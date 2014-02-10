@@ -2,15 +2,14 @@ MusicBox
 ========
 
 Module #2/4 
-
 ### Frontend
 
 
+Partials commits
+Documentation in progres
 
-Work in progress ..
 
 commits next hours and days.
-
 Stay tuned ! 
 
 /-) 
