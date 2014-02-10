@@ -1,0 +1,17 @@
+{
+    "PORT": 3021,
+    "COOKIESECRET": "@g#~@O8=a#;&2j2s6^21",
+    "SESSIONSECRET": "boUNPrGo@zZ1?9w7oe5D",
+    "ROOT_URL": "http://localhost",
+    "USE_SOCKET_SERVER": false,
+    "SOCKET_SERVER_URL": "http://localhost",
+    "SOCKET_SERVER_PORT": "3013",
+    "SITE_TITLE": "MusicBox",
+    "SITE_DESCRIPTION": "your site description",
+    "SITE_DESCRIPTION_LONG" : "your site",
+    "SITE_IMG_THUMB": "http://..",
+    "SOCKET_SERVER_PORT": "3013",
+    "API_SERVER_URL": "http://localhost", 
+    "API_SERVER_PORT": "3001",
+    "API_METHOD": "db"
+}
