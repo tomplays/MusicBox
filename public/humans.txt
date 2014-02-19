@@ -1,15 +1,32 @@
 # humanstxt.org/
 # The humans responsible & technology colophon
 
-# TEAM
+/* TEAM */
+
+                            
+Your title: tom wersinger
+
+                            
+Site: homeof@gmail.com tom-wersinger.com
+
+                            
+Twitter: tom_plays
+
+                            
+Location: Paris, France
 
     
 
-# THANKS
+/* THANKS */
 
-    
+ 
+                            
+/* SITE */
 
-# TECHNOLOGY COLOPHON
+                              
+
+/* TECHNOLOGY COLOPHON */
 
     HTML5, CSS3
     Node, Express, Angular
+    Pim's, good coffee, & <3

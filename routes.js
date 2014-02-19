@@ -16,6 +16,7 @@ module.exports = function(app) {
 	// http:// ... /doc/read/1
 	app.get('/doc/:layout/:docid/:foo?/:bar?', 								index.document); // added foo and bar params could be usefull
 	
+	app.get('/editor/:name/:param?',										index.editor); // load kind of blocks 
 	app.get('/fragments/:name/:param?',										index.fragments); // load kind of blocks 
 	app.get('/partials/:name/:param?', 										index.partials);  // document.jade for example + column/right|left|..
 	// ALL ELSE
