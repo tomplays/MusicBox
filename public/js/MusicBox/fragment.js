@@ -25,9 +25,7 @@ function FragmentCtrl($scope, $http , $location, $routeParams) {
 		var key;
 		$scope.dockeys.needed = "true";
 		key = $scope.dockeys.key;
-		if($scope.dockeys.valid !== "true"){
-			return
-		}
+		if($scope.dockeys.valid !== "true"){return}
 		var gindex = $scope.cur_sel.section_index;
 		$scope.$emit('fragmentEvent', {index: gindex, textdata: textdata, action:'save_object'});		
 	}
@@ -186,9 +184,7 @@ function FragmentCtrl($scope, $http , $location, $routeParams) {
 		$scope.dockeys.needed = "true";
 		key = $scope.dockeys.key;
 
-		if($scope.dockeys.valid !== "true"){
-			return;
-		}
+		if($scope.dockeys.valid !== "true"){return;}
 
 		if(!sorted_section || sorted_section == 'auto'){
 				sorted_section = $scope.sorted_sections[object.sectionin];
@@ -243,9 +239,7 @@ function FragmentCtrl($scope, $http , $location, $routeParams) {
 		var key;
 		$scope.dockeys.needed = "true";
 		key = $scope.dockeys.key;
-		if(!key){
-			return;
-		}
+		if(!key){return;}
 		var n = '';
 		// for notes and datas, position depends on type.. (no image in global , . etc//)
 		if( (a.type== 'data' ||  a.type== 'note' ) && a.position == 'left'  ){n= 'under';}
@@ -332,17 +326,74 @@ function FragmentCtrl($scope, $http , $location, $routeParams) {
 		return
 	}
 
-	// create a new fragment (textdata)
-	$scope.push_fragment = function (p_type, p_subtype, p_position, p_depth, p_metadata, p_css, p_start, p_end, ss){
+
+
+
+	// transform selection into a new section
+	// > save "left" "old" section
+	// > create a new section (~ middle)
+	// > create a new "right" old section
+	// TODO : - check end/start "hit" to avoid a 0;0 ghost section or a section.end;section.end saving...
+	// 		  - create an special event ? to be sure to reload only once..
+	//		  - remove classes 
+	
+	$scope.enclose_fragment = function (){
+			var key;
+			$scope.dockeys.needed = "true";
+			if(	$scope.dockeys.valid !== "true"){return;}
+		
+			var cur_index   		= $scope.cur_sel['section_index'];
+			var or_section  	    = $scope.sorted_sections[cur_index];
+
+			var or_section_start  	= or_section.start;
+			var or_section_end  	= or_section.end;
+
+			var range_start 		= $scope.cranges['start'];
+			var range_end 			= $scope.cranges['end'];
+
+
+			// adding some class before/inrange/after
+			switch_letters_classes_by_range(or_section_start,range_start , 'enclose_before', 1)
+			switch_letters_classes_by_range(range_start ,range_end+1,'enclose_neo', 1)
+			switch_letters_classes_by_range(range_end+1 , or_section_end+1,'enclose_after', 1)
+
+
+			// why switch_letters_classes ranges are differents from sections.. (<= // < // =).. ? ^^#@@#.
+			var left_textdata = {type: 'section', id: or_section.id, subtype: 'section', position : 'inline', depth:1, metadata : 'text', css: 'section_lvl', start: or_section_start  , end: range_start-1};
+			
+			var neo_textdata = {type: 'section', subtype: 'section', position : 'inline', depth:1, metadata : 'text', css: 'section_lvl', start: range_start  , end: range_end};
+			var right_textdata = {type: 'section', subtype: 'section', position : 'inline', depth:1, metadata : 'text', css: 'section_lvl', start: range_end+1  , end: or_section_end+1};
+			/*
+				console.log('left_textdata, neo_textdata, right_textdata');
+				console.log(left_textdata)
+				console.log(neo_textdata)
+			 	console.log(right_textdata)
+			*/
+			// triple event + one ... thinking about a better method.
+			$scope.$emit('sectionEvent', {index: cur_index, textdata: left_textdata, object : 'section',action:'save_section'});		
+			$scope.$emit('sectionEvent', {index: cur_index, textdata: neo_textdata,object : 'section', action:'create_section'});	
+			$scope.$emit('sectionEvent', {index: cur_index, textdata: right_textdata, object : 'section', action:'create_section'});
+			//$scope.$emit('sectionEvent', {action:'enclosed_fragment'});
+	}
+
+
+	// create a new fragment (textdata) from params (called in html editor, add comment)
+	// 
+	$scope.push_fragment = function (p_type, p_subtype, p_position, p_depth, p_metadata, p_css, p_start, p_end, ss){	
+		if(!p_start || p_start == ''){
+			p_start = $scope.cranges['start']
+		}
+		if(!p_end || p_end == ''){
+			p_end = $scope.cranges['end']
+		}
+		if(!ss || ss == ''){
+			ss = $scope.cur_sel['section_index']
+		}
 		var key;
 		// no key for comments
 		if(p_subtype !=="comment"){
 			$scope.dockeys.needed = "true";
-
-			if(	$scope.dockeys.valid !== "true")
-			{
-				return;
-			}
+			if(	$scope.dockeys.valid !== "true"){return;}
 		}
 		var p_section = $scope.cur_sel.section_index;
 		var textdata = {type: p_type, subtype: p_subtype, position :p_position, depth:p_depth, metadata : p_metadata, css: p_css, start: p_start , end: p_end};
