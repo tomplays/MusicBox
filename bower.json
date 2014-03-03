@@ -4,7 +4,7 @@
   "authors": [
     "tomplays <homeof@gmail.com>"
   ],
-  "description": "frontend musicbox scripts and stsyles",
+  "description": "frontend musicbox scripts and styles",
   "license": "GPL",
   "private": true,
   "ignore": [
@@ -20,8 +20,9 @@
     "angular-resource": "~1.2.12",
     "angular-route": "~1.2.12",
     "angular-sanitize": "~1.2.12",
-    "font-awesome":"3.2.1",
+    "font-awesome": "3.2.1",
     "jquery": "~2.1.0",
-    "underscore": "~1.5.2"
+    "underscore": "~1.5.2",
+    "momentjs": "~2.5.1"
   }
 }

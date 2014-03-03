@@ -1,7 +1,7 @@
 'use strict';
 //console.log('FragmentCtrl @ /public/js/MusicBoxfragment.js')
 
-function FragmentCtrl($scope, $http , $location, $routeParams) {
+function FragmentCtrl($scope, $http) {
 	/*
 		AngularJs controller for fragments' (img, notes, comments,..) actions (save, edit, move, ..)
 		using cross controller events/broadcasting to DocumentCtrl (its parent) and services calls
@@ -15,6 +15,7 @@ function FragmentCtrl($scope, $http , $location, $routeParams) {
 				_remove_object
 				_toggle_position (td or dm)
 				subfield_fragment
+				enclose_fragment
 				push_fragment
 		
 		TODO : move functions, select fix., indentation, remove "_ prefix", use "slide-array patterns", always use services.js
@@ -30,8 +31,12 @@ function FragmentCtrl($scope, $http , $location, $routeParams) {
 		$scope.$emit('fragmentEvent', {index: gindex, textdata: textdata, action:'save_object'});		
 	}
 
+
+
 	$scope._lookup_obj = function (a){
 		var data = {metadata:a.metadata }
+
+
 		$http.post(API_URL+'/apis/findtarget/', serialize(data)).
 			success(function(arr_bg) {
 				console.log(arr_bg.IdocId);
@@ -132,10 +137,8 @@ function FragmentCtrl($scope, $http , $location, $routeParams) {
 
 			// false ! to check all sides...
 			else{
-				var b = $scope.objects_sections[ids][object.type][side];
-				
+				var b = $scope.objects_sections[ids][object.type][side];	
 			}
-	
 			// on objects
 			_.each(b, function(ma, ida){
 					if( (object.id == b[ida].id) && (swr == 1) ){
@@ -154,7 +157,7 @@ function FragmentCtrl($scope, $http , $location, $routeParams) {
 			});
 			// and on letters
 		});
-		switch_letters_classes_by_range(object.start, object.end, 'selected', 1)
+		switch_letters_classes_by_range(object.start, object.end+1, 'selected', 1)
 	}
 
 	// standalone function.
@@ -199,6 +202,9 @@ function FragmentCtrl($scope, $http , $location, $routeParams) {
 			$scope.$emit('fragmentEvent', {textdata : object, index: gindex, action:'delete_markup'});		
 		}
 		if(object=='section'){
+
+
+			/*
 			$scope.sorted_sections[index].start = 0;
 			$scope.sorted_sections[index].end = -1;
 			
@@ -227,6 +233,7 @@ function FragmentCtrl($scope, $http , $location, $routeParams) {
 					$scope.$emit('fragmentEvent', {fragment: a, action:'remove_object'});	
 				});	
 			}
+			*/
 		}
 		if(object=='author_card'){
 			 $scope.docmetas.use_authorcard ='removed_1';
@@ -284,6 +291,7 @@ function FragmentCtrl($scope, $http , $location, $routeParams) {
 		 		else if(odm 	== 'after_title_and_content'){	n 		= 'after_title';}	
 			}
 			if(a == 'date_fragment' ){
+				
 				if(odm == 'full_first'){				n  		= 'left_text_first';}
 				else if(odm		== 'left_text_first'){	n 		= 'right_text_first';}
 				else if(odm 	== 'right_text_first'){	n  		= 'full_last';}
@@ -294,7 +302,7 @@ function FragmentCtrl($scope, $http , $location, $routeParams) {
 			_.each($scope.docmetas , function(dm){
 				if(dm.meta_key == a){	
 					dm.meta_value = n;
-					$scope.$emit('fragmentEvent', {doc_id: $scope.doc.id , key:key , meta_key:a, meta_value: tdm, id: dm.id, action:'save_dm'});	
+					$scope.$emit('fragmentEvent', {doc_id: $scope.doc.id , key:key , meta_key:a, meta_value: n, id: dm.id, action:'save_dm'});	
 					return;
 				}
 			});
@@ -326,17 +334,15 @@ function FragmentCtrl($scope, $http , $location, $routeParams) {
 		return
 	}
 
-
-
-
-	// transform selection into a new section
-	// > save "left" "old" section
+	/* transform selection into a new section
+	// > save "left" part of "old" section
 	// > create a new section (~ middle)
 	// > create a new "right" old section
-	// TODO : - check end/start "hit" to avoid a 0;0 ghost section or a section.end;section.end saving...
-	// 		  - create an special event ? to be sure to reload only once..
+	// TODO : - #important check end/start "hit" to avoid a 0;0 ghost section or a section.end;section.end saving...
+	// 		  - #important cjheck crossed "lost" fragments
+			   - create an special event ? to be sure to reload only once..
 	//		  - remove classes 
-	
+	*/
 	$scope.enclose_fragment = function (){
 			var key;
 			$scope.dockeys.needed = "true";
@@ -370,6 +376,8 @@ function FragmentCtrl($scope, $http , $location, $routeParams) {
 			 	console.log(right_textdata)
 			*/
 			// triple event + one ... thinking about a better method.
+
+
 			$scope.$emit('sectionEvent', {index: cur_index, textdata: left_textdata, object : 'section',action:'save_section'});		
 			$scope.$emit('sectionEvent', {index: cur_index, textdata: neo_textdata,object : 'section', action:'create_section'});	
 			$scope.$emit('sectionEvent', {index: cur_index, textdata: right_textdata, object : 'section', action:'create_section'});
@@ -400,8 +408,44 @@ function FragmentCtrl($scope, $http , $location, $routeParams) {
 		// broadcast to services
 		$scope.$emit('fragmentEvent', {index: p_section, textdata: textdata, action:'push_fragment'});	
 	}
+
+
+
+
+		$scope.push_to_next_section = function (or_section,cur_index){
+			var key;
+			$scope.dockeys.needed = "true";
+			if(	$scope.dockeys.valid !== "true"){return;}
+			var or_section_start  	= or_section.start;
+			var or_section_end  	= or_section.end;
+			switch_letters_classes_by_range(or_section.end, or_section.end+1,'enclose_before', 1)
+			
+			var touch_queue 	 = new Array();
+			
+			// > no next, create a new one. with one with one letter-wide
+			if(!$scope.sorted_sections[cur_index+1]){
+				var neo_textdata = {type: 'section', subtype: 'section', position : 'inline', depth:1, metadata : 'text', css: 'section_lvl', start: or_section.end  , end: or_section.end+1};
+				$scope.$emit('sectionEvent', {index: cur_index, textdata: neo_textdata,object : 'section', action:'create_section'});	
+				//touch_queue.create.push(neo_textdata);
+			}
+			else{
+				var next_section 		= $scope.sorted_sections[cur_index+1];
+				var next_section_start  = next_section.start;
+				var next_section_end 	= next_section.end;
+				switch_letters_classes_by_range(next_section_start, next_section_start+1,'enclose_after', 1)
+				// why switch_letters_classes ranges are differents from sections.. (<= // < // =).. ? ^^#@@#.
+				var right_textdata 	= {id: next_section.id, start: next_section_start-1  , end:  next_section_end};
+				touch_queue.push(right_textdata)
+				//	$scope.$emit('sectionEvent', {index: cur_index, textdata: right_textdata, object : 'section', action:'save_section'});		
+			}
+
+			var left_textdata 	= { id: or_section.id, start: or_section_start  , end:  or_section_end-1};
+			//$scope.$emit('sectionEvent', {index: cur_index, textdata: left_textdata, object : 'section', action:'save_section'});		
+			touch_queue.push(left_textdata)
+			$scope.$emit('sectionEvent', {index: cur_index, queue: touch_queue,  action:'touch_sections'});				
+	}
 	//
 } // </CRTL>
 
 // and $inject
-FragmentCtrl.$inject = ['$scope', '$http' , '$location', '$routeParams'];
+FragmentCtrl.$inject = ['$scope', '$http'];
