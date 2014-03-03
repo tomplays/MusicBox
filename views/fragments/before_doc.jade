@@ -1,0 +1,15 @@
+.columns.twelve
+  .columns.three
+  .six.columns
+      p(class="loading_msg {{doc_load_status}}") {{doc_load_status}} 
+      p(ng-if="(doc_load_status =='not_found')" )
+        {{ilc[p_lang]['doc_notfound_notice']}}
+      p(ng-if="sections_to_count_notice")
+       {{ilc[p_lang]['sections_to_count_notice']}}
+      p(ng-if="fresh_doc=='true'") welcome 
+  .columns.three
+.twelve.columns.col-full()
+ .one.columns
+ .ten.columns.col-summary-centered
+  div.summary_text(ng-if="(ilc['summarize_toggle'] == 'true')", ng-bind-html="text_summary") {{text_summary}}
+ .one.columns

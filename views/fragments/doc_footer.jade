@@ -1,0 +1,11 @@
+.doc-footer-in-left.three.columns
+.doc-footer-in-center.six.columns.npadl
+ p(ng-bind-html="docmetas.footer_center_html")
+.doc-footer-in-right.three.columns
+
+ // angularJS directives-way #todo v2
+ // docfooter(render="{{render_layout}}", metakey="{{docmetas.footer_center_html}}")
+ span(ng-show="render_layout== 'editor'")
+  p Footer: 
+   input(ng-class="'editing_i_'+editing_fields['footer_center_html']['state']",  ng-init="alt('init', 'footer_center_html', docmetas.footer_center_html)", ng-mouseleave="alt('leave', 'footer_center_html',  docmetas.footer_center_html)" , ng-click="alt('click', 'footer_center_html',  docmetas.footer_center_html)",   ng-change="alt('change', 'footer_center_html', docmetas.footer_center_html)", ng-model="docmetas.footer_center_html")
+

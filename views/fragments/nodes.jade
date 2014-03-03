@@ -1,0 +1,6 @@
+h6 {{docmetas.keywords_notice}}
+div
+ a(ng-repeat="node in nodes" , class="taglink taxo_{{node.taxonomy}} count_{{node.objectcount}}", href="#/{{node.slug}}") {{node.name}}
+.fragment_editor(ng-controller="FragmentCtrl" , ng-if="render_layout=='fragments'" ) 
+  span 
+  i.icon-move( ng-click="_toggle_position('nodes_fragment')") 

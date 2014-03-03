@@ -1,0 +1,48 @@
+// using a extraparam to load col @ left, right and under
+
+
+.three_or_twelve(class="col-#{locals.extraparam}") 
+        
+     h5.global(ng-if="(objects_sections['global'].length > 0) && '#{locals.extraparam}' == 'global'" ) Global Document 
+   
+     div(ng-if="(render_layout == 'fragments') && ('#{locals.extraparam}' == 'left') && $first" , class="edits-elements")
+      span(ng-click="_select_all_objects()", class="clipped_{{allselected}}" ) select all
+
+  
+     div( ng-if=" '#{locals.extraparam}' == 'right' ", ng-include="fragments['editright'][0].url")
+     div( ng-if=" '#{locals.extraparam}' == 'left' ", ng-include="fragments['editleft'][0].url")
+
+     // usefull markup 
+     // h1= locals.extraparam
+     // h2 #{locals.extraparam}
+     
+     .twelve.imgs_col.imgs_col
+      div(ng-repeat="a in objects_section_array('img',$index,'#{locals.extraparam}')",  ng-include="fragments['generic'][0].url")
+
+     .twelve.columns.child_doc_blocks(ng-repeat="a in objects_section_array('child_section', $index , '#{locals.extraparam}') ", ng-include="fragments['generic'][0].url")
+
+     .twelve.author_card.tdinfos(ng-if="active_section_only_index('author_card_#{locals.extraparam}_text_first', '' , $index)" , ng-include="fragments['author_card'][0].url" )
+     .twelve.time.tdinfos(ng-include="fragments['date'][0].url", ng-if="active_section_only_index('date_fragment_#{locals.extraparam}_text_first', '' , $index )")
+
+     .twelve.column.share_fragment.share_fragment_left(ng-if="show_at('share', '#{locals.extraparam}', $index, $first, $last)",  ng-include="fragments['share'][0].url")
+
+     .twelve.playerstdinfos.tdinfos(ng-include="fragments['generic'][0].url", ng-repeat="a in objects_section_array('player', $index,'#{locals.extraparam}')")
+
+     .twelve.notetdinfos.tdinfos(ng-if="sorted_section.mode !=='composer'", ng-include="fragments['generic'][0].url", ng-repeat="a in objects_section_array('note',$index, '#{locals.extraparam}')")
+
+     .twelve.notesinfos.tdinfos(ng-include="fragments['generic'][0].url", ng-repeat="a in objects_section_array('data',$index, '#{locals.extraparam}')") 
+
+
+
+     // special double-block-under-only
+
+     .twelve.columns.npadl.npadr.doc_time( ng-include="fragments['date'][0].url",  ng-if="active_section_only_index('date_fragment_full_last', $last, $index) && '#{locals.extraparam}' == 'global'")
+    
+     .twelve.column.tags_author_block(ng-if="$last && '#{locals.extraparam}' == 'global'   && ( active_section_only_index('author_card_full_last',$last,$index )  || ( $last && nodes.length > 0 && docmetas.nodes_fragment=='full_last')       )  ")
+
+       .six.columns.npadl.author_block(ng-if="active_section_only_index('author_card_full_last', $last, $index )" , ng-include="fragments['author_card'][0].url" )  
+      
+       .six.columns.npadr.nodes(ng-include="fragments['docnodes'][0].url", ng-if="nodes.length > 0 && docmetas.nodes_fragment=='full_last'")
+       .six.columns.npadr.share_fragment.share_fragment_after_box_right(ng-if="show_at('share', 'after_box_right', $index, $first, $last)",  ng-include="fragments['share'][0].url")
+
+      

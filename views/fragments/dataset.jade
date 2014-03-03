@@ -1,0 +1,38 @@
+.one.columns 
+.ten.columns
+  span.filter_dataset_by filtered by :{{filter_dataset_by}} 
+  a.filter_dataset_by_next(ng-click="slide_filter_dataset_by('filter_dataset_available')")  &raquo; {{filter_dataset_by_next}}
+  table(style="width:100%;")
+    thead 
+      tr
+        th Select
+        th type
+        th subtype
+        th metadata
+        th start
+        th end
+        th position
+        th section index
+        th sel.
+        th ed.
+        th status.
+    tbody
+      tr(ng-repeat="a in objects_sections['all']", ng-if="a.type==filter_dataset_by || filter_dataset_by == 'any'")
+        td(ng-controller="FragmentCtrl")
+         a.markup-item-subtype( ng-click="_select_object(a, a.position, 'auto','-1')", class="clipped_{{a.isselected}} markup-hn_{{a.subtype}}" ) + 
+         i.icon-remove-sign.remove-markup( ng-click="_remove_object(a, '', 'auto')") 
+        td {{a.type}}
+        td {{a.subtype}}
+        td  - 
+        td {{a.start}}
+        td {{a.end}}
+        td {{a.position}}
+        td {{a.sectionin}}
+        td 
+          span {{a.isselected}}
+        td
+          span {{a.editing}}
+        td
+          span {{a.status}}
+
+.one.columns

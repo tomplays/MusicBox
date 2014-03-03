@@ -1,0 +1,22 @@
+.one.columns
+.ten.columns
+ h4 Document log
+ table(style="width:100%;")
+  thead 
+    tr
+      th date
+      th author
+      th verb
+      th subject
+      th object
+      th id
+  tbody
+    tr(ng-repeat="log in logs")
+      td {{log.date}}
+      td {{log.author}}
+      td {{log.verb}}
+      td {{log.subject}}
+      td {{log.object}}
+
+      td {{log.id}} 
+.one.columns

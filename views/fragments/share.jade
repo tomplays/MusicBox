@@ -1,0 +1,11 @@
+h6 {{docmetas.share_notice}}
+a(class="twitter-share-icon", ng-class="cur_sel['status']", href="https://twitter.com/intent/tweet?text={{cur_sel['string'] }}  {{encoded_doc_url}}")
+ i.icon-twitter 
+span.twitter_live_text(ng-class="cur_sel['status']", ng-show="cur_sel['string'].length > 0") {{cur_sel['string']}}
+  em.twitter_live_counter(ng-show="cur_sel['string'].length > 0") [{{cur_sel['string'].length}}]
+  a.gotwit(ng-show="(cur_sel['string'].length > 0) && (cur_sel['string'].length < 140)",href="https://twitter.com/intent/tweet?text={{cur_sel['string'] }}  {{encoded_doc_url}}" ) tweet!
+  em.tltweet(ng-show="cur_sel['string'].length > 140") too long to tweet!
+a(href="https://www.facebook.com/sharer/sharer.php?u={{encoded_doc_url}}")
+ i.icon-facebook-sign
+.metaedit(ng-controller="FragmentCtrl" , ng-show="render_layout=='fragments'")
+ i.icon-move(ng-click="_toggle_position('share_fragment')")

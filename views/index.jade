@@ -20,15 +20,18 @@ html(ng-app="musicBox")
 		
 		link(rel='stylesheet', href='/css/logo.css')
 		link(rel='stylesheet', href='/css/commons.css')
-		link(rel='stylesheet', href='/css/media.css')
 
 		link(rel='stylesheet', href='/css/doc.css')
 		link(rel='stylesheet', href='/css/charset.css')
 		link(rel='stylesheet', href='/css/editor.css')
+
+		// website architecture (tags, ..)
+		// link(rel='stylesheet', href='/css/media.css')
+
 		// group : minified not commited:
 		// link(rel='stylesheet', href='/css/min/MusicBox.min.css')
 
-		// link(rel='stylesheet', href='/css/custom.css')
+		link(rel='stylesheet', href='/css/custom.css')
 
 		// Misc libs/utils
 		script(src="/bower/jquery/jquery.min.js")
@@ -36,8 +39,12 @@ html(ng-app="musicBox")
 
 		// kept local
 		script(src='/js/lib/webfont.js')
-		if locals.use_socket_server
-			script(src="/socket.io/socket.io.js")
+
+		script(src='/bower/momentjs/min/moment-with-langs.min.js')
+
+		
+		//if locals.use_socket_server
+		script(src="/socket.io/socket.io.js")
 		
 		script(src='/bower/angular/angular.min.js')	
 		script(src='/bower/angular-sanitize/angular-sanitize.min.js')
@@ -50,7 +57,7 @@ html(ng-app="musicBox")
 		// run services (x-controllers, translations, strings, locales) 
 		script(src='/js/angular-modules/services.js')	
 		
-		script(src='/js/angular-modules/filters.js')
+		// script(src='/js/angular-modules/filters.js')
 
 		script(src='/js/angular-modules/directives.js')
 
@@ -60,7 +67,7 @@ html(ng-app="musicBox")
 		script(src='/js/MusicBox/fragment.js')
 		script(src='/js/MusicBox/section.js')
 		script(src='/js/MusicBox/letter.js')
-		script(src='/js/MusicBox/key.js')
+		// script(src='/js/MusicBox/key.js')
 
 		// minified
 		// script(src='/js/min/MusicBox.min.js')
@@ -70,7 +77,7 @@ html(ng-app="musicBox")
 		title= locals.title
 		meta(name="description", content=locals.description)
 
-		// meta(property="fb:app_id" , content="248664598505342")
+		// meta(property="fb:app_id" , content="")
 		meta(property="og:title", content=locals.title)
 		// https://developers.facebook.com/docs/reference/opengraph/object-type
 		// https://developers.facebook.com/tools/object-browser?app_id=248664598505342
@@ -78,5 +85,6 @@ html(ng-app="musicBox")
 		// meta(property="og:type", content="like:article")
 		meta(property="og:image", content=locals.image)
 		meta(property="og:url", content="")
-	body(class="{{docmetas['single_theme']}}")
+	body(class="loading_class_loads {{doc_load_status}} {{docmetas['single_theme']}} ")
 		div(ng-view)
+

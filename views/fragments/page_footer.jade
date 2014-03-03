@@ -1,0 +1,44 @@
+footer.columns.twelve(ng-if="render_layout=='page'")
+  .three.columns
+  .six.columns.l-footer.page_footer
+   ul.link-list
+     li(class="aboutif_{{doc.id}}")
+       span.under(style=" line-height: 18px;") <&nbsp; 
+       a(href="/doc/page/a-propos") à propos
+     li 
+       span.under(style=" line-height: 18px;") ! 
+       a(href="/{{doc_all.room.slug}}/manifest") Manifest
+     li(class="contactif_{{doc.id}}")
+      span.under _ 
+      a(href="/doc/page/contact")  Contact
+      
+     li 
+       span.under(style=" line-height: 18px;") : 
+       a(href="/login/redirect/+/") Login
+     li 
+       span.under(style=" line-height: 18px;") + 
+       a(href="/doc/creator") Post&nbsp;&nbsp;
+     li
+      span.under(style=" line-height: 18px;") /&nbsp;
+      a(href="https://twitter.com/") 
+       i.icon-twitter 
+     li.socialm 
+      a(href="")
+       i.icon-facebook 
+     li.socialm 
+      a(href="")
+       i.icon-github
+     li
+       span.socketer_online
+     //li
+      select(ng-model="render_mode" , ng-options="c.name for c in render_modes")
+    
+     li 
+      a(href="/doc/creator?bugreport")
+       i.icon-bug 
+     li   
+      span.under.OFFcsitelink(style=" line-height: 18px;") cc
+     li   
+      a - 2014 -
+      span.under(style=" line-height: 18px;")  &nbsp;/> 
+  .three.columns
