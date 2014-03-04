@@ -17,7 +17,7 @@ fluidvids(ng-if="a.type=='player'", ng-controller="FragmentCtrl", src="", positi
 
 
 
-.twelve.column.npadr(ng-controller="FragmentCtrl", class="{{a.type}}s subtype_{{a.subtype}}" , ng-if="(a.type=='data') || (a.type=='note')")
+.twelve.column.npadr(ng-controller="FragmentCtrl", class="iblock {{a.type}}s subtype_{{a.subtype}}" , ng-if="(a.type=='data') || (a.type=='note')")
   
  
  i(ng-click="_select_object(a,a.position,sorted_section,'-1')", ng-dblclick="dbc_object(a)",  title="{{a.subtype}}", class="fragment_icon type_{{a.type}} subtype_{{a.subtype}} already_{{a.tochange}} selected_icon_{{a.isselected}}") {{a.subtype[0]}}

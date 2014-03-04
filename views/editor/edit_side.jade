@@ -59,7 +59,7 @@ div.side_edit_left(ng-if="('#{locals.extraparam}' == 'left')")
 
 
 
-   old div( ng-if="showtabs('styles_inline', 'editor_left',[$index])" )
+   div( ng-if="showtabs('styles_inline', 'editor_left',[$index])" )
     h4 {{ilc[p_lang]['cssclassesextend_title']}} 
     p {{ilc[p_lang]['cssclassesextend_notice']}}
     .style_toggle.twelve.action_info(ng-repeat="style in objects_sections[$index]['css_styles']") 

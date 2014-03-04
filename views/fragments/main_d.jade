@@ -94,7 +94,7 @@
  // p {{sorted_section.start}} -  {{sorted_section.end}}
  
 
- span(ng-repeat="a in letters[$index] track by $index", id="char-{{a.sectionin}}-{{a.order}}", class="fi-{{a.fi_nd.fi}} nd-{{a.fi_nd.nd}} select-{{a.state.select}} action_{{a.action}}", ng-click="action_letter('click', a)")
+ span(ng-repeat="a in letters[$index] track by $index", class="fi-{{a.fi_nd.fi}} nd-{{a.fi_nd.nd}} select-{{a.state.select}} action_{{a.action}}", ng-click="action_letter('click', a)")
   lt(ng-if="a.state.mode !=='lo'", ng-class="a.classes") {{a.char}}
    // input.linput(ng-if="a.mode=='editing_letter'",type="text",ng-change="lt_input_changed(a)", ng-model="a.char")
    
