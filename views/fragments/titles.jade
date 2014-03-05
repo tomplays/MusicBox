@@ -1,10 +1,10 @@
 .three.columns.ae
-.six.columns
+.six.columns( ng-dblclick="switch_render_layout('editor')")
  p 
   i.icon-plus.icon-muted.hdifsections(ng-click='click_summarize(doc.content)')
  
  p 
-  em.styleheadings.doc_notices_before_title.hdifsections(ng-bind-html="docmetas.doc_notices_before_title", ng-dblclick="switch_render_layout('editor')" )
+  em.styleheadings.doc_notices_before_title.hdifsections(ng-bind-html="docmetas.doc_notices_before_title" )
  p(ng-if="($index==0) && (render_layout== 'editor')")
   label Before title: 
    input(ng-class="'editing_i_'+editing_fields['doc_notices_before_title']['state']",  ng-init="alt('init', 'doc_notices_before_title', docmetas.doc_notices_before_title)", ng-mouseleave="alt('leave', 'doc_notices_before_title',  docmetas.doc_notices_before_title)" , ng-click="alt('click', 'doc_notices_before_title',  docmetas.doc_notices_before_title)",   ng-change="alt('change', 'doc_notices_before_title', docmetas.doc_notices_before_title)", ng-model="docmetas.doc_notices_before_title")

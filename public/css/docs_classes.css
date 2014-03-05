@@ -1,0 +1,533 @@
+
+
+
+section.custom_a{
+    
+}
+
+
+body.mode-read{background: #F9F9F7; font-family: 'Open Sans', Helvetica, Arial, sans-serif;}
+body.darkest{
+        background:black;
+        color:#fff;
+}
+
+body.darkest input[type="text"],
+body.darkest input[type="password"],body.darkest input[type="date"],
+body.darkest textarea {
+    background-color: #000;
+    border: 1px solid #fff;
+    border-radius: 2px 2px 2px 2px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) inset;
+    color: #fff;
+   
+}
+
+
+
+
+
+
+
+
+
+.doc_id_21 section.custom_a {
+    background:  -moz-linear-gradient(center top , #FFFFFF 21%, #A8BFDE 81%);
+    opacity: .8;
+    padding-bottom: 619px;
+    /*"https://fbcdn-sphotos-a-a.akamaihd.net/hphotos-ak-frc3/1401183_10151651421722504_887129633_o.jpg") no-repeat*/
+}
+.doc_id_21 section.custom_a:hover {
+    opacity: 1;
+}
+
+.doc_id_7 section.custom_a{
+    background-image: -moz-linear-gradient(center bottom , #FFFFFF 23%, #AFC5EA 83%);
+}
+.doc_id_7 section.custom_b{
+    background-image: -moz-linear-gradient(center bottom ,#AFC5EA  23%, #FFFFFF 83%);
+}
+.doc_id_7 section.custom_c {
+    background-color: #AFC5EA;
+    background-image: url("/img/snow-test.png");
+    background-position: right bottom;
+    background-repeat: no-repeat;
+    background-size: 100% auto;
+    min-height: 620px;
+}
+.doc_id_7 section.custom_d{
+
+ background-color: #AFC5EA;
+    background-image: url("/img/snow-roof.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+
+}
+
+
+
+.doc_id_7 section.custom_e{
+    background-color: #AFC5EA;
+    background-image: url("/img/snow-enter.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.doc_id_7 section.custom_f{
+
+     background-color: #AFC5EA;
+    background-image: url("/img/chmx-bg.png");
+    background-repeat: repeat;
+   
+   
+}
+
+
+
+
+.doc_id_1ddd5 section.custom_e ,  {
+    background-color: #000;
+    background-image: url("http://localhost:3001/img/plnt/sky2.jpg");
+    background-repeat: repeat;
+    background-size: 100% auto;
+    animation-duration: 44s;
+    animation-iteration-count: infinite;
+    animation-name: hanimsky;
+    animation-timing-function: linear;
+
+}
+
+ 
+@keyframes hanimsky{
+    0% {background-size: 100% auto; }
+    50% {background-size: 120% auto;}
+    100% { background-size: 100% auto; }
+}
+
+
+.doc_id_8 section.custom_a .col-text, .doc_id_8 section.custom_a .doc_notices_after_title {
+    background:#000000;
+}
+
+.doc_id_8.mt section.custom_a span.doc_notices_after_title {border-bottom:1px dotted #fff;}
+
+/*
+.doc_id_8 section.custom_b{
+    background-image: -moz-linear-gradient(center bottom ,#AFC5EA  23%, #FFFFFF 83%);
+}
+.doc_id_8 section.custom_c{
+    background-image: -moz-linear-gradient(center bottom ,#AFC5EA  23%, #FFFFFF 83%);
+}
+.doc_id_8 section.custom_d{
+    background-image: -moz-linear-gradient(center top ,#000  23%, #FFFFFF 83%);
+}
+.doc_id_8 section.custom_e{
+
+    padding-bottom:2000px;
+    background-image: -moz-linear-gradient(center bottom ,#000  23%, #FFFFFF 83%);
+}
+*/
+
+/*
+body.plnt{
+        background-image: -moz-linear-gradient(center top , #FFFFFF 64%, #000000 100%);
+
+}
+*/
+/*
+body.plnt .before_letters {
+    background: url("/img/themes/8/bubble_a.png") no-repeat scroll center -2px rgba(0, 0, 0, 0);
+    height: 92px;
+    margin: 0 auto;
+    transform: rotate(-459deg);
+    width: 98px;
+}
+*/
+body.plnt .after_letters {
+   /* background: url("http://localhost:3001/img/themes/8/bubble_a-50.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);*/
+}
+
+
+.single-footer.doc_id_8{
+     background:#000000;
+    border-top: 1px dotted #fff;
+     color:#fff;
+    margin-top: 0px;
+
+}
+
+
+
+body.plnt section.custom_a{
+ background:#c0392b;
+}
+body.plnt section.custom_b{
+ background:#2980b9;
+}
+body.plnt section.custom_c{
+ background:#16a085;
+}
+
+
+
+body.plnt-b section.custom_a{
+ background:#c0392b;
+}
+body.plnt-b section.custom_b{
+ background:#2980b9;
+}
+body.plnt-b section.custom_c{
+ background:#16a085;
+}
+
+
+
+/** bklyn **/
+
+
+
+body.bklyn{
+ background-color: #F8F4EB;
+}
+body.bklyn .mt span.h1{
+    font-size: 119px;
+    font-weight: bolder;
+    line-height: 208px;
+}
+
+body.bklyn .mt lt.h2 {
+    color: #362B23;
+    /*font-family: "quatro-slab",Helvetica,Arial,sans-serif;*/
+    font-size: 1.4em;
+}
+
+
+
+
+
+body.bklyn .btn_dark{
+    background: none repeat scroll 0 0 #362B23;
+    padding: 5px 3px;
+    /*
+    
+    border-radius: 3em 3em 3em 3em;
+    color: #FFFFFF;
+    display: inline-block;
+    padding: 1em 3em;
+    text-align: center;
+*/
+}
+
+body.bklyn .bg_darkest{ /*footer*/
+    background-color: #362B23;
+  
+}
+body.amstd .bg_darkest{ /*footer*/
+    background-color: #38291D;
+
+}
+
+body.aklnd .bg_darkest {
+    background-image: url("http://stephencaver.com/-/img/bg-band-bottom.png"), url("http://stephencaver.com/-/img/bg-desert.jpg");
+    background-position: -300% 100%, 100% 100%;
+    background-repeat: repeat-x, no-repeat;
+    min-height: 259px;
+    padding: 0 24px;
+
+}
+
+body.bklyn .bklyn-menu{
+    background-color: #000;
+    
+}
+
+body.bklyn .bklyn-0 {
+    background-color: #AC0818;
+    background-image: url("https://brooklynbeta.org/img/2013/bg-main.jpg");
+    background-position: center center;
+    background-size: cover;
+    border-bottom: 5px solid #75000B;
+    min-height: 504px;
+}
+body.amstd .bklyn-0 {
+     background-size: cover;
+    background-image: url("http://media-cdn.tripadvisor.com/media/photo-s/03/9b/2d/ab/amsterdam.jpg");
+    background-position: center center;
+    border-bottom: 5px solid #38291D;
+    min-height: 504px;
+    position: relative;
+}
+
+body.aklnd  {
+    background: url("http://stephencaver.com/-/img/bg-grain.png") repeat scroll 0 0 #FAFAE1;
+    color: #000000;
+    font: 100% "Book Antiqua",Palatino,"Palatino Linotype","Palatino LT STD",Georgia,serif;
+    text-rendering: optimizelegibility;
+}
+body.aklnd .bklyn-0{
+         background-size: cover;
+    background-image: url("http://farm6.staticflickr.com/5449/9485581464_5ba600d4ff_o.jpg");
+    background-position: center center;
+    border-bottom: 5px solid #38291D;
+    min-height: 504px;
+    position: relative;
+    
+
+
+
+
+}
+body.paname .bklyn-0 {
+    /*
+    background-image: url("http://farm4.staticflickr.com/3758/9321508334_98389e0e11_b.jpg");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 100% 1091px;
+    border-bottom: 5px solid #38291D;
+    height: 1091px;
+    position: relative;
+    padding-top:550px;
+    */
+}
+
+    .zippy {
+    border: 1px solid black;
+    display: inline-block;
+    width: 250px;
+    }
+    .zippy.opened > .title:before { content: '▼ '; }
+    .zippy.opened > .body { display: block; }
+    .zippy.closed > .title:before { content: '► '; }
+    .zippy.closed > .body { display: none; }
+    .zippy > .title {
+    background-color: black;
+    color: white;
+    padding: .1em .3em;
+    cursor: pointer;
+    }
+    .zippy > .body {
+    padding: .1em .3em;
+    }
+
+
+
+body.aklnd section{
+
+   background: url("http://stephencaver.com/-/img/rule-double-dotted.png") repeat-x scroll 0 0% transparent;
+    padding: 19px
+}
+
+body.amstd .bklyn-0:after {
+    background-color: #515B47;
+    content: "";
+    height: 504px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 9999;
+
+    opacity:.9; 
+    animation-duration: 5s;
+    animation-iteration-count: 1;
+    animation-name: hanim;
+    animation-timing-function: linear;
+ 
+}
+@keyframes hanim{
+    0% {opacity:0.1; }
+    100% {opacity:0.9; }
+}
+
+body.amstd .bklyn-0:hover {
+  
+}
+
+
+
+  
+}
+
+
+
+body.amstd .bklyn-0 {
+     position: relative;
+}
+
+
+
+body.bklyn .bklyn-1{
+    /*font-family: "quatro-slab",Helvetica,Arial,sans-serif;*/
+    font-size: 1.4em;
+}
+
+body.bklyn .bg_lighter{ /*beige re. 1*/
+    background-color: #F8F4EB;
+    border-bottom: 1px solid #E0DCD3;
+    border-top: 1px solid #38291D;
+    padding: 4em 0;
+}
+body.amstd .bg_lighter{ /*beige re. 1*/
+    background-color: #515B47;
+    border-bottom: 1px solid #4D3A2C;
+    border-top: 1px solid #4D3A2C;
+    padding: 4em 0;
+    color:#fff;
+}
+
+
+body.paname .bg_lighter{ /*beige re. 1*/
+    background-color: #fffaf4;
+    border-bottom: 4px solid #fc6f78;
+    border-top: 4px solid #eed1c1;
+    
+}
+
+body.chmnx .bg_lighter{
+   background:#EFF4FB;
+}
+
+body.paname .bg_darkest {
+    background-image: url("/img/fgg.png");
+    background-position: right bottom;
+    background-repeat: no-repeat;
+    border-bottom: 1px solid #FC6F78;
+    min-height: 624px;
+}
+
+body.bklyn  .bklyn-2{ /*people*/
+	padding-top:100px;
+}
+
+body.bklyn .mt span.h3 {
+    background: none repeat scroll 0 0 #FFFFFF;
+    display: inline-block;
+    padding: 0 0.825em;
+    position: relative;
+    top: 0.8em;
+	color: #AC0818;
+    font-family: "quatro-slab",Helvetica,Arial,sans-serif;
+    font-size: 1.2em;
+}
+
+
+
+body.bklyn .bklyn-3, body.bklyn .bklyn-5{ /*banner white*/
+
+    padding: 4em 0;
+}
+
+
+
+
+
+body.bklyn .bklyn-6{ /*green*/
+
+background-color: #00BEBE;
+    border-bottom: 1px solid #009FA0;
+    border-top: 1px solid #009FA0;
+    padding: 4em 0;
+}
+body.bklyn .illustrated_big{ /*love*/
+	
+    background-image: url("https://brooklynbeta.org/img/2013/bbridge.jpg");
+    background-position: center center;
+    background-size: cover;
+    border-bottom: 1px solid #75000B;
+    text-align: center;
+	padding-top:220px;
+	min-height:800px;
+}
+
+
+
+ body.chmnx figcaption {
+    background: none repeat scroll 0 0 #DADADA;
+    color: #000000;
+    opacity: 0.3;
+}
+ body.chmnx figcaption:hover {
+   
+    opacity: 1;
+}
+
+
+body.chmnx {
+
+
+
+
+/*
+
+background-image: linear-gradient(bottom, #FFFFFF 9%, #AFC5EA 59%);
+background-image: -o-linear-gradient(bottom, #FFFFFF 9%, #AFC5EA 59%);
+background-image: -webkit-linear-gradient(bottom, #FFFFFF 9%, #AFC5EA 59%);
+background-image: -ms-linear-gradient(bottom, #FFFFFF 9%, #AFC5EA 59%);
+background-image: -webkit-gradient(
+    linear,
+    left bottom,
+    left top,
+    color-stop(0.09, #FFFFFF),
+    color-stop(0.59, #AFC5EA)
+);
+
+*/
+   background-image: -moz-linear-gradient(center bottom , #FFFFFF 91%, #7A97C4 107%);
+    opacity:1;
+     transition: opacity 1s linear 0.2s;
+
+
+}
+body.chmnx:hover {
+/*
+ transition: opacity 1s linear 0.2s;
+opacity:1;
+*/
+/*
+
+background-image: linear-gradient(bottom, #FFFFFF 9%, #AFC5EA 59%);
+background-image: -o-linear-gradient(bottom, #FFFFFF 9%, #AFC5EA 59%);
+background-image: -webkit-linear-gradient(bottom, #FFFFFF 9%, #AFC5EA 59%);
+background-image: -ms-linear-gradient(bottom, #FFFFFF 9%, #AFC5EA 59%);
+background-image: -webkit-gradient(
+	linear,
+	left bottom,
+	left top,
+	color-stop(0.09, #FFFFFF),
+	color-stop(0.59, #AFC5EA)
+);
+
+*/
+  /*	background-image: -moz-linear-gradient(center bottom , #FFFFFF 86%, #7A97C4 96%); */
+
+}
+
+
+body.chmnx .bg_footer {
+    background-color: #AFC5EA;
+    background-image: url("/img/snow-test.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    min-height: 597px;
+}
+
+body.chmnx .bg_footer .col-text {
+   
+    background-image: -moz-linear-gradient(center bottom , #FFFFFF 1%, #AFC5EA 100%);
+}
+
+body.chmnx .bg_footer i {
+   color: #fff;
+}
+body.chmnx .nodes.tdinfos a {background-color: #AFC5EA;}
+
+
+
+
+body.chmnx .share_fragment i {
+    color: #AFC5EA;
+    font-size: 27px;
+    margin-right: 6px;
+}
+
+
+

@@ -1,14 +1,10 @@
 // file to clean. new layout > only comments on left,+ small editors contextual right
-
 div.side_edit_right(ng-if="('#{locals.extraparam}' == 'right')")
-  
   div(ng-if=" (sorted_section.mode == 'section_edit') && (cur_sel['section_index'] == $index) " ) 
-   
   div( class="markup-elements columns " , ng-if="sorted_section.mode == 'markup_edit' && cur_sel['section_index'] == $index ",  ng-controller="FragmentCtrl")
    div(class="markup-element" , ng-repeat="a in objects_section_array('markup',$index,'inline') track by $index")
       // p {{a.explicit}}
       span.markup-item-subtype(ng-click="_select_object(a, a.position, sorted_section,'-1')", class="already_{{a.tochange}}  clipped_{{a.isselected}} markup-hn_{{a.subtype}}") {{a.subtype}}  
-
       span.markup-item-metadata(ng-if="a.subtype== 'link' ") {{a.metadata}}
       span.markup-item-edit(ng-if="a.isselected == 'true'")
       span.markup-item-ranges(ng-if="a.isselected == 'true'") {{a.start}} - {{a.end}}
@@ -34,61 +30,44 @@ div.side_edit_left(ng-if="('#{locals.extraparam}' == 'left')")
     h4.floating_block {{ilc[p_lang]['add_a']}} 
     select.floating_blocks(ng-model="addsomething", ng-change="toggled_addsomething(c)",  ng-options="c for c in available_sections_objects")
         option(value="c" , ng-selected="" ) {{c}}
-
-   i.icon-comment(ng-click="toggletabs('comments', 'editor_left',[$index] )  ")
-   i.icon-superscript.icon-muted(ng-if="render_layout=='fragments'",ng-click="toggletabs('markup', 'editor_left',[$index] )"  )  
-   i.icon-link(ng-if="render_layout=='fragments'",ng-click="toggletabs('links', 'editor_left',[$index] )"  )  
-   i.icon-camera(ng-if="render_layout=='fragments'",ng-click="toggletabs('images', 'editor_left',[$index] )"  )  
-   i.icon-info-sign(ng-if="render_layout=='fragments'",ng-click="toggletabs('notes', 'editor_left',[$index] )"  )  
-   i.icon-tint.icon-muted(ng-if="render_layout=='fragments'" ,ng-click="toggletabs('styles_inline', 'editor_left',[$index] )"  )  
+   
+   // toggletabs('comments', 'editor_left',[$index] )  
+   i.icon-comment(ng-click="")
+   //.i.icon-superscript.icon-muted(ng-if="render_layout=='fragments'",ng-click="toggletabs('markup', 'editor_left',[$index] )"  )  
+   //i.icon-link(ng-if="render_layout=='fragments'",ng-click="toggletabs('links', 'editor_left',[$index] )"  )  
+   //i.icon-camera(ng-if="render_layout=='fragments'",ng-click="toggletabs('images', 'editor_left',[$index] )"  )  
+   //i.icon-info-sign(ng-if="render_layout=='fragments'",ng-click="toggletabs('notes', 'editor_left',[$index] )"  )  
+   //i.icon-tint.icon-muted(ng-if="render_layout=='fragments'" ,ng-click="toggletabs('styles_inline', 'editor_left',[$index] )"  )  
    i.icon-tint.icon-muted(ng-if="render_layout=='fragments'", ng-click="toggletabs('styles_classes', 'editor_left',[$index] )"  )  
 
-   div(ng-if="showtabs('comments', 'editor_left',[$index])" )
-    h4 {{ilc['post_comment_title']}} 
-    p  {{ilc[p_lang]['comment_input']}} 
-   
-
-  
-
-   div( ng-if="showtabs('notes', 'editor_left',[$index])" )
-    h4 {{ilc[p_lang]['note_title']}}
-    p {{ilc[p_lang]['note_notice']}}
-    textarea(ng-model="ilctext")
-    p 
-    i.icon-ok-sign.postilc(ng-click="push_fragment('note','comment', cranges['side'],'' , ilctext, '',cranges['start'],cranges['end'] ,cur_sel['section_index'])" ) 
-
-
-
-   div( ng-if="showtabs('styles_inline', 'editor_left',[$index])" )
-    h4 {{ilc[p_lang]['cssclassesextend_title']}} 
-    p {{ilc[p_lang]['cssclassesextend_notice']}}
-    .style_toggle.twelve.action_info(ng-repeat="style in objects_sections[$index]['css_styles']") 
-      p 
-        input(type="text", ng-model="style.prop") :
-        input(type="text", ng-model="style.attribute")
-      p  
-        input(value="save",type="button", ng-model="style", ng-click="save_prop_attribute(style, $parent.$index,sorted_section )")
-    
-    .style_toggle.twelve.action_info(ng-repeat="stylez in objects_sections[$index]['fixed_sections']")
-      p {{stylez.subtype}}
-      .twelve.action_info
-        p(ng-click="push_prop_attribute($parent.$index,sorted_section )") 
-         i.icon-plus {{ilc['cssclassesextend_new']}}
-
-   
-   // tools cross types
+   div(ng-if="showtabs('comments', 'editor_left',[$index])")
+      h4 {{ilc[p_lang]['post_comment_title']}}
+      p {{ilc[p_lang]['comment_input']}}
+   div(ng-if="showtabs('styles_inline', 'editor_left',[$index])")
+      h4 {{ilc[p_lang]['cssclassesextend_title']}} 
+      p {{ilc[p_lang]['cssclassesextend_notice']}}
+      .style_toggle.twelve.action_info(ng-repeat="style in objects_sections[$index]['css_styles']") 
+        p
+         label
+          input(type="text", ng-model="style.prop") :
+          input(type="text", ng-model="style.attribute")
+        p
+         label
+          input(value="save",type="button", ng-model="style", ng-click="save_prop_attribute(style, $parent.$index,sorted_section )")
+      .style_toggle.twelve.action_info(ng-repeat="stylez in objects_sections[$index]['fixed_sections']")
+        p {{stylez.subtype}}
+        .twelve.action_info
+          p(ng-click="push_prop_attribute($parent.$index,sorted_section )") 
+           i.icon-plus {{ilc['cssclassesextend_new']}}
    div.twelve.ilctools-extra
-    textarea(ng-model="ilctext") {{ilctext}}
-
-    label.editor_left_subtypeofobj(ng-if="showtabs('editor_left_subtypeofobj', 'editor_left',[$index])") Select subtype:
-      select(ng-model="ilsubtype", ng-options="s for s in fragment_sub_types")
-
-    label.editor_left_start_ranges(ng-if="showtabs('editor_left_start_ranges', 'editor_left',[$index])") from:
-      input(type="number", ng-model="cranges['start']",  ng-change="change_textarea_range(cranges['start'], cranges['end'], cranges['side'])")
-    label.editor_left_start_ranges(ng-if="showtabs('editor_left_end_ranges', 'editor_left',[$index])") to:
-      input(type="number", ng-model="cranges['end']", ng-change="change_textarea_range(cranges['start'], cranges['end'], cranges['side'])" ) 
-
-    label.editor_left_sideofobj(ng-if="showtabs('editor_left_sideofobj', 'editor_left',[$index])") Select side
-      select(ng-model="cranges.side", ng-change="",  ng-options="c for c in available_positions_objects_flat")
-        option(value="c" , ng-selected="" ) {{c}}
-    span.btn(ng-click="push_fragment('note','comment',cranges['side'], '', ilctext, '', cranges['start'],cranges['end'],cur_sel['section_index'])" ) OK
+      textarea(ng-model="ilctext") {{ilctext}}
+      label.editor_left_subtypeofobj(ng-if="showtabs('editor_left_subtypeofobj', 'editor_left',[$index])") Select subtype:
+        select(ng-model="ilsubtype", ng-options="s for s in fragment_sub_types")
+      label.editor_left_start_ranges(ng-if="showtabs('editor_left_start_ranges', 'editor_left',[$index])") {{ilc[p_lang]['start']}} :
+        input(type="number", ng-model="cranges['start']",  ng-change="change_textarea_range(cranges['start'], cranges['end'], cranges['side'])")
+      label.editor_left_start_ranges(ng-if="showtabs('editor_left_end_ranges', 'editor_left',[$index])") {{ilc[p_lang]['end']}} :
+        input(type="number", ng-model="cranges['end']", ng-change="change_textarea_range(cranges['start'], cranges['end'], cranges['side'])" ) 
+      label.editor_left_sideofobj(ng-if="showtabs('editor_left_sideofobj', 'editor_left',[$index])") {{ilc[p_lang]['select_side']}} :
+        select(ng-model="cranges.side", ng-change="",  ng-options="c for c in available_positions_objects_flat")
+          option(value="c" , ng-selected="" ) {{c}}
+      span.btn(ng-click="push_fragment('note','comment',cranges['side'], '', ilctext, '', '','','')" ) OK

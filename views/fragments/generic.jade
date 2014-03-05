@@ -20,7 +20,7 @@ fluidvids(ng-if="a.type=='player'", ng-controller="FragmentCtrl", src="", positi
 .twelve.column.npadr(ng-controller="FragmentCtrl", class="iblock {{a.type}}s subtype_{{a.subtype}}" , ng-if="(a.type=='data') || (a.type=='note')")
   
  
- i(ng-click="_select_object(a,a.position,sorted_section,'-1')", ng-dblclick="dbc_object(a)",  title="{{a.subtype}}", class="fragment_icon type_{{a.type}} subtype_{{a.subtype}} already_{{a.tochange}} selected_icon_{{a.isselected}}") {{a.subtype[0]}}
+ i(ng-click="_select_object(a,a.position,sorted_section,'-1')", ng-dblclick="dbc_object(a)",  title="Select / edit {{a.subtype}}", class="fragment_icon type_{{a.type}} subtype_{{a.subtype}} already_{{a.tochange}} selected_icon_{{a.isselected}}") {{a.subtype[0]}}
 
  p.smallt(ng-bind-html="a.metadata", class="mtvalue idepth idepth_{{a.depth}}") 
 
@@ -76,9 +76,9 @@ fluidvids(ng-if="a.type=='player'", ng-controller="FragmentCtrl", src="", positi
     i.icon-external-link(ng-if="a.extref", ng-click="_setref_obj(doc.id, a.id, a.extref)") 
 
   p
-   label.numberfloat from:
+   label.numberfloat {{ilc[p_lang]['start']}} :
     input.numberfloat(required ,max="{{sorted_section.end}}" , min="{{sorted_section.start}}",  type="number" , ng-model="a.start" , ng-change="editing_object_range(a,a.start, a.end)")
-   label.numberfloat to:
+   label.numberfloat {{ilc[p_lang]['end']}} :
     input.numberfloat(required , max="{{sorted_section.end}}", min="{{sorted_section.start}}", type="number" , ng-model="a.end" ,   ng-change="editing_object_range(a, a['start'], a['end'])")
    
    span(ng-if="(a.position !== 'global') && (myForm.$error.required[0])") is empty 

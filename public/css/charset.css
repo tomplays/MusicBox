@@ -1,0 +1,527 @@
+
+
+input.linput[type="text"]{
+    display:inline;
+    font-family: 'Esteban';
+    font-size: 1.2em;
+    line-height: 1.3em;
+}
+
+
+
+lt.h1.fi:before,lt.h2.fi:before, lt.h3.fi:before,  lt.h4.fi:before,  lt.h5.fi:before, lt.h6.fi:before {
+    clear: both;
+    content: "";
+    display: block;
+    height: 1px;
+    width: 1px;
+}
+lt.h1.nd:after, lt.h2.nd:after , lt.h3.nd:after,lt.h4.nd:after ,lt.h5.nd:after ,lt.h6.nd:after {
+    clear: both;
+    content: "";
+    display: block;
+    height: 1px;
+    width: 1px;
+}
+
+input.linput[type="text"] {
+    border: medium none;
+    box-shadow: none;
+    
+    font-size: 21px;
+    margin: 0;
+    padding: 0;
+    width: 13px;
+
+}
+
+
+span.fi-true:before {
+    background: none repeat scroll 0 0 #FFA500;
+    clear: both;
+    content: "";
+    display: block;
+}
+
+span.fi-true{
+  
+  /* background:green;*/
+}
+
+span.nd-true{
+ /* background:red;*/
+
+}
+span.nd-true:after{
+    clear: both;
+    content: "";
+    display: block;
+    margin-bottom: 15px;
+}
+
+
+span.fi-true lt.list-item:before {
+    clear: none;
+    color: #DADADA;
+    content: "*";
+    display: block;
+    float: none;
+    font-size: 29px;
+    height: 0;
+    left: -20px;
+    margin-bottom: 7px;
+    margin-right: 13px;
+    margin-top: 4px;
+    position: relative;
+    top: 14px;
+}
+span.fi-true lt.list-item{
+
+}
+
+.styleclass_high_fat lt.cite {
+    background: none repeat scroll 0 0 #DDE4F0;
+    font-size: 1.6em;
+    line-height: 2em;
+    padding-bottom: 0.4em;
+    padding-top: 0.4em;
+}
+.styleclass_high_fat span.fi-true lt.cite {
+  
+
+}
+
+span.fi-true lt.cite:before {
+    background: none repeat scroll 0 0 #DDE4F0;
+    color: #FFFFFF;
+    content: "“";
+    float: none;
+    font-family: georgia;
+    font-size: 47px;
+    height: 7px;
+    left: -22px;
+    line-height: 8px;
+    margin-bottom: 2px;
+    margin-right: 0;
+    margin-top: 0;
+    padding-left: 4px;
+    padding-right: 0;
+    padding-top: 0;
+    position: relative;
+    top: 13px;
+    width: 17px;
+}
+/*
+span.nd-true lt.cite:after {
+    background: none repeat scroll 0 0 #DDE4F0;
+    color: #FFFFFF;
+    content: "“";
+    float: none;
+    font-family: georgia;
+    font-size: 47px;
+    height: 7px;
+    left: -22px;
+    line-height: 8px;
+    margin-bottom: 2px;
+    margin-right: 0;
+    margin-top: 0;
+    padding-left: 4px;
+    padding-right: 0;
+    padding-top: 0;
+    position: relative;
+    top: 13px;
+    width: 17px;
+}
+*/
+span.select-true lt.cite {
+    background-color: #16A085;
+    color:#DDE4F0;
+}
+
+
+
+.styleclass_high_fat lt.code, lt.code {
+    background: none repeat scroll 0 0 #CFE6E1;
+    color: #16A085;
+    font-family: monospace;
+    font-size: 1.3em;
+    line-height: 1.3em;
+    margin-top: 9px;
+    padding-top: 0.3em;
+}
+
+span.select-true lt.code {
+    background-color: #16A085;
+    color:#CFE6E1;
+}
+
+lt.link{text-decoration:underline;}
+
+lt.sp{margin-right:1em;}
+lt.selected{/*color:blue;*/}
+
+
+lt.cur_sel, .fx_bolds lt.strong.cur_sel{
+     background-color: #eee;  
+}
+.mt lt.cur_sel_magnet_dot{
+     background-color: green;  
+}
+.mt lt.cur_sel_magnet_number{
+     background-color: pink;  
+}
+.mt lt.cur_sel_magnet_dot:after {
+    clear: both;
+    content: "";
+    display: block;
+    height: 1px;
+    width: 1px;
+    margin-bottom: 15px;
+}
+.mt lt.cur_sel_magnet_empty, .mt lt.cur_sel_magnet_comma{
+     background-color: red;
+     width:22px;
+}
+
+
+
+.mt section:nth-child(odd) .col-text { /* background-color: #eee;  */}
+
+
+
+
+.mt.styletext_Esteban lt,
+.styletext_Esteban time,
+.post-author-info p,
+.summary_text,
+.styletext_Esteban .styletext,
+
+.pstatic
+{
+      font-family: 'Esteban';
+}
+
+.mt.styletext_MontserratSubrayada lt{
+          font-family: 'Montserrat Subrayada';
+
+}
+.mt.styletext_LovedbytheKing lt{
+          font-family: 'Loved by the King', cursive;
+}
+
+
+
+.mt.styletext_Fascinate lt,
+.styleheadings_Fascinate .styleheadings,
+ .mt.styleheadings_Fascinate lt.h1, .mt.styleheadings_Fascinate lt.h2, .mt.styleheadings_Fascinate lt.h3, .mt.styleheadings_Fascinate lt.h4, .mt.styleheadings_Fascinate lt.h5
+{
+          font-family: 'Fascinate';
+}
+
+
+
+.mt.styletext_FredokaOne lt{
+          font-family: 'Fredoka One', cursive;
+}
+
+/*
+.mt.DroidSans 
+
+        font-family: 'Droid Sans', serif;
+  
+.mt.Esteban span{
+      font-family: 'Esteban', serif;
+    
+}
+.mt.PressStart2P span .col-text span.h1{
+      font-family: 'Press Start 2P', cursive;
+}
+.mt.Chango
+     font-family: 'Chango', cursive;
+Cousine 
+  font-family: 'Cousine', sans-serif;
+.mt.Flamenco 
+font-family: 'Flamenco', cursive;
+
+
+.mt.CaesarDressing 
+       font-family: 'Caesar Dressing', cursive;
+}
+
+*/
+
+
+
+
+
+
+.styleclass_medium lt, .thesections p.pstatic
+{
+      line-height:1.3em;
+      font-size:1.2em;
+}
+.styleclass_high_fat lt , .thesections p.pstatic
+{
+    font-size: 1.3em;
+    line-height: 1.45em;
+}
+.styleclass_medium_fr lt, .thesections p.pstatic
+{
+      line-height:1.25em;
+      font-size:1.2em;
+}
+
+.styleclass_mini lt , .thesections p.pstatic
+{
+    font-size: 1.3em;
+    line-height: 1.4em;
+}
+
+
+
+.mt.styleheadings_DroidSans h1,
+.styleheadings_DroidSans .styleheadings
+{
+    font-family: 'Droid Sans',serif;
+   
+}
+
+.mt.styleheadings_DroidSans h1, .mt.styleheadings_DroidSans lt.h1, .mt.styleheadings_DroidSans lt.h2, .mt.styleheadings_DroidSans lt.h3, .mt.styleheadings_DroidSans lt.h4, .mt.styleheadings_DroidSans lt.h5  {
+    font-family: 'Droid Sans',serif;
+}
+
+lt.strike{
+    text-decoration: line-through;
+}  
+
+ lt.link{
+    text-decoration: underline;
+}  
+
+
+
+
+lt.h1 {
+    font-size: 44px;
+}
+lt.h2 {
+    font-size: 37px;
+}
+lt.h3 {
+    font-size: 27px;
+}
+lt.h4 {
+    font-size: 23px;
+}
+lt.h5 {
+    font-size: 17px;
+}
+lt.h6 {
+    font-size: 14px;
+}
+
+lt{
+     opacity 1; 
+}
+
+lt.next-neo-section{
+     opacity .1; 
+     transition: opacity 1.2s linear .2s;
+}
+
+.styleheadings_Droid lt.h1 {
+    font-size: 5em;
+    font-weight: bold;
+    line-height: 0.95em;
+    text-transform: uppercase;
+}
+
+
+
+
+.styleheadings_Droid lt.h2 {
+    font-size: 3.7em;
+    line-height: 1.2em;
+}
+
+.styleheadings_Droid lt.h3 {
+    font-size: 2.3em;
+    line-height: 1.5em;
+}
+
+.styleheadings_Droid lt.h4 {
+    color: #292929;
+    font-size: 2.1em;
+    line-height: 1.5em;
+}
+.styleheadings_Droid lt.h5 {
+    font-size: 1.6em;
+    line-height: 1.3em;
+}
+.styleheadings_Droid lt.h6 {
+    border-bottom: 1px solid #DADADA;
+    font-size: 1.2em;
+   line-height: 1.4em;
+    padding-bottom: 3px;
+}
+
+/*
+h1 {
+    font-size: 44px;
+}
+h2 {
+    font-size: 37px;
+}
+h3 {
+    font-size: 27px;
+}
+h4 {
+    font-size: 23px;
+}
+h5 {
+    font-size: 17px;
+}
+h6 {
+    font-size: 14px;
+}
+*/
+
+
+lt.strong{font-weight:bold;}
+lt.em{font-style: italic;}
+/*
+
+*/
+lt.markup_sel_range{background:#ccc;}
+
+/*lt.note{border-bottom:1px solid #dadada;}*/
+lt.comment{
+    border-bottom:1px dotted #8E44AD;
+}
+
+lt.freebase, lt.place{
+    border-bottom:1px solid #8E44AD;
+}
+
+lt.sel_hover{background:#eee;}
+/*
+
+lt.sel_section{background:#eee;}
+
+section.active_section{
+    background:#dadada;
+}
+section.active_section div{
+    border:1px solid green;
+}
+*/
+
+.mt.styleheadings_DroidSans lt.h1{
+  font-size: 42px;
+    line-height: 55px;
+}
+
+.mt.styleheadings_DroidSans lt.h2{
+   font-size: 42px;
+    line-height: 55px;
+}
+.mt.styleheadings_DroidSans lt.h3 {
+    font-size: 27px;
+    line-height: 36px;
+}
+.mt.doc_id_3.styleheadings_DroidSans lt.h3 {
+    border-bottom:1px solid #dadada;
+}
+
+
+.mt.styleheadings_DroidSans .col-text lt.h4{
+   font-size: 2rem;
+   
+}
+
+
+
+
+
+
+.summary_text{
+    background-color: #dadada;
+    padding:20px;
+    font-size:.9em;
+}
+.summary_isvisible lt.h1,
+.summary_isvisible lt.h2,
+.summary_isvisible lt.h3,
+.summary_isvisible lt.h4,
+.summary_isvisible lt.h5,
+.summary_isvisible lt.summary,
+.summary_isvisible lt.summary-block
+
+{
+color:#2980b9; /*blue*/
+}
+
+
+
+
+
+
+.mt.styletext_Esteban lt.time {font-size: 18px;}
+.mt.styletext_Esteban .post-author-info p {
+   font-size: 16px;
+    line-height: 18px;
+}
+
+
+.mt p.smallt{
+    font-size:.9em;
+}
+
+
+
+
+
+
+
+lt.object_selected{
+}
+
+
+
+
+
+span.select-true lt{
+    background-color:#1abc9c;
+
+}
+
+
+
+
+
+
+.mt .markups-H16 span{
+    font-size: 1.5em;
+}
+.mt .markups-H16 span + span{
+    font-size: 1.35em;
+}
+.mt .markups-H16 span + span +span{
+    font-size: 1.25em;
+}
+.mt .markups-H16 span + span + span + span + span{
+    font-size: 1.15em;
+}
+.mt .markups-H16 span + span + span + span + span + span{
+   font-size: 1em;
+}
+
+
+lt.sectionlast{background:green;}
+lt.sectionfirst{background:green;}
+lt.sectionantelast{background:orange;}
+lt.sectionsecond{background:orange;}
+lt.enclose_before{background:orange;}
+lt.enclose_neo{background:yellow;}
+lt.enclose_after{background:red;}
+

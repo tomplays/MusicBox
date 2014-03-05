@@ -28,7 +28,7 @@
 
      .twelve.playerstdinfos.tdinfos(ng-include="fragments['generic'][0].url", ng-repeat="a in objects_section_array('player', $index,'#{locals.extraparam}')")
 
-     .twelve.notetdinfos.tdinfos(ng-if="sorted_section.mode !=='composer'", ng-include="fragments['generic'][0].url", ng-repeat="a in objects_section_array('note',$index, '#{locals.extraparam}')")
+     .twelve.notetdinfos.tdinfos(ng-if="sorted_section.mode !=='text_edit'", ng-include="fragments['generic'][0].url", ng-repeat="a in objects_section_array('note',$index, '#{locals.extraparam}')")
 
      .twelve.notesinfos.tdinfos(ng-include="fragments['generic'][0].url", ng-repeat="a in objects_section_array('data',$index, '#{locals.extraparam}')") 
 
