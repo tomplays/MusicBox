@@ -392,7 +392,7 @@ function FragmentCtrl($scope, $http) {
 			p_start = $scope.cranges['start']
 		}
 		if(!p_end || p_end == ''){
-			p_end = $scope.cranges['end']
+			p_end = $scope.cranges['end'];
 		}
 		if(!ss || ss == ''){
 			ss = $scope.cur_sel['section_index']
