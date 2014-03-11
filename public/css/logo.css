@@ -1,42 +1,42 @@
+/* First file to be rewritten with stylus */
 .branding {
-    color: #FFFFFF;
-    background:#000;
-    height: 44px;
-    width: 44px;
-    left: 10px;
-    top: 10px;
-    position: absolute;
-    text-align: center;
-    transition: top 0.2s linear 0s, left 0.2s linear 0s, opacity 0.2s linear 0s;
-    z-index: 700;
-    border-radius: 5px;
+  color: #fff;
+  background: #000;
+  height: 44px;
+  width: 44px;
+  left: 10px;
+  top: 10px;
+  position: absolute;
+  text-align: center;
+  transition: top 0.2s linear 0s, left 0.2s linear 0s, opacity 0.2s linear 0s;
+  z-index: 700;
+  border-radius: 5px;
 }
-
-.branding h1{
- 	font-size: 24px;
+.branding h1 {
+  font-size: 24px;
   margin: 0;
   padding: 9px 0 0;
 }
-.branding h1 a{ 
-  font-size: 24px; 
-  color:#fff;
+.branding h1 a {
+  font-size: 24px;
+  color: #fff;
 }
-.branding h1 a span{}
-
-/*
-.branding.black_bg{background-color:#000000;}
-.branding.white_bg{background-color:#fff;}
-.branding.transparent_bg{background-color:transparent;}
-*/
-
-@media only screen and (max-width: 767px) { 
-    /* become relative */
-   .branding {
-      left: 0;
-      margin: 0 auto;
-      position: relative;
-      top: 0;
-      width: 100%;
-      border-radius: 0px;
-   }
+.branding.black_bg {
+  background-color: #000;
+}
+.branding.white_bg {
+  background-color: #fff;
+}
+.branding.transparent_bg {
+  background-color: transparent;
+}
+@media only screen and (max-width: 767px) {
+  .branding {
+    left: 0;
+    margin: 0 auto;
+    position: relative;
+    top: 0;
+    width: 100%;
+    border-radius: 0px;
+  }
 }

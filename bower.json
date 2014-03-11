@@ -21,7 +21,7 @@
     "angular-route": "~1.2.12",
     "angular-sanitize": "~1.2.12",
     "font-awesome": "3.2.1",
-    "jquery": "~2.1.0",
+    "jquery": "2.1.0",
     "underscore": "~1.5.2",
     "momentjs": "~2.5.1"
   }

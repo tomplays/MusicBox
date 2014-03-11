@@ -27,6 +27,7 @@ angular.module('musicBox',  ['ngResource', 'musicBox.filters', 'ngRoute', 'music
         redirectTo: '/'
       });
       $locationProvider.html5Mode(true);
+      
     // $sceDelegate.enabled(false);
      // $sceDelegateProvider.resourceUrlWhitelist(['.*']);
     }

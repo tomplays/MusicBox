@@ -12,7 +12,26 @@ musicBox.run(function($rootScope) {
     /*
         Receive emitted message and broadcast it.
     */
-    $rootScope.$on('docEvent', function(event, args) {
+
+    
+    // $rootScope.$on('summarizeEvent', function(event, args) {
+       // $rootScope.$broadcast('summarize', args);
+    // });
+
+ 
+   
+});
+
+musicBox.run(function($rootScope, $http, $route) {
+ 
+  $rootScope.$on('$routeChangeSuccess', function (e, cur, prev) {
+    if(cur && prev && cur !== prev){
+  }
+  });
+
+
+
+   $rootScope.$on('docEvent', function(event, args) {
         $rootScope.$broadcast('doc', args);
     });
     $rootScope.$on('sectionEvent', function(event, args) {
@@ -26,19 +45,18 @@ musicBox.run(function($rootScope) {
     });
     $rootScope.$on('keyEvent', function(event, args) {
         $rootScope.$broadcast('key', args);
-    });
-    // $rootScope.$on('summarizeEvent', function(event, args) {
-       // $rootScope.$broadcast('summarize', args);
-    // });
-});
+    });   
+
+
+})
+
 
 
 musicBox.factory('docsfactory', function ($rootScope, $http, $location,$routeParams, socket, translations) {
     return function (inf) {
     var self = {
         init: function () {
-            
-            // 
+     
 
             var translation = translations();
 
@@ -154,6 +172,8 @@ musicBox.factory('docsfactory', function ($rootScope, $http, $location,$routePar
           return $rootScope;
         },
         init_first : function () {
+
+
             // will not change in navigation 
             // basic arrays
             var translation = translations();
@@ -237,6 +257,8 @@ musicBox.factory('docsfactory', function ($rootScope, $http, $location,$routePar
           console.log($rootScope.p_lang)
         },
         listen: function (docId) {
+
+         
               console.log('Now listenning.. #'+docId)
           
 
@@ -333,12 +355,13 @@ musicBox.factory('docsfactory', function ($rootScope, $http, $location,$routePar
             var doc = docdatas.data;
             if(doc.doc){
               var docId = doc.doc.id;
-              self.listen(docId)
+            
 
              // console.log('then+d');
               $rootScope.doc = doc
               $rootScope.working_doc = doc;
               $rootScope.rawtext= '-';
+                self.listen(docId)
               $rootScope.doc_load_status = 'loaded';
               //$rootScope.doctoload.push($rootScope.doc);
               $rootScope.docstoload.push($rootScope.doc);
@@ -388,6 +411,11 @@ musicBox.factory('docsfactory', function ($rootScope, $http, $location,$routePar
 
         },
         create_td : function(docId,args){
+
+            if(docId !== $rootScope.working_doc.doc.id){
+            return;
+          }
+         
           if(args.action == 'add_section'){
             var temp_data = new Array();
             temp_data.start = args.textdata.start;
@@ -416,6 +444,9 @@ musicBox.factory('docsfactory', function ($rootScope, $http, $location,$routePar
           });   
         },
         delete_td : function(docId,args){
+          if(docId !== $rootScope.working_doc.doc.id){
+            return;
+          }
           var args_action ='';
           
           if(args.action == 'delete_fragment'){
@@ -648,7 +679,7 @@ musicBox.factory('translations', function ($rootScope, $http, $location) {
       },
       fragmentSubTypes:function (){
         // todo : groups
-        var arr = new Array('pick one', 'world','city', 'hyperlocal', 'comment','place','code_block','data','year','unit','x','y','version','sc-track', 'translation','comment','wikipedia','youtube','vimeo','soundcloud','freebase','summary','summary-block','img','child_section');
+        var arr = new Array('pick one', 'world','city', 'hyperlocal', 'comment','place','code_block','data','year','unit','x','y','version','sc-track', 'translation','comment','wikipedia','youtube','vimeo','soundcloud','freebase','person-bio','summary','summary-block','img','child_section');
         return arr 
       },
       posAvailable:function (){

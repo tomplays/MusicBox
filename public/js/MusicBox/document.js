@@ -39,6 +39,10 @@ GLOBALS.show_section_size = false;
 function DocumentCtrl($scope, $http , $location, $routeParams,socket, translations, userinfo, docsfactory) {
 	
 	
+/*
+
+*/
+
 	//$scope.action_letter = new Array();
 
  	// use a service
@@ -52,6 +56,9 @@ function DocumentCtrl($scope, $http , $location, $routeParams,socket, translatio
 
  // load a doc 
 function preinit(){	
+
+
+
 	if(!$routeParams.doc_id){
 		 $routeParams.doc_id = 1;
 		 $routeParams.render_layout = 'read'
@@ -488,7 +495,9 @@ function apply_docmetas(docmetas){
 			$scope.nodes = $scope.working_doc.nodes;
 		}
 		// note: could be (and), not (else) to fill anyway
-		$scope.docmetas[dmmk] = dmmv;
+		else{
+			$scope.docmetas[dmmk] = dmmv;
+		}
 	});
 	 if($scope.globals.fonts_api =='gfonts'){
 		_.each(googlefonts_loadlist , function(tfont){
@@ -554,13 +563,18 @@ function text_summarize(content){
 	$scope.godoc = function (doctarget) {
 		//console.log(doctarget)
 		if(doctarget){
-				$scope.doctoload.id = doctarget.id
-				$location.path('/doc/'+doctarget.renderas+'/'+doctarget.slug)
+			window.location = '/doc/'+doctarget.renderas+'/'+doctarget.slug
+			//	$scope.doctoload.id = doctarget.id
+		//	$location.path('/doc/'+doctarget.renderas+'/'+doctarget.slug)
 		}
 		else{
-			$scope.doctoload.id = '1';
-			$location.path('/')
+						window.location = '/';
+
+			//$scope.doctoload.id = '1';
+		//	$location.path('/')
 		}
+				
+
 	}
 
 	// show a fragment at side, index, position..
@@ -1285,6 +1299,8 @@ function map_user(userid, kind){
 
 // bug ": :: //"
 function google_unfontize(typo){
+		var n =typo.replace(/:latin/gi,""); 
+
 	var n =typo.replace(/::latin/gi,""); 
 	n = n.replace(/\+/gi, ""); 
 	n = n.replace(/ /g,"");

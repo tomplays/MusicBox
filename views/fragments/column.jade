@@ -4,7 +4,8 @@
 .three_or_twelve(class="col-#{locals.extraparam}") 
         
      h5.global(ng-if="(objects_sections['global'].length > 0) && '#{locals.extraparam}' == 'global'" ) Global Document 
-   
+     // tests : .titles(ng-if="'#{locals.extraparam}' == 'right'" , ng-include="fragments['titles'][0].url" )
+
      div(ng-if="(render_layout == 'fragments') && ('#{locals.extraparam}' == 'left') && $first" , class="edits-elements")
       span(ng-click="_select_all_objects()", class="clipped_{{allselected}}" ) select all
 
@@ -28,7 +29,7 @@
 
      .twelve.playerstdinfos.tdinfos(ng-include="fragments['generic'][0].url", ng-repeat="a in objects_section_array('player', $index,'#{locals.extraparam}')")
 
-     .twelve.notetdinfos.tdinfos(ng-if="sorted_section.mode !=='text_edit'", ng-include="fragments['generic'][0].url", ng-repeat="a in objects_section_array('note',$index, '#{locals.extraparam}')")
+     .twelve.notetdinfos.tdinfos(ng-include="fragments['generic'][0].url", ng-repeat="a in objects_section_array('note',$index, '#{locals.extraparam}')")
 
      .twelve.notesinfos.tdinfos(ng-include="fragments['generic'][0].url", ng-repeat="a in objects_section_array('data',$index, '#{locals.extraparam}')") 
 
