@@ -33,38 +33,63 @@ GLOBALS.fonts_api = 'gfonts';
 GLOBALS.load_section_style = true;
 GLOBALS.show_section_size = false;
 
+var rendrf;
+
+
 
 // MAIN document controller
 // require files "filters.js" and "services.js" for CTRLs
-function DocumentCtrl($scope, $http , $location, $routeParams,socket, translations, userinfo, docsfactory) {
+function DocumentCtrl($scope, $http , $location, $routeParams,renderfactory,socket, translations, userinfo, docsfactory) {
 	
 	
+
+	var force_user = new Object({'islogged':'true', 'user_username': 'system_bot','user_id':1})
+	$scope.userlogged = new Object({'islogged':'true'})
+	if(force_user && USER_USERNAME ==''){
+		$scope.userlogged = force_user;
+	}	
+	if(USER_USERNAME !==''){
+
+		$scope.userlogged = new Object({'islogged':'true', 'user_username': USER_USERNAME,'user_id':USER_ID})
+	}
+
 /*
 
 */
 
 	//$scope.action_letter = new Array();
 
- 	// use a service
+ 	// use services
+
+ 	// for document load and editing
 	var docf = docsfactory();
+
+	// for render view 
+	var render = renderfactory();
+	$scope.render = render;
+
+
 	// register some controllers vars 
 	// (not to reload on doc change)
 	docf.init_first();
+    render.init_first();
+    render.init();
+
+
 	// trigger dom function.. could/should be all exectuted from service, how ? 
 	// load a doc here, from first time
 	preinit();
 
+
  // load a doc 
 function preinit(){	
-
-
-
 	if(!$routeParams.doc_id){
 		 $routeParams.doc_id = 1;
 		 $routeParams.render_layout = 'read'
 	}
    	// basic vars for a doc
 	docf.init();
+
 	// routes params + determine doc id to load
 	docf.listen_routes();
 	docf.load($scope.doctoload);
@@ -76,7 +101,15 @@ function preinit(){
 // ($scope.textdatas > $scope.sorted_sections)
 // broadcast 'sections_prepared' event 
 
-function prepare_sections(){	
+
+
+// init sections arrays
+// order // filter // sort // count 
+// retruns normalized sections arrays and count
+// > but doesnt loop each section.
+
+$scope.prepare_sections = function(){	
+ 	// order // filter // sort // count cf function
 	$scope.sectionstocount = 0;
 	//$scope.sorted_sections = new Array()
 	$scope.textdatas  = _.sortBy($scope.textdatas,function (num) {
@@ -85,64 +118,30 @@ function prepare_sections(){
 	//if($scope.render_layout !=='debug' && !$scope.richtext && $scope.render_layout !=='summarize'){}
     $scope.sorted_sections = _.filter($scope.textdatas, function(td){ return  td.type == 'section'; });
 	$scope.sectionstocount = _.size($scope.sorted_sections);
+	$scope.sections_to_count_notice = ($scope.sectionstocount == 0) ? true : false;
 
-     
-	// maybe no section
-	// var keep_untouched ??
-	if($scope.objects_sections){}
-	else{}
+	// maybe no section ?
+    // init "out the sections" objects array 
 
 	$scope.objects_sections = new Array();
-	$scope.sections_to_count_notice = ($scope.sectionstocount == 0) ? true : false;
+	$scope.objects_sections['global_by_type'] = new Array();
+	_.each($scope.available_sections_objects, function(o, obj_index){
+		$scope.objects_sections['global_by_type'][o] = new Array();
+	});
+
+
 	
 
-	$scope.objects_sections['global'] = new Array();
-	$scope.objects_sections['global_by_type'] = new Array();
+
 	$scope.objects_sections['all'] = new Array();
-
-	// loop each section to create indexed arrays
-	_.each($scope.sorted_sections, function(a, index){
-		//init an indexed array for objects of sections
-		
-			//if(_.isArray($scope.objects_sections[index]) ){
-				
-			//}
-			//else{
-			// and each sections an array of subs objects
-			$scope.objects_sections[index] = new Array();
-			_.each($scope.available_sections_objects, function(o, obj_index){
-				$scope.objects_sections[index][$scope.available_sections_objects[obj_index]] = new Array();
-					// and each subs objects an array of each positions
-					$scope.objects_sections['global_by_type'][$scope.available_sections_objects[obj_index]] = new Array();
-					_.each($scope.available_positions_objects, function(op){ // op: left, right, ..
-						$scope.objects_sections[index][$scope.available_sections_objects[obj_index]][op.name] = new Array();
-					});
-			});
-
-
-			if(a.css){$scope.objects_sections[index]['classes'].push(a.css);}
-
-		//}
-	});
 	$scope.$emit('docEvent', {action: 'sections_prepared' });
 }
 
 
-// 
-function fill_loops(){
-	_.each($scope.sorted_sections, function(a, ss_index){
-				fill_chars(a,ss_index);
-				// run sub loop for each kind
-				apply_chars_classes(a,ss_index);
-				
-	});
-	$scope.$emit('docEvent', {action: 'letters_prepared' });
-}
-
 // sub loop _a
 // fill arrays of letters for each section
 // required init : 
-function fill_chars(section, section_count){
+$scope.fill_chars = function (section, section_count){
 	var temp_letters = new Array(); 
 	var i;
 	var i_array 		= 	0;
@@ -152,7 +151,7 @@ function fill_chars(section, section_count){
 	var content_string  = 	$scope.doc.content;
 
 	for (i = str_start; i <= str_end; i++) {
-		var letter_arr = new Array();
+		var letter_arr = new Object();
 		var ch = '';
 		ch = content_string[i];
 		
@@ -166,32 +165,29 @@ function fill_chars(section, section_count){
         fulltext += ch;
 		letter_arr['char'] = ch;
 
-		letter_arr['fi_nd'] = new Array();
-		letter_arr['fi_nd']['fi'] = false
-		letter_arr['fi_nd']['nd']= false
-		letter_arr['fi_nd']['md']= false
+		//letter_arr['fi_nd'] = new Object({'fi': false, 'nd':false/*, 'md':false*/});
+		letter_arr.fi_nd = new Object({'fi': false, 'nd':false/*, 'md':false*/});
+		letter_arr.classes = new Array();
 
 
 
-		letter_arr['order'] = i;
-		letter_arr['action'] = '';
-		letter_arr['rindex'] = i_array;
-		letter_arr['lindex'] = i;
-		letter_arr['classes'] = new Array();
-		letter_arr['objects'] = new Array();
-		letter_arr['href'] = new Array();
-		letter_arr['sectionin'] = section_count;
-		letter_arr['mode'] = 'display';
+		letter_arr.order = i;
+		letter_arr.action = '';
+		letter_arr.rindex = i_array;
+		letter_arr.lindex= i;
+		
+		//unsued a heavy	letter_arr.objects = new Array();
+		letter_arr.href= new Array();
+		letter_arr.sectionin = section_count;
+		letter_arr.mode= 'display';
 
 
-		letter_arr['state'] = new Array();
-		letter_arr['state']['mode'] = 'loading';
-		letter_arr['state']['select'] = false;
-		letter_arr['state']['clicked'] = false;
-		letter_arr['state']['inrange'] = false;
+		letter_arr.state = new Object({ 'statemode' : 'loading','select' : false,'clicked' : false,'inrange' : false , 'flat': {}  });
+	
 
 
-		letter_arr['sel'] = false;
+		letter_arr.sel = false;
+		
 		temp_letters[i_array]  = letter_arr;
 		i_array++;
 	}
@@ -217,220 +213,165 @@ function fill_chars(section, section_count){
 	$scope.sorted_sections[section_count]['text_content']['status'] = new Array('init_origin');
 }
 
-// DOUBLON for reload.
-// Fix in progress
-
-// sub loop _a
-// fill arrays of letters for each section
-function refill_chars(section, section_count){
-	console.log('refill_char')
-	$scope.sorted_sections[section_count]['text_content']['status'].push('refiling section #'+section_count);
-	console.log(section)
-
-	var temp_letters = new Array(); 
-	var i;
-	var i_array 		= 	0;
-	var fulltext 		= 	'';
-	var str_start 		= 	$scope.sorted_sections[section_count].start;
-	var str_end 		= 	$scope.sorted_sections[section_count].end;
-	var content_string  = 	$scope.sorted_sections[section_count]['text_content']['fulltext']['cur'];
 
 
-	
 
-	for (i = str_start; i <= str_end; i++) {
-		var letter_arr = new Array();
-		var ch = '';
-		ch = content_string[i-str_start];
-		
-		if (ch === " ") {
-          ch = ' ';
-
-    	}
-    	if (!content_string[i-str_start]) {
-          ch = ' ';
-    	}
-        fulltext += ch;
-		letter_arr['char'] = ch;
-
-		letter_arr['fi_nd'] = new Array();
-		letter_arr['fi_nd']['fi'] = false
-		letter_arr['fi_nd']['nd']= false
-		letter_arr['fi_nd']['md']= false
-
-		letter_arr['order'] = i;
-		letter_arr['action'] = '';
-		letter_arr['rindex'] = i_array;
-		letter_arr['lindex'] = i;
-		letter_arr['classes'] = new Array();
-		letter_arr['objects'] = new Array();
-		letter_arr['href'] = new Array();
-		letter_arr['sectionin'] = section_count;
-		letter_arr['mode'] = 'display';
-
-
-		letter_arr['state'] = new Array();
-		letter_arr['state']['mode'] = 'loading';
-		letter_arr['state']['select'] = true;
-		letter_arr['state']['clicked'] = false;
-		letter_arr['state']['inrange'] = false;
-		letter_arr['sel'] = false;
-		temp_letters[i_array]  = letter_arr;
-		i_array++;
-	}
-	if(!fulltext){
-	 	fulltext = '-';
-	}
-	$scope.letters[section_count]= temp_letters;
-}
-
-// sub loop _b
-function apply_chars_classes(section, section_count, ztype){
-		if(!ztype){
-			ztype = 'markup';
-		}
-		//console.log('apply_chars_classes')
-		//
-			_.each($scope.textdatas, function(a){
-				var i_array = 0;	
-					if( a.start >= section.start &&  a.end <= section.end ){
-					if(a.type == 'markup' || a.type == 'note' || a.type == 'data' ){
-						var j_arr=0;
-						var into_for = 0;
-						//console.log('section end:'+section.end)
-						//console.log('fc:'+ parseInt(section.end) - parseInt(section.start) );
-						var size_object = parseInt(a.end) - parseInt(a.start) -1;
-						//console.log('soze'+size_object)
-						for (var pos= a.start; pos<=a.end; pos++){ 
-							// pushing class to each letter..
-							var delta = parseInt(a.start) - parseInt(section.start) + j_arr;
-							
-
-							if( pos == a.start  && (a.subtype== 'list-item' || a.subtype== 'h1'  || a.subtype== 'h2' || a.subtype== 'h3'  || a.subtype== 'h4'  || a.subtype== 'h5'  || a.subtype== 'h6' || a.subtype== 'cite' || a.subtype== 'code'   )  )   {
-								$scope.letters[section_count][delta]['fi_nd']['fi'] = true; 
-
-							}
-
-
-							//console.log(size_object +'/'+ j_arr)
-							//console.log(delta+ '-' +section.start+'--'+a.start+'--'+deltaz+'?end'+into_for+' / '+j_arr +'/'+i_array)
-							if( ( size_object ==  j_arr ) && (a.subtype== 'list-item' || a.subtype== 'h1'  || a.subtype== 'h2' || a.subtype== 'h3'  || a.subtype== 'h4'  || a.subtype== 'h5'  || a.subtype== 'h6' || a.subtype== 'cite' || a.subtype== 'code'  )  )   {
-								$scope.letters[section_count][delta+1]['fi_nd']['nd'] = true; 
-							}
-							//$scope.letters[section_count][delta]['char'] =  j_arr;
-							//if(ztype && ztype== 'note'){
-							//	$scope.letters[section_count][delta]['classes'].push(a.subtype);
-							//	$scope.letters[section_count][delta]['classes'].push(ztype);
-
-							//}
-							//else{
-								$scope.letters[section_count][delta]['classes'].push(a.subtype);
-								//$scope.letters[section_count][delta]['objects'].push(a);
-						        //	    $scope.letters[section_count][delta]['classes'].push('c-'+a.id);
-
-							//}
-							if(a.subtype == 'link' && a.metadata){
-								$scope.letters[section_count][delta]['href'].push(a);
-							}
-							i_array++;
-							j_arr++
-						}
-					}
-				}
-			});
-			//console.log($scope.letters[section_count]);
-}
-
-/* sub loop _c
+/* loop _b
 // Push right objects in right sections (distribution in arrays of objects by sections)
-
 
 // REQUIRED INITs: 
   - loaded tds
   - prepared sections
-
-
- emit event 'dispatched_objects'
-
-*/   
-
-function dispatch_obj() {
 	
-	var all_td = new Array();
-	var global_td= new Array();
+  - overview: 
+
+	each(sorted_sections,s)
+		
+		init globals objects
+		fill_chars()
+		init type-position arrays
+		
+		each(textdatas,td)
+			if in s.ranges 
+				dispacth in array(type, position)
+
+				if markup 
+					dispatch in array(position = inline)
+
+					loop from s.start to s.end 
+						add td.type, td.classes,.. to letters
+			 	
+		push to "all" objects
+		push to "global' objects
+					
+
+
+
+ return 
+ > emit event 'dispatched_objects'
+
+*/
+
+
+
+
+$scope.dispatch_obj = function () {
+
 	
-	_.each($scope.textdatas, function(td){
-		_.each($scope.sorted_sections, function(s, index){
+	//	
+	// START Looping each SECTION
+	// 
+	_.each($scope.sorted_sections, function(s, index){
+		
+		// add props to section first
+		// letters init ! 
+		$scope.fill_chars(s,index);
+
+
+		
+		if(s.css && s.css !=="none"){
+			$scope.objects_sections[index]['classes'].push(s.css);
+		}
+		
+		$scope.objects_sections[index] = new Array();
+			//$scope.objects_sections[index]['global'] = new Array();
+		
+		_.each($scope.available_sections_objects, function(o, obj_index){
+			$scope.objects_sections[index][$scope.available_sections_objects[obj_index]] = new Array();
+				// and each subs objects an array of each positions
+				_.each($scope.available_positions_objects, function(op){ // op: left, right, ..
+					$scope.objects_sections[index][$scope.available_sections_objects[obj_index]][op.name] = new Array();
+				});
+		});
+
+		//
+		// START Looping each TEXTDATAS
+		//
+		_.each($scope.textdatas, function(td){
+
+ 				var i_array = 0;	
+				//Only if textdata is in sections ranges
 			if(td.start >= s.start && td.end <= s.end){
+
+				// some commons attributes
 				td.sectionin = index;
-				if(!td.isselected){
-
-				}
-				td.isselected = 'false';
+				if(!td.isselected){td.isselected = 'false';}
+				td.formatedcreatedAt = moment(td.createdAt).fromNow();
 				td.status = 'dispatched';
-				var explicit_string  = 	'';
-					var i;
-
-					for (i = td.start; i < td.end; i++) {
-						var j = i - $scope.sorted_sections[index].start;
-						explicit_string += $scope.sorted_sections[index]['text_content']['fulltext']['cur'][j];
-					}
-					td.explicit = explicit_string;
-				if(td.position && td.position =='global'){
-					global_td.push(td)
+				td.explicit_string  = 	'';
+				var i;
+				for (i = td.start; i < td.end; i++) {
+					var j = i - $scope.sorted_sections[index].start;
+					td.explicit_string += $scope.sorted_sections[index]['text_content']['fulltext']['cur'][j];
 				}
-				if(td.type=='img' || td.type =='player'  || td.type =='child_section' ){
-						$scope.objects_sections[index]['classes'].push('has_o has_o_'+td.position);	
+				
+				
+				if(td.type && td.position && (td.type=='img' || td.type =='player'  || td.type =='child_section' ) ){
+					$scope.objects_sections[index]['classes'].push('has_o has_o_type_'+td.type+' has_o_position_'+td.position);	
 				}
 				if(td.socketed =='true'){ // not implemented
 					//console.log('socketed td in loop');
 				}
 				// ext ref calls for medias (for exemple, not otehr use yet)
-				if(td.ext_doc !==null && td.ext_doc !=='null'){
- 
-				    var asyncload = function() {
-						//docf.loadsubdoc(td, index);
-						//console.log('external call = '+td.ext_doc);
-
-
-				            $http.get(API_URL+'/apis/doc/'+td.ext_doc).
-				              success(function(docref) {
-				                td.ext_doc_array_doc = new Array(docref);
-				                //dm for image ? refaktor plz _.map
-				                td.ext_doc_array_dm = new Array();
-				                _.each(docref.docmetas , function(dm,ii){
-				                  td.ext_doc_array_dm[dm.meta_key] = dm.meta_value;
-				                });
-				                if(td.type=='child_section'){
-				                  $scope.objects_sections[index][td.type][td.position].push(td); 
-
-				                  //incase, could be usefull
-				                  $scope.objects_sections[index]['classes'].push('ischild');
-				                }
-				                if(td.type=='img' || td.type =='player' ){
-				                  $scope.objects_sections[index][td.type][td.position].push(td); 
-				                  // pretty push-image FX
-				                  $scope.objects_sections[index]['classes'].push('has_image has_image_'+td.position);
-				                }
-				              
-				            }); 
-
-				    }
-					setTimeout(asyncload, 1);	/*index*1000 +3000*/
+				if(td.docRef && td.docRef.title !==null){
+ 					//console.log(td.docRef)
+					td.ext_doc_array_doc = td.docRef;
+								
 				}
-				else{
-					if(td.type=='img' || td.type =='player'  ){
-						$scope.objects_sections[index][td.type][td.position].push(td); 
-					}
-					if(td.type=='child_section'){
-						//console.log('child_section ext-ref shouldnt not be null..')
-					}
+				if(td.position && (td.type=='child_section')){
+				      //incase, could be usefull
+				      //$scope.objects_sections[index]['classes'].push('ischild');
+				}
+				if(td.type && td.position && (td.type=='img' || td.type =='player' || td.type=='child_section') ){
+				     $scope.objects_sections[index][td.type][td.position].push(td); 
+				   
 				}
 				if(td.metadata && td.type=='section_class'){
 					$scope.objects_sections[index]['classes'].push(td.metadata);	
 				}
 				
-				if(td.type=='markup'){
+				if(td.type=='markup'){ // or pos == inlined
+							var j_arr=0;
+							var into_for = 0;
+							//console.log('section end:'+section.end)
+							//console.log('fc:'+ parseInt(section.end) - parseInt(section.start) );
+							var size_object = parseInt(td.end) - parseInt(td.start) -1;
+							//console.log('soze'+size_object)
+							for (var pos= td.start; pos<=td.end; pos++){ 
+
+								// pushing class to each letter..
+								var delta = parseInt(td.start) - parseInt(s.start) + j_arr;
+								
+								if( pos == td.start  && (td.subtype== 'list-item' || td.subtype== 'h1'  || td.subtype== 'h2' || td.subtype== 'h3'  || td.subtype== 'h4'  || td.subtype== 'h5'  || td.subtype== 'h6' || td.subtype== 'cite' || td.subtype== 'code'   )  )   {
+									$scope.letters[index][delta].fi_nd.fi = true; 
+
+								}
+
+								//console.log(size_object +'/'+ j_arr)
+								//console.log(delta+ '-' +section.start+'--'+a.start+'--'+deltaz+'?end'+into_for+' / '+j_arr +'/'+i_array)
+								if( ( size_object ==  j_arr ) && (td.subtype== 'list-item' || td.subtype== 'h1'  || td.subtype== 'h2' || td.subtype== 'h3'  || td.subtype== 'h4'  || td.subtype== 'h5'  || td.subtype== 'h6' || td.subtype== 'cite' || td.subtype== 'code'  )  )   {
+									$scope.letters[index][delta+1].fi_nd.nd = true; 
+								}
+								//$scope.letters[section_count][delta]['char'] =  j_arr;
+								//if(ztype && ztype== 'note'){
+								//	$scope.letters[section_count][delta]['classes'].push(a.subtype);
+								//	$scope.letters[section_count][delta]['classes'].push(ztype);
+
+								//}
+								//else{
+									$scope.letters[index][delta]['classes'].push(td.subtype);
+									//$scope.letters[section_count][delta]['objects'].push(a);
+							        //	    $scope.letters[section_count][delta]['classes'].push('c-'+a.id);
+
+								//}
+								if(td.subtype == 'link' && td.metadata){
+									$scope.letters[index][delta]['href'].push(td);
+								}
+								i_array++;
+								j_arr++
+							}
+
+
 					$scope.objects_sections[index][td.type]['inline'].push(td);	
 					//console.log($scope.objects_sections[index][td.type])
 				}	
@@ -445,36 +386,64 @@ function dispatch_obj() {
 					$scope.objects_sections[index]['css_styles'].push(styles);
 				}
 				if(td.type=='data'){
-					$scope.objects_sections[index][td.type][td.position].push(td);
+					//$scope.objects_sections[index][td.type][td.position].push(td);
 				}
-				if(td.type=='note' || td.subtype=='place' ) {		
-					if(td && ( !(td.position) || td.position == 'undefined'||  td.position == null || td.position == 'null') ){
+				if(td.type=='note' || td.subtype=='place' || td.type=='data' || td.type=='semantic') {		
+					if( !td.position || td.position == 'undefined'||  td.position == null || td.position == 'null' ){
 						//$scope.objects_sections[index][td.type]['unknown'].push(td);
 						console.log('unknown td type:')
 					    console.log(td)
 					}
 					else{
+
 						$scope.objects_sections[index][td.type][td.position].push(td);
 					}
 				}
-				if(td.position == 'global'){
-					$scope.objects_sections['global'].push(td);
+
+
+				if(td.type && td.position && td.position == 'global'){
+					//$scope.objects_sections['global'].push(td)
 					$scope.objects_sections['global_by_type'][td.type].push(td)
+
+				
 				}
-				all_td.push(td)
 			}
-		})
-	})
+		}) // each textdatas
+
+
+     	$scope.sorted_sections[index].objects = $scope.objects_sections[index]    
+		$scope.sorted_sections[index].letters = $scope.letters[index]
+		
+
+		// TEST precompile as string		
+		$scope.sorted_sections[index].precompiled = '';
+		for (var ps = s.start; ps<=s.end; ps++){ 
+			var flatten_classes = flatten($scope.sorted_sections[index].letters[ps]['classes'])
+			$scope.sorted_sections[index].precompiled += '<span class="'+flatten_classes+'" >'+$scope.sorted_sections[index].letters[ps]['char']+'</span>'
+		}
+		
+
+	}) // each sections
+
 	//console.log($scope.objects_sections['global_by_type'])
 	//console.log($scope.objects_sections['global'])
-	$scope.objects_sections['all'] = all_td /*global_td; */
+	// $scope.objects_sections['all'] = all_td 
+
 
 
 	$scope.$emit('docEvent', {action: 'dispatched_objects' });
 	
 }
+
+
+var flatten= function (n) {
+		//console.log(n);
+		var out = '';
+			_.each(n, function(c, i){out +=  n[i]+' ';});
+		return out;
+	}
 	
-// sub loop _d
+// sub loop _d (not really musicbox, rather document's option)
 function apply_docmetas(docmetas){	
 	console.log('apply_docmetas')
 	$scope.docmetas.docfragments 	= new Array();
@@ -510,19 +479,14 @@ function apply_docmetas(docmetas){
 	}
 }
 
-function eval_doc(){
-	$scope.report = 'EVAL report:';
-	$scope.report += 'content letter length:'+_.size($scope.working_doc.doc.content);
-	$scope.report += 'textdatas  length: '+_.size($scope.working_doc.textdatas);
-	$scope.report += 'sections count: '+_.size($scope.sorted_sections);
-	console.log($scope.report);
-}
+
 
 $scope.click_summarize= function (content) {
-	text_summarize(content);
+	$scope.text_summarize(content);
 }
 
-function text_summarize(content){
+$scope.text_summarize = function(content){
+	alert(content)
 		$(".mt").toggleClass('summary_isvisible');
 		
 		if($scope.ilc['summarize_toggle'] == 'true'){
@@ -563,7 +527,7 @@ function text_summarize(content){
 	$scope.godoc = function (doctarget) {
 		//console.log(doctarget)
 		if(doctarget){
-			window.location = '/doc/'+doctarget.renderas+'/'+doctarget.slug
+			window.location = '/doc/'+APP_VERSION+'/'+doctarget.renderas+'/'+doctarget.slug
 			//	$scope.doctoload.id = doctarget.id
 		//	$location.path('/doc/'+doctarget.renderas+'/'+doctarget.slug)
 		}
@@ -679,6 +643,7 @@ function text_summarize(content){
 		  	object_type	=='note' ||
 		  	object_type	=='data' ||
 		  	object_type	=='player' ||
+		  	object_type	=='semantic' ||
 		  	object_type=='img' || 
 		  	object_type=='child_section' ||
 		  	object_type=='classes'
@@ -689,7 +654,13 @@ function text_summarize(content){
 			}
 			else{
 				// in a section, for a type, at side
-				objects_section = $scope.objects_sections[section_index][object_type][side];
+				
+				// version independent array : 
+				// objects_section = $scope.objects_sections[section_index][object_type][side];
+				
+				// version 'section[object]' array
+				//console.log($scope.sorted_sections[section_index]['objects'])
+				objects_section = $scope.sorted_sections[section_index].objects[object_type][side];
 			}		
 		}
 		else{
@@ -1242,12 +1213,7 @@ $scope.toggle_side_editor = function(obj, zindex) {
 	//objects_global_array()
 	// new in angular rc 2..? returns an "auto array"
 	// "unsplits" classes of each letter
-	$scope.classes_array= function (n) {
-		//console.log(n);
-		var out = '';
-			_.each(n, function(c, i){out +=  n[i]+' ';});
-		return out;
-	}
+	
 	$scope.classes_sections_array= function (index) {
 		var source_arr = $scope.objects_sections[index]['classes'];
 		var out = '';
@@ -1486,6 +1452,7 @@ var i_r = i - $scope.sorted_sections[ids].start + 1;
 
 	// DOC 
 
+
 	$scope.$on('doc', function(event, args) {
 		if(args.action){
 			if(args.action == 'docmetas_ready'){
@@ -1501,15 +1468,16 @@ var i_r = i - $scope.sorted_sections[ids].start + 1;
 				//}
 			}
 			else if( args.action == 'textdatas_ready'){
-				prepare_sections();
+				$scope.prepare_sections();
 			}
 
 
 			else if( args.action == 'sections_prepared'){
-				fill_loops();
+				//fill_loops();
+				$scope.dispatch_obj();
 			}
 			else if( args.action == 'letters_prepared'){
-				dispatch_obj(); // dispatch class, sections, etc..;	
+				$scope.dispatch_obj(); // dispatch class, sections, etc..;	
 			}
 			else if( args.action == 'dispatched_objects'){
 				console.log('AR')
@@ -1518,7 +1486,8 @@ var i_r = i - $scope.sorted_sections[ids].start + 1;
 
 
 			else if( args.action == 'section_touched'){
-				fill_loops();
+				//fill_loops();
+				$scope.dispatch_obj();
 			}
 
 			else if (args.action == 'fulltext_update'){
@@ -1563,13 +1532,13 @@ var i_r = i - $scope.sorted_sections[ids].start + 1;
 		// todo use massive TD method
 		if(args.action &&  args.action == 'enclosed_fragment'){
 		    console.log('reload')
-		  	 prepare_sections();
+		  	 $scope.prepare_sections();
 		}
 		if(args.action &&  args.action == 'created_section'){
 			console.log('created s')
 			console.log(args.section)
 			$scope.textdatas.push(args.section);
-			prepare_sections();
+			$scope.prepare_sections();
 		}
 		if(args.action &&  args.action == 'saved_section'){
 			console.log('saved: (array)')
@@ -1579,7 +1548,7 @@ var i_r = i - $scope.sorted_sections[ids].start + 1;
 					console.log('ffffound')
 					console.log(td);
 					$scope.textdatas[td_i]= args.textdatas;
-					prepare_sections();
+					$scope.prepare_sections();
 				}
 			})
 		}
@@ -1639,14 +1608,14 @@ var i_r = i - $scope.sorted_sections[ids].start + 1;
        	if(args.action &&  args.action == 'deleted_section'){
        			// can be call  directly in service 'docEvent:textdatas_ready'
        	 		$scope.textdatas = args.textdatas;
-        		prepare_sections();
+        		$scope.prepare_sections();
        	}
 		
        	if(args.action &&  args.action == 'added_section'){
        	  //$scope.textdatas.push(args.textdata);
        	  alert('section added, please refresh doc');
          // $scope.sorted_sections.push(args.textdata);
-         // dispatch_obj();
+         // $scope.dispatch_obj();
        	}
 
  		// silent 'services only use'
@@ -1663,16 +1632,16 @@ var i_r = i - $scope.sorted_sections[ids].start + 1;
         //console.log(args)
         // a fragment has moved 		
         if(args.action == 'toggled_position'   ){
-			dispatch_obj()
+			$scope.dispatch_obj()
 			// alert('main 1')
         }
 		if( args.action == 'saved_object'){
-			dispatch_obj()
+			$scope.dispatch_obj()
 			$scope.offset_count=0;	
         }
 		if(args.action == 'touched_sections'){
 			$scope.textdatas = args.textdatas;
-			prepare_sections();
+			$scope.prepare_sections();
 		}
 
 		if(args.action == 'saved_massive_object_index'){
@@ -1682,29 +1651,30 @@ var i_r = i - $scope.sorted_sections[ids].start + 1;
             	 td.tochange = ''; // css3 fx..
        	   });
 		   // sub loop
-		   refill_chars($scope.sorted_sections[tt], tt);
-       	   apply_chars_classes($scope.sorted_sections[tt], tt, 'note')
-       	   apply_chars_classes($scope.sorted_sections[tt], tt, 'markup')	
-		   dispatch_obj()
+		  // refill_chars($scope.sorted_sections[tt], tt);
+       	   // $scope.apply_chars_classes($scope.sorted_sections[tt], tt)
+		   $scope.dispatch_obj()
         }
         if( args.action == 'deleted_markup' ){
         	
 			$scope.textdatas = args.textdatas;
-			prepare_sections();
+			$scope.prepare_sections();
         }
         if( args.action == 'pushed_fragment'){	
         		// back from services
         		$scope.textdatas.push(args.textdata);
+
         		if(args.refresh && args.refresh == false){
+
         		}
         		else{
         			//fill_chars($scope.sorted_sections[args.index], args.index);
 					//apply_chars_classes($scope.sorted_sections[args.index], args.index, 'note')
 					//apply_chars_classes($scope.sorted_sections[args.index], args.index, 'markup')
-					//dispatch_obj()
+					//$scope.dispatch_obj()
 					//$rootScope.$emit('docEvent', {action: 'textdatas_ready' });
 
-					prepare_sections();
+					$scope.prepare_sections();
         		}
     			
         }
@@ -1712,14 +1682,14 @@ var i_r = i - $scope.sorted_sections[ids].start + 1;
 			
 			// back from services
         	$scope.textdatas = args.textdatas;
-        	prepare_sections();
+        	$scope.prepare_sections();
         	//$rootScope.$emit('docEvent', {action: 'textdatas_ready' });
 
         	//fill_loops()
 			//fill_chars($scope.sorted_sections[args.index], args.index, 'false')	
         	//apply_chars_classes($scope.sorted_sections[args.index], args.index, 'note')
         	//apply_chars_classes($scope.sorted_sections[args.index], args.index, 'markup')	
-			//dispatch_obj()
+			//$scope.dispatch_obj()
         }
         // silent 'services only use'
         /*
@@ -1761,7 +1731,7 @@ var i_r = i - $scope.sorted_sections[ids].start + 1;
 			console.log('textdata socketed'+data.textdata[0]);
 			data.textdata.socketed = true;
 			$scope.textdatas.push(data.textdata);
-			dispatch_obj();
+			$scope.dispatch_obj();
 		}
 		if( (data.action =='tweet') && (data.doc_id == $scope.working_doc.doc.id) ){
 			//console.log(data.socketer_name);
