@@ -31,6 +31,8 @@
 
      .twelve.notetdinfos.tdinfos(ng-include="fragments['generic'][0].url", ng-repeat="a in objects_section_array('note',$index, '#{locals.extraparam}')")
 
+     .twelve.notetdinfos.tdinfos(ng-include="fragments['generic'][0].url", ng-repeat="a in objects_section_array('semantic',$index, '#{locals.extraparam}')")
+
      .twelve.notesinfos.tdinfos(ng-include="fragments['generic'][0].url", ng-repeat="a in objects_section_array('data',$index, '#{locals.extraparam}')") 
 
 

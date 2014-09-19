@@ -5,24 +5,31 @@ fluidvids(ng-if="a.type=='player'", ng-controller="FragmentCtrl", src="", positi
  i.icon-picture.img-clicker(ng-controller="FragmentCtrl", ng-dblclick="dbc_object(a)",  ng-click="_select_object(a,a.position,sorted_section,'-1')")
 
 
-.twelve.column(ng-if="a.type=='child_section'" ,class="child_doc_block block_type_{{a.type}} {{a.ext_doc_array_dm['block_color']}} {{a.ext_doc_array_dm['block_bgcolor']}} block_section_{{a.ext_doc_array_doc[0].doc.section}}")
-  h5(ng-bind-html="a.metadata")
+.twelve.column(ng-if="a.type=='child_section'" ,class="child_doc_block block_type_{{a.type}} block_subtype_{{a.subtype}} ")
+  h5(ng-bind-html="a.docRef.title")
+  // h5(ng-bind-html="a.extref.createdAt")
+  
   div
-    a(ng-click="godoc(a.ext_doc_array_doc[0].doc)")
-     img(src="{{a.ext_doc_array_dm['image_thumb']}}") 
+    a(ng-click="godoc(a.extref)")
+     // img(src="{{a.ext_doc_array_dm['image_thumb']}}") 
   h3 
-   a(ng-click="godoc(a.ext_doc_array_doc[0].doc)") {{a.ext_doc_array_doc[0].doc.title}}
-  p(ng-bind-html="a.ext_doc_array_dm['short_excerpt']")
+   a(ng-click="godoc(a.docRef)") {{a.docRef.title}}
+  p(ng-bind-html="a.extref.content")
   i.icon-sitemap.child_section-clicker( ng-controller="FragmentCtrl", ng-dblclick="dbc_object(a)",  ng-click="_select_object(a,a.position,sorted_section,'-1')")
 
 
 
-.twelve.column.npadr(ng-controller="FragmentCtrl", class="iblock {{a.type}}s subtype_{{a.subtype}}" , ng-if="(a.type=='data') || (a.type=='note')")
+.twelve.column.npadr(ng-controller="FragmentCtrl", class="iblock {{a.type}}s subtype_{{a.subtype}}" , ng-if="(a.type=='data') || (a.type=='note') || (a.type=='semantic') ")
+ 
+ // debug h3 {{a.metadata}}
   
  
  i(ng-click="_select_object(a,a.position,sorted_section,'-1')", ng-dblclick="dbc_object(a)",  title="Select / edit {{a.subtype}}", class="fragment_icon type_{{a.type}} subtype_{{a.subtype}} already_{{a.tochange}} selected_icon_{{a.isselected}}") {{a.subtype[0]}}
 
- p.smallt(ng-bind-html="a.metadata", class="mtvalue idepth idepth_{{a.depth}}") 
+ p.smallt(class="mtvalue idepth idepth_{{a.depth}}") 
+  p {{a.metadata}}
+  // span.smallt() {{a.userRef.username}} 
+  // span.smallt() {{a.formatedcreatedAt}}
 
 
 .twelve.column.img_container(ng-controller="FragmentCtrl" , ng-if="a.type=='player'")

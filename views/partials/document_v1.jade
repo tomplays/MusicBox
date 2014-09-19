@@ -1,13 +1,7 @@
-block body
-  .renders_toggler
-    span(class="slide_render  slide_{{render_layout_next}}") 
-     a(ng-click="slide_render_layout()", title="{{render_layout_next}} ") {{render_layout_next}} 
-      // &raquo;{{render_layout_next}}
-
-  .branding(ng-include="fragments['branding'][0].url", ng-hide="render_layout=='iframe'")
+block body 
+  .branding(ng-include="fragments['branding'][0].url",  ng-hide="render_layout=='iframe' || render.config.hasbranding== false")
   .before_doc(ng-include="fragments['before_doc'][0].url" )
-
-  .twelve(ng-if="render_layout=='logs'"   , ng-include="fragments['logs'][0].url")
+  .twelve(ng-if="render_layout=='logs'  , ng-include="fragments['logs'][0].url")
   .twelve(ng-if="doc.renderas == 'media'" , ng-include="fragments['media'][0].url")
 
   .dataset(ng-include="fragments['dataset'][0].url" , ng-if="(render_layout=='dataset' || render_layout=='fragments' ) ")
@@ -53,7 +47,7 @@ block body
     
 
      .three.columns
-
+     // load DM key/
      .twelve.columns.bottom_editor(ng-if="$last && (render_layout=='editor')" , ng-include="fragments['bottom_editor'][0].url")
   div.fixed_bar    
     div.msgflash(ng-repeat="msg in msgflash")
