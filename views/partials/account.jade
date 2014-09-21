@@ -1,0 +1,11 @@
+//- index.jade
+doctype html
+html
+  include ./header.jade
+  body
+   form(action="register" ,method="post")
+    h1 Your account 
+    h3 #{user.username} 
+    h3 #{user.email} 
+    h3 #{user.password} 
+    input(type="submit" ,value="Submit")

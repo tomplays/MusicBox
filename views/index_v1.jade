@@ -6,7 +6,7 @@ html(ng-app="musicBox")
 		meta(name='viewport', content='width=device-width, initial-scale=1.0')
 		
 		// vars from locals, transmit to javascript
-		script(type='text/javascript').
+		script(type='text/javascript')
 			var USE_SOCKET_SERVER = '#{locals.use_socket_server}';
 			var SOCKET_URL = '#{locals.socket_url}';
 			var API_METHOD = '#{locals.api_method}';
@@ -40,6 +40,9 @@ html(ng-app="musicBox")
 		script(src="/bower/jquery/dist/jquery.min.js")
 		script(src='/bower/underscore/underscore-min.js')
 
+		script(src='/js/serialize.min.js')
+
+
 		// kept local
 		script(src='/js/lib/webfont.js')
 
@@ -59,9 +62,9 @@ html(ng-app="musicBox")
 
 		// run services (x-controllers, translations, strings, locales) 
 		
-		script(src='/js/angular-modules/misc_services.js')
+		script(src='/js/angular-modules/services.js')
 		script(src='/js/angular-modules/render_services.js')
-		script(src='/js/angular-modules/services.js')	
+		script(src='/js/angular-modules/docfactory.js')	
 
 
 		
@@ -76,7 +79,7 @@ html(ng-app="musicBox")
 		script(src='/js/MusicBox/section.js')
 		script(src='/js/MusicBox/letter.js')
 		// script(src='/js/MusicBox/key.js')
-		script(src='/js/MusicBox/document_light.js')
+		// script(src='/js/MusicBox/document_light.js')
 		
 
 		// minified
@@ -96,5 +99,6 @@ html(ng-app="musicBox")
 		meta(property="og:image", content=locals.image)
 		meta(property="og:url", content="")
 	body(class="loading_class_loads {{doc_load_status}} {{docmetas['single_theme']}} ")
+		
 		div(ng-view)
 
