@@ -1,0 +1,10 @@
+//- index.jade
+doctype html
+html
+  include ./header.jade
+  body
+    h1 register.. 
+    form(action="/register" ,method="post")
+     input(type="text" ,name="username", value="admin")
+     input(type="text" ,name="password" , value="")
+     input(type="submit" ,value="Submit")
