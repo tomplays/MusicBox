@@ -1,0 +1,48 @@
+// p {{markup.start}} - {{markup.end}} - {{markup.metadata}} - {{markup.type}} - {{markup.subtype}}
+
+
+
+
+img(ng-if="markup.subtype=='img'" , data-tdid="{{markup.id}}" , ng-click="toggle_select_markup(markup)",  ng-src="{{markup.metadata}}")
+
+
+div(ng-if="markup.type=='markup'") 
+	
+	a(href="#", ng-click="toggle_select_markup(markup)") 
+		{{markup.subtype}} 
+	// a(href="", ng-if="markup.selected == true ", ng-click="toggle_select_markup(markup)") unselect 
+
+
+div(ng-if="markup.type=='note'") 
+	p {{markup.metadata}}
+	a(href="", ng-if="markup.selected == false ", ng-click="toggle_select_markup(markup)") select 
+
+
+
+div(ng-if="markup.selected == true ")
+	p {{markup._id}}
+
+	a(href="", ng-if="markup.selected == true ", ng-click="toggle_select_markup(markup)") unselect 
+
+	p(ng-if="markup.type=='container'") {{$index}}
+
+	p type 
+		input(ng-model="markup.type" ,type="text")
+	p subtype
+		input(ng-model="markup.subtype" ,type="text")
+	p position
+		input(ng-model="markup.position" ,type="text")
+	p start
+		input(ng-model="markup.start" ,type="text")
+	p end
+		input(ng-model="markup.end", type="text")
+	p metadata
+		input(ng-model="markup.metadata", type="text")
+	p status
+		input(ng-model="markup.status" ,type="text")
+	p depth
+		input(ng-model="markup.depth" type="text" )
+	a(ng-click="markup_delete(markup)") markup_delete
+	// a(ng-click="offset_markup(markup)")  markup offset 
+
+	a.btn(ng-click="markup_save(markup)") ok

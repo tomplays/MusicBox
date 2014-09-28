@@ -1,0 +1,36 @@
+
+
+div(ng-if="section.type=='container'") 
+	// p {{section._id}}
+	// p {{section.subtype}}
+	// p {{section.start}} - {{section.end}} - {{section.metadata}} - {{section.type}} - {{section.subtype}}
+	a(href="", ng-if="section.selected == false ", ng-click="toggle_select_markup(section)") select section
+
+
+div(ng-if="section.selected == true ")
+
+	
+	a(href="", ng-if="section.selected == true ", ng-click="toggle_select_markup(section)") unselect 
+
+	p  {{$parent.$parent.$index}}
+
+	p type 
+		input(ng-model="section.type" ,type="text")
+	p subtype
+		input(ng-model="section.subtype" ,type="text")
+	p position
+		input(ng-model="section.position" ,type="text")
+	p start
+		input(ng-model="section.start" ,type="text")
+	p end
+		input(ng-model="section.end", type="text")
+	p metadata
+		input(ng-model="section.metadata", type="text")
+	p status
+		input(ng-model="section.status" ,type="text")
+	p depth
+		input(ng-model="section.depth" type="text" )
+	a(ng-click="markup_delete(section)") section_delete
+	// a(ng-click="offset_markup(section)")  section offset 
+
+	a.btn(ng-click="markup_save(section)") ok

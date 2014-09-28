@@ -1,0 +1,104 @@
+
+
+html,body{
+  margin:0px;
+  padding:0px;
+}
+.sections_container{
+  width:100%;
+  float:left;
+}
+.tools_container{
+  width:80%;
+  float:left;
+}
+
+section{
+  width:100%;
+  float:left;
+}
+img{
+  max-width:100%;
+}
+
+
+
+/*layout level (wide, left, center, right, ...) */
+.layout_{
+  float:left;
+  
+  &.has_count_0{}
+  &.has_object_false{}
+  &.has_object_true{}
+
+}
+
+
+
+/* all layouts positions variantes like: */
+
+.layout_name_inline_into_after, .layout_name_inline_into_before, .layout_name_inline-implicit{
+  display:none;
+}
+
+ .layout_name_wide, .layout_name_slidewide{
+  width:100%;
+  text-align:center;
+ 
+}
+
+.layout_name_center{
+  width:58%;
+  text-align:center;
+  padding:0 18%
+
+ 
+}
+
+
+.layout_name_under, .layout_name_global{
+  width:98%;
+  padding:1%;
+}
+
+
+.layout_name_left{
+  width:16%;
+  padding:1%;
+  
+}
+.layout_name_inline{
+width:58%;
+padding:1%;
+background:#dadada;
+  
+}
+.layout_name_right{
+width:16%;
+padding:1%;
+}
+
+
+/* markup level */
+.markup_{
+  border:1px solid red;
+}
+
+/* all markup types variantes like: */
+.markup_type_img{
+    border:2px solid green;
+
+}
+
+
+.branding{
+  
+}
+
+
+footer{
+ text-align:center;
+  width:100%;
+  float:left;
+  border-top:1px solid #292929;
+}

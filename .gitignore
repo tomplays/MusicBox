@@ -6,14 +6,18 @@ lib-cov
 *.dat
 *.out
 *.pid
-*.gz
-*.sh 
+*.gz 
 pids
 logs
 results
+tests
 
+README.md
+config.json
+config_kimi.json
+public/uploads/
 npm-debug.log
 node_modules
-
+start.sh
 
 

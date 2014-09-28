@@ -1,0 +1,7 @@
+.debug-only{
+	display:none
+}
+
+body.debug .debug-only{
+	display:block
+}

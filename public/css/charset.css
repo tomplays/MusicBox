@@ -1,0 +1,14 @@
+
+
+.lt.h1, .lt.h2,.lt.h3 {
+	font-size:2em;
+}
+.lt.h3{
+	
+}
+.lt.em{
+	font-style: italic
+}
+.lt.selected{
+	background:red;
+}
