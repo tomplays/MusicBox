@@ -1,4 +1,0 @@
-.six.columns.col-text.npadr.padl(ng-dblclickss="dbc_text(sorted_section)" , ng-controller="LetterCtrl", spellCheck="false" , contentEditable="false" )
- p(ng-bind-html="sorted_section.precompiled")
- span(ng-repeat="l in letters[$index] track by $index", class="fi-{{l.fi_nd.fi}} nd-{{l.fi_nd.nd}} select-{{l.state.select}} select-{{l.state.clicked}} {{l.states}} action_{{l.action}}", ng-dblclick="action_letter('dbl', l)", ng-click="action_letter('click', l)")
-  lt(ng-if="l.state.mode !=='lo'", ng-class="l.classes") {{l.char}}
