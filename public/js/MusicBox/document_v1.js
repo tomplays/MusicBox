@@ -46,7 +46,7 @@ var doc;
 
  */
 
-function DocumentCtrl($scope, $http , $location, $routeParams, renderfactory,socket,docfactory) {
+function DocumentCtrl($scope, $http , $sce, $location, $routeParams, renderfactory,socket,docfactory) {
 		
 
 		console.log('DocumentCtrl on');
@@ -66,6 +66,7 @@ function DocumentCtrl($scope, $http , $location, $routeParams, renderfactory,soc
 		$scope.init = function (){
 			console.log('DocumentCtrl init');
 
+		
 
 			if(USERIN){
 				//console.log(USERIN)
@@ -74,15 +75,10 @@ function DocumentCtrl($scope, $http , $location, $routeParams, renderfactory,soc
 			render = renderfactory();
 			$scope.render = render.init();
 
-			if(DOC){
-				doc =  docfactory();
-				doc.init(DOC);
-				return;
-			}
-			else{
-				$scope.doc = 'DOC loading';
-				//alert('no service here')
-			}
+			doc =  docfactory();
+			doc.init();
+				
+			
 		}
 
 
@@ -96,7 +92,6 @@ var flatten= function (n) {
 			_.each(n, function(c, i){out +=  n[i]+' ';});
 		return out;
 }	
-
 
 
 

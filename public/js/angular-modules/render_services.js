@@ -6,7 +6,7 @@
 // SOCKET part 
 musicBox.factory('socket', function($rootScope, $http, $location)  {
   
-  if(1){
+  if(false){
     var socket = io.connect(socket_url);
    // console.log(socket)
     return {
@@ -67,8 +67,8 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
 
      //       $rootScope.render_available                  =    self.renderAvailable();
             $rootScope.available_sections_objects        =   self.objAvailable(); 
-            $rootScope.fragment_types                    =   self.fragmentTypes();
-            $rootScope.fragment_sub_types                =   self.fragmentSubTypes();
+          //  $rootScope.fragment_types                    =   self.fragmentTypes();
+           // $rootScope.fragment_sub_types                =   self.fragmentSubTypes();
             $rootScope.available_layouts  =   self.posAvailable();
 
           // $rootScope.available_positions_objects_flat  =   self.posAvailableFlat();
@@ -162,6 +162,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
             arr['markup_editor']             = [ {  url: 'fragments/markup_editor.jade'} ];
             arr['section_editor']            = [ {  url: 'fragments/section_editor.jade'} ];
             arr['markup_push']               = [{  url: 'fragments/markup_push.jade'} ];
+            arr['author_card']          = [ {  url: 'fragments/author_card'} ]; 
 
 
 
@@ -174,7 +175,6 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
 
             arr['branding']             = [ {  url: 'fragments/branding.jade'} ];
             arr['share']                = [ {  url: 'fragments/share'} ];
-            arr['author_card']          = [ {  url: 'fragments/profile'} ]; 
             arr['comment_global']       = [ {  url: 'fragments/comment_global'} ];
             arr['docnodes']             = [ {  url: 'fragments/nodes'} ];
          

@@ -7,7 +7,11 @@ var mongoose = require('mongoose'),
     Schema = mongoose.Schema,
     crypto = require('crypto'),
     authTypes = ['facebook']; // bufferapp', 'twitter',
+var  meta_options = Schema.MetaoptionsSchema;
 
+
+var ObjectIdSchema = Schema.ObjectId;
+var ObjectId = mongoose.Types.ObjectId;
 
 /**
  * User Schema
@@ -27,7 +31,8 @@ var UserSchema = new Schema({
     salt: String,
     facebook: {},
     twitter: {},
-    bufferapp: {}
+    bufferapp: {},
+    user_options: [meta_options]
 });
 
 /**

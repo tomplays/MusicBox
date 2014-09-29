@@ -2,7 +2,7 @@
 
 // Declare app level module which depends on filters, and services
 angular.module('musicBox',  ['ngResource', 'musicBox.filters', 'ngRoute', 'musicBox.services', 'musicBox.directives', 'ngSanitize']).
-  config(['$routeProvider', '$locationProvider',function($routeProvider, $locationProvider ) {
+  config(['$routeProvider', '$locationProvider', '$sceProvider', function($routeProvider, $locationProvider, $sceProvider ) {
     $routeProvider.
  	   when('/', {
         templateUrl: 'partials/document',
@@ -41,14 +41,15 @@ angular.module('musicBox',  ['ngResource', 'musicBox.filters', 'ngRoute', 'music
       });
       $locationProvider.html5Mode(true);
       $locationProvider.hashPrefix('!');
-      
-    // $sceDelegate.enabled(false);
+      // $sceProvider.enabled(false);
      //$sceDelegateProvider.resourceUrlWhitelist(['.*']);
     }
   ]);
+
+
 // instead of empty file include, but files exist #v+
 // if/not included switcher
-angular.module('musicBox.filters', [])
+//angular.module('musicBox.filters', [])
 //angular.module('musicBox.directives', [])
 
 

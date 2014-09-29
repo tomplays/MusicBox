@@ -13,18 +13,42 @@
 
 
 
-musicBox.factory('docfactory', function ($rootScope, $http, $location,$routeParams, socket, renderfactory) {
+musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $routeParams, socket, renderfactory) {
     return function (inf) {
     var self = {
-      init: function (doc) {
+      init: function () {
+          var docid = '';
+
+          if($routeParams.docid){
+            docid = $routeParams.docid
+          }
+          else{
+            docid = 'homepage'
+          }
+          $http.get(api_url+'/doc/'+docid).success(function(d) {
+             //console.log(m)
+              $rootScope.doc = d;
+              $rootScope.doc.formated_date= 'last update '+moment(d.updated).calendar() +', '+moment(d.updated).fromNow(); 
+
+               console.log($rootScope.doc.user)
+               self.init_containers()
+               self.apply_object_options('document', $rootScope.doc.doc_options)
+               self.apply_object_options('author', d.user.user_options)
+
+               self.apply_object_options('room', d.room.room_options)
+
+
+         })
+
+
 
         console.log(root_url)
 
-        $rootScope.doc = doc;
+       //$rootScope.doc = JSON.parse(DOC.replace(/&quot;/g,'"'))
         
         // equivalence
         //$rootScope.$emit('docEvent', {action: 'doc_ready', type: 'load', collection_type: 'doc', collection:doc});
-        self.init_containers()
+       
 
       },
 
@@ -329,6 +353,60 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$routePara
         $rootScope.letters[section_count]= temp_letters;
         $rootScope.containers[section_count].fulltext = fulltext;
       },
+
+      /**
+      * sub loop _d (not really musicbox, rather objects options (doc_options, users_options, etc..))
+      */
+
+      apply_object_options : function(object, options){
+        console.log(' apply doc_options to object'+object)
+        var options_array = new Array()
+        _.each(options , function(option){
+           // console.log(option)
+            var op_name = option.option_name;
+            var op_value = option.option_value;
+            var op_type = option.option_type;
+
+            options_array[op_name]= new Array()
+            options_array[op_name]['value'] = op_value;
+
+            if(op_type == 'google_typo' && object == 'document'){
+               WebFont.load({
+                  google: {
+                   families: [op_value]
+                  }
+              }); 
+            }
+        });
+        if(object == 'document')  {
+          $rootScope.doc_options = new Array()
+          $rootScope.doc_options = options_array
+           console.log($rootScope.doc_options)
+         }
+         else if(object == 'author')  {
+          $rootScope.author_options = new Array()
+          $rootScope.author_options = options_array
+          console.log($rootScope.author_options)
+         }
+         else if(object == 'room')  {
+          $rootScope.room_options = new Array()
+          $rootScope.room_options = options_array
+          console.log($rootScope.room_options)
+         }
+
+
+         else{
+          console.log('undef object')
+         }
+  
+
+      },
+
+
+
+
+
+
       push_markup : function (markup){
           // todo : post api
          $http.get(api_url+'/doc/'+ $rootScope.doc.title+'/markups/push/'+markup.type+'/'+markup.subtype+'/'+markup.start+'/'+markup.end+'/'+markup.position+'/'+markup.metadata+'/'+markup.status+'/'+markup.depth).success(function(m) {

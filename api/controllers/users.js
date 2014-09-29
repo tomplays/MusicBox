@@ -79,6 +79,15 @@ exports.create = function(req, res, next) {
     var message = null;
 
     user.provider = 'local';
+
+    user.user_options = new Array();
+    
+    var user_option = new Object( {'option_name':'color', 'option_value':'#ccc',  'option_type': '' } )
+
+
+
+    user.user_options.push(user_option)
+
     user.save(function(err) {
         if (err) {
             switch (err.code) {

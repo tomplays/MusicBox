@@ -13,35 +13,35 @@ html(ng-app="musicBox", xmlns="http://www.w3.org/1999/xhtml")
 			var api_url = '#{api_url}'
 
 			var user_obj = new Object();
-			user_obj.username = '#{user.username}'
-			user_obj.image_url= '#{user.image_url}'
+			user_obj.username = '#{user_in.username}'
+			user_obj.image_url= '#{user_in.image_url}'
 			var USERIN= user_obj
 			
-			var doc_obj = '#{doc}'
-			if('#{doc}')
-				doc_obj =  doc_obj.replace(/&quot;/g,'"')
-				var DOC= JSON.parse(doc_obj)
 			
-			// var docs_obj = '#{docs}'
-			// if('#{docs}')	
-			//	docs_obj =  docs_obj.replace(/&quot;/g,'"')
-			//	var DOCS = JSON.parse(docs_obj)
+			
+
+			
 
 		// Misc libs/utils
 		script(src="/bower_components/jquery/dist/jquery.min.js")
 		script(src='/bower_components/underscore/underscore-min.js')
 		
-		
+		// font loader kept local
+		script(src='/js/lib/webfont.js')
+
+		// calendar functions lib.
+		script(src='/bower_components/momentjs/min/moment-with-langs.min.js')
+
 
 		script(src="/bower_components/angular/angular.min.js")
 		script(src='/bower_components/angular-sanitize/angular-sanitize.min.js')
 		script(src='/bower_components/angular-route/angular-route.min.js')
 		script(src='/bower_components/angular-resource/angular-resource.min.js')
-		// script(src='/js/angular-modules/filters.js')
+		script(src='/js/angular-modules/filters.js')
 		script(src='/js/angular-modules/directives.js')
 
 		//if locals.use_socket_server
-		script(src="#{socket_url}/socket.io/socket.io.js")
+		// script(src="#{socket_url}/socket.io/socket.io.js")
 
 		script(src='/js/angular-modules/services.js')
 		script(src='/js/angular-modules/render_services.js')
@@ -64,5 +64,5 @@ html(ng-app="musicBox", xmlns="http://www.w3.org/1999/xhtml")
 
 
 
-	body()
+	body(class="text_typography_{{doc_options.text_typography.value}} headings_typography_{{doc_options.headings_typography.value}}")
 		div(ng-view)

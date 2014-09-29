@@ -1,3 +1,7 @@
+h1 {{room_options.branding_image_url.value}}
+div {{doc_options.branding_class.value}}
+
+
 div(class="sections_container")
 	div.quick_tools.debug-only
 		a(ng-click="push_markup()") 
@@ -23,6 +27,8 @@ div(class="sections_container")
 				// h3 {{section.objects_count.by_positions[layout.name].count}}
 				div(ng-if=" (layout.name== 'wide') && ($parent.$index ==0) ")
 					h1 {{doc.title}}
+					time(ng-bind="doc.formated_date", ng-click="" ) 
+
 				div(ng-if="layout.include_objects !==false")
 					div(ng-if="layout.name == 'right'")
 						.cols-edit(ng-include="fragments['section_editor'][0].url" )
@@ -49,8 +55,8 @@ div(class="sections_container")
 						div
 							span(ng-class="l.classes", ng-click="click_letter(l)" ng-dblclick="switch_editing(l)", data-order="{{$index}}" ng-repeat="l in letters[$parent.$parent.$index]") {{l.char}}
 
-
-footer.debug-only
-	p
-	a(href="/doc/{{doc.title}}") permalink
-	a(href="/") back home
+.cols-edit(ng-include="fragments['author_card'][0].url" )
+footer.debug-onlyr
+	p(ng-bind-html="doc_options.footer_center_html.value") 
+	// a(href="/doc/{{doc.title}}") permalink
+	// a(href="/") back home
