@@ -45,19 +45,23 @@ musicBox.factory('socket', function($rootScope, $http, $location)  {
 
 
 
-musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeParams) {
+musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeParams, $locale) {
     return function (inf) {
      var self = {
 
        init: function () {
+          $rootScope.i18n = $locale;
+
 
           //$rootScope.$emit('renderEvent', { action:'render_ready' });
           self.config= new Array();
           self.state= new Array();
-
+          //$rootScope.r = 7;
 
           self.config.hasbranding = true;
           self.state.logs = 'closed';
+
+          $rootScope.r = self;
 
            // api/misc
             $rootScope.globals = GLOBALS;
@@ -79,35 +83,44 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
             $rootScope.fragments                         =   self.fragmentsAvailable();
            // $rootScope.classesofsections                 =   self.classesAvailable();
 
-
-
          // console.log(self);
-
-
          // ui set up.
-  // this var never change as long a doc is loaded... (no reset at rebuild)
+         // this var never change as long a doc is loaded... (no reset at rebuild)
 
-  $rootScope.ui = new Object();
-  $rootScope.ui.selected_range  = new Object({start:null, end:null});
-  $rootScope.ui.selected_section_index = null;
-  $rootScope.ui.selected_objects = new Array()
-  $rootScope.ui.menus = new Array();
-  $rootScope.ui.menus.push_markup = new Array();
-  $rootScope.ui.menus.push_markup.open = -1;
+        $rootScope.ui = new Object();
+        $rootScope.ui.selected_range  = new Object({start:null, end:null});
+        $rootScope.ui.selected_section_index = null;
+        $rootScope.ui.selected_objects = new Array()
 
 
-    $rootScope.inserttext = new Array()
-    $rootScope.inserttext[0] =''
+        $rootScope.ui.renderAvailable = self.renderAvailable()
+        $rootScope.ui.renderAvailable_active =  $rootScope.ui.renderAvailable[0]
+
+
+        $rootScope.ui.menus = new Array();
+        $rootScope.ui.menus.push_markup = new Array();
+        $rootScope.ui.menus.push_markup.open = -1;
+
+        // top page menu tools
+        $rootScope.ui.menus.quick_tools = new Array();
+        $rootScope.ui.menus.quick_tools.open = -1;
+
+        // top page menu user
+        $rootScope.ui.menus.user_tools = new Array();
+        $rootScope.ui.menus.user_tools.open = -1;
+        $rootScope.inserttext = new Array()
+        $rootScope.inserttext[0] =''
 
 
 
           console.log('render service on init_first')
+          console.log(self)
         
         },
 
 
       objAvailable:function (){
-        var arr = new Array('container','comment','place','data','version', 'translation','note','summary','summary-block','freebase','player','markup','css_styles','classes','img','child_section', 'semantic');
+        var arr = new Array('container','container_class','comment','place','data','version', 'translation','note','summary','summary-block','freebase','player','markup','css_styles','classes','img','child_section', 'semantic');
         return arr 
       },
       fragmentTypes:function (){
@@ -162,18 +175,17 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
             arr['markup_editor']             = [ {  url: 'fragments/markup_editor.jade'} ];
             arr['section_editor']            = [ {  url: 'fragments/section_editor.jade'} ];
             arr['markup_push']               = [{  url: 'fragments/markup_push.jade'} ];
-            arr['author_card']          = [ {  url: 'fragments/author_card'} ]; 
+            arr['author_card']               = [ {  url: 'fragments/author_card'} ]; 
+            arr['branding']                  = [ {  url: 'fragments/branding.jade'} ];
+            arr['before_doc']           = [ {  url: 'fragments/before_doc'} ];
 
-
-
-
+            arr['comment_form']           = [ {  url: 'fragments/comment_form'} ];
 
 
 
 
             /*
 
-            arr['branding']             = [ {  url: 'fragments/branding.jade'} ];
             arr['share']                = [ {  url: 'fragments/share'} ];
             arr['comment_global']       = [ {  url: 'fragments/comment_global'} ];
             arr['docnodes']             = [ {  url: 'fragments/nodes'} ];
@@ -183,7 +195,6 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
             
             arr['generic']              = [ {  url: 'fragments/generic'} ];
             
-            arr['before_doc']           = [ {  url: 'fragments/before_doc'} ];
             arr['page_footer']          = [ {  url: 'fragments/page_footer'} ];
             arr['doc_footer']           = [ {  url: 'fragments/doc_footer'} ];
             arr['titles']               = [ {  url: 'fragments/titles'} ];

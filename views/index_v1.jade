@@ -15,6 +15,8 @@ html(ng-app="musicBox", xmlns="http://www.w3.org/1999/xhtml")
 			var user_obj = new Object();
 			user_obj.username = '#{user_in.username}'
 			user_obj.image_url= '#{user_in.image_url}'
+			user_obj._id= '#{user_in._id}'
+
 			var USERIN= user_obj
 			
 			
@@ -25,6 +27,13 @@ html(ng-app="musicBox", xmlns="http://www.w3.org/1999/xhtml")
 		// Misc libs/utils
 		script(src="/bower_components/jquery/dist/jquery.min.js")
 		script(src='/bower_components/underscore/underscore-min.js')
+
+
+		script(src='/bower_components/chartist/libdist/chartist.min.js')
+		link(rel='stylesheet', href='/bower_components/chartist/libdist/chartist.min.css')
+
+		
+
 		
 		// font loader kept local
 		script(src='/js/lib/webfont.js')
@@ -37,6 +46,10 @@ html(ng-app="musicBox", xmlns="http://www.w3.org/1999/xhtml")
 		script(src='/bower_components/angular-sanitize/angular-sanitize.min.js')
 		script(src='/bower_components/angular-route/angular-route.min.js')
 		script(src='/bower_components/angular-resource/angular-resource.min.js')
+
+		script(src='/js/angular-modules/i18n/angular_fr-fr.js')
+		// script(src='/js/angular-modules/i18n/angular_en_us.js')
+
 		script(src='/js/angular-modules/filters.js')
 		script(src='/js/angular-modules/directives.js')
 
@@ -64,5 +77,5 @@ html(ng-app="musicBox", xmlns="http://www.w3.org/1999/xhtml")
 
 
 
-	body(class="text_typography_{{doc_options.text_typography.value}} headings_typography_{{doc_options.headings_typography.value}}")
+	body(class="loading_{{ui.loaded}} render_active_{{ui.renderAvailable_active}} text_typography_{{doc_options.text_typography.value}} headings_typography_{{doc_options.headings_typography.value}}")
 		div(ng-view)

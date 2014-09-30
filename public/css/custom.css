@@ -5,3 +5,41 @@
 body.debug .debug-only{
 	display:block
 }
+
+body.text_typography_Esteban {
+    font-family: "Esteban";
+   
+}
+
+body.headings_typography_Droid.Sans h1{
+     font-family: "Droid Sans",serif;   
+}
+
+
+.branding.sa {
+    background-image: url("/img/logos/loguy/hacktuel.png");
+    background-size: 60px auto;
+    height: 60px;
+    width: 60px;
+}
+.branding.white-bg {
+   background-color:#fff;
+}
+
+.branding.sa h1 span {
+    display: block;
+    text-indent: -9999px;
+}
+
+
+
+
+section.bg_black{
+	background:#000;
+	color:#fff;
+
+}
+
+section.bg_black a{
+		color:#fff;
+	}

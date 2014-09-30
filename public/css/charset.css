@@ -1,4 +1,6 @@
-
+p{
+	margin:0;
+}
 
 .lt.h1, .lt.h2,.lt.h3 {
 	font-size:2em;
@@ -11,4 +13,115 @@
 }
 .lt.selected{
 	background:red;
+}
+
+
+.fa-markup{
+
+  
+}
+
+.fa-h1:before{
+	 content: "";
+    display: block;
+}
+
+i.fa-comment:before {
+    content: "";
+    display: block;
+}
+
+i.fa-em:before {
+    content: "em";
+    display: block;
+    font-style:italic;
+}
+i.fa-container_class:before {
+    content: "css";
+    display: block;
+    font-style:italic;
+}
+
+
+i.fa-note:before {
+    content: "n";
+    display: block;
+    font-style:italic;
+}
+
+
+.markup_displayer .mk_val {
+    display: inline-block;
+    float: right;
+    font-size: 0.65em;
+    line-height: 1.3;
+    padding: 0;
+    text-align: left;
+    width: 86%;
+}
+.markup_displayer .icon_col {
+    display: inline-block;
+    float: left;
+    font-size: 0.7em;
+    padding: 0;
+    text-align: left;
+    width: 10%;
+}
+
+.markup_displayer {
+  
+    display: inline-block;
+    float: left;
+    width: 100%;
+ margin-bottom: 2px;
+}
+
+.markup_displayer_img .icon_col {
+ 
+    width: 100%;
+}
+
+div.markup_editor{
+	width:100%;
+}
+
+
+i.fa-img {
+    background: none repeat scroll 0 0 #ffffff;
+    float: right;
+    position: relative;
+    right: 5px;
+    top: -33px;
+    width: 14px;
+    z-index: 9999;
+}
+i.fa-img:before {
+    content: "";
+    display: block;
+  
+}
+
+.fa.selected_true{
+	color:red;
+}
+
+
+
+.layout_ i.fa {
+    border: 1px solid;
+    border-radius: 5px;
+    display: block;
+    font-size: 10px;
+    padding: 2px 2px 3px 3px;
+    text-align: center;
+}
+
+.layout_name_left i.fa {
+    float: left;
+    margin-right: 0;
+}
+.layout_name_right i.fa {
+    float: left;
+    margin-right: 2px;
+    margin-top: 3px;
 }

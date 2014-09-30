@@ -1,61 +1,75 @@
-h1 {{room_options.branding_image_url.value}}
-div {{doc_options.branding_class.value}}
 
+// div.ct-chart
+
+div(ng-include="fragments['branding'][0].url" )
+div(ng-include="fragments['before_doc'][0].url" )
 
 div(class="sections_container")
-	div.quick_tools.debug-only
-		a(ng-click="push_markup()") 
-			i.icon-move
-		a(ng-click="push_section()") push markup_section
-		a(ng-click="offset_markups()") offset_markups
-	h1.debug-only {{sectionstocount}}
-	div.debug-only.user_in()
-		p 
-			em welcome
-			em 
-				a(href="/me/account")
-					{{userin.username}}
-
-		img(ng-src="{{userin.image_url}}")
-	div.user_not_in(ng-if="userin.username == '' ")
-		a(ng-click="external_link(root_url+'/auth/facebook')" , ng-if="userin.username == '' ") log in with facebook
-
-	section(ng-repeat='section in containers')
+	section(ng-repeat='section in containers' , class="{{section.section_classes}}")
 		div(ng-repeat='layout in available_layouts')
 			div(class="layout_ layout_name_{{layout.name}} has_count_{{section.objects_count.by_positions[layout.name].count}} has_object_{{section.objects_count.by_positions[layout.name].has_object}}")
 				// span {{layout.name}}
 				// h3 {{section.objects_count.by_positions[layout.name].count}}
-				div(ng-if=" (layout.name== 'wide') && ($parent.$index ==0) ")
-					h1 {{doc.title}}
-					time(ng-bind="doc.formated_date", ng-click="" ) 
+				div(ng-if="layout.name == 'global' && $parent.$last")
+					
+					h3 global
+					
+					div(class="markup_ markup_type_inline", ng-repeat="markup in objects_sections.global_by_type.comment")
+							.cols-edit(ng-include="fragments['markup_editor'][0].url" )
+
 
 				div(ng-if="layout.include_objects !==false")
 					div(ng-if="layout.name == 'right'")
 						.cols-edit(ng-include="fragments['section_editor'][0].url" )
+					
+
+					div(ng-if="layout.name == 'right'")
+						
+						div(class="markup_ container_class_type_inline", ng-if="ui.renderAvailable_active == 'lire'" , ng-repeat="markup in section.objects['container_class']['inline']")
+							.cols-edit(ng-include="fragments['markup_editor'][0].url" )
 
 					div(ng-if="layout.name == 'left'")
 						.cols-edit(ng-include="fragments['markup_push'][0].url" )
 
-						div(class="markup_ markup_type_inline", ng-repeat="markup in section.objects['markup']['inline']")
-							.cols-edit(ng-include="fragments['markup_editor'][0].url" )
-
 						
 
+						div(class="markup_ markup_type_inline", ng-if="ui.renderAvailable_active == 'lire'" , ng-repeat="markup in section.objects['markup']['inline']")
+							.cols-edit(ng-include="fragments['markup_editor'][0].url" )
 
 
 					div(ng-repeat='object in available_sections_objects')
 
 						div(class="markup_ markup_type_{{markup.type}}" ng-repeat="markup in section.objects[object][layout.name]")
 							.cols-edit(ng-include="fragments['markup_editor'][0].url" )
+				
+				div(ng-if="(layout.name== 'center') && ($parent.$first) ")
+						div.doc_header
+							h3(ng-bind-html="doc_options.doc_notices_before_title.value +'&nbsp;'", class="editing_{{ui.editing_doc_notices_before_title}}" , ng-dblclick="edit_doc_option('doc_notices_before_title')") {{}} &nbsp;
+							input(ng-if="ui.editing_doc_notices_before_title",   ng-model="doc_options.doc_notices_before_title.value", name="doc_options.doc_notices_before_title.value")
+
+
+							h1(ng-dblclick="edit_doc('title')") {{doc.title}}
+							input(ng-if="ui.editing_title",   ng-model="doc.title", name="doc.title")
+
+
+							
+							h3(class="editing_{{ui.editing_doc_notices_after_title}}" , ng-dblclick="edit_doc_option('doc_notices_after_title')") {{doc_options.doc_notices_after_title.value}} &nbsp;
+							input(ng-if="ui.editing_doc_notices_after_title",   ng-model="doc_options.doc_notices_after_title.value", name="doc_options.doc_notices_after_title.value")
+
+
+							time(ng-bind="doc.formated_date", ng-click="" ) 
+							.cols-edit(ng-include="fragments['author_card'][0].url" )
+
+
+
 				// to stay on same indent level
 				div
 					div(ng-if="layout.name == 'inline'")
-						div
+						// div
 							input(type="text", ng-model="inserttext[$parent.$parent.$index]")
 						div
 							span(ng-class="l.classes", ng-click="click_letter(l)" ng-dblclick="switch_editing(l)", data-order="{{$index}}" ng-repeat="l in letters[$parent.$parent.$index]") {{l.char}}
 
-.cols-edit(ng-include="fragments['author_card'][0].url" )
 footer.debug-onlyr
 	p(ng-bind-html="doc_options.footer_center_html.value") 
 	// a(href="/doc/{{doc.title}}") permalink

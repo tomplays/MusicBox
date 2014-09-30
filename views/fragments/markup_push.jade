@@ -1,5 +1,8 @@
 span(ng-click="open_markup_push(section)") +
-.tools_container(ng-if="ui.menus.push_markup.open == section.sectionin ")
+div(ng-if="ui.menus.push_markup.open == section.sectionin " , ng-include="fragments['comment_form'][0].url" )
+
+
+.tools_container(ng-if="ui.menus.push_markup.open == section.sectionin && ui.renderAvailable_active == 'editor' ")
 	p type 
 		input(ng-model="push.type" ,type="text")
 	p subtype

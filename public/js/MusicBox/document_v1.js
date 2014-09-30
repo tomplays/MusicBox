@@ -67,17 +67,10 @@ function DocumentCtrl($scope, $http , $sce, $location, $routeParams, renderfacto
 			console.log('DocumentCtrl init');
 
 		
-
-			if(USERIN){
-				//console.log(USERIN)
-				$scope.userin = USERIN;
-			}
 			render = renderfactory();
 			$scope.render = render.init();
-
 			doc =  docfactory();
 			doc.init();
-				
 			
 		}
 
@@ -139,17 +132,71 @@ $scope.$emit('docEvent', {action: 'fulltext', type: 'edit', collection_type: 'do
 
 
 }
+	
 
-	$scope.toggle_select_markup = function (markup){
+	$scope.edit_doc = function(field){
+		if(!$scope.userin){
+			alert('no user')
+			return;
+		}
 
-		var real_start = markup.start - $scope.containers[markup.sectionin].start 
-		var real_end   = markup.end -  $scope.containers[markup.sectionin].start
-		if(markup.selected){
+
+			if($scope.ui['editing_'+field] === true){
+				$scope.ui['editing_'+field] = false;
+				doc.save_doc(field)
+			}
+			else{
+				$scope.ui['editing_'+field]= true;
+			}
+	}
+
+	$scope.edit_doc_option = function(field){
+		if(!$scope.userin){
+			alert('no user')
+			return;
+		}
+		if($scope.ui['editing_'+field] === true){
+				$scope.ui['editing_'+field] = false;
+				doc.save_doc_option(field)
+				//alert($scope.doc_options[field].value)
+			}
+			else{
+				$scope.ui['editing_'+field]= true;
+			}
+
+				
+	}
+
+
+
+	$scope.toggle_select_markup = function (markup, event_name){
+		if(!event_name){
+			var event_name = 'click'
+		}
+
+
+
+		var real_start = markup.start 	- $scope.containers[markup.sectionin].start 
+		var real_end   = markup.end 	- $scope.containers[markup.sectionin].start
+		
+
+		if(markup.selected===true && event_name == 'click'){
 			markup.selected = false
 		}
-		else{
-			markup.selected = true
+		else if(markup.selected===false && event_name == 'click'){
+			markup.selected =true
 		}
+		
+
+		if(markup.editing===true && event_name == 'dblclick'){
+			markup.editing = false
+		}
+		else if(markup.editing===false && event_name == 'dblclick'){
+			markup.editing =true
+		}
+		console.log(markup)
+
+
 		$scope.ui.selected_range.start = real_start
 		$scope.ui.selected_range.end = real_end
 		$scope.ui.selected_section_index = markup.sectionin
@@ -182,14 +229,26 @@ $scope.$emit('docEvent', {action: 'fulltext', type: 'edit', collection_type: 'do
 	$scope.push_section= function (){
 		$scope.push.type = 'container';
 		$scope.push.subtype = 'container';
-		$scope.push.start =0;
-		$scope.push.end = 100;
+		$scope.push.start =100;
+		$scope.push.end = 200;
 		$scope.push_markup();
 
 	}
 
-	$scope.push_markup = function (){
+	$scope.push_comment= function (){
+		$scope.push.type = 'comment';
+		$scope.push.subtype = 'comment';
+		$scope.push.start =0;
+		$scope.push.end = 1;
+		$scope.push.position = 'left';
 
+		$scope.push_markup();
+
+	}
+
+
+	$scope.push_markup = function (){
+			console.log($scope.push)
 		// clean up object
 			if(!$scope.push.depth){
 				$scope.push.depth = 1;
@@ -259,6 +318,16 @@ $scope.$emit('docEvent', {action: 'fulltext', type: 'edit', collection_type: 'do
 	*/
 	$scope.external_link = function (link){
 		window.location = link;
+	}
+
+	$scope.expand_tools = function(name){
+		$scope.ui.menus[name].open = $scope.ui.menus[name].open * -1;
+		//return;
+		//alert('d')
+	}
+
+	$scope.toggle_render = function(r){
+		$scope.ui.renderAvailable_active = r
 	}
 	
 	$scope.upload_file_image = new Object({'uploaded': false});

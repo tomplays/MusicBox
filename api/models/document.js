@@ -67,13 +67,12 @@ var MarkupSchema = new Schema({
         default: Date.now
     },
     user_id: {
-        type: Number,
-        default: 0,
-        trim: true
+        type: Schema.ObjectId,
+        ref: 'User'
     },
     username : {
         type: String,
-        default: 'anon',
+        default: '-',
         trim: true
     },
     doc_id: {
@@ -135,7 +134,12 @@ var DocumentSchema = new Schema({
     },
     title: {
         type: String,
-        default: 'Yout title',
+        default: 'Your title',
+        trim: true
+    },
+    slug: {
+        type: String,
+        default: 'your-title',
         trim: true
     },
     subtitle: {
@@ -161,7 +165,7 @@ var DocumentSchema = new Schema({
     },
     username : {
         type: String,
-        default: 'anon',
+        default: '-',
         trim: true
     },
     room: {

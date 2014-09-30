@@ -1,8 +1,8 @@
 'use strict';
 
 // Declare app level module which depends on filters, and services
-angular.module('musicBox',  ['ngResource', 'musicBox.filters', 'ngRoute', 'musicBox.services', 'musicBox.directives', 'ngSanitize']).
-  config(['$routeProvider', '$locationProvider', '$sceProvider', function($routeProvider, $locationProvider, $sceProvider ) {
+angular.module('musicBox',  ['ngLocale', 'ngResource', 'musicBox.filters', 'ngRoute', 'musicBox.services', 'musicBox.directives', 'ngSanitize']).
+  config(['$localeProvider','$routeProvider', '$locationProvider', '$sceProvider', function($localeProvider,$routeProvider, $locationProvider, $sceProvider ) {
     $routeProvider.
  	   when('/', {
         templateUrl: 'partials/document',
@@ -41,6 +41,13 @@ angular.module('musicBox',  ['ngResource', 'musicBox.filters', 'ngRoute', 'music
       });
       $locationProvider.html5Mode(true);
       $locationProvider.hashPrefix('!');
+
+
+      //console.log($localeProvider)
+
+     
+     
+
       // $sceProvider.enabled(false);
      //$sceDelegateProvider.resourceUrlWhitelist(['.*']);
     }

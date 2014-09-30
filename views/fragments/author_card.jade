@@ -10,7 +10,8 @@
 
  div.post-author-info
   
-  a(style="color:{{doc.user.color}}; ", class="post-author-name", rel="author" ,title="Go to the profile of {{doc.user.username}}" , href="{{doc.user.website_url}}") {{doc.user.username}} 
+  p {{i18n.CUSTOM.DOCUMENT.by_author}} 
+    a(style="color:{{doc.user.color}}; ", class="post-author-name", rel="author" ,title="Go to the profile of {{doc.user.username}}" , href="{{doc.user.website_url}}") {{doc.user.username}} 
    //span {{doc.user.facebook.quotes}}
 
   
