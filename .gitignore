@@ -16,6 +16,7 @@ README.md
 config.json
 config_kimi.json
 public/uploads/
+public/documentation/sources
 npm-debug.log
 node_modules
 start.sh
