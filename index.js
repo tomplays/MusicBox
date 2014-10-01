@@ -20,6 +20,10 @@ logger = require('mean-logger'),
     flash = require('connect-flash'),
     helpers = require('view-helpers');
 
+var locale = require("locale")
+  , supported = ["fr-fr", "en_us"]
+
+
 nconf.argv().env().file({file:'config.json'});
 
 var auth = require('./api/authorization');
@@ -50,8 +54,8 @@ db.once('open', function callback () {
 });
 var app = express();
 
- //Prettify HTML
-    app.locals.pretty = true;
+    //Prettify HTML
+    // app.locals.pretty = true;
 
     //Should be placed before express.static
     app.use(express.compress({
@@ -69,7 +73,8 @@ app.configure(function(){
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
   app.set('view options', {
-    layout: true
+    layout: true,
+    debug: true 
   });
     app.use(express.cookieParser( nconf.get('COOKIESECRET')) );
 
@@ -78,7 +83,6 @@ app.configure(function(){
         app.use(express.json());
         app.use(express.methodOverride( nconf.get('SESSIONSECRET') ));
   
-
         //express/mongo session storage
         app.use(express.session({
             secret: nconf.get('SESSIONSECRET'),
@@ -92,34 +96,21 @@ app.configure(function(){
 
         //connect flash for flash messages
         app.use(flash());
-
-
+        
+        //i18n (server)
+        app.use(locale(supported))
+        // lang_js_url : 
+      
         app.locals.site_title = nconf.get('SITE_TITLE');
         app.locals.site_description = nconf.get('SITE_DESCRIPTION');
         app.locals.site_description_long = nconf.get('SITE_DESCRIPTION_LONG');
         app.locals.root_url= nconf.get('ROOT_URL');
         app.locals.api_url= nconf.get('API_URL');
-
-
-
-
-
-
-// which is short for
-
-app.use(function(req, res, next){
-  res.locals.uname = "fresh";
-  next();
-});
-
-        // dynamic helpers
-
-
-
-
-
-
-
+        // i18n dyn. load
+        app.use(function(req, res, next){
+          res.locals.lang_js_url  = '/js/angular-modules/i18n/angular_'+req.locale+'.js';
+          next();
+        });
 
         //use passport session
         app.use(passport.initialize());
@@ -133,9 +124,6 @@ app.use(function(req, res, next){
         app.use(express.static(__dirname + '/public'));
         app.use(app.router);
 });
-
-
-
 app.configure('development', function(){
   app.use(express.errorHandler({ dumpExceptions: false , showStack: false }));
 });
@@ -160,18 +148,13 @@ var io;
 exports.io = io =  require('socket.io').listen(server, {log:false, origins:'*:*'}, function(){
   console.log(chalk.green('Hello io') );
 })
-io.on('connection', function(socket){
-    
-console.log(chalk.green('Hello client'+socket.handshake.address))
-  //console.log(socket);
+io.on('connection', function(socket){ 
+    console.log(chalk.green('Hello client'+socket.handshake.address))
+    //console.log(socket);
     socket.on('news', function(data){
       require('./api/socket').socketer(socket, data);
     });
   });
 // logger.init(app, passport, mongoose);
 //expose app
-
-
-
-
 exports = module.exports = app;

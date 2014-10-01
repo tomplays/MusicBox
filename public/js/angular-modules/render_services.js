@@ -48,50 +48,31 @@ musicBox.factory('socket', function($rootScope, $http, $location)  {
 musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeParams, $locale) {
     return function (inf) {
      var self = {
-
        init: function () {
-          $rootScope.i18n = $locale;
+        // inject locale service. defined in public/js/angualr-modules/i18n/angular_lang-lang.js
+        $rootScope.i18n = $locale;
+        //$rootScope.$emit('renderEvent', { action:'render_ready' });
+        self.config= new Array();
+        self.state= new Array();
+        //$rootScope.r = 7;
+        self.config.hasbranding = true;
+        self.state.logs = 'closed';
+        // api/misc
+        $rootScope.globals = GLOBALS;
+        $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
 
+        $rootScope.available_sections_objects        =   self.objAvailable(); 
+        $rootScope.available_layouts                 =   self.posAvailable();
+        $rootScope.fragments                         =   self.fragmentsAvailable();
+        // $rootScope.classesofsections                 =   self.classesAvailable();
 
-          //$rootScope.$emit('renderEvent', { action:'render_ready' });
-          self.config= new Array();
-          self.state= new Array();
-          //$rootScope.r = 7;
-
-          self.config.hasbranding = true;
-          self.state.logs = 'closed';
-
-          $rootScope.r = self;
-
-           // api/misc
-            $rootScope.globals = GLOBALS;
-            $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
-
-
-
-     //       $rootScope.render_available                  =    self.renderAvailable();
-            $rootScope.available_sections_objects        =   self.objAvailable(); 
-          //  $rootScope.fragment_types                    =   self.fragmentTypes();
-           // $rootScope.fragment_sub_types                =   self.fragmentSubTypes();
-            $rootScope.available_layouts  =   self.posAvailable();
-
-          // $rootScope.available_positions_objects_flat  =   self.posAvailableFlat();
-          //  $rootScope.inline_markup_available           =   self.InlineMarkupAvailable();
-
-            // used in doc.jade
-
-            $rootScope.fragments                         =   self.fragmentsAvailable();
-           // $rootScope.classesofsections                 =   self.classesAvailable();
-
-         // console.log(self);
-         // ui set up.
-         // this var never change as long a doc is loaded... (no reset at rebuild)
+        // ui set up.
+        // this var never change as long a doc is loaded... (no reset at rebuild)
 
         $rootScope.ui = new Object();
         $rootScope.ui.selected_range  = new Object({start:null, end:null});
         $rootScope.ui.selected_section_index = null;
         $rootScope.ui.selected_objects = new Array()
-
 
         $rootScope.ui.renderAvailable = self.renderAvailable()
         $rootScope.ui.renderAvailable_active =  $rootScope.ui.renderAvailable[0]
@@ -177,10 +158,10 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
             arr['markup_push']               = [{  url: 'fragments/markup_push.jade'} ];
             arr['author_card']               = [ {  url: 'fragments/author_card'} ]; 
             arr['branding']                  = [ {  url: 'fragments/branding.jade'} ];
-            arr['before_doc']           = [ {  url: 'fragments/before_doc'} ];
+            arr['before_doc']                = [ {  url: 'fragments/before_doc.jade'} ];
+            arr['ad_welcome']                = [ {  url: 'fragments/ad_welcome.jade'} ];
 
-            arr['comment_form']           = [ {  url: 'fragments/comment_form'} ];
-
+            arr['comment_form']              = [ {  url: 'fragments/comment_form.jade'} ];
 
 
 

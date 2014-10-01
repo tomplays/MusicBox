@@ -29,7 +29,7 @@ angular.module('musicBox',  ['ngLocale', 'ngResource', 'musicBox.filters', 'ngRo
         templateUrl: '/partials/user_account',
         controller: UserCtrl
       }).
-      when('#_=_', {
+      when('_=_', {
         redirectTo: '/!'
       }).
       

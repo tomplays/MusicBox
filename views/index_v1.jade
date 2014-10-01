@@ -7,30 +7,17 @@ html(ng-app="musicBox", xmlns="http://www.w3.org/1999/xhtml")
 
 
 		script(type="text/javascript").
-			// var API_SERVER_URL =  '#{api_server_url}'
 			var socket_url = '#{socket_url}'
 			var root_url = '#{root_url}'
 			var api_url = '#{api_url}'
-
-			var user_obj = new Object();
-			user_obj.username = '#{user_in.username}'
-			user_obj.image_url= '#{user_in.image_url}'
-			user_obj._id= '#{user_in._id}'
-
-			var USERIN= user_obj
-			
-			
-			
-
-			
-
+			var USERIN = new Object({'username':'#{user_in.username}', 'image_url': '#{user_in.image_url}', '_id': '#{user_in._id}'} );
 		// Misc libs/utils
 		script(src="/bower_components/jquery/dist/jquery.min.js")
 		script(src='/bower_components/underscore/underscore-min.js')
 
 
-		script(src='/bower_components/chartist/libdist/chartist.min.js')
-		link(rel='stylesheet', href='/bower_components/chartist/libdist/chartist.min.css')
+		// script(src='/bower_components/chartist/libdist/chartist.min.js')
+		// link(rel='stylesheet', href='/bower_components/chartist/libdist/chartist.min.css')
 
 		
 
@@ -47,14 +34,14 @@ html(ng-app="musicBox", xmlns="http://www.w3.org/1999/xhtml")
 		script(src='/bower_components/angular-route/angular-route.min.js')
 		script(src='/bower_components/angular-resource/angular-resource.min.js')
 
-		script(src='/js/angular-modules/i18n/angular_fr-fr.js')
+		script(src="#{lang_js_url}")
 		// script(src='/js/angular-modules/i18n/angular_en_us.js')
 
 		script(src='/js/angular-modules/filters.js')
 		script(src='/js/angular-modules/directives.js')
 
-		//if locals.use_socket_server
-		// script(src="#{socket_url}/socket.io/socket.io.js")
+		// if locals.use_socket_server
+		script(src="#{socket_url}/socket.io/socket.io.js")
 
 		script(src='/js/angular-modules/services.js')
 		script(src='/js/angular-modules/render_services.js')
@@ -79,3 +66,4 @@ html(ng-app="musicBox", xmlns="http://www.w3.org/1999/xhtml")
 
 	body(class="loading_{{ui.loaded}} render_active_{{ui.renderAvailable_active}} text_typography_{{doc_options.text_typography.value}} headings_typography_{{doc_options.headings_typography.value}}")
 		div(ng-view)
+

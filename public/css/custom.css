@@ -1,8 +1,15 @@
 body.loading_{
 	background:#CCC;
+	opacity:0;
 }
-body.loaded{
+
+body.loading_ .branding{
+	 display:none;
+}
+
+body.loading_loaded{
 	background:#fff;
+	opacity:1;
 }
 
 

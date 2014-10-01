@@ -8,12 +8,8 @@ div(ng-if="section.type=='container'  && ui.renderAvailable_active == 'editor'  
 
 
 div(ng-if="section.selected == true ")
-
-	
-	a(href="", ng-if="section.selected == true ", ng-click="toggle_select_markup(section)") unselect 
-
-	p  {{$parent.$parent.$index}}
-
+	a(href="", ng-if="section.selected == true ", ng-click="toggle_select_markup(section)") unselect
+	p {{$parent.$parent.$index}}
 	p type 
 		input(ng-model="section.type" ,type="text")
 	p subtype

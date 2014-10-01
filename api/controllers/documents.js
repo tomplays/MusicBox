@@ -9,6 +9,18 @@ var nconf = require('nconf')
 nconf.argv().env().file({file:'config.json'});
 var app;
 
+exports.index_doc= function(req, res) {
+		var user_ = ''
+		if(req.user){
+			user_ = new Object({'_id': req.user._id , 'username': req.user.username,  'image_url': req.user.image_url})
+		}
+		 
+		res.render('index_v1', {
+			user_in : user_,
+			socket_url: nconf.get('SOCKET_SERVER_URL')
+		});
+}
+
 
 
 
@@ -144,6 +156,18 @@ exports.docByIdOrTitle = function(req, res) {
 	if (err){
 		res.json(err)
 	} else{
+
+		console.log('here')
+		var markups_type = new Array()
+ _.each(doc.markups , function (markup, i){
+ 	
+ 	if(markup.type){
+ 		markups_type.push(markup.type)
+ 	}
+ 	
+})
+ console.log(_.uniq(markups_type))
+
 		res.json(doc)
 		}
 	})
@@ -311,20 +335,7 @@ exports.markup_edit = function(req, res) {
 }
 
 
-exports.docByIdOrTitleRender = function(req, res) {
 
-		var user_ = ''
-		if(req.user){
-				user_ = new Object({'_id': req.user._id , 'username': req.user.username,  'image_url': req.user.image_url})
-
-		}
-		res.render('index_v1', {
-			user_in : user_,
-			socket_url: nconf.get('SOCKET_SERVER_URL')
-		});
-
-	
-}
 
 // /api/v1/doc/:doc_id_or_title/markups/create/:type/:subtype/:start/:end/:position/:metadata/:status/:depth
 exports.markup_create = function(req, res) {

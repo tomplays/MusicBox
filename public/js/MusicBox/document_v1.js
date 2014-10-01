@@ -277,18 +277,18 @@ $scope.$emit('docEvent', {action: 'fulltext', type: 'edit', collection_type: 'do
 		$scope.push.subtype = 'comment';
 
 		if($scope.ui.selected_range.start){
-			$scope.push.start =$scope.ui.selected_range.start;
+			$scope.push.start = $scope.ui.selected_range.start;
 		}
 		else{
-			$scope.push.start =0;
+			$scope.push.start = 0;
 		}
 
 
 		if($scope.ui.selected_range.end){
-			$scope.push.end =$scope.ui.selected_range.end;
+			$scope.push.end = $scope.ui.selected_range.end;
 		}
 		else{
-			$scope.push.end =1;
+			$scope.push.end = 1;
 		}
 
 		
@@ -472,6 +472,12 @@ $scope.$emit('docEvent', {action: 'fulltext', type: 'edit', collection_type: 'do
 			if(args.action == 'containers_ready'){
 				doc.distribute_markups()
 			}
+			if(args.action == 'dispatched_objects'){
+				$scope.ui.loaded = 'loaded'
+			}
+
+			
+
 
 		}
 

@@ -5,6 +5,7 @@ $provide.value("$locale", {
 "CUSTOM" : {
 	"COMMENT" : {
 		"single" : "commentaire",
+		"textarea" : "Votre commentaire...",
 		"verb" : "commenter",
 		"needs_logging": "Vous devez être connecté pour ajouter un commentaire"
 
@@ -12,7 +13,14 @@ $provide.value("$locale", {
 	"DOCUMENT" : {
 		"by_author" : "par"
 
-	}
+	},
+	"APP" : {
+		"write_invitation" : "Vous avez quelquechose à nous raconter ?",
+		"write_invitation_link" : "En savoir plus &raquo;"
+
+
+
+	},
 
 } ,
 "DATETIME_FORMATS": {

@@ -1,14 +1,10 @@
-
 // div.ct-chart
-
-div(ng-include="fragments['branding'][0].url" )
-div(ng-include="fragments['before_doc'][0].url" )
-
+//div(ng-include="fragments['branding'][0].url")
+div(ng-include="fragments['before_doc'][0].url")
 div(class="sections_container")
 	section(ng-repeat='section in containers' , class="{{section.section_classes}}")
 		div(ng-repeat='layout in available_layouts')
 			div(class="layout_ layout_name_{{layout.name}} has_count_{{section.objects_count.by_positions[layout.name].count}} has_object_{{section.objects_count.by_positions[layout.name].has_object}}")
-				// span {{layout.name}}
 				// h3 {{section.objects_count.by_positions[layout.name].count}}
 				div(ng-if="layout.name == 'global' && $parent.$last")
 					
@@ -41,6 +37,9 @@ div(class="sections_container")
 						div(class="markup_ markup_type_{{markup.type}}" ng-repeat="markup in section.objects[object][layout.name]")
 							.cols-edit(ng-include="fragments['markup_editor'][0].url" )
 				
+
+				div(ng-if="(doc.slug !=='about' && layout.name== 'under') && ($parent.$last) " , ng-include="fragments['ad_welcome'][0].url")
+
 				div(ng-if="(layout.name== 'center') && ($parent.$first) ")
 						div.doc_header
 							h3(ng-bind-html="doc_options.doc_notices_before_title.value +'&nbsp;'", class="editing_{{ui.editing_doc_notices_before_title}}" , ng-dblclick="edit_doc_option('doc_notices_before_title')") {{}} &nbsp;
@@ -74,7 +73,7 @@ div(class="sections_container")
 							a(ng-click="edit_doc('content')") ok
 								
 						div(ng-click="click_text()")
-							span(ng-mousedown="over(l, 'down')", ng-mouseup="over(l, 'up')", ng-class="l.classes", ng-click="click_letter(l)" ng-dblclick="switch_editing(l)", data-order="{{$index}}" ng-repeat="l in letters[$parent.$parent.$index]") {{l.char}}
+							span(ng-mousedown="over(l, 'down')", ng-mouseup="over(l, 'up')", ng-class="l.classes", ng-click="click_letter(l)" ng-dblclick="switch_editing(l)", data-order="{{$index}}", ng-repeat="l in letters[$parent.$parent.$index]") {{l.char}}
 
 footer.debug-onlyr
 	p(ng-bind-html="doc_options.footer_center_html.value") 

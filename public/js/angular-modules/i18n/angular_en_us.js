@@ -16,17 +16,27 @@ var f = ((n * base) | 0) % base;
 return {v: v, f: f};
 }
 $provide.value("$locale", {
-
 "CUSTOM" : {
 	"COMMENT" : {
 		"single" : "comment",
-		"verb" : "comment"
+		"textarea" : "Your comment...",
+		"verb" : "comment",
+		"needs_logging": "Please login first"
 
-	}
+	},
+	"DOCUMENT" : {
+		"by_author" : "par"
+
+	},
+	"APP" : {
+		"write_invitation" : "Vous avez quelquechose à nous raconter ?",
+		"write_invitation_link" : "En savoir plus &raquo;"
+
+
+
+	},
 
 } ,
-
-
 "DATETIME_FORMATS": {
 "AMPMS": [
 "AM",
