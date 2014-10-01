@@ -160,18 +160,18 @@ exports.edit  = function(req, res) {
 			var value = req.body.value
 
 			console.log(field +'<->'+ value)
-			if(field == 'title' ){
 
-				doc[field] = value;
+			
+
+			if(field == 'title' ){
 				// and todo : clean
 				var slugify = value.replace(/\s/g, '-')
 				slugify = slugify.replace('?', '_')
 				slugify = slugify.replace('!', '_')
-
 				doc['slug'] =slugify
 
-
-
+			}
+			doc[field] = value;
 
  				doc.save(function(err,doc) {
 					if (err) {
@@ -185,10 +185,8 @@ exports.edit  = function(req, res) {
 
 
 
-			}
-			else{
-				res.json(doc)
-			}
+			
+		
 
 		
 	}

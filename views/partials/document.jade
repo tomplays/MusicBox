@@ -12,9 +12,8 @@ div(class="sections_container")
 				// h3 {{section.objects_count.by_positions[layout.name].count}}
 				div(ng-if="layout.name == 'global' && $parent.$last")
 					
-					h3 global
-					
-					div(class="markup_ markup_type_inline", ng-repeat="markup in objects_sections.global_by_type.comment")
+					// h3 
+					div(class="markup_ markup_type_inline", ng-repeat="markup in objects_sections.global_all")
 							.cols-edit(ng-include="fragments['markup_editor'][0].url" )
 
 
@@ -65,10 +64,17 @@ div(class="sections_container")
 				// to stay on same indent level
 				div
 					div(ng-if="layout.name == 'inline'")
+						// p {{section.start}} {{section.end}}
+						// p {{ui.selected_range.start}} - {{ui.selected_range.end}} 
 						// div
 							input(type="text", ng-model="inserttext[$parent.$parent.$index]")
-						div
-							span(ng-class="l.classes", ng-click="click_letter(l)" ng-dblclick="switch_editing(l)", data-order="{{$index}}" ng-repeat="l in letters[$parent.$parent.$index]") {{l.char}}
+
+						div(ng-if="ui.renderAvailable_active == 'editor'" )
+							textarea(type="text", ng-model="doc.content")
+							a(ng-click="edit_doc('content')") ok
+								
+						div(ng-click="click_text()")
+							span(ng-mousedown="over(l, 'down')", ng-mouseup="over(l, 'up')", ng-class="l.classes", ng-click="click_letter(l)" ng-dblclick="switch_editing(l)", data-order="{{$index}}" ng-repeat="l in letters[$parent.$parent.$index]") {{l.char}}
 
 footer.debug-onlyr
 	p(ng-bind-html="doc_options.footer_center_html.value") 

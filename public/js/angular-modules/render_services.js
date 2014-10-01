@@ -120,7 +120,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
 
 
       objAvailable:function (){
-        var arr = new Array('container','container_class','comment','place','data','version', 'translation','note','summary','summary-block','freebase','player','markup','css_styles','classes','img','child_section', 'semantic');
+        var arr = new Array('generic','container','container_class','img', 'comment','place','data','version', 'translation','note','summary','summary-block','freebase','player','markup','css_styles','classes','child_section', 'semantic');
         return arr 
       },
       fragmentTypes:function (){

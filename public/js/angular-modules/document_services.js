@@ -95,6 +95,8 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
         // console.log($rootScope.containers)
 
         $rootScope.objects_sections = new Array();
+        $rootScope.objects_sections['global_all'] = new Array();
+
         $rootScope.objects_sections['global_by_type'] = new Array();
 
         _.each($rootScope.available_sections_objects, function(o, obj_index){
@@ -288,6 +290,8 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
            if(markup.type !== "" && markup.position){
 
                  if(markup.position == 'global'){
+                                                  $rootScope.objects_sections['global_all'].push(markup)
+
                                 $rootScope.objects_sections['global_by_type'][markup.type].push(markup)
 
                  }
@@ -511,6 +515,11 @@ var options = {
             if(field == 'title'){
                window.location = root_url+'/doc/'+doc.slug;
             } 
+            if(field == 'content'){
+            $rootScope.$emit('docEvent', {action: 'doc_ready', type: '-', collection_type: 'doc', collection:doc });
+
+
+            }
            });  
         },
           save_doc_option: function (field) {

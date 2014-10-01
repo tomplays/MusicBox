@@ -132,9 +132,46 @@ $scope.$emit('docEvent', {action: 'fulltext', type: 'edit', collection_type: 'do
 
 
 }
+
+	$scope.over= function(letter, event){
+			console.log(letter)
+		var event_at = letter.order
+		if(event == 'down'){
+			$scope.ui.selected_range.start = event_at;
+		}
+		if(event == 'up'){
+			$scope.ui.selected_range.end = event_at;
+		}
+
+
+		//if(event_at <= $scope.ui.selected_range.start){
+		//	$scope.ui.selected_range.start = event_at;
+		//}
+		//else{
+			//$scope.ui.selected_range.start =  event_at;
+		//}
+
+		//if(event_at > $scope.ui.selected_range.end){
+		//	$scope.ui.selected_range.end= event_at;
+		//}
+		//else{
+			//$scope.ui.selected_range.start =  event_at;
+		//}
+		//console.log(letter)
+		//$scope.ui.selected_range.start  = letter.rindex
+		//$scope.ui.selected_range.end = letter.rindex
+
+
+
+
+	}
 	
 
 	$scope.edit_doc = function(field){
+
+		if(field == 'content'){
+			//alert('content change without api offset!')
+		}	
 		if(!$scope.userin){
 			alert('no user')
 			return;
@@ -238,8 +275,24 @@ $scope.$emit('docEvent', {action: 'fulltext', type: 'edit', collection_type: 'do
 	$scope.push_comment= function (){
 		$scope.push.type = 'comment';
 		$scope.push.subtype = 'comment';
-		$scope.push.start =0;
-		$scope.push.end = 1;
+
+		if($scope.ui.selected_range.start){
+			$scope.push.start =$scope.ui.selected_range.start;
+		}
+		else{
+			$scope.push.start =0;
+		}
+
+
+		if($scope.ui.selected_range.end){
+			$scope.push.end =$scope.ui.selected_range.end;
+		}
+		else{
+			$scope.push.end =1;
+		}
+
+		
+		
 		$scope.push.position = 'left';
 
 		$scope.push_markup();
