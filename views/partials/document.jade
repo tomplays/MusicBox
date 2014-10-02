@@ -72,7 +72,7 @@ div(class="sections_container")
 							textarea(type="text", ng-model="doc.content")
 							a(ng-click="edit_doc('content')") ok
 								
-						// div(ng-click="click_text()")
+						div(ng-click="click_text()")
 							span(ng-mousedown="over(l, 'down')", ng-mouseup="over(l, 'up')", ng-class="l.classes", ng-click="click_letter(l)" ng-dblclick="switch_editing(l)", data-order="{{$index}}", ng-repeat="l in letters[$parent.$parent.$index]") {{l.char}}
 
 footer.debug-onlyr

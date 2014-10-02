@@ -97,20 +97,13 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
         
         // console.log($rootScope.containers)
 
-        $rootScope.objects_sections = new Array();
-        $rootScope.objects_sections['global_all'] = new Array();
-
-        $rootScope.objects_sections['global_by_type'] = new Array();
-
+        $rootScope.objects_sections = [];
+        $rootScope.objects_sections['global_all'] = [];
+        $rootScope.objects_sections['global_by_type'] = [];
         _.each($rootScope.available_sections_objects, function(o, obj_index){
-          $rootScope.objects_sections['global_by_type'][o] = new Array();
+          $rootScope.objects_sections['global_by_type'][o] =[];
         });
-
-
-
-
-
-
+        // emit event
 
         $rootScope.$emit('docEvent', {action: 'containers_ready' });
       },
@@ -149,33 +142,17 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
          //var data_serie = new Array()
 
         _.each($rootScope.containers, function(container, index){
-
           //console.log(section)
           self.fill_chars(container,index);
-
-
           // data_serie.push(container.start)
-
-
-
-              
-
-
           //$rootScope.objects_sections[index] = new Array();
           $rootScope.containers[index]['objects'] = new Array();
           $rootScope.containers[index]['objects_count'] = new Array();
           $rootScope.containers[index]['objects_count']['by_positions'] = new Array();
-
            $rootScope.containers[index].section_classes = '';
-
 //          $rootScope.containers[index]['classes'] = new Array();
-
-
-
           //$rootScope.objects_sections[index]['global'] = new Array();
-          
           _.each($rootScope.available_sections_objects, function(o, obj_index){
-
             $rootScope.containers[index]['objects'][$rootScope.available_sections_objects[obj_index]] = new Array();
               // and each subs objects an array of each positions
               _.each(render.posAvailable() , function(op){ // op: left, right, ..
@@ -196,10 +173,7 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
               // some commons attributes
               // > todo use states objects
               markup.sectionin = index;
-
-
-
-              /// kepp open test :
+              /// keep open test :
               //console.log('keep open')
               markup.selected = false;
               markup.editing = false;
@@ -293,9 +267,8 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
            if(markup.type !== "" && markup.position){
 
                  if(markup.position == 'global'){
-                                                  $rootScope.objects_sections['global_all'].push(markup)
-
-                                $rootScope.objects_sections['global_by_type'][markup.type].push(markup)
+                      $rootScope.objects_sections['global_all'].push(markup)
+                      $rootScope.objects_sections['global_by_type'][markup.type].push(markup)
 
                  }
                  else{
@@ -306,11 +279,6 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
                 $rootScope.containers[index].objects_count['by_positions'][markup.position].count++;
                 $rootScope.containers[index].objects_count['by_positions'][markup.position].has_object  = true;
             }
-
-            
-
-
-
               //console.log($rootScope.containers[index]['objects'][markup.type][markup.position])
               //console.log('pushed'+markup.position)
             }
@@ -322,8 +290,6 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
   
         // console.log($rootScope.letters)
         $rootScope.$emit('docEvent', {action: 'dispatched_objects' });
-
-
        // console.log( $rootScope.objects_sections['global_by_type'])
 
 /*
@@ -502,16 +468,11 @@ var options = {
   
 
       },
-
-
-
-
       save_doc: function (field) {
           var data = new Object()
           data.field = field;
           data.value =  $rootScope.doc[field]
          
-
           $http.post(api_url+'/doc/'+$rootScope.doc._id+'/edit', serialize(data) ).
           success(function(doc) {
             // hard redirect

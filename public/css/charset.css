@@ -2,15 +2,60 @@ p{
 	margin:0;
 }
 
-.lt.h1, .lt.h2,.lt.h3 {
-	font-size:2em;
+
+.lt.h1 {
+    font-size: 44px;
 }
-.lt.h3{
-	
+.lt.h2 {
+    font-size: 37px;
 }
+.lt.h3 {
+    font-size: 27px;
+}
+.lt.h4 {
+    font-size: 23px;
+}
+.lt.h5 {
+    font-size: 17px;
+}
+.lt.h6 {
+    font-size: 14px;
+}
+.lt.strong{
+     font-weight:bold;
+}  
+
+.lt.strike{
+    text-decoration: line-through;
+}  
+
+.lt.link{
+    text-decoration: underline;
+}  
+
 .lt.em{
 	font-style: italic
 }
+.lt.list_item{
+	font-style: italic
+}
+.lt.cite{
+	   background-color: #16A085;
+    color:#DDE4F0;
+}
+.lt.code{
+	 background: none repeat scroll 0 0 #CFE6E1;
+    color: #16A085;
+    font-family: monospace;
+    font-size: 1.3em;
+    line-height: 1.3em;
+    margin-top: 9px;
+    padding-top: 0.3em;
+}
+
+
+
+
 .lt.selected{
 	background:#1abc9c
 }
@@ -21,21 +66,44 @@ p{
   
 }
 
-.fa-h1:before{
-	 content: "";
+.fa-h1:before, .fa-h2:before, .fa-h3:before, .fa-h4:before,.fa-h5:before, .fa-h6:before{
+	content: "";
     display: block;
 }
 
 i.fa-comment:before {
     content: "";
-    display: block;
+ 
 }
 
 i.fa-em:before {
     content: "em";
-    display: block;
+   
     font-style:italic;
 }
+
+i.fa-strike:before {
+    content: "s";
+     text-decoration: line-through;
+   
+}
+i.fa-strong:before {
+    content: "b";
+    display: block;
+    font-weight:bold;
+}
+
+i.fa-cite:before {
+    content: "q";
+  
+}
+i.fa-list_item:before {
+    content: "list";
+    display: block;
+    font-weight:bold;
+}
+
+
 i.fa-container_class:before {
     content: "css";
     display: block;

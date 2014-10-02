@@ -9,7 +9,7 @@
 
 
 
-div(class="markup_displayer markup_displayer_{{markup.type}}", ng-if="markup.type=='container_class' || markup.type=='note' || markup.type=='comment'||  markup.type=='markup' || markup.type=='img' || markup.type=='generic'  " ) 
+div(class="markup_displayer markup_displayer_{{markup.type}}", ng-if="markup.type=='container_class' || markup.type=='note' || markup.type=='comment'||  markup.type=='markup' || markup.type=='media' || markup.type=='generic'  " ) 
 	
 	img.mk_img(ng-if="markup.subtype=='img'" , data-tdid="{{markup.id}}" , ng-src="{{markup.metadata}}")
 
