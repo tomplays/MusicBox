@@ -64,7 +64,7 @@ angular.module('musicBox',  ['ngLocale', 'ngResource', 'musicBox.filters', 'ngRo
 
 // instead of empty file include, but files exist #v+
 // if/not included switcher
-//angular.module('musicBox.filters', [])
-//angular.module('musicBox.directives', [])
+angular.module('musicBox.filters', [])
+angular.module('musicBox.directives', [])
 
 

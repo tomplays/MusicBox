@@ -2,68 +2,107 @@ doctype html
 html(ng-app="musicBox", xmlns="http://www.w3.org/1999/xhtml")
 	head
 
+		title #{site_title} #{site_description}
 
-		title #{site_title} #{site_description} 
+		
 		meta(charset="utf-8")
 		meta(http-equiv="X-UA-Compatible", content="IE=edge,chrome=1")
 		meta(name='viewport', content='width=device-width, initial-scale=1.0')
+		base(href='/')
+		// meta(name="description", content=#{site_description_long})
+		meta(property="fb:app_id" , content="#{fbapp_id}")
+		meta(property="og:title", content=locals.title)
+		// https://developers.facebook.com/docs/reference/opengraph/object-type
+		// https://developers.facebook.com/tools/object-browser?app_id=248664598505342
+		meta(property="og:type", content="article")
+		// meta(property="og:type", content="like:article")
+		// meta(property="og:image", content=locals.image)
+		// meta(property="og:url", content="")
+
+		
 
 		script(type="text/javascript").
-			var socket_url = '#{socket_url}'
+			var SOCKET_URL = ''
 			var root_url = '#{root_url}'
 			var api_url = '#{api_url}'
 			var USERIN = new Object({'username':'#{user_in.username}', 'image_url': '#{user_in.image_url}', '_id': '#{user_in._id}'} );
-		// Misc libs/utils
-		script(src="/bower_components/jquery/dist/jquery.min.js")
-		script(src='/bower_components/underscore/underscore-min.js')
 
-
-		// script(src='/bower_components/chartist/libdist/chartist.min.js')
-		// link(rel='stylesheet', href='/bower_components/chartist/libdist/chartist.min.css')
-
-		
-
-		
-		// font loader kept local
-		script(src='/js/lib/webfont.js')
-
-		// calendar functions lib.
-		script(src='/bower_components/momentjs/min/moment-with-langs.min.js')
-
-
+			
+		if (socket_url !== '')
+				script(src="#{socket_url}/socket.io/socket.io.js")
+		// angularJS / 
 		script(src="/bower_components/angular/angular.min.js")
 		script(src='/bower_components/angular-sanitize/angular-sanitize.min.js')
 		script(src='/bower_components/angular-route/angular-route.min.js')
 		script(src='/bower_components/angular-resource/angular-resource.min.js')
 
-		script(src="#{lang_js_url}")
-		// script(src='/js/angular-modules/i18n/angular_en_us.js')
+		// i18n dynamic load
+		script(src="#{root_url}/#{lang_js_url}")
+	
 
-		script(src='/js/angular-modules/filters.js')
-		script(src='/js/angular-modules/directives.js')
-
-		// if locals.use_socket_server
-		script(src="#{socket_url}/socket.io/socket.io.js")
-
-		script(src='/js/angular-modules/services.js')
-		script(src='/js/angular-modules/render_services.js')
-		script(src='/js/angular-modules/document_services.js')
-
-
-		
-		// controllers
-		script(src='/js/MusicBox/document_v1.js')
-		script(src='/js/MusicBox/userCtrl.js')
-		
-		// Angular top level 'app' routing 
-		script(src='/js/app.js')
+		// no need to load them
+		// script(src='/js/angular-modules/filters.js')
+		// script(src='/js/angular-modules/directives.js')
 		
 
+		if (env == 'dev')
+			
+			// sub if (hard version of file minified or kept locally)
+			
+
+
+			// Misc libs/utils
+			script(src="/bower_components/jquery/dist/jquery.min.js")
+			script(src='/bower_components/underscore/underscore-min.js')
+			
+			// font loader kept local
+			script(src='/js/lib/webfont.js')
+
+			// calendar functions lib. (momentjs)
+			script(src='/bower_components/momentjs/min/moment-with-langs.min.js')
+
+			// tests for charts
+			// script(src='/bower_components/chartist/libdist/chartist.min.js')
+			// link(rel='stylesheet', href='/bower_components/chartist/libdist/chartist.min.css')
+
+			script(src='/js/angular-modules/services.js')
+			script(src='/js/angular-modules/render_services.js')
+			script(src='/js/angular-modules/document_services.js')
+
+			
+			
+		
+			link(rel='stylesheet', href='/css/grid.css')
+			link(rel='stylesheet', href='/css/charset.css')
+			link(rel='stylesheet', href='/css/custom.css')
+			
+			// Angular controllers
+			script(src='/js/MusicBox/document_v1.js')
+
+			script(src='/js/MusicBox/userCtrl.js')
+			
+			// Angular top level 'app' routing 
+			script(src='/js/app.js')
+		
+
+		// same in dev and prod env 
+		
+
+		
+		
 		link(rel='stylesheet', href='/bower_components/font-awesome/css/font-awesome.min.css')
-		link(rel='stylesheet', href='/css/grid.css')
-		link(rel='stylesheet', href='/css/charset.css')
-		link(rel='stylesheet', href='/css/custom.css')
 
+
+		
+		if (env == 'prod')
+			link(rel='stylesheet', href='/css/min/MusicBox.min.css')
+			
+
+			// Calling 9 js files, minified crash for angular, whereas .debug no, why ?
+				
+			//script(src='/js/min/MusicBox.min.js')
+
+			script(src='/js/min/MusicBox.min-debug.js')
 
 
 	body(class="loading_e render_active_{{ui.renderAvailable_active}} text_typography_{{doc_options.text_typography.value}} headings_typography_{{doc_options.headings_typography.value}}")
