@@ -44,7 +44,10 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
              
                self.apply_object_options('document', $rootScope.doc.doc_options)
                self.apply_object_options('author', d.doc.user.user_options)
-               self.apply_object_options('room', d.doc.room.room_options)
+               if(d.doc.room){
+                               self.apply_object_options('room', d.doc.room.room_options)
+
+               }
                //console.log(d.markups_type)
 
                if($rootScope.userin._id ==  $rootScope.doc.user._id ){
