@@ -1,5 +1,4 @@
-
-'use strict';
+// todo doc     
 
 /**
 * @constructor

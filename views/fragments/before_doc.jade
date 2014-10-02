@@ -21,7 +21,7 @@ div.quick_tools
 	
 	div(class="inside visible_{{ui.menus.quick_tools.open}}")
 		p 
-			a(href="dashboard/doc/create") Create a new doc
+			a(href="/doc/create") Create a new doc
 
 		// a(ng-click="push_markup()") push h1
 		// i.icon-move
@@ -31,3 +31,4 @@ div.quick_tools
 		// a {{ui.renderAvailable_active }}
 		// div(class="markup_ markup_type_inline", ng-repeat="r in ui.renderAvailable")
 			a(ng-click="toggle_render(r)") {{r}}
+		a(ng-click="toggle_render('editor')") editor mode

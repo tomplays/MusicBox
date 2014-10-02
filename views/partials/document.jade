@@ -73,7 +73,7 @@ div(class="sections_container")
 							a(ng-click="edit_doc('content')") ok
 								
 						div(ng-click="click_text()")
-							span(ng-mousedown="over(l, 'down')", ng-mouseup="over(l, 'up')", ng-class="l.classes", ng-click="click_letter(l)" ng-dblclick="switch_editing(l)", data-order="{{$index}}", ng-repeat="l in letters[$parent.$parent.$index]") {{l.char}}
+							span(ng-mousedown="over(l, 'down')", ng-mouseup="over(l, 'up')", ng-class="l.classes", ng-click="over(l, 'click')" ,ng-dblclick="switch_editing(l)", data-order="{{$index}}", ng-repeat="l in letters[$parent.$parent.$index]") {{l.char}}
 
 footer.debug-onlyr
 	p(ng-bind-html="doc_options.footer_center_html.value") 

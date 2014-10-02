@@ -134,12 +134,14 @@ var DocumentSchema = new Schema({
     },
     title: {
         type: String,
-        default: 'Your title',
+        // default: 'Your title',
+        unique: true,
         trim: true
     },
     slug: {
         type: String,
-        default: 'your-title',
+        // default: 'your-title',
+        unique: true,
         trim: true
     },
     subtitle: {

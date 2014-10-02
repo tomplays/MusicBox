@@ -1,13 +1,11 @@
-'use strict';
 
-
-      
+// todo doc      
 
 // SOCKET part 
 musicBox.factory('socket', function($rootScope, $http, $location)  {
   
-  if(false){
-    var socket = io.connect(socket_url);
+  if(SOCKET_URL !==""){
+    var socket = io.connect(SOCKET_URL);
    // console.log(socket)
     return {
 
@@ -15,6 +13,7 @@ musicBox.factory('socket', function($rootScope, $http, $location)  {
         socket.on(eventName, function () {
           var args = arguments;
           $rootScope.$apply(function () {
+            
             callback.apply(socket, args);
           });
         });
@@ -24,6 +23,7 @@ musicBox.factory('socket', function($rootScope, $http, $location)  {
           var args = arguments;
           $rootScope.$apply(function () {
             if (callback) {
+              //alert('on')
               callback.apply(socket, args);
             }
           });

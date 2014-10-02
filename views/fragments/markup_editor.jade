@@ -20,7 +20,7 @@ div(class="markup_displayer markup_displayer_{{markup.type}}", ng-if="markup.typ
 
 
 	p.mk_val.metavalue(ng-if="markup.type =='note' || markup.type =='generic' || markup.type =='comment' || markup.type =='container_class'") {{markup.metadata}}
-	p.mk_val.subtype(ng-if="markup.type=='markup'")  {{markup.subtype}} 
+	p.mk_val.subtype(class="mk_val_subtype_{{markup.subtype}}", ng-if="markup.type=='markup'")  {{markup.subtype}} 
 	p.mk_val.created(ng-if="markup.type =='note' || markup.type =='comment'") {{markup.created | date}}
 	p.mk_val.username(ng-if="markup.type =='note' || markup.type =='comment' ") {{markup.username}}
 

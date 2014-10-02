@@ -60,6 +60,31 @@ p{
 	background:#1abc9c
 }
 
+.lt.fi, .lt.fi.selected{
+	background:#2980b9
+}
+
+.lt.nd, .lt.nd.selected{
+	background:#3498db
+}
+
+
+
+
+.lt.h1.fi:before,.lt.h2.fi:before,.lt.h3.fi:before,.lt.h4.fi:before,.lt.h5.fi:before,.lt.h6.fi:before {
+    clear: both;
+    content: "";
+    display: block;
+    height: 1px;
+    width: 1px;
+}
+.lt.h1.nd:after, .lt.h2.nd:after,.lt.h3.nd:after,.lt.h4.nd:after,.lt.h5.nd:after,.lt.h6.nd:after  {
+    clear: both;
+    content: "";
+    display: block;
+    height: 1px;
+    width: 1px;
+}
 
 .fa-markup{
 
@@ -68,7 +93,10 @@ p{
 
 .fa-h1:before, .fa-h2:before, .fa-h3:before, .fa-h4:before,.fa-h5:before, .fa-h6:before{
 	content: "";
-    display: block;
+   
+}
+.mk_val_subtype_h1, .mk_val_subtype_h2, .mk_val_subtype_h3, .mk_val_subtype_h4, .mk_val_subtype_h5, .mk_val_subtype_h6{
+	text-transform:uppercase;
 }
 
 i.fa-comment:before {

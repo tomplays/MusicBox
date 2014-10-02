@@ -1,4 +1,4 @@
-'use strict';
+// todo doc     
 
 // 
 
@@ -179,7 +179,7 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
               /// keep open test :
               //console.log('keep open')
               markup.selected = false;
-              markup.editing = false;
+              markup.editing  = false;
 
 
               _.each($rootScope.ui.selected_objects, function(obj){
@@ -187,6 +187,12 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
                 if(markup._id == obj._id){
                   markup.selected = true;
                   // should select ranges too..
+                }
+              })
+               _.each($rootScope.ui.editing_objects, function(obj){
+                //console.log('keep opn'+obj._id)
+                if(markup._id == obj._id){
+                  markup.editing = true;
                 }
               })
               
@@ -222,14 +228,19 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
                     var delta = parseInt(markup.start) - parseInt(container.start) + j_arr;
                     
                     if( pos == markup.start  && (markup.subtype== 'list-item' || markup.subtype== 'h1'  || markup.subtype== 'h2' || markup.subtype== 'h3'  || markup.subtype== 'h4'  || markup.subtype== 'h5'  || markup.subtype== 'h6' || markup.subtype== 'cite' || markup.subtype== 'code'   )  )   {
-                      $rootScope.letters[index][delta].fi_nd.fi = true; 
+                      //as object ?  
+                      //$rootScope.letters[index][delta].fi_nd.fi = true; 
+                    
+                      $rootScope.letters[index][delta]['classes'].push('fi')
+
 
                     }
 
                     //console.log(size_object +'/'+ j_arr)
                     //console.log(delta+ '-' +section.start+'--'+a.start+'--'+deltaz+'?end'+into_for+' / '+j_arr +'/'+i_array)
                     if( ( size_object ==  j_arr ) && (markup.subtype== 'list-item' || markup.subtype== 'h1'  || markup.subtype== 'h2' || markup.subtype== 'h3'  || markup.subtype== 'h4'  || markup.subtype== 'h5'  || markup.subtype== 'h6' || markup.subtype== 'cite' || markup.subtype== 'code'  )  )   {
-                      $rootScope.letters[index][delta+1].fi_nd.nd = true; 
+                       // $rootScope.letters[index][delta+1].fi_nd.nd = true; 
+                       $rootScope.letters[index][delta+1]['classes'].push('nd')
                     }
 
                     if(markup.selected === true){
@@ -250,7 +261,7 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
 
                     //}
                     if(markup.subtype == 'link' && markup.metadata){
-                      $rootScope.letters[index][delta]['href'].push(markup);
+                      $rootScope.letters[index][delta]['href']= markup.metadata
                     }
                     if(markup.selected === true){
                       $rootScope.letters[index][delta]['classes'].push('selected')
@@ -263,7 +274,7 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
             }
 
 
-    //////////////
+    
 
          
 
@@ -405,7 +416,7 @@ var options = {
           letter_arr.lindex= i;
           
           //unsued a heavy  letter_arr.objects = new Array();
-          letter_arr.href= new Array();
+          letter_arr.href= '';
           letter_arr.sectionin = section_count;
           letter_arr.mode= 'display';
 

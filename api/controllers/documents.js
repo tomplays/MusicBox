@@ -19,7 +19,33 @@ exports.index_doc= function(req, res) {
 		});
 }
 
+exports.docByIdOrTitle = function(req, res) {
+	var query = Document.findOne({ 'slug':req.params.slug });
+	query.populate('user').populate('room').exec(function (err, doc) {
+	if (err){
+		res.json(err)
+	} else{
+		var markups_type = new Array()
+		 if(doc && doc.markups){
+		 	_.each(doc.markups , function (markup, i){
+			 	if(markup.type){
+			 		markups_type.push(markup.type)
+			 	}
+			})
 
+ 			markups_type = _.uniq(markups_type)
+			doc.markups_type = new Array()
+		}
+		var out = new Object();
+		out.doc = doc
+		out.markups_type= new Array(markups_type);
+		///	out.markups_type.push()
+		res.json(out)
+		//res.json(doc)
+
+		}
+	})
+}
 
 
 exports.list = function(req, res) {
@@ -179,35 +205,7 @@ exports.createdoc = function(req, res){
     });
 }
 
-exports.docByIdOrTitle = function(req, res) {
-	var query = Document.findOne({ 'slug':req.params.slug });
-	query.populate('user').populate('room').exec(function (err, doc) {
-	if (err){
-		res.json(err)
-	} else{
 
-		console.log('here')
-		var markups_type = new Array()
- _.each(doc.markups , function (markup, i){
- 	
- 	if(markup.type){
- 		markups_type.push(markup.type)
- 	}
- 	
-})
- 		markups_type = _.uniq(markups_type)
-		doc.markups_type = new Array()
-					var out = new Object();
-					out.doc = doc
-					out.markups_type= new Array(markups_type);
-				///	out.markups_type.push()
-
-					res.json(out)
-
-				//res.json(doc)
-		}
-	})
-}
 
 exports.edit  = function(req, res) {
 	var query = Document.findOne({ '_id':req.params.doc_id });
@@ -215,15 +213,11 @@ exports.edit  = function(req, res) {
 	if (err){
 		res.json(err)
 	} else{
-
 			var field = req.body.field
 			var value = req.body.value
-
-			console.log(field +'<->'+ value)
-
-			
-
-			if(field == 'title' ){
+			console.log('editing doc '+req.params.doc_id +'field '+ field +'<->'+ value)
+			// 'create' is a routes keyword..
+			if(field == 'title' && value !== 'create' ){
 				// and todo : clean
 				var slugify = value.replace(/\s/g, '-')
 				slugify = slugify.replace('?', '_')
@@ -239,15 +233,7 @@ exports.edit  = function(req, res) {
 					} else {
 						res.json(doc)
 					}
-				});
-
-
-
-
-			
-		
-
-		
+				});		
 	}
 	})
 }

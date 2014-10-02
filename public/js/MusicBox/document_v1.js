@@ -121,7 +121,7 @@ $scope.virtualize = function(collection){
 
 $scope.switch_editing = function (origin){
 
-
+/*
 console.log($scope.inserttext[origin.sectionin])
 console.log(origin)
 
@@ -143,18 +143,30 @@ $scope.doc.content = left_text+' '+ $scope.inserttext[origin.sectionin] +' '+rig
 
 
 $scope.$emit('docEvent', {action: 'fulltext', type: 'edit', collection_type: 'document', collection:$scope.doc});
-
+*/
 
 }
 
 	$scope.over= function(letter, event){
-			console.log(letter)
+		
+
+
+		console.log(letter)
 		var event_at = letter.order
 		if(event == 'down'){
 			$scope.ui.selected_range.start = event_at;
 		}
 		if(event == 'up'){
 			$scope.ui.selected_range.end = event_at;
+		}
+
+
+		if(event == 'click'){
+			if(letter.href !==''){
+				//console.log(letter)
+				//alert(letter.href)
+				window.location = letter.href
+			}
 		}
 
 
