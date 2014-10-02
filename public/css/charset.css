@@ -12,7 +12,7 @@ p{
 	font-style: italic
 }
 .lt.selected{
-	background:red;
+	background:#1abc9c
 }
 
 
@@ -102,7 +102,7 @@ i.fa-img:before {
 }
 
 .fa.selected_true{
-	color:red;
+	color:#1abc9c
 }
 
 
@@ -125,3 +125,12 @@ i.fa-img:before {
     margin-right: 2px;
     margin-top: 3px;
 }
+
+
+ .css-form input.ng-invalid.ng-dirty {
+    background-color: #FA787E;
+  }
+
+  .css-form input.ng-valid.ng-dirty {
+    background-color: #78FA89;
+  }

@@ -9,7 +9,12 @@ var rooms = require('../api/controllers/rooms');
 
 
 module.exports = function(app, passport, auth) {
+  app.get('/login', index.login );
+    app.post('/register', users.create);
 
+   app.get('/signup', index.signup );
+  //  app.post('/login', users.signin);
+  
 
  var fileupload = require('fileupload').createFileUpload('public/uploads').middleware;
 
@@ -23,7 +28,7 @@ module.exports = function(app, passport, auth) {
     app.get('/signout', users.signout);
   //Setting the facebook oauth routes
     app.get('/auth/facebook', passport.authenticate('facebook', {
-        scope: ['email', 'publish_stream'],
+        scope: ['email'],
         failureRedirect: '/'
     }), users.signin);
 
@@ -37,13 +42,31 @@ module.exports = function(app, passport, auth) {
     app.param('userId', users.userById);
 
 
-     app.get('/me/account', passport.authenticate('facebook', {
-        failureRedirect: '/'
-    }), users.account);
+     app.get('/me/account', auth.requiresLogin, users.account);
 
+/*
+    app.post('/login',   function(req, res, next) {
+passport.authenticate('local', function(err, user, info) {
+    console.log('user')
+if (err) { return next(err) }
+if (!user) {
+return res.redirect('/login')
+}
+req.logIn(user, function(err) {
+if (err) { return next(err); }
+return res.redirect('/');
+});
+})(req,res, next);
+});
+*/
+ //Setting the local strategy route
+    app.post('/login', passport.authenticate('local', {
+        failureRedirect: '/login',
+        //failureFlash: true
+    }), users.session);
 
+      
     //Home 
-   
 
 
     /* with view */
@@ -57,7 +80,8 @@ module.exports = function(app, passport, auth) {
     app.get('/fragments/:name/:param?',     index.fragments); // load sub-blocks 
     app.get('/doc/fragments/:name/:param?', index.fragments); // load sub-blocks ? express/angualar..?
 
-   
+  
+    app.get('/doc/create',  auth.requiresLogin, docs.index_doc ); // load sub-blocks ? express/angualar..?
 
     app.get('/api/v1/docs', docs.list);
 

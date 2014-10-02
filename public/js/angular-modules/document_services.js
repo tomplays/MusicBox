@@ -27,34 +27,37 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
           else{
             docid = 'homepage'
           }
-          if(USERIN){
-                  console.log(USERIN)
-                  $rootScope.userin = USERIN;
+          
 
+          if(USERIN){
+            //console.log(USERIN)
+            $rootScope.userin = USERIN;
           }
 
 
           $http.get(api_url+'/doc/'+docid).success(function(d) {
              //console.log(m)
-              $rootScope.doc = d;
-              $rootScope.doc.formated_date= 'last update '+moment(d.updated).calendar() +', '+moment(d.updated).fromNow(); 
-
-               console.log($rootScope.doc.user)
-               self.init_containers()
+              $rootScope.doc = d.doc;
+              /// $rootScope.doc.formated_date= 'last update '+moment(d.doc.updated).calendar() +', '+moment(d.doc.updated).fromNow(); 
+              $rootScope.doc.formated_date = d.doc.updated
+               // console.log($rootScope.doc.user)
+             
                self.apply_object_options('document', $rootScope.doc.doc_options)
-               self.apply_object_options('author', d.user.user_options)
-               self.apply_object_options('room', d.room.room_options)
+               self.apply_object_options('author', d.doc.user.user_options)
+               self.apply_object_options('room', d.doc.room.room_options)
+               //console.log(d.markups_type)
 
+               if($rootScope.userin._id ==  $rootScope.doc.user._id ){
+                console.log('is owner')
+               }
+               else{
+                  console.log('is !owner')
 
+               }
 
-
+            $rootScope.available_sections_objects  = d.markups_type[0]
+            self.init_containers()  
          })
-
-
-
-        console.log(root_url)
-
-       //$rootScope.doc = JSON.parse(DOC.replace(/&quot;/g,'"'))
         
         // equivalence
         //$rootScope.$emit('docEvent', {action: 'doc_ready', type: 'load', collection_type: 'doc', collection:doc});
@@ -314,14 +317,14 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
           })
           //$rootScope.containers[index].objects = $rootScope.objects_sections[index]    
           $rootScope.containers[index].letters = $rootScope.letters[index]
-           console.log($rootScope.containers[index])
+         //  console.log($rootScope.containers[index])
         });
   
         // console.log($rootScope.letters)
         $rootScope.$emit('docEvent', {action: 'dispatched_objects' });
 
 
-        console.log( $rootScope.objects_sections['global_by_type'])
+       // console.log( $rootScope.objects_sections['global_by_type'])
 
 /*
 
@@ -457,7 +460,7 @@ var options = {
       */
 
       apply_object_options : function(object, options){
-        console.log(' apply doc_options to object'+object)
+        //console.log(' apply doc_options to object'+object)
         var options_array = new Array()
         _.each(options , function(option){
            // console.log(option)
@@ -479,17 +482,17 @@ var options = {
         if(object == 'document')  {
           $rootScope.doc_options = new Array()
           $rootScope.doc_options = options_array
-           console.log($rootScope.doc_options)
+           //console.log($rootScope.doc_options)
          }
          else if(object == 'author')  {
           $rootScope.author_options = new Array()
           $rootScope.author_options = options_array
-          console.log($rootScope.author_options)
+          //console.log($rootScope.author_options)
          }
          else if(object == 'room')  {
           $rootScope.room_options = new Array()
           $rootScope.room_options = options_array
-          console.log($rootScope.room_options)
+          //console.log($rootScope.room_options)
          }
 
 

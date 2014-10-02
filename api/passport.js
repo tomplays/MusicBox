@@ -3,6 +3,8 @@
 var mongoose = require('mongoose'),
     //TwitterStrategy = require('passport-twitter').Strategy,
     FacebookStrategy = require('passport-facebook').Strategy,
+    LocalStrategy = require('passport-local').Strategy,
+
     //BufferAppStrategy = require('passport-bufferapp').Strategy,
     User = mongoose.model('User'),
     request = require('request');
@@ -51,11 +53,33 @@ module.exports = function(passport) {
         
     });
 
-    //Use bufferapp strategy
-   
+  passport.use(new LocalStrategy(function(username, password, done) {
+User.findOne({ username: username }, function(err, user) {
+if (err) { 
+    console.log('err')
+    return done(err); }
+if (!user) { console.log('Unknown user')
+ return done(null, false, { message: 'Unknown user ' + username }); }
 
-    //Use twitter strategy
+user.authenticate(password, function(cb) {
+     if(cb){
+        return done(null, user);
+
+     }
+     else{
+         return done(err);
+     }
+})
+
+ //console.log(password)
+ // done(err, user);
+
+});
+}));
     
+
+
+
 
     //Use facebook strategy
     passport.use(new FacebookStrategy({
@@ -74,7 +98,7 @@ module.exports = function(passport) {
                 }
                 if (!user) {
                     
-                    user = new User({
+                        user = new User({
                         name: profile.displayName,
                         email: profile.emails[0].value,
                         username: profile.username,

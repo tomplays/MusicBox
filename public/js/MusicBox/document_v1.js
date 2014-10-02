@@ -45,6 +45,20 @@ var doc;
   * @param {Factory} docfactory -  angular custom factory for document 
 
  */
+function DocumentNewCtrl($scope, $http , $sce, $location, $routeParams, renderfactory,socket,docfactory) {
+console.log('DocumentNewCtrl')
+
+
+
+	$scope.init = function (){
+			render = renderfactory();
+			$scope.render = render.init();
+			$scope.ui.loaded = 'loaded' 
+	}
+
+		$scope.init()
+}
+
 
 function DocumentCtrl($scope, $http , $sce, $location, $routeParams, renderfactory,socket,docfactory) {
 		

@@ -7,18 +7,17 @@ var _package = require('./package.json'),
 express = require('express'),
 fs = require('fs'),
 jade = require('jade'),
-
 mongoose = require('mongoose'),
  _ = require('underscore'),
 nconf = require('nconf'), 
 http = require('http'),  
-program = require('commander'),
+// program = require('commander'),
 chalk = require('chalk'),
 passport = require('passport'),
-logger = require('mean-logger'),
+//logger = require('mean-logger'),
  mongoStore = require('connect-mongo')(express),
-    flash = require('connect-flash'),
-    helpers = require('view-helpers');
+flash = require('connect-flash'),
+helpers = require('view-helpers');
 
 var locale = require("locale")
   , supported = ["fr-fr", "en_us"]
@@ -106,6 +105,7 @@ app.configure(function(){
         app.locals.site_description_long = nconf.get('SITE_DESCRIPTION_LONG');
         app.locals.root_url= nconf.get('ROOT_URL');
         app.locals.api_url= nconf.get('API_URL');
+        app.locals.socket_url = nconf.get('SOCKET_SERVER_URL')
         // i18n dyn. load
         app.use(function(req, res, next){
           res.locals.lang_js_url  = '/js/angular-modules/i18n/angular_'+req.locale+'.js';
@@ -121,6 +121,9 @@ app.configure(function(){
         
         //Setting the fav icon and static folder
         app.use(express.favicon());
+
+
+
         app.use(express.static(__dirname + '/public'));
         app.use(app.router);
 });

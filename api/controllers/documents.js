@@ -3,10 +3,10 @@
 var mongoose = require('mongoose'),
  _ = require('underscore'),
 Document = mongoose.model('Document')
-
-
 var nconf = require('nconf')
 nconf.argv().env().file({file:'config.json'});
+
+
 var app;
 
 exports.index_doc= function(req, res) {
@@ -14,10 +14,8 @@ exports.index_doc= function(req, res) {
 		if(req.user){
 			user_ = new Object({'_id': req.user._id , 'username': req.user.username,  'image_url': req.user.image_url})
 		}
-		 
 		res.render('index_v1', {
-			user_in : user_,
-			socket_url: nconf.get('SOCKET_SERVER_URL')
+			user_in : user_
 		});
 }
 
@@ -122,30 +120,15 @@ exports.createdoc = function(req, res){
              //   article: article
           //  });
 	}
-
 	//doc.populate('user', 'name username image_url').exec(function(err,doc) {
-
-
-	
-
-
-
 	doc.save(function(err,doc) {
 		if (err) {
    			res.json(err);
         } else {
-
-        	 
-
-
-        	console.log(doc)
-
-      	var doc =  Document.findOne({title: new_doc.title}).populate('user', 'name username image_url').populate('room').exec(function(err, doc) {
-        res.json(doc)
-    });	
-        	
-
-            
+			console.log(doc)
+			var doc =  Document.findOne({title: new_doc.title}).populate('user', 'name username image_url').populate('room').exec(function(err, doc) {
+        	res.json(doc)
+   			});            
         }
     });
 }
@@ -166,9 +149,16 @@ exports.docByIdOrTitle = function(req, res) {
  	}
  	
 })
- console.log(_.uniq(markups_type))
+ 		markups_type = _.uniq(markups_type)
+		doc.markups_type = new Array()
+					var out = new Object();
+					out.doc = doc
+					out.markups_type= new Array(markups_type);
+				///	out.markups_type.push()
 
-		res.json(doc)
+					res.json(out)
+
+				//res.json(doc)
 		}
 	})
 }
@@ -201,7 +191,6 @@ exports.edit  = function(req, res) {
 					if (err) {
 						res.send(err)
 					} else {
-						
 						res.json(doc)
 					}
 				});

@@ -6,7 +6,7 @@
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema,
     crypto = require('crypto'),
-    authTypes = ['facebook']; // bufferapp', 'twitter',
+    authTypes = ['facebook', 'local']; // bufferapp', 'twitter',
 var  meta_options = Schema.MetaoptionsSchema;
 
 
@@ -24,6 +24,10 @@ var UserSchema = new Schema({
     username: {
         type: String,
         unique: true
+    },
+    newsletter: {
+         type: Boolean,
+         default: false
     },
     image_url : String,
     hashed_password: String,
@@ -62,7 +66,7 @@ UserSchema.path('name').validate(function(name) {
 
 UserSchema.path('email').validate(function(email) {
     // if you are authenticating by any of the oauth strategies, don't validate
-    if (authTypes.indexOf(this.provider) !== -1) return true;
+  //  if (authTypes.indexOf(this.provider) !== -1) return true;
     return email.length;
 }, 'Email cannot be blank');
 
@@ -102,8 +106,16 @@ UserSchema.methods = {
      * @return {Boolean}
      * @api public
      */
-    authenticate: function(plainText) {
-        return this.encryptPassword(plainText) === this.hashed_password;
+    authenticate: function(plainText, cb) {
+        if( this.encryptPassword(plainText) === this.hashed_password) 
+        {
+             cb(true);
+        }
+        else{
+             cb(false);
+        }
+       
+        //return true;
     },
 
     /**

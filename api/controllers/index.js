@@ -3,8 +3,20 @@
 
 
 exports.sockets_list = function(req, res) {
-			var user_ = new Object({'username': null,  'image_url':null})
+			   var user_ = new Object({'username': null,  'image_url':null})
    			 res.render('index_v1', { user:user_ } );
+};
+
+exports.login = function(req, res) {
+         res.render('login');
+};
+
+exports.signup = function(req, res) {
+
+  var user_ = new Object({'username': null,  'image_url':null})
+  res.render('index_v1', { user_in:user_ } );
+
+  
 };
 
 

@@ -8,10 +8,17 @@ angular.module('musicBox',  ['ngLocale', 'ngResource', 'musicBox.filters', 'ngRo
         templateUrl: 'partials/document',
         controller: DocumentCtrl
       }).
-
-      when('/:docid', {
-        templateUrl: 'partials/document',
-        controller: DocumentCtrl
+      when('/doc/create', {
+         templateUrl: '/partials/document_new',
+        controller: DocumentNewCtrl
+      }).
+       when('/login', {
+         templateUrl: '/partials/document_new',
+        controller: DocumentNewCtrl
+      }).
+       when('/signup', {
+        templateUrl: '/partials/signup',
+        controller: SignUpCtrl
       }).
       when('/doc/:docid', {
         templateUrl: '/../partials/document',
@@ -25,6 +32,7 @@ angular.module('musicBox',  ['ngLocale', 'ngResource', 'musicBox.filters', 'ngRo
         templateUrl: '/partials/documents_list',
         controller: DocumentsListCtrl
       }).
+     
       when('/me/account', {
         templateUrl: '/partials/user_account',
         controller: UserCtrl

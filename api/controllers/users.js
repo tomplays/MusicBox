@@ -16,25 +16,12 @@ exports.authCallback = function(req, res) {
     res.redirect('/');
 };
 
-/**
- * Show login form
- */
+
 exports.signin = function(req, res) {
-    res.render('users/signin', {
-        title: 'Signin',
-        message: req.flash('error')
-    });
+
 };
 
-/**
- * Show sign up form
- */
-exports.signup = function(req, res) {
-    res.render('users/signup', {
-        title: 'Sign up',
-        user: new User()
-    });
-};
+
 
 /**
  * Logout
@@ -48,46 +35,37 @@ exports.signout = function(req, res) {
  * Session
  */
 exports.session = function(req, res) {
-    res.redirect('/');
+    return res.redirect('/');
 };
 
 
 exports.account = function(req, res) {
   
         if(req.user){
-                user_ = new Object({'username': 'jsjd',  'image_url':'img'})
+            var user_ = new Object({'username': req.user.username})
 
         }
-        
+        else{
+            var user_ = new Object({'username':'-'})
+        }
         res.render('index_v1', {
             doc: new Object(),
-            docs: new Object(),
-            user : user_,
-            socket_url: nconf.get('SOCKET_SERVER_URL')
+            user_in : user_,
         });
-
-
+}
   
 
-}
 
-/**
- * Create user
- */
-exports.create = function(req, res, next) {
+   
+exports.create = function(req, res) {
+    console.log(req.body)
     var user = new User(req.body);
     var message = null;
-
-    user.provider = 'local';
-
     user.user_options = new Array();
     
     var user_option = new Object( {'option_name':'color', 'option_value':'#ccc',  'option_type': '' } )
-
-
-
     user.user_options.push(user_option)
-
+    user.provider = 'local';
     user.save(function(err) {
         if (err) {
             switch (err.code) {
@@ -99,14 +77,14 @@ exports.create = function(req, res, next) {
                     message = 'Please fill all the required fields';
             }
 
-            return res.render('users/signup', {
-                message: message,
-                user: user
-            });
+            return res.send(message);
         }
         req.logIn(user, function(err) {
-            if (err) return next(err);
-            return res.redirect('/');
+            if (err){
+                  res.send('user')
+            }
+            //res.redirect('/');
+            res.send('user')
         });
     });
 };

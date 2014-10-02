@@ -1,0 +1,18 @@
+h3 Signup
+	form(novalidate class="css-form")
+		p {{errors}}
+		p {{username}}
+		p {{password}}
+
+		label 
+			Pick username
+		input(type="text", ng-model="username"  )
+		label 
+			Pick password
+		input(type="password", ng-model="password", )
+		
+		a( ng-click="checkpost()") ok
+
+
+		p 
+			a(href="/me/account") {{success}}

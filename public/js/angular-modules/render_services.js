@@ -61,7 +61,11 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
         $rootScope.globals = GLOBALS;
         $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
 
-        $rootScope.available_sections_objects        =   self.objAvailable(); 
+        // $rootScope.available_sections_objectsd        =   self.objAvailable(); 
+        // console.log($rootScope.available_sections_objectsd )
+
+
+
         $rootScope.available_layouts                 =   self.posAvailable();
         $rootScope.fragments                         =   self.fragmentsAvailable();
         // $rootScope.classesofsections                 =   self.classesAvailable();
@@ -95,7 +99,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
 
 
           console.log('render service on init_first')
-          console.log(self)
+          //console.log(self)
         
         },
 
