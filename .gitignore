@@ -7,12 +7,12 @@ lib-cov
 *.out
 *.pid
 *.gz 
+*.DS_Store
 pids
 logs
 results
 tests
 
-README.md
 config.json
 config_kimi.json
 public/uploads/
@@ -20,5 +20,8 @@ public/documentation/sources
 npm-debug.log
 node_modules
 start.sh
+compressor_CSS.sh
+compressor_JS.sh
 
-
+README.md
+public/img/

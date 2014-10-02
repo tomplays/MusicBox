@@ -103,12 +103,15 @@ app.configure(function(){
         app.locals.site_title = nconf.get('SITE_TITLE');
         app.locals.site_description = nconf.get('SITE_DESCRIPTION');
         app.locals.site_description_long = nconf.get('SITE_DESCRIPTION_LONG');
+        app.locals.env = nconf.get('ENV');
         app.locals.root_url= nconf.get('ROOT_URL');
         app.locals.api_url= nconf.get('API_URL');
+        app.locals.fbapp_id = nconf.get('FACEBOOK_ID');
+        // > if setted to "null" script wont be load in view
         app.locals.socket_url = nconf.get('SOCKET_SERVER_URL')
         // i18n dyn. load
         app.use(function(req, res, next){
-          res.locals.lang_js_url  = '/js/angular-modules/i18n/angular_'+req.locale+'.js';
+          res.locals.lang_js_url  = 'js/angular-modules/i18n/angular_'+req.locale+'.js';
           next();
         });
 
