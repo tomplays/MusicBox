@@ -45,6 +45,13 @@ var doc;
   * @param {Factory} docfactory -  angular custom factory for document 
 
  */
+
+
+function  DocumentCtrlJasmine($scope, $http , $sce, $location, $routeParams, renderfactory,socket,docfactory){
+			return 'hello';
+} 
+
+
 function DocumentNewCtrl($scope, $http , $sce, $location, $routeParams, renderfactory,socket,docfactory) {
 console.log('DocumentNewCtrl')
 
@@ -87,9 +94,6 @@ function DocumentCtrl($scope, $http , $sce, $location, $routeParams, renderfacto
 			doc.init();
 			
 		}
-
-
-
 
 
 // util flatten array to string
@@ -302,7 +306,7 @@ $scope.$emit('docEvent', {action: 'fulltext', type: 'edit', collection_type: 'do
 		$scope.push.type = 'comment';
 		$scope.push.subtype = 'comment';
 
-		if($scope.ui.selected_range.start){
+		/*if($scope.ui.selected_range.start){
 			$scope.push.start = $scope.ui.selected_range.start;
 		}
 		else{
@@ -316,8 +320,9 @@ $scope.$emit('docEvent', {action: 'fulltext', type: 'edit', collection_type: 'do
 		else{
 			$scope.push.end = 1;
 		}
-
-		
+*/
+		$scope.push.start = 0;
+		$scope.push.end = 1;
 		
 		$scope.push.position = 'left';
 
@@ -345,7 +350,7 @@ $scope.$emit('docEvent', {action: 'fulltext', type: 'edit', collection_type: 'do
 				$scope.push.metadata= '-';
 			}
 			else{
-				$scope.push.metadata =encodeURIComponent($scope.push.metadata);
+				$scope.push.metadata = $scope.push.metadata; // encodeURIComponent(..)
 			}
 			if(!$scope.push.status){
 				$scope.push.status= '-';
@@ -400,7 +405,13 @@ $scope.$emit('docEvent', {action: 'fulltext', type: 'edit', collection_type: 'do
 	}
 
 	$scope.expand_tools = function(name){
-		$scope.ui.menus[name].open = $scope.ui.menus[name].open * -1;
+		//$scope.ui.menus[name].open = $scope.ui.menus[name].open * -1;
+		if($scope.ui.menus[name].open == 'yes'){
+			$scope.ui.menus[name].open = 'no'
+		}
+		else{
+			$scope.ui.menus[name].open = "yes"
+		}
 		//return;
 		//alert('d')
 	}

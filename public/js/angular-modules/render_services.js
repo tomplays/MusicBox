@@ -61,12 +61,16 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
         $rootScope.globals = GLOBALS;
         $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
 
-        // $rootScope.available_sections_objectsd        =   self.objAvailable(); 
+         $rootScope.objAvailable        =   self.objAvailable(); 
         // console.log($rootScope.available_sections_objectsd )
 
 
 
         $rootScope.available_layouts                 =   self.posAvailable();
+        $rootScope.item_position  = '';
+
+
+        
         $rootScope.fragments                         =   self.fragmentsAvailable();
         // $rootScope.classesofsections                 =   self.classesAvailable();
 
@@ -119,21 +123,23 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
       },
       posAvailable:function (){
 
+
+
         var arr = new Array(
-          {name:'wide', order:0},
-          {name:'slidewide', order:1},
-          {name:'center', order:2, include_title:true},
-          {name:'left', order:3},
-          {name:'inline_into_before',  order:4},
-          {name:'inline', order:5, include_objects:false}, 
-          {name:'inline-implicit', order:6},
-          {name:'inline_into_after', order:7},
+          {name:'wide', order:0, ID:0},
+          {name:'slidewide', order:1, ID:1},
+          {name:'center', order:2, include_title:true,  ID:2},
+          {name:'left', order:7, ID:3},  // "left" layout is after inline (css-technique : margin-left:-50%)
+          {name:'inline_into_before',  order:3, ID:4},
+          {name:'inline', order:4, include_objects:false, ID:5}, 
+          {name:'inline-implicit', order:5, ID:6},
+          {name:'inline_into_after', order:6, ID:7},
           
-          {name:'right', order:8},
+          {name:'right', order:8, ID:8},
          
-          {name:'under', order:9},
+          {name:'under', order:9, ID:9},
          
-          {name:'global', order:10});
+          {name:'global', order:10, ID:10});
 
         arr  = _.sortBy(arr,function (num) {
          return num.order;

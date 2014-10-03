@@ -38,8 +38,8 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
           $http.get(api_url+'/doc/'+docid).success(function(d) {
              //console.log(m)
               $rootScope.doc = d.doc;
-              /// $rootScope.doc.formated_date= 'last update '+moment(d.doc.updated).calendar() +', '+moment(d.doc.updated).fromNow(); 
-              $rootScope.doc.formated_date = d.doc.updated
+              $rootScope.doc.formated_date=  moment(d.doc.updated).calendar() +', '+moment(d.doc.updated).fromNow(); 
+              //$rootScope.doc.formated_date = d.doc.updated
                // console.log($rootScope.doc.user)
              
                self.apply_object_options('document', $rootScope.doc.doc_options)
@@ -227,7 +227,9 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
                     // pushing class to each letter..
                     var delta = parseInt(markup.start) - parseInt(container.start) + j_arr;
                     
-                    if( pos == markup.start  && (markup.subtype== 'list-item' || markup.subtype== 'h1'  || markup.subtype== 'h2' || markup.subtype== 'h3'  || markup.subtype== 'h4'  || markup.subtype== 'h5'  || markup.subtype== 'h6' || markup.subtype== 'cite' || markup.subtype== 'code'   )  )   {
+                    if( pos == markup.start  
+                     // && (markup.subtype== 'list-item' || markup.subtype== 'h1'  || markup.subtype== 'h2' || markup.subtype== 'h3'  || markup.subtype== 'h4'  || markup.subtype== 'h5'  || markup.subtype== 'h6' || markup.subtype== 'cite' || markup.subtype== 'code'   )  
+                      )   {
                       //as object ?  
                       //$rootScope.letters[index][delta].fi_nd.fi = true; 
                     
@@ -238,7 +240,9 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
 
                     //console.log(size_object +'/'+ j_arr)
                     //console.log(delta+ '-' +section.start+'--'+a.start+'--'+deltaz+'?end'+into_for+' / '+j_arr +'/'+i_array)
-                    if( ( size_object ==  j_arr ) && (markup.subtype== 'list-item' || markup.subtype== 'h1'  || markup.subtype== 'h2' || markup.subtype== 'h3'  || markup.subtype== 'h4'  || markup.subtype== 'h5'  || markup.subtype== 'h6' || markup.subtype== 'cite' || markup.subtype== 'code'  )  )   {
+                    if( ( size_object ==  j_arr ) 
+                      //&& (markup.subtype== 'list-item' || markup.subtype== 'h1'  || markup.subtype== 'h2' || markup.subtype== 'h3'  || markup.subtype== 'h4'  || markup.subtype== 'h5'  || markup.subtype== 'h6' || markup.subtype== 'cite' || markup.subtype== 'code'  ) 
+                       )   {
                        // $rootScope.letters[index][delta+1].fi_nd.nd = true; 
                        $rootScope.letters[index][delta+1]['classes'].push('nd')
                     }
@@ -523,7 +527,7 @@ var options = {
          
 
         $http.post(api_url+'/doc/'+ $rootScope.doc.slug+'/markups/push', serialize(data) ).success(function(m) {
-             //console.log(m)
+             console.log(m)
             $rootScope.doc = m.doc;
             //$rootScope.$emit('docEvent', {action: 'doc_ready' });
             $rootScope.$emit('docEvent', {action: 'doc_ready', type: 'push', collection_type: 'markup', collection:m.inserted[0] });
