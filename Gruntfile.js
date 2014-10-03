@@ -35,7 +35,7 @@ module.exports = function(grunt) {
       server: {
         options: {
           hostname: '',
-          port: 80
+          port: 8800
         }
       }
     },
@@ -60,6 +60,13 @@ module.exports = function(grunt) {
         }  
       }
     },
+    forever: {
+      server1: {
+        options: {
+          index: 'index.js'
+        }
+      }
+    },
     watch: {
       styles: {
         files: ['public/css/*.less'], // which files to watch
@@ -74,8 +81,9 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-jasmine');
-  grunt.loadNpmTasks('grunt-contrib-connect');
+  // grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-contrib-jade');
+  grunt.loadNpmTasks('grunt-forever');
 
-  grunt.registerTask('default', ['jade','watch', 'less','jasmine', 'connect:server']);
+  grunt.registerTask('default', ['jade','watch', 'less','jasmine']); // , 'connect:server' // 'forever', 
 };
