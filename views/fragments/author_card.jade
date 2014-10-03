@@ -1,10 +1,10 @@
 .post-author-card
- // p {{doc.user}}
- a(title="Go to url of {{doc.user.username}}",class="post-author-image" , href="{{doc.user.website_url}}")
+ //p {{doc.user}}
+ p()
   span.img-border( title="{{doc.user.username}} avatar", style="background-image:url({{doc.user.image_url}}); border-color:{{user.color}}; ")
  div.post-author-info
   p {{i18n.CUSTOM.DOCUMENT.by_author}} 
-    a(style="color:{{doc.user.color}}; ", class="post-author-name", rel="author" ,title="Go to the profile of {{doc.user.username}}" , href="{{doc.user.website_url}}") {{doc.user.username}} 
+    span(style="color:{{doc.user.color}}; ", class="post-author-name", rel="author") {{doc.user.username}} 
    //span {{doc.user.facebook.quotes}}
 
   

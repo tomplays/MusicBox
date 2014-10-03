@@ -1,6 +1,8 @@
 // div.ct-chart
-//div(ng-include="fragments['branding'][0].url")
-div(ng-include="fragments['before_doc'][0].url")
+//div(ng-include="fragments['branding'][0]['url']")
+
+
+div(ng-include="fragments['before_doc'][0].url" )
 div(class="sections_container")
 	section(ng-repeat='section in containers' , class="{{section.section_classes}}")
 		div(ng-repeat='layout in available_layouts')
@@ -38,7 +40,7 @@ div(class="sections_container")
 							.cols-edit(ng-include="fragments['markup_editor'][0].url" )
 				
 
-				div(ng-if="(doc.slug !=='about' && layout.name== 'under') && ($parent.$last) " , ng-include="fragments['ad_welcome'][0].url")
+				// div(ng-if="(doc.slug !=='about' && layout.name== 'global') && ($parent.$last) " , ng-include="fragments['ad_welcome'][0].url")
 
 				div(ng-if="(layout.name== 'center') && ($parent.$first) ")
 						div.doc_header
@@ -74,8 +76,9 @@ div(class="sections_container")
 								
 						div(ng-click="click_text()")
 							span(ng-mousedown="over(l, 'down')", ng-mouseup="over(l, 'up')", ng-class="l.classes", ng-click="over(l, 'click')" ,ng-dblclick="switch_editing(l)", data-order="{{$index}}", ng-repeat="l in letters[$parent.$parent.$index]") {{l.char}}
+		
 
-footer.debug-onlyr
-	p(ng-bind-html="doc_options.footer_center_html.value") 
-	// a(href="/doc/{{doc.title}}") permalink
-	// a(href="/") back home
+		footer.debug-onlyr(ng-if="$last")
+			p(ng-bind-html="doc_options.footer_center_html.value") 
+			// a(href="/doc/{{doc.title}}") permalink
+			// a(href="/") back home

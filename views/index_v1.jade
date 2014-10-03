@@ -18,7 +18,7 @@ html(ng-app="musicBox", xmlns="http://www.w3.org/1999/xhtml")
 		// meta(property="og:type", content="like:article")
 		// meta(property="og:image", content=locals.image)
 		// meta(property="og:url", content="")
-
+		link(rel='icon', type="image/png", href="/favicon.png")
 		
 
 		script(type="text/javascript").
@@ -27,23 +27,22 @@ html(ng-app="musicBox", xmlns="http://www.w3.org/1999/xhtml")
 			var api_url = '#{api_url}'
 			var USERIN = new Object({'username':'#{user_in.username}', 'image_url': '#{user_in.image_url}', '_id': '#{user_in._id}'} );
 
-			
+
 		if (socket_url !== '')
 				script(src="#{socket_url}/socket.io/socket.io.js")
+		
+
+
 		// angularJS / 
 		script(src="/bower_components/angular/angular.min.js")
 		script(src='/bower_components/angular-sanitize/angular-sanitize.min.js')
 		script(src='/bower_components/angular-route/angular-route.min.js')
 		script(src='/bower_components/angular-resource/angular-resource.min.js')
 
-		// i18n dynamic load
+		//i18n dynamic load
 		script(src="#{root_url}/#{lang_js_url}")
-	
-
-		// no need to load them
-		// script(src='/js/angular-modules/filters.js')
-		// script(src='/js/angular-modules/directives.js')
-		
+		//script(src='/js/angular-modules/filters.js')
+		//script(src='/js/angular-modules/directives.js')
 
 		if (env == 'dev')
 			
@@ -72,9 +71,12 @@ html(ng-app="musicBox", xmlns="http://www.w3.org/1999/xhtml")
 			
 			
 		
-			link(rel='stylesheet', href='/css/grid.css')
-			link(rel='stylesheet', href='/css/charset.css')
-			link(rel='stylesheet', href='/css/custom.css')
+			// link(rel='stylesheet', href='/css/grid.css')
+			// link(rel='stylesheet', href='/css/charset.css')
+			// link(rel='stylesheet', href='/css/custom.css')
+
+			link(rel='stylesheet', href='/css/min/main.css')
+
 			
 			// Angular controllers
 			script(src='/js/MusicBox/document_v1.js')
@@ -86,16 +88,12 @@ html(ng-app="musicBox", xmlns="http://www.w3.org/1999/xhtml")
 		
 
 		// same in dev and prod env 
-		
-
-		
-		
 		link(rel='stylesheet', href='/bower_components/font-awesome/css/font-awesome.min.css')
 
 
 		
 		if (env == 'prod')
-			link(rel='stylesheet', href='/css/min/MusicBox.min.css')
+			link(rel='stylesheet', href='/css/min/main.css')
 			
 
 			// Calling 9 js files, minified crash for angular, whereas .debug no, why ?

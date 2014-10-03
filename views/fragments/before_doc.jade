@@ -3,32 +3,40 @@ div(class="branding {{doc_options.branding_class.value}}")
 	h1
 		a(href="/#!", title="home") 
 			span {{doc.room.slug}}
-div.user_tools
+//div.user_tools
 	i.fa.fa-user.muted.mute.inactive(ng-click="expand_tools('user_tools')")
 	div(class=" inside visible_{{ui.menus.user_tools.open}}")
-			div.user_in(ng-if="userin.username !== '' ")
+			
+div.quick_tools
+	i.fa.fa-cog.inactive(ng-click="expand_tools('quick_tools')")
+	
+	div(class="inside visible_{{ui.menus.quick_tools.open}}")
+		div.user_in(ng-if="userin.username !== '' ")
 				p
-					em
+					em 
 						a(href="/me/account") {{userin.username}}
 				p
 					a(ng-click="external_link(root_url+'/signout')")
 						i.fa.fa-sign-out log out
 				img(ng-src="{{userin.image_url}}")
-			div.user_not_in(ng-if="userin.username == '' ")
-				a(ng-click="external_link(root_url+'/auth/facebook')" , ng-if="userin.username == '' ") log in with facebook
-div.quick_tools
-	i.fa.fa-cog.inactive(ng-click="expand_tools('quick_tools')")
-	
-	div(class="inside visible_{{ui.menus.quick_tools.open}}")
-		p 
-			a(href="/doc/create") Create a new doc
+				
+				p 
+					a(href="/doc/create") Create a new doc
 
-		// a(ng-click="push_markup()") push h1
-		// i.icon-move
-		// a(ng-click="push_section()") push markup_section
-		// a(ng-click="offset_markups()") offset_markups
-		// h1.debug-onlys {{sectionstocount}}
-		// a {{ui.renderAvailable_active }}
-		// div(class="markup_ markup_type_inline", ng-repeat="r in ui.renderAvailable")
-			a(ng-click="toggle_render(r)") {{r}}
-		a(ng-click="toggle_render('editor')") editor mode
+				// a(ng-click="push_markup()") push h1
+				// i.icon-move
+				// a(ng-click="push_section()") push markup_section
+				// a(ng-click="offset_markups()") offset_markups
+				// h1.debug-onlys {{sectionstocount}}
+				// a {{ui.renderAvailable_active }}
+				// div(class="markup_ markup_type_inline", ng-repeat="r in ui.renderAvailable")
+					a(ng-click="toggle_render(r)") {{r}}
+				a(ng-click="toggle_render('editor')") editor mode
+
+
+		div.user_not_in(ng-if="userin.username == '' ")
+				a(ng-click="external_link(root_url+'/auth/facebook')" , ng-if="userin.username == '' ") log in with facebook
+
+
+
+		

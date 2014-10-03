@@ -9,47 +9,66 @@
 
 
 
-div(class="markup_displayer markup_displayer_{{markup.type}}", ng-if="markup.type=='container_class' || markup.type=='note' || markup.type=='comment'||  markup.type=='markup' || markup.type=='media' || markup.type=='generic'  " ) 
+div(class="markup_displayer markup_displayer_{{markup.type}}", ng-if="markup.type=='container_class' || markup.type=='note' || markup.type=='comment'||  ( markup.type=='markup' ) || markup.type=='media' || markup.type=='generic'  " ) 
 	
 	img.mk_img(ng-if="markup.subtype=='img'" , data-tdid="{{markup.id}}" , ng-src="{{markup.metadata}}")
 
 	span.icon_col
 		i(class="fa fa-{{markup.type}} fa-{{markup.subtype}} editing_{{markup.editing}} selected_{{markup.selected}}",  ng-click="toggle_select_markup(markup)", ng-dblclick="toggle_select_markup(markup, 'dblclick')"  ) 
-			span(ng-if="markup.type=='generic' ") {{markup.subtype[0]}}.
+			span(ng-if="markup.type=='generic' ") {{markup.subtype[0]}}{{markup.subtype[1]}}.
 
 
 
-	p.mk_val.metavalue(ng-if="markup.type =='note' || markup.type =='generic' || markup.type =='comment' || markup.type =='container_class'") {{markup.metadata}}
-	p.mk_val.subtype(class="mk_val_subtype_{{markup.subtype}}", ng-if="markup.type=='markup'")  {{markup.subtype}} 
-	p.mk_val.created(ng-if="markup.type =='note' || markup.type =='comment'") {{markup.created | date}}
-	p.mk_val.username(ng-if="markup.type =='note' || markup.type =='comment' ") {{markup.username}}
+	span.mk_val.metavalue(ng-if="markup.type =='note' || markup.type =='generic' || markup.type =='comment' || markup.type =='container_class'") {{markup.metadata}}
+	span.mk_val.subtype(class="mk_val_subtype_{{markup.subtype}}", ng-if="markup.type=='markup'")  {{markup.subtype}} 
+	span.mk_val.created(ng-if="markup.type =='note' || markup.type =='comment'") {{markup.created | date}}
+	span.mk_val.username(ng-if="markup.type =='note' || markup.type =='comment' ") {{markup.username}}
 
 	
 	
 
-div.markup_editor(ng-if="markup.editing == true ")
+div(class="markup_editor markup_editor_{{markup.type}}", ng-if="markup.editing == true ")
 	
 
 	// a(href="", ng-if="markup.selected == true ", ng-click="toggle_select_markup(markup)") unselect 
 
+	form(name="myForm")
+		span.field
+			label.label_type type
+			select(ng-model="markup.type", ng-options="t for t in objAvailable")
+				option(value="markup.type")
+				option(value="t") {{t}}
+		span.field
+			label subtype
+			input(ng-model="markup.subtype" , type="text")
+		span.field 
+			label position
+			input(ng-model="markup.position" ,type="text")
+		span.field.numberfloat
+			label start
+			input(required ,max="{{section.end}}" , min="{{section.start}}",  type="number" , ng-model="markup.start" )
 
-	p type 
-		input(ng-model="markup.type" ,type="text")
-	p subtype
-		input(ng-model="markup.subtype" ,type="text")
-	p position
-		input(ng-model="markup.position" ,type="text")
-	p start
-		input(ng-model="markup.start" ,type="text")
-	p end
-		input(ng-model="markup.end", type="text")
-	p metadata
-		input(ng-model="markup.metadata", type="text")
-	p status
-		input(ng-model="markup.status" ,type="text")
-	p depth
-		input(ng-model="markup.depth" type="text" )
-	a(ng-click="markup_delete(markup)") markup_delete
-	// a(ng-click="offset_markup(markup)")  markup offset 
+		span.field.numberfloat
+			label end
+			input(required ,max="{{section.end}}" , min="{{section.start}}",  type="number" , ng-model="markup.end" )
+			
 
-	a.btn(ng-click="markup_save(markup)") ok
+
+
+		span.field.mt_input(class="mt_input_type_{{markup.type}} mt_input_subtype_{{markup.subtype}}", ng-if="markup.type !=='markup'") 
+			label metadata
+			input(ng-model="markup.metadata", type="text")
+		span.field.smallinput 
+			label status
+			input( ng-model="markup.status" ,type="text")
+		span.field.smallinput 
+			label  depth
+			input( ng-model="markup.depth" type="text" )
+		div.actions
+			i.fa.fa-remove.btn_action(ng-click="markup_delete(markup)")
+			// a(ng-click="offset_markup(markup)")  markup offset 
+		
+			span(ng-if="myForm.$valid")
+				i.fa.fa-save.btn_action(ng-click="markup_save(markup)") 
+				// i.icon-move.right(ng-click="_toggle_position(a)")
+
