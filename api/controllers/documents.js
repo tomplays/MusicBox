@@ -76,63 +76,97 @@ exports.createdoc = function(req, res){
 	//var ar = new Object({'title':'bloue'+Math.random()})
 	var new_doc = new Object({'title':slug, 'slug': slug, 'content': 'Start editing.. Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing.. Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing.. Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing.. Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..'})
 
-	new_doc.markups = new Array()
-	new_doc.doc_options = new Array()
-
-
-	var markup  = new Object( {'user_id':'542691afb9dc3c6a19445d24', 'username':'tom', 'start':0, 'end':300,  'type': 'container', 'subtype':'section', 'position':'inline'} )
-	var markup_summary  = new Object( {'user_id':'542691afb9dc3c6a19445d24', 'username':'tom', 'start':20, 'end':30,  'type': 'summary', 'subtype':'', 'position':'inline-implicit'} )
-
-
-
-	var markup_class= new Object( {'user_id':'542691afb9dc3c6a19445d24', 'username':'tom', 'start':0, 'end':10,  'type': 'container_class', 'subtype':'css_class', 'metadata': 'bg_black', 'position':'inline'} )
-	
-
-	var markup_h1	= new Object( {'user_id':'542691afb9dc3c6a19445d24', 'username':'tom', 'start':0, 'end':10,  'type': 'markup', 'subtype':'h1', 'metadata': '', 'position':'inline'} )
-	var markup_h2	= new Object( {'user_id':'542691afb9dc3c6a19445d24', 'username':'tom', 'start':11, 'end':20,  'type': 'markup', 'subtype':'h2', 'metadata': '', 'position':'inline'} )
-	var markup_h3	= new Object( {'user_id':'542691afb9dc3c6a19445d24', 'username':'tom', 'start':21, 'end':30,  'type': 'markup', 'subtype':'h3', 'metadata': '', 'position':'inline'} )
-	var markup_h4	= new Object( {'user_id':'542691afb9dc3c6a19445d24', 'username':'tom', 'start':31, 'end':40,  'type': 'markup', 'subtype':'h4', 'metadata': '', 'position':'inline'} )
-	var markup_h5	= new Object( {'user_id':'542691afb9dc3c6a19445d24', 'username':'tom', 'start':41, 'end':50,  'type': 'markup', 'subtype':'h5', 'metadata': '', 'position':'inline'} )
-	var markup_h6	= new Object( {'user_id':'542691afb9dc3c6a19445d24', 'username':'tom', 'start':51, 'end':60,  'type': 'markup', 'subtype':'h6', 'metadata': '', 'position':'inline'} )
-
-
-
-	var markup_em		= new Object( {'user_id':'542691afb9dc3c6a19445d24', 'username':'tom', 'start':60, 'end':70,  'type': 'markup', 'subtype':'em', 'metadata': '', 'position':'inline'} )
-	var markup_strike	= new Object( {'user_id':'542691afb9dc3c6a19445d24', 'username':'tom', 'start':71, 'end':80,  'type': 'markup', 'subtype':'strike', 'metadata': '', 'position':'inline'} )
-	var markup_strong	= new Object( {'user_id':'542691afb9dc3c6a19445d24', 'username':'tom', 'start':81, 'end':90,  'type': 'markup', 'subtype':'strong', 'metadata': '', 'position':'inline'} )
-
-	var markup_link		= new Object( {'user_id':'542691afb9dc3c6a19445d24', 'username':'tom', 'start':100, 'end':110,  'type': 'markup', 'subtype':'link', 'metadata': 'https://github.com/tomplays/MusicBox', 'position':'inline'} )
-
-	var markup_img		= new Object( {'user_id':'542691afb9dc3c6a19445d24', 'username':'tom', 'start':0, 'end':1,  'type': 'media', 'subtype':'img', 'metadata': 'http://www.todayandtomorrow.net/wp-content/uploads/2009/07/surface-modulation_2.jpg', 'position':'wide'} )
-
-
-	var markup_code		= new Object( {'user_id':'542691afb9dc3c6a19445d24', 'username':'tom', 'start':160, 'end':170,  'type': 'markup', 'subtype':'code', 'metadata': '', 'position':'inline'} )
-	var markup_cite		= new Object( {'user_id':'542691afb9dc3c6a19445d24', 'username':'tom', 'start':171, 'end':180,  'type': 'markup', 'subtype':'cite', 'metadata': '', 'position':'inline'} )
-	var markup_list_item= new Object( {'user_id':'542691afb9dc3c6a19445d24', 'username':'tom', 'start':181, 'end':190,  'type': 'markup', 'subtype':'list_item', 'metadata': '', 'position':'inline'} )
+	 new_doc.markups = new Array()
+	 new_doc.doc_options = new Array()
 
 
 
 
-	new_doc.markups.push(markup)
-	new_doc.markups.push(markup_summary)
-	new_doc.markups.push(markup_class)
 
-	new_doc.markups.push(markup_h1)
-	new_doc.markups.push(markup_h2)
-	new_doc.markups.push(markup_h3)
-	new_doc.markups.push(markup_h4)
-	new_doc.markups.push(markup_h5)
-	new_doc.markups.push(markup_h6)
-	new_doc.markups.push(markup_em)
-	new_doc.markups.push(markup_strong)
+	var markup_section_base  = new Object( {'user_id':'542691afb9dc3c6a19445d24', 'username':'tom', 'start':0, 'end':300,  'type': 'container', 'subtype':'section', 'position':'inline'} )
+	new_doc.markups.push(markup_section_base)
+/*
+	if(req.params.slug == 'guerilla-open-access-manifesto'){
 
-	new_doc.markups.push(markup_strike)
-	new_doc.markups.push(markup_link)
-	new_doc.markups.push(markup_img)
 
-	new_doc.markups.push(markup_code)
-	new_doc.markups.push(markup_cite)
-	new_doc.markups.push(markup_list_item)
+			var new_doc = new Object({'title':slug, 'slug': slug, 'content': 'Sqsditing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing.. Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing.. Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing.. Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..'})
+
+		var markup_class= new Object( {'user_id':'542691afb9dc3c6a19445d24', 'username':'tom', 'start':0, 'end':10,  'type': 'container_class', 'subtype':'css_class', 'metadata': 'bg_black', 'position':'inline'} )
+		new_doc.markups.push(markup_class)
+
+
+
+
+
+
+
+
+
+
+	}
+
+
+    
+	else if(req.params.slug == 'demo-1'){
+			var new_doc = new Object({'title':slug, 'slug': slug, 'content': 'Start editing.. Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing.. Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing.. Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing.. Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..Start editing..'})
+
+					var markup_summary  = new Object( {'user_id':'542691afb9dc3c6a19445d24', 'username':'tom', 'start':20, 'end':30,  'type': 'summary', 'subtype':'', 'position':'inline-implicit'} )
+					var markup_class= new Object( {'user_id':'542691afb9dc3c6a19445d24', 'username':'tom', 'start':0, 'end':10,  'type': 'container_class', 'subtype':'css_class', 'metadata': 'bg_black', 'position':'inline'} )
+					
+
+					var markup_h1	= new Object( {'user_id':'542691afb9dc3c6a19445d24', 'username':'tom', 'start':0, 'end':10,  'type': 'markup', 'subtype':'h1', 'metadata': '', 'position':'inline'} )
+					var markup_h2	= new Object( {'user_id':'542691afb9dc3c6a19445d24', 'username':'tom', 'start':11, 'end':20,  'type': 'markup', 'subtype':'h2', 'metadata': '', 'position':'inline'} )
+					var markup_h3	= new Object( {'user_id':'542691afb9dc3c6a19445d24', 'username':'tom', 'start':21, 'end':30,  'type': 'markup', 'subtype':'h3', 'metadata': '', 'position':'inline'} )
+					var markup_h4	= new Object( {'user_id':'542691afb9dc3c6a19445d24', 'username':'tom', 'start':31, 'end':40,  'type': 'markup', 'subtype':'h4', 'metadata': '', 'position':'inline'} )
+					var markup_h5	= new Object( {'user_id':'542691afb9dc3c6a19445d24', 'username':'tom', 'start':41, 'end':50,  'type': 'markup', 'subtype':'h5', 'metadata': '', 'position':'inline'} )
+					var markup_h6	= new Object( {'user_id':'542691afb9dc3c6a19445d24', 'username':'tom', 'start':51, 'end':60,  'type': 'markup', 'subtype':'h6', 'metadata': '', 'position':'inline'} )
+
+
+
+					var markup_em		= new Object( {'user_id':'542691afb9dc3c6a19445d24', 'username':'tom', 'start':60, 'end':70,  'type': 'markup', 'subtype':'em', 'metadata': '', 'position':'inline'} )
+					var markup_strike	= new Object( {'user_id':'542691afb9dc3c6a19445d24', 'username':'tom', 'start':71, 'end':80,  'type': 'markup', 'subtype':'strike', 'metadata': '', 'position':'inline'} )
+					var markup_strong	= new Object( {'user_id':'542691afb9dc3c6a19445d24', 'username':'tom', 'start':81, 'end':90,  'type': 'markup', 'subtype':'strong', 'metadata': '', 'position':'inline'} )
+
+					var markup_link		= new Object( {'user_id':'542691afb9dc3c6a19445d24', 'username':'tom', 'start':100, 'end':110,  'type': 'markup', 'subtype':'link', 'metadata': 'https://github.com/tomplays/MusicBox', 'position':'inline'} )
+
+					var markup_img		= new Object( {'user_id':'542691afb9dc3c6a19445d24', 'username':'tom', 'start':0, 'end':1,  'type': 'media', 'subtype':'img', 'metadata': 'http://www.todayandtomorrow.net/wp-content/uploads/2009/07/surface-modulation_2.jpg', 'position':'wide'} )
+
+
+					var markup_code		= new Object( {'user_id':'542691afb9dc3c6a19445d24', 'username':'tom', 'start':160, 'end':170,  'type': 'markup', 'subtype':'code', 'metadata': '', 'position':'inline'} )
+					var markup_cite		= new Object( {'user_id':'542691afb9dc3c6a19445d24', 'username':'tom', 'start':171, 'end':180,  'type': 'markup', 'subtype':'cite', 'metadata': '', 'position':'inline'} )
+					var markup_list_item= new Object( {'user_id':'542691afb9dc3c6a19445d24', 'username':'tom', 'start':181, 'end':190,  'type': 'markup', 'subtype':'list_item', 'metadata': '', 'position':'inline'} )
+
+
+
+
+					
+					new_doc.markups.push(markup_summary)
+					new_doc.markups.push(markup_class)
+
+					new_doc.markups.push(markup_h1)
+					new_doc.markups.push(markup_h2)
+					new_doc.markups.push(markup_h3)
+					new_doc.markups.push(markup_h4)
+					new_doc.markups.push(markup_h5)
+					new_doc.markups.push(markup_h6)
+					new_doc.markups.push(markup_em)
+					new_doc.markups.push(markup_strong)
+
+					new_doc.markups.push(markup_strike)
+					new_doc.markups.push(markup_link)
+					new_doc.markups.push(markup_img)
+
+					new_doc.markups.push(markup_code)
+					new_doc.markups.push(markup_cite)
+					new_doc.markups.push(markup_list_item)
+	}
+	else{
+*/
+
+			var markup_class= new Object( {'user_id':'542691afb9dc3c6a19445d24', 'username':'tom', 'start':0, 'end':10,  'type': 'container_class', 'subtype':'css_class', 'metadata': 'bg_black', 'position':'inline'} )
+			new_doc.markups.push(markup_class)
+
+//	}
 
 
 
@@ -149,10 +183,10 @@ exports.createdoc = function(req, res){
 
 
 
-	var   doc_notices_after_title= new Object( {'option_name':'doc_notices_after_title', 'option_value':'hello',  'option_type': '' } )
+	var   doc_notices_after_title= new Object( {'option_name':'doc_notices_after_title', 'option_value':'-',  'option_type': '' } )
 	new_doc.doc_options.push(doc_notices_after_title)
 
-	var   doc_notices_before_title= new Object( {'option_name':'doc_notices_before_title', 'option_value':'hello b',  'option_type': '' } )
+	var   doc_notices_before_title= new Object( {'option_name':'doc_notices_before_title', 'option_value':'-',  'option_type': '' } )
 	new_doc.doc_options.push(doc_notices_before_title)
 
 
@@ -164,7 +198,7 @@ exports.createdoc = function(req, res){
 	var branding_class  = new Object( {'option_name':'branding_class', 'option_value':'sa white-bg',  'option_type': '' } )
 	new_doc.doc_options.push(branding_class)
 
-	var   footer_center_html = new Object( {'option_name':'footer_center_html', 'option_value':"<i>2014</i> , MusicBox  CC",  'option_type': '' } )
+	var   footer_center_html = new Object( {'option_name':'footer_center_html', 'option_value':"<i class=\'fa fa-file-text-o\'></i>document #2 <a>cc</a>- 2013 - <a>Hacktuel.fr</a>",  'option_type': '' } )
 	new_doc.doc_options.push(footer_center_html)
 
 
@@ -172,7 +206,7 @@ exports.createdoc = function(req, res){
 	
 
 
-//new_doc.doc_options.push(doc_options)
+	//new_doc.doc_options.push(doc_options)
 
 
 	new_doc.room = '542691cab9dc3c6a19445d27'
