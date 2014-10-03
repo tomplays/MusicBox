@@ -18,7 +18,7 @@
     "crypto": "0.0.3",
     "express": "~3.0.3",
     "fileupload": "^0.3.0",
-    "forever": "~0.10.11",
+    "forever": "^0.10.11",
     "htmlparser": "^1.7.7",
     "jade": "~1.0.2",
     "jsdoc": "^3.3.0-alpha9",
