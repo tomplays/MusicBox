@@ -13,6 +13,9 @@ logs
 results
 tests
 
+.grunt/
+_SpecRunner.html
+
 config.json
 config_kimi.json
 public/uploads/
@@ -25,3 +28,4 @@ compressor_JS.sh
 
 README.md
 public/img/
+
