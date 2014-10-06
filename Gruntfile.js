@@ -4,6 +4,14 @@ module.exports = function(grunt) {
   grunt.initConfig({
      pkg: grunt.file.readJSON('package.json'),
     less: {
+
+
+         dev: {
+
+
+        }, 
+
+
        options: {
             paths: ["public/css"],
             compress: true
@@ -53,10 +61,7 @@ module.exports = function(grunt) {
 
        files: {
             // no need for files, the config below should work
-          
            "tests/partials/*.html" : "views/partials/*.jade",
-           
-          
         }  
       }
     },
@@ -69,12 +74,17 @@ module.exports = function(grunt) {
     },
     watch: {
       styles: {
-        files: ['public/css/*.less'], // which files to watch
+        files: ['public/css/*.less'], // less auto-compilation
         tasks: ['less']
       },
       templates: {
-        files: ['views/partials/*.jade'], // which files to watch
+        files: ['views/partials/*.jade'], // compiling  auto-dedug
         tasks: ['jade']
+      },
+      api_folder:{
+        files: ['api/**/*.js'], // restart server on controllers, routes and models changes
+        tasks: ['forever:server1:restart']
+
       }
     }
   });
@@ -84,6 +94,7 @@ module.exports = function(grunt) {
   // grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-contrib-jade');
   grunt.loadNpmTasks('grunt-forever');
-
-  grunt.registerTask('default', ['jade','watch', 'less','jasmine']); // , 'connect:server' // 'forever', 
+  //grunt.registerTask('dev', ['forever']); // , 'connect:server' // 'forever', 
+  grunt.registerTask('stop', ['forever:server1:stop']); // , 'connect:server' // 'forever', 
+  grunt.registerTask('default', ['forever:server1:restart','jade','watch', 'less','jasmine']); // , 'connect:server' // 'forever', 
 };
