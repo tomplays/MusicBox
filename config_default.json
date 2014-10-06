@@ -17,5 +17,6 @@
     "FACEBOOK_ID": "7ze0854",
     "FACEBOOK_SECRET":"a66279a9eze742a66431b6eee82a56",
     "HOMEPAGE": "homepage",
+    "DEFAULT_ROOM_ID" : "----",
     "ENV": "prod"
 }
