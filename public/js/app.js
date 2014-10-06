@@ -9,7 +9,7 @@ angular.module('musicBox',  ['ngLocale', 'ngResource', 'musicBox.filters', 'ngRo
         controller: DocumentCtrl
       }).
       when('/doc/create', {
-         templateUrl: '/partials/document_new',
+        templateUrl: '/partials/document_new',
         controller: DocumentNewCtrl
       }).
        when('/login', {
@@ -40,27 +40,16 @@ angular.module('musicBox',  ['ngLocale', 'ngResource', 'musicBox.filters', 'ngRo
       when('#_=_', {
         redirectTo: '/!'
       }).
-      
-     //     
-
-     
       otherwise({
         redirectTo: '/!'
       });
       $locationProvider.html5Mode(true);
       $locationProvider.hashPrefix('!');
-
-
       //console.log($localeProvider)
-
-     
-     
-
       // $sceProvider.enabled(false);
      //$sceDelegateProvider.resourceUrlWhitelist(['.*']);
     }
   ]);
-
 
 // instead of empty file include, but files exist #v+
 // if/not included switcher
