@@ -62,6 +62,8 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
         $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
 
          $rootScope.objAvailable        =   self.objAvailable(); 
+        $rootScope.available_sections_objects =   self.objAvailable(); 
+
         // console.log($rootScope.available_sections_objectsd )
 
 
@@ -91,12 +93,10 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
         $rootScope.ui.menus.push_markup.open = -1;
 
         // top page menu tools
-        $rootScope.ui.menus.quick_tools = new Array();
-        $rootScope.ui.menus.quick_tools.open = -1;
+        $rootScope.ui.menus['quick_tools'] = [];
+        $rootScope.ui.menus['quick_tools'].open = 'no';
 
-        // top page menu user
-        $rootScope.ui.menus.user_tools = new Array();
-        $rootScope.ui.menus.user_tools.open = -1;
+      
         $rootScope.inserttext = new Array()
         $rootScope.inserttext[0] =''
 
@@ -109,7 +109,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
 
 
       objAvailable:function (){
-        var arr = new Array('media','generic','container','container_class','img', 'comment','place','data','version', 'translation','note','summary','summary-block','freebase','player','markup','css_styles','classes','child_section', 'semantic');
+        var arr = new Array('media','generic','container','container_class','img', 'comment','place','data','version', 'translation','note','summary','summary-block','freebase','player','markup','css_styles','classes','child_section','child' ,'semantic');
         return arr 
       },
       fragmentTypes:function (){
@@ -173,6 +173,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
 
             arr['comment_form']              = [ {  url: 'fragments/comment_form.jade'} ];
 
+            arr['doc_real']              = [ {  url: 'fragments/doc_real.jade'} ];
 
 
             /*

@@ -1,21 +1,7 @@
 // todo doc     
 
-// 
 
-// this file contains 
-
-
-// document service
-
-// init
-//
-
-
-
-// All you need to do is pass your configuration as third parameter to the chart function
-
-
-musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $routeParams, socket, renderfactory) {
+musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $routeParams, socket, renderfactory, $locale) {
    
     return function (inf) {
     var self = {
@@ -37,7 +23,11 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
 
           $http.get(api_url+'/doc/'+docid).success(function(d) {
              //console.log(m)
-              $rootScope.doc = d.doc;
+              if(!d.doc && docid !=='homepage'){
+               window.location = root_url+'/';
+               return;
+              }
+               $rootScope.doc = d.doc;
               $rootScope.doc.formated_date=  moment(d.doc.updated).calendar() +', '+moment(d.doc.updated).fromNow(); 
               //$rootScope.doc.formated_date = d.doc.updated
                // console.log($rootScope.doc.user)
@@ -45,7 +35,7 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
                self.apply_object_options('document', $rootScope.doc.doc_options)
                self.apply_object_options('author', d.doc.user.user_options)
                if(d.doc.room){
-                               self.apply_object_options('room', d.doc.room.room_options)
+                    self.apply_object_options('room', d.doc.room.room_options)
 
                }
                //console.log(d.markups_type)
@@ -58,7 +48,7 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
 
                }
 
-            $rootScope.available_sections_objects  = d.markups_type[0]
+           // $rootScope.available_sections_objects  = d.markups_type[0]
             self.init_containers()  
          })
         
@@ -67,6 +57,7 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
        
 
       },
+
 
       /**
       * init containers
@@ -181,6 +172,14 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
               markup.selected = false;
               markup.editing  = false;
 
+              // user by_me test
+              markup.by_me = 'false'
+              if( markup.user_id && $rootScope.userin._id  && ($rootScope.userin._id == markup.user_id ) )  {
+                   markup.by_me = 'true'
+              }
+
+
+
 
               _.each($rootScope.ui.selected_objects, function(obj){
                 //console.log('keep opn'+obj._id)
@@ -212,7 +211,36 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
                    $rootScope.containers[index].section_classes += markup.metadata+' ';
               }
 
-              
+
+              markup.doc_id_id = '';
+              if(markup.type =='child' ){ 
+                // to keep doc_id._id (just id as string) in model and not pass to post object later..
+                
+              if(markup.doc_id){ 
+               
+
+                markup.doc_id_id = markup.doc_id._id;
+                 if(markup.doc_id.doc_options){
+                   // m.markup.child_options = new Array();
+                   var  options_array =  new Array();
+                    markup.child_options = new Array();
+                    _.each(markup.doc_id.doc_options , function(option){
+                     options_array[option.option_name] = option.option_value
+                    });
+                    markup.child_options = options_array
+                  }
+              }
+                
+
+                console.log('children call ...')
+                 
+              }
+             
+
+
+
+
+
               if(markup.type=='markup' ){ // or pos == inlined
 
 
@@ -486,6 +514,37 @@ var options = {
   
 
       },
+
+       init_new: function () {
+               $rootScope.i18n = $locale;
+               
+               $rootScope.newdoc = new Object();
+               $rootScope.newdoc.raw_content  = $rootScope.i18n.CUSTOM.DOCUMENT.default_content
+               $rootScope.newdoc.raw_title    =    $rootScope.i18n.CUSTOM.DOCUMENT.default_title
+               $rootScope.newdoc.created_link    =   '';
+
+
+        },
+
+      newdoc: function(){
+          ///api/v1/doc/create
+          var data = new Object();
+         
+          data =  $rootScope.newdoc;
+         
+          $http.post(api_url+'/doc/create', serialize(data) ).
+          success(function(doc) {
+              // hard redirect
+              //console.log(doc)
+              $rootScope.newdoc.created_link = doc.slug;
+             // alert('ok')
+           });  
+
+
+
+
+      },
+
       save_doc: function (field) {
           var data = new Object()
           data.field = field;
@@ -493,12 +552,15 @@ var options = {
          
           $http.post(api_url+'/doc/'+$rootScope.doc._id+'/edit', serialize(data) ).
           success(function(doc) {
+
+
+            console.log(doc)
             // hard redirect
             if(field == 'title'){
-               window.location = root_url+'/doc/'+doc.slug;
+             window.location = root_url+'/doc/'+doc.doc.slug;
             } 
             if(field == 'content'){
-            $rootScope.$emit('docEvent', {action: 'doc_ready', type: '-', collection_type: 'doc', collection:doc });
+           // $rootScope.$emit('docEvent', {action: 'doc_ready', type: '-', collection_type: 'doc', collection:doc });
 
 
             }
@@ -564,6 +626,13 @@ var options = {
       markup_save: function (markup){
           //var data = new Object({'start': markup.start})
             console.log(markup)
+
+       
+
+
+
+
+
            if(markup.type =='container'){
                 var temp = markup;
                 markup.letters = new Array()
@@ -574,11 +643,22 @@ var options = {
 
            }
            else{
-               var data =  serialize(markup)
-               console.log(data)
-               console.log(data)
+
+
+
+
+               var data =  markup
+
+               if(markup.doc_id){
+                  data.child_options = ''
+
+                  data.doc_id = markup.doc_id._id;
+               }
+
+               data = serialize(data)
+             
            }
-     
+   //  return;
          
           $http.post(api_url+'/doc/'+$rootScope.doc.slug+'/markup/'+markup._id+'/edit', data ).success(function(m) {
             console.log(m)
@@ -678,3 +758,6 @@ var options = {
       return self;
     }
 });
+
+
+

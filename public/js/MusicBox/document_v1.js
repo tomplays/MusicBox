@@ -47,29 +47,43 @@ var doc;
  */
 
 
-function  DocumentCtrlJasmine($scope, $http , $sce, $location, $routeParams, renderfactory,socket,docfactory){
-			return 'hello';
-} 
+var newdoc_service;
 
-
-function DocumentNewCtrl($scope, $http , $sce, $location, $routeParams, renderfactory,socket,docfactory) {
+function DocumentNewCtrl($scope, $http , docfactory) {
 console.log('DocumentNewCtrl')
 
 
 
-	$scope.init = function (){
-			render = renderfactory();
-			$scope.render = render.init();
-			$scope.ui.loaded = 'loaded' 
+	
+
+	$scope.init_ = function (){
+       	 	$http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
+
+		
+			 newdoc_service =  docfactory();
+			 newdoc_service.init_new();
+
+			//alert('A')
+	}
+	
+
+
+	$scope.create_doc = function(){
+		//alert('B')
+		console.log($scope.newdoc)
+				
+
+		 newdoc_service.newdoc();
 	}
 
-		$scope.init()
+	$scope.init_()
+	//alert('0')
+
 }
 
 
 function DocumentCtrl($scope, $http , $sce, $location, $routeParams, renderfactory,socket,docfactory) {
 		
-
 		console.log('DocumentCtrl on');
 
 		socket.on('news', function (data) {
@@ -202,9 +216,8 @@ $scope.$emit('docEvent', {action: 'fulltext', type: 'edit', collection_type: 'do
 		if(field == 'content'){
 			//alert('content change without api offset!')
 		}	
-		if(!$scope.userin){
-			alert('no user')
-			return;
+		if($scope.userin.username ==''){
+			return false;
 		}
 
 
@@ -218,9 +231,8 @@ $scope.$emit('docEvent', {action: 'fulltext', type: 'edit', collection_type: 'do
 	}
 
 	$scope.edit_doc_option = function(field){
-		if(!$scope.userin){
-			alert('no user')
-			return;
+		if($scope.userin.username ==''){
+			return false;
 		}
 		if($scope.ui['editing_'+field] === true){
 				$scope.ui['editing_'+field] = false;
@@ -254,11 +266,11 @@ $scope.$emit('docEvent', {action: 'fulltext', type: 'edit', collection_type: 'do
 			markup.selected =true
 		}
 		
-
-		if(markup.editing===true && event_name == 'dblclick'){
+		// cant edit if not a 'by_me' markup
+		if(markup.by_me == 'true' && markup.editing===true && event_name == 'dblclick'){
 			markup.editing = false
 		}
-		else if(markup.editing===false && event_name == 'dblclick'){
+		else if(markup.by_me == 'true'  && markup.editing===false && event_name == 'dblclick'){
 			markup.editing =true
 		}
 		console.log(markup)
@@ -289,7 +301,6 @@ $scope.$emit('docEvent', {action: 'fulltext', type: 'edit', collection_type: 'do
 		}
 		$scope.ui.menus.push_markup.open = cur;
 		return;
-
 	}
 
     $scope.push = new Object;
@@ -405,12 +416,13 @@ $scope.$emit('docEvent', {action: 'fulltext', type: 'edit', collection_type: 'do
 	}
 
 	$scope.expand_tools = function(name){
+
 		//$scope.ui.menus[name].open = $scope.ui.menus[name].open * -1;
-		if($scope.ui.menus[name].open == 'yes'){
-			$scope.ui.menus[name].open = 'no'
+		if($scope.ui.menus[name].open == 'no'){
+			$scope.ui.menus[name].open = 'yes'
 		}
 		else{
-			$scope.ui.menus[name].open = "yes"
+			$scope.ui.menus[name].open = "no"
 		}
 		//return;
 		//alert('d')
@@ -511,6 +523,8 @@ $scope.$emit('docEvent', {action: 'fulltext', type: 'edit', collection_type: 'do
 			}
 			if(args.action == 'dispatched_objects'){
 				$scope.ui.loaded = 'loaded'
+
+
 			}
 
 			
@@ -558,6 +572,13 @@ function DocumentsListCtrl($scope, $http , $location, $routeParams, socket) {
 }
 
 
+// used to test jasmine test technique..
+function  DocumentCtrlJasmine($scope, $http , $sce, $location, $routeParams, renderfactory,socket,docfactory){
+			return 'hello';
+} 
+
+
+
 // MISC UTILS
 function urlencode(str) {
     return escape(str.replace(/%/g, '%25').replace(/\+/g, '%2B')).replace(/%25/g, '%');
@@ -573,3 +594,8 @@ function serialize(obj, prefix) {
   }
   return str.join("&");
 }
+
+
+
+DocumentNewCtrl.$inject = ['$scope', '$http' , 'docfactory'];
+
