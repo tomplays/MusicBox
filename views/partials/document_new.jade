@@ -1,3 +1,20 @@
+
+
+
 div(class="sections_container")
-	input() 
-	p hello here !
+	form
+		
+		label {{i18n.CUSTOM.DOCUMENT.default_title}}
+		input(ng-model="newdoc.raw_title", ng-value="newdoc.title") 
+		
+		label {{i18n.CUSTOM.DOCUMENT.default_content}}
+		textarea(ng-model="newdoc.raw_content" )
+		
+
+
+		p 
+			a.btn_action(ng-click="create_doc()") create !  
+
+		p(ng-if="newdoc.created_link") 
+			a(href="http://localhost/doc/{{newdoc.created_link}}") new document:  {{newdoc.created_link}}
+

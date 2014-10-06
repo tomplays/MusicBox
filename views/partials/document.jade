@@ -14,8 +14,28 @@ div(class="sections_container")
 					div(class="markup_ markup_type_inline", ng-repeat="markup in objects_sections.global_all")
 							.cols-edit(ng-include="fragments['markup_editor'][0].url" )
 
+				// title, author, date, ..
+				div(ng-if="(layout.name== 'center') && ($parent.$first) ")
+						div.doc_header
+							h3(ng-bind-html="doc_options.doc_notices_before_title.value +'&nbsp;'", class="editing_{{ui.editing_doc_notices_before_title}}" , ng-dblclick="edit_doc_option('doc_notices_before_title')") {{}} &nbsp;
+							input(ng-if="ui.editing_doc_notices_before_title",   ng-model="doc_options.doc_notices_before_title.value", name="doc_options.doc_notices_before_title.value")
+
+							h1(ng-dblclick="edit_doc('title')") {{doc.title}}
+							input(ng-if="ui.editing_title",   ng-model="doc.title", name="doc.title")
+							
+							h3(class="editing_{{ui.editing_doc_notices_after_title}}" , ng-dblclick="edit_doc_option('doc_notices_after_title')") {{doc_options.doc_notices_after_title.value}} &nbsp;
+							input(ng-if="ui.editing_doc_notices_after_title",   ng-model="doc_options.doc_notices_after_title.value", name="doc_options.doc_notices_after_title.value")
+
+
+							time(ng-bind="doc.formated_date", ng-click="" ) 
+							.cols-edit(ng-include="fragments['author_card'][0].url" )
+
 
 				div(ng-if="layout.include_objects !==false")
+
+					
+
+
 					div(ng-if="layout.name == 'right'")
 						.cols-edit(ng-include="fragments['section_editor'][0].url" )
 					
@@ -25,13 +45,15 @@ div(class="sections_container")
 						div(class="markup_ container_class_type_inline", ng-if="ui.renderAvailable_active == 'lire'" , ng-repeat="markup in section.objects['container_class']['inline']")
 							.cols-edit(ng-include="fragments['markup_editor'][0].url" )
 
+						
+						div(class="markup_ markup_type_inline", ng-if="ui.renderAvailable_active == 'lire'" , ng-repeat="markup in section.objects['markup']['inline']")
+							.cols-edit(ng-include="fragments['markup_editor'][0].url" )
+
+
 					div(ng-if="layout.name == 'left'")
 						.cols-edit(ng-include="fragments['markup_push'][0].url" )
 
 						
-
-						div(class="markup_ markup_type_inline", ng-if="ui.renderAvailable_active == 'lire'" , ng-repeat="markup in section.objects['markup']['inline']")
-							.cols-edit(ng-include="fragments['markup_editor'][0].url" )
 
 
 					div(ng-repeat='object in available_sections_objects')
@@ -42,24 +64,7 @@ div(class="sections_container")
 
 				// div(ng-if="(doc.slug !=='about' && layout.name== 'global') && ($parent.$last) " , ng-include="fragments['ad_welcome'][0].url")
 
-				div(ng-if="(layout.name== 'center') && ($parent.$first) ")
-						div.doc_header
-							h3(ng-bind-html="doc_options.doc_notices_before_title.value +'&nbsp;'", class="editing_{{ui.editing_doc_notices_before_title}}" , ng-dblclick="edit_doc_option('doc_notices_before_title')") {{}} &nbsp;
-							input(ng-if="ui.editing_doc_notices_before_title",   ng-model="doc_options.doc_notices_before_title.value", name="doc_options.doc_notices_before_title.value")
-
-
-							h1(ng-dblclick="edit_doc('title')") {{doc.title}}
-							input(ng-if="ui.editing_title",   ng-model="doc.title", name="doc.title")
-
-
-							
-							h3(class="editing_{{ui.editing_doc_notices_after_title}}" , ng-dblclick="edit_doc_option('doc_notices_after_title')") {{doc_options.doc_notices_after_title.value}} &nbsp;
-							input(ng-if="ui.editing_doc_notices_after_title",   ng-model="doc_options.doc_notices_after_title.value", name="doc_options.doc_notices_after_title.value")
-
-
-							time(ng-bind="doc.formated_date", ng-click="" ) 
-							.cols-edit(ng-include="fragments['author_card'][0].url" )
-
+				
 
 
 				// to stay on same indent level
@@ -78,7 +83,9 @@ div(class="sections_container")
 							span(ng-mousedown="over(l, 'down')", ng-mouseup="over(l, 'up')", ng-class="l.classes", ng-click="over(l, 'click')" ,ng-dblclick="switch_editing(l)", data-order="{{$index}}", ng-repeat="l in letters[$parent.$parent.$index]") {{l.char}}
 		
 
-		footer.debug-onlyr(ng-if="$last")
-			p(ng-bind-html="doc_options.footer_center_html.value") 
+		footer(ng-if="$last")
+			p(ng-bind-html="doc_options.footer_center_html.value +'&nbsp;'", class="editing_{{ui.editing_footer_center_html}}" , ng-dblclick="edit_doc_option('footer_center_html')") {{}} &nbsp;
+			input(ng-if="ui.editing_footer_center_html",   ng-model="doc_options.footer_center_html.value", name="doc_options.footer_center_html.value")
+
 			// a(href="/doc/{{doc.title}}") permalink
 			// a(href="/") back home
