@@ -2,9 +2,12 @@
 
 var mongoose = require('mongoose'),
  _ = require('underscore'),
-Document = mongoose.model('Document')
+Document = mongoose.model('Document'),
+Markup  = mongoose.model('Markup');
+
 var nconf = require('nconf')
 nconf.argv().env().file({file:'config.json'});
+var chalk = require('chalk')
 
 
 var app;
@@ -21,14 +24,41 @@ exports.index_doc= function(req, res) {
 
 exports.docByIdOrTitle = function(req, res) {
 	var query = Document.findOne({ 'slug':req.params.slug });
-	query.populate('user').populate('room').exec(function (err, doc) {
+
+ var opts = {
+path: 'markups.doc_id',
+model: 'Document'
+}
+// .populate('markups', opts).
+/*
+	var iter = function(doc, callback) {
+                Markup.populate('document', {
+                    path: 'markups.doc_id'
+                }, callback);
+            };
+
+
+            console.log(doc)
+
+*/
+
+	query.populate('user').populate({path:'markups.doc_id', select:'-markups'}).populate('room').exec(function (err, doc) {
 	if (err){
 		res.json(err)
 	} else{
+
+
+
+
+
 		var markups_type = new Array()
+		var markups_f = new Array()
 		 if(doc && doc.markups){
+
+
 		 	_.each(doc.markups , function (markup, i){
-			 	if(markup.type){
+
+			if(markup.type){
 			 		markups_type.push(markup.type)
 			 	}
 			})
@@ -37,7 +67,13 @@ exports.docByIdOrTitle = function(req, res) {
 			doc.markups_type = new Array()
 		}
 		var out = new Object();
+
 		out.doc = doc
+		
+
+
+		out.markupsuiuiu = new Array(markups_f);
+
 		out.markups_type= new Array(markups_type);
 		///	out.markups_type.push()
 		res.json(out)
@@ -66,10 +102,105 @@ exports.listRender = function(req, res) {
 			});
 	})
 };
+exports.createdoc_post = function(req,res){
+
+	// to filter a better way
+	var raw_title =req.body.raw_title;
+	var raw_content   = req.body.raw_content;
+ 	var filtered_title = raw_title;
+	var filtered_content =raw_content;
+	var slug= raw_title.replace(/\s/g, '-')
+	slug= slug.replace('?', '_')
+	slug = slug.replace('!', '_')
+
+	
+
+	
+
+	//var ar = new Object({'title':'bloue'+Math.random()})
+	var new_doc = new Object({'title':filtered_title, 'slug': slug, 'content': filtered_content})
+
+	 new_doc.markups = new Array()
+	 new_doc.doc_options = new Array()
+	 var markup_section_base  = new Object( {'user_id':req.user._id, 'username':req.user.username, 'start':0, 'end':300,  'type': 'container', 'subtype':'section', 'position':'inline'} )
+	 new_doc.markups.push(markup_section_base)
+
+
+	 // var markup_class= new Object( {'user_id':req.user._id, 'username':req.user.username, 'start':0, 'end':10,  'type': 'container_class', 'subtype':'css_class', 'metadata': 'bg_black', 'position':'inline'} )
+	 // new_doc.markups.push(markup_class)
+
+
+
+
+	var text_typography  = new Object( {'option_name':'text_typography', 'option_value':'Esteban',  'option_type': 'google_typo' } )
+	new_doc.doc_options.push(text_typography)
+	var headings_typography  = new Object( {'option_name':'headings_typography', 'option_value':'Droid Sans',  'option_type': 'google_typo' } )
+	new_doc.doc_options.push(headings_typography)
+
+
+
+	var  use_authorcard = new Object( {'option_name':'use_authorcard', 'option_value':'full_last',  'option_type': 'fragment' } )
+	new_doc.doc_options.push(use_authorcard)
+
+
+
+	var   doc_notices_after_title= new Object( {'option_name':'doc_notices_after_title', 'option_value':'-',  'option_type': '' } )
+	new_doc.doc_options.push(doc_notices_after_title)
+
+	var   doc_notices_before_title= new Object( {'option_name':'doc_notices_before_title', 'option_value':'-',  'option_type': '' } )
+	new_doc.doc_options.push(doc_notices_before_title)
+
+
+
+
+	var  share_fragment = new Object( {'option_name':'share_fragment', 'option_value':'right',  'option_type': '' } )
+	new_doc.doc_options.push(share_fragment)
+
+	var branding_class  = new Object( {'option_name':'branding_class', 'option_value':'sa white-bg',  'option_type': '' } )
+	new_doc.doc_options.push(branding_class)
+
+	var   footer_center_html = new Object( {'option_name':'footer_center_html', 'option_value':"<i class=\'fa fa-file-text-o\'></i>a data-document powered by <a href=\'http://github.com/tomplays/MusicBox/\'>MusicBox beta*</a> - 2014 - <a href=\'http://hacktuel.fr\'>@Hacktuel.fr</a>",  'option_type': '' } )
+	new_doc.doc_options.push(footer_center_html)
+
+
+
+
+
+
+	// hardcoded
+	//new_doc.doc_options.push(doc_options)
+	//nconf.get('DEFAULT_ROOM_ID')
+	new_doc.room = nconf.get('ROOM_ID');
+
+	var doc = new Document(new_doc);
+	if(req.user){
+		doc.user = req.user;
+   	 	doc.username = req.user.username;
+   	 	console.log(req.user)
+	}
+	else{
+		//return res.send('users/signup', {
+             //   errors: err.errors,
+             //   article: article
+          //  });
+	}
+	//doc.populate('user', 'name username image_url').exec(function(err,doc) {
+	doc.save(function(err,doc) {
+		if (err) {
+   			res.json(err);
+        } else {
+			//console.log(doc)
+			var doc =  Document.findOne({title: filtered_title}).populate('user', 'name username image_url').populate('room').exec(function(err, doc) {
+        	res.json(doc)
+   			});            
+        }
+    });
+}
+
 
 exports.createdoc = function(req, res){
    
-
+	var raw_title = req.body;
 	var slug = req.params.slug;
 	
 
@@ -208,7 +339,7 @@ exports.createdoc = function(req, res){
 
 	//new_doc.doc_options.push(doc_options)
 
-
+	// require('nconf')
 	new_doc.room = '542691cab9dc3c6a19445d27'
 
 
@@ -241,38 +372,67 @@ exports.createdoc = function(req, res){
 
 
 
-exports.edit  = function(req, res) {
+exports.doc_edit  = function(req, res) {
 	var query = Document.findOne({ '_id':req.params.doc_id });
 	query.populate('user').populate('room').exec(function (err, doc) {
 	if (err){
 		res.json(err)
 	} else{
-			var field = req.body.field
-			var value = req.body.value
-			console.log('editing doc '+req.params.doc_id +'field '+ field +'<->'+ value)
-			// 'create' is a routes keyword..
-			if(field == 'title' && value !== 'create' ){
-				// and todo : clean
-				var slugify = value.replace(/\s/g, '-')
-				slugify = slugify.replace('?', '_')
-				slugify = slugify.replace('!', '_')
-				doc['slug'] =slugify
+			console.log('editing user id :'+ req.user._id +' test doc_user.id'+ doc.user._id)
+			//console.log('editing doc id :')
+			//console.log(doc)
+
+
+			//if(1){
+					  console.log(chalk.green('authorized') );
+
+					  var field = req.body.field
+				var value = req.body.value
+				console.log('editing doc '+req.params.doc_id +'field '+ field +'<->'+ value)
+				// 'create' is a routes keyword..
+				if(field == 'title' && value !== 'create' ){
+					// and todo : clean
+					var slugify = value.replace(/\s/g, '-')
+					slugify = slugify.replace('?', '_')
+					slugify = slugify.replace('!', '_')
+					doc['slug'] =slugify
+
+
+					doc[field] = value;
+					  console.log(chalk.green('after doc edit') );
 
 			}
-			doc[field] = value;
 
- 				doc.save(function(err,doc) {
-					if (err) {
-						res.send(err)
-					} else {
-						res.json(doc)
-					}
-				});		
+
+if(field == 'content' ){
+			
+
+
+					doc[field] = value;
+					  console.log(chalk.green('after doc edit') );
+
+			}
+
+
+			doc.save(function(err,docsaved) {
+						if (err) {
+							res.send(err)
+						} else {
+							  console.log(chalk.green('after doc 22 edit') );
+						
+	var out = new Object();
+		out.doc = docsaved;
+		console.log(out)
+							res.json(out)
+						}
+					});		
+
+			
 	}
 	})
 }
 
-exports.edit_options  = function(req, res) {
+exports.doc_edit_options  = function(req, res) {
 	var query = Document.findOne({ 'slug':req.params.slug });
 	query.populate('user').populate('room').exec(function (err, doc) {
 	if (err){
@@ -289,21 +449,10 @@ exports.edit_options  = function(req, res) {
 
 			 
 			 	if(option.option_name == field ){
-			 		
-
-					
- 					
+			 		 					
  				option.option_value = value
-
  					doc_options_new.push(option)
- 					 console.log(option)
-
- 					
-
-
-
-
-
+ 				 console.log(option)
 			 	}
 			 	else{
 			 		doc_options_new.push(option)
@@ -339,7 +488,14 @@ exports.edit_options  = function(req, res) {
 
 
 exports.markup_edit = function(req, res) {
-	console.log(req.body.start)
+
+
+	
+
+
+
+
+	
 
 	var edited = new Array();
 	var query = Document.findOne({ 'slug':req.params.slug });
@@ -348,15 +504,36 @@ exports.markup_edit = function(req, res) {
 			return handleError(err);
 	}
 	else{
+
+				
+	
 			 _.each(doc.markups , function (m, i){
 			       if(m._id == req.params.markup_id){
-			      	 	console.log(m)
+			       	console.log('m.doc_id>')
+			       	console.log(req.body)
+				if(req.body.doc_id_id){
+
+					console.log('DOC ID IDADADA'+req.body.doc_id_id)
+				}
+
+
+	
+
+		//	console.log(m)
 			      	 	m.start = req.body.start
 			      	 	m.end = req.body.end
 			      	 	m.type = req.body.type
 			      	 	m.subtype = req.body.subtype
 			      	 	m.position= req.body.position
 						m.metadata = req.body.metadata
+						
+
+							if(req.body.doc_id_id){
+
+					console.log('DOC ID IDADADA'+req.body.doc_id_id)
+					m.doc_id = req.body.doc_id_id;
+				}
+
 
 						  /*m.depth
 						  m.status
@@ -366,12 +543,14 @@ exports.markup_edit = function(req, res) {
 						  m.updated
 						  m.created
 						  */
-						
+					//	console.log(m.toObject())
+
 			      	 	edited.push(m)
 			      	 	doc.markups[i] = m
-			       }
-			 });
-			 doc.save(function(err,doc) {
+
+
+
+			      	 	 doc.save(function(err,doc) {
 				if (err) {
 					res.send(err)
 				} else {
@@ -383,6 +562,16 @@ exports.markup_edit = function(req, res) {
 					res.json(out)
 				}
 			});
+
+	}
+
+
+});		
+
+	
+
+
+
 	}
 		
 	})

@@ -75,11 +75,22 @@ var MarkupSchema = new Schema({
         default: '-',
         trim: true
     },
+    /*
     doc_id: {
-        type: Number,
-        default: '',
-        trim: true
+        type:  ObjectIdSchema,
+        default: '5432496bd009c77406f29298',
+        ref: 'Document'
     },
+    */
+
+
+    doc_id:{
+          type: Schema.ObjectId,
+          //  default: '54325fc1b265c1f807dd26fd',
+          ref: 'Document'
+    },
+
+
     start: {
         type: Number,
         default: '',
@@ -138,6 +149,7 @@ var DocumentSchema = new Schema({
         unique: true,
         trim: true
     },
+
     slug: {
         type: String,
         // default: 'your-title',
@@ -194,5 +206,6 @@ DocumentSchema.statics.load = function(title, cb) {
 
 };
 
+mongoose.model('Markup',MarkupSchema);
 
 mongoose.model('Document', DocumentSchema);

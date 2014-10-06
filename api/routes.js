@@ -23,6 +23,7 @@ module.exports = function(app, passport, auth) {
      })
 
 
+
 	// USER
 
     app.get('/signout', users.signout);
@@ -89,8 +90,6 @@ return res.redirect('/');
     app.get('/api/v1/doc/:slug', docs.docByIdOrTitle);
 
 
-
-
     // Main api feature : handle massive markups update
     // all mk in range
     app.get('/api/v1/doc/:slug/markups/offset/:side/:start/:end/:qty', auth.requiresLogin, docs.markups_offset);
@@ -99,9 +98,10 @@ return res.redirect('/');
 
 
     app.post('/api/v1/doc/:slug/markup/:markup_id/edit',auth.requiresLogin,  docs.markup_edit);
-    app.post('/api/v1/doc/:doc_id/edit',auth.requiresLogin,  docs.edit);
-    app.post('/api/v1/doc/:slug/edit_options', auth.requiresLogin, docs.edit_options);
+    app.post('/api/v1/doc/:doc_id/edit',auth.requiresLogin,  docs.doc_edit);
+    app.post('/api/v1/doc/:slug/edit_options', auth.requiresLogin, docs.doc_edit_options);
     app.post('/api/v1/doc/:slug/markups/push', auth.requiresLogin, docs.markup_create);
+
 
 
     app.get('/api/v1/doc/:slug/markups/delete/:markup_id', auth.requiresLogin, docs.markup_delete);
@@ -109,8 +109,10 @@ return res.redirect('/');
 
 
 
+    app.post('/api/v1/doc/create',  auth.requiresLogin, docs.createdoc_post);
 
     app.get('/api/v1/doc/create/:slug?',  auth.requiresLogin, docs.createdoc);
+
     app.get('/sockets/list', index.sockets_list);
 
 
