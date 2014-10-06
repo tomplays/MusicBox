@@ -11,7 +11,10 @@ $provide.value("$locale", {
 
 	},
 	"DOCUMENT" : {
-		"by_author" : "par"
+		"by_author" : "Par",
+		"default_title" :"Votre titre",
+		"default_content" :"Votre contenu texte"
+
 
 	},
 	"APP" : {
