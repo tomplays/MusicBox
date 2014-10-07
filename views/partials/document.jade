@@ -20,7 +20,7 @@ div(class="sections_container")
 							h3(ng-bind-html="doc_options.doc_notices_before_title.value +'&nbsp;'", class="editing_{{ui.editing_doc_notices_before_title}}" , ng-dblclick="edit_doc_option('doc_notices_before_title')") {{}} &nbsp;
 							input(ng-if="ui.editing_doc_notices_before_title",   ng-model="doc_options.doc_notices_before_title.value", name="doc_options.doc_notices_before_title.value")
 
-							h1(ng-dblclick="edit_doc('title')") {{doc.title}}
+							h1(ng-bind-html="doc.title+'&nbsp;'", ng-dblclick="edit_doc('title')")
 							input(ng-if="ui.editing_title",   ng-model="doc.title", name="doc.title")
 							
 							h3(class="editing_{{ui.editing_doc_notices_after_title}}" , ng-dblclick="edit_doc_option('doc_notices_after_title')") {{doc_options.doc_notices_after_title.value}} &nbsp;

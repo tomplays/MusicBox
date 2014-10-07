@@ -1,7 +1,11 @@
 
 
 div.user_not_in(ng-if="userin.username == '' ")
+	
+
 	a(ng-click="external_link(root_url+'/auth/facebook')" , ng-if="userin.username == '' ") {{i18n.CUSTOM.COMMENT.needs_logging}}
+
+
 div.user_in(ng-if="userin.username")
 	p 
 		em {{userin.username}}

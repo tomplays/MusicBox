@@ -10,7 +10,7 @@ div(class="markup_displayer markup_displayer_{{markup.type}} markup_displayer_{{
 		i(class="fa fa-{{markup.type}} fa-{{markup.subtype}} editing_{{markup.editing}} selected_{{markup.selected}}",  ng-click="toggle_select_markup(markup)", ng-dblclick="toggle_select_markup(markup, 'dblclick')"  ) 
 	// h4 {{markup.child_options.branding_class}}
 	h4(ng-bind-html="markup.metadata" )
-	p(ng-bind-html="markup.doc_id.content" )
+	// p(ng-bind-html="markup.doc_id.content" )
 
 	h3 
 		a(href="#{root_url}/doc/{{markup.doc_id.slug}}") {{markup.doc_id.title}}

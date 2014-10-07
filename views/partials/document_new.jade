@@ -16,5 +16,5 @@ div(class="sections_container")
 			a.btn_action(ng-click="create_doc()") create !  
 
 		p(ng-if="newdoc.created_link") 
-			a(href="http://localhost/doc/{{newdoc.created_link}}") new document:  {{newdoc.created_link}}
+			a(href="#{root_url}/doc/{{newdoc.created_link}}") your new document:  {{newdoc.created_link}}
 
