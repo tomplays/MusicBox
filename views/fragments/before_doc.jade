@@ -21,7 +21,7 @@ div.quick_tools(class="inside visible_{{ui.menus.quick_tools.open}}")
 				
 			div.action_box
 				p 
-					a(href="/doc/create") Create a new doc
+					
 
 				// a(ng-click="push_markup()") push h1
 				// i.icon-move
@@ -36,7 +36,8 @@ div.quick_tools(class="inside visible_{{ui.menus.quick_tools.open}}")
 
 	div.user_not_in(ng-if="userin.username == '' ")
 		div.user_box
-			a(ng-click="external_link(root_url+'/auth/facebook')" , ng-if="userin.username == '' ") log in with facebook
+			a(href="/login?redirect_url=#{root_url}/doc/{{doc.slug}}" , ng-if="userin.username == '' ") log in 
+			// a(ng-click="external_link(root_url+'/auth/facebook')" , ng-if="userin.username == '' ") log in with facebook
 
 
 
