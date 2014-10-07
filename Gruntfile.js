@@ -14,7 +14,7 @@ module.exports = function(grunt) {
 
        options: {
             paths: ["public/css"],
-            compress: true
+          //  compress: true
         },
 
         src: {
