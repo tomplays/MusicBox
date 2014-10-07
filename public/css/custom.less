@@ -44,22 +44,35 @@ body.headings_typography_Droid.Sans h1{
 	 margin: 0;
     padding: 0;
 }
-
-.branding.sa {
+.branding.sa , .branding.sb , .branding.sc {
+  background-size: 60px;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+.branding.sa{
     background-image: url("/img/logos/loguy/hacktuel.png");
-    background-size: 60px;
-     background-repeat:no-repeat;
-      background-position:center center;
-   
+
 }
-.branding.white-bg {
-   background-color:#fff;
+.branding.sb{
+    background-image: url("/img/logos/loguy/hacktuel-coul.png");
+}
+.branding.sc{
+    background-image: url("/img/logos/loguy/hacktuel-coul-2.png");
+}
+.branding.bg_white {
+  background-color: #fff;
 }
 
-.branding.sa h1 span {
-    display: block;
-    text-indent: -9999px;
+
+.branding.sa h1 span,
+.branding.sb h1 span,
+.branding.sc h1 span 
+{
+  display: block;
+  text-indent:-9990px;
+
 }
+
 section.bg_black{
 	background:#000;
 	color:#fff;

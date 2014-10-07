@@ -1,1 +1,163 @@
-p{margin:0}.lt.h1{font-size:44px}.lt.h2{font-size:37px}.lt.h3{font-size:27px}.lt.h4{font-size:23px}.lt.h5{font-size:17px}.lt.h6{font-size:14px}.lt.strong{font-weight:bold}.lt.strike,.lt.del{text-decoration:line-through}.lt.important{background:#c0392b;opacity:0.75}.lt.mark{background:#e67e22}.lt.mark.fi{padding:0 0 0 5px}.lt.mark.nd{padding:0 5px 0 0}.lt.link{text-decoration:underline}.lt.em{font-style:italic}.lt.list_item{font-style:italic}.lt.cite{background-color:#16a085;color:#DDE4F0}.lt.code{background:none repeat scroll 0 0 #CFE6E1;color:#16a085;font-family:monospace;font-size:1.3em;line-height:1.3em;margin-top:9px;padding-top:0.3em}.lt.selected{background:#1abc9c}.lt.h1.fi:before,.lt.h2.fi:before,.lt.h3.fi:before,.lt.h4.fi:before,.lt.h5.fi:before,.lt.h6.fi:before{clear:both;content:"";display:block;height:1px;width:1px}.lt.h1.nd:after,.lt.h2.nd:after,.lt.h3.nd:after,.lt.h4.nd:after,.lt.h5.nd:after,.lt.h6.nd:after{clear:both;content:"";display:block;height:1px;width:1px}.fa-h1:before,.fa-h2:before,.fa-h3:before,.fa-h4:before,.fa-h5:before,.fa-h6:before{content:""}.mk_val_subtype_h1,.mk_val_subtype_h2,.mk_val_subtype_h3,.mk_val_subtype_h4,.mk_val_subtype_h5,.mk_val_subtype_h6{text-transform:uppercase}i.fa-comment:before{content:""}i.fa.fa-remove{color:#c0392b;font-size:1.3em;padding:2px 1% 2px 2px}i.fa-em:before{content:"em";font-style:italic}i.fa-strike:before{content:"s";text-decoration:line-through}i.fa-mark:before{content:"m";background:#e67e22;text-decoration:line-through}i.fa-strong:before{content:"b";display:block;font-weight:bold}i.fa-cite:before{content:"q"}i.fa-list_item:before{content:"list";display:block;font-weight:bold}i.fa-container_class:before{content:"css";display:block;font-style:italic}i.fa-note:before{content:"n";display:block;font-style:italic}
+p {
+  margin: 0;
+}
+.lt.h1 {
+  font-size: 44px;
+}
+.lt.h2 {
+  font-size: 37px;
+}
+.lt.h3 {
+  font-size: 27px;
+}
+.lt.h4 {
+  font-size: 23px;
+}
+.lt.h5 {
+  font-size: 17px;
+}
+.lt.h6 {
+  font-size: 14px;
+}
+.lt.strong {
+  font-weight: bold;
+}
+.lt.strike,
+.lt.del {
+  text-decoration: line-through;
+}
+.lt.important {
+  background: #c0392b;
+  opacity: 0.75;
+}
+.lt.mark {
+  background: #e67e22;
+}
+.lt.mark.fi {
+  padding: 0 0 0 5px;
+}
+.lt.mark.nd {
+  padding: 0 5px 0 0;
+}
+.lt.link {
+  text-decoration: underline;
+}
+.lt.em {
+  font-style: italic;
+}
+.lt.list_item {
+  font-style: italic;
+}
+.lt.cite {
+  background-color: #16a085;
+  color: #DDE4F0;
+}
+.lt.code {
+  background: none repeat scroll 0 0 #CFE6E1;
+  color: #16a085;
+  font-family: monospace;
+  font-size: 1.3em;
+  line-height: 1.3em;
+  margin-top: 9px;
+  padding-top: 0.3em;
+}
+.lt.selected {
+  background: #1abc9c;
+}
+/*
+.lt.fi, 
+.lt.fi.selected{
+    background:#2980b9
+}
+
+.lt.nd, 
+.lt.nd.selected{
+    background:#3498db
+}
+*/
+/* fi : first*/
+/*  */
+.lt.h1.fi:before,
+.lt.h2.fi:before,
+.lt.h3.fi:before,
+.lt.h4.fi:before,
+.lt.h5.fi:before,
+.lt.h6.fi:before {
+  clear: both;
+  content: "";
+  display: block;
+  height: 1px;
+  width: 1px;
+}
+.lt.h1.nd:after,
+.lt.h2.nd:after,
+.lt.h3.nd:after,
+.lt.h4.nd:after,
+.lt.h5.nd:after,
+.lt.h6.nd:after {
+  clear: both;
+  content: "";
+  display: block;
+  height: 1px;
+  width: 1px;
+}
+.fa-h1:before,
+.fa-h2:before,
+.fa-h3:before,
+.fa-h4:before,
+.fa-h5:before,
+.fa-h6:before {
+  content: "";
+}
+.mk_val_subtype_h1,
+.mk_val_subtype_h2,
+.mk_val_subtype_h3,
+.mk_val_subtype_h4,
+.mk_val_subtype_h5,
+.mk_val_subtype_h6 {
+  text-transform: uppercase;
+}
+i.fa-comment:before {
+  content: "";
+}
+i.fa.fa-remove {
+  color: #c0392b;
+  font-size: 1.3em;
+  padding: 2px 1% 2px 2px;
+}
+i.fa-em:before {
+  content: "em";
+  font-style: italic;
+}
+i.fa-strike:before {
+  content: "s";
+  text-decoration: line-through;
+}
+i.fa-mark:before {
+  content: "m";
+  background: #e67e22;
+  text-decoration: line-through;
+}
+i.fa-strong:before {
+  content: "b";
+  display: block;
+  font-weight: bold;
+}
+i.fa-cite:before {
+  content: "q";
+}
+i.fa-list_item:before {
+  content: "list";
+  display: block;
+  font-weight: bold;
+}
+i.fa-container_class:before {
+  content: "css";
+  display: block;
+  font-style: italic;
+}
+i.fa-note:before {
+  content: "n";
+  display: block;
+  font-style: italic;
+}

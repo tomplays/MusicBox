@@ -1,4 +1,17 @@
 
+@left-margin:18%;
+@inline-width:60%;
+@inline-width-neg:-60%;
+
+
+/*
+small layout
+@left-margin:27%;
+@inline-width:40%;
+@inline-width-neg:-40%;
+*/
+
+
 
 /* mixins */
 
@@ -29,6 +42,7 @@
 html,body{
   margin:0px;
   padding:0px;
+   font-size: 1.0em;
   
 }
 
@@ -74,7 +88,9 @@ img{
   max-width:100%;
 }
 
-
+.float_right{
+  float:right;
+}
 
 /*forms*/
 
@@ -125,8 +141,35 @@ textarea {
     width: 20%;
 }
 
-.layout_name_wide img, .layout_name_center img{
 
+.css-form{
+  input{
+    
+  }
+
+}
+.bordered{
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    padding:2%;
+
+  }
+
+
+
+
+/* BUTTONS */
+a.btn_ok{
+    background: none repeat scroll 0 0 #000;
+    border-radius: 4px;
+    color: #fff;
+    font-weight: bold;
+    padding: 4px;
+    text-decoration:none;
+}
+
+
+.layout_name_wide img, .layout_name_center img, .layout_name_under img{
+    max-width: 200%;
   width:100%;
 } 
 
@@ -157,37 +200,49 @@ textarea {
  
 }
 
-.layout_name_center{
-  width:58%;
-  text-align:center;
-  padding:0 18% 
+.layout_name_center {
+ 
+
+     margin: 0 2%;
+    padding: 0 @left-margin;
+    text-align: center;
+    width:@inline-width;
+
 }
 
+
 .layout_name_under, .layout_name_global{
-   width:58%;
   
-  padding:0 18%
+
+    margin: 0 2%;
+    padding: 0 @left-margin;
+ 
+    width:@inline-width;
 }
 
 
 .layout_name_left {
-   left: -58%;
-    padding: 1% 0 1% 1%;
+    left: @inline-width-neg;
+ 
     position: relative;
-    width: 17%;
+    width: @left-margin;
+    margin-left: -2%;
+    margin-right: 1%;
+    padding: 0 0 0 1%;
 }
 
 .layout_name_inline {
-    left: 19%;
+   left: @left-margin;
+    margin-left: 2%;
     margin-right: 0;
     position: relative;
-    width: 58%;
+    width: @inline-width;
 }
 
 .layout_name_right {
-    margin-left: 2%;
-    padding: 1% 1% 0;
-    width: 17%;
+    margin-left: 0;
+    padding: 0 0 0 1%;
+    width: @left-margin;
 }
 
 /* markup level */
@@ -200,8 +255,7 @@ textarea {
 /* doc_header */
 .doc_header {
     text-align: left;
-    border-bottom:1px solid #ccc;
-    margin-left: 1.5%;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     padding-bottom: 1%;
     margin-bottom: 2%;
     h1{
@@ -215,6 +269,13 @@ textarea {
     time{
       font-size:.9em;
     }
+}
+
+html.doc_slug_homepage{
+  .doc_header h1 , .doc_header .post-author-card, .doc_header time {
+    display:none
+  }
+
 }
 
 /*render modes active*/
@@ -437,6 +498,42 @@ i.fa-img:before {
   }
 
 
+/* cms part */
+
+.main_center{
+    margin-left:@left-margin;
+    width:@inline-width;
+    float: left;
+    margin-top: 60px;
+    
+
+    a{text-decoration:underline;}
+    h2{
+
+    }
+    h3{
+
+    }
+
+}
+
+
+
+.login_form{
+    .left_part{
+      border-right: 1px solid rgba(0, 0, 0, 0.1);
+      float: left;
+      margin-right: 2%;
+      padding-right: 5%;
+      width: 41%;
+    }
+    .right_part{
+       width:20%;
+       float:left;
+    }
+
+}
+
 
 
 
@@ -457,6 +554,12 @@ footer{
 @media (max-width: 720px) {
   body{
   /* padding-top:60px */
+   font-size: .8em;
+  }
+
+
+  .layout_{
+    
   }
   div.branding{
       .border-radius(1px);    
@@ -474,31 +577,43 @@ footer{
         background: transparent;
       }
   }
-
+  .doc_header{
+     margin-top:80px;
+  }
   .layout_name_right{
-      margin-left: 2%;
-      margin-top: 1%;
-      padding: 1% 0 2%;
-      width: 94%;  border-bottom: 1px solid;
+   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  left: 0;
+    margin-left: 2%;
+    margin-top: 0;
+    padding: 0;
+    width: 95%;
+    &.has_count_0{
+         border-bottom:none;
+         margin-bottom:10px;
+
+     }
+
   }
 
   .layout_name_left {
-      border-bottom: 1px solid;
-      border-top: 1px solid;
-      left: 2%;
-      margin-top: 1%;
-      padding: 1% 0 2%;
-      width: 94%;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    left: 4%;
+    margin-top: 0;
+    padding: 0;
+    width: 95%;
+
+
   }
 
-  .layout_name_center{
-    width:98%; padding:0 1%; 
+  .layout_name_center,  .layout_name_under,  .layout_name_global{
+     padding: 0 0;
+      width: 95%;
   }
 
   .layout_name_inline{
-    padding: 0 2%; 
-    width: 94%;
-    left:0% 
+     left: 0;
+    padding: 0 0;
+    width: 95%;
   }
 
   input[type="text"], input[type="password"], input[type="date"], input[type="datetime"], input[type="email"], input[type="number"], input[type="search"], input[type="tel"], input[type="time"], input[type="url"], textarea {
