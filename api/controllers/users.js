@@ -5,8 +5,9 @@
  */
 var mongoose = require('mongoose'),
     documents = require('./documents'),
-    User = mongoose.model('User');
-    var auth = require('../authorization');
+    User = mongoose.model('User'),
+    Document = mongoose.model('Document'),
+    auth = require('../authorization');
 
 
 /**
@@ -21,6 +22,17 @@ exports.signin = function(req, res) {
 
 };
 
+exports.signin_login= function(req, res) {
+
+
+    console.log(req.body.redirect_url)
+    if(req.user){
+        console.log('yoo')
+        var out = new Object({'redirect_url': req.body.redirect_url})
+        res.json(out)
+        
+    }
+};
 
 
 /**
@@ -28,32 +40,44 @@ exports.signin = function(req, res) {
  */
 exports.signout = function(req, res) {
     req.logout();
-    res.redirect('/');
+    res.redirect('');
 };
 
 /**
  * Session
  */
 exports.session = function(req, res) {
-    return res.redirect('/');
+
+
+    //return res.redirect('/');
+    res.json('ok');
 };
 
 
 exports.account = function(req, res) {
-  
-        if(req.user){
-            var user_ = new Object({'username': req.user.username})
-
-        }
-        else{
-            var user_ = new Object({'username':'-'})
-        }
+       
+        var user_ = new Object({'username': req.user.username})
         res.render('index_v1', {
             doc: new Object(),
             user_in : user_,
         });
 }
-  
+
+exports.account_api = function(req, res) {
+    Document.find({username : req.user.username}).sort('-created').populate('user').exec(function(err, user_documents) {
+        if (err) {
+            return 'Error';
+            res.send('err')
+        } else {
+           //console.log(user_documents);
+           var out = new Object();
+           out.user_documents = user_documents;
+           out.user = req.user;
+           res.json(out);
+        }
+    });
+   
+}  
 
 
    

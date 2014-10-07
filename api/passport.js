@@ -58,8 +58,12 @@ User.findOne({ username: username }, function(err, user) {
 if (err) { 
     console.log('err')
     return done(err); }
-if (!user) { console.log('Unknown user')
- return done(null, false, { message: 'Unknown user ' + username }); }
+if (!user) { 
+    console.log('Unknown user')
+ return done(null, false, { message: 'Unknown user ' + username }); 
+
+
+}
 
 user.authenticate(password, function(cb) {
      if(cb){

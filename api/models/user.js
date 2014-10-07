@@ -66,7 +66,7 @@ UserSchema.path('name').validate(function(name) {
 
 UserSchema.path('email').validate(function(email) {
     // if you are authenticating by any of the oauth strategies, don't validate
-  //  if (authTypes.indexOf(this.provider) !== -1) return true;
+  if (authTypes.indexOf(this.provider) !== -1) return true;
     return email.length;
 }, 'Email cannot be blank');
 

@@ -9,7 +9,7 @@ var rooms = require('../api/controllers/rooms');
 
 
 module.exports = function(app, passport, auth) {
-  app.get('/login', index.login );
+    app.get('/login', index.login );
     app.post('/register', users.create);
 
    app.get('/signup', index.signup );
@@ -44,6 +44,8 @@ module.exports = function(app, passport, auth) {
 
 
      app.get('/me/account', auth.requiresLogin, users.account);
+     app.get('/api/v1/me/account', auth.requiresLogin, users.account_api);
+
 
 /*
     app.post('/login',   function(req, res, next) {
@@ -61,10 +63,7 @@ return res.redirect('/');
 });
 */
  //Setting the local strategy route
-    app.post('/login', passport.authenticate('local', {
-        failureRedirect: '/login',
-        //failureFlash: true
-    }), users.session);
+  
 
       
     //Home 
@@ -116,7 +115,7 @@ return res.redirect('/');
     app.get('/sockets/list', index.sockets_list);
 
 
-
+    app.post('/api/v1/userlogin', passport.authenticate('local', {}), users.signin_login);
 
     app.get('/api/v1/room/create/:title?',  auth.requiresLogin, rooms.createroom);
 
