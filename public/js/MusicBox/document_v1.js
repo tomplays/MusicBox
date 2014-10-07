@@ -332,7 +332,7 @@ $scope.$emit('docEvent', {action: 'fulltext', type: 'edit', collection_type: 'do
 			$scope.push.end = 1;
 		}
 */
-		$scope.push.start = 0;
+		$scope.push.start= 0;
 		$scope.push.end = 1;
 		
 		$scope.push.position = 'left';
@@ -349,10 +349,10 @@ $scope.$emit('docEvent', {action: 'fulltext', type: 'edit', collection_type: 'do
 				$scope.push.depth = 1;
 			}
 			if(!$scope.push.start){
-				$scope.push.start = 10;
+				$scope.push.start = 0;
 			}
 			if(!$scope.push.end){
-				$scope.push.end = 88;
+				$scope.push.end = 1;
 			}
 			if(!$scope.push.type){
 				$scope.push.type = 'markup';
@@ -546,7 +546,7 @@ $scope.init()
 function SocketsListCtrl($scope, $http , $location, $routeParams, socket) {
 		//$scope.docs = DOCS;
 		console.log('SocketsListCtrl')
-		$scope.stack = new Array();
+		$scope.stack = [];
 		socket.on('newsback', function (data) {
 			//console.log('newsback')
 			//console.log(data);

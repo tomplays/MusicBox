@@ -132,7 +132,7 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
         //  
         // START Looping each SECTION
         // 
-        $rootScope.letters = new Array()
+        $rootScope.letters = [];
          //var data_serie = new Array()
 
         _.each($rootScope.containers, function(container, index){
@@ -140,18 +140,18 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
           self.fill_chars(container,index);
           // data_serie.push(container.start)
           //$rootScope.objects_sections[index] = new Array();
-          $rootScope.containers[index]['objects'] = new Array();
-          $rootScope.containers[index]['objects_count'] = new Array();
-          $rootScope.containers[index]['objects_count']['by_positions'] = new Array();
+          $rootScope.containers[index]['objects'] = [];
+          $rootScope.containers[index]['objects_count'] = [];
+          $rootScope.containers[index]['objects_count']['by_positions'] = [];
            $rootScope.containers[index].section_classes = '';
-//          $rootScope.containers[index]['classes'] = new Array();
-          //$rootScope.objects_sections[index]['global'] = new Array();
+//          $rootScope.containers[index]['classes'] =[];
+          //$rootScope.objects_sections[index]['global'] = [];
           _.each($rootScope.available_sections_objects, function(o, obj_index){
-            $rootScope.containers[index]['objects'][$rootScope.available_sections_objects[obj_index]] = new Array();
+            $rootScope.containers[index]['objects'][$rootScope.available_sections_objects[obj_index]] = [];
               // and each subs objects an array of each positions
               _.each(render.posAvailable() , function(op){ // op: left, right, ..
                 $rootScope.containers[index]['objects_count']['by_positions'][op.name] = new Object({'count':0, 'has_object':false})
-                $rootScope.containers[index]['objects'][$rootScope.available_sections_objects[obj_index]][op.name] = new Array();
+                $rootScope.containers[index]['objects'][$rootScope.available_sections_objects[obj_index]][op.name] =[];
               });
           });
 
@@ -211,38 +211,26 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
                    $rootScope.containers[index].section_classes += markup.metadata+' ';
               }
 
-
+              // special cases for chil documents (refs as doc_id in markup record)
               markup.doc_id_id = '';
-              if(markup.type =='child' ){ 
+              if(markup.type =='child'){ 
                 // to keep doc_id._id (just id as string) in model and not pass to post object later..
-                
-              if(markup.doc_id){ 
-               
-
-                markup.doc_id_id = markup.doc_id._id;
-                 if(markup.doc_id.doc_options){
-                   // m.markup.child_options = new Array();
-                   var  options_array =  new Array();
-                    markup.child_options = new Array();
-                    _.each(markup.doc_id.doc_options , function(option){
-                     options_array[option.option_name] = option.option_value
-                    });
-                    markup.child_options = options_array
-                  }
+                if(markup.doc_id){ 
+                  markup.doc_id_id = markup.doc_id._id;
+                   if(markup.doc_id.doc_options){
+                     // m.markup.child_options = [];
+                     var  options_array =  [];
+                      markup.child_options = [];
+                      _.each(markup.doc_id.doc_options , function(option){
+                        options_array[option.option_name] = option.option_value
+                      });
+                      markup.child_options = options_array
+                    }
+                }
+                //console.log('children call ...')
               }
-                
-
-                console.log('children call ...')
-                 
-              }
-             
-
-
-
-
-
+          
               if(markup.type=='markup' ){ // or pos == inlined
-
 
                   var j_arr=0;
                   var into_for = 0;
@@ -260,10 +248,7 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
                       )   {
                       //as object ?  
                       //$rootScope.letters[index][delta].fi_nd.fi = true; 
-                    
                       $rootScope.letters[index][delta]['classes'].push('fi')
-
-
                     }
 
                     //console.log(size_object +'/'+ j_arr)
@@ -400,7 +385,7 @@ var options = {
       */
   
       fill_chars : function (section, section_count){
-        var temp_letters = new Array(); 
+        var temp_letters = [];
         var i;
         var i_array     =   0;
         var fulltext    =   '';
@@ -447,7 +432,7 @@ var options = {
           letter_arr.rindex = i_array;
           letter_arr.lindex= i;
           
-          //unsued a heavy  letter_arr.objects = new Array();
+          //unsued a heavy  letter_arr.objects = [];
           letter_arr.href= '';
           letter_arr.sectionin = section_count;
           letter_arr.mode= 'display';
@@ -473,14 +458,14 @@ var options = {
 
       apply_object_options : function(object, options){
         //console.log(' apply doc_options to object'+object)
-        var options_array = new Array()
+        var options_array = [];
         _.each(options , function(option){
            // console.log(option)
             var op_name = option.option_name;
             var op_value = option.option_value;
             var op_type = option.option_type;
 
-            options_array[op_name]= new Array()
+            options_array[op_name]= [];
             options_array[op_name]['value'] = op_value;
 
             if(op_type == 'google_typo' && object == 'document'){
@@ -492,17 +477,17 @@ var options = {
             }
         });
         if(object == 'document')  {
-          $rootScope.doc_options = new Array()
+          $rootScope.doc_options = [];
           $rootScope.doc_options = options_array
            //console.log($rootScope.doc_options)
          }
          else if(object == 'author')  {
-          $rootScope.author_options = new Array()
+          $rootScope.author_options = [];
           $rootScope.author_options = options_array
           //console.log($rootScope.author_options)
          }
          else if(object == 'room')  {
-          $rootScope.room_options = new Array()
+          $rootScope.room_options = [];
           $rootScope.room_options = options_array
           //console.log($rootScope.room_options)
          }
@@ -635,9 +620,9 @@ var options = {
 
            if(markup.type =='container'){
                 var temp = markup;
-                markup.letters = new Array()
-                markup.objects = new Array()
-                markup.objects_count = new Array()
+                markup.letters =[];
+                markup.objects =[];
+                markup.objects_count =[];
                 console.log(markup)
                 var data  = serialize(temp)
 
@@ -671,7 +656,7 @@ var options = {
     markup_delete: function (markup){
        $http.get(api_url+'/doc/'+$rootScope.doc.slug+'/markups/delete/'+markup._id).success(function(m) {
       //console.log(m)
-      $rootScope.doc = new Array()
+      $rootScope.doc = [];
      $rootScope.doc = m.doc;
     $rootScope.doc.markups = m.doc.markups;
       console.log($rootScope.doc.markups)

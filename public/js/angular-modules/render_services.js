@@ -52,8 +52,8 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
         // inject locale service. defined in public/js/angualr-modules/i18n/angular_lang-lang.js
         $rootScope.i18n = $locale;
         //$rootScope.$emit('renderEvent', { action:'render_ready' });
-        self.config= new Array();
-        self.state= new Array();
+        self.config= [];
+        self.state= [];
         //$rootScope.r = 7;
         self.config.hasbranding = true;
         self.state.logs = 'closed';
@@ -82,14 +82,14 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
         $rootScope.ui = new Object();
         $rootScope.ui.selected_range  = new Object({start:null, end:null});
         $rootScope.ui.selected_section_index = null;
-        $rootScope.ui.selected_objects = new Array()
+        $rootScope.ui.selected_objects =[];
 
         $rootScope.ui.renderAvailable = self.renderAvailable()
         $rootScope.ui.renderAvailable_active =  $rootScope.ui.renderAvailable[0]
 
 
-        $rootScope.ui.menus = new Array();
-        $rootScope.ui.menus.push_markup = new Array();
+        $rootScope.ui.menus = [];
+        $rootScope.ui.menus.push_markup = [];
         $rootScope.ui.menus.push_markup.open = -1;
 
         // top page menu tools
@@ -97,7 +97,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
         $rootScope.ui.menus['quick_tools'].open = 'no';
 
       
-        $rootScope.inserttext = new Array()
+        $rootScope.inserttext = [];
         $rootScope.inserttext[0] =''
 
 
@@ -160,7 +160,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
         return arr 
       },
       fragmentsAvailable:function (){
-        var arr = new Array();
+        var arr = [];
 
 
             arr['markup_editor']             = [ {  url: 'fragments/markup_editor.jade'} ];

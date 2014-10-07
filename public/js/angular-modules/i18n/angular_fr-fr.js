@@ -20,8 +20,11 @@ $provide.value("$locale", {
 	"APP" : {
 		"write_invitation" : "Vous avez quelquechose à nous raconter ?",
 		"write_invitation_link" : "En savoir plus &raquo;"
-
-
+	},
+	"USER": {
+		"login" : "S\'identifier",
+		"login_condition" : "Si vous avez un compte",
+		"register": "Créer un compte"
 
 	},
 
