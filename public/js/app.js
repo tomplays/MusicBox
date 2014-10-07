@@ -13,12 +13,12 @@ angular.module('musicBox',  ['ngLocale', 'ngResource', 'musicBox.filters', 'ngRo
         controller: DocumentNewCtrl
       }).
        when('/login', {
-         templateUrl: '/partials/document_new',
-        controller: DocumentNewCtrl
+         templateUrl: '/partials/login',
+        controller: UserCtrl
       }).
        when('/signup', {
         templateUrl: '/partials/signup',
-        controller: SignUpCtrl
+        controller: UserCtrl
       }).
       when('/doc/:docid', {
         templateUrl: '/../partials/document',
@@ -35,13 +35,13 @@ angular.module('musicBox',  ['ngLocale', 'ngResource', 'musicBox.filters', 'ngRo
      
       when('/me/account', {
         templateUrl: '/partials/user_account',
-        controller: UserCtrl
+        controller: UserProfileCtrl
       }).
       when('#_=_', {
-        redirectTo: '/!'
+        redirectTo: '/'
       }).
       otherwise({
-        redirectTo: '/!'
+        redirectTo: '/'
       });
       $locationProvider.html5Mode(true);
       $locationProvider.hashPrefix('!');

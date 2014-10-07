@@ -1,17 +1,24 @@
-h3 Signup
+div(class="branding sc bg_white")
+	h1
+		a(href="/#!", title="") 
+			span #{locals.site_title}
+div.main_center.register_form.bordered
+	h3 {{i18n.CUSTOM.USER.register}}
 	form(novalidate class="css-form")
 		p {{errors}}
-		p {{username}}
-		p {{password}}
+	
+		label Pick username
+		input(type="text", ng-model="username")
 
-		label 
-			Pick username
-		input(type="text", ng-model="username"  )
-		label 
-			Pick password
+		label email
+		input(type="text", ng-model="email"  )
+		
+
+
+		label Pick password
 		input(type="password", ng-model="password", )
 		
-		a( ng-click="checkpost()") ok
+		a.btn_ok.float_right(ng-click="checkregister()") ok
 
 
 		p 
