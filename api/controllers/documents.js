@@ -22,6 +22,10 @@ exports.index_doc= function(req, res) {
 		});
 }
 
+
+
+
+
 exports.docByIdOrTitle = function(req, res) {
 	var query = Document.findOne({ 'slug':req.params.slug });
 

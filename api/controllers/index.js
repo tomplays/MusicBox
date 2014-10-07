@@ -8,7 +8,10 @@ exports.sockets_list = function(req, res) {
 };
 
 exports.login = function(req, res) {
-         res.render('login');
+        // res.render('login');
+
+          var user_ = new Object({'username': null,  'image_url':null})
+         res.render('index_v1', { user_in:user_ } );
 };
 
 exports.signup = function(req, res) {

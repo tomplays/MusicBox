@@ -170,8 +170,8 @@ var DocumentSchema = new Schema({
     doc_options: [meta_options], 
 
     published:{
-        type: Boolean,
-        default: false
+        type: String,
+        default: 'draft'
     },
     user: {
         type: Schema.ObjectId,
