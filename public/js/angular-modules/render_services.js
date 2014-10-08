@@ -90,10 +90,28 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
         if($routeParams.mode){
                $rootScope.ui.renderAvailable_active =  $routeParams.mode
         }
+        
+
+        $rootScope.ui.secret = false;
+        if($routeParams.secret){
+               $rootScope.ui.secret =  $routeParams.secret
+               console.log('using secret')
+        }
+
         else{
               $rootScope.ui.renderAvailable_active =  $rootScope.ui.renderAvailable[0]
         }
 
+
+  if($routeParams.docid ){
+        $rootScope.ui.is_home = 'false'
+            $rootScope.ui.is_single = 'true'
+
+  }
+else{
+ $rootScope.ui.is_home = 'true'
+    $rootScope.ui.is_single = 'false'
+}
 
         $rootScope.ui.menus = [];
         $rootScope.ui.menus.push_markup = [];

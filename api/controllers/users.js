@@ -79,6 +79,10 @@ exports.account_api = function(req, res) {
    
 }  
 
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 
    
 exports.create = function(req, res) {
@@ -87,7 +91,11 @@ exports.create = function(req, res) {
     var message = null;
     user.user_options = new Array();
     
-    var user_option = new Object( {'option_name':'color', 'option_value':'#ccc',  'option_type': '' } )
+    var r = getRandomInt(0, 255);
+    var g = getRandomInt(0, 255);
+    var b = getRandomInt(0, 255);
+    var rand_color = 'rgb('+r+', '+g+', '+b+')';
+    var user_option = new Object( {'option_name':'color', 'option_value': rand_color,  'option_type': '' } )
     user.user_options.push(user_option)
     user.provider = 'local';
     user.save(function(err) {

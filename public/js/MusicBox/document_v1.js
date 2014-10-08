@@ -173,9 +173,14 @@ $scope.$emit('docEvent', {action: 'fulltext', type: 'edit', collection_type: 'do
 		up_at	 = $scope.ui.selected_range.end
 
 
+		console.log(event)
 
-		console.log(letter)
+		//console.log(letter)
+
+
 		var event_at = letter.order;
+		
+
 		if(event == 'down'){
 			down_at = event_at;
 
@@ -191,7 +196,15 @@ $scope.$emit('docEvent', {action: 'fulltext', type: 'edit', collection_type: 'do
 			var up_at =  event_at;
 			$scope.ui.selected_range.end = up_at
 		}
+		if(event == 'click'){
+			
+			$scope.ui.selected_range.end = letter.order;
+			$scope.ui.selected_range.start = letter.order;
 
+
+			console.log(letter)
+
+		}
 
 		
 		$scope.ui.selected_range.textrange = doc.text_range($scope.ui.selected_range.start, $scope.ui.selected_range.end)   
@@ -306,10 +319,10 @@ $scope.$emit('docEvent', {action: 'fulltext', type: 'edit', collection_type: 'do
 		}
 		
 		// cant edit if not a 'by_me' markup
-		if(markup.by_me == 'true' && markup.editing===true && event_name == 'dblclick'){
+		if( ($scope.doc_owner == true  ||  $scope.ui.secret ||  markup.by_me == 'true') && markup.editing===true && event_name == 'dblclick'){
 			markup.editing = false
 		}
-		else if(markup.by_me == 'true'  && markup.editing===false && event_name == 'dblclick'){
+		else if( ($scope.doc_owner == true  ||  $scope.ui.secret ||  markup.by_me == 'true')  && markup.editing===false && event_name == 'dblclick'){
 			markup.editing = true
 		}
 		console.log(markup)

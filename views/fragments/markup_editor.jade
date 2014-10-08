@@ -14,7 +14,9 @@ div(class="markup_displayer markup_displayer_{{markup.type}} by_me_{{markup.by_m
 	span.mk_val.metavalue(ng-bind-html="markup.metadata",  ng-if="markup.type =='note' || markup.type =='generic' || markup.type =='comment' || markup.type =='container_class' || markup.type=='semantic' ") 
 	span.mk_val.subtype(class="mk_val_subtype_{{markup.subtype}}", ng-if="markup.type=='markup'")  {{markup.subtype}} 
 	span.mk_val.created(ng-if="markup.type =='note' || markup.type =='comment'") {{markup.created | date}}
-	span.mk_val.username(ng-if="markup.type =='note' || markup.type =='comment' ") {{markup.username}}
+	span.mk_val.username(ng-if="markup.type =='note' || markup.type =='comment' ") 
+		{{markup.username}}
+		span.color_avatar.mini(style="background-color:{{markup.user_options['color'].value}}")
 
 
 
@@ -97,10 +99,11 @@ div(class="markup_displayer markup_displayer_{{markup.type}} by_me_{{markup.by_m
 
 			span.field.mt_input(class="mt_input_type_{{markup.type}} mt_input_subtype_{{markup.subtype}}", ng-if="markup.type !=='markup'") 
 				label metadata
-				input(ng-model="markup.metadata", type="text")
+				// input or textarea
+				input(ng-if="markup.type !=='comment'", ng-model="markup.metadata", type="text")
+				textarea(ng-if="markup.type =='comment'", ng-model="markup.metadata")
+
 			
-
-
 			span.field.smallinput(ng-if="false")
 				label status
 				input( ng-model="markup.status" ,type="text")

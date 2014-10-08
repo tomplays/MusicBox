@@ -17,6 +17,7 @@ div(class="sections_container")
 				// title, author, date, ..
 				div(ng-if="(layout.name== 'center') && ($parent.$first) ")
 						div.doc_header
+							// span.secret {{ui.secret}}
 							
 							div(ng-if="ui.renderAvailable_active == 'editor'")
 								h1(ng-bind-html="doc.room.name+'&nbsp;'", ng-dblclick="edit_doc('room_id')")
@@ -98,7 +99,7 @@ div(class="sections_container")
 							a.btn_ok.float_right(ng-click="edit_doc('content')") save
 								
 						div(ng-click="click_text()")
-							span(ng-mousedown="over(l, 'down')", ng-mouseup="over(l, 'up')", ng-class="l.classes", ng-click="over(l, 'click')" ,ng-dblclick="switch_editing(l)", data-order="{{$index}}", ng-repeat="l in letters[$parent.$parent.$index]") {{l.char}}
+							span(ng-mousedown="over(l, 'down')", ng-mouseup="over(l, 'up')", ng-class="l.classes", ng-click="over(l, 'click')" , ng-dblclick="switch_editing(l)", data-order="{{$index}}", ng-repeat="l in letters[$parent.$parent.$index]") {{l.char}}
 		
 
 		footer(ng-if="$last")

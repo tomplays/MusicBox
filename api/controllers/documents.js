@@ -1,5 +1,22 @@
 'use strict';
 
+
+
+/*
+API functions
+
+document 
+	create, edit, delete ..
+
+markups
+	crud 
+	offset
+
+
+
+*/
+
+
 var mongoose = require('mongoose'),
  _ = require('underscore'),
 Document = mongoose.model('Document'),
@@ -24,25 +41,7 @@ exports.index_doc= function(req, res) {
 
 exports.docByIdOrTitle = function(req, res) {
 	var query = Document.findOne({ 'slug':req.params.slug });
-
- var opts = {
-path: 'markups.doc_id',
-model: 'Document'
-}
-// .populate('markups', opts).
-/*
-	var iter = function(doc, callback) {
-                Markup.populate('document', {
-                    path: 'markups.doc_id'
-                }, callback);
-            };
-
-
-            console.log(doc)
-
-*/
-
-	query.populate('user','-email -hashed_password -salt').populate({path:'markups.doc_id', select:'-markups'}).populate('room').exec(function (err, doc) {
+	query.populate('user','-email -hashed_password -salt').populate({path:'markups.user_id', select:'-hashed_password -salt -email'}).populate({path:'markups.doc_id', select:'-markups'}).populate('room').exec(function (err, doc) {
 	if (err){
 		res.json(err)
 	} else{
@@ -52,6 +51,9 @@ model: 'Document'
 		if(doc && doc.markups){
 
 		 	_.each(doc.markups , function (markup, i){
+
+
+
 				if(markup.type){
 			 		markups_type.push(markup.type)
 			 	}
@@ -110,27 +112,30 @@ exports.doc_create = function(req,res){
 	 // var markup_class= new Object( {'user_id':req.user._id, 'username':req.user.username, 'start':0, 'end':10,  'type': 'container_class', 'subtype':'css_class', 'metadata': 'bg_black', 'position':'inline'} )
 	 // new_doc.markups.push(markup_class)
 
-	var text_typography  = new Object( {'option_name':'text_typography', 'option_value':'Esteban',  'option_type': 'google_typo' } )
+	var text_typography  = new Object( {'option_name':'text_typography', 'option_value':'Open Sans',  'option_type': 'google_typo' } )
 	new_doc.doc_options.push(text_typography)
-	var headings_typography  = new Object( {'option_name':'headings_typography', 'option_value':'Droid Sans',  'option_type': 'google_typo' } )
+	var headings_typography  = new Object( {'option_name':'headings_typography', 'option_value':'Open Sans',  'option_type': 'google_typo' } )
 	new_doc.doc_options.push(headings_typography)
 
-	var  use_authorcard = new Object( {'option_name':'use_authorcard', 'option_value':'full_last',  'option_type': 'fragment' } )
-	new_doc.doc_options.push(use_authorcard)
-
+	
 	var   doc_notices_after_title= new Object( {'option_name':'doc_notices_after_title', 'option_value':'-',  'option_type': '' } )
 	new_doc.doc_options.push(doc_notices_after_title)
 
 	var   doc_notices_before_title= new Object( {'option_name':'doc_notices_before_title', 'option_value':'-',  'option_type': '' } )
 	new_doc.doc_options.push(doc_notices_before_title)
 
+
+/*
 	var  share_fragment = new Object( {'option_name':'share_fragment', 'option_value':'right',  'option_type': '' } )
 	new_doc.doc_options.push(share_fragment)
+	var  use_authorcard = new Object( {'option_name':'use_authorcard', 'option_value':'full_last',  'option_type': 'fragment' } )
+	new_doc.doc_options.push(use_authorcard)
+*/
 
 	var branding_class  = new Object( {'option_name':'branding_class', 'option_value':'sa white-bg',  'option_type': '' } )
 	new_doc.doc_options.push(branding_class)
 
-	var   footer_center_html = new Object( {'option_name':'footer_center_html', 'option_value':"<i class=\'fa fa-file-text-o\'></i>a data-document powered by <a href=\'http://github.com/tomplays/MusicBox/\'>MusicBox beta*</a> - 2014 - <a href=\'http://hacktuel.fr\'>@Hacktuel.fr</a>",  'option_type': '' } )
+	var   footer_center_html = new Object( {'option_name':'footer_center_html', 'option_value':"<i class=\'fa fa-file-text-o\'></i> powered by <a href=\'http://github.com/tomplays/MusicBox/\'>MusicBox beta*</a> - 2014 - <a href=\'http://hacktuel.fr\'>@Hacktuel.fr</a>",  'option_type': '' } )
 	new_doc.doc_options.push(footer_center_html)
 
 
@@ -299,86 +304,123 @@ exports.doc_edit_option  = function(req, res) {
 }
 
 exports.markup_edit = function(req, res) {
-
 	var edited = new Array();
+
+	
+
 	var query = Document.findOne({ 'slug':req.params.slug });
 	query.exec(function (err, doc) {
 	if (err){ 
-			return handleError(err);
+		return res.json(err)
 	}
 	else{
-			 _.each(doc.markups , function (m, i){
-			       if(m._id == req.params.markup_id){
-			       	console.log('m.doc_id>')
-			       	console.log(req.body)
-				if(req.body.doc_id_id){
 
-					console.log('DOC ID IDADADA'+req.body.doc_id_id)
-				}
-		//	console.log(m)
-			      	 	m.start = req.body.start
-			      	 	m.end = req.body.end
-			      	 	m.type = req.body.type
-			      	 	m.subtype = req.body.subtype
-			      	 	m.position= req.body.position
-						m.metadata = req.body.metadata
+	if(req.user._id.equals(doc.user) || req.body.secret == doc.secret){
+
+			console.log('user is owner OR secret match')
+	}
+
+
+
+	
+
+
+
+		 _.each(doc.markups , function (m, i){
+		 	// single match.
+			if(m._id == req.params.markup_id){
+
+
+
+console.log(req.user._id +' vs: '+ doc.user)
+console.log(m)
+console.log(req.user._id)
+var a = req.user
+var b = doc.user
+
+// doc owner or markup owner
+	if(req.user._id.equals(doc.user)  || req.user._id.equals(m.user_id)  ){
 						
 
-							if(req.body.doc_id_id){
+			
+	}
+	else{
+console.log('user is not markup owner')
+						if(req.body.secret == doc.secret){
+							console.log('but secret match')
 
+
+						}
+						else{
+							console.log('and secret dont match')
+							var err = new Object({'message':'Need to be either doc owner or use right secret key', 'err_code':'100'})
+							res.json(err)
+							return;
+						}
+
+
+	}
+
+
+
+
+
+
+
+					// console.log('m.doc_id>')
+					// console.log(req.body)
+				if(req.body.doc_id_id){
+
+					//console.log('DOC ID IDADADA'+req.body.doc_id_id)
+				}
+				//	console.log(m)
+				 	m.start = req.body.start
+				 	m.end = req.body.end
+				 	m.type = req.body.type
+				 	m.subtype = req.body.subtype
+				 	m.position= req.body.position
+				m.metadata = req.body.metadata
+				if(req.body.doc_id_id){
 					console.log('DOC ID IDADADA'+req.body.doc_id_id)
 					m.doc_id = req.body.doc_id_id;
 				}
+				/*m.depth
+				m.status
+				m.doc_id
+				m.user_id
+				m.updated
+				m.created
+				*/
+				//	console.log(m.toObject())
+				edited.push(m)
+				doc.markups[i] = m
+				// save it
+				doc.save(function(err,doc) {
+					if (err) {
+						res.send(err)
+					} 
+					else {
+						var out = new Object();
+						out.doc = doc
+						out.edited = new Array();
+						out.edited.push(edited)
+						res.json(out)
+					}
+				});
 
-
-						  /*m.depth
-						  m.status
-						
-						  m.doc_id
-						  m.user_id
-						  m.updated
-						  m.created
-						  */
-					//	console.log(m.toObject())
-
-			      	 	edited.push(m)
-			      	 	doc.markups[i] = m
-
-
-
-			      	 	 doc.save(function(err,doc) {
-				if (err) {
-					res.send(err)
-				} else {
-					var out = new Object();
-					out.doc = doc
-					out.edited = new Array();
-					out.edited.push(edited)
-
-					res.json(out)
-				}
-			});
-
-	}
-
-
-});		
+			}
+		});	 // each	
 	}
 		
 	})
-	
 }
 
 
 // /api/v1/doc/:doc_id_or_title/markups/create/:type/:subtype/:start/:end/:position/:metadata/:status/:depth
 exports.markup_create = function(req, res) {
 	var query = Document.findOne({ 'slug':req.params.slug });
-	console.log(req.body)
-
-
-	console.log(req.body.username)
-
-	
+	// console.log(req.body)
+	// console.log(req.body.username)
 	query.exec(function (err, doc) {
 	if (err) {
 		res.send(err)
@@ -386,15 +428,11 @@ exports.markup_create = function(req, res) {
 	else{
 		var markup  = new Object( {'user_id': req.body.user_id , 'username': req.body.username, 'position': req.body.position, 'start':req.body.start, 'end':req.body.end, 'subtype': req.body.subtype, 'type': req.body.type, 'status': req.body.status, 'metadata': req.body.metadata, 'depth': req.body.depth} )
 		//console.log(doc.markups)
-
-
 		doc.markups.push(markup)
 		console.log('doc.markups after')
 		//console.log(doc.markups)
-
 		var inserted = _.last(doc.markups);
 		// console.log(inserted)
-
 		doc.save(function(err,doc) {
 			if (err) {
 				res.send(err)
@@ -411,7 +449,6 @@ exports.markup_create = function(req, res) {
 	  }
 	});
 }
-
 
 
 // /api/v1/doc/:doc_id_or_title/markups/delete/:markup_id
@@ -435,8 +472,6 @@ exports.markup_delete = function(req, res) {
 			        if (err) {
 			           res.send(err)
 			        } else {
-
-
 			        	var out = new Object();
 						out.doc = doc
 						out.deleted= new Array();
@@ -470,8 +505,6 @@ exports.markup_delete = function(req, res) {
 			        if (err) {
 			           res.send(err)
 			        } else {
-
-
 			        	var out = new Object();
 						out.doc = doc
 						out.deleted= new Array(deleted);
@@ -479,8 +512,6 @@ exports.markup_delete = function(req, res) {
 						res.json(out)
 			        }
 			 	});
-
-
 			}
 			// both case save
 			
@@ -499,29 +530,20 @@ exports.markup_offset= function(req, res) {
 		return handleError(err);
 		}
 		else{
-			
 			_.each(doc.markups, function (m, i){
-					if(req.body.markup_id == m._id){
-
-						console.log('touch')
-						console.log(m)
-
-/*
-  		  data.markup_id = markup._id;
-          data.side = 'left'
-          data.start_qty = -2;
-          data.end_qty = 4;
-          data.qty = 1
-
-
-
-*/
-						doc.markups[i].start = parseInt(doc.markups[i].start)+parseInt(req.body.start_qty);
-						doc.markups[i].end = parseInt(doc.markups[i].end)+parseInt(req.body.end_qty);
-
-					}
-
-
+				if(req.body.markup_id == m._id){
+					console.log('touch')
+					console.log(m)
+					/*
+					  		  data.markup_id = markup._id;
+					          data.side = 'left'
+					          data.start_qty = -2;
+					          data.end_qty = 4;
+					          data.qty = 1
+					*/
+					doc.markups[i].start = parseInt(doc.markups[i].start)+parseInt(req.body.start_qty);
+					doc.markups[i].end = parseInt(doc.markups[i].end)+parseInt(req.body.end_qty);
+				}
 			})
 			doc.save(function (err,article) {
 				if (err) {
@@ -580,7 +602,4 @@ Contact.findByIdAndUpdate(
         console.log(err);
     }
 );
-
-
 */
-

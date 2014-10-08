@@ -45,6 +45,12 @@ p {
 .lt.em {
   font-style: italic;
 }
+.lt.comment {
+  border-bottom: 1px dotted #27ae60;
+}
+.lt.note {
+  border-bottom: 1px dotted #2980b9;
+}
 .lt.list-item {
   line-height: 2em;
 }

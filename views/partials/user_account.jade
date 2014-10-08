@@ -4,8 +4,15 @@ div(class="branding sc bg_white")
 			span #{locals.site_title}
 
 div.main_center.user_account.bordered
-	p {{me.username}}
+	
+	span.color_avatar(style="background-color:{{user_options['color'].value}}")
+	p Username : {{me.username}}
+
+	// p {{me}}
+	// p {{user_options}}
 	p mail : {{me.email}} (hidden from public)
+
+
 	p 
 		img(ng-src="{{me.image_url}}")
 	p 
@@ -15,14 +22,26 @@ div.main_center.user_account.bordered
 		
 		a(ng-click="external_link(root_url+'/signout')") Log out
 		i.fa.fa-sign-out 
+	h3 Options
+	ul 
+		li You are an admin ? {{me.is_admin}}
+		li You are an editor ? {{me.is_editor}}
+		li subscribed to newsletter ? {{me.newsletter}}
+			
 
-	h3 Mes documents :
+	ul(ng-repeat="option in me.user_options")
+		li 
+			{{option.option_name}} : {{option.option_value}}
+	h3 Documents :
 	ul(ng-repeat="doc in documents")
 		li 
 			a(href="/doc/{{doc.slug}}") {{doc.slug}} 
 			span
 				{{doc.published}} |	{{doc.slug}} • {{doc.roomname}} 
-				a(href="", ng-click="external_link('/api/v1/doc/'+doc.slug) " ) [api]
+				p
+					a(href="", ng-click="external_link('/doc/'+doc.slug+'?secret='+doc.secret) " ) [secret/free edit link]
+				p
+					a(href="", ng-click="external_link('/api/v1/doc/'+doc.slug) " ) [api]
 
 footer
-	p /-)
+	p 2014 - MusicBox

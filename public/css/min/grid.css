@@ -4,7 +4,6 @@ small layout
 @inline-width:40%;
 @inline-width-neg:-40%;
 */
-/* mixins */
 html,
 body {
   margin: 0px;
@@ -230,9 +229,9 @@ a.btn_ok {
 .doc_header time {
   font-size: .9em;
 }
-html.doc_slug_homepage .doc_header h1,
-html.doc_slug_homepage .doc_header .post-author-card,
-html.doc_slug_homepage .doc_header time {
+html.is_home_true .doc_header h1,
+html.is_home_true .doc_header .post-author-card,
+html.is_home_true .doc_header time {
   display: none;
 }
 /*render modes active*/
@@ -380,8 +379,9 @@ div.markup_displayer_media .icon_col {
 .markup_displayer_img .icon_col {
   width: 100%;
 }
-.markup_displayer.by_me_true {
+.markup_displayer.by_me_true .mk_val.username {
   background: #ebebf8;
+  padding: 1%;
 }
 .markup_editor {
   width: 100%;
@@ -400,13 +400,11 @@ div.markup_displayer_media .icon_col {
   float: left;
   width: 100%;
 }
-.markup_displayer.markup_displayer_doc_dark_block,
-.markup_displayer.markup_displayer_doc_dark_block.by_me_true {
+.markup_displayer.markup_displayer_doc_dark_block {
   background: #000;
   color: #fff;
 }
-.markup_displayer.markup_displayer_doc_dark_block h3 a,
-.markup_displayer.markup_displayer_doc_dark_block.by_me_true h3 a {
+.markup_displayer.markup_displayer_doc_dark_block h3 a {
   color: #fff;
 }
 i.fa-img {
@@ -458,6 +456,18 @@ i.fa-img:before {
 .main_center a {
   text-decoration: underline;
 }
+.color_avatar {
+  height: 80px;
+  width: 80px;
+  float: left;
+  background-image: url("/img/avatar-mask-white.png");
+}
+.color_avatar.mini {
+  background-size: 12px 12px;
+  height: 12px;
+  width: 12px;
+  margin-right: 1%;
+}
 .login_form .left_part {
   border-right: 1px solid rgba(0, 0, 0, 0.1);
   float: left;
@@ -471,14 +481,16 @@ i.fa-img:before {
   width: 30%;
 }
 footer {
-  text-align: center;
-  width: 100%;
-  border-top: 1px solid #dadada;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
   clear: both;
   float: left;
+  font-size: 0.8em;
   margin-top: 15px;
-  padding: 10px 0;
+  padding: 0.5% 0 0;
+  text-align: center;
+  width: 100%;
 }
+/* mixins */
 /* RESPONSIVE */
 @media (max-width: 720px) {
   body {

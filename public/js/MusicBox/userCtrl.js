@@ -21,8 +21,29 @@ function UserProfileCtrl($scope, $http , $location, $routeParams,  $locale) {
 
          	$scope.me = d.user;
          	$scope.documents = d.user_documents;
-
          	console.log(d)
+
+
+
+         	var options_array = [];
+        _.each(d.user.user_options , function(option){
+        	console.log(option)
+           // console.log(option)
+            var op_name = option.option_name;
+            var op_value = option.option_value;
+            var op_type = option.option_type;
+
+            options_array[op_name]= [];
+            options_array[op_name]['value'] = op_value;
+
+           
+        });
+       
+          $scope.user_options = [];
+          $scope.user_options = options_array
+          console.log($scope.user_options)
+           //console.log($rootScope.doc_options)
+       
 
 
 

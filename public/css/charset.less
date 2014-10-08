@@ -3,40 +3,39 @@
 @marker:#e67e22;
 @green:#16a085;
 
-
-
-
-p{
-    margin:0;
-}
-
+p{margin:0;}
 
 .lt.h1 {
     font-size: 44px;
 }
+
 .lt.h2 {
     font-size: 37px;
 }
+
 .lt.h3 {
     font-size: 27px;
 }
+
 .lt.h4 {
     font-size: 23px;
 }
+
 .lt.h5 {
     font-size: 17px;
 }
+
 .lt.h6 {
     font-size: 14px;
 }
+
 .lt.strong{
      font-weight:bold;
-}  
+}
 
 .lt.strike, .lt.del{
     text-decoration: line-through;
 }  
-
 
 .lt.important  {
   background: @important-color;
@@ -58,6 +57,14 @@ p{
 }  
 .lt.em{
     font-style: italic
+}
+
+.lt.comment{
+    border-bottom:1px dotted #27ae60;
+}
+
+.lt.note{
+    border-bottom:1px dotted #2980b9;
 }
 .lt.list-item{
     line-height:2em;
@@ -84,13 +91,9 @@ p{
     }
 }
 
-
-
-
 .lt.cite, .lt.quote{
     background-color:#DADADA;
-    color:#fff;
-     
+    color:#fff;     
      &.nd:after  {
         clear: both;
         content: "";
@@ -111,9 +114,6 @@ p{
         line-height: 45px;
         margin-left: -10px;
         margin-top: -4px;
- 
-
-
     }
     &.fi:after  {
         clear: none;
@@ -124,11 +124,9 @@ p{
         color:#000;
         line-height: 45px;
         margin-left: -10px;
-        margin-top: -4px;
- 
+        margin-top: -4px; 
     }
 }
-
 
 .lt.code{
     background: none repeat scroll 0 0 #CFE6E1;
@@ -140,13 +138,9 @@ p{
     padding-top: 0.3em;
 }
 
-
-
-
 .lt.selected{
     background:@sel-green
 }
-
 
 /*
 .lt.fi, 
@@ -179,37 +173,28 @@ p{
     width: 1px;
 }
 
-
-
-
-
-.fa-markup{
-
-  
-}
+.fa-markup{}
 
 .fa-h1:before, .fa-h2:before, .fa-h3:before, .fa-h4:before,.fa-h5:before, .fa-h6:before{
-    content: "";
-   
+    content: "";   
 }
+
 .mk_val_subtype_h1, .mk_val_subtype_h2, .mk_val_subtype_h3, .mk_val_subtype_h4, .mk_val_subtype_h5, .mk_val_subtype_h6{
     text-transform:uppercase;
 }
 
 i.fa-comment:before {
-    content: "";
- 
+    content: ""; 
 }
-
 
 i.fa.fa-remove{
     color:@important-color;
     font-size: 1.3em;
     padding: 2px 1% 2px 2px;
 }
+
 i.fa-em:before {
     content: "em";
-   
     font-style:italic;
 }
 
@@ -221,28 +206,24 @@ i.fa-strike:before {
 i.fa-mark:before {
     content: "m";
     background:@marker;
-     text-decoration: line-through;
-   
+     text-decoration: line-through;  
 }
+
 i.fa-strong:before {
     content: "b";
     display: block;
     font-weight:bold;
 }
 
-
 i.fa-cite:before {
-    content: "q";
-  
+    content: "q";  
 }
+
 i.fa-list_item:before {
     content: "list";
     display: block;
     font-weight:bold;
 }
-
-
-
 
 i.fa-container_class:before {
     content: "css";
@@ -250,10 +231,8 @@ i.fa-container_class:before {
     font-style:italic;
 }
 
-
 i.fa-note:before {
     content: "n";
     display: block;
     font-style:italic;
 }
-

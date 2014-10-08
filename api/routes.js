@@ -104,7 +104,7 @@ return res.redirect('/');
     app.post('/api/v1/doc/:slug/markup/:markup_id/offset', auth.requiresLogin, docs.markup_offset);
 
 
-    app.post('/api/v1/doc/:slug/markup/:markup_id/edit',auth.requiresLogin,  docs.markup_edit);
+    app.post('/api/v1/doc/:slug/markup/:markup_id/edit',auth.requiresLogin_or_secret,  docs.markup_edit);
     app.post('/api/v1/doc/:doc_id/edit',auth.requiresLogin,  docs.doc_edit);
    
 

@@ -4,6 +4,8 @@
 @inline-width-neg:-60%;
 
 
+@light-border : 1px solid rgba(0, 0, 0, 0.1);
+
 /*
 small layout
 @left-margin:27%;
@@ -13,44 +15,16 @@ small layout
 
 
 
-/* mixins */
-
-.border-radius(@radius) {
-  -webkit-border-radius: @radius;
-     -moz-border-radius: @radius;
-          border-radius: @radius;
-}
-
-.gradient(@color: #ccc, @start: #000, @stop: #fff) {
-  background: @color;
-  background: -webkit-gradient(linear,
-                               left bottom,
-                               left top,
-                               color-stop(0, @start),
-                               color-stop(1, @stop));
-  background: -ms-linear-gradient(bottom,
-                                  @start,
-                                  @stop);
-  background: -moz-linear-gradient(center bottom,
-                                   @start 0%,
-                                   @stop 100%);
-  background: -o-linear-gradient(@stop,
-                                 @start);
-  filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=0)",@stop,@start));
-}
-
 html,body{
   margin:0px;
   padding:0px;
-   font-size: 1.0em;
-  
+  font-size: 1.0em;
 }
 
 a, a:link , a:hover{text-decoration:none; color:#222; }
 
 h1, h2, h3, h4, h5, h6 {
     font-style: normal;
-    
     line-height: 1.1;
     margin-bottom: 14px;
     text-rendering: optimizelegibility;
@@ -65,9 +39,6 @@ time {
   float:left;
 }
 
-
-
-
 .tools_container{
   width:80%;
   float:left;
@@ -81,9 +52,6 @@ section{
 section{padding-bottom:10px;}
 section.pad-bottom{padding-bottom:20px}
 section.pad-top-bottom{padding:20px 0px}
-
-
-
 img{
   max-width:100%;
 }
@@ -141,21 +109,17 @@ textarea {
     width: 20%;
 }
 
-
 .css-form{
   input{
     
   }
-
 }
+
 .bordered{
-    border: 1px solid rgba(0, 0, 0, 0.1);
+    border: @light-border;
     padding:2%;
 
   }
-
-
-
 
 /* BUTTONS */
 a.btn_ok{
@@ -290,7 +254,7 @@ a.btn_ok{
 /* doc_header */
 .doc_header {
     text-align: left;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: @light-border;
     padding-bottom: 1%;
     margin-bottom: 2%;
     h1{
@@ -306,11 +270,10 @@ a.btn_ok{
     }
 }
 
-html.doc_slug_homepage{
+html.is_home_true{
   .doc_header h1 , .doc_header .post-author-card, .doc_header time {
     display:none
   }
-
 }
 
 /*render modes active*/
@@ -443,7 +406,7 @@ div.branding{
 
 
 .editor_zone{
-   border-bottom:  1px solid rgba(0, 0, 0, 0.1);
+   border-bottom:  @light-border;
     float: left;
     padding-bottom: 10px;
     padding-right: 3%;
@@ -504,8 +467,9 @@ div.markup_displayer_media .icon_col {
     width: 100%;
 }
 
-.markup_displayer.by_me_true{
+.markup_displayer.by_me_true .mk_val.username{
    background: #ebebf8;
+   padding:1%;
 }
 
 .markup_editor{
@@ -530,8 +494,7 @@ div.markup_displayer_media .icon_col {
 }
 
 
-.markup_displayer.markup_displayer_doc_dark_block,
-.markup_displayer.markup_displayer_doc_dark_block.by_me_true{
+.markup_displayer.markup_displayer_doc_dark_block{
   background:#000;
   color:#fff;
 
@@ -598,23 +561,28 @@ i.fa-img:before {
     width:@inline-width;
     float: left;
     margin-top: 70px;
-    
-
     a{text-decoration:underline;}
-    h2{
+    h2{}
+    h3{}
+}
 
-    }
-    h3{
-
-    }
+.color_avatar{
+  height:80px;
+  width:80px;
+  float: left;
+  background-image: url("/img/avatar-mask-white.png");
+  &.mini{
+    background-size: 12px 12px;
+    height: 12px;
+    width: 12px;
+    margin-right:1%
+  }
 
 }
 
-
-
 .login_form{
     .left_part{
-      border-right: 1px solid rgba(0, 0, 0, 0.1);
+      border-right: @light-border;
       float: left;
       margin-right: 2%;
       padding-right: 5%;
@@ -625,27 +593,49 @@ i.fa-img:before {
        padding-top: 52px;
         width: 30%;
     }
-
 }
-
-
-
 
 footer{
- text-align:center;
-  width:100%;
-  float:left;
-  border-top:1px solid #dadada;
-  clear: both;
+    border-top: @light-border;
+    clear: both;
     float: left;
+    font-size: 0.8em;
     margin-top: 15px;
-    padding: 10px 0;
+    padding: 0.5% 0 0;
+    text-align: center;
+    width: 100%;
 }
+
+
+/* mixins */
+
+.border-radius(@radius) {
+  -webkit-border-radius: @radius;
+  -moz-border-radius: @radius;
+  border-radius: @radius;
+}
+
+.gradient(@color: #ccc, @start: #000, @stop: #fff) {
+  background: @color;
+  background: -webkit-gradient(linear,
+  left bottom,
+  left top,
+  color-stop(0, @start),
+  color-stop(1, @stop));
+  background: -ms-linear-gradient(bottom,
+  @start,
+  @stop);
+  background: -moz-linear-gradient(center bottom,
+  @start 0%,
+  @stop 100%);
+  background: -o-linear-gradient(@stop,
+  @start);
+  filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=0)",@stop,@start));
+}
+
 
 
 /* RESPONSIVE */
-
-
 
 
 @media (max-width: 720px) {
@@ -653,11 +643,7 @@ footer{
   /* padding-top:60px */
    font-size: .8em;
   }
-
-
-  .layout_{
-    
-  }
+  .layout_{}
   div.branding{
       .border-radius(1px);    
       left: 0px;
@@ -678,7 +664,7 @@ footer{
      margin-top:80px;
   }
   .layout_name_right{
-   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+   border-bottom: @light-border;
   left: 0;
     margin-left: 2%;
     margin-top: 0;
@@ -687,19 +673,15 @@ footer{
     &.has_count_0{
          border-bottom:none;
          margin-bottom:10px;
-
      }
-
   }
 
   .layout_name_left {
-    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-top: @light-border;
     left: 4%;
     margin-top: 0;
     padding: 0;
     width: 95%;
-
-
   }
 
   .layout_name_center,  .layout_name_under,  .layout_name_global{
@@ -713,10 +695,7 @@ footer{
     width: 95%;
   }
 
-
-
   input[type="text"], input[type="password"], input[type="date"], input[type="datetime"], input[type="email"], input[type="number"], input[type="search"], input[type="tel"], input[type="time"], input[type="url"], textarea {
     width:94%; margin-right:1%;
   }
-
 }

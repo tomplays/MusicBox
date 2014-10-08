@@ -40,9 +40,11 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
                //console.log(d.markups_type)
 
                if($rootScope.userin._id ==  $rootScope.doc.user._id ){
-                console.log('is owner')
+                    $rootScope.doc_owner = true;
+                    console.log('is owner')
                }
                else{
+                  $rootScope.doc_owner = false;
                   console.log('is !owner')
 
                }
@@ -173,9 +175,12 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
 
               // user by_me test
               markup.by_me = 'false'
-              if( markup.user_id && $rootScope.userin._id  && ($rootScope.userin._id == markup.user_id ) )  {
+              if( markup.user_id._id && $rootScope.userin._id  && ($rootScope.userin._id == markup.user_id._id ) )  {
                    markup.by_me = 'true'
               }
+
+               markup.user_options =  self.apply_object_options('markup_user_options',markup.user_id.user_options)
+
 
 
 
@@ -229,7 +234,7 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
                 //console.log('children call ...')
               }
           
-              if(markup.type=='markup' ){ // or pos == inlined
+              if(markup.type=='markup' || markup.type=='comment' || markup.type=='note'  ){ // or pos == inlined
 
                   var j_arr=0;
                   var into_for = 0;
@@ -242,7 +247,9 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
                     // pushing class to each letter..
                     var delta = parseInt(markup.start) - parseInt(container.start) + j_arr;
                     
-                    if( pos == markup.start  
+
+                    // only to markup with type markup
+                    if( markup.type=='markup'  && pos == markup.start  
                      // && (markup.subtype== 'list-item' || markup.subtype== 'h1'  || markup.subtype== 'h2' || markup.subtype== 'h3'  || markup.subtype== 'h4'  || markup.subtype== 'h5'  || markup.subtype== 'h6' || markup.subtype== 'cite' || markup.subtype== 'code'   )  
                       )   {
                       //as object ?  
@@ -252,7 +259,7 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
 
                     //console.log(size_object +'/'+ j_arr)
                     //console.log(delta+ '-' +section.start+'--'+a.start+'--'+deltaz+'?end'+into_for+' / '+j_arr +'/'+i_array)
-                    if( ( size_object ==  j_arr ) 
+                    if(markup.type=='markup' && ( size_object ==  j_arr ) 
                       //&& (markup.subtype== 'list-item' || markup.subtype== 'h1'  || markup.subtype== 'h2' || markup.subtype== 'h3'  || markup.subtype== 'h4'  || markup.subtype== 'h5'  || markup.subtype== 'h6' || markup.subtype== 'cite' || markup.subtype== 'code'  ) 
                        )   {
                        // $rootScope.letters[index][delta+1].fi_nd.nd = true; 
@@ -476,6 +483,9 @@ var options = {
               }); 
             }
         });
+
+
+
         if(object == 'document')  {
           $rootScope.doc_options = [];
           $rootScope.doc_options = options_array
@@ -491,7 +501,11 @@ var options = {
           $rootScope.room_options = options_array
           //console.log($rootScope.room_options)
          }
+         else if(object =='markup_user_options'){
+              console.log(options_array)
+              return options_array;
 
+         }
 
          else{
           console.log('undef object')
@@ -687,13 +701,6 @@ var options = {
       markup_save: function (markup){
           //var data = new Object({'start': markup.start})
             console.log(markup)
-
-       
-
-
-
-
-
            if(markup.type =='container'){
                 var temp = markup;
                 markup.letters =[];
@@ -704,28 +711,29 @@ var options = {
 
            }
            else{
-
-
-
-
-               var data =  markup
-
+              var data =  markup
                if(markup.doc_id){
                   data.child_options = ''
-
                   data.doc_id = markup.doc_id._id;
                }
-
+               data.secret = $rootScope.ui.secret;
                data = serialize(data)
-             
            }
    //  return;
          
           $http.post(api_url+'/doc/'+$rootScope.doc.slug+'/markup/'+markup._id+'/edit', data ).success(function(m) {
             console.log(m)
-             $rootScope.doc = m.doc;
-            $rootScope.$emit('docEvent', {action: 'doc_ready', type: 'edit', collection_type: 'markup', collection:m.edited });
 
+            if(m.err_code){
+              alert(m.message)
+            }
+            else{
+               $rootScope.doc = m.doc;
+               $rootScope.$emit('docEvent', {action: 'doc_ready', type: 'edit', collection_type: 'markup', collection:m.edited });
+
+            }
+
+            
           })
 
       },
