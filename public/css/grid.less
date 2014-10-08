@@ -165,8 +165,43 @@ a.btn_ok{
     font-weight: bold;
     padding: 4px;
     text-decoration:none;
+    display:block;
 }
 
+.btn_section_edit{
+  margin-bottom:5px;
+}
+
+.comment_form{
+    background: none repeat scroll 0 0 #ebebf8;
+    float: left;
+    margin-bottom: 15px;
+    padding: 7% 2%;
+      width: 96%;
+
+  textarea{
+    background: none repeat scroll 0 0 #fff;
+    border: medium none;
+    margin-bottom: 10px;
+    margin-top: 3px;
+    min-height: 100px;
+    width: 94%;
+  }
+  a.loginOrSignup{
+     font-size: 0.8em;
+    line-height: 0.8em;
+    text-decoration:underline
+  }
+  .logged_in_as{
+    display: block;
+    float: left;
+    font-size: 0.8em;
+    line-height: 0.8em;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+}
 
 .layout_name_wide img, .layout_name_center img, .layout_name_under img{
     max-width: 200%;
@@ -357,11 +392,66 @@ div.branding{
 }
 
 
+.fixed_tools {
+  
+    /* 
+      background: none repeat scroll 0 0 rgba(0, 0, 0, 0.2);
+    */
+    background:#fff;
+    bottom: 0;
+    display: block;
+    height: auto;
+    padding: 1% 20%;
+    position: fixed;
+    transition: opacity 0.2s linear 20s;
+    width: 60%;
+    z-index: 99999;
+    .inside{
+     
+      
+    }
+    .ranges{
+        float:left;
+        width:100%;
+    }
+    .pusher_items{
+        float:left;
+        width:100%;
+    }
+     .pusher_item{
 
+    }
 
+}
+.btn_pusher{
+    background: none repeat scroll 0 0 #95a5a6;
+    border: 1px solid #7f8c8d;
+    border-radius: 4px;
+    font-size: 13px;
+    margin-left: 2px;
+    margin-right: 2px;
+    padding: 0 2px;
+}
 
+.btn_h1{
+  
+
+}
 
 .comment_form{
+}
+
+
+.editor_zone{
+   border-bottom:  1px solid rgba(0, 0, 0, 0.1);
+    float: left;
+    padding-bottom: 10px;
+    padding-right: 3%;
+    width: 97%;
+  textarea{
+    min-height:200px;
+    margin-bottom:20px;
+  } 
 }
 
 .markup_displayer:not(.markup_displayer_media) {
@@ -421,6 +511,9 @@ div.markup_displayer_media .icon_col {
 .markup_editor{
     width:100%;
     form{
+        input{
+          max-width:92%;
+        }
         span.field{
           float: left;
           width:100%;
@@ -504,7 +597,7 @@ i.fa-img:before {
     margin-left:@left-margin;
     width:@inline-width;
     float: left;
-    margin-top: 60px;
+    margin-top: 70px;
     
 
     a{text-decoration:underline;}
@@ -528,8 +621,9 @@ i.fa-img:before {
       width: 41%;
     }
     .right_part{
-       width:20%;
-       float:left;
+        float: left;
+       padding-top: 52px;
+        width: 30%;
     }
 
 }
@@ -550,6 +644,9 @@ footer{
 
 
 /* RESPONSIVE */
+
+
+
 
 @media (max-width: 720px) {
   body{
@@ -615,6 +712,8 @@ footer{
     padding: 0 0;
     width: 95%;
   }
+
+
 
   input[type="text"], input[type="password"], input[type="date"], input[type="datetime"], input[type="email"], input[type="number"], input[type="search"], input[type="tel"], input[type="time"], input[type="url"], textarea {
     width:94%; margin-right:1%;

@@ -125,6 +125,38 @@ a.btn_ok {
   font-weight: bold;
   padding: 4px;
   text-decoration: none;
+  display: block;
+}
+.btn_section_edit {
+  margin-bottom: 5px;
+}
+.comment_form {
+  background: none repeat scroll 0 0 #ebebf8;
+  float: left;
+  margin-bottom: 15px;
+  padding: 7% 2%;
+  width: 96%;
+}
+.comment_form textarea {
+  background: none repeat scroll 0 0 #fff;
+  border: medium none;
+  margin-bottom: 10px;
+  margin-top: 3px;
+  min-height: 100px;
+  width: 94%;
+}
+.comment_form a.loginOrSignup {
+  font-size: 0.8em;
+  line-height: 0.8em;
+  text-decoration: underline;
+}
+.comment_form .logged_in_as {
+  display: block;
+  float: left;
+  font-size: 0.8em;
+  line-height: 0.8em;
+  width: 100%;
+  margin-bottom: 10px;
 }
 .layout_name_wide img,
 .layout_name_center img,
@@ -268,6 +300,48 @@ div.branding h1 a {
   width: 27%;
   padding: 0 3% 0% 0%;
 }
+.fixed_tools {
+  /* 
+      background: none repeat scroll 0 0 rgba(0, 0, 0, 0.2);
+    */
+  background: #fff;
+  bottom: 0;
+  display: block;
+  height: auto;
+  padding: 1% 20%;
+  position: fixed;
+  transition: opacity 0.2s linear 20s;
+  width: 60%;
+  z-index: 99999;
+}
+.fixed_tools .ranges {
+  float: left;
+  width: 100%;
+}
+.fixed_tools .pusher_items {
+  float: left;
+  width: 100%;
+}
+.btn_pusher {
+  background: none repeat scroll 0 0 #95a5a6;
+  border: 1px solid #7f8c8d;
+  border-radius: 4px;
+  font-size: 13px;
+  margin-left: 2px;
+  margin-right: 2px;
+  padding: 0 2px;
+}
+.editor_zone {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  float: left;
+  padding-bottom: 10px;
+  padding-right: 3%;
+  width: 97%;
+}
+.editor_zone textarea {
+  min-height: 200px;
+  margin-bottom: 20px;
+}
 .markup_displayer:not(.markup_displayer_media) {
   padding: 2%;
   width: 96%;
@@ -311,6 +385,9 @@ div.markup_displayer_media .icon_col {
 }
 .markup_editor {
   width: 100%;
+}
+.markup_editor form input {
+  max-width: 92%;
 }
 .markup_editor form span.field {
   float: left;
@@ -376,7 +453,7 @@ i.fa-img:before {
   margin-left: 18%;
   width: 60%;
   float: left;
-  margin-top: 60px;
+  margin-top: 70px;
 }
 .main_center a {
   text-decoration: underline;
@@ -389,8 +466,9 @@ i.fa-img:before {
   width: 41%;
 }
 .login_form .right_part {
-  width: 20%;
   float: left;
+  padding-top: 52px;
+  width: 30%;
 }
 footer {
   text-align: center;

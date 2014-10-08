@@ -45,12 +45,69 @@ p {
 .lt.em {
   font-style: italic;
 }
-.lt.list_item {
-  font-style: italic;
+.lt.list-item {
+  line-height: 2em;
 }
-.lt.cite {
-  background-color: #16a085;
-  color: #DDE4F0;
+.lt.list-item.nd:after {
+  clear: both;
+  content: "";
+  display: block;
+  height: 1px;
+  width: 1px;
+}
+.lt.list-item.fi {
+  clear: both;
+}
+.lt.list-item.fi:before {
+  clear: none;
+  content: "*";
+  display: block;
+  font-size: 21px;
+  height: 0;
+  line-height: 45px;
+  margin-left: -10px;
+  margin-top: -4px;
+}
+.lt.cite,
+.lt.quote {
+  background-color: #DADADA;
+  color: #fff;
+}
+.lt.cite.nd:after,
+.lt.quote.nd:after {
+  clear: both;
+  content: "";
+  display: block;
+  height: 1px;
+  width: 1px;
+}
+.lt.cite.fi,
+.lt.quote.fi {
+  clear: both;
+}
+.lt.cite.fi:before,
+.lt.quote.fi:before {
+  clear: none;
+  content: "\2022";
+  display: block;
+  font-size: 21px;
+  height: 0;
+  color: #000;
+  line-height: 45px;
+  margin-left: -10px;
+  margin-top: -4px;
+}
+.lt.cite.fi:after,
+.lt.quote.fi:after {
+  clear: none;
+  content: "\0027";
+  display: block;
+  font-size: 21px;
+  height: 0;
+  color: #000;
+  line-height: 45px;
+  margin-left: -10px;
+  margin-top: -4px;
 }
 .lt.code {
   background: none repeat scroll 0 0 #CFE6E1;
