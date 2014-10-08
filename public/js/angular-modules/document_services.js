@@ -14,7 +14,6 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
             docid = 'homepage'
           }
           
-
           if(USERIN){
             //console.log(USERIN)
             $rootScope.userin = USERIN;
@@ -238,7 +237,7 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
                   //console.log('fc:'+ parseInt(section.end) - parseInt(section.start) );
                   var size_object = parseInt(markup.end) - parseInt(markup.start) -1;
                   
-                  for (var pos= markup.start; pos<=markup.end; pos++){ 
+                  for (var pos= markup.start; pos<markup.end; pos++){ 
 
                     // pushing class to each letter..
                     var delta = parseInt(markup.start) - parseInt(container.start) + j_arr;
@@ -257,10 +256,10 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
                       //&& (markup.subtype== 'list-item' || markup.subtype== 'h1'  || markup.subtype== 'h2' || markup.subtype== 'h3'  || markup.subtype== 'h4'  || markup.subtype== 'h5'  || markup.subtype== 'h6' || markup.subtype== 'cite' || markup.subtype== 'code'  ) 
                        )   {
                        // $rootScope.letters[index][delta+1].fi_nd.nd = true; 
-                       $rootScope.letters[index][delta+1]['classes'].push('nd')
+                       $rootScope.letters[index][delta]['classes'].push('nd')
                     }
 
-                    if(markup.selected === true){
+                    if(markup.selected === true || markup.editing === true ){
                       $rootScope.letters[index][delta]['classes'].push('selected')
                     }
 
@@ -413,9 +412,10 @@ var options = {
 
             }
             if (!content_string[i]) {
+              // maybe better to unset ? 
                 ch = ' ';
             }
-              fulltext += ch;
+          fulltext += ch;
           letter_arr['char'] = ch;
 
           //letter_arr['fi_nd'] = new Object({'fi': false, 'nd':false/*, 'md':false*/});
@@ -500,9 +500,28 @@ var options = {
 
       },
 
-       init_new: function () {
-               $rootScope.i18n = $locale;
-               
+      text_range: function (start, end) {
+         var content_string  = $rootScope.doc.content
+         var text_range = '';
+
+         if(end-start > 70){
+          var i_s = start;
+          var i_e =  end
+          text_range = content_string[i_s]+content_string[i_s+1]+content_string[i_s+2]+content_string[i_s+3]+content_string[i_s+4]+' ..('+ (end-start) +' letters)..'+content_string[end-1]+content_string[end];
+         }
+         else{
+            for (var i = start; i <= end; i++) {
+             text_range += content_string[i];
+          }
+
+         }
+         
+         return text_range;
+
+
+      },
+      init_new: function () {
+               $rootScope.i18n = $locale;         
                $rootScope.newdoc = new Object();
                $rootScope.newdoc.raw_content  = $rootScope.i18n.CUSTOM.DOCUMENT.default_content
                $rootScope.newdoc.raw_title    =    $rootScope.i18n.CUSTOM.DOCUMENT.default_title
@@ -522,6 +541,8 @@ var options = {
               // hard redirect
               //console.log(doc)
               $rootScope.newdoc.created_link = doc.slug;
+              $rootScope.newdoc.created_link_title = doc.title;
+
              // alert('ok')
            });  
 
@@ -532,8 +553,16 @@ var options = {
 
       save_doc: function (field) {
           var data = new Object()
-          data.field = field;
-          data.value =  $rootScope.doc[field]
+          data.field = field;     
+          if(field== 'room_id'){
+            //alert('d')
+            
+            data.value =  $rootScope.doc.room___id
+          }
+          else{
+            data.value =  $rootScope.doc[field]
+          }
+          
          
           $http.post(api_url+'/doc/'+$rootScope.doc._id+'/edit', serialize(data) ).
           success(function(doc) {
@@ -544,25 +573,55 @@ var options = {
             if(field == 'title'){
              window.location = root_url+'/doc/'+doc.doc.slug;
             } 
-            if(field == 'content'){
-           // $rootScope.$emit('docEvent', {action: 'doc_ready', type: '-', collection_type: 'doc', collection:doc });
+
+
+
+            else if(field == 'content'){
+              $rootScope.$emit('docEvent', {action: 'doc_ready', type: '-', collection_type: 'doc', collection:doc });
 
 
             }
+            else{
+                console.log('emit?')
+            }
            });  
         },
-          save_doc_option: function (field) {
+        save_doc_option: function (field) {
           var data = new Object()
           data.field = field;
           //data.value =  $rootScope.doc[field]
-          data.value = $rootScope.doc_options[field].value
+          
 
-          $http.post(api_url+'/doc/'+$rootScope.doc.slug+'/edit_options', serialize(data) ).
+          data.value = $rootScope.doc_options[field].value;
+          
+          $rootScope.doc_options[field].value = data.value
+
+          $http.post(api_url+'/doc/'+$rootScope.doc.slug+'/edit_option', serialize(data) ).
           success(function(doc) {
             // hard redirect
            
            });  
         },
+ delete_doc_option: function (field) {
+  var data = new Object()
+   data.option_name = field;
+   $http.post(api_url+'/doc/'+$rootScope.doc.slug+'/delete_option', serialize(data) ).
+          success(function(doc) {
+            alert(doc)
+           
+   });  
+ 
+
+ },
+  create_doc_option: function () {
+
+   $http.post(api_url+'/doc/'+$rootScope.doc.slug+'/create_option' ).
+          success(function(doc) {
+            alert(doc)
+           
+   });  
+
+  },
 
       push_markup : function (markup){
         console.log($rootScope.userin.username)
@@ -601,12 +660,29 @@ var options = {
             $rootScope.$emit('docEvent', {action: 'doc_ready', type: 'offset', collection_type: 'markup', collection:m.markups });
           })
       },
-      offset_markup: function (markup){
-          $http.get(api_url+'/doc/'+$rootScope.doc.slug+'/markup/'+markup._id+'/offset/left/0/1/1').success(function(m) {
+      offset_markup: function (markup,start_qty, end_qty){
+
+          var data = new Object()
+        
+          data.markup_id  = markup._id;
+          data.start_qty  = start_qty
+          data.end_qty    = end_qty
+          
+
+
+          // data.qty = 1
+          // data.side = 'left'
+
+
+          $http.post(api_url+'/doc/'+$rootScope.doc.slug+'/markup/'+markup._id+'/offset', serialize(data) ).success(function(m) {
             console.log(m)
-            //$rootScope.doc = m;
-            //$rootScope.$emit('docEvent', {action: 'doc_ready' });
+            $rootScope.doc = m;
+            $rootScope.$emit('docEvent', {action: 'doc_ready', type: 'offset', collection_type: 'markup', collection:m.markups });
+      
           })
+
+
+
       },
       markup_save: function (markup){
           //var data = new Object({'start': markup.start})

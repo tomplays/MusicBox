@@ -80,18 +80,26 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
         // this var never change as long a doc is loaded... (no reset at rebuild)
 
         $rootScope.ui = new Object();
-        $rootScope.ui.selected_range  = new Object({start:null, end:null});
+        $rootScope.ui.selected_range  = new Object({start:null, end:null, 'textrange':''});
         $rootScope.ui.selected_section_index = null;
         $rootScope.ui.selected_objects =[];
 
         $rootScope.ui.renderAvailable = self.renderAvailable()
-        $rootScope.ui.renderAvailable_active =  $rootScope.ui.renderAvailable[0]
+
+
+        if($routeParams.mode){
+               $rootScope.ui.renderAvailable_active =  $routeParams.mode
+        }
+        else{
+              $rootScope.ui.renderAvailable_active =  $rootScope.ui.renderAvailable[0]
+        }
 
 
         $rootScope.ui.menus = [];
         $rootScope.ui.menus.push_markup = [];
         $rootScope.ui.menus.push_markup.open = -1;
-
+        $rootScope.ui.menus.push_comment = [];
+        $rootScope.ui.menus.push_comment.open = -1;
         // top page menu tools
         $rootScope.ui.menus['quick_tools'] = [];
         $rootScope.ui.menus['quick_tools'].open = 'no';
@@ -109,7 +117,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
 
 
       objAvailable:function (){
-        var arr = new Array('media','generic','container','container_class','img', 'comment','place','data','version', 'translation','note','summary','summary-block','freebase','player','markup','css_styles','classes','child_section','child' ,'semantic');
+        var arr = new Array('media','generic','container','container_class','img', 'comment','note','summary','summary-block','player','markup','css_styles','classes','child_section','child' ,'semantic');
         return arr 
       },
       fragmentTypes:function (){
@@ -130,10 +138,10 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
           {name:'slidewide', order:1, ID:1},
           {name:'center', order:2, include_title:true,  ID:2},
           {name:'left', order:7, ID:3},  // "left" layout is after inline (css-technique : margin-left:-50%)
-          {name:'inline_into_before',  order:3, ID:4},
+        //  {name:'inline_into_before',  order:3, ID:4},
           {name:'inline', order:4, include_objects:false, ID:5}, 
           {name:'inline-implicit', order:5, ID:6},
-          {name:'inline_into_after', order:6, ID:7},
+        //  {name:'inline_into_after', order:6, ID:7},
           
           {name:'right', order:8, ID:8},
          

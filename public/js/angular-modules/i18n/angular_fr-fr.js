@@ -7,7 +7,8 @@ $provide.value("$locale", {
 		"single" : "commentaire",
 		"textarea" : "Votre commentaire...",
 		"verb" : "commenter",
-		"needs_logging": "Vous devez être connecté pour ajouter un commentaire"
+		"needs_logging": "Vous devez être connecté pour ajouter un commentaire",
+		"logged_in_as" : "Vous êtes connecté en tant que"
 
 	},
 	"DOCUMENT" : {
@@ -23,8 +24,15 @@ $provide.value("$locale", {
 	},
 	"USER": {
 		"login" : "S\'identifier",
+		"loginOrSignup" : "S\'identifier / Créer un compte",
 		"login_condition" : "Si vous avez un compte",
-		"register": "Créer un compte"
+		"register": "Créer un compte",
+		"no_account_yet" : "Pas encore de compte ?",
+		"pick_password" : "Mot de passe",
+		"pick_username" : "Votre nom d'utilisateur (public)",
+		"pick_email" : "Votre email",
+
+
 
 	},
 

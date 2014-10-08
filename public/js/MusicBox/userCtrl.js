@@ -29,6 +29,14 @@ function UserProfileCtrl($scope, $http , $location, $routeParams,  $locale) {
          })
 
 
+
+
+
+         $scope.external_link = function (link){
+			window.location = link;
+		}
+
+
 }
 function UserCtrl($scope, $http , $location, $routeParams,  $locale) {
 	
