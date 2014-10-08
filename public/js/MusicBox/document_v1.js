@@ -167,16 +167,40 @@ $scope.$emit('docEvent', {action: 'fulltext', type: 'edit', collection_type: 'do
 
 	$scope.over= function(letter, event){
 		
+		var down_at;
+		var up_at;
+		down_at  = $scope.ui.selected_range.start
+		up_at	 = $scope.ui.selected_range.end
+
 
 
 		console.log(letter)
-		var event_at = letter.order
+		var event_at = letter.order;
 		if(event == 'down'){
-			$scope.ui.selected_range.start = event_at;
+			down_at = event_at;
+
+			if(down_at < $scope.ui.selected_range.end){
+				$scope.ui.selected_range.start = down_at
+			}
+			else{
+				$scope.ui.selected_range.start = down_at
+			}
+
 		}
 		if(event == 'up'){
-			$scope.ui.selected_range.end = event_at;
+			var up_at =  event_at;
+			$scope.ui.selected_range.end = up_at
 		}
+
+
+		
+		$scope.ui.selected_range.textrange = doc.text_range($scope.ui.selected_range.start, $scope.ui.selected_range.end)   
+
+
+		
+
+///
+
 
 
 		if(event == 'click'){
@@ -248,6 +272,19 @@ $scope.$emit('docEvent', {action: 'fulltext', type: 'edit', collection_type: 'do
 
 
 
+
+	$scope.newDm = function (){
+		doc.create_doc_option();
+	}
+	$scope.deleteDm = function (opt_name){	
+		doc.delete_doc_option(opt_name);
+	}
+	// save to api 
+	$scope.saveDm = function (opt_name){
+		doc.save_doc_option(opt_name);
+	}
+
+
 	$scope.toggle_select_markup = function (markup, event_name){
 		if(!event_name){
 			var event_name = 'click'
@@ -257,6 +294,8 @@ $scope.$emit('docEvent', {action: 'fulltext', type: 'edit', collection_type: 'do
 
 		var real_start = markup.start 	- $scope.containers[markup.sectionin].start 
 		var real_end   = markup.end 	- $scope.containers[markup.sectionin].start
+
+
 		
 
 		if(markup.selected===true && event_name == 'click'){
@@ -271,14 +310,24 @@ $scope.$emit('docEvent', {action: 'fulltext', type: 'edit', collection_type: 'do
 			markup.editing = false
 		}
 		else if(markup.by_me == 'true'  && markup.editing===false && event_name == 'dblclick'){
-			markup.editing =true
+			markup.editing = true
 		}
 		console.log(markup)
 
 
 		$scope.ui.selected_range.start = real_start
-		$scope.ui.selected_range.end = real_end
+		$scope.ui.selected_range.end 	= real_end
 		$scope.ui.selected_section_index = markup.sectionin
+
+
+
+
+		if(markup.editing == true){
+			$scope.ui.editing_objects.push(markup)
+		}
+		if(markup.editing == false){
+			$scope.ui.editing_objects = _.without($scope.ui.editing_objects, markup)
+		}
 
 		if(markup.selected == true){
 			$scope.ui.selected_objects.push(markup)
@@ -288,18 +337,22 @@ $scope.$emit('docEvent', {action: 'fulltext', type: 'edit', collection_type: 'do
 			$scope.ui.selected_objects = _.without($scope.ui.selected_objects, markup)
 			$scope.$emit('docEvent', {action: 'selection', type: 'unselect' });
 		}
+
+
+
+
 	}
 	
-	$scope.open_markup_push = function (container_index){
+	$scope.open_comment_push = function (container_index){
 	// this way only one menu can me open.. and persistent
-		var cur = $scope.ui.menus.push_markup.open;
+		var cur = $scope.ui.menus.push_comment.open;
 		if(cur == container_index.sectionin){
 			cur = -1	
 		}
 		else{
 			cur = container_index.sectionin;
 		}
-		$scope.ui.menus.push_markup.open = cur;
+		$scope.ui.menus.push_comment.open = cur;
 		return;
 	}
 
@@ -308,10 +361,31 @@ $scope.$emit('docEvent', {action: 'fulltext', type: 'edit', collection_type: 'do
 		$scope.push.type = 'container';
 		$scope.push.subtype = 'container';
 		$scope.push.start =100;
+		$scope.push.position = 'inline';
 		$scope.push.end = 200;
 		$scope.push_markup();
 
 	}
+	$scope.push_generic_from_ranges= function (type, subtype,position){
+
+				$scope.push.type = type;
+				$scope.push.subtype = subtype;
+				$scope.push.start= $scope.ui.selected_range.start;
+				$scope.push.end = $scope.ui.selected_range.end;
+				$scope.push.position = position
+
+				$scope.push_markup();
+
+
+
+	}
+
+	// change and save a single value of a markup
+	$scope.replace_markup = function(markup, field, value){
+		markup[field] = value;
+		doc.markup_save(markup)
+	}
+
 
 	$scope.push_comment= function (){
 		$scope.push.type = 'comment';
@@ -339,6 +413,9 @@ $scope.$emit('docEvent', {action: 'fulltext', type: 'edit', collection_type: 'do
 
 		$scope.push_markup();
 
+		// close form.
+		$scope.ui.menus.push_comment.open  = -1
+
 	}
 
 
@@ -360,9 +437,6 @@ $scope.$emit('docEvent', {action: 'fulltext', type: 'edit', collection_type: 'do
 			if(!$scope.push.metadata){
 				$scope.push.metadata= '-';
 			}
-			else{
-				$scope.push.metadata = $scope.push.metadata; // encodeURIComponent(..)
-			}
 			if(!$scope.push.status){
 				$scope.push.status= '-';
 			}
@@ -382,9 +456,12 @@ $scope.$emit('docEvent', {action: 'fulltext', type: 'edit', collection_type: 'do
 	$scope.offset_markups = function (){
 		doc.offset_markups()
 	}
-	$scope.offset_markup = function (markup){
-		doc.offset_markup(m)
+	
+	$scope.offset_markup = function (markup, start_qty, end_qty){
+		doc.offset_markup(markup, start_qty, end_qty)
 	}
+
+
 	$scope.markup_save = function (markup){
 		doc.markup_save(markup)
 	}
@@ -429,6 +506,7 @@ $scope.$emit('docEvent', {action: 'fulltext', type: 'edit', collection_type: 'do
 	}
 
 	$scope.toggle_render = function(r){
+		$scope.ui.menus['quick_tools'].open = "no"
 		$scope.ui.renderAvailable_active = r
 	}
 	

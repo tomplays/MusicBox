@@ -56,19 +56,82 @@ p{
 .lt.link{
     text-decoration: underline;
 }  
-
 .lt.em{
     font-style: italic
 }
-.lt.list_item{
-    font-style: italic
+.lt.list-item{
+    line-height:2em;
+    &.nd:after  {
+        clear: both;
+        content: "";
+        display: block;
+        height: 1px;
+        width: 1px;
+    }
+    &.fi{
+      clear: both;
+    }
+    &.fi:before  {
+        clear: none;
+        content: "*";
+        display: block;
+        font-size: 21px;
+        height: 0;
+        line-height: 45px;
+        margin-left: -10px;
+        margin-top: -4px;
+ 
+    }
 }
-.lt.cite{
-    background-color:@green;
-    color:#DDE4F0;
+
+
+
+
+.lt.cite, .lt.quote{
+    background-color:#DADADA;
+    color:#fff;
+     
+     &.nd:after  {
+        clear: both;
+        content: "";
+        display: block;
+        height: 1px;
+        width: 1px;
+    }
+    &.fi{
+      clear: both;
+    }
+    &.fi:before  {
+        clear: none;
+        content: "\2022";
+        display: block;
+        font-size: 21px;
+        height: 0;
+        color:#000;
+        line-height: 45px;
+        margin-left: -10px;
+        margin-top: -4px;
+ 
+
+
+    }
+    &.fi:after  {
+        clear: none;
+       content: "\0027";
+        display: block;
+        font-size: 21px;
+        height: 0;
+        color:#000;
+        line-height: 45px;
+        margin-left: -10px;
+        margin-top: -4px;
+ 
+    }
 }
+
+
 .lt.code{
-     background: none repeat scroll 0 0 #CFE6E1;
+    background: none repeat scroll 0 0 #CFE6E1;
     color:@green;
     font-family: monospace;
     font-size: 1.3em;
