@@ -4,56 +4,17 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
-    Schema = mongoose.Schema
-
-, meta_options = Schema.MetaoptionsSchema;
-
-
-
-
-var ObjectIdSchema = Schema.ObjectId;
-var ObjectId = mongoose.Types.ObjectId;
-
+Schema = mongoose.Schema,
+meta_options = Schema.MetaoptionsSchema;
 
 /**
  * Document Schema
  */
 
-
 // generate _id
 //http://stackoverflow.com/questions/11604928/is-there-a-way-to-auto-generate-objectid-when-a-mongoose-model-is-newed
-
-
-/*
-var DocOptionsSchema = new Schema({
-    _id:  {type:ObjectIdSchema, default: function () { return new ObjectId()} },
-    created: {
-        type: Date,
-        default: Date.now
-    },
-    updated: {
-        type: Date,
-        default: Date.now
-    },
-    option_name : {
-        type: String,
-        default: '',
-        trim: true
-    },
-    option_value : {
-        type: String,
-        default: '',
-        trim: true
-    },
-    option_type : {
-        type: String,
-        default: '',
-        trim: true
-    },
-});
-*/
-
-
+var ObjectIdSchema = Schema.ObjectId;
+var ObjectId = mongoose.Types.ObjectId;
 
 
 var MarkupSchema = new Schema({
@@ -75,22 +36,10 @@ var MarkupSchema = new Schema({
         default: '-',
         trim: true
     },
-    /*
-    doc_id: {
-        type:  ObjectIdSchema,
-        default: '5432496bd009c77406f29298',
-        ref: 'Document'
-    },
-    */
-
-
     doc_id:{
           type: Schema.ObjectId,
-          //  default: '54325fc1b265c1f807dd26fd',
           ref: 'Document'
     },
-
-
     start: {
         type: Number,
         default: '',
@@ -149,16 +98,10 @@ var DocumentSchema = new Schema({
         unique: true,
         trim: true
     },
-
     slug: {
         type: String,
         // default: 'your-title',
         unique: true,
-        trim: true
-    },
-    subtitle: {
-        type: String,
-        default: '',
         trim: true
     },
     content: {
@@ -166,46 +109,29 @@ var DocumentSchema = new Schema({
         default: 'Your content..',
         trim: true
     },
+    excerpt: {
+        type: String,
+        default: '...',
+        trim: true
+    },
     markups: [MarkupSchema], 
     doc_options: [meta_options], 
-
     published:{
         type: String,
         default: 'draft'
     },
+    secret: {type:ObjectIdSchema, default: function () { return new ObjectId()} },
     user: {
         type: Schema.ObjectId,
         ref: 'User'
     },
-    username : {
-        type: String,
-        default: '-',
-        trim: true
-    },
     room: {
         type: Schema.ObjectId,
         ref: 'Room'
-    },
-    roomname : {
-        type: String,
-        default: 'anon-newsroom',
-        trim: true
     }
 });
-
-
 DocumentSchema.path('title').validate(function(title) {
     return title.length;
 }, 'Title cannot be blank');
-
-
-DocumentSchema.statics.load = function(title, cb) {
-    this.findOne({
-        title: title
-    }).populate('user', 'name username').populate('room').exec(cb);
-
-};
-
 mongoose.model('Markup',MarkupSchema);
-
 mongoose.model('Document', DocumentSchema);

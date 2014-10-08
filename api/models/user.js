@@ -29,6 +29,18 @@ var UserSchema = new Schema({
          type: Boolean,
          default: false
     },
+    is_admin: {
+         type: Boolean,
+         default: false
+    },
+    is_editor: {
+         type: Boolean,
+         default: false
+    },
+    trust: {
+         type: String,
+         default: 'registered'
+    },
     image_url : String,
     hashed_password: String,
     provider: String,

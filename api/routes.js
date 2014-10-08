@@ -85,21 +85,37 @@ return res.redirect('/');
 
     app.get('/api/v1/docs', docs.list);
 
-    //a single doc record
+    // DOC
+    // single doc record
     app.get('/api/v1/doc/:slug', docs.docByIdOrTitle);
+    
+    // create 
+    app.post('/api/v1/doc/create',  auth.requiresLogin, docs.doc_create);
+
+    // delete 
+
+
 
 
     // Main api feature : handle massive markups update
     // all mk in range
     app.get('/api/v1/doc/:slug/markups/offset/:side/:start/:end/:qty', auth.requiresLogin, docs.markups_offset);
     // single mk 
-    app.get('/api/v1/doc/:slug/markup/:markup_id/offset/:side/:start/:end/:qty', auth.requiresLogin, docs.markup_offset);
+    app.post('/api/v1/doc/:slug/markup/:markup_id/offset', auth.requiresLogin, docs.markup_offset);
 
 
     app.post('/api/v1/doc/:slug/markup/:markup_id/edit',auth.requiresLogin,  docs.markup_edit);
     app.post('/api/v1/doc/:doc_id/edit',auth.requiresLogin,  docs.doc_edit);
-    app.post('/api/v1/doc/:slug/edit_options', auth.requiresLogin, docs.doc_edit_options);
-    app.post('/api/v1/doc/:slug/markups/push', auth.requiresLogin, docs.markup_create);
+   
+
+    // doc_options
+    app.post('/api/v1/doc/:slug/edit_option', auth.requiresLogin, docs.doc_edit_option);
+    app.post('/api/v1/doc/:slug/create_option', auth.requiresLogin, docs.doc_create_option);
+    app.post('/api/v1/doc/:slug/delete_option', auth.requiresLogin, docs.doc_delete_option);
+
+
+
+   app.post('/api/v1/doc/:slug/markups/push', auth.requiresLogin, docs.markup_create);
 
 
 
@@ -108,16 +124,14 @@ return res.redirect('/');
 
 
 
-    app.post('/api/v1/doc/create',  auth.requiresLogin, docs.createdoc_post);
 
-    app.get('/api/v1/doc/create/:slug?',  auth.requiresLogin, docs.createdoc);
 
     app.get('/sockets/list', index.sockets_list);
 
 
     app.post('/api/v1/userlogin', passport.authenticate('local', {}), users.signin_login);
 
-    app.get('/api/v1/room/create/:title?',  auth.requiresLogin, rooms.createroom);
+    app.get('/api/v1/room/create/:slug?',  auth.requiresLogin, rooms.createroom);
 
 
 };
