@@ -5,17 +5,24 @@ div(class="branding sc bg_white")
 
 div.main_center.user_account.bordered
 	p {{me.username}}
-	p mail {{me.email}}
+	p mail : {{me.email}} (hidden from public)
+	p 
+		img(ng-src="{{me.image_url}}")
 	p 
 		a(href="/doc/create") Create a new doc
 
 	p 
-		a(href="/logout") Logout
+		
+		a(ng-click="external_link(root_url+'/signout')") Log out
+		i.fa.fa-sign-out 
+
 	h3 Mes documents :
 	ul(ng-repeat="doc in documents")
-		li {{doc.slug}} |	{{doc.published}} |	{{doc.slug}}	• {{doc.roomname}}
-
-
+		li 
+			a(href="/doc/{{doc.slug}}") {{doc.slug}} 
+			span
+				{{doc.published}} |	{{doc.slug}} • {{doc.roomname}} 
+				a(href="", ng-click="external_link('/api/v1/doc/'+doc.slug) " ) [api]
 
 footer
 	p /-)

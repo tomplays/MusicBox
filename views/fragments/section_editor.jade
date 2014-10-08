@@ -1,15 +1,20 @@
 
 
 div(ng-if="section.type=='container'  && ui.renderAvailable_active == 'editor'  ") 
-	p {{section._id}}
-	p {{section.subtype}}
-	p {{section.start}} - {{section.end}} - {{section.metadata}} - {{section.type}} - {{section.subtype}}
-	a(href="", ng-if="section.selected == false ", ng-click="toggle_select_markup(section)") select section
+	// p {{section._id}}
+	// p {{section.subtype}}
+	// p {{section.start}} - {{section.end}} - {{section.metadata}} - {{section.type}} - {{section.subtype}}
+	a.btn_ok.btn_section_edit(href="",ng-if="section.selected==false",ng-click="toggle_select_markup(section)") edit section
+
+
+
 
 
 div(ng-if="section.selected == true ")
-	a(href="", ng-if="section.selected == true ", ng-click="toggle_select_markup(section)") unselect
-	p {{$parent.$parent.$index}}
+	a.btn_section_edit.btn_ok(href="", ng-if="section.selected == true ", ng-click="toggle_select_markup(section)") unselect
+	i.fa.fa-remove.btn_action(ng-click="markup_delete(section)")
+
+	// p {{$parent.$parent.$index}}
 	p type 
 		input(ng-model="section.type" ,type="text")
 	p subtype
@@ -26,7 +31,7 @@ div(ng-if="section.selected == true ")
 		input(ng-model="section.status" ,type="text")
 	p depth
 		input(ng-model="section.depth" type="text" )
-	a(ng-click="markup_delete(section)") section_delete
+	
 	// a(ng-click="offset_markup(section)")  section offset 
 
-	a.btn(ng-click="markup_save(section)") ok
+	i.fa.fa-save.btn_action(ng-click="markup_save(section)")

@@ -17,6 +17,11 @@ div(class="sections_container")
 				// title, author, date, ..
 				div(ng-if="(layout.name== 'center') && ($parent.$first) ")
 						div.doc_header
+							
+							div(ng-if="ui.renderAvailable_active == 'editor'")
+								h1(ng-bind-html="doc.room.name+'&nbsp;'", ng-dblclick="edit_doc('room_id')")
+								input(ng-if="ui.editing_room_id",   ng-model="doc.room___id", name="doc.room___id")
+								by {{doc.room.owner}}
 							h3(ng-bind-html="doc_options.doc_notices_before_title.value +'&nbsp;'", class="editing_{{ui.editing_doc_notices_before_title}}" , ng-dblclick="edit_doc_option('doc_notices_before_title')") {{}} &nbsp;
 							input(ng-if="ui.editing_doc_notices_before_title",   ng-model="doc_options.doc_notices_before_title.value", name="doc_options.doc_notices_before_title.value")
 
@@ -29,6 +34,18 @@ div(class="sections_container")
 
 							time(ng-bind="doc.formated_date", ng-click="" ) 
 							.cols-edit(ng-include="fragments['author_card'][0].url" )
+
+
+							div.doc_option_menu(ng-if="ui.renderAvailable_active == 'editor'")
+								p {{doc.excerpt}}
+								p {{doc.updated}} 
+								ul(ng-repeat="opt in doc.doc_options")
+									li {{opt.option_name}} {{doc_options[opt.option_name].value}}
+										input(name="doc_options[opt.option_name]", type="text", ng-model="doc_options[opt.option_name].value")
+										i.fa.fa-save(ng-click="saveDm(opt.option_name)")
+										i.fa.fa-remove(ng-click="deleteDm(opt.option_name)")  
+
+								i.fa.fa-plus(ng-click='newDm()') new key/value field
 
 
 				div(ng-if="layout.include_objects !==false")
@@ -46,7 +63,7 @@ div(class="sections_container")
 							.cols-edit(ng-include="fragments['markup_editor'][0].url" )
 
 						
-						div(class="markup_ markup_type_inline", ng-if="ui.renderAvailable_active == 'lire'" , ng-repeat="markup in section.objects['markup']['inline']")
+						div(class="markup_ markup_type_inline", ng-if="ui.renderAvailable_active == 'editor'" , ng-repeat="markup in section.objects['markup']['inline']")
 							.cols-edit(ng-include="fragments['markup_editor'][0].url" )
 
 
@@ -75,9 +92,10 @@ div(class="sections_container")
 						// div
 							input(type="text", ng-model="inserttext[$parent.$parent.$index]")
 
-						div(ng-if="ui.renderAvailable_active == 'editor'" )
+						div.editor_zone(ng-if="ui.renderAvailable_active == 'editor'" )
 							textarea(type="text", ng-model="doc.content")
-							a(ng-click="edit_doc('content')") ok
+							p (markup positions will be lost)
+							a.btn_ok.float_right(ng-click="edit_doc('content')") save
 								
 						div(ng-click="click_text()")
 							span(ng-mousedown="over(l, 'down')", ng-mouseup="over(l, 'up')", ng-class="l.classes", ng-click="over(l, 'click')" ,ng-dblclick="switch_editing(l)", data-order="{{$index}}", ng-repeat="l in letters[$parent.$parent.$index]") {{l.char}}

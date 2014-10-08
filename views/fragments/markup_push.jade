@@ -1,14 +1,8 @@
+span(ng-click="open_comment_push(section)") +
 
+div.comment_form(ng-if="ui.menus.push_comment.open == section.sectionin " , ng-include="fragments['comment_form'][0].url" )
 
-span(ng-click="open_markup_push(section)") +
-
-
-
-div.comment_form(ng-if="ui.menus.push_markup.open == section.sectionin " , ng-include="fragments['comment_form'][0].url" )
-
-
-
-.tools_container(ng-if="ui.menus.push_markup.open == section.sectionin  ")
+.tools_container(ng-if="ui.menus.push_markup.open == section.sectionin")
 	p type 
 		input(ng-model="push.type" ,type="text")
 	p subtype
@@ -30,4 +24,3 @@ div.comment_form(ng-if="ui.menus.push_markup.open == section.sectionin " , ng-in
 	input(onchange="angular.element(this).scope().preuploadFile(this.files)", type="file")
 	a(ng-click="uploadFile()" ) send
 	img(ng-if="upload_file_image.uploaded == true", ng-src="{{upload_file_image.fullpath}}")
-

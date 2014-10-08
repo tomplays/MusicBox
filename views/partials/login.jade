@@ -15,6 +15,6 @@ div.main_center.login_form.bordered
 			a.btn_ok.float_right(ng-if="myForm.$valid == true" , ng-click="checklogin()") ok
 			//input(type="submit", value="Submit")
 	div.right_part
-		h3 Pas encore de compte ? 
-		a(href="/signup") créer un compte
+		h3 {{i18n.CUSTOM.USER.no_account_yet}}
+		a(href="/signup") {{i18n.CUSTOM.USER.register}}
 		// ou avec facebook

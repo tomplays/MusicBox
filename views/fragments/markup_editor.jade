@@ -1,28 +1,7 @@
 // p {{markup.start}} - {{markup.end}} - {{markup.metadata}} - {{markup.type}} - {{markup.subtype}}
-
-
-
-
-div(class="markup_displayer markup_displayer_{{markup.type}} markup_displayer_{{markup.subtype}} by_me_{{markup.by_me}}", ng-if="markup.type=='child'  " ) 
-
-
-	span.icon_col
-		i(class="fa fa-{{markup.type}} fa-{{markup.subtype}} editing_{{markup.editing}} selected_{{markup.selected}}",  ng-click="toggle_select_markup(markup)", ng-dblclick="toggle_select_markup(markup, 'dblclick')"  ) 
-	// h4 {{markup.child_options.branding_class}}
-	h4(ng-bind-html="markup.metadata" )
-	// p(ng-bind-html="markup.doc_id.content" )
-
-	h3 
-		a(href="#{root_url}/doc/{{markup.doc_id.slug}}") {{markup.doc_id.title}}
-
-
-
-
 // && ui.renderAvailable_active == 'lire'"
 
-
-
-div(class="markup_displayer markup_displayer_{{markup.type}} by_me_{{markup.by_me}}", ng-if="markup.type=='container_class' || markup.type=='note' || markup.type=='comment'||  ( markup.type=='markup' ) || markup.type=='media' || markup.type=='generic'  " ) 
+div(class="markup_displayer markup_displayer_{{markup.type}} by_me_{{markup.by_me}}", ng-if="markup.type=='container_class' || markup.type=='note' || markup.type=='comment'||  ( markup.type =='markup')  || markup.type=='media' || markup.type=='generic' || markup.type=='child'  || markup.type=='semantic' " ) 
 	
 	img.mk_img(ng-if="markup.subtype=='img'" , data-tdid="{{markup.id}}" , ng-src="{{markup.metadata}}")
 
@@ -32,61 +11,107 @@ div(class="markup_displayer markup_displayer_{{markup.type}} by_me_{{markup.by_m
 
 
 
-	span.mk_val.metavalue(ng-bind-html="markup.metadata",  ng-if="markup.type =='note' || markup.type =='generic' || markup.type =='comment' || markup.type =='container_class'") 
+	span.mk_val.metavalue(ng-bind-html="markup.metadata",  ng-if="markup.type =='note' || markup.type =='generic' || markup.type =='comment' || markup.type =='container_class' || markup.type=='semantic' ") 
 	span.mk_val.subtype(class="mk_val_subtype_{{markup.subtype}}", ng-if="markup.type=='markup'")  {{markup.subtype}} 
 	span.mk_val.created(ng-if="markup.type =='note' || markup.type =='comment'") {{markup.created | date}}
 	span.mk_val.username(ng-if="markup.type =='note' || markup.type =='comment' ") {{markup.username}}
 
 
 
-div(class="markup_editor markup_editor_{{markup.type}}", ng-if="markup.editing == true ")
-	
-
-	// a(href="", ng-if="markup.selected == true ", ng-click="toggle_select_markup(markup)") unselect 
-
-	form(name="myForm")
-		span.field
-			label.label_type type
-			select(ng-model="markup.type", ng-options="t for t in objAvailable")
-				option(value="markup.type")
-				option(value="t") {{t}}
-		span.field
-			label subtype
-			input(ng-model="markup.subtype" , type="text")
+	span(ng-if="markup.type == 'child' ")
+		h4(ng-bind-html="markup.metadata" )
 
 
-		span.field
-			label doc id ida
-			input(ng-model="markup.doc_id_id" , type="text")
+	span(ng-if="markup.subtype == 'doc_excerpt' ")
+		h3 
+			a(href="#{root_url}/doc/{{markup.doc_id.slug}}") 
+				span {{markup.doc_id.title}}
+				span(ng-bind-html="markup.doc_id.content" )
 
-		span.field 
-			label position
-			input(ng-model="markup.position" ,type="text")
-		span.field.numberfloat
-			label start
-			input(required ,max="{{section.end}}" , min="{{section.start}}",  type="number" , ng-model="markup.start" )
 
-		span.field.numberfloat
-			label end
-			input(required ,max="{{section.end}}" , min="{{section.start}}",  type="number" , ng-model="markup.end" )
+		// h4 {{markup.child_options.branding_class}}
+		// h4(ng-bind-html="markup.metadata" )
+		// p
+	div(class="markup_editor markup_editor_{{markup.type}}", ng-if="markup.editing == true ")
+		
+
+		// a(href="", ng-if="markup.selected == true ", ng-click="toggle_select_markup(markup)") unselect 
+
+		form(name="myForm")
+
+			div.mk_tools
+				div(ng-if="markup.subtype=='img'")
+					p
+						a(ng-click="replace_markup(markup, 'position', 'left')") move to left
+					p
+						a(ng-click="replace_markup(markup, 'position', 'right')") move to right
+					p
+						a(ng-click="replace_markup(markup, 'position', 'wide')") move to wide
+
+				div(ng-if="markup.type=='markup'")
+					p
+						a(ng-click="offset_markup(markup, 0,1)") offset end+1
+					p
+						a(ng-click="offset_markup(markup, 0,10)") offset end+10
+					p
+						a(ng-click="offset_markup(markup, 1,1)") offset start+1, end+1
+					p
+						a(ng-click="offset_markup(markup, 1,0)") offset start+1
+
+
+					p
+						a(ng-click="offset_markup(markup, 0,-1)") offset end-1
+					p
+						a(ng-click="offset_markup(markup, -1,-1)") offset start-1, end-1
+					p
+						a(ng-click="offset_markup(markup, -1, 0)") offset start-1
+
+
+
+			span.field
+				label.label_type type
+				select(ng-model="markup.type", ng-options="t for t in objAvailable")
+					option(value="markup.type")
+					option(value="t") {{t}}
+			span.field
+				label subtype
+				input(ng-model="markup.subtype" , type="text")
+
+
+			
+			span.field(ng-if="markup.type=='child' ")
+				label doc id ida
+				input(ng-model="markup.doc_id_id" , type="text")
+
+			span.field 
+				label position
+				input(ng-model="markup.position" ,type="text")
+			span.field.numberfloat
+				label start
+				input(required ,max="{{section.end}}" , min="{{section.start}}",  type="number" , ng-model="markup.start" )
+
+			span.field.numberfloat
+				label end
+				input(required ,max="{{section.end}}" , min="{{section.start}}",  type="number" , ng-model="markup.end" )
+				
+
+			span.field.mt_input(class="mt_input_type_{{markup.type}} mt_input_subtype_{{markup.subtype}}", ng-if="markup.type !=='markup'") 
+				label metadata
+				input(ng-model="markup.metadata", type="text")
 			
 
 
-
-		span.field.mt_input(class="mt_input_type_{{markup.type}} mt_input_subtype_{{markup.subtype}}", ng-if="markup.type !=='markup'") 
-			label metadata
-			input(ng-model="markup.metadata", type="text")
-		span.field.smallinput 
-			label status
-			input( ng-model="markup.status" ,type="text")
-		span.field.smallinput 
-			label  depth
-			input( ng-model="markup.depth" type="text" )
-		div.actions
-			i.fa.fa-remove.btn_action(ng-click="markup_delete(markup)")
-			// a(ng-click="offset_markup(markup)")  markup offset 
-		
-			span(ng-if="myForm.$valid")
-				i.fa.fa-save.btn_action(ng-click="markup_save(markup)") 
-				// i.icon-move.right(ng-click="_toggle_position(a)")
+			span.field.smallinput(ng-if="false")
+				label status
+				input( ng-model="markup.status" ,type="text")
+			span.field.smallinput(ng-if="false")
+				label  depth
+				input( ng-model="markup.depth" type="text" )
+			div.actions
+				i.fa.fa-remove.btn_action(ng-click="markup_delete(markup)")
+				// 
+			
+				span(ng-if="myForm.$valid")
+					i.fa.fa-save.btn_action(ng-click="markup_save(markup)") 
+					// i.icon-move.right(ng-click="_toggle_position(a)")
 
