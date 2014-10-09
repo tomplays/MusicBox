@@ -404,21 +404,9 @@ $scope.$emit('docEvent', {action: 'fulltext', type: 'edit', collection_type: 'do
 		$scope.push.type = 'comment';
 		$scope.push.subtype = 'comment';
 
-		/*if($scope.ui.selected_range.start){
-			$scope.push.start = $scope.ui.selected_range.start;
-		}
-		else{
-			$scope.push.start = 0;
-		}
 
 
-		if($scope.ui.selected_range.end){
-			$scope.push.end = $scope.ui.selected_range.end;
-		}
-		else{
-			$scope.push.end = 1;
-		}
-*/
+// sectionIN.start
 		$scope.push.start= 0;
 		$scope.push.end = 1;
 		
@@ -459,6 +447,12 @@ $scope.$emit('docEvent', {action: 'fulltext', type: 'edit', collection_type: 'do
             if(!$scope.push.position){
 				$scope.push.position = 'inline';
 			}
+			if(!$scope.push.doc_id_id){
+				$scope.push.doc_id_id = 'null';
+			}
+
+
+			
 
 		//call service
 		doc.push_markup($scope.push)
@@ -478,7 +472,15 @@ $scope.$emit('docEvent', {action: 'fulltext', type: 'edit', collection_type: 'do
 	$scope.markup_save = function (markup){
 		doc.markup_save(markup)
 	}
-	
+
+
+	// open tools for markup or section 
+	$scope.object_tools = function (object){
+		if(object.object_tools && object.object_tools === true){
+			return object.object_tools = false;
+		}
+			return object.object_tools = true;
+	}
 
 	/**
 	* delete a markup on click
@@ -489,6 +491,10 @@ $scope.$emit('docEvent', {action: 'fulltext', type: 'edit', collection_type: 'do
 		 if(markup.type=="container"){
 			 //alert('can hold objects!')
 			 //return;
+			 if($scope.sectionstocount == 1){
+			 	alert('can\'t delete last section')
+			 	return
+			 }
 			 doc.markup_delete(markup)
 		 }
 		else{

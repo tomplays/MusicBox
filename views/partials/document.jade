@@ -17,37 +17,101 @@ div(class="sections_container")
 				// title, author, date, ..
 				div(ng-if="(layout.name== 'center') && ($parent.$first) ")
 						div.doc_header
-							// span.secret {{ui.secret}}
-							
-							div(ng-if="ui.renderAvailable_active == 'editor'")
-								h1(ng-bind-html="doc.room.name+'&nbsp;'", ng-dblclick="edit_doc('room_id')")
-								input(ng-if="ui.editing_room_id",   ng-model="doc.room___id", name="doc.room___id")
+								
+
+
+								
+								h3(class="editing_{{ui.editing_doc_notices_before_title}}" , ng-dblclick="edit_doc_option('doc_notices_before_title')") 
+									{{doc_options.doc_notices_before_title.value}} &nbsp;
+								.edit_field(ng-if="ui.editing_doc_notices_before_title")
+									label Edit "Before Title"
+									input(ng-if="ui.editing_doc_notices_before_title",   ng-model="doc_options.doc_notices_before_title.value", name="doc_options.doc_notices_before_title.value")
+									a.btn_ok.float_right(ng-click="edit_doc_option('doc_notices_before_title')") Save
+
+
+
+
+								h1(ng-bind-html="doc.title+'&nbsp;'", ng-dblclick="edit_doc('title')")
+								.edit_field(ng-if="ui.editing_title")
+									label Edit "Title"
+									input(ng-model="doc.title")
+									a.btn_ok.float_right(ng-click="edit_doc('title')") Save
+
+
+								h3(class="editing_{{ui.editing_doc_notices_after_title}}" , ng-dblclick="edit_doc_option('doc_notices_after_title')") 
+									{{doc_options.doc_notices_after_title.value}} &nbsp;
+								.edit_field(ng-if="ui.editing_doc_notices_after_title")
+									label Edit "After Title"
+									input(ng-if="ui.editing_doc_notices_after_title",   ng-model="doc_options.doc_notices_after_title.value", name="doc_options.doc_notices_after_title.value")
+									a.btn_ok.float_right(ng-click="edit_doc_option('doc_notices_after_title')") Save
+
+
+								time(ng-bind="doc.formated_date", ng-click="" ) 
+								.cols-edit(ng-include="fragments['author_card'][0].url" )
+
+
+
+
+
+							div.doc_editor(ng-if="ui.renderAvailable_active == 'doc_options' ")
+								h4 Options du document
+
+								
+								
+								
+								
+								// div
+									label "Title color"
+									p(ng-if="ui.editing_title_color")
+										
+										input(ng-if="ui.editing_title_color",   ng-model="doc_options.title_color.value", name="doc_options.title_color.value")
+									span( ng-bind-html="doc_options.title_color.value", class="editing_{{ui.editing_title_color}}" , ng-dblclick="edit_doc_option('title_color')") # {{doc_options.title_color.value}}
+									span(style="color:{{doc_options.title_color.value}}") ####
+											
+									p(ng-if="ui.editing_block_color")
+										label block color
+										input(ng-if="ui.editing_block_color",   ng-model="doc_options.block_color.value", name="doc_options.block_color.value")
+
+									span( ng-bind-html="doc_options.block_color.value", class="editing_{{ui.editing_block_color}}" , ng-dblclick="edit_doc_option('block_color')") # {{doc_options.block_color.value}}
+									span(style="color:{{doc_options.block_color.value}}") ####
+										
+								
+
+								.edit_field.exceprt
+									label "L'extrait"
+
+									// p(ng-bind-html="doc.excerpt+'--'", ng-dblclick="edit_doc('excerpt')")
+									textarea(ng-model="doc.excerpt", name="doc.excerpt")
+								
+								// h1(ng-bind-html="doc.room.name+'&nbsp;'", ng-dblclick="edit_doc('room_id')")
+								label Published in "room"
+								input(type="text" ,ng-model="doc.room___id", name="doc.room___id")
 								by {{doc.room.owner}}
-							h3(ng-bind-html="doc_options.doc_notices_before_title.value +'&nbsp;'", class="editing_{{ui.editing_doc_notices_before_title}}" , ng-dblclick="edit_doc_option('doc_notices_before_title')") {{}} &nbsp;
-							input(ng-if="ui.editing_doc_notices_before_title",   ng-model="doc_options.doc_notices_before_title.value", name="doc_options.doc_notices_before_title.value")
 
-							h1(ng-bind-html="doc.title+'&nbsp;'", ng-dblclick="edit_doc('title')")
-							input(ng-if="ui.editing_title",   ng-model="doc.title", name="doc.title")
+								label "thumbnail" image url
+								input(type="text",ng-model="doc.thumbnail", name="doc.thumbnail") 
+								img.thumbnail_input( ng-src="{{doc.thumbnail}}", ng-dblclick="edit_doc('thumbnail')")
+
+								
+
 							
-							h3(class="editing_{{ui.editing_doc_notices_after_title}}" , ng-dblclick="edit_doc_option('doc_notices_after_title')") {{doc_options.doc_notices_after_title.value}} &nbsp;
-							input(ng-if="ui.editing_doc_notices_after_title",   ng-model="doc_options.doc_notices_after_title.value", name="doc_options.doc_notices_after_title.value")
+
+								// ng-if="ui.editing_thumbnail",  
 
 
-							time(ng-bind="doc.formated_date", ng-click="" ) 
-							.cols-edit(ng-include="fragments['author_card'][0].url" )
-
-
-							div.doc_option_menu(ng-if="ui.renderAvailable_active == 'editor'")
-								p {{doc.excerpt}}
-								p {{doc.updated}} 
-								ul(ng-repeat="opt in doc.doc_options")
-									li {{opt.option_name}} {{doc_options[opt.option_name].value}}
+								label Other options
+								
+								div.doc_options_table
+									div.doc_options_item(ng-repeat="opt in doc.doc_options")
+										label {{opt.option_name}}
 										input(name="doc_options[opt.option_name]", type="text", ng-model="doc_options[opt.option_name].value")
 										i.fa.fa-save(ng-click="saveDm(opt.option_name)")
 										i.fa.fa-remove(ng-click="deleteDm(opt.option_name)")  
 
-								i.fa.fa-plus(ng-click='newDm()') new key/value field
+									// i.fa.fa-plus(ng-click='newDm()') new option
+								
 
+								// span.secret {{ui.secret}}
 
 				div(ng-if="layout.include_objects !==false")
 
@@ -60,7 +124,7 @@ div(class="sections_container")
 
 					div(ng-if="layout.name == 'right'")
 						
-						div(class="markup_ container_class_type_inline", ng-if="ui.renderAvailable_active == 'lire'" , ng-repeat="markup in section.objects['container_class']['inline']")
+						div(class="markup_ container_class_type_inline", ng-if="ui.renderAvailable_active == 'editor'" , ng-repeat="markup in section.objects['container_class']['inline']")
 							.cols-edit(ng-include="fragments['markup_editor'][0].url" )
 
 						
@@ -96,7 +160,7 @@ div(class="sections_container")
 						div.editor_zone(ng-if="ui.renderAvailable_active == 'editor'" )
 							textarea(type="text", ng-model="doc.content")
 							p (markup positions will be lost)
-							a.btn_ok.float_right(ng-click="edit_doc('content')") save
+							a.btn_ok.float_right(ng-dblclick="edit_doc('content')", ng-click="edit_doc('content')") save
 								
 						div(ng-click="click_text()")
 							span(ng-mousedown="over(l, 'down')", ng-mouseup="over(l, 'up')", ng-class="l.classes", ng-click="over(l, 'click')" , ng-dblclick="switch_editing(l)", data-order="{{$index}}", ng-repeat="l in letters[$parent.$parent.$index]") {{l.char}}

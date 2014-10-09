@@ -89,6 +89,10 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
 
         if($routeParams.mode){
                $rootScope.ui.renderAvailable_active =  $routeParams.mode
+
+        }
+        else{
+              $rootScope.ui.renderAvailable_active =  $rootScope.ui.renderAvailable[0]
         }
         
 
@@ -98,9 +102,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
                console.log('using secret')
         }
 
-        else{
-              $rootScope.ui.renderAvailable_active =  $rootScope.ui.renderAvailable[0]
-        }
+       
 
 
   if($routeParams.docid ){
@@ -135,7 +137,7 @@ else{
 
 
       objAvailable:function (){
-        var arr = new Array('media','generic','container','container_class','img', 'comment','note','summary','summary-block','player','markup','css_styles','classes','child_section','child' ,'semantic');
+        var arr = new Array('media','generic','container','container_class', 'comment','note','summary','summary-block','player','markup','css_styles','classes','child_section','child' ,'semantic');
         return arr 
       },
       fragmentTypes:function (){
@@ -182,7 +184,7 @@ else{
       },
 
       renderAvailable:function (){
-        var arr = new Array('lire','read','fragments','sections','editor','dataset','logs', 'card', 'media');
+        var arr = new Array('lire','read','fragments','doc_options','editor','dataset','logs', 'card', 'media');
         return arr 
       },
       fragmentsAvailable:function (){

@@ -220,7 +220,10 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
               if(markup.type =='child'){ 
                 // to keep doc_id._id (just id as string) in model and not pass to post object later..
                 if(markup.doc_id){ 
-                  markup.doc_id_id = markup.doc_id._id;
+                   markup.doc_id_id = markup.doc_id._id;
+// markup.doc_id_id.uuser = markup.doc_id.user;
+ console.log( markup.doc_id)
+
                    if(markup.doc_id.doc_options){
                      // m.markup.child_options = [];
                      var  options_array =  [];
@@ -553,11 +556,12 @@ var options = {
           $http.post(api_url+'/doc/create', serialize(data) ).
           success(function(doc) {
               // hard redirect
+              console.log(doc)
               //console.log(doc)
               $rootScope.newdoc.created_link = doc.slug;
               $rootScope.newdoc.created_link_title = doc.title;
 
-             // alert('ok')
+    
            });  
 
 
@@ -701,25 +705,20 @@ var options = {
       markup_save: function (markup){
           //var data = new Object({'start': markup.start})
             console.log(markup)
+           var temp = markup;
            if(markup.type =='container'){
-                var temp = markup;
                 markup.letters =[];
                 markup.objects =[];
                 markup.objects_count =[];
-                console.log(markup)
-                var data  = serialize(temp)
-
            }
            else{
-              var data =  markup
                if(markup.doc_id){
-                  data.child_options = ''
-                  data.doc_id = markup.doc_id._id;
+                  temp.child_options = ''
+                  temp.doc_id = markup.doc_id._id;
                }
-               data.secret = $rootScope.ui.secret;
-               data = serialize(data)
            }
-   //  return;
+          temp.secret = $rootScope.ui.secret;
+          var data = serialize(temp)
          
           $http.post(api_url+'/doc/'+$rootScope.doc.slug+'/markup/'+markup._id+'/edit', data ).success(function(m) {
             console.log(m)

@@ -4,6 +4,13 @@ small layout
 @inline-width:40%;
 @inline-width-neg:-40%;
 */
+html {
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.004);
+  -webkit-font-smoothing: antialiased !important;
+  font-smoothing: antialiased;
+  text-rendering: optimizeLegibility !important;
+  -moz-osx-font-smoothing: grayscale;
+}
 html,
 body {
   margin: 0px;
@@ -52,6 +59,10 @@ section.pad-bottom {
 section.pad-top-bottom {
   padding: 20px 0px;
 }
+/*place for editing zone at fixed bottom*/
+body.render_active_editor section:last-child {
+  padding-bottom: 100px;
+}
 img {
   max-width: 100%;
 }
@@ -73,7 +84,8 @@ input[type="search"],
 input[type="tel"],
 input[type="time"],
 input[type="url"],
-textarea {
+textarea,
+select {
   background-color: white;
   border: 1px solid #cccccc;
   border-radius: 2px;
@@ -117,6 +129,13 @@ textarea {
   padding: 2%;
 }
 /* BUTTONS */
+.btn {
+  border-radius: 4px;
+  font-weight: bold;
+  padding: 4px;
+  text-decoration: none;
+  display: block;
+}
 a.btn_ok {
   background: none repeat scroll 0 0 #000;
   border-radius: 4px;
@@ -126,8 +145,28 @@ a.btn_ok {
   text-decoration: none;
   display: block;
 }
-.btn_section_edit {
+.btn_section {
+  color: #fff;
+  float: left;
+  width: auto;
   margin-bottom: 5px;
+  font-size: 0.8em;
+  clear: both;
+}
+.btn_section.btn_section_select {
+  background: #3498db;
+}
+.btn_section.btn_section_create {
+  background: #2980b9;
+  float: right;
+  width: auto;
+}
+.btn_section.btn_section_unselect {
+  background: #2980b9;
+}
+.btn_section:hover {
+  background: #3498db;
+  color: #fff;
 }
 .comment_form {
   background: none repeat scroll 0 0 #ebebf8;
@@ -224,10 +263,15 @@ a.btn_ok {
   margin-top: 2%;
 }
 .doc_header .editing_true {
-  background: red;
+  background: #ecf0f1;
+  padding: 5px 10px;
 }
 .doc_header time {
   font-size: .9em;
+}
+body.render_active_doc_options .editing_:hover {
+  background: #ecf0f1;
+  padding: 5px 10px;
 }
 html.is_home_true .doc_header h1,
 html.is_home_true .doc_header .post-author-card,
@@ -262,35 +306,38 @@ div.branding h1 a {
   font-size: 1.2em;
   line-height: 1em;
   opacity: 0.6;
-  padding: 2px 2px 0 3px;
+  padding: 2px 3px 2px 3px;
   position: fixed;
-  right: 1.5%;
+  right: 2.5%;
+  top: 17px;
   z-index: 99999;
-  top: 9px;
+  color: #fff;
 }
 .quick_tool_opener.visible_yes {
   opacity: 1;
-  color: #fff;
+  background: #2980b9;
 }
 .quick_tools {
   top: -536px;
   position: fixed;
   width: 96%;
+  font-size: 1.1em;
   display: block;
   padding: 2%;
   background: none repeat scroll 0 0 #fff;
-  z-index: 99999;
+  z-index: 99;
 }
 .quick_tools.visible_yes {
-  transition: top 0.2s linear 0s;
-  top: 36px;
+  background: none repeat scroll 0 0 #ecf0f1;
+  top: 76px;
+  transition: background 1.2s linear 0s, top 0.2s linear 0s;
 }
-.quick_tools .user_box {
-  background: none repeat scroll 0 0 #fff;
-  border-right: 1px solid #292929;
-  float: left;
-  width: 27%;
-  padding: 0 3% 0% 0%;
+.quick_tools a {
+  text-decoration: underline;
+}
+.quick_tools .inside {
+  float: right;
+  width: 40%;
 }
 .quick_tools .edit_box {
   background: none repeat scroll 0 0 #fff;
@@ -330,6 +377,65 @@ div.branding h1 a {
   margin-right: 2px;
   padding: 0 2px;
 }
+.doc_editor {
+  background: none repeat scroll 0 0 #95a5a6;
+  float: left;
+  margin-bottom: 4%;
+  padding: 2%;
+  text-align: left;
+  width: 96%;
+}
+.doc_editor label {
+  width: 100%;
+  font-size: 0.8em;
+  font-style: italic;
+  float: left;
+}
+.doc_editor input {
+  width: 46%;
+  background: #ecf0f1;
+  border: none;
+}
+.doc_editor textarea {
+  max-width: 90%;
+  margin-bottom: 2px;
+  background: #ecf0f1;
+}
+.doc_editor img.thumbnail_input {
+  border: 1px solid #ccc;
+  display: inline;
+  float: right;
+  height: auto;
+  margin-right: 0;
+  max-height: 20%;
+  max-width: 34%;
+  padding: 2px;
+  width: auto;
+}
+.doc_editor .doc_options_table {
+  clear: both;
+  border-top: 1px solid #dadada;
+  padding-bottom: 10px;
+}
+.doc_editor .doc_options_table input {
+  float: left;
+  margin-right: 2%;
+  width: 36%;
+}
+.doc_editor .doc_options_table i.fa {
+  border: medium none;
+  float: left;
+  font-size: 1em;
+  line-height: 2em;
+  padding-left: 8px;
+  padding-right: 7px;
+  padding-top: 2px;
+  width: auto;
+}
+.doc_editor .doc_options_item {
+  float: left;
+  width: 100%;
+}
 .editor_zone {
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   float: left;
@@ -341,6 +447,34 @@ div.branding h1 a {
   min-height: 200px;
   margin-bottom: 20px;
 }
+.section_displayer input {
+  width: 60%;
+  background: none repeat scroll 0 0 #fff;
+  border: medium none;
+}
+.section_displayer label {
+  float: left;
+  width: 100%;
+  font-style: italic;
+}
+.section_displayer .section_editor {
+  background: #ecf0f1;
+  float: left;
+  padding: 2%;
+  width: 96%;
+  margin-bottom: 5px;
+}
+.object-tools {
+  background: #fff;
+  padding: 2%;
+  float: left;
+  width: 96%;
+  border-radius: 10px;
+  margin-top: 10px;
+}
+.object-tools i.fa.fa-remove {
+  float: right;
+}
 .markup_displayer:not(.markup_displayer_media) {
   padding: 2%;
   width: 96%;
@@ -348,8 +482,17 @@ div.branding h1 a {
   float: left;
   margin-bottom: 2px;
 }
-.markup_displayer:not(.markup_displayer_media):hover {
-  background: #ebebf8;
+.markup_displayer.is_editing_true {
+  background: #ecf0f1;
+  padding-bottom: 10px;
+}
+.markup_displayer label {
+  float: left;
+  width: 100%;
+  font-style: italic;
+}
+.markup_displayer_markup {
+  background: #ecf0f1;
 }
 .markup_displayer .mk_val {
   display: inline-block;
@@ -383,10 +526,18 @@ div.markup_displayer_media .icon_col {
   background: #ebebf8;
   padding: 1%;
 }
+.markup_displayer img.doc_thumb {
+  float: left;
+  height: auto;
+  margin-right: 2%;
+  margin-top: 4px;
+  width: 40%;
+}
 .markup_editor {
   width: 100%;
 }
-.markup_editor form input {
+.markup_editor form input,
+.markup_editor form textarea {
   max-width: 92%;
 }
 .markup_editor form span.field {
@@ -406,6 +557,20 @@ div.markup_displayer_media .icon_col {
 }
 .markup_displayer.markup_displayer_doc_dark_block h3 a {
   color: #fff;
+}
+.markup_displayer_subtype_doc_content_block .inside_child {
+  display: block;
+  float: left;
+  padding: 2%;
+  width: 96%;
+}
+.markup_displayer_subtype_doc_content_block .inside_child h4 {
+  margin: 0;
+}
+.markup_displayer_subtype_doc_content_block .inside_child h3 {
+  font-size: 1.8em;
+  line-height: 1.1em;
+  margin: 0;
 }
 i.fa-img {
   background: none repeat scroll 0 0 #ffffff;
@@ -506,13 +671,25 @@ footer {
     top: 0px;
     padding: 1%;
     width: 98%;
-    background: transparent;
-  }
-  div.branding.white_bg {
-    background: transparent;
+    /* background: transparent; */
+    background: rgba(0, 0, 0, 0.5);
   }
   div.branding h1 a {
     background: transparent;
+  }
+  .quick_tools .inside {
+    width: 90%;
+  }
+  .quick_tool_opener {
+    padding: 5px 5px 6px 7px;
+    right: 3.5%;
+    top: 17px;
+  }
+  .quick_tool_opener.fa:before {
+    font-size: 1.9em;
+  }
+  .quick_tools.visible_yes {
+    top: 74px;
   }
   .doc_header {
     margin-top: 80px;

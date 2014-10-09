@@ -15,6 +15,24 @@ nconf.argv().env().file({file:'config.json'});
 
 
 */
+exports.list = function(req, res){
+var rooms =  Room.find( {is_public: true}, {secret: 0, owner_email:0}).populate('owner', '-user_options -hashed_password -email -salt').exec(function(err, rooms) {
+   	res.json(rooms)
+});	
+}
+
+
+exports.room_view = function(req, res){
+
+
+var user_ = ''
+		if(req.user){
+			user_ = new Object({'_id': req.user._id , 'username': req.user.username,  'image_url': req.user.image_url})
+		}
+		res.render('index_v1', {
+			user_in : user_
+		});
+}
 
 exports.createroom = function(req, res){
 	//var ar = new Object({'title':'bloue'+Math.random()})

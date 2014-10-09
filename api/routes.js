@@ -89,12 +89,7 @@ return res.redirect('/');
     // single doc record
     app.get('/api/v1/doc/:slug', docs.docByIdOrTitle);
     
-    // create 
-    app.post('/api/v1/doc/create',  auth.requiresLogin, docs.doc_create);
-
-    // delete 
-
-
+   
 
 
     // Main api feature : handle massive markups update
@@ -112,6 +107,12 @@ return res.redirect('/');
     app.post('/api/v1/doc/:slug/edit_option', auth.requiresLogin, docs.doc_edit_option);
     app.post('/api/v1/doc/:slug/create_option', auth.requiresLogin, docs.doc_create_option);
     app.post('/api/v1/doc/:slug/delete_option', auth.requiresLogin, docs.doc_delete_option);
+    
+
+     // delete 
+    app.post('/api/v1/doc/:slug/delete',  auth.requiresLogin, docs.doc_delete);
+    app.get('/api/v1/doc/:slug/reset',    auth.requiresLogin, docs.doc_reset);
+
 
 
 
@@ -123,6 +124,10 @@ return res.redirect('/');
     // app.post('/api/v1/doc/:doc_id_or_title/markups/delete/' , docs.markup_delete);
 
 
+ // create 
+    app.post('/api/v1/doc/create',  auth.requiresLogin, docs.doc_create);
+
+
 
 
 
@@ -132,6 +137,10 @@ return res.redirect('/');
     app.post('/api/v1/userlogin', passport.authenticate('local', {}), users.signin_login);
 
     app.get('/api/v1/room/create/:slug?',  auth.requiresLogin, rooms.createroom);
+        app.get('/api/v1/rooms/list', rooms.list);
+
+    app.get('/api/v1/rooms/list/:filter?/:filter_value', rooms.list);
+    app.get('/room/:slug', rooms.room_view);
 
 
 };

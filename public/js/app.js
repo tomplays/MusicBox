@@ -37,6 +37,10 @@ angular.module('musicBox',  ['ngLocale', 'ngResource', 'musicBox.filters', 'ngRo
         templateUrl: '/partials/user_account',
         controller: UserProfileCtrl
       }).
+       when('/room/:room_slug', {
+        templateUrl: '/partials/sockets_list',
+        controller: SocketsListCtrl
+      }).
       when('#_=_', {
         redirectTo: '/'
       }).

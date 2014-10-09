@@ -29,6 +29,7 @@ var MarkupSchema = new Schema({
     },
     user_id: {
         type: Schema.ObjectId,
+         trim: true,
         ref: 'User'
     },
     username : {
@@ -38,6 +39,7 @@ var MarkupSchema = new Schema({
     },
     doc_id:{
           type: Schema.ObjectId,
+           trim: true,
           ref: 'Document'
     },
     start: {
@@ -121,9 +123,17 @@ var DocumentSchema = new Schema({
         default: 'draft'
     },
     secret: {type:ObjectIdSchema, default: function () { return new ObjectId()} },
+    thumbnail: {
+        type: String,
+         default: 'http://localhost/img/lorem/400-400.jpg'
+        
+    },
     user: {
         type: Schema.ObjectId,
         ref: 'User'
+    },
+    username: {
+        type: String
     },
     room: {
         type: Schema.ObjectId,

@@ -8,28 +8,30 @@ div(class="branding {{doc_options.branding_class.value}}")
 			span {{doc.room.slug}}
 
 i.fa.fa-cog.inactive.quick_tool_opener(class="inside visible_{{ui.menus.quick_tools.open}}", ng-click="expand_tools('quick_tools')")
-div.quick_tools(class="inside visible_{{ui.menus.quick_tools.open}}")
-	div.user_in(ng-if="userin.username !== '' ")
+div.quick_tools(class="visible_{{ui.menus.quick_tools.open}}")
+	div.inside 
+		div.user_in(ng-if="userin.username !== '' ")
+				div.user_box
+					p {{i18n.CUSTOM.COMMENT.logged_in_as}} 
+						em 
+							a(href="/me/account") {{userin.username}}
+							
+				div.action_box(ng-if="doc_owner == true  || ui.secret " )
+					p Switch to 
+						a(ng-click="toggle_render('editor')") "editor" mode
+					p Edit 
+						a(ng-click="toggle_render('doc_options')") document options
+
+		div.user_not_in(ng-if="userin.username == '' ")
 			div.user_box
-				p
-					em 
-						a(href="/me/account") {{userin.username}}
-						
-			div.action_box
-				p 
-					a(ng-click="toggle_render('editor')") editor mode
-
-
-	div.user_not_in(ng-if="userin.username == '' ")
-		div.user_box
-			a(href="/login?redirect_url=#{root_url}/doc/{{doc.slug}}" , ng-if="userin.username == '' ") log in 
-			// a(ng-click="external_link(root_url+'/auth/facebook')" , ng-if="userin.username == '' ") log in with facebook
+				a(href="/login?redirect_url=#{root_url}/doc/{{doc.slug}}" , ng-if="userin.username == '' ") log in 
+				// a(ng-click="external_link(root_url+'/auth/facebook')" , ng-if="userin.username == '' ") log in with facebook
 
 		
 div.fixed_tools(ng-if="ui.renderAvailable_active == 'editor'")
 
 	.inside
-		
+
 		span.ranges
 			span.ranges_start_end selection from {{ui.selected_range.start}}  to {{ui.selected_range.end}}
 		span.textrange
@@ -44,5 +46,4 @@ div.fixed_tools(ng-if="ui.renderAvailable_active == 'editor'")
 				a(ng-click="push_generic_from_ranges('markup', 'code','inline')") code 
 			span
 				a(ng-click="push_generic_from_ranges('markup', 'list-item ','inline')") list-item
-			span
-				a(ng-click="push_section()") push_section
+			
