@@ -26,7 +26,6 @@ var nconf = require('nconf')
 nconf.argv().env().file({file:'config.json'});
 var chalk = require('chalk')
 
-
 var app;
 
 exports.index_doc= function(req, res) {
@@ -41,7 +40,7 @@ exports.index_doc= function(req, res) {
 
 exports.docByIdOrTitle = function(req, res) {
 	var query = Document.findOne({ 'slug':req.params.slug });
-	query.populate('user','-email -hashed_password -salt').populate({path:'markups.user_id', select:'-hashed_password -salt -email'}).populate({path:'markups.doc_id', select:'-markups'}).populate('room').exec(function (err, doc) {
+	query.populate('user','-email -hashed_password -salt').populate( {path:'markups.user_id', select:'-salt', model:'User'}).populate({path:'markups.doc_id', select:'-markups -secret', model:'Document'}).populate('markups.doc_id.user').populate('room').exec(function (err, doc) {
 	if (err){
 		res.json(err)
 	} else{
@@ -89,6 +88,10 @@ exports.listRender = function(req, res) {
 			});
 	})
 };
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 exports.doc_create = function(req,res){
 
 	// to filter a better way
@@ -124,6 +127,20 @@ exports.doc_create = function(req,res){
 	var   doc_notices_before_title= new Object( {'option_name':'doc_notices_before_title', 'option_value':'-',  'option_type': '' } )
 	new_doc.doc_options.push(doc_notices_before_title)
 
+
+	var r = getRandomInt(0, 255);
+    var g = getRandomInt(0, 255);
+    var b = getRandomInt(0, 255);
+    //var rand_color = 'rgb('+r+', '+g+', '+b+')';
+    //var rand_color_b = 'rgb('+b+', '+r+', '+g+')';
+
+	var rand_color = '#000'
+	var rand_color_b = '#fff'
+
+	var   block_color= new Object( {'option_name':'block_color', 'option_value':rand_color,  'option_type': '' } )
+	new_doc.doc_options.push(block_color)
+	var   title_color= new Object( {'option_name':'title_color', 'option_value':rand_color_b,  'option_type': '' } )
+	new_doc.doc_options.push(title_color)
 
 /*
 	var  share_fragment = new Object( {'option_name':'share_fragment', 'option_value':'right',  'option_type': '' } )
@@ -162,97 +179,114 @@ exports.doc_create = function(req,res){
    			res.json(err);
         } else {
 			//console.log(doc)
-			var doc =  Document.findOne({title: filtered_title}).populate('user', 'name username image_url').populate('room').exec(function(err, doc) {
+			// var doc =  Document.findOne({title: filtered_title}).populate('user', '-salt name username image_url').populate('room').exec(function(err, doc) {
         	res.json(doc)
-   			});            
+   			          
         }
     });
 }
 
 
+exports.doc_reset  = function(req, res) {
+	var query = Document.findOne({ 'slug':req.params.slug });
+	query.exec(function (err, doc) {
+		if (err){
+			res.json(err)
+		} 
+		else{
+				 var markup_section_base  = new Object( {'user_id':req.user._id, 'username':req.user.username, 'start':0, 'end':300,  'type': 'container', 'subtype':'section', 'position':'inline'} )
+				 doc.markups.push(markup_section_base)
 
+				 doc.save(function(err,docsaved) {
+				if (err) {
+					res.send(err)
+				} 
+				else {
+				  	
+					res.json(doc)
+				}
+			});
+
+		}
+	});
+}	
+
+
+exports.doc_delete  = function(req, res) {
+	var query = Document.findOne({ '_id':req.params.doc_id });
+	query.exec(function (err, doc) {
+		if (err){
+			res.json(err)
+		} 
+		else{
+
+
+		}
+	});
+}	
 
 exports.doc_edit  = function(req, res) {
 	var query = Document.findOne({ '_id':req.params.doc_id });
 	query.populate('user').populate('room').exec(function (err, doc) {
-	if (err){
-		res.json(err)
-	} else{
+		if (err){
+			res.json(err)
+		} 
+		else{
+
 			console.log('editing user id :'+ req.user._id +' test doc_user.id'+ doc.user._id)
-			//console.log('editing doc id :')
 			//console.log(doc)
-
-
-			//if(1){
-					  console.log(chalk.green('authorized') );
-
-					  var field = req.body.field
-				var value = req.body.value
-				console.log('editing doc '+req.params.doc_id +'field '+ field +'<->'+ value)
-				// 'create' is a routes keyword..
-				if(field == 'title' && value !== 'create' ){
-					// and todo : clean
-					var slugify = value.replace(/\s/g, '-')
-					slugify = slugify.replace('?', '_')
-					slugify = slugify.replace('.', '_')
-					slugify = slugify.replace('/', '_')
-					slugify = slugify.replace('!', '_')
-					doc['slug'] =slugify
-
-
-					doc[field] = value;
-					  console.log(chalk.green('after doc edit') );
-
-			}
-
-
-			if(field == 'content' ){
 			
-
-
-						doc[field] = value;
-					  console.log(chalk.green('after doc edit') );
-
+	        var field = req.body.field
+			var value = req.body.value
+			console.log('editing doc '+req.params.doc_id +'field '+ field +'<->'+ value)
+			// 'create' is a routes keyword..
+			if(field == 'title' && value !== 'create' ){
+				// and todo : clean
+				var slugify = value.replace(/\s/g, '-')
+				slugify = slugify.replace('?', '_')
+				slugify = slugify.replace('.', '_')
+				slugify = slugify.replace('/', '_')
+				slugify = slugify.replace('!', '_')
+				doc['slug'] =slugify
+		
+				doc[field] = value;
 			}
+
+			if(field == 'content' || field == 'excerpt' || field == 'thumbnail' ){
+					  doc[field] = value;		 
+			}
+
 			if(field == 'room_id'){
-doc.room = value;
+				doc.room = value;
 			}
-
 
 			doc.save(function(err,docsaved) {
-						if (err) {
-							res.send(err)
-						} else {
-							  console.log(chalk.green('after doc 22 edit') );
-						
-	var out = new Object();
-		out.doc = docsaved;
-		console.log(out)
-							res.json(out)
-						}
-					});		
-
-			
-	}
+				if (err) {
+					res.send(err)
+				} 
+				else {
+				  	console.log(chalk.green('doc saved') );
+					var out = new Object();
+					out.doc = docsaved;
+					console.log(out)
+					res.json(out)
+				}
+			});
+		}
 	})
 }
-
 
 
 exports.doc_create_option  = function(req, res) {
 	var query = Document.findOne({ 'slug':req.params.slug });
 	query.populate('user').populate('room').exec(function (err, doc) {
-	if (err){
-		res.json(err)
-	} else{
-				console.log(doc)
-			res.send('created')
-	}
-
-});
-
-
-
+		if (err){
+			res.json(err)
+		} else{
+			console.log(doc)
+			res.send('(not implemented in api)')
+		}
+	});
 }
 
 exports.doc_delete_option  = function(req, res) {
@@ -262,8 +296,8 @@ exports.doc_delete_option  = function(req, res) {
 	if (err){
 		res.json(err)
 	} else{
-				console.log(doc)
-			res.send('deleted'+req.body.option_name)
+			console.log(doc)
+			res.send('not implemented in api '+req.body.option_name)
 	}
 
 });
@@ -352,7 +386,7 @@ console.log('user is not markup owner')
 
 						}
 						else{
-							console.log('and secret dont match')
+							console.log('and secret dont match(   '+doc.secret+'   )')
 							var err = new Object({'message':'Need to be either doc owner or use right secret key', 'err_code':'100'})
 							res.json(err)
 							return;
@@ -592,14 +626,3 @@ exports.markups_offset = function(req, res) {
 		}
 	})
 }
-
-/*
-Contact.findByIdAndUpdate(
-    info._id,
-    {$push: {"messages": {title: title, msg: msg}}},
-    {safe: true, upsert: true},
-    function(err, model) {
-        console.log(err);
-    }
-);
-*/

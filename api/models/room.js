@@ -27,8 +27,19 @@ var RoomSchema = new Schema({
     slug: {
         type: String,
         unique: true
-    }
-    ,room_options: [meta_options]
+    },
+    is_public: {
+        type:Boolean,
+        default: true,
+        trim: true
+    },
+    status: {
+        type: String,
+        default: 'open',
+        trim: true
+    },
+    secret: {type:ObjectIdSchema, default: function () { return new ObjectId()} },
+    room_options: [meta_options]
 });
 mongoose.model('Room', RoomSchema);
 
