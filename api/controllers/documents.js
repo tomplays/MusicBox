@@ -28,6 +28,78 @@ var chalk = require('chalk')
 
 var app;
 
+
+exports.doc_sync= function(req, res) {
+	console.log('req.body.markups')
+
+console.log(req.body.markups)
+
+
+	var query = Document.findOne({ 'slug':req.params.slug });
+	query.populate('user','-email -hashed_password -salt').populate( {path:'markups.user_id', select:'-salt', model:'User'}).populate({path:'markups.doc_id', select:'-markups -secret', model:'Document'}).populate('markups.doc_id.user').populate('room').exec(function (err, doc) {
+		if (err){
+			res.json(err)
+		} 
+		else{
+
+			//console.log(req.body.doc_content)
+			console.log('doc.markups')
+			console.log('#######')
+			console.log(doc.markups)
+			console.log('#######################')
+			console.log('req.body.markups')
+			console.log('#######')
+			
+
+			_.each(doc.markups, function(doc_mk, i){
+
+					//console.log(mk)
+					var match = _.find(req.body.markups, function(m){ return m.id  == doc_mk._id; });
+					if(match){
+						/*
+						console.log('original start: '+doc_mk.start)
+						console.log('offset start : '+match.offset_start)
+						console.log('original end: '+doc_mk.end )
+						console.log('offset end : '+parseFloat(match.offset_end))
+						//console.log('doc.markups[i] before')
+						//console.log(doc.markups[i])
+						*/
+						
+						doc.markups[i].start 	=  parseFloat(doc.markups[i].start) + parseFloat(match.offset_start);
+						doc.markups[i].end 		=  parseFloat(doc.markups[i].end)   + parseFloat(match.offset_end);
+						
+						//console.log('doc.markups[i] after')
+						//console.log(doc.markups[i])
+						//match.start = mk.start;
+						//console.log(match)
+					}
+					else{
+										  	console.log(chalk.red('should not mismatch') );
+
+					}
+			});
+
+
+			// save content
+			doc.content = req.body.doc_content;
+			doc.save(function(err,docsaved) {
+				if (err) {
+					res.send(err)
+				} 
+				else {
+				  	console.log(chalk.green('doc saved') );
+					var out = new Object();
+					out = docsaved;
+					//console.log(out)
+					res.json(out)
+				}
+			});
+
+
+		}
+	});
+}
+
 exports.index_doc= function(req, res) {
 		var user_ = ''
 		if(req.user){
@@ -71,8 +143,10 @@ exports.docByIdOrTitle = function(req, res) {
 }
 
 exports.list = function(req, res) {
-	var query = Document.find();
-	query.exec(function (err, docs) {
+	var query = Document.find({'published': 'draft'}, {'markups':0, 'doc_options':0, 'secret':0});
+	query.populate('user', '-email -hashed_password -salt -user_options').populate('room').exec(function (err, docs) {
+
+
 	if (err) return handleError(err);
 		res.json(docs)
 	})
@@ -343,13 +417,14 @@ exports.markup_edit = function(req, res) {
 	
 
 	var query = Document.findOne({ 'slug':req.params.slug });
-	query.exec(function (err, doc) {
+		query.populate('user','-email -hashed_password -salt').populate( {path:'markups.user_id', select:'-salt', model:'User'}).populate({path:'markups.doc_id', select:'-markups -secret', model:'Document'}).populate('markups.doc_id.user').populate('room').exec(function (err, doc) {
+
 	if (err){ 
 		return res.json(err)
 	}
 	else{
 
-	if(req.user._id.equals(doc.user) || req.body.secret == doc.secret){
+	if(req.user._id.equals(doc.user._id) || req.body.secret == doc.secret){
 
 			console.log('user is owner OR secret match')
 	}
@@ -366,14 +441,14 @@ exports.markup_edit = function(req, res) {
 
 
 
-console.log(req.user._id +' vs: '+ doc.user)
+console.log(req.user._id +' vs: '+ doc.user._id)
 console.log(m)
 console.log(req.user._id)
 var a = req.user
-var b = doc.user
+var b = doc.user._id
 
 // doc owner or markup owner
-	if(req.user._id.equals(doc.user)  || req.user._id.equals(m.user_id)  ){
+	if(req.user._id.equals(doc.user._id)  || req.user._id.equals(m.user_id)  ){
 						
 
 			
@@ -455,7 +530,7 @@ exports.markup_create = function(req, res) {
 	var query = Document.findOne({ 'slug':req.params.slug });
 	// console.log(req.body)
 	// console.log(req.body.username)
-	query.exec(function (err, doc) {
+	query.populate('user','-email -hashed_password -salt').populate( {path:'markups.user_id', select:'-salt', model:'User'}).populate({path:'markups.doc_id', select:'-markups -secret', model:'Document'}).populate('markups.doc_id.user').populate('room').exec(function (err, doc) {
 	if (err) {
 		res.send(err)
 	}
@@ -493,7 +568,8 @@ exports.markup_delete = function(req, res) {
 	
 
 
-	query.exec(function (err, doc) {
+		query.populate('user','-email -hashed_password -salt').populate( {path:'markups.user_id', select:'-salt', model:'User'}).populate({path:'markups.doc_id', select:'-markups -secret', model:'Document'}).populate('markups.doc_id.user').populate('room').exec(function (err, doc) {
+
 	  if(err) {
 	  	res.send(err)
 	  }
@@ -559,7 +635,8 @@ exports.markup_offset= function(req, res) {
 	console.log(req.body)
 	//res.send('ok')
 	var query = Document.findOne({ 'slug':req.params.slug });
-	query.exec(function (err, doc) {
+		query.populate('user','-email -hashed_password -salt').populate( {path:'markups.user_id', select:'-salt', model:'User'}).populate({path:'markups.doc_id', select:'-markups -secret', model:'Document'}).populate('markups.doc_id.user').populate('room').exec(function (err, doc) {
+
 		if (err) {
 		return handleError(err);
 		}

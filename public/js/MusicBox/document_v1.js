@@ -164,7 +164,145 @@ $scope.$emit('docEvent', {action: 'fulltext', type: 'edit', collection_type: 'do
 */
 
 }
+	
 
+$scope.textarea_event= function( event){
+		
+			//alert(event)
+
+}
+
+
+$scope.$watch('doc.content', function(newValue, oldValue) {
+	//console.log(newValue +'-'+ oldValue)
+if(newValue !==undefined  && oldValue !==undefined && (newValue !== oldValue) )
+{
+	
+
+		
+
+					var diff = 99999999999999;
+					
+
+					for (var i = 0; i <= _.size(newValue); i++) {
+							//console.log( newValue[i] )
+							//console.log( oldValue[i] )
+							//console.log('at index #'+i+'|newletter|'+newValue[i]+' |oldletter|'+oldValue[i])
+							if(newValue[i] !== oldValue[i]){
+									if(i < diff){
+										diff = i;
+									}
+							}
+					}
+					//console.log('mini diff at '+diff)
+
+
+
+	//console.log(_.size(oldValue))
+	//console.log(_.size(newValue))
+
+	$scope.ui.selected_range.diff_old_size  = _.size(oldValue)
+	$scope.ui.selected_range.diff_new_size  = _.size(newValue)
+
+	$scope.ui.selected_range.diff_at  = diff
+
+	if(_.size(oldValue) > _.size(newValue) ){
+		//console.log('old > new (text is shorter) ')
+		//console.log('diff'+ ( _.size(newValue) - _.size(oldValue)) )
+		$scope.ui.selected_range.diff_qty=  _.size(newValue) - _.size(oldValue)
+		$scope.ui.selected_range.diff_dir= 'reduced'
+
+
+	} 
+	if(_.size(oldValue) < _.size(newValue) ){
+		//console.log('old < new (text is longer) ')
+		//console.log('diff'+ ( _.size(newValue) - _.size(oldValue)) )
+		$scope.ui.selected_range.diff_qty= _.size(newValue) - _.size(oldValue)
+		$scope.ui.selected_range.diff_dir= 'expanded'
+
+	} 
+	if(_.size(oldValue) == _.size(newValue) ){
+		//console.log('same size ')
+		$scope.ui.selected_range.diff_qty= 0;
+		$scope.ui.selected_range.diff_dir= 'inplaced';
+	} 
+
+	// each markup concerned by edit (text was edited before or into a markup range)
+	
+	$scope.ui.selected_range.markups_to_offset = []
+
+	$scope.ui.selected_range.diff_objects_concerned_count = 0;
+	
+
+	if($scope.ui.selected_range.diff_dir == 'expanded' || $scope.ui.selected_range.diff_dir =='reduced'){
+		_.each($scope.doc.markups, function(mk, i){
+
+			var touched = false;
+			// nothing to to if after range
+			if(  diff >  mk.end) {
+					
+			}
+			// means "on" the left of range
+			else{
+
+					// means between the range
+					if(  diff >=  mk.start) {
+							// offset end only
+							mk.offset_end = mk.offset_end+$scope.ui.selected_range.diff_qty
+							touched = true;
+
+					}
+					// means before both start and end..
+					else{
+						
+						// offset both
+	 					mk.offset_start = mk.offset_start+$scope.ui.selected_range.diff_qty
+	 					mk.offset_end   = mk.offset_end+$scope.ui.selected_range.diff_qty;
+
+						touched = true;
+
+
+					}
+
+
+
+			}
+
+
+			if(touched){
+				console.log(mk.type)
+				$scope.ui.selected_range.markups_to_offset.push(mk)
+			}
+
+
+		
+
+
+
+
+
+
+		});
+	}
+
+
+
+
+
+
+
+}
+
+});
+
+
+
+
+	$scope.doc_sync = function(){
+		
+		doc.docsync();
+
+	}
 	$scope.over= function(letter, event){
 		
 		var down_at;
@@ -206,6 +344,12 @@ $scope.$emit('docEvent', {action: 'fulltext', type: 'edit', collection_type: 'do
 
 		}
 
+
+		// if end < start inf case:
+		// var true_end = start
+		// start = end
+        // end = true_end
+
 		
 		$scope.ui.selected_range.textrange = doc.text_range($scope.ui.selected_range.start, $scope.ui.selected_range.end)   
 
@@ -241,7 +385,10 @@ $scope.$emit('docEvent', {action: 'fulltext', type: 'edit', collection_type: 'do
 		//console.log(letter)
 		//$scope.ui.selected_range.start  = letter.rindex
 		//$scope.ui.selected_range.end = letter.rindex
+		
 
+		// apply selected to objects in ranges
+		$scope.objects_in_range('containers');
 
 
 
@@ -370,6 +517,8 @@ $scope.$emit('docEvent', {action: 'fulltext', type: 'edit', collection_type: 'do
 	}
 
     $scope.push = new Object;
+
+
 	$scope.push_section= function (){
 		$scope.push.type = 'container';
 		$scope.push.subtype = 'container';
@@ -377,8 +526,10 @@ $scope.$emit('docEvent', {action: 'fulltext', type: 'edit', collection_type: 'do
 		$scope.push.position = 'inline';
 		$scope.push.end = 200;
 		$scope.push_markup();
-
 	}
+
+
+
 	$scope.push_generic_from_ranges= function (type, subtype,position){
 
 				$scope.push.type = type;
@@ -400,15 +551,14 @@ $scope.$emit('docEvent', {action: 'fulltext', type: 'edit', collection_type: 'do
 	}
 
 
-	$scope.push_comment= function (){
+	$scope.push_comment= function (section){
+
+		// console.log(section.start +'c++'+section.end)
 		$scope.push.type = 'comment';
 		$scope.push.subtype = 'comment';
 
-
-
-// sectionIN.start
-		$scope.push.start= 0;
-		$scope.push.end = 1;
+		$scope.push.start= section.start;
+		$scope.push.end = section.end;
 		
 		$scope.push.position = 'left';
 
@@ -480,6 +630,137 @@ $scope.$emit('docEvent', {action: 'fulltext', type: 'edit', collection_type: 'do
 			return object.object_tools = false;
 		}
 			return object.object_tools = true;
+	}
+
+	$scope.objects_in_range = function(select_by, start_range, end_range){
+		var source = $scope.doc.markups;
+		
+	
+		
+
+		if(select_by == 'containers'){
+			var source = $scope.containers;
+
+		}
+	
+		if(!start_range || !end_range){
+			var start_range = $scope.ui.selected_range.start
+			var end_range = $scope.ui.selected_range.end
+		}
+
+      
+
+		var objects_in_range = []
+
+
+		_.each(source, function(c, i){
+
+				// should be later test.
+
+				//if(start_range < c.end || start_range < c.start){
+				//	if(end_range > c.end  || end_range > c.start ){
+						console.log('ok:'+c.type+' ('+c.start+' -- '+c.end+')');
+						
+
+						console.log(c.objects)
+
+						console.log(_.keys(c.objects))
+							// loop types
+							_.each(_.keys(c.objects), function(key, u){
+								
+
+								var pos_keys = _.keys(c.objects[key])
+
+									// loop positions
+									_.each(pos_keys, function(skey, u){
+										//	console.log(c.objects[key][skey])
+												
+										// loop objects at type _ position
+										var objs = c.objects[key][skey];
+										_.each(objs, function(ob, w){
+
+
+											ob.selected = false;
+											
+
+
+
+											if(start_range < ob.end || start_range < ob.start){
+												if(ob.type !== 'container' && (end_range > ob.end  || end_range > ob.start) ){
+
+													ob.selected = true;
+													console.log(ob.type)
+												}
+												else{
+													
+												}
+											}
+											
+											//ob.selected = true;
+										})
+
+
+
+									})
+
+								//console.log(c.objects[key])
+							});
+
+
+
+						objects_in_range.push(c)
+
+					//}
+				//}
+
+
+
+
+		});
+		console.log(objects_in_range);
+
+
+/*
+
+		_.each(source, function(mk, i){
+
+			if( mk.type !== 'container'){
+				if(start_range < mk.end || start_range < mk.start){
+					if(end_range > mk.end  || end_range > mk.start ){
+						//console.log('ok:'+ mk.type+' ('+mk.start+' -- '+mk.end+')');
+						objects_in_range.push(mk)
+					}
+				}
+			}
+
+		});
+		console.log(objects_in_range);
+		_.each(objects_in_range, function(o, i){
+		
+
+		});
+*/
+
+		return objects_in_range;
+
+
+
+
+	}
+
+	$scope.wrapin_section = function(){
+		
+			$scope.objects_in_range('containers');
+			//$scope.objects_in_range('markups');
+
+
+			$scope.push.type = 'container';
+			$scope.push.subtype = 'container';
+			$scope.push.start = $scope.ui.selected_range.start
+			$scope.push.position = 'inline';
+			$scope.push.end = $scope.ui.selected_range.end
+		//	$scope.push_markup();
+
 	}
 
 	/**
@@ -595,7 +876,7 @@ $scope.$emit('docEvent', {action: 'fulltext', type: 'edit', collection_type: 'do
 					// NOT STABLE
 					// loop each  $scope.ui.selected_objects.
 
-					for (var i = $scope.ui.selected_range.start; i < $scope.ui.selected_range.end; i++) {
+					for (var i = $scope.ui.selected_range.start; i <= $scope.ui.selected_range.end; i++) {
 						if(args.type == 'select'){
 							$scope.letters[$scope.ui.selected_section_index][i]['classes'].push('selected');
 						}

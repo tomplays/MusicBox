@@ -1,4 +1,4 @@
-span(ng-click="open_comment_push(section)") +
+span.open_comment(ng-click="open_comment_push(section)") +
 
 div.comment_form(ng-if="ui.menus.push_comment.open == section.sectionin " , ng-include="fragments['comment_form'][0].url" )
 

@@ -11,12 +11,14 @@ div(class="markup_displayer markup_displayer_{{markup.type}} markup_displayer_su
 
 	/// i.fa.fa-remove.btn_action(ng-if="markup.type=='markup'", ng-click="markup_delete(markup)")
 
-	span.mk_val.metavalue(ng-bind-html="markup.metadata",  ng-if="markup.type =='note' || markup.type =='generic' || markup.type =='comment' || markup.type =='container_class' || markup.type=='semantic' ") 
-	span.mk_val.subtype(class="mk_val_subtype_{{markup.subtype}}", ng-if="markup.type=='markup'")  {{markup.subtype}} 
-	span.mk_val.created(ng-if="markup.type =='note' || markup.type =='comment'") {{markup.created | date}}
-	span.mk_val.username(ng-if="markup.type =='note' || markup.type =='comment' ") 
-		{{markup.username}}
-		span.color_avatar.mini(style="background-color:{{markup.user_options['color'].value}}")
+	div.data_col
+		span.mk_val.metavalue(ng-bind-html="markup.metadata",  ng-if="markup.type =='note' || markup.type =='generic' || markup.type =='comment' || markup.type =='container_class' || markup.type=='semantic' ") 
+		span.mk_val.subtype(class="mk_val_subtype_{{markup.subtype}}", ng-if="markup.type=='markup'")  {{markup.subtype}} 
+		span.mk_val.mk_metas
+			span.mk_val.created(ng-if="markup.type =='note' || markup.type =='comment'") {{markup.created | date}}
+			span.mk_val.mk_username(style="color:{{markup.user_options['color'].value}}" , ng-if="markup.type =='note' || markup.type =='comment' ") 
+				{{markup.username}}
+			span.mk_val.mk_avatar.color_avatar.mini(style="background-color:{{markup.user_options['color'].value}}")
 
 
 

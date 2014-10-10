@@ -4,7 +4,7 @@
 @inline-width-neg:-60%;
 
 
-@light-border : 1px solid rgba(0, 0, 0, 0.1);
+@light-border : 1px solid rgba(189, 195, 199, 0.3);
 
 /*
 small layout
@@ -38,7 +38,6 @@ h1, h2, h3, h4, h5, h6 {
     text-rendering: optimizelegibility;
 }
 time {
-    font-size: 1.1em;
     font-style: italic;
 }
 
@@ -61,8 +60,20 @@ section{
 
 
 section{padding-bottom:10px;}
-section.pad-bottom{padding-bottom:20px}
-section.pad-top-bottom{padding:20px 0px}
+section.pad-bottom{padding-bottom:2%}
+section.pad-top-bottom{padding:2% 0px}
+
+section.two-cols .theletters{
+       -moz-column-count: 2;
+       -moz-column-gap: 30px;
+       -webkit-column-count: 2;
+       -webkit-column-gap: 30px;        
+}
+
+section.text-right .theletters{
+      text-align:right;  
+}
+
 
 /*place for editing zone at fixed bottom*/
 body.render_active_editor section:last-child{
@@ -321,6 +332,9 @@ a.btn_ok{
     time{
       font-size:.9em;
     }
+    .post-author-card {
+     font-size:.9em;
+    }
 }
 
 
@@ -477,7 +491,8 @@ div.branding{
 
 
 .doc_editor{
-    background: none repeat scroll 0 0 #95a5a6;
+    background: none repeat scroll 0 0 rgba(236, 240, 241,0.7);
+    color:#000;
     float: left;
     margin-bottom: 4%;
     padding: 2%;
@@ -490,24 +505,54 @@ div.branding{
      font-style:italic;
      float:left;
   }
-  input{
-     width: 46%;
-        background:#ecf0f1;
-        border:none;
+  .edit_field_left{
+
+    float:left;
+    width:50%;
   }
-  textarea{
-    max-width:90%;
-    margin-bottom:2px;
-    background:#ecf0f1;
+  .edit_field_right{
+    float:left;
+    width:50%;
+   
+  }
+  .excerpt_field, .room_field, .thumbnai_field{
+    
+    float:left;
+    width:90%;
+    textarea{
+      background:#fff;
+        border:1px solid #bdc3c7;
+      float: left;
+      height: 34px;
+      margin-bottom: 2px;
+      max-width: 80%;
+    }
+    h3{
+       float:left;
+        width: 90%;
+    }
+    input{
+        float:left;
+        width: 80%;
+        background:#fff;
+        border:1px solid #bdc3c7;
+    }
+
+    i.fa.fa-save{
+      float: left;
+      margin-left: 10px;
+    }
+
+
   }
   img.thumbnail_input{
-      border: 1px solid #ccc;
+     border: 1px solid rgb(204, 204, 204);
     display: inline;
-    float: right;
+    float:left;
     height: auto;
     margin-right: 0;
     max-height: 20%;
-    max-width: 34%;
+    max-width: 100%;
     padding: 2px;
     width: auto;
   }
@@ -522,7 +567,7 @@ div.branding{
    input{
        float: left;
        margin-right: 2%;
-       width: 36%;
+       width: 86%;
 
    }
    i.fa{
@@ -543,13 +588,35 @@ div.branding{
    }
 }
 
+.theletters{
+  width:100%;
+  float:left;
+}
+
+.open_comment{
+ float: left;
+  color:#95a5a6;
+  font-size: 1.2em;
+  font-weight: bold;  
+  &:hover{
+    color:#000;
+  }
+}
 
 .editor_zone{
+  
+   text-align:left;
+   padding-top:2%;
    border-bottom:  @light-border;
     float: left;
     padding-bottom: 10px;
     padding-right: 3%;
     width: 97%;
+  label{
+      float:left;
+      width:100%;
+      font-style:italic;
+    }
   textarea{
     min-height:200px;
     margin-bottom:20px;
@@ -594,12 +661,35 @@ div.branding{
 }
 
 
+
+
+
+.markup_displayer .icon_col {
+    display: inline-block;
+    float: left;
+    font-size: 0.7em;
+    padding: 0;
+    text-align: left;
+    width: auto;
+}
+
+.markup_displayer .data_col{
+    float: left;
+    margin-left: 4px;
+    padding-top: 2px;
+    width: 83%;
+}
+
+
+
 .markup_displayer:not(.markup_displayer_media) {
-    padding: 2%;
-    width: 96%;
+    padding: 10px 0;
+    width: 100%;
     display: inline-block;
     float: left;
     margin-bottom: 2px;
+      width: 99%;
+       overflow: scroll;
 
 }
 
@@ -616,41 +706,64 @@ div.branding{
       width:100%;
       font-style:italic;
     }
+    i.fa{
+
+     width: 10px;
+    }
 }
 
 .markup_displayer_markup{
    background:#ecf0f1;
 }
 
+
 .markup_displayer .mk_val {
-    display: inline-block;
-    float: right;
-    font-size: 0.65em;
-    line-height: 1.3;
-    padding: 0;
-    text-align: left;
-    width: 86%;
-    &.created{
-      font-style: italic;
+   
+   font-size: 12px;
+    line-height: 1;
+    &.metavalue{
+     
+   
+     display: inline;
+     float: left;
     }
-    &.username{
+    &.created{
+     
+    float: left;
+    font-style: italic;
+    margin-right: 3px;
+ 
+   
+     
+       
+    }
+    &.mk_metas{
+         float: left;
+       
+   
+    }
+    &.mk_username{
+      
+      display: block;
+      float: left;
+    
+      font-style: italic;
+       border-radius: 2px;
+      padding: 0 3px;
+     
     }
 }
 
-.markup_displayer .icon_col {
-    display: inline-block;
-    float: left;
-    font-size: 0.7em;
-    padding: 0;
-    text-align: left;
-    width: 10%;
-}
+
+
+.color_avatar.mini {display:none;}
+
 
 
 div.markup_displayer_media .icon_col {
    float: right;
    width:auto;
-    margin-right: 2%;
+   margin-right: 2%;
 }
 
 
@@ -660,7 +773,7 @@ div.markup_displayer_media .icon_col {
 }
 
 .markup_displayer.by_me_true .mk_val.username{
-   background: #ebebf8;
+   background: none repeat scroll 0 0 rgba(189, 195, 199, 0.1);
    padding:1%;
 }
 
@@ -741,7 +854,7 @@ i.fa-img:before {
 
 
 .layout_ i.fa {
-    border: 1px solid;
+    border: 2px solid transparent;
     border-radius: 5px;
     display: block;
     font-size: 10px;
@@ -750,13 +863,10 @@ i.fa-img:before {
 }
 
 .layout_name_left i.fa {
-    float: left;
-    margin-right: 0;
+   
 }
 .layout_name_right i.fa {
-    float: left;
-    margin-right: 2px;
-    margin-top: 3px;
+ 
 }
 
 
@@ -891,7 +1001,7 @@ footer{
      margin-top:80px;
   }
   .layout_name_right{
-   border-bottom: @light-border;
+  /* border-bottom: @light-border; */
   left: 0;
     margin-left: 2%;
     margin-top: 0;
@@ -904,7 +1014,7 @@ footer{
   }
 
   .layout_name_left {
-    border-top: @light-border;
+   /* border-top: @light-border; */
     left: 4%;
     margin-top: 0;
     padding: 0;
@@ -922,6 +1032,18 @@ footer{
     width: 95%;
   }
 
+
+  .markup_displayer .data_col {
+  
+    width: 90%;
+  }
+  .open_comment {
+     
+     
+    
+      margin-left: -8px;
+      margin-top: -17px;
+  }
   input[type="text"], input[type="password"], input[type="date"], input[type="datetime"], input[type="email"], input[type="number"], input[type="search"], input[type="tel"], input[type="time"], input[type="url"], textarea {
     width:94%; margin-right:1%;
   }

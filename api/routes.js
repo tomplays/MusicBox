@@ -114,6 +114,7 @@ return res.redirect('/');
     app.get('/api/v1/doc/:slug/reset',    auth.requiresLogin, docs.doc_reset);
 
 
+    app.post('/api/v1/doc/:slug/sync',  auth.requiresLogin, docs.doc_sync);
 
 
    app.post('/api/v1/doc/:slug/markups/push', auth.requiresLogin, docs.markup_create);

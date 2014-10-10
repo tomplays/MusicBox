@@ -39,8 +39,8 @@ div.main_center.user_account.bordered
 			span
 				{{doc.published}} |	{{doc.slug}} • {{doc.roomname}} 
 				p
-					a(href="", ng-click="external_link('/doc/'+doc.slug+'?secret='+doc.secret) " ) [secret/free edit link]
-				p
+					a(href="", ng-click="external_link('/doc/'+doc.slug+'?secret='+doc.secret) " ) [secret/free edit link] 
+					-  
 					a(href="", ng-click="external_link('/api/v1/doc/'+doc.slug) " ) [api]
 
 footer

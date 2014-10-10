@@ -59,13 +59,8 @@ p{margin:0;}
     font-style: italic
 }
 
-.lt.comment{
-    border-bottom:1px dotted #27ae60;
-}
 
-.lt.note{
-    border-bottom:1px dotted #2980b9;
-}
+
 .lt.list-item{
     line-height:2em;
     &.nd:after  {
@@ -232,7 +227,7 @@ i.fa-cite:before {
     content: "q";  
 }
 
-i.fa-list_item:before {
+i.fa-list-item:before {
     content: "list";
     display: block;
     font-weight:bold;
@@ -249,3 +244,64 @@ i.fa-note:before {
     display: block;
     font-style:italic;
 }
+
+.lt.comment{
+    background: none repeat scroll 0 0 rgba(39, 174, 96, 0.3);
+    &.selected {
+      background: none repeat scroll 0 0 rgba(39, 174, 96, 0.7);
+    }
+}
+
+.layout_ i.fa-comment{
+    background: none repeat scroll 0 0 rgba(39, 174, 96, 0.5);
+    color: rgb(255, 255, 255);
+    &.selected_true {
+        background: none repeat scroll 0 0 rgba(39, 174, 96, 0.7);
+         border:  2px solid  rgba(39, 174, 96, 0.9)
+     
+    }   
+}
+
+.lt.note{
+    background: none repeat scroll 0 0 rgba(39, 174, 96, 0.3);
+    &.selected {
+      background: none repeat scroll 0 0 rgba(39, 174, 96, 0.7);
+    }
+}
+
+.layout_ i.fa-note{
+    background: none repeat scroll 0 0 rgba(39, 174, 96, 0.5);
+    color: rgb(255, 255, 255);
+    &.selected_true {
+        background: none repeat scroll 0 0 rgba(39, 174, 96, 0.7);
+         border:  2px solid  rgba(39, 174, 96, 0.9)
+     
+    }   
+}
+
+
+
+
+.lt.semantic{
+    background: none repeat scroll 0 0 rgba(142, 68, 173, 0.4);
+    &.selected {
+     background: none repeat scroll 0 0 rgba(142, 68, 173,0.7);
+    }
+}
+.layout_ i.fa-semantic {
+    background: none repeat scroll 0 0 rgba(142, 68, 173,0.5);
+    color: rgb(255, 255, 255);
+    &.selected_true {
+         background: none repeat scroll 0 0 rgba(142, 68, 173,0.7);
+         border:  2px solid  rgba(142, 68, 173,0.9);
+     
+    }   
+}
+i.fa-semantic:before {
+    content: "s";
+    display: block;
+    font-style:italic;
+}
+
+
+

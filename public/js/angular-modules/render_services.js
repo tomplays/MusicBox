@@ -88,8 +88,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
 
 
         if($routeParams.mode){
-               $rootScope.ui.renderAvailable_active =  $routeParams.mode
-
+          $rootScope.ui.renderAvailable_active =  $routeParams.mode
         }
         else{
               $rootScope.ui.renderAvailable_active =  $rootScope.ui.renderAvailable[0]
@@ -100,6 +99,10 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
         if($routeParams.secret){
                $rootScope.ui.secret =  $routeParams.secret
                console.log('using secret')
+        }
+
+        if($routeParams.debug){
+           $rootScope.ui.debug = true;
         }
 
        

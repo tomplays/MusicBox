@@ -35,7 +35,6 @@ h6 {
   text-rendering: optimizelegibility;
 }
 time {
-  font-size: 1.1em;
   font-style: italic;
 }
 .sections_container {
@@ -54,10 +53,19 @@ section {
   padding-bottom: 10px;
 }
 section.pad-bottom {
-  padding-bottom: 20px;
+  padding-bottom: 2%;
 }
 section.pad-top-bottom {
-  padding: 20px 0px;
+  padding: 2% 0px;
+}
+section.two-cols .theletters {
+  -moz-column-count: 2;
+  -moz-column-gap: 30px;
+  -webkit-column-count: 2;
+  -webkit-column-gap: 30px;
+}
+section.text-right .theletters {
+  text-align: right;
 }
 /*place for editing zone at fixed bottom*/
 body.render_active_editor section:last-child {
@@ -125,7 +133,7 @@ textarea {
   width: 20%;
 }
 .bordered {
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(189, 195, 199, 0.3);
   padding: 2%;
 }
 /* BUTTONS */
@@ -254,7 +262,7 @@ a.btn_ok {
 /* doc_header */
 .doc_header {
   text-align: left;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(189, 195, 199, 0.3);
   padding-bottom: 1%;
   margin-bottom: 2%;
 }
@@ -267,6 +275,9 @@ a.btn_ok {
   padding: 5px 10px;
 }
 .doc_header time {
+  font-size: .9em;
+}
+.doc_header .post-author-card {
   font-size: .9em;
 }
 body.render_active_doc_options .editing_:hover {
@@ -378,7 +389,8 @@ div.branding h1 a {
   padding: 0 2px;
 }
 .doc_editor {
-  background: none repeat scroll 0 0 #95a5a6;
+  background: none repeat scroll 0 0 rgba(236, 240, 241, 0.7);
+  color: #000;
   float: left;
   margin-bottom: 4%;
   padding: 2%;
@@ -391,24 +403,58 @@ div.branding h1 a {
   font-style: italic;
   float: left;
 }
-.doc_editor input {
-  width: 46%;
-  background: #ecf0f1;
-  border: none;
+.doc_editor .edit_field_left {
+  float: left;
+  width: 50%;
 }
-.doc_editor textarea {
-  max-width: 90%;
+.doc_editor .edit_field_right {
+  float: left;
+  width: 50%;
+}
+.doc_editor .excerpt_field,
+.doc_editor .room_field,
+.doc_editor .thumbnai_field {
+  float: left;
+  width: 90%;
+}
+.doc_editor .excerpt_field textarea,
+.doc_editor .room_field textarea,
+.doc_editor .thumbnai_field textarea {
+  background: #fff;
+  border: 1px solid #bdc3c7;
+  float: left;
+  height: 34px;
   margin-bottom: 2px;
-  background: #ecf0f1;
+  max-width: 80%;
+}
+.doc_editor .excerpt_field h3,
+.doc_editor .room_field h3,
+.doc_editor .thumbnai_field h3 {
+  float: left;
+  width: 90%;
+}
+.doc_editor .excerpt_field input,
+.doc_editor .room_field input,
+.doc_editor .thumbnai_field input {
+  float: left;
+  width: 80%;
+  background: #fff;
+  border: 1px solid #bdc3c7;
+}
+.doc_editor .excerpt_field i.fa.fa-save,
+.doc_editor .room_field i.fa.fa-save,
+.doc_editor .thumbnai_field i.fa.fa-save {
+  float: left;
+  margin-left: 10px;
 }
 .doc_editor img.thumbnail_input {
-  border: 1px solid #ccc;
+  border: 1px solid #cccccc;
   display: inline;
-  float: right;
+  float: left;
   height: auto;
   margin-right: 0;
   max-height: 20%;
-  max-width: 34%;
+  max-width: 100%;
   padding: 2px;
   width: auto;
 }
@@ -420,7 +466,7 @@ div.branding h1 a {
 .doc_editor .doc_options_table input {
   float: left;
   margin-right: 2%;
-  width: 36%;
+  width: 86%;
 }
 .doc_editor .doc_options_table i.fa {
   border: medium none;
@@ -436,12 +482,32 @@ div.branding h1 a {
   float: left;
   width: 100%;
 }
+.theletters {
+  width: 100%;
+  float: left;
+}
+.open_comment {
+  float: left;
+  color: #95a5a6;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+.open_comment:hover {
+  color: #000;
+}
 .editor_zone {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  text-align: left;
+  padding-top: 2%;
+  border-bottom: 1px solid rgba(189, 195, 199, 0.3);
   float: left;
   padding-bottom: 10px;
   padding-right: 3%;
   width: 97%;
+}
+.editor_zone label {
+  float: left;
+  width: 100%;
+  font-style: italic;
 }
 .editor_zone textarea {
   min-height: 200px;
@@ -475,12 +541,28 @@ div.branding h1 a {
 .object-tools i.fa.fa-remove {
   float: right;
 }
+.markup_displayer .icon_col {
+  display: inline-block;
+  float: left;
+  font-size: 0.7em;
+  padding: 0;
+  text-align: left;
+  width: auto;
+}
+.markup_displayer .data_col {
+  float: left;
+  margin-left: 4px;
+  padding-top: 2px;
+  width: 83%;
+}
 .markup_displayer:not(.markup_displayer_media) {
-  padding: 2%;
-  width: 96%;
+  padding: 10px 0;
+  width: 100%;
   display: inline-block;
   float: left;
   margin-bottom: 2px;
+  width: 99%;
+  overflow: scroll;
 }
 .markup_displayer.is_editing_true {
   background: #ecf0f1;
@@ -491,28 +573,37 @@ div.branding h1 a {
   width: 100%;
   font-style: italic;
 }
+.markup_displayer i.fa {
+  width: 10px;
+}
 .markup_displayer_markup {
   background: #ecf0f1;
 }
 .markup_displayer .mk_val {
-  display: inline-block;
-  float: right;
-  font-size: 0.65em;
-  line-height: 1.3;
-  padding: 0;
-  text-align: left;
-  width: 86%;
+  font-size: 12px;
+  line-height: 1;
+}
+.markup_displayer .mk_val.metavalue {
+  display: inline;
+  float: left;
 }
 .markup_displayer .mk_val.created {
-  font-style: italic;
-}
-.markup_displayer .icon_col {
-  display: inline-block;
   float: left;
-  font-size: 0.7em;
-  padding: 0;
-  text-align: left;
-  width: 10%;
+  font-style: italic;
+  margin-right: 3px;
+}
+.markup_displayer .mk_val.mk_metas {
+  float: left;
+}
+.markup_displayer .mk_val.mk_username {
+  display: block;
+  float: left;
+  font-style: italic;
+  border-radius: 2px;
+  padding: 0 3px;
+}
+.color_avatar.mini {
+  display: none;
 }
 div.markup_displayer_media .icon_col {
   float: right;
@@ -523,7 +614,7 @@ div.markup_displayer_media .icon_col {
   width: 100%;
 }
 .markup_displayer.by_me_true .mk_val.username {
-  background: #ebebf8;
+  background: none repeat scroll 0 0 rgba(189, 195, 199, 0.1);
   padding: 1%;
 }
 .markup_displayer img.doc_thumb {
@@ -589,21 +680,12 @@ i.fa-img:before {
   color: #1abc9c;
 }
 .layout_ i.fa {
-  border: 1px solid;
+  border: 2px solid transparent;
   border-radius: 5px;
   display: block;
   font-size: 10px;
   padding: 2px 2px 3px 3px;
   text-align: center;
-}
-.layout_name_left i.fa {
-  float: left;
-  margin-right: 0;
-}
-.layout_name_right i.fa {
-  float: left;
-  margin-right: 2px;
-  margin-top: 3px;
 }
 .css-form input.ng-invalid.ng-dirty {
   background-color: #FA787E;
@@ -634,7 +716,7 @@ i.fa-img:before {
   margin-right: 1%;
 }
 .login_form .left_part {
-  border-right: 1px solid rgba(0, 0, 0, 0.1);
+  border-right: 1px solid rgba(189, 195, 199, 0.3);
   float: left;
   margin-right: 2%;
   padding-right: 5%;
@@ -646,7 +728,7 @@ i.fa-img:before {
   width: 30%;
 }
 footer {
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-top: 1px solid rgba(189, 195, 199, 0.3);
   clear: both;
   float: left;
   font-size: 0.8em;
@@ -695,7 +777,7 @@ footer {
     margin-top: 80px;
   }
   .layout_name_right {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    /* border-bottom: @light-border; */
     left: 0;
     margin-left: 2%;
     margin-top: 0;
@@ -707,7 +789,7 @@ footer {
     margin-bottom: 10px;
   }
   .layout_name_left {
-    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    /* border-top: @light-border; */
     left: 4%;
     margin-top: 0;
     padding: 0;
@@ -723,6 +805,13 @@ footer {
     left: 0;
     padding: 0 0;
     width: 95%;
+  }
+  .markup_displayer .data_col {
+    width: 90%;
+  }
+  .open_comment {
+    margin-left: -8px;
+    margin-top: -17px;
   }
   input[type="text"],
   input[type="password"],
