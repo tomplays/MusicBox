@@ -33,15 +33,16 @@ div.main_center.user_account.bordered
 		li 
 			{{option.option_name}} : {{option.option_value}}
 	h3 Documents :
-	ul(ng-repeat="doc in documents")
-		li 
+	ul
+		li(ng-repeat="doc in documents")
 			a(href="/doc/{{doc.slug}}") {{doc.slug}} 
 			span
-				{{doc.published}} |	{{doc.slug}} • {{doc.roomname}} 
-				p
-					a(href="", ng-click="external_link('/doc/'+doc.slug+'?secret='+doc.secret) " ) [secret/free edit link] 
-					-  
-					a(href="", ng-click="external_link('/api/v1/doc/'+doc.slug) " ) [api]
+				{{doc.published}} • {{doc.slug}} • {{doc.roomname}} 
+				span
+					a(href="", ng-click="external_link('/doc/'+doc.slug+'?secret='+doc.secret) " ) [secret/free edit link]  •
+					a(href="", ng-click="external_link('/api/v1/doc/'+doc.slug) " ) [api]  •
+					a.delete_document(href="", ng-click="delete_document(doc) " ) [delete document]
+
 
 footer
 	p 2014 - MusicBox

@@ -4,14 +4,12 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
-    Schema = mongoose.Schema,
-    crypto = require('crypto'),
-    authTypes = ['facebook', 'local']; // bufferapp', 'twitter',
-var  meta_options = Schema.MetaoptionsSchema;
-
-
-var ObjectIdSchema = Schema.ObjectId;
-var ObjectId = mongoose.Types.ObjectId;
+Schema = mongoose.Schema,
+crypto = require('crypto'),
+authTypes = ['facebook', 'local'] ,
+meta_options = Schema.MetaoptionsSchema,
+ObjectIdSchema = Schema.ObjectId,
+ObjectId = mongoose.Types.ObjectId;
 
 /**
  * User Schema

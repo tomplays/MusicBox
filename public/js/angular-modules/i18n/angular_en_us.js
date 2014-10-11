@@ -21,7 +21,8 @@ $provide.value("$locale", {
 		"single" : "comment",
 		"textarea" : "Your comment...",
 		"verb" : "comment",
-		"needs_logging": "Please login first"
+		"needs_logging": "Please login first",
+		"logged_in_as" : "Logged in as"
 
 	},
 	"DOCUMENT" : {
@@ -33,6 +34,19 @@ $provide.value("$locale", {
 	"APP" : {
 		"write_invitation" : "Vous avez quelquechose à nous raconter ?",
 		"write_invitation_link" : "En savoir plus &raquo;"
+
+
+
+	},
+	"USER": {
+		"login" : "Login",
+		"loginOrSignup" : "Login/ Signup",
+		"login_condition" : "if you have an account",
+		"register": "Create account",
+		"no_account_yet" : "No account yet ?",
+		"pick_password" : "Password",
+		"pick_username" : "Username (public)",
+		"pick_email" : "Your email",
 
 
 

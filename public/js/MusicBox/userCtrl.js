@@ -14,7 +14,7 @@ function UserProfileCtrl($scope, $http , $location, $routeParams,  $locale) {
 		$scope.i18n = $locale;
  		$scope.globals = GLOBALS;
         $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
-
+		$scope.documents = [];
 
 
          $http.get(api_url+'/me/account').success(function(d) {
@@ -49,7 +49,17 @@ function UserProfileCtrl($scope, $http , $location, $routeParams,  $locale) {
 
          })
 
+         $scope.delete_document= function(doc){
+         	  $http.post(api_url+'/doc/'+doc.slug+'/delete').success(function(d) {
+         	  	console.log(d)
+         	  	console.log($scope.documents)
+         	  //	$scope.documents = _.without($scope.documents,d)
 
+					$scope.documents  = _.reject($scope.documents , function(doc){ return doc._id  == d._id; });
+
+         	  })
+
+         }
 
 
 
