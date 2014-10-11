@@ -22,17 +22,18 @@ var mongoose = require('mongoose'),
 Document = mongoose.model('Document'),
 Markup  = mongoose.model('Markup');
 
-var nconf = require('nconf')
-nconf.argv().env().file({file:'config.json'});
+var nconf;
+
 var chalk = require('chalk')
 
 var app;
 
 
-exports.doc_sync= function(req, res) {
-	console.log('req.body.markups')
 
-console.log(req.body.markups)
+exports.doc_sync= function(req, res) {
+	//console.log('req.body.markups')
+
+	//console.log(req.body.markups)
 
 
 	var query = Document.findOne({ 'slug':req.params.slug });
@@ -45,7 +46,7 @@ console.log(req.body.markups)
 			//console.log(req.body.doc_content)
 			console.log('doc.markups')
 			console.log('#######')
-			console.log(doc.markups)
+			//console.log(doc.markups)
 			console.log('#######################')
 			console.log('req.body.markups')
 			console.log('#######')
@@ -74,7 +75,9 @@ console.log(req.body.markups)
 						//console.log(match)
 					}
 					else{
-										  	console.log(chalk.red('should not mismatch') );
+
+						console.log(chalk.red('doc_sync should not mismatch >>' ) );
+						console.log(doc_mk)
 
 					}
 			});
@@ -112,7 +115,7 @@ exports.index_doc= function(req, res) {
 
 exports.docByIdOrTitle = function(req, res) {
 	var query = Document.findOne({ 'slug':req.params.slug });
-	query.populate('user','-email -hashed_password -salt').populate( {path:'markups.user_id', select:'-salt', model:'User'}).populate({path:'markups.doc_id', select:'-markups -secret', model:'Document'}).populate('markups.doc_id.user').populate('room').exec(function (err, doc) {
+	query.populate('user','-email -hashed_password -salt').populate( {path:'markups.user_id', select:'-salt -email -hashed_password', model:'User'}).populate({path:'markups.doc_id', select:'-markups -secret', model:'Document'}).populate('markups.doc_id.user').populate('room').exec(function (err, doc) {
 	if (err){
 		res.json(err)
 	} else{
@@ -132,12 +135,25 @@ exports.docByIdOrTitle = function(req, res) {
  			markups_type = _.uniq(markups_type)
 			doc.markups_type = new Array()
 		}
-		var out = new Object();
+
+
+		if(doc){
+
+var out = new Object();
 		out.doc = doc.toObject()
 		out.doc.secret = 'api_secret'
 		out.markups_type = new Array(markups_type);
 		///	out.markups_type.push()
 		res.json(out)
+
+
+		}
+		else{
+			res.json('err')
+		}
+		
+
+
 		}
 	})
 }
@@ -166,6 +182,70 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+
+exports.doc_clone = function(req,res){
+	// http://stackoverflow.com/questions/18324843/easiest-way-to-copy-clone-a-mongoose-document-instance
+	
+	var query = Document.findOne({ 'slug':req.params.slug }, { 'secret':0});
+	query.populate('user').populate( {path:'markups.user_id', select:'', model:'User'}).populate({path:'markups.doc_id', select:'', model:'Document'}).populate('markups.doc_id.user').populate('room').exec(function (err, doc) {
+		if (err){
+			return false;
+		} 
+		else{
+
+			var right = test_owner_or_key(doc, req)
+			if(right){
+
+				var new_doc = doc.toObject();
+
+				// can only have one parent :-) 
+				new_doc.clone_of = new_doc._id;
+
+				// avoid cascading clones :-)
+				new_doc.clones = []
+				// unset at root level '_id'
+				new_doc._id = mongoose.Types.ObjectId();
+				
+				new_doc.slug = req.params.clone_slug;
+				new_doc.title = req.params.clone_slug;
+				
+				new_doc.user = doc.user;
+				
+				new_doc.isNew = true;
+				_.each(doc.markups , function (markup, i){
+					// unset '_id' for each
+					doc.markups[i]._id = null; 
+				});
+				var new_ = new Document(new_doc);
+				//console.log(new_)
+				//.push(new_doc)
+				
+				// DOUBLE SAVE, CROSSED
+				new_.save(function(err,newdoc) {
+					if (err) {
+			   			res.json(err);
+			        } else {
+
+						doc.clones.push(newdoc._id);
+						doc.save(function(err,doc) {
+							if (err) {
+					   			res.json(err)
+					        } else {
+					        	res.json(newdoc)
+					   			          
+					        }
+				  	    });        
+			        }
+		  	    });
+		  	}
+		  	else{
+		  		res.json('right error')
+		  	}
+		}
+	});
+
+}
+
 exports.doc_create = function(req,res){
 
 	// to filter a better way
@@ -176,13 +256,17 @@ exports.doc_create = function(req,res){
 	var slug= raw_title.replace(/\s/g, '-')
 	slug= slug.replace('?', '_')
 	slug = slug.replace('!', '_')
+	slug = slug.replace('#', '_')
 
 	//var ar = new Object({'title':'bloue'+Math.random()})
 	var new_doc = new Object({'title':filtered_title, 'slug': slug, 'content': filtered_content})
 
 	 new_doc.markups = new Array()
 	 new_doc.doc_options = new Array()
-	 var markup_section_base  = new Object( {'user_id':req.user._id, 'username':req.user.username, 'start':0, 'end':300,  'type': 'container', 'subtype':'section', 'position':'inline'} )
+
+	 var text_size = _.size(raw_content);
+
+	 var markup_section_base  = new Object( {'user_id':req.user._id, 'username':req.user.username, 'start':0, 'end':text_size,  'type': 'container', 'subtype':'section', 'position':'inline'} )
 	 new_doc.markups.push(markup_section_base)
 
 
@@ -287,12 +371,30 @@ exports.doc_reset  = function(req, res) {
 
 
 exports.doc_delete  = function(req, res) {
-	var query = Document.findOne({ '_id':req.params.doc_id });
-	query.exec(function (err, doc) {
+
+// TODO : 	// check owner
+
+	var query = Document.findOne({ 'slug':req.params.slug });
+	query.populate('user', '-email -hashed_password -salt -user_options').populate('room').exec(function (err, doc) {
 		if (err){
 			res.json(err)
 		} 
 		else{
+			var right = test_owner_or_key(doc, req)
+			if(right){
+							doc.remove(function(err) {
+			        if (err) {
+			            res.jsonp('err deleteing')
+			        } else {
+			            res.jsonp(doc);
+			        }
+			    });
+
+			}
+			else{
+				res.json('doc delete error')
+			}
+			
 
 
 		}
@@ -301,7 +403,7 @@ exports.doc_delete  = function(req, res) {
 
 exports.doc_edit  = function(req, res) {
 	var query = Document.findOne({ '_id':req.params.doc_id });
-	query.populate('user').populate('room').exec(function (err, doc) {
+	query.populate('user', '-email -hashed_password -salt').populate('room', '-secret').exec(function (err, doc) {
 		if (err){
 			res.json(err)
 		} 
@@ -326,12 +428,18 @@ exports.doc_edit  = function(req, res) {
 				doc[field] = value;
 			}
 
-			if(field == 'content' || field == 'excerpt' || field == 'thumbnail' ){
-					  doc[field] = value;		 
+			//if(field == 'content' || field == 'excerpt' || field == 'thumbnail' ){}
+
+			else if(field == 'room_id'){
+				doc.room = value;
+			}
+			else if(field == 'user_id'){
+				doc.user = value;
 			}
 
-			if(field == 'room_id'){
-				doc.room = value;
+			else{
+				
+	  			doc[field] = value;	
 			}
 
 			doc.save(function(err,docsaved) {
@@ -702,4 +810,28 @@ exports.markups_offset = function(req, res) {
 			});
 		}
 	})
+}
+
+
+
+// UTILs
+
+function test_owner_or_key(doc,req){
+	// doc owner or markup owner
+	if(req.user._id.equals(doc.user._id) ){	
+		console.log('user is owner')
+		return true;	
+	}
+	else{
+		if(req.body.secret == doc.secret){
+			console.log('but secret match')
+			return true;
+		}
+		else{
+			console.log('and secret dont match(tell no one: '+doc.secret+'   )')
+			var err = new Object({'message':'Need to be either doc owner or use right secret key', 'err_code':'100'})
+			
+			return false
+		}
+	}
 }

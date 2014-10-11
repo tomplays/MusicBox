@@ -3,6 +3,10 @@
 /**
  * Module dependencies.
  */
+var nconf = require('nconf')
+nconf.argv().env().file({file:'config.json'});
+
+
 var mongoose = require('mongoose'),
 Schema = mongoose.Schema,
 meta_options = Schema.MetaoptionsSchema;
@@ -82,7 +86,7 @@ var MarkupSchema = new Schema({
         default: 1,
         trim: true
     },
-     markup_options: [meta_options]
+    markup_options: [meta_options]
 });
 
 var DocumentSchema = new Schema({
@@ -125,20 +129,47 @@ var DocumentSchema = new Schema({
     secret: {type:ObjectIdSchema, default: function () { return new ObjectId()} },
     thumbnail: {
         type: String,
-         default: 'http://localhost/img/lorem/400-400.jpg'
-        
+         default: nconf.get('ROOT_URL')+'/img/lorem/400-400.jpg'
     },
+    lang: {
+        type: String,
+        default: 'en'
+    },
+    lang_versions: [{
+        type: Schema.ObjectId,
+        ref: 'Document'
+    }],
     user: {
         type: Schema.ObjectId,
         ref: 'User'
     },
+    editors: [{
+       type: Schema.ObjectId,
+        ref: 'User'
+    }],
     username: {
         type: String
     },
     room: {
         type: Schema.ObjectId,
         ref: 'Room'
-    }
+    },
+    parents: {
+        type: Schema.ObjectId,
+        ref: 'Document'
+    },
+    childs: [{
+        type: Schema.ObjectId,
+        ref: 'Document'
+    }],
+    clone_of: {
+        type: Schema.ObjectId,
+        ref: 'Document'
+    },
+    clones: [{
+        type: Schema.ObjectId,
+        ref: 'Document'
+    }]
 });
 DocumentSchema.path('title').validate(function(title) {
     return title.length;

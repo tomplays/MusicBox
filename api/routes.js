@@ -110,7 +110,9 @@ return res.redirect('/');
     
 
      // delete 
-    app.post('/api/v1/doc/:slug/delete',  auth.requiresLogin, docs.doc_delete);
+    app.post('/api/v1/doc/:slug/delete',  auth.requiresLogin_or_secret, docs.doc_delete);
+    
+
     app.get('/api/v1/doc/:slug/reset',    auth.requiresLogin, docs.doc_reset);
 
 
@@ -129,6 +131,7 @@ return res.redirect('/');
     app.post('/api/v1/doc/create',  auth.requiresLogin, docs.doc_create);
 
 
+    app.get('/api/v1/doc/:slug/clone/:clone_slug',  auth.requiresLogin, docs.doc_clone);
 
 
 
