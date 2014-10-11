@@ -17,6 +17,12 @@ body {
   padding: 0px;
   font-size: 1.0em;
 }
+ul,
+li {
+  margin: 0px;
+  list-style: none;
+  padding: 0;
+}
 a,
 a:link,
 a:hover {
@@ -48,6 +54,9 @@ time {
 section {
   width: 100%;
   float: left;
+}
+.bg_debug {
+  background: #2ecc71;
 }
 section {
   padding-bottom: 10px;
@@ -265,10 +274,16 @@ a.btn_ok {
   border-bottom: 1px solid rgba(189, 195, 199, 0.3);
   padding-bottom: 1%;
   margin-bottom: 2%;
+  float: left;
+  width: 100%;
 }
 .doc_header h1 {
   font-size: 2em;
   margin-top: 2%;
+}
+.doc_header .head_left {
+  width: 80%;
+  float: left;
 }
 .doc_header .editing_true {
   background: #ecf0f1;
@@ -279,6 +294,24 @@ a.btn_ok {
 }
 .doc_header .post-author-card {
   font-size: .9em;
+}
+.doc_header .sharer {
+  float: right;
+  width: 20%;
+}
+.doc_header .sharer i.fa {
+  font-size: 0.8em;
+  margin-left: 7px;
+}
+.sharer a {
+  color: rgba(44, 62, 80, 0.6);
+  float: right;
+}
+.sharer .fa-twitter:hover {
+  color: #1abc9c;
+}
+.sharer .fa-facebook-square:hover {
+  color: #2980b9;
 }
 body.render_active_doc_options .editing_:hover {
   background: #ecf0f1;
@@ -317,7 +350,7 @@ div.branding h1 a {
   font-size: 1.2em;
   line-height: 1em;
   opacity: 0.6;
-  padding: 2px 3px 2px 3px;
+  padding: 3px 4px;
   position: fixed;
   right: 2.5%;
   top: 17px;
@@ -413,12 +446,16 @@ div.branding h1 a {
 }
 .doc_editor .excerpt_field,
 .doc_editor .room_field,
+.doc_editor .user_field,
+.doc_editor .published_field,
 .doc_editor .thumbnai_field {
   float: left;
   width: 90%;
 }
 .doc_editor .excerpt_field textarea,
 .doc_editor .room_field textarea,
+.doc_editor .user_field textarea,
+.doc_editor .published_field textarea,
 .doc_editor .thumbnai_field textarea {
   background: #fff;
   border: 1px solid #bdc3c7;
@@ -429,13 +466,22 @@ div.branding h1 a {
 }
 .doc_editor .excerpt_field h3,
 .doc_editor .room_field h3,
+.doc_editor .user_field h3,
+.doc_editor .published_field h3,
 .doc_editor .thumbnai_field h3 {
   float: left;
   width: 90%;
 }
 .doc_editor .excerpt_field input,
 .doc_editor .room_field input,
-.doc_editor .thumbnai_field input {
+.doc_editor .user_field input,
+.doc_editor .published_field input,
+.doc_editor .thumbnai_field input,
+.doc_editor .excerpt_field select,
+.doc_editor .room_field select,
+.doc_editor .user_field select,
+.doc_editor .published_field select,
+.doc_editor .thumbnai_field select {
   float: left;
   width: 80%;
   background: #fff;
@@ -443,6 +489,8 @@ div.branding h1 a {
 }
 .doc_editor .excerpt_field i.fa.fa-save,
 .doc_editor .room_field i.fa.fa-save,
+.doc_editor .user_field i.fa.fa-save,
+.doc_editor .published_field i.fa.fa-save,
 .doc_editor .thumbnai_field i.fa.fa-save {
   float: left;
   margin-left: 10px;
@@ -495,14 +543,17 @@ div.branding h1 a {
 .open_comment:hover {
   color: #000;
 }
-.editor_zone {
-  text-align: left;
-  padding-top: 2%;
-  border-bottom: 1px solid rgba(189, 195, 199, 0.3);
+.doc_centered {
   float: left;
+  margin-left: 20%;
+  width: 58%;
+}
+.editor_zone {
+  border-bottom: 1px solid rgba(189, 195, 199, 0.3);
   padding-bottom: 10px;
-  padding-right: 3%;
-  width: 97%;
+  padding-right: 0;
+  padding-top: 2%;
+  text-align: left;
 }
 .editor_zone label {
   float: left;
@@ -512,6 +563,27 @@ div.branding h1 a {
 .editor_zone textarea {
   min-height: 200px;
   margin-bottom: 20px;
+}
+.section_debug li {
+  background: #ecf0f1;
+  display: block;
+  float: left;
+  margin-bottom: 2px;
+  padding: 1%;
+  width: 100%;
+}
+.section_debug input {
+  float: left;
+  margin-right: 1%;
+  width: 66px;
+}
+.section_debug textarea {
+  min-height: 130px;
+  width: 90%;
+}
+.section_debug span {
+  float: left;
+  width: 100%;
 }
 .section_displayer input {
   width: 60%;
@@ -548,6 +620,13 @@ div.branding h1 a {
   padding: 0;
   text-align: left;
   width: auto;
+}
+.markup_displayer .icon_col i {
+  border: 2px solid transparent;
+  border-radius: 5px;
+  display: block;
+  padding: 2px 2px 3px 3px;
+  text-align: center;
 }
 .markup_displayer .data_col {
   float: left;
@@ -679,14 +758,6 @@ i.fa-img:before {
 .fa.selected_true {
   color: #1abc9c;
 }
-.layout_ i.fa {
-  border: 2px solid transparent;
-  border-radius: 5px;
-  display: block;
-  font-size: 10px;
-  padding: 2px 2px 3px 3px;
-  text-align: center;
-}
 .css-form input.ng-invalid.ng-dirty {
   background-color: #FA787E;
 }
@@ -726,6 +797,9 @@ i.fa-img:before {
   float: left;
   padding-top: 52px;
   width: 30%;
+}
+.delete_document {
+  color: #c0392b;
 }
 footer {
   border-top: 1px solid rgba(189, 195, 199, 0.3);

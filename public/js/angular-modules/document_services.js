@@ -66,6 +66,20 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
       * @function DocumentCtrl#init_containers
       */
       init_containers: function () {
+
+
+
+        // *** THE ALLWAYS REINIT, avoids non formatting of objects 
+        // ..sometime..
+        // todo : isolate into function
+        var encoded_url = root_url;
+        if($rootScope.doc.slug !=='homepage'){
+             encoded_url += '/doc/'+$rootScope.doc.slug;
+        }
+        $rootScope.doc.encoded_url = urlencode(encoded_url);
+        
+        
+
         $rootScope.sectionstocount = 0;
         $rootScope.doc.markups  = _.sortBy($rootScope.doc.markups,function (num) {
           return num.start;
@@ -137,7 +151,23 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
         $rootScope.letters = [];
          //var data_serie = new Array()
 
+
+         $rootScope.max_reached_letter = 0;
         _.each($rootScope.containers, function(container, index){
+    
+            // reach letter max test
+            if(container.end > $rootScope.max_reached_letter){
+              $rootScope.max_reached_letter = container.end
+            } 
+
+            // continous test (prev end match current start)
+            if($rootScope.containers[index-1]){
+              var container_prev_end = ($rootScope.containers[index-1].end)+1;
+              if(container_prev_end !== container.start){
+                console.log('discontinous section found '+container_prev_end+' /vs/'+container.start)
+              }
+            }
+          
           //console.log(section)
           self.fill_chars(container,index);
           // data_serie.push(container.start)
@@ -145,12 +175,17 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
           $rootScope.containers[index]['objects'] = [];
           $rootScope.containers[index]['objects_count'] = [];
           $rootScope.containers[index]['objects_count']['by_positions'] = [];
+          $rootScope.containers[index]['objects_count']['all'] = [];
+
            $rootScope.containers[index].section_classes = '';
 //          $rootScope.containers[index]['classes'] =[];
           //$rootScope.objects_sections[index]['global'] = [];
           _.each($rootScope.available_sections_objects, function(o, obj_index){
             $rootScope.containers[index]['objects'][$rootScope.available_sections_objects[obj_index]] = [];
               // and each subs objects an array of each positions
+               $rootScope.containers[index]['objects_count']['all']= new Object({'count':0, 'has_object':false})
+
+
               _.each(render.posAvailable() , function(op){ // op: left, right, ..
                 $rootScope.containers[index]['objects_count']['by_positions'][op.name] = new Object({'count':0, 'has_object':false})
                 $rootScope.containers[index]['objects'][$rootScope.available_sections_objects[obj_index]][op.name] =[];
@@ -163,6 +198,8 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
           _.each($rootScope.doc.markups, function(markup){
             markup.offset_start = 0;
             markup.offset_end = 0;
+            //markup.sectionin = false;
+            markup.isolated = true;
 
             var i_array = 0;  
               //Only if textdata is in sections ranges
@@ -171,6 +208,7 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
               // some commons attributes
               // > todo use states objects
               markup.sectionin = index;
+              markup.isolated = false;
               /// keep open test :
               //console.log('keep open')
               markup.selected = false;
@@ -224,8 +262,8 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
                 // to keep doc_id._id (just id as string) in model and not pass to post object later..
                 if(markup.doc_id){ 
                    markup.doc_id_id = markup.doc_id._id;
-// markup.doc_id_id.uuser = markup.doc_id.user;
- console.log( markup.doc_id)
+                    // markup.doc_id_id.uuser = markup.doc_id.user;
+                     console.log( markup.doc_id)
 
                    if(markup.doc_id.doc_options){
                      // m.markup.child_options = [];
@@ -332,6 +370,10 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
 
                 $rootScope.containers[index].objects_count['by_positions'][markup.position].count++;
                 $rootScope.containers[index].objects_count['by_positions'][markup.position].has_object  = true;
+            
+                $rootScope.containers[index].objects_count['all'].count++;
+                $rootScope.containers[index].objects_count['all'].has_object  = true;
+
             }
               //console.log($rootScope.containers[index]['objects'][markup.type][markup.position])
               //console.log('pushed'+markup.position)
@@ -340,7 +382,36 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
           //$rootScope.containers[index].objects = $rootScope.objects_sections[index]    
           $rootScope.containers[index].letters = $rootScope.letters[index]
          //  console.log($rootScope.containers[index])
-        });
+        
+
+
+        }); // end of containers loop
+        
+
+        if($rootScope.max_reached_letter !==  $rootScope.doc.content.length){
+              console.log('unreached letter found :'+ $rootScope.max_reached_letter +'--'+$rootScope.doc.content.length)
+              //max_reached_letter.end = container.end
+
+              if(_.last($rootScope.containers) && $rootScope.max_reached_letter  <  $rootScope.doc.content.length){
+
+                  console.log('should patch last section from :'+ _.last($rootScope.containers).end+ ' to'+$rootScope.doc.content.length)
+              } 
+        } 
+
+        // reloop to find isolate markups
+
+          $rootScope.ui.isolated_markups = []
+          _.each($rootScope.doc.markups, function(markup){
+            if(markup.isolated == true && markup.type !=="container"){
+                console.log('isolate markup: '+markup.start+' - '+markup.type)
+                console.log(markup)
+                $rootScope.ui.isolated_markups.push(markup)
+            }
+
+          })
+
+
+
   
         // console.log($rootScope.letters)
         $rootScope.$emit('docEvent', {action: 'dispatched_objects' });
@@ -552,14 +623,12 @@ var options = {
 
       },
       init_new: function () {
-               $rootScope.i18n = $locale;         
-               $rootScope.newdoc = new Object();
-               $rootScope.newdoc.raw_content  = $rootScope.i18n.CUSTOM.DOCUMENT.default_content
-               $rootScope.newdoc.raw_title    =    $rootScope.i18n.CUSTOM.DOCUMENT.default_title
-               $rootScope.newdoc.created_link    =   '';
-
-
-        },
+        $rootScope.i18n                    =   $locale;         
+        $rootScope.newdoc                  =   new Object();
+        $rootScope.newdoc.raw_content      =   $rootScope.i18n.CUSTOM.DOCUMENT.default_content
+        $rootScope.newdoc.raw_title        =   $rootScope.i18n.CUSTOM.DOCUMENT.default_title
+        $rootScope.newdoc.created_link     =   '';
+      },
 
       newdoc: function(){
           ///api/v1/doc/create
@@ -626,6 +695,11 @@ var options = {
             //alert('d')
             
             data.value =  $rootScope.doc.room__id
+          }
+          if(field== 'user_id'){
+            //alert('d')
+            
+            data.value =  $rootScope.doc.user._id;
           }
           else{
             data.value =  $rootScope.doc[field]

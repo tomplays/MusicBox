@@ -47,39 +47,7 @@ var doc;
  */
 
 
-var newdoc_service;
 
-function DocumentNewCtrl($scope, $http , docfactory) {
-console.log('DocumentNewCtrl')
-
-
-
-	
-
-	$scope.init_ = function (){
-       	 	$http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
-
-		
-			 newdoc_service =  docfactory();
-			 newdoc_service.init_new();
-
-			//alert('A')
-	}
-	
-
-
-	$scope.create_doc = function(){
-		//alert('B')
-		console.log($scope.newdoc)
-				
-
-		 newdoc_service.newdoc();
-	}
-
-	$scope.init_()
-	//alert('0')
-
-}
 
 
 function DocumentCtrl($scope, $http , $sce, $location, $routeParams, renderfactory,socket,docfactory) {
@@ -299,10 +267,28 @@ if(newValue !==undefined  && oldValue !==undefined && (newValue !== oldValue) )
 
 
 	$scope.doc_sync = function(){
-		
 		doc.docsync();
-
 	}
+
+
+	$scope.sync_section_next = function(section, index){
+		//alert(index)
+		//alert(index+1)
+		//alert('d')
+		console.log(index)
+		$scope.containers[index+1].start = $scope.containers[index+1].start+1;
+	}
+
+	// re set a markup to "safe" place {O,1,comment,left}
+	$scope.reset_markup = function(markup){
+		markup.start = 0;
+		markup.end= 1;
+		markup.type = 'comment';
+		markup.position = 'left';
+		doc.markup_save(markup)
+	}
+
+
 	$scope.over= function(letter, event){
 		
 		var down_at;
@@ -520,11 +506,12 @@ if(newValue !==undefined  && oldValue !==undefined && (newValue !== oldValue) )
 
 
 	$scope.push_section= function (){
+
+		$scope.push.start  = (_.last($scope.containers).end)+1
+		$scope.push.end  = (_.last($scope.containers).end)+10
 		$scope.push.type = 'container';
-		$scope.push.subtype = 'container';
-		$scope.push.start =100;
+		$scope.push.subtype = 'container';		
 		$scope.push.position = 'inline';
-		$scope.push.end = 200;
 		$scope.push_markup();
 	}
 
@@ -572,7 +559,9 @@ if(newValue !==undefined  && oldValue !==undefined && (newValue !== oldValue) )
 
 	$scope.push_markup = function (){
 			console.log($scope.push)
-		// clean up object
+			
+
+			// sure to set up
 			if(!$scope.push.depth){
 				$scope.push.depth = 1;
 			}
@@ -600,12 +589,14 @@ if(newValue !==undefined  && oldValue !==undefined && (newValue !== oldValue) )
 			if(!$scope.push.doc_id_id){
 				$scope.push.doc_id_id = 'null';
 			}
+			// force autoset
+			if($scope.push.type=="markup"){$scope.push.position = 'inline'}
+			if($scope.push.type=="container"){$scope.push.position = 'inline'}
+			if($scope.push.type=="container_class"){$scope.push.position = 'inline'}
 
 
-			
-
-		//call service
-		doc.push_markup($scope.push)
+			//call service
+			doc.push_markup($scope.push)
 
 		
 
@@ -955,6 +946,31 @@ function  DocumentCtrlJasmine($scope, $http , $sce, $location, $routeParams, ren
 			return 'hello';
 } 
 
+
+var newdoc_service;
+
+function DocumentNewCtrl($scope, $http , docfactory) {
+console.log('DocumentNewCtrl')
+
+
+
+	$scope.init_new_doc = function (){
+       	 	$http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
+
+			 newdoc_service =  docfactory();
+			 newdoc_service.init_new();
+			//alert('A')
+	}
+
+	$scope.create_doc = function(){
+		console.log($scope.newdoc)
+		 newdoc_service.newdoc();
+	}
+
+	$scope.init_new_doc()
+	//alert('0')
+
+}
 
 
 // MISC UTILS

@@ -16,11 +16,15 @@ div.quick_tools(class="visible_{{ui.menus.quick_tools.open}}")
 					p {{i18n.CUSTOM.COMMENT.logged_in_as}} 
 						em 
 							a(href="/me/account") {{userin.username}}
+					p
 							
 				div.action_box(ng-if="doc_owner == true  || ui.secret " )
-					p Switch to 
+					
+					p(ng-if="ui.renderAvailable_active !=='read'") Switch to 
+						a(ng-click="toggle_render('read')") "reading" mode
+					p(ng-if="ui.renderAvailable_active !=='editor'")  Switch to 
 						a(ng-click="toggle_render('editor')") "editor" mode
-					p Edit 
+					p(ng-if="ui.renderAvailable_active !=='doc_options'")  Edit 
 						a(ng-click="toggle_render('doc_options')") document options
 
 		div.user_not_in(ng-if="userin.username == '' ")
@@ -52,3 +56,50 @@ div.fixed_tools(ng-if="ui.renderAvailable_active == 'editor'")
 
 			span
 				a(ng-click="push_section()") push_section
+
+
+
+div.editor_zone.doc_centered(ng-if="ui.renderAvailable_active == 'editor'" )
+	label text content (without html markup)
+	textarea(ng-change="textarea_event('change')", ng-mousedown="textareaevent('down')" , type="text", ng-model="doc.content")
+	
+	div.text_helpers.bg_debug(ng-if="ui.debug")
+		
+			p text length : {{doc.content.length}}
+			p old size :{{ui.selected_range.diff_old_size}}
+			p new size : {{ui.selected_range.diff_new_size}}		
+			p diff position {{ui.selected_range.diff_at}}		
+			p diff qty : {{ui.selected_range.diff_qty}}
+			p direction {{ui.selected_range.diff_dir}}
+			p count: {{ui.selected_range.diff_objects_concerned_count}}
+
+			div(ng-repeat="mk in ui.selected_range.markups_to_offset")
+				p start {{mk.start}} +/- : {{mk.offset_start}} end {{mk.end}} +/- : {{mk.offset_end}} {{mk.type}}
+
+
+			div(ng-repeat="isolated in ui.isolated_markups")
+				p isolated markup @:  {{isolated.start}} {{isolated.end}} {{isolated.type}} 
+				a(ng-click="reset_markup(isolated)") reset (as start 0 end 1 type -comment)
+
+
+	a.btn_ok.float_right(ng-click="doc_sync()") SAVE
+
+
+div.section_debug.doc_centered(ng-if="ui.debug")
+	// input(type="checkbox", ng-model="ui.sync_sections" , ng-true-value="true" ,ng-false-value="false")
+	// span {{ui.sync_sections}}
+	ul
+		li(ng-repeat='s in containers')
+			span # {{$index}}
+				input(ng-model="s.start" ,type="number") 
+				input(ng-change="" , ng-model="s.end", type="number")
+				
+				textarea(ng-model="s.fulltext" , readonly)
+				span (read-only)
+				//p {{s.fulltext}}
+				// p {{s.objects}}
+				// sync_section_next(s, $index)
+				p objects in section :  {{s.objects_count.all.count}}
+				p {{s.objects_count['inline']['markup'].count}}
+				i.fa.fa-save.btn_action(ng-click="markup_save(s)")
+

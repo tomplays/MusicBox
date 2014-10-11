@@ -86,6 +86,9 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
 
         $rootScope.ui.renderAvailable = self.renderAvailable()
 
+        // used in section editing
+        $rootScope.ui.sync_sections  = true;
+        
 
         if($routeParams.mode){
           $rootScope.ui.renderAvailable_active =  $routeParams.mode

@@ -3,6 +3,11 @@
 
 
 div(ng-include="fragments['before_doc'][0].url" )
+
+
+
+
+
 div(class="sections_container")
 	section(ng-repeat='section in containers' , class="{{section.section_classes}}")
 		div(ng-repeat='layout in available_layouts')
@@ -16,33 +21,12 @@ div(class="sections_container")
 
 				// title, author, date, ..
 				div(ng-if="(layout.name== 'center') && ($parent.$first) ")
-						
-
-						div.editor_zone(ng-if="$parent.$parent.$first && ui.renderAvailable_active == 'editor'" )
-							label text content (without html markup)
-							textarea(ng-change="textarea_event('change')", ng-mousedown="textareaevent('down')" , type="text", ng-model="doc.content")
-							
-							div.text_helpers(ng-if="ui.debug")
-								
-
-									p old size :{{ui.selected_range.diff_old_size}}
-									p new size : {{ui.selected_range.diff_new_size}}		
-									p diff position {{ui.selected_range.diff_at}}		
-									p diff qty : {{ui.selected_range.diff_qty}}
-									p direction {{ui.selected_range.diff_dir}}
-									p count: {{ui.selected_range.diff_objects_concerned_count}}
-
-								div(ng-repeat="mk in ui.selected_range.markups_to_offset")
-									p start {{mk.start}} +/- : {{mk.offset_start}} end {{mk.end}} +/- : {{mk.offset_end}} {{mk.type}}
-									
-							a.btn_ok.float_right(ng-click="doc_sync()") SAVE
-
-
+	
 						div.doc_header(ng-hide="ui.renderAvailable_active == 'editor'")
 								
 								
-								h3(class="editing_{{ui.editing_doc_notices_before_title}}" , ng-dblclick="edit_doc_option('doc_notices_before_title')") 
-									{{doc_options.doc_notices_before_title.value}} &nbsp;
+								h3(ng-bind-html="doc_options.doc_notices_before_title.value+'&nbsp;'" , class="editing_{{ui.editing_doc_notices_before_title}}" , ng-dblclick="edit_doc_option('doc_notices_before_title')") 
+									
 								.edit_field(ng-if="ui.editing_doc_notices_before_title")
 									label Edit "Before Title"
 									input(ng-if="ui.editing_doc_notices_before_title",   ng-model="doc_options.doc_notices_before_title.value", name="doc_options.doc_notices_before_title.value")
@@ -56,18 +40,26 @@ div(class="sections_container")
 									label Edit "Title"
 									input(ng-model="doc.title")
 									a.btn_ok.float_right(ng-click="edit_doc('title')") Save
-
-
-								h3(class="editing_{{ui.editing_doc_notices_after_title}}" , ng-dblclick="edit_doc_option('doc_notices_after_title')") 
-									{{doc_options.doc_notices_after_title.value}} &nbsp;
+								
+								h3(class="editing_{{ui.editing_doc_notices_after_title}}" , ng-
+								dblclick="edit_doc_option('doc_notices_after_title')") 
+										{{doc_options.doc_notices_after_title.value}} &nbsp;
 								.edit_field(ng-if="ui.editing_doc_notices_after_title")
 									label Edit "After Title"
 									input(ng-if="ui.editing_doc_notices_after_title",   ng-model="doc_options.doc_notices_after_title.value", name="doc_options.doc_notices_after_title.value")
 									a.btn_ok.float_right(ng-click="edit_doc_option('doc_notices_after_title')") Save
 
-
 								time(ng-bind="doc.formated_date", ng-click="" ) 
-								.cols-edit(ng-include="fragments['author_card'][0].url" )
+								
+								div.head_left
+									.cols-edit(ng-include="fragments['author_card'][0].url" )
+								div.sharer
+									a(class="twitter-share-icon", ng-class="", href="https://twitter.com/intent/tweet?text={{doc.excerpt}} {{doc.encoded_url}}")
+										i.fa.fa-twitter
+
+									a(href="https://www.facebook.com/sharer/sharer.php?u={{doc.encoded_url}}")
+										i.fa.fa-facebook-square
+
 
 							div.doc_editor(ng-if="ui.renderAvailable_active == 'doc_options' ")
 								h4 Options du document
@@ -81,6 +73,23 @@ div(class="sections_container")
 										label Published in "room" ID : {{doc.room.slug}}
 										input(type="text" ,ng-model="doc.room__id", name="doc.room__id")
 										i.fa.fa-save(ng-click="edit_doc('room_id')")
+
+							
+									.edit_field.user_field
+										label User ID : {{doc.user.username}} (transmit ownership)
+										input(type="text" ,ng-model="doc.user._id", name="doc.user._id")
+										i.fa.fa-save(ng-click="edit_doc('user_id')")
+
+									.edit_field.published_field
+										label published
+										select(ng-model="doc.published", name="doc.published")
+											option(value="{{doc.published}}") {{doc.published}}
+											option(value="draft") draft
+											option(value="public") public
+										i.fa.fa-save(ng-click="edit_doc('published')")
+
+
+
 								.edit_field_right
 									.edit_field.thumbnai_field
 										label "thumbnail" image url
