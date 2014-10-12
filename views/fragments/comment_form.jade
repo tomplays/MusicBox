@@ -1,25 +1,13 @@
-
-
 div.user_not_in(ng-if="userin.username == '' ")
-	
-
 	p 
 		a(ng-click="external_link(root_url+'/login')" , ng-if="userin.username == '' ") {{i18n.CUSTOM.COMMENT.needs_logging}}
 	p
 		a.loginOrSignup(ng-click="external_link(root_url+'/login')" , ng-if="userin.username == '' ") {{i18n.CUSTOM.USER.loginOrSignup}}
 
-
 div.user_in(ng-if="userin.username")
 
-	p Votre commentaire
-		textarea(ng-model="push.metadata", type="text", value="{{i18n.CUSTOM.COMMENT.textarea}}") 
-	// p position
-		input(ng-model="push.position" ,type="text")
-	// p start
-		input(ng-model="push.start" ,type="text")
-	// p end
-		input(ng-model="push.end", type="text")
-	
+	label {{i18n.CUSTOM.COMMENT.label}}
+	textarea(ng-model="push.metadata", type="text", value="{{i18n.CUSTOM.COMMENT.textarea}}") 
 	p.logged_in_as 
 		{{i18n.CUSTOM.COMMENT.logged_in_as}} 
 		em 

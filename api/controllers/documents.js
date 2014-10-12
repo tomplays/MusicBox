@@ -105,13 +105,26 @@ exports.doc_sync= function(req, res) {
 
 exports.index_doc= function(req, res) {
 		var user_ = ''
+		
 		if(req.user){
-			user_ = new Object({'_id': req.user._id , 'username': req.user.username,  'image_url': req.user.image_url})
+			// user_ = new Object({'_id': req.user._id , 'username': req.user.username,  'image_url': req.user.image_url})
 		}
+
+		var doc_title ='';
+		
+		if(req.params.slug){
+			doc_title = req.params.slug
+		}
+
 		res.render('index_v1', {
-			user_in : user_
+			user_in : user_,
+			doc_title: doc_title
 		});
 }
+
+
+
+// main document caller
 
 exports.docByIdOrTitle = function(req, res) {
 	var query = Document.findOne({ 'slug':req.params.slug });
@@ -120,40 +133,36 @@ exports.docByIdOrTitle = function(req, res) {
 		res.json(err)
 	} else{
 
-		var markups_type = new Array()
+		//var markups_type = new Array()
 		var markups_f = new Array()
 		if(doc && doc.markups){
-
-		 	_.each(doc.markups , function (markup, i){
-
-
-
-				if(markup.type){
-			 		markups_type.push(markup.type)
-			 	}
-			})
- 			markups_type = _.uniq(markups_type)
-			doc.markups_type = new Array()
+		 	//_.each(doc.markups , function (markup, i){
+				//if(markup.type){
+			 		//markups_type.push(markup.type)
+			 	//}
+			//})
+ 			//markups_type = _.uniq(markups_type)
+			//doc.markups_type = new Array()
 		}
-
-
 		if(doc){
 
-var out = new Object();
-		out.doc = doc.toObject()
-		out.doc.secret = 'api_secret'
-		out.markups_type = new Array(markups_type);
-		///	out.markups_type.push()
-		res.json(out)
+			var out 			= new Object();
+			out.doc 			= doc.toObject();
+
+			if(req.user){
+				 out.userin 	= req.user.toObject();
+			}
+			out.is_owner 		= test_owner_or_key(doc,req);
+
+			out.doc.secret 		= 'api_secret'
+			// out.markups_type = new Array(markups_type);
+			res.json(out)
 
 
 		}
 		else{
 			res.json('err')
 		}
-		
-
-
 		}
 	})
 }
@@ -257,6 +266,7 @@ exports.doc_create = function(req,res){
 	slug= slug.replace('?', '_')
 	slug = slug.replace('!', '_')
 	slug = slug.replace('#', '_')
+	slug = slug.replace('/', '_')
 
 	//var ar = new Object({'title':'bloue'+Math.random()})
 	var new_doc = new Object({'title':filtered_title, 'slug': slug, 'content': filtered_content})
@@ -307,7 +317,7 @@ exports.doc_create = function(req,res){
 	new_doc.doc_options.push(use_authorcard)
 */
 
-	var branding_class  = new Object( {'option_name':'branding_class', 'option_value':'sa white-bg',  'option_type': '' } )
+	var branding_class  = new Object( {'option_name':'branding_class', 'option_value':'sa bg_transparent',  'option_type': '' } )
 	new_doc.doc_options.push(branding_class)
 
 	var   footer_center_html = new Object( {'option_name':'footer_center_html', 'option_value':"<i class=\'fa fa-file-text-o\'></i> powered by <a href=\'http://github.com/tomplays/MusicBox/\'>MusicBox beta*</a> - 2014 - <a href=\'http://hacktuel.fr\'>@Hacktuel.fr</a>",  'option_type': '' } )
@@ -403,7 +413,7 @@ exports.doc_delete  = function(req, res) {
 
 exports.doc_edit  = function(req, res) {
 	var query = Document.findOne({ '_id':req.params.doc_id });
-	query.populate('user', '-email -hashed_password -salt').populate('room', '-secret').exec(function (err, doc) {
+	query.populate('user', '-email -hashed_password -salt').populate('room').exec(function (err, doc) {
 		if (err){
 			res.json(err)
 		} 
@@ -423,6 +433,7 @@ exports.doc_edit  = function(req, res) {
 				slugify = slugify.replace('.', '_')
 				slugify = slugify.replace('/', '_')
 				slugify = slugify.replace('!', '_')
+				slugify = slugify.replace('#', '_')
 				doc['slug'] =slugify
 		
 				doc[field] = value;
@@ -431,25 +442,36 @@ exports.doc_edit  = function(req, res) {
 			//if(field == 'content' || field == 'excerpt' || field == 'thumbnail' ){}
 
 			else if(field == 'room_id'){
-				doc.room = value;
+				console.log(chalk.green('a / b') );
+				console.log(doc.room)
+/*
+				if(doc.room && doc.room._id){
+					doc.room._id = value;
+				}
+				else{
+					**/
+					doc.room = value
+				/*}*/
+				
+				console.log(doc)
 			}
 			else if(field == 'user_id'){
 				doc.user = value;
 			}
 
 			else{
-				
+
 	  			doc[field] = value;	
 			}
 
-			doc.save(function(err,docsaved) {
+			doc.save(function(err,doc) {
 				if (err) {
 					res.send(err)
 				} 
 				else {
 				  	console.log(chalk.green('doc saved') );
 					var out = new Object();
-					out.doc = docsaved;
+					out.doc = doc;
 					console.log(out)
 					res.json(out)
 				}
@@ -521,8 +543,10 @@ exports.doc_edit_option  = function(req, res) {
 
 exports.markup_edit = function(req, res) {
 	var edited = new Array();
-
+	console.log(req.body)
 	
+	var req_user_id = req.user.toObject()._id;
+		console.log('req_user_id:::'+req_user_id)
 
 	var query = Document.findOne({ 'slug':req.params.slug });
 		query.populate('user','-email -hashed_password -salt').populate( {path:'markups.user_id', select:'-salt', model:'User'}).populate({path:'markups.doc_id', select:'-markups -secret', model:'Document'}).populate('markups.doc_id.user').populate('room').exec(function (err, doc) {
@@ -532,58 +556,34 @@ exports.markup_edit = function(req, res) {
 	}
 	else{
 
-	if(req.user._id.equals(doc.user._id) || req.body.secret == doc.secret){
+	if(req_user_id == doc.user._id || req.body.secret == doc.secret){
 
 			console.log('user is owner OR secret match')
 	}
 
-
-
-	
-
-
-
-		 _.each(doc.markups , function (m, i){
+	 _.each(doc.markups , function (m, i){
 		 	// single match.
 			if(m._id == req.params.markup_id){
 
+				console.log(req_user_id +' vs: '+ doc.user._id)
+				console.log(m.user_id.toObject()._id)
 
 
-console.log(req.user._id +' vs: '+ doc.user._id)
-console.log(m)
-console.log(req.user._id)
-var a = req.user
-var b = doc.user._id
-
-// doc owner or markup owner
-	if(req.user._id.equals(doc.user._id)  || req.user._id.equals(m.user_id)  ){
-						
-
-			
-	}
-	else{
-console.log('user is not markup owner')
-						if(req.body.secret == doc.secret){
-							console.log('but secret match')
-
-
+					// doc owner or markup owner
+						if(req_user_id.equals(doc.user._id)  || req_user_id.equals(m.user_id._id) ){
 						}
 						else{
-							console.log('and secret dont match(   '+doc.secret+'   )')
-							var err = new Object({'message':'Need to be either doc owner or use right secret key', 'err_code':'100'})
-							res.json(err)
-							return;
+								console.log('user is not markup owner')
+											if(req.body.secret == doc.secret){
+												console.log('but secret match')
+											}
+											else{
+												console.log('and secret dont match(   '+doc.secret+'   )')
+												var err = new Object({'message':'Need to be either doc owner or use right secret key', 'err_code':'100'})
+												res.json(err)
+												return;
+											}
 						}
-
-
-	}
-
-
-
-
-
-
-
 					// console.log('m.doc_id>')
 					// console.log(req.body)
 				if(req.body.doc_id_id){
@@ -596,19 +596,14 @@ console.log('user is not markup owner')
 				 	m.type = req.body.type
 				 	m.subtype = req.body.subtype
 				 	m.position= req.body.position
-				m.metadata = req.body.metadata
-				if(req.body.doc_id_id){
-					console.log('DOC ID IDADADA'+req.body.doc_id_id)
-					m.doc_id = req.body.doc_id_id;
+					m.metadata = req.body.metadata
+					m.status = req.body.status
+						m.depth = req.body.depth
+				if(req.body.doc_id){
+					console.log('DOC sub _id: '+req.body.doc_id)
+					m.doc_id = req.body.doc_id;
 				}
-				/*m.depth
-				m.status
-				m.doc_id
-				m.user_id
-				m.updated
-				m.created
-				*/
-				//	console.log(m.toObject())
+			
 				edited.push(m)
 				doc.markups[i] = m
 				// save it
@@ -818,20 +813,22 @@ exports.markups_offset = function(req, res) {
 
 function test_owner_or_key(doc,req){
 	// doc owner or markup owner
-	if(req.user._id.equals(doc.user._id) ){	
-		console.log('user is owner')
-		return true;	
-	}
-	else{
-		if(req.body.secret == doc.secret){
-			console.log('but secret match')
-			return true;
+	if(req.user){
+		if(req.user._id.equals(doc.user._id) ){	
+			console.log('user is owner')
+			return true;	
 		}
 		else{
-			console.log('and secret dont match(tell no one: '+doc.secret+'   )')
-			var err = new Object({'message':'Need to be either doc owner or use right secret key', 'err_code':'100'})
-			
-			return false
+			if(req.body.secret == doc.secret){
+				console.log('but secret match')
+				return true;
+			}
+			else{
+				console.log('and secret dont match(tell no one: '+doc.secret+'   )')
+				var err = new Object({'message':'Need to be either doc owner or use right secret key', 'err_code':'100'})
+				return false
+			}
 		}
 	}
+	return false;
 }

@@ -19,7 +19,8 @@ $provide.value("$locale", {
 "CUSTOM" : {
 	"COMMENT" : {
 		"single" : "comment",
-		"textarea" : "Your comment...",
+		"textarea" : "Your comment",
+		"label" : "Add a comment",
 		"verb" : "comment",
 		"needs_logging": "Please login first",
 		"logged_in_as" : "Logged in as"

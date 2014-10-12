@@ -62,6 +62,9 @@ body.headings_typography_Open.Sans h1 {
 .branding.bg_white {
   background-color: #fff;
 }
+.branding.bg_transparent {
+  background-color: transparent;
+}
 .branding.sa h1 span,
 .branding.sb h1 span,
 .branding.sc h1 span {
@@ -83,6 +86,19 @@ section.bg_black a {
 }
 section.bg_black .markup_displayer:not(.markup_displayer_media):hover {
   background: transparent;
+}
+section.gradient {
+  /*background:linear-gradient(-88deg, rgba(60, 33, 89,0.1) 0%, rgb(100, 143, 189) 100%) repeat scroll 0 0 rgba(0, 0, 0, 0)
+   */
+  background: linear-gradient(-8deg, rgba(190, 33, 89, 0.1) 12%, #648fbd 90%) repeat scroll 0 0 rgba(0, 0, 0, 0);
+}
+/*
+section.gradient-pink {
+    background: linear-gradient(180deg, rgb(251, 234, 234) 0%, rgb(255, 255, 255) 50%) repeat scroll 0 0 rgba(0, 0, 0, 0);
+}
+*/
+section.gradient-pink {
+  background: linear-gradient(180deg, #2980b9 0%, #ffffff 50%) repeat scroll 0 0 rgba(0, 0, 0, 0);
 }
 html.doc_slug_Star-telling section.custom_a {
   background-image: url("/img/docs/8/sky2.jpg");

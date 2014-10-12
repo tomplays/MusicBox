@@ -62,6 +62,12 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
         $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
 
          $rootScope.objAvailable        =   self.objAvailable(); 
+
+         $rootScope.objSchema        =   self.objSchema(); 
+
+
+
+
         $rootScope.available_sections_objects =   self.objAvailable(); 
 
         // console.log($rootScope.available_sections_objectsd )
@@ -89,7 +95,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
         // used in section editing
         $rootScope.ui.sync_sections  = true;
         
-
+        $rootScope.ui.focus_side = ''
         if($routeParams.mode){
           $rootScope.ui.renderAvailable_active =  $routeParams.mode
         }
@@ -146,6 +152,216 @@ else{
         var arr = new Array('media','generic','container','container_class', 'comment','note','summary','summary-block','player','markup','css_styles','classes','child_section','child' ,'semantic');
         return arr 
       },
+
+      objSchema:function (){
+
+            var obj_base  = new Object({'type':'block', 'only':'metadata'});
+
+
+            var arr = new Array();
+            
+            
+            arr.comment = new Object({
+              'type':obj_base.type ,
+              'only':'',
+              'metadata': { 
+                'editor': {
+                   'show' : true,
+                    'label':'comment text',
+                     'input' : 'textarea'
+                  },
+                  'render': {
+                   'show' : true
+                  }
+              }, 
+              'show_date': true, 
+              'show_user': true, 
+              'subtype': {
+                'free_input' : false,
+                'available' : ['comment', 'response']
+             },   
+              'position_available': ['left', 'right', 'under', 'global'],
+            });
+            arr.note = new Object({
+              'type':obj_base.type ,
+              'only':'',
+              'metadata': { 
+                'editor': {
+                   'show' : true,
+                    'label':'note text',
+                     'input' : 'textarea'
+                  },
+                  'render': {
+                   'show' : true
+                  }
+              }, 
+              'show_date': true,
+              'icon': { 
+                'before': {
+                   'show' : true
+                  }
+              }, 
+              'show_user': true, 
+              'subtype': {
+                'free_input' : false,
+                'available' : ['freebase', 'about']
+             },   
+              'position_available': ['left', 'right', 'under', 'global'],
+            });
+            arr.generic = new Object({
+              'type':obj_base.type ,
+              'only':'',
+              'metadata': { 
+                'editor': {
+                   'show' : true,
+                    'label':'text',
+                     'input' : 'textarea'
+                  },
+                  'render': {
+                   'show' : true
+                  }
+              }, 
+              'show_date': true,
+              'icon': { 
+                'before': {
+                   'show' : true
+                  }
+              }, 
+              'show_user': true,
+              'subtype': {
+                'free_input' : true,
+                'available' : 'any'
+             },   
+              'position_available': ['left', 'right', 'under', 'global'],
+            });
+
+
+            arr.container_class = new Object({
+              'type':obj_base.type ,
+              'only':'',
+              'metadata': { 
+                'editor': {
+                   'show' : true,
+                    'label':'css class(es)',
+                     'input' : 'input'
+                  },
+                  'render': {
+                   'show' : true
+                  }
+              }, 
+              'show_date': false,
+              'icon': { 
+                'before': {
+                   'show' : true
+                  }
+              }, 
+              'show_user': false,
+              'subtype': {
+                'free_input' : false,
+                'available' : ['css']
+             },   
+              'position_available': ['inline'],
+            });
+
+
+
+            arr.child = new Object({
+              'type':obj_base.type ,
+              'only':'',
+              'metadata': { 
+                'editor': {
+                   'show' : true,
+                    'label':'block text',
+                     'input' : 'input'
+                  }
+                  ,
+                  'render': {
+                   'show' : false
+                  }
+              }, 
+              'show_date': false,
+              'icon': { 
+                'before': {
+                   'show' : true
+                  }
+              }, 
+              'show_user': false, 
+              'subtype': {
+                'free_input' : false,
+                'available' : ['doc_content_block','share_excerpt','b','c']
+             },   
+              'position_available': ['left', 'right', 'under', 'global'],
+            });
+
+            arr.media = new Object({
+              'type':obj_base.type ,
+              'only':'',
+              'metadata': { 
+                'editor': {
+                    'show' : true,
+                    'label':'media url',
+                    'input' : 'input'
+                  }
+                  ,
+                  'render': {
+                   'show' :false
+                  }
+              }, 
+              'show_date': false,
+              'icon': { 
+                'before': {
+                   'show' : true
+                  }
+              }, 
+              'show_user': false, 
+              'subtype': {
+                'free_input' :false,
+                'available' : ['img']
+             },   
+              'position_available': ['wide','center','left', 'right', 'under', 'global'],
+            });
+
+            arr.markup = new Object({
+              'type':obj_base.type ,
+              'only':'',
+              'metadata': { 
+                'editor': {
+                    'show' : false,
+                    'label':'-',
+                    'input' : '-'
+                  }
+                  ,
+                  'render': {
+                   'show' : false
+                  }
+              }, 
+              'show_date': false, 
+              'icon': { 
+                'before': {
+                   'show' : true
+                  }
+              }, 
+              'show_user': false, 
+
+              'subtype': {
+                'free_input' : false,
+                'available' : ['h1','h2', 'h3', 'h4', 'h5','h6','em', 'strong', 'code']
+             },   
+             'position_available': ['inline'],
+
+            });
+
+
+
+    
+            // console.log(arr)
+            return arr;
+        },
+
+
+
+
+
       fragmentTypes:function (){
         var arr = new Array('note','data','summary','summary-block','img','player','child_section');
         return arr 
@@ -203,12 +419,12 @@ else{
             arr['author_card']               = [ {  url: 'fragments/author_card'} ]; 
             arr['branding']                  = [ {  url: 'fragments/branding.jade'} ];
             arr['before_doc']                = [ {  url: 'fragments/before_doc.jade'} ];
-            arr['ad_welcome']                = [ {  url: 'fragments/ad_welcome.jade'} ];
 
+            arr['doc_header']                = [ {  url: 'fragments/doc_header.jade'} ];
+            //arr['ad_welcome']                = [ {  url: 'fragments/ad_welcome.jade'} ];
             arr['comment_form']              = [ {  url: 'fragments/comment_form.jade'} ];
-
-            arr['doc_real']              = [ {  url: 'fragments/doc_real.jade'} ];
-
+            //arr['doc_real']              = [ {  url: 'fragments/doc_real.jade'} ];
+            arr['child_markup']              = [ {  url: 'fragments/child_markup.jade'} ];
 
             /*
 

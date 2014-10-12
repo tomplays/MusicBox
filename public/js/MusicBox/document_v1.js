@@ -382,6 +382,7 @@ if(newValue !==undefined  && oldValue !==undefined && (newValue !== oldValue) )
 	
 
 	$scope.edit_doc = function(field){
+	
 
 		if(field == 'content'){
 			//alert('content change without api offset!')
@@ -416,7 +417,10 @@ if(newValue !==undefined  && oldValue !==undefined && (newValue !== oldValue) )
 				
 	}
 
+	$scope.switch_focus_side = function(side){
 
+		$scope.ui.focus_side = side;
+	}
 
 
 	$scope.newDm = function (){
@@ -488,15 +492,30 @@ if(newValue !==undefined  && oldValue !==undefined && (newValue !== oldValue) )
 
 
 	}
-	
+
+
+	$scope.match_selection = function (markup){
+		// apply selection to mk
+		//alert('e')
+
+		markup.start = $scope.ui.selected_range.start
+		markup.end = $scope.ui.selected_range.end
+		doc.markup_save(markup)
+
+	}
+
+
 	$scope.open_comment_push = function (container_index){
+		
 	// this way only one menu can me open.. and persistent
 		var cur = $scope.ui.menus.push_comment.open;
 		if(cur == container_index.sectionin){
 			cur = -1	
+			$scope.ui.focus_side = ''
 		}
 		else{
 			cur = container_index.sectionin;
+			$scope.ui.focus_side = 'left'
 		}
 		$scope.ui.menus.push_comment.open = cur;
 		return;
@@ -553,6 +572,7 @@ if(newValue !==undefined  && oldValue !==undefined && (newValue !== oldValue) )
 
 		// close form.
 		$scope.ui.menus.push_comment.open  = -1
+		$scope.ui.focus_side = ''
 
 	}
 

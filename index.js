@@ -107,6 +107,9 @@ app.configure(function(){
         app.locals.root_url= nconf.get('ROOT_URL');
         app.locals.api_url= nconf.get('API_URL');
         app.locals.fbapp_id = nconf.get('FACEBOOK_ID');
+
+
+       
         // > if setted to "null" script wont be load in view
         app.locals.socket_url = nconf.get('SOCKET_SERVER_URL')
         // i18n dyn. load

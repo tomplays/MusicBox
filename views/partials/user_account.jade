@@ -32,17 +32,41 @@ div.main_center.user_account.bordered
 	ul(ng-repeat="option in me.user_options")
 		li 
 			{{option.option_name}} : {{option.option_value}}
-	h3 Documents :
+	h3 Mes documents :
+
+	table.user_documents()
+		thead
+			tr
+				th title
+				th published
+				th room
+				th last upadted
+				th 
+		
+		tbody
+			tr(ng-repeat="doc in documents")
+				td 
+					a(href="/doc/{{doc.slug}}") {{doc.slug}} 
+				td {{doc.published}}
+				td {{doc.room.name}} 
+				td {{doc.created | date }}
+				
+				td 
+					i.fa.fa-cogs(href="", ng-click="external_link('/doc/'+doc.slug+'?mode=doc_options') " )
+					i.fa.fa-edit(href="", ng-click="external_link('/doc/'+doc.slug+'?mode=editor') " )
+
+					i.fa.fa-unlock(href="", ng-click="external_link('/doc/'+doc.slug+'?secret='+doc.secret) " )
+					i.fa.fa-database(href="", ng-click="external_link('/api/v1/doc/'+doc.slug) " ) 
+					// {{doc._id}}
+				
+				
+					i.fa.fa-trash.delete_document(href="", ng-click="delete_document(doc) " )
+
 	ul
 		li(ng-repeat="doc in documents")
-			a(href="/doc/{{doc.slug}}") {{doc.slug}} 
-			span
-				{{doc.published}} • {{doc.slug}} • {{doc.roomname}} 
-				span
-					a(href="", ng-click="external_link('/doc/'+doc.slug+'?secret='+doc.secret) " ) [secret/free edit link]  •
-					a(href="", ng-click="external_link('/api/v1/doc/'+doc.slug) " ) [api]  •
-					a.delete_document(href="", ng-click="delete_document(doc) " ) [delete document]
-
-
+			// p {{doc}}
+			// a(href="/doc/{{doc.slug}}") {{doc.slug}} 
+			// span
+				{{doc.published}} • {{doc.slug}} • 
 footer
 	p 2014 - MusicBox

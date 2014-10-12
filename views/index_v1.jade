@@ -2,7 +2,7 @@ doctype html
 html(class="is_home_{{ui.is_home}} is_single_{{ui.is_single}} doc_id_{{doc._id}} doc_slug_{{doc.slug}}", ng-app="musicBox", xmlns="http://www.w3.org/1999/xhtml")
 	head
 
-		title {{doc.title}} #{site_title} #{site_description} 
+		title #{doc_title} #{site_title} #{site_description} 
 		
 		meta(charset="utf-8")
 		meta(http-equiv="X-UA-Compatible", content="IE=edge,chrome=1")
@@ -15,7 +15,7 @@ html(class="is_home_{{ui.is_home}} is_single_{{ui.is_single}} doc_id_{{doc._id}}
 		// https://developers.facebook.com/tools/object-browser?app_id=248664598505342
 		meta(property="og:type", content="article")
 		// meta(property="og:type", content="like:article")
-		// meta(property="og:image", content=locals.image)
+		meta(property="og:image", content="{{doc.thumbnail}}")
 		// meta(property="og:url", content="")
 		link(rel='icon', type="image/png", href="/favicon.png")
 		
@@ -94,5 +94,5 @@ html(class="is_home_{{ui.is_home}} is_single_{{ui.is_single}} doc_id_{{doc._id}}
 
 			script(src='/js/min/MusicBox.min-debug.js')
 
-	body(class="render_active_{{ui.renderAvailable_active}} text_typography_{{doc_options.text_typography.value}} headings_typography_{{doc_options.headings_typography.value}}")
+	body(class="xxxfocus_side_{{ui.focus_side}} render_active_{{ui.renderAvailable_active}} text_typography_{{doc_options.text_typography.value}} headings_typography_{{doc_options.headings_typography.value}}")
 		div(ng-view)

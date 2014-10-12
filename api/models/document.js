@@ -73,7 +73,7 @@ var MarkupSchema = new Schema({
     },
     status: {
         type: String,
-        default: '',
+        default: 'pending',
         trim: true
     },
     position: {

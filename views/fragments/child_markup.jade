@@ -1,0 +1,37 @@
+div.inside_child(style="background:{{markup.child_options.block_color}}")
+
+
+
+
+	div(ng-if="markup.subtype == 'doc_content_block'")
+		h4(ng-if="markup.metadata", style="color:{{markup.child_options.title_color}}" , ng-bind-html="markup.metadata" )
+
+		a(href="#{root_url}/doc/{{markup.doc_id.slug}}") 
+			img.doc_thumb(ng-src="{{markup.doc_id.thumbnail}}")
+		h3 
+			a(style="color:{{markup.child_options.title_color}}" , href="#{root_url}/doc/{{markup.doc_id.slug}}") {{markup.doc_id.title}}
+		h4 
+			a(style="color:{{markup.child_options.title_color}}" , href="#{root_url}/doc/{{markup.doc_id.slug}}") Par {{markup.doc_id.username}}
+				
+		p
+			a(style="color:{{markup.child_options.title_color}}", href="#{root_url}/doc/{{markup.doc_id.slug}}", ng-bind-html="markup.doc_id.excerpt")
+	
+
+
+	div(ng-if="markup.subtype == 'share_excerpt'")
+
+		h5 {{markup.metadata}}
+		div.sharer
+									a(class="twitter-share-icon", ng-class="", href="https://twitter.com/intent/tweet?text={{markup.explicit_string}} {{doc.encoded_url}}")
+										i.fa.fa-twitter
+
+									a(href="https://www.facebook.com/sharer/sharer.php?u={{doc.encoded_url}}")
+										i.fa.fa-facebook-square
+		p 
+			em {{markup.explicit_string}}
+
+	span.icon_col
+		i(class="fa fa-{{markup.type}} fa-{{markup.subtype}} editing_{{markup.editing}} selected_{{markup.selected}}",  ng-click="toggle_select_markup(markup)", ng-dblclick="toggle_select_markup(markup, 'dblclick')"  ) 
+
+	// h4 {{markup.child_options.branding_class}}
+	// h4(ng-bind-html="markup.metadata" )

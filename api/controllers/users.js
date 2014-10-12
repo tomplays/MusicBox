@@ -64,7 +64,7 @@ exports.account = function(req, res) {
 }
 
 exports.account_api = function(req, res) {
-    Document.find({user : req.user._id}).sort('-created').populate('user').exec(function(err, user_documents) {
+    Document.find({user : req.user._id}).sort('-updated').populate('user', '-hashed-password').populate('room').exec(function(err, user_documents) {
         if (err) {
             return 'Error';
             res.send('err')

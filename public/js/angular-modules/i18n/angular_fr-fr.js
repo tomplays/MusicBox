@@ -5,7 +5,8 @@ $provide.value("$locale", {
 "CUSTOM" : {
 	"COMMENT" : {
 		"single" : "commentaire",
-		"textarea" : "Votre commentaire...",
+		"textarea" : "Votre commentaire",
+		"label" : "Ajouter un commentaire",
 		"verb" : "commenter",
 		"needs_logging": "Vous devez être connecté pour ajouter un commentaire",
 		"logged_in_as" : "Vous êtes connecté en tant que"

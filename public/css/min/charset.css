@@ -234,11 +234,11 @@ i.fa-note:before {
 .lt.comment.selected {
   background: none repeat scroll 0 0 rgba(39, 174, 96, 0.7);
 }
-.layout_ i.fa-comment {
+i.fa.fa-comment {
   background: none repeat scroll 0 0 rgba(39, 174, 96, 0.5);
   color: #ffffff;
 }
-.layout_ i.fa-comment.selected_true {
+i.fa.fa-comment.selected_true {
   background: none repeat scroll 0 0 rgba(39, 174, 96, 0.7);
   border: 2px solid rgba(39, 174, 96, 0.9);
 }
@@ -248,13 +248,31 @@ i.fa-note:before {
 .lt.note.selected {
   background: none repeat scroll 0 0 rgba(39, 174, 96, 0.7);
 }
-.layout_ i.fa-note {
+i.fa.fa-note {
   background: none repeat scroll 0 0 rgba(39, 174, 96, 0.5);
   color: #ffffff;
 }
-.layout_ i.fa-note.selected_true {
+i.fa.fa-note.selected_true {
   background: none repeat scroll 0 0 rgba(39, 174, 96, 0.7);
   border: 2px solid rgba(39, 174, 96, 0.9);
+}
+.lt.container_class {
+  background: none repeat scroll 0 0 rgba(52, 73, 94, 0.3);
+}
+.lt.container_class.selected {
+  background: none repeat scroll 0 0 rgba(52, 73, 94, 0.8);
+}
+i.fa.fa-container_class {
+  background: none repeat scroll 0 0 rgba(52, 73, 94, 0.8);
+  color: #ffffff;
+  font-size: 8px;
+  font-weight: bold;
+  padding: 3px 4px 4px 1px;
+  text-transform: uppercase;
+}
+i.fa.fa-container_class.selected_true {
+  background: none repeat scroll 0 0 rgba(52, 73, 94, 0.8);
+  border: 2px solid rgba(52, 73, 94, 0.3);
 }
 .lt.semantic {
   background: none repeat scroll 0 0 rgba(142, 68, 173, 0.4);
