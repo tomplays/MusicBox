@@ -110,7 +110,7 @@ exports.index_doc= function(req, res) {
 			// user_ = new Object({'_id': req.user._id , 'username': req.user.username,  'image_url': req.user.image_url})
 		}
 
-		var doc_title ='';
+		var doc_title = '';
 		
 		if(req.params.slug){
 			doc_title = req.params.slug
@@ -118,7 +118,7 @@ exports.index_doc= function(req, res) {
 
 		res.render('index_v1', {
 			user_in : user_,
-			doc_title: doc_title
+			doc_title : doc_title
 		});
 }
 
