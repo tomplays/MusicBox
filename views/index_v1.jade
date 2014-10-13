@@ -10,18 +10,16 @@ html(class="is_home_{{ui.is_home}} is_single_{{ui.is_single}} doc_id_{{doc._id}}
 		base(href='/')
 		// meta(name="description", content=#{site_description_long})
 		meta(property="fb:app_id" , content="#{fbapp_id}")
-		meta(property="og:title", content=locals.title)
+		
 		// https://developers.facebook.com/docs/reference/opengraph/object-type
 		// https://developers.facebook.com/tools/object-browser?app_id=248664598505342
 		meta(property="og:type", content="article")
 		// meta(property="og:type", content="like:article")
 		
-
+		meta(property="og:title", content="#{doc_title}")
 		meta(property="og:image", content="#{doc_thumbnail}")
 		
-
-
-		// meta(property="og:url", content="")
+		meta(property="og:url", content="#{doc_slug_discret}")
 		link(rel='icon', type="image/png", href="/favicon.png")
 		
 		script(type="text/javascript").

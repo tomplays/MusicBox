@@ -21,8 +21,9 @@ var mongoose = require('mongoose'),
  _ = require('underscore'),
 Document = mongoose.model('Document'),
 Markup  = mongoose.model('Markup');
+var nconf = require('nconf')
 
-var nconf;
+nconf.argv().env().file({file:'config.json'});
 
 var chalk = require('chalk')
 
@@ -110,13 +111,16 @@ exports.index_doc= function(req, res) {
 			// user_ = new Object({'_id': req.user._id , 'username': req.user.username,  'image_url': req.user.image_url})
 		}
 
-		var doc_req_slug = 'homepage';
+		var doc_req_slug 	  = 'homepage';
+		var doc_slug_discret  =  nconf.get('ROOT_URL')+'/'
+
 		
 		if(req.params.slug){
-			doc_req_slug = req.params.slug
+			doc_req_slug = req.params.slug;
+			doc_slug_discret  +=  '/doc/'+req.params.slug;
 		}
 
-
+					
 		// miniquery.
 		var query = Document.findOne({ 'slug':doc_req_slug });
 			query.populate('user','-email -hashed_password -salt').populate( {path:'markups.user_id', select:'-salt -email -hashed_password', model:'User'}).populate({path:'markups.doc_id', select:'-markups -secret', model:'Document'}).populate('markups.doc_id.user').populate('room').exec(function (err, doc) {
@@ -137,11 +141,14 @@ exports.index_doc= function(req, res) {
 
 						
 				}
+
+
 					res.render('index_v1', {
 						user_in : user_,
 						doc_title : doc.title,
 						doc_thumbnail : doc.thumbnail,
-						doc_exceprt: doc.excerpt
+						doc_exceprt: doc.excerpt,
+						doc_slug_discret : doc_slug_discret 
 					});
 	
 				
