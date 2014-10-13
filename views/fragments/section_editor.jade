@@ -1,15 +1,10 @@
-
-
-div.section_displayer(ng-if="section.type=='container' && ui.renderAvailable_active == 'editor'  ") 
-	
-
-
+div.section_displayer(ng-if="section.type=='container' && ui.renderAvailable_active == 'editor' ")
 	// p {{section._id}}
 	// p {{section.subtype}}
 	// p {{section.start}} - {{section.end}} - {{section.metadata}} - {{section.type}} - {{section.subtype}}
 	
 
-	a.btn.btn_section.btn_section_select(href="",ng-if="section.selected==false",ng-click="toggle_select_markup(section)") Select section
+	a.btn.btn_section.btn_section_select(href="",ng-if="section.selected==false", ng-click="toggle_select_markup(section)") Select section
 	a.btn.btn_section.btn_section_unselect(href="", ng-if="section.selected == true ", ng-click="toggle_select_markup(section)") Unselect
 
 
@@ -38,16 +33,19 @@ div.section_displayer(ng-if="section.type=='container' && ui.renderAvailable_act
 		input(ng-model="section.start" ,type="number")
 		label end
 		input(ng-model="section.end", type="number")
+		span.field.ranges
+			span.ranges_inputs
+				span.field.numberfloat._start
+					label start
+					input(required   type="number" , ng-model="section.start" )
+				span.field.numberfloat.number._end
+					label end
+					input(required  type="number" , ng-model="section.end" )
+			span.ranges_tools
+				i.fa.fa-text-width.match_selection(title="re-match ranges from active selection", ng-click="match_selection(section)")
 		// label metadata
 		// input(ng-model="section.metadata", type="text")
 		// label status
 		// input(ng-model="section.status" ,type="text")
 		// label depth
 		// input(ng-model="section.depth" type="text" )
-		
-		// 
-
-		
-
-	
-	

@@ -1,13 +1,7 @@
 // div.ct-chart
 //div(ng-include="fragments['branding'][0]['url']")
 
-
 div(ng-include="fragments['before_doc'][0].url" )
-
-
-
-
-
 
 div(class="sections_container")
 	section(ng-repeat='section in containers' , class="{{section.section_classes}}")
@@ -63,11 +57,25 @@ div(class="sections_container")
 						// p {{ui.selected_range.start}} - {{ui.selected_range.end}} 
 						// div
 							input(type="text", ng-model="inserttext[$parent.$parent.$index]")
-					
 						
+						
+						// in use, v++++ ! directive and sub dire
+						div.theletters
+							//p {{section.selecting}}
+							my-Text(selecting="section.selecting" , section="section")
+						
+
+						// v1
+						// div.theletters
+							my-customer(letter="l", ng-repeat="l in letters[$parent.$parent.$index]") 
+						
+						// v -
+						// div.precompiled(ng-bind-html="section.compiled")
+						
+						// v classic.		
+						// div.theletters
+							span(ng-bind-html="l.char", ng-mousedown="over(l, 'down')", ng-mouseup="over(l, 'up')", ng-class="l.classes", ng-click="over(l, 'click')" , ng-dblclick="switch_editing(l)", data-order="{{$index}}", ng-repeat="l in letters[$parent.$parent.$index]") 
 								
-						div.theletters(ng-click="click_text()")
-							span(ng-mousedown="over(l, 'down')", ng-mouseup="over(l, 'up')", ng-class="l.classes", ng-click="over(l, 'click')" , ng-dblclick="switch_editing(l)", data-order="{{$index}}", ng-repeat="l in letters[$parent.$parent.$index]") {{l.char}}
 		
 
 		footer(ng-if="$last")
@@ -76,3 +84,5 @@ div(class="sections_container")
 
 			// a(href="/doc/{{doc.title}}") permalink
 			// a(href="/") back home
+
+

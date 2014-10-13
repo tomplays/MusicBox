@@ -21,7 +21,7 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
           if($routeParams.docid){
             docid = $routeParams.docid
           }
-          
+         $rootScope.selectingd = 'ydu';
          $rootScope.userin = new Object({'username':''});
 
 
@@ -172,6 +172,9 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
 
          $rootScope.max_reached_letter = 0;
         _.each($rootScope.containers, function(container, index){
+
+
+            container.selecting = -1;
     
             // reach letter max test
             if(container.end > $rootScope.max_reached_letter){
@@ -260,12 +263,7 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
               
 
               
-              markup.explicit_string  =   '';
-              var i;
-              for (i = markup.start; i < markup.end; i++) {
-                var j = i - $rootScope.containers[index].start;
-                markup.explicit_string += $rootScope.containers[index].fulltext[j];
-              }
+            
 
 
               if(markup.type=='container_class' ){ // or pos == inlined
@@ -282,7 +280,7 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
                 if(markup.doc_id){ 
                    markup.doc_id_id = markup.doc_id._id;
                     // markup.doc_id_id.uuser = markup.doc_id.user;
-                     console.log( markup.doc_id)
+                    // console.log( markup.doc_id)
 
                    if(markup.doc_id.doc_options){
                      // m.markup.child_options = [];
@@ -304,12 +302,26 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
                   //console.log('section end:'+section.end)
                   //console.log('fc:'+ parseInt(section.end) - parseInt(section.start) );
                   var size_object = parseInt(markup.end) - parseInt(markup.start) -1;
-                  
+                  markup.explicit_string  =   '';
                   for (var pos= markup.start; pos<=markup.end; pos++){ 
+
+
+
+
+
+
+
 
                     // pushing class to each letter..
                     var delta = parseInt(markup.start) - parseInt(container.start) + j_arr;
                     
+
+                    if($rootScope.doc.content[delta]){
+                                          markup.explicit_string += $rootScope.doc.content[delta];
+
+                    }
+
+
 
                     // only to markup with type markup
                     if( markup.subtype=='h1' ||  markup.subtype=='h2' ||  markup.subtype=='h3' || markup.subtype=='h4' || markup.subtype=='h5' || markup.subtype=='h6' || markup.subtype=='list-item')  {
@@ -334,7 +346,8 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
 
                     }
 
-                   
+                    
+           
 
                     //$rootScope.letters[index][delta]['classes'] = _.without($rootScope.letters[index][delta]['classes'],'selected')
                     //$rootScope.letters[index][delta]['classes'] = _.without($rootScope.letters[index][delta]['classes'],'editing')
@@ -406,12 +419,40 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
           })
           //$rootScope.containers[index].objects = $rootScope.objects_sections[index]    
           $rootScope.containers[index].letters = $rootScope.letters[index]
+         
+
+
+
+
+         
+
+
+
+
+
+
+
          //  console.log($rootScope.containers[index])
         
 
 
         }); // end of containers loop
+
         
+/*
+
+           _.each($rootScope.containers, function(container, index){
+                      $rootScope.containers[index].compiled = '';
+                      
+
+                       _.each($rootScope.containers[index].letters, function(l, l_index){
+                          $rootScope.containers[index].compiled += "<my-customer></my-customer>";
+                       });
+                     
+
+           }); // end of containers loop        
+
+        */
 
         if($rootScope.max_reached_letter !==  $rootScope.doc.content.length){
               console.log('unreached letter found :'+ $rootScope.max_reached_letter +'--'+$rootScope.doc.content.length)
@@ -429,7 +470,7 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
           _.each($rootScope.doc.markups, function(markup){
             if(markup.isolated == true && markup.type !=="container"){
                 console.log('isolate markup: '+markup.start+' - '+markup.type)
-                console.log(markup)
+               // console.log(markup)
                 $rootScope.ui.isolated_markups.push(markup)
             }
 
@@ -528,12 +569,12 @@ var options = {
           ch = content_string[i];
           
           if (ch === " ") {
-                ch = ' ';
+                ch = '';
 
             }
             if (!content_string[i]) {
               // maybe better to unset ? 
-                ch = ' ';
+                ch = '';
             }
           fulltext += ch;
           letter_arr['char'] = ch;
@@ -615,7 +656,7 @@ var options = {
           //console.log($rootScope.room_options)
          }
          else if(object =='markup_user_options'){
-              console.log(options_array)
+            //  console.log(options_array)
               return options_array;
 
          }

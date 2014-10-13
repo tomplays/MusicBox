@@ -29,6 +29,9 @@ a:hover {
   text-decoration: none;
   color: #222;
 }
+p {
+  margin: 0;
+}
 h1,
 h2,
 h3,
@@ -769,7 +772,7 @@ body.render_active_editor .markup_displayer_generic.markup_displayer_subtype_not
   float: left;
   margin-bottom: 2px;
   width: 99%;
-  overflow: scroll;
+  overflow: hidden;
 }
 .markup_displayer.is_editing_true {
   padding-bottom: 10px;

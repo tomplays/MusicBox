@@ -1,6 +1,5 @@
 // p {{markup.start}} - {{markup.end}} - {{markup.metadata}} - {{markup.type}} - {{markup.subtype}}
 
-
 div(class="markup_box markup_box_depth_{{markup.depth}} markup_box_status_{{markup.status}}   markup_displayer_ markup_displayer markup_displayer_{{markup.type}} markup_displayer_subtype_{{markup.subtype}}  by_me_{{markup.by_me}} is_editing_{{markup.editing}}") 
 	
 	img.mk_img(ng-if="markup.subtype=='img'" , data-tdid="{{markup.id}}" , ng-src="{{markup.metadata}}")
@@ -11,6 +10,7 @@ div(class="markup_box markup_box_depth_{{markup.depth}} markup_box_status_{{mark
 			span(ng-if="markup.type=='generic'") {{markup.subtype[0]}}
 
 	div.data_col
+		// p {{markup.explicit_string}}
 
 
 		span.mk_val.metadata.use_depth(ng-bind-html="markup.metadata",  ng-if="objSchema[markup.type].metadata.render.show") 
@@ -91,7 +91,7 @@ div(class="markup_box markup_box_depth_{{markup.depth}} markup_box_status_{{mark
 				
 				select(ng-options="sub for sub in objSchema[markup.type].subtype.available" , ng-model="markup.subtype", name="markup.subtype")
 								
-			span.field(ng-if="markup.type=='doc_content_block' ")
+			span.field(ng-if="markup.subtype=='doc_content_block' ")
 				label sub-doc id
 				input(ng-model="markup.doc_id_id" , type="text")
 

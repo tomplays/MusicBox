@@ -129,7 +129,7 @@ var DocumentSchema = new Schema({
     secret: {type:ObjectIdSchema, default: function () { return new ObjectId()} },
     thumbnail: {
         type: String,
-         default: nconf.get('ROOT_URL')+'/img/lorem/400-400.jpg'
+         default: 'http://hacktuel.fr/img/logos/loguy/hacktuel.png'
     },
     lang: {
         type: String,

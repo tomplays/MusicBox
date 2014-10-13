@@ -221,13 +221,13 @@ else{
                    'show' : true
                   }
               }, 
-              'show_date': true,
+              'show_date': false,
               'icon': { 
                 'before': {
                    'show' : true
                   }
               }, 
-              'show_user': true,
+              'show_user': false,
               'subtype': {
                 'free_input' : true,
                 'available' : 'any'

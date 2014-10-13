@@ -289,20 +289,101 @@ if(newValue !==undefined  && oldValue !==undefined && (newValue !== oldValue) )
 	}
 
 
-	$scope.over= function(letter, event){
+$scope.allo = 's'
+$scope.over= function(position, event){
+
+		console.log('over ctrl '+position, event);
+		$scope.allo = 'ds'
+ 		
+ 	//	var start_range = position;
+ 	//	var end_range  =  position+10
+		$scope.selectingd = 'd'
+
+
+	}
+$scope.over= function(position, event){
+
+		console.log('over ctrl '+position, event);
+
+ 		
+ 	//	var start_range = position;
+ 	//	var end_range  =  position+10
+	
+
+
+
+		// scan markups in range.
+		_.each($scope.doc.markups, function(c, i){
+					//	c.selected= true;
+						//c.selected = true;
+						if(c.start == 5){
+							$scope.letters[c.sectionin][5]['classes'].push('selected')
+							c.selected = true;
+						//	console.log(c.selecting );
+						}
+						
+							/*
+
+						if(c.end<= end_range || c.start == start_range  || c.start <= start_range ){
+							console.log('container:'+c.type+' ('+c.start+' -- '+c.end+')');
+							c.selected= true;
+
+
+
+
+													for (var i = c.start; i <= c.end; i++) {
+													//	console.log(i)
+													var _classes = $scope.letters[c.sectionin][i]['classes'];
+
+												
+												if(_.contains(_classes, 'selected')  ){
+													 $scope.letters[c.sectionin][i]['classes'] = _.without( _classes,'selected')
+
+												}
+												else{
+													$scope.letters[c.sectionin][i]['classes'].push('selected')
+
+												}
+												console.log(_classes)
+
+											}
+
+						
+
+						}
+						*/
+
+						// console.log(c.objects)
+
+
+
+
+
+
+
+
+
+
+		});
+	
+	
+
+
+
+}
+	$scope.over_= function(letter, event){
 		
 		var down_at;
 		var up_at;
 		down_at  = $scope.ui.selected_range.start
 		up_at	 = $scope.ui.selected_range.end
 
-
 		console.log(event)
 
 		//console.log(letter)
 
 
-		var event_at = letter.order;
+		var event_at = letter;
 		
 
 		if(event == 'down'){
@@ -322,8 +403,8 @@ if(newValue !==undefined  && oldValue !==undefined && (newValue !== oldValue) )
 		}
 		if(event == 'click'){
 			
-			$scope.ui.selected_range.end = letter.order;
-			$scope.ui.selected_range.start = letter.order;
+			$scope.ui.selected_range.end = letter;
+			$scope.ui.selected_range.start = letter;
 
 
 			console.log(letter)
@@ -344,7 +425,7 @@ if(newValue !==undefined  && oldValue !==undefined && (newValue !== oldValue) )
 
 ///
 
-
+/*
 
 		if(event == 'click'){
 			if(letter.href !==''){
@@ -353,7 +434,7 @@ if(newValue !==undefined  && oldValue !==undefined && (newValue !== oldValue) )
 				window.location = letter.href
 			}
 		}
-
+*/
 
 		//if(event_at <= $scope.ui.selected_range.start){
 		//	$scope.ui.selected_range.start = event_at;
@@ -374,6 +455,8 @@ if(newValue !==undefined  && oldValue !==undefined && (newValue !== oldValue) )
 		
 
 		// apply selected to objects in ranges
+
+	
 		$scope.objects_in_range('containers');
 
 
@@ -382,7 +465,7 @@ if(newValue !==undefined  && oldValue !==undefined && (newValue !== oldValue) )
 	
 
 	$scope.edit_doc = function(field){
-	
+
 
 		if(field == 'content'){
 			//alert('content change without api offset!')
@@ -435,13 +518,195 @@ if(newValue !==undefined  && oldValue !==undefined && (newValue !== oldValue) )
 	}
 
 
+
 	$scope.toggle_select_markup = function (markup, event_name){
+			markup.selected = true
+			markup.editing= true
+
+			//alert(markup.type)
+			console.log(markup)
+			//return;
+			var source = $scope.doc.markups;
+		
+	
+		
+	
+
+				var start_range = markup.start 	- $scope.containers[markup.sectionin].start 
+				var start_range  = markup.end 	- $scope.containers[markup.sectionin].start
+
+
+
+			// match from an object and its range.
+			//if(markup.type !== 'container'){
+					for (var i = markup.start; i <= markup.end; i++) {
+
+						var _classes = $scope.letters[markup.sectionin][i]['classes'];
+
+						//$scope.letters[markup.sectionin][i]['classes'].push("editing")
+						//$scope.letters[markup.sectionin][i]['classes'].push("selected")
+						//console.log($scope.letters[markup.sectionin][i]['classes'])
+
+						if(_.contains(_classes, 'selected')  ){
+							 $scope.letters[markup.sectionin][i]['classes'] = _.without( _classes,'selected')
+
+						}
+						else{
+							$scope.letters[markup.sectionin][i]['classes'].push('selected')
+
+						}
+
+					}
+			//}
+
+			// match
+			if(markup.type == 'container'){
+						console.log('rangeing section')
+
+			}
+
+
+
+			$scope.containers[markup.sectionin].selecting = Math.random()
+			return;
+
+
+
+
+
+	/*
+		if(!start_range || !end_range){
+			var start_range = $scope.ui.selected_range.start
+			var end_range = $scope.ui.selected_range.end
+		}
+		
+*/
+      
+
+		var objects_in_range = []
+
+
+		_.each(source, function(c, i){
+
+				// should be later test.
+
+				//if(start_range < c.end || start_range < c.start){
+				//	if(end_range > c.end  || end_range > c.start ){
+						
+					if(c.type !== 'container'){
+
+
+							// single select a mk.
+							console.log('mk');
+
+
+
+
+
+
+
+
+
+					}
+
+					if(c.type == 'container'){
+						console.log(c.objects)
+						console.log('container:'+c.type+' ('+c.start+' -- '+c.end+')');
+
+
+						console.log(_.keys(c.objects))
+							// loop types
+							_.each(_.keys(c.objects), function(key, u){
+								
+
+								var pos_keys = _.keys(c.objects[key])
+
+									// loop positions
+									_.each(pos_keys, function(skey, u){
+										//	console.log(c.objects[key][skey])
+												
+										// loop objects at type _ position
+										var objs = c.objects[key][skey];
+										_.each(objs, function(ob, w){
+
+
+											ob.selected = false;
+											
+
+
+
+											if(start_range < ob.end || start_range < ob.start){
+												if(ob.type !== 'container' && (end_range > ob.end  || end_range > ob.start) ){
+
+													ob.selected = true;
+													console.log(ob.type)
+													objects_in_range.push(ob);
+
+
+
+
+
+
+
+
+
+												}
+												else{
+													
+												}
+											}
+											
+											//ob.selected = true;
+										})
+
+
+
+									})
+
+								//console.log(c.objects[key])
+							});
+
+}
+
+						
+
+					//}
+				//}
+
+
+
+
+		});
+
+
+		
+		console.log(objects_in_range);
+		_.each(objects_in_range, function(o, us){ console.log(o) });
+
+
+
+// triger
+// 	
+
+
+
+
+
+
+
+
+    }
+
+	$scope.toggle_select_markupP = function (markup, event_name){
 		if(!event_name){
 			var event_name = 'click'
 		}
 
 
+ 	//	alert(markup.sectionin)
 
+
+ 	//	alert($scope.containers[markup.sectionin].selecting)
 		var real_start = markup.start 	- $scope.containers[markup.sectionin].start 
 		var real_end   = markup.end 	- $scope.containers[markup.sectionin].start
 
@@ -731,6 +996,7 @@ if(newValue !==undefined  && oldValue !==undefined && (newValue !== oldValue) )
 		console.log(objects_in_range);
 
 
+
 /*
 
 		_.each(source, function(mk, i){
@@ -751,6 +1017,7 @@ if(newValue !==undefined  && oldValue !==undefined && (newValue !== oldValue) )
 
 		});
 */
+$scope.containers[0].selecting = Math.random()
 
 		return objects_in_range;
 
@@ -896,7 +1163,7 @@ if(newValue !==undefined  && oldValue !==undefined && (newValue !== oldValue) )
 						}
 
 					}
-					socket.emit('news', {doc_id: $scope.doc.title, action: args.action , type: args.type });
+				//	socket.emit('news', {doc_id: $scope.doc.title, action: args.action , type: args.type });
 					console.log($scope.ui);
 
 
