@@ -8,7 +8,7 @@ html(class="is_home_{{ui.is_home}} is_single_{{ui.is_single}} doc_id_{{doc._id}}
 		meta(http-equiv="X-UA-Compatible", content="IE=edge,chrome=1")
 		meta(name='viewport', content='width=device-width, initial-scale=1.0')
 		base(href='/')
-		// meta(name="description", content=#{site_description_long})
+		meta(name="description", content="#{doc_excerpt}")
 		meta(property="fb:app_id" , content="#{fbapp_id}")
 		
 		// https://developers.facebook.com/docs/reference/opengraph/object-type
@@ -18,6 +18,11 @@ html(class="is_home_{{ui.is_home}} is_single_{{ui.is_single}} doc_id_{{doc._id}}
 		
 		meta(property="og:title", content="#{doc_title}")
 		meta(property="og:image", content="#{doc_thumbnail}")
+		meta(property="og:description", content="#{doc_excerpt}")
+		meta(property="og:site_name", content="#{site_title}")
+
+
+
 		
 		meta(property="og:url", content="#{doc_slug_discret}")
 		link(rel='icon', type="image/png", href="/favicon.png")

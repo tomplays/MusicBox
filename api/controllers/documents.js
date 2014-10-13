@@ -147,7 +147,7 @@ exports.index_doc= function(req, res) {
 						user_in : user_,
 						doc_title : doc.title,
 						doc_thumbnail : doc.thumbnail,
-						doc_exceprt: doc.excerpt,
+						doc_excerpt: doc.excerpt,
 						doc_slug_discret : doc_slug_discret 
 					});
 	
