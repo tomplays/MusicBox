@@ -110,16 +110,46 @@ exports.index_doc= function(req, res) {
 			// user_ = new Object({'_id': req.user._id , 'username': req.user.username,  'image_url': req.user.image_url})
 		}
 
-		var doc_title = '';
+		var doc_req_slug = 'homepage';
 		
 		if(req.params.slug){
-			doc_title = req.params.slug
+			doc_req_slug = req.params.slug
 		}
 
-		res.render('index_v1', {
-			user_in : user_,
-			doc_title : doc_title
+
+		// miniquery.
+		var query = Document.findOne({ 'slug':doc_req_slug });
+			query.populate('user','-email -hashed_password -salt').populate( {path:'markups.user_id', select:'-salt -email -hashed_password', model:'User'}).populate({path:'markups.doc_id', select:'-markups -secret', model:'Document'}).populate('markups.doc_id.user').populate('room').exec(function (err, doc) {
+			if (err){
+				res.json(err)
+			} else{
+				console.log(doc)	
+					if(doc.published =='edraft')
+				{
+						
+
+					
+							var user_can	= test_owner_or_key(doc,req)
+							if(!user_can){
+								res.json('is draft ! ');
+								return;
+							}
+
+						
+				}
+					res.render('index_v1', {
+						user_in : user_,
+						doc_title : doc.title,
+						doc_thumbnail : doc.thumbnail,
+						doc_exceprt: doc.excerpt
+					});
+	
+				
+
+			}
 		});
+
+		
 }
 
 

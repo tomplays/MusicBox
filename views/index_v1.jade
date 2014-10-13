@@ -15,7 +15,12 @@ html(class="is_home_{{ui.is_home}} is_single_{{ui.is_single}} doc_id_{{doc._id}}
 		// https://developers.facebook.com/tools/object-browser?app_id=248664598505342
 		meta(property="og:type", content="article")
 		// meta(property="og:type", content="like:article")
-		meta(property="og:image", content="{{doc.thumbnail}}")
+		
+
+		meta(property="og:image", content="#{doc_thumbnail}")
+		
+
+
 		// meta(property="og:url", content="")
 		link(rel='icon', type="image/png", href="/favicon.png")
 		
