@@ -77,6 +77,17 @@ function UserCtrl($scope, $http , $location, $routeParams,  $locale) {
 				$scope.userin = USERIN;
 
 		}
+
+			$scope.register_url = root_url+'/signup';
+			$scope.created_user_link   = root_url+'/me/account?welcome';
+
+
+			if($routeParams.redirect_url){
+				$scope.created_user_link 	= $routeParams.redirect_url;
+				$scope.register_url 		+= '?redirect_url='+$routeParams.redirect_url
+			}
+         
+
 		$scope.i18n = $locale;
  		$scope.globals = GLOBALS;
         $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
@@ -109,7 +120,9 @@ function UserCtrl($scope, $http , $location, $routeParams,  $locale) {
 			 	console.log(data)
  				$http.post(root_url+'/register', serialize(data) ).
          		 success(function(e) {
-          			$scope.success= 'welcome '+$scope.username +' !'
+         		 		
+         		 		 window.location = $scope.created_user_link 
+          			
            
           		 });  
 
@@ -126,11 +139,13 @@ function UserCtrl($scope, $http , $location, $routeParams,  $locale) {
 
 
 
-function SignUpCtrl($scope, $http ) {
+function SignUpCtrl($scope, $http,$routeParams ) {
 		console.log('SignUpCtrl')
-		
+
+//
+
 		$scope.init = function (){
-		        $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
+		   $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
 
 		
 		}

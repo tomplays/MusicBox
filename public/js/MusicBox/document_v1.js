@@ -520,8 +520,13 @@ $scope.over= function(position, event){
 
 
 	$scope.toggle_select_markup = function (markup, event_name){
+
+
 			markup.selected = true
 			markup.editing= true
+
+
+
 
 			//alert(markup.type)
 			console.log(markup)
@@ -532,8 +537,8 @@ $scope.over= function(position, event){
 		
 	
 
-				var start_range = markup.start 	- $scope.containers[markup.sectionin].start 
-				var start_range  = markup.end 	- $scope.containers[markup.sectionin].start
+			var start_range = markup.start 	- $scope.containers[markup.sectionin].start 
+			var start_range  = markup.end 	- $scope.containers[markup.sectionin].start
 
 
 
@@ -561,17 +566,17 @@ $scope.over= function(position, event){
 
 			// match
 			if(markup.type == 'container'){
-						console.log('rangeing section')
+				console.log('range--in-g section')
 
 			}
 
 
-
+			// trigger 
 			$scope.containers[markup.sectionin].selecting = Math.random()
 			return;
 
 
-
+/////////////////////////////////////////
 
 
 	/*
@@ -610,11 +615,11 @@ $scope.over= function(position, event){
 					}
 
 					if(c.type == 'container'){
-						console.log(c.objects)
-						console.log('container:'+c.type+' ('+c.start+' -- '+c.end+')');
+							console.log(c.objects)
+							console.log('container:'+c.type+' ('+c.start+' -- '+c.end+')');
 
 
-						console.log(_.keys(c.objects))
+							console.log(_.keys(c.objects))
 							// loop types
 							_.each(_.keys(c.objects), function(key, u){
 								
@@ -632,24 +637,11 @@ $scope.over= function(position, event){
 
 											ob.selected = false;
 											
-
-
-
 											if(start_range < ob.end || start_range < ob.start){
 												if(ob.type !== 'container' && (end_range > ob.end  || end_range > ob.start) ){
-
 													ob.selected = true;
 													console.log(ob.type)
 													objects_in_range.push(ob);
-
-
-
-
-
-
-
-
-
 												}
 												else{
 													
@@ -665,114 +657,31 @@ $scope.over= function(position, event){
 
 								//console.log(c.objects[key])
 							});
-
-}
-
-						
-
+						}
 					//}
 				//}
-
-
-
-
-		});
-
-
-		
+		});		
 		console.log(objects_in_range);
 		_.each(objects_in_range, function(o, us){ console.log(o) });
 
-
-
-// triger
-// 	
-
-
-
-
-
-
-
-
     }
 
-	$scope.toggle_select_markupP = function (markup, event_name){
-		if(!event_name){
-			var event_name = 'click'
-		}
-
-
- 	//	alert(markup.sectionin)
-
-
- 	//	alert($scope.containers[markup.sectionin].selecting)
-		var real_start = markup.start 	- $scope.containers[markup.sectionin].start 
-		var real_end   = markup.end 	- $scope.containers[markup.sectionin].start
-
-
-		
-
-		if(markup.selected===true && event_name == 'click'){
-			markup.selected = false
-		}
-		else if(markup.selected===false && event_name == 'click'){
-			markup.selected =true
-		}
-		
-		// cant edit if not a 'by_me' markup
-		if( ($scope.doc_owner == true  ||  $scope.ui.secret ||  markup.by_me == 'true') && markup.editing===true && event_name == 'dblclick'){
-			markup.editing = false
-		}
-		else if( ($scope.doc_owner == true  ||  $scope.ui.secret ||  markup.by_me == 'true')  && markup.editing===false && event_name == 'dblclick'){
-			markup.editing = true
-		}
-		console.log(markup)
-
-
-		$scope.ui.selected_range.start = real_start
-		$scope.ui.selected_range.end 	= real_end
-		$scope.ui.selected_section_index = markup.sectionin
-
-
-
-
-		if(markup.editing == true){
-			$scope.ui.editing_objects.push(markup)
-		}
-		if(markup.editing == false){
-			$scope.ui.editing_objects = _.without($scope.ui.editing_objects, markup)
-		}
-
-		if(markup.selected == true){
-			$scope.ui.selected_objects.push(markup)
-			$scope.$emit('docEvent', {action: 'selection', type: 'select' });
-		}
-		if(markup.selected == false){
-			$scope.ui.selected_objects = _.without($scope.ui.selected_objects, markup)
-			$scope.$emit('docEvent', {action: 'selection', type: 'unselect' });
-		}
-
-
-
-
-	}
-
-
 	$scope.match_selection = function (markup){
-		// apply selection to mk
-		//alert('e')
+		
+		// apply selection ranges to markup ranges
+		
+		// todo: should check notnull
+		markup.start    = $scope.ui.selected_range.start
+		markup.end 		= $scope.ui.selected_range.end
 
-		markup.start = $scope.ui.selected_range.start
-		markup.end = $scope.ui.selected_range.end
+		// and save (automatic)	
 		doc.markup_save(markup)
-
 	}
 
 
 	$scope.open_comment_push = function (container_index){
 		
-	// this way only one menu can me open.. and persistent
+	   // this way only one menu can me open.. and persistent
 		var cur = $scope.ui.menus.push_comment.open;
 		if(cur == container_index.sectionin){
 			cur = -1	
@@ -786,16 +695,20 @@ $scope.over= function(position, event){
 		return;
 	}
 
-    $scope.push = new Object;
 
 
+    $scope.push = {};
+
+    // short function
 	$scope.push_section= function (){
-
+		
+		// auto set
 		$scope.push.start  = (_.last($scope.containers).end)+1
 		$scope.push.end  = (_.last($scope.containers).end)+10
 		$scope.push.type = 'container';
 		$scope.push.subtype = 'container';		
 		$scope.push.position = 'inline';
+
 		$scope.push_markup();
 	}
 
@@ -815,12 +728,7 @@ $scope.over= function(position, event){
 
 	}
 
-	// change and save a single value of a markup
-	$scope.replace_markup = function(markup, field, value){
-		markup[field] = value;
-		doc.markup_save(markup)
-	}
-
+	
 
 	$scope.push_comment= function (section){
 
@@ -845,7 +753,6 @@ $scope.over= function(position, event){
 	$scope.push_markup = function (){
 			console.log($scope.push)
 			
-
 			// sure to set up
 			if(!$scope.push.depth){
 				$scope.push.depth = 1;
@@ -857,35 +764,41 @@ $scope.over= function(position, event){
 				$scope.push.end = 1;
 			}
 			if(!$scope.push.type){
-				$scope.push.type = 'markup';
+				$scope.push.type = 'comment';
 			}
 			if(!$scope.push.metadata){
 				$scope.push.metadata= '-';
 			}
 			if(!$scope.push.status){
-				$scope.push.status= '-';
+				$scope.push.status= 'pending';
 			}
 			if(!$scope.push.subtype){
-				$scope.push.subtype = 'h1';
+				$scope.push.subtype = 'comment';
 			}
             if(!$scope.push.position){
-				$scope.push.position = 'inline';
+				$scope.push.position = 'left';
 			}
 			if(!$scope.push.doc_id_id){
 				$scope.push.doc_id_id = 'null';
 			}
-			// force autoset
-			if($scope.push.type=="markup"){$scope.push.position = 'inline'}
-			if($scope.push.type=="container"){$scope.push.position = 'inline'}
-			if($scope.push.type=="container_class"){$scope.push.position = 'inline'}
+			// force autoset / force-correct
+			if($scope.push.type == "markup"){ $scope.push.position = 'inline'}
+			if($scope.push.type == "container"){$scope.push.position = 'inline'}
+			if($scope.push.type == "container_class"){$scope.push.position = 'inline'}
+			
+			// object is clean
 
-
-			//call service
-			doc.push_markup($scope.push)
-
-		
+			doc.push_markup($scope.push)	 // call service
 
 	}
+
+	// change and save a single value of a markup
+	$scope.replace_markup = function(markup, field, value){
+		markup[field] = value;
+		doc.markup_save(markup)
+	}
+
+
 	$scope.offset_markups = function (){
 		doc.offset_markups()
 	}
@@ -1239,32 +1152,26 @@ var newdoc_service;
 function DocumentNewCtrl($scope, $http , docfactory) {
 console.log('DocumentNewCtrl')
 
-
-
 	$scope.init_new_doc = function (){
-       	 	$http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
-
+       	 	 $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
 			 newdoc_service =  docfactory();
 			 newdoc_service.init_new();
 			//alert('A')
 	}
-
 	$scope.create_doc = function(){
 		console.log($scope.newdoc)
 		 newdoc_service.newdoc();
 	}
-
 	$scope.init_new_doc()
 	//alert('0')
-
 }
+DocumentNewCtrl.$inject = ['$scope', '$http' , 'docfactory'];
 
 
 // MISC UTILS
 function urlencode(str) {
     return escape(str.replace(/%/g, '%25').replace(/\+/g, '%2B')).replace(/%25/g, '%');
 }
-
 function serialize(obj, prefix) {
   var str = [];
   for(var p in obj) {
@@ -1275,8 +1182,3 @@ function serialize(obj, prefix) {
   }
   return str.join("&");
 }
-
-
-
-DocumentNewCtrl.$inject = ['$scope', '$http' , 'docfactory'];
-

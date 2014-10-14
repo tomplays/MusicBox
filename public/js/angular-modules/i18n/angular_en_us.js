@@ -27,7 +27,7 @@ $provide.value("$locale", {
 
 	},
 	"DOCUMENT" : {
-		"by_author" : "par",
+		"by_author" : "by",
 		"default_title" :"Your Title",
 		"default_content" :"Your text-content"
 

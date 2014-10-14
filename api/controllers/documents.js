@@ -5,45 +5,37 @@
 /*
 API functions
 
-document 
+"document" functions
+
 	create, edit, delete ..
 
-markups
-	crud 
-	offset
 
+"markups"
 
+	crud /	offset
+
+misc. function (access/right)
 
 */
-
 
 var mongoose = require('mongoose'),
  _ = require('underscore'),
 Document = mongoose.model('Document'),
 Markup  = mongoose.model('Markup');
-var nconf = require('nconf')
-
+var nconf = require('nconf');
 nconf.argv().env().file({file:'config.json'});
-
-var chalk = require('chalk')
-
+var chalk = require('chalk');
 var app;
-
-
 
 exports.doc_sync= function(req, res) {
 	//console.log('req.body.markups')
-
 	//console.log(req.body.markups)
-
-
 	var query = Document.findOne({ 'slug':req.params.slug });
 	query.populate('user','-email -hashed_password -salt').populate( {path:'markups.user_id', select:'-salt', model:'User'}).populate({path:'markups.doc_id', select:'-markups -secret', model:'Document'}).populate('markups.doc_id.user').populate('room').exec(function (err, doc) {
 		if (err){
 			res.json(err)
 		} 
 		else{
-
 			//console.log(req.body.doc_content)
 			console.log('doc.markups')
 			console.log('#######')
@@ -51,8 +43,7 @@ exports.doc_sync= function(req, res) {
 			console.log('#######################')
 			console.log('req.body.markups')
 			console.log('#######')
-			
-
+	
 			_.each(doc.markups, function(doc_mk, i){
 
 					//console.log(mk)
@@ -128,48 +119,33 @@ exports.index_doc= function(req, res) {
 				res.json(err)
 			} else{
 				console.log(doc)	
-					if(doc.published =='edraft')
+				if(doc.published =='draft')
 				{
-						
-
-					
 							var user_can	= test_owner_or_key(doc,req)
 							if(!user_can){
-								res.json('is draft ! ');
+								var message = 'This doc is a draft : <a style="text-decoration:underline;" href="/login?redirect_url='+nconf.get('ROOT_URL')+'/doc/'+req.params.slug+'">login</a> if your are doc owner or grab "secret key" <a style="text-decoration:underline;" href="'+nconf.get('ROOT_URL')+'"> &laquo; Back </a>';
+								 res.render('error', { title: 'no access', message: message} );
 								return;
 							}
-
-						
 				}
-
-
-					res.render('index_v1', {
+				res.render('index_v1', {
 						user_in : user_,
 						doc_title : doc.title,
 						doc_thumbnail : doc.thumbnail,
 						doc_excerpt: doc.excerpt,
 						doc_slug_discret : doc_slug_discret 
-					});
-	
-				
-
+				});
 			}
 		});
-
-		
 }
 
-
-
 // main document caller
-
 exports.docByIdOrTitle = function(req, res) {
 	var query = Document.findOne({ 'slug':req.params.slug });
 	query.populate('user','-email -hashed_password -salt').populate( {path:'markups.user_id', select:'-salt -email -hashed_password', model:'User'}).populate({path:'markups.doc_id', select:'-markups -secret', model:'Document'}).populate('markups.doc_id.user').populate('room').exec(function (err, doc) {
 	if (err){
 		res.json(err)
 	} else{
-
 		//var markups_type = new Array()
 		var markups_f = new Array()
 		if(doc && doc.markups){
@@ -182,10 +158,8 @@ exports.docByIdOrTitle = function(req, res) {
 			//doc.markups_type = new Array()
 		}
 		if(doc){
-
 			var out 			= new Object();
 			out.doc 			= doc.toObject();
-
 			if(req.user){
 				 out.userin 	= req.user.toObject();
 			}
@@ -194,8 +168,6 @@ exports.docByIdOrTitle = function(req, res) {
 			out.doc.secret 		= 'api_secret'
 			// out.markups_type = new Array(markups_type);
 			res.json(out)
-
-
 		}
 		else{
 			res.json('err')

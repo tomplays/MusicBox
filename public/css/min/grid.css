@@ -4,6 +4,14 @@ small layout
 @inline-width:40%;
 @inline-width-neg:-40%;
 */
+[ng\:cloak],
+[ng-cloak],
+[data-ng-cloak],
+[x-ng-cloak],
+.ng-cloak,
+.x-ng-cloak {
+  display: none !important;
+}
 html {
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.004);
   -webkit-font-smoothing: antialiased !important;
@@ -113,6 +121,10 @@ section {
 }
 .bg_debug {
   background: #2ecc71;
+}
+.fa,
+a.btn_ok {
+  cursor: pointer;
 }
 section {
   padding-bottom: 10px;
@@ -610,6 +622,7 @@ div.branding h1 a {
   color: #95a5a6;
   font-size: 1.2em;
   font-weight: bold;
+  cursor: pointer;
 }
 .open_comment:hover {
   color: #000;

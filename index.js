@@ -73,7 +73,8 @@ app.configure(function(){
   app.set('view engine', 'jade');
   app.set('view options', {
     layout: true,
-    debug: true 
+    debug: true,
+    pretty: true
   });
     app.use(express.cookieParser( nconf.get('COOKIESECRET')) );
 
@@ -99,7 +100,11 @@ app.configure(function(){
         //i18n (server)
         app.use(locale(supported))
         // lang_js_url : 
-      
+        
+
+        // thx @ http://stackoverflow.com/questions/5276892/expressjs-how-to-output-pretty-html
+        app.locals.pretty = true;
+        
         app.locals.site_title = nconf.get('SITE_TITLE');
         app.locals.site_description = nconf.get('SITE_DESCRIPTION');
         app.locals.site_description_long = nconf.get('SITE_DESCRIPTION_LONG');
