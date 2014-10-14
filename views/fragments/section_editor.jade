@@ -11,7 +11,7 @@ div.section_displayer( ng-if="section.type=='container' && ui.renderAvailable_ac
 		
 		.object-tools
 			i.fa.fa-save.btn_action(ng-click="markup_save(section)")
-			i.fa.fa-remove.btn_action(ng-click="markup_delete()")
+			i.fa.fa-remove.btn_action(ng-click="markup_delete(section)")
 			i.fa.fa-sliders.btn_action(ng-click="object_tools(section)")
 		
 		.section_tool_more(ng-if="section.object_tools")

@@ -227,6 +227,7 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
               //console.log('keep open')
               markup.selected = '';
               markup.editing  = '';
+              markup.inrange  = true;
               markup.uptodate = '';
 
               // user by_me test

@@ -496,7 +496,10 @@ div.branding h1 a {
   width: 100%;
 }
 .fixed_tools .ranges .ranges_start_end {
-  background: #e74c3c;
+  background: none repeat scroll 0 0 rgba(231, 76, 60, 0.4);
+  border-radius: 6px;
+  color: #ffffff;
+  padding: 1%;
 }
 .fixed_tools .pusher_items {
   float: left;

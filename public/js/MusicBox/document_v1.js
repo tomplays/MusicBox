@@ -291,14 +291,17 @@ if(newValue !==undefined  && oldValue !==undefined && (newValue !== oldValue) )
 
 $scope.over= function(position, event){
 
-		console.log('over ctrl '+position, event);
+		//console.log('over ctrl '+position, event);
 
 		var down_at;
 		var up_at;
 		down_at  = $scope.ui.selected_range.start
 		up_at	 = $scope.ui.selected_range.end
 
-		console.log(event)
+
+
+
+		// console.log(event)
 
 		//console.log(letter)
 
@@ -334,7 +337,7 @@ $scope.over= function(position, event){
 
 
 		// false need section index...
-
+/*
 		_.each($scope.containers, function(c, ci){
 			_.each($scope.letters[ci], function(d, id){
 					$scope.letters[ci][id]['classes'] = _.without($scope.letters[ci][id]['classes'],'inrange') 
@@ -354,7 +357,7 @@ $scope.over= function(position, event){
 			})
 		})
 
-		
+*/
 
 
 		// scan markups in range.
@@ -363,7 +366,7 @@ $scope.over= function(position, event){
 						//c.selected = true;
 						if(markup.type !=='container'){
 								$scope.ui.selected_objects.push(markup); 
-								markup.selected = true
+								
 
 						}
 						
@@ -424,10 +427,32 @@ $scope.over= function(position, event){
 
 
 		});
-	
-	
+		
 
-		console.log(_.uniq($scope.ui.selected_objects))
+		var selected_objects = _.uniq($scope.ui.selected_objects);
+		_.each(selected_objects , function(markup, i){
+				//console.log(markup.sectionin)
+				
+				markup.inrange = true;
+				//if(!markup.sectionin && markup.sectionin !==0){
+				//	console.log("not in")
+				//	console.log(markup)
+				//}
+				//else{
+					//console.log("in")
+					//console.log(markup)
+					$scope.toggle_fragment_ranges('by_range','inrange', markup, true, false)
+
+				//}
+				
+		});
+		_.each($scope.containers , function(c, ci){
+			$scope.containers[ci].selecting = Math.random()
+		});
+		
+
+
+
 
 }
 
@@ -665,118 +690,7 @@ $scope.over= function(position, event){
 			return object.object_tools = true;
 	}
 
-	$scope.objects_in_range = function(select_by, start_range, end_range){
-		var source = $scope.doc.markups;
-		
 	
-		
-
-		if(select_by == 'containers'){
-			var source = $scope.containers;
-
-		}
-	
-		if(!start_range || !end_range){
-			var start_range = $scope.ui.selected_range.start
-			var end_range = $scope.ui.selected_range.end
-		}
-
-      
-
-		var objects_in_range = []
-
-
-		_.each(source, function(c, i){
-				// should be later test.
-				//if(start_range < c.end || start_range < c.start){
-				//	if(end_range > c.end  || end_range > c.start ){
-						console.log('ok:'+c.type+' ('+c.start+' -- '+c.end+')');
-						console.log(c.objects)
-						console.log(_.keys(c.objects))
-							// loop types
-							_.each(_.keys(c.objects), function(key, u){
-								
-
-								var pos_keys = _.keys(c.objects[key])
-
-									// loop positions
-									_.each(pos_keys, function(skey, u){
-										//	console.log(c.objects[key][skey])
-												
-										// loop objects at type _ position
-										var objs = c.objects[key][skey];
-										_.each(objs, function(ob, w){
-
-
-											ob.selected = false;
-											
-
-
-
-											if(start_range < ob.end || start_range < ob.start){
-												if(ob.type !== 'container' && (end_range > ob.end  || end_range > ob.start) ){
-
-													ob.selected = true;
-													console.log(ob.type)
-												}
-												else{
-													
-												}
-											}
-											
-											//ob.selected = true;
-										})
-
-
-
-									})
-
-								//console.log(c.objects[key])
-							});
-
-
-
-						objects_in_range.push(c)
-
-					//}
-				//}
-
-
-
-
-		});
-		console.log(objects_in_range);
-
-
-
-/*
-
-		_.each(source, function(mk, i){
-
-			if( mk.type !== 'container'){
-				if(start_range < mk.end || start_range < mk.start){
-					if(end_range > mk.end  || end_range > mk.start ){
-						//console.log('ok:'+ mk.type+' ('+mk.start+' -- '+mk.end+')');
-						objects_in_range.push(mk)
-					}
-				}
-			}
-
-		});
-		console.log(objects_in_range);
-		_.each(objects_in_range, function(o, i){
-		
-
-		});
-*/
-$scope.containers[0].selecting = Math.random()
-
-		return objects_in_range;
-
-
-
-
-	}
 
 	$scope.wrapin_section = function(){
 		
@@ -876,9 +790,147 @@ $scope.containers[0].selecting = Math.random()
 				markup.selected = !markup.selected
 			}
     }
+	$scope.toggle_fragment_ranges = function (kind,classname, markup, value, trigger){
+
+		//	console.log('toggle_fragment_ranges'+kind)
+			var source = $scope.doc.markups;
 
 
 
+			if(kind=='single_markup'){
+					for (var i = markup.start; i <= markup.end; i++) {
+						
+
+						var delta =  i  - $scope.containers[markup.sectionin].start;
+						//
+						//console.log(delta)
+
+						if($scope.letters[markup.sectionin][delta]){
+							var _classes = $scope.letters[markup.sectionin][delta]['classes'];
+
+						//$scope.letters[markup.sectionin][i]['classes'].push("editing")
+						//$scope.letters[markup.sectionin][i]['classes'].push("selected")
+						//console.log($scope.letters[markup.sectionin][i]['classes'])
+
+						if(_.contains(_classes, classname)  ){
+							 $scope.letters[markup.sectionin][delta]['classes'] = _.without( _classes,classname)
+
+						}
+						else{
+							$scope.letters[markup.sectionin][delta]['classes'].push(classname)
+
+						}
+						}
+						
+
+					}
+
+
+				
+				
+
+			}
+			if(kind=='by_range'){
+
+				
+ 				//	console.log('apply '+classname+' from '+$scope.ui.selected_range.start+ ' to: '+ $scope.ui.selected_range.end)
+
+					for (var i = $scope.ui.selected_range.start; i <= $scope.ui.selected_range.end; i++) {
+							//if($scope.containers[markup.sectionin].start){
+								
+								// - $scope.containers[markup.sectionin].start;
+								if(markup.sectionin && $scope.letters[markup.sectionin][i]){
+									var delta =  i
+									//console.log('delta;'+delta+ ' cs/'+ markup.start)
+									
+
+						//			var _classes = $scope.letters[markup.sectionin][delta]['classes'];
+									
+/*
+						if(_.contains(_classes, classname)  ){
+						//	$scope.letters[markup.sectionin][delta]['classes'] = _.without( _classes,classname)
+
+						}
+						else{
+						//	$scope.letters[markup.sectionin][delta]['classes'].push(classname)
+
+						}
+
+*/
+
+
+
+
+								}
+							//}
+							
+						
+
+
+					}
+					
+
+			}
+
+            // trigger 
+			//	console.log('TRIGGER ?'+trigger)
+
+			if(trigger){
+					$scope.containers[markup.sectionin].selecting = Math.random()
+			}
+
+
+			/*
+	
+			if($scope.containers[markup.sectionin].start ){
+					var start_range =   markup.start - $scope.containers[markup.sectionin].start 
+					var end_range  	= 	markup.end 	 - $scope.containers[markup.sectionin].start
+			}
+			*/
+
+			return;
+			// match from an object and its range.
+			//if(markup.type !== 'container'){
+					
+//for (var i = 0; i <= 100; i++) {
+
+					
+			//}
+
+			// match
+			if(markup.type == 'container'){
+				console.log('range--in-g section')
+
+			}
+
+
+			
+			
+			return;
+
+
+		}
+		
+
+	/**
+		* delete a markup on click
+		* @function DocumentCtrl#delete_markup
+		* @param  {Object} markup - markup to delete
+		*/
+		$scope.markup_delete = function (markup){
+			 if(markup.type=="container"){
+				 //alert('can hold objects!')
+				 //return;
+				 if($scope.sectionstocount == 1){
+				 	alert('can\'t delete last section')
+				 	return
+				 }
+				 doc.markup_delete(markup)
+			 }
+			else{
+				doc.markup_delete(markup)
+			}
+		}
 
 	/**
 	*  EVENTS 
@@ -906,10 +958,10 @@ $scope.containers[0].selecting = Math.random()
 
 					for (var i = $scope.ui.selected_range.start; i <= $scope.ui.selected_range.end; i++) {
 						if(args.type == 'select'){
-							$scope.letters[$scope.ui.selected_section_index][i]['classes'].push('selected');
+						//	$scope.letters[$scope.ui.selected_section_index][i]['classes'].push('selected');
 						}
 						if(args.type == 'unselect'){
-							$scope.letters[$scope.ui.selected_section_index][i]['classes'] = _.without($scope.letters[$scope.ui.selected_section_index][i]['classes'], 'selected')
+						//	$scope.letters[$scope.ui.selected_section_index][i]['classes'] = _.without($scope.letters[$scope.ui.selected_section_index][i]['classes'], 'selected')
 						}
 
 					}
@@ -990,192 +1042,29 @@ function fragmentCtrl($scope){
 		//console.log('fragment')
 		//console.log($scope.markup)
 		
-		$scope.toggle_fragment_ranges = function (markup,value){
-
-			console.log('toggle_fragment_ranges')
-			var source = $scope.doc.markups;
-
-
-		
-		//	return;
-		
-
-
-
-
-			//alert(markup.type)
-			//console.log(markup)
-			//return;
-			
 	
-		
-	
-
-			var start_range =   markup.start - $scope.containers[markup.sectionin].start 
-			var end_range  	= 	markup.end 	 - $scope.containers[markup.sectionin].start
-
-
-
-			// match from an object and its range.
-			//if(markup.type !== 'container'){
-					for (var i = markup.start; i <= markup.end; i++) {
-
-						var _classes = $scope.letters[markup.sectionin][i]['classes'];
-
-						//$scope.letters[markup.sectionin][i]['classes'].push("editing")
-						//$scope.letters[markup.sectionin][i]['classes'].push("selected")
-						//console.log($scope.letters[markup.sectionin][i]['classes'])
-
-						if(_.contains(_classes, 'selected')  ){
-							 $scope.letters[markup.sectionin][i]['classes'] = _.without( _classes,'selected')
-
-						}
-						else{
-							$scope.letters[markup.sectionin][i]['classes'].push('selected')
-
-						}
-
-					}
-			//}
-
-			// match
-			if(markup.type == 'container'){
-				console.log('range--in-g section')
-
-			}
-
-
-			// trigger 
-			$scope.containers[markup.sectionin].selecting = Math.random()
-			return;
-
-
-/////////////////////////////////////////
-
-
-	/*
-		if(!start_range || !end_range){
-			var start_range = $scope.ui.selected_range.start
-			var end_range = $scope.ui.selected_range.end
-		}
-		
-*/
-      
-
-		var objects_in_range = []
-
-
-		_.each(source, function(c, i){
-
-				// should be later test.
-
-				//if(start_range < c.end || start_range < c.start){
-				//	if(end_range > c.end  || end_range > c.start ){
-						
-					if(c.type !== 'container'){
-
-
-							// single select a mk.
-							console.log('mk');
-
-
-
-
-
-
-
-
-
-					}
-
-					if(c.type == 'container'){
-							console.log(c.objects)
-							console.log('container:'+c.type+' ('+c.start+' -- '+c.end+')');
-
-
-							console.log(_.keys(c.objects))
-							// loop types
-							_.each(_.keys(c.objects), function(key, u){
-								
-
-								var pos_keys = _.keys(c.objects[key])
-
-									// loop positions
-									_.each(pos_keys, function(skey, u){
-										//	console.log(c.objects[key][skey])
-												
-										// loop objects at type _ position
-										var objs = c.objects[key][skey];
-										_.each(objs, function(ob, w){
-
-
-											ob.selected = false;
-											
-											if(start_range < ob.end || start_range < ob.start){
-												if(ob.type !== 'container' && (end_range > ob.end  || end_range > ob.start) ){
-													ob.selected = true;
-													console.log(ob.type)
-													objects_in_range.push(ob);
-												}
-												else{
-													
-												}
-											}
-											
-											//ob.selected = true;
-										})
-
-
-
-									})
-
-								//console.log(c.objects[key])
-							});
-						}
-					//}
-				//}
-		});		
-		console.log(objects_in_range);
-		_.each(objects_in_range, function(o, us){ console.log(o) });
-
-
-		}
-		
 
 	
 
 
-	/**
-	* delete a markup on click
-	* @function DocumentCtrl#delete_markup
-	* @param  {Object} markup - markup to delete
-	*/
-	$scope.markup_delete = function (){
-		 if($scope.markup.type=="container"){
-			 //alert('can hold objects!')
-			 //return;
-			 if($scope.sectionstocount == 1){
-			 	alert('can\'t delete last section')
-			 	return
-			 }
-			 doc.markup_delete($scope.markup)
-		 }
-		else{
-			doc.markup_delete($scope.markup)
-		}
-	}
-
 	
+
+		/*
 
 		$scope.$watchCollection('[markup.start, markup.end]', function(newValue, oldValue) {
 				//console.log($scope)
-				console.log(newValue)
-				console.log(oldValue)
+				//console.log(newValue)
+				//console.log(oldValue)
 
 				// can call parent..
 				//doc.init_containers()
+				if(oldValue !==newValue && oldValue && oldValue !=='' &&  newValue && newValue !==''){
+
+				}
+
 
 		});
+*/
 
 		$scope.$watch('markup.position', function(newValue, oldValue) {
 					// only new value check
@@ -1198,7 +1087,7 @@ function fragmentCtrl($scope){
 					if(newValue !==''){
 						//console.log(newValue)
 						//console.log(oldValue)
-						$scope.toggle_fragment_ranges($scope.markup, newValue)
+						$scope.toggle_fragment_ranges('single_markup', 'selected', $scope.markup, newValue, true)
 					}
 					else{
 						console.log('watch untrigger')
