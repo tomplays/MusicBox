@@ -294,3 +294,11 @@ i.fa-semantic:before {
   display: block;
   font-style: italic;
 }
+.lt.inrange {
+  background: rgba(231, 76, 60, 0.2);
+  color: #ffffff;
+}
+.lt.inrange.selected {
+  background: none repeat scroll 0 0 rgba(231, 76, 60, 0.8);
+  color: #ffffff;
+}

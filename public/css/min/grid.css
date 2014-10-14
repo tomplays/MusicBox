@@ -473,6 +473,10 @@ div.branding h1 a {
   width: 27%;
   padding: 0 3% 0% 0%;
 }
+.quick_tools .action_box p,
+.quick_tools .user_box p {
+  margin-bottom: 7px;
+}
 .fixed_tools {
   /* 
       background: none repeat scroll 0 0 rgba(0, 0, 0, 0.2);
@@ -490,6 +494,9 @@ div.branding h1 a {
 .fixed_tools .ranges {
   float: left;
   width: 100%;
+}
+.fixed_tools .ranges .ranges_start_end {
+  background: #e74c3c;
 }
 .fixed_tools .pusher_items {
   float: left;

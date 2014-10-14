@@ -226,7 +226,32 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
              },   
               'position_available': ['left', 'right', 'under', 'global'],
             });
-
+           arr.container= new Object({
+              'type':obj_base.type ,
+              'only':'',
+              'metadata': { 
+                'editor': {
+                   'show' : false,
+                    'label':'-',
+                     'input' : '-'
+                  },
+                  'render': {
+                   'show' : true
+                  }
+              }, 
+              'show_date': false,
+              'icon': { 
+                'before': {
+                   'show' : true
+                  }
+              }, 
+              'show_user': false,
+              'subtype': {
+                'free_input' : false,
+                'available' : ['section']
+             },   
+              'position_available': ['inline'],
+            });
 
             arr.container_class = new Object({
               'type':obj_base.type ,

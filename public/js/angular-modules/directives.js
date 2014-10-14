@@ -11,6 +11,20 @@ angular.module('musicBox.directives', [])
 
   function($rootScope, $compile) {
 
+
+
+      return ({
+          scope: {
+                   section   : '=',
+                   selecting : '='
+          },
+          transclude :true,
+          restrict: 'E',
+          link: link
+      });
+
+
+
       function draw(scope, elem, attrs){
         console.log('drawing...')
         var text_out = '';
@@ -30,44 +44,52 @@ angular.module('musicBox.directives', [])
             text_out += '<lt ng-click="lc()" lettersi="'+lt.sectionin+'" letterorder="'+lt.order+'"  class="'+lt_classes+'"  chars="'+lt.char+'">'+lt.char+'</lt>';
         });       
         elem.html(text_out);
-       $compile(elem.contents())(scope);
-
+       
+        //console.log('compile?'+scope.compile_)
       }
       
      function link(scope, elem, attrs) {
 
         
-            scope.lc = function(){
-                console.log('lc')
-            }
+           
 
             scope.$watch(attrs.selecting, function(value,old) {
                 //console.log(attrs.selecting)
                // console.log(value, old)
                // console.log(old)
-               if(old !== value && old && value) {draw(scope, elem, attrs);}
+               if(old !== value && old && value) {
+                console.log('draw by change selecting')
+                draw(scope, elem, attrs);
+              }
+            });
+
+
+            scope.compile_ = false;
+            scope.compiled_once = false;
+
+            // a way to load uncompiled letters, as we dont need their binding 
+            elem.bind('mouseover', function() {
+
+                      if(scope.compiled_once == false){
+                          // never compiled 
+                          $compile(elem.contents())(scope);
+                          scope.$apply(function(){
+                            scope.compile_ = true;
+                            scope.compiled_once == true;
+                          });
+                      }
+                      else{
+                        // never triggered after... cause child directives bindings running
+                         console.log('already c.')
+                      }
             });
 
 
          draw(scope, elem, attrs);
   
       }
-    
-
-    return ({
-      scope: {
-       section : '=',
-       selecting : '='
-      },
 
     
-      transclude :true,
-      restrict: 'E',
-      link: link
-      //  compile: compile,
-      // template: '<span>{{customerSection.start}}{{customerSection.starte}}</span>'
-
-  })
 
  })
 
@@ -114,11 +136,10 @@ angular.module('musicBox.directives', [])
 */
        
           elem.bind('mouseup', function() {
-            console.log('mouseup')
+                     console.log('mouseup')
                      // var parsed = JSON.parse(attrs.letterz)
                      //console.log(parsed.order)
-                     scope.$parent.$parent.over(scope.ltLetterorder, 'down')
-
+                     scope.$parent.$parent.over(scope.ltLetterorder, 'up')
                       scope.$apply(function(){
                           scope.$parent.selecting = Math.random()+'ov';
                       });
@@ -126,10 +147,10 @@ angular.module('musicBox.directives', [])
           });
           
            elem.bind('mousedown', function() {
-              console.log('ousedown')
-            // console.log(scope.ltLetterorder)
-            //alert(attrs.chars)
-           // scope.$parent.$parent.over( scope.ltLetterorder, 'down')
+              console.log('mousedown')
+              // console.log(scope.ltLetterorder)
+              //alert(attrs.chars)
+              scope.$parent.$parent.over( scope.ltLetterorder, 'down')
           });
 
 

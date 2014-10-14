@@ -3,15 +3,15 @@ div(ng-include="fragments['branding'][0]['url']")
 div(ng-include="fragments['before_doc'][0].url" )
 
 div(class="sections_container")
-	section(ng-repeat='section in containers' , class="{{section.section_classes}}")
+	section(ng-controller="sectionCtrl" , ng-repeat='section in containers' , class="{{section.section_classes}}")
 		div(ng-repeat='layout in available_layouts')
 			div(class="layout_ layout_name_{{layout.name}} has_count_{{section.objects_count.by_positions[layout.name].count}} has_object_{{section.objects_count.by_positions[layout.name].has_object}}")
 				// h3 {{section.objects_count.by_positions[layout.name].count}}
 				div(ng-if="layout.name == 'global' && $parent.$last")
 					
 					// h3 
-					div(class="markup_ markup_type_inline", ng-repeat="markup in objects_sections.global_all")
-							div(ng-include="fragments['markup_editor'][0].url" )
+					//div(class="markup_ markup_type_inline", ng-repeat="markup in objects_sections.global_all")
+						div(ng-include="fragments['markup_editor'][0].url" )
 
 				// title, author, date, ..
 				div(ng-if="(layout.name== 'center') && ($parent.$first) ")
@@ -23,14 +23,10 @@ div(class="sections_container")
 				div(ng-if="layout.name == 'right'")
 					div(ng-include="fragments['section_editor'][0].url" )
 										
-					div(class="markup_ container_class_type_inline", ng-if="ui.renderAvailable_active == 'editor'" , ng-repeat="markup in section.objects['container_class']['inline']")
-						.cols-edit(ng-include="fragments['markup_editor'][0].url" )
+					div(class="markup_ container_class_type_inline", ng-if="ui.renderAvailable_active == 'editor'" , ng-repeat="markup in section.objects['container_class']['inline']" ng-include="fragments['markup_editor'][0].url")
 					
-					div(class="markup_ markup_type_inline", ng-if="ui.renderAvailable_active == 'editor'" , ng-repeat="markup in section.objects['markup']['inline']")
-						.cols-edit(ng-include="fragments['markup_editor'][0].url" )
-
-
-				
+					div(class="markup_ markup_type_inline", ng-if="ui.renderAvailable_active == 'editor'" , ng-repeat="markup in section.objects['markup']['inline']", ng-include="fragments['markup_editor'][0].url")
+		
 				div(ng-if="layout.name == 'left'", ng-include="fragments['markup_push'][0].url" )
 
 					
@@ -76,5 +72,3 @@ div(class="sections_container")
 
 			// a(href="/doc/{{doc.title}}") permalink
 			// a(href="/") back home
-
-

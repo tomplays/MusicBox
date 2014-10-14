@@ -225,8 +225,9 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
               markup.isolated = false;
               /// keep open test :
               //console.log('keep open')
-              markup.selected = false;
-              markup.editing  = false;
+              markup.selected = '';
+              markup.editing  = '';
+              markup.uptodate = '';
 
               // user by_me test
               markup.by_me = 'false'

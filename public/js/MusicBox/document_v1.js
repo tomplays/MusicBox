@@ -289,38 +289,97 @@ if(newValue !==undefined  && oldValue !==undefined && (newValue !== oldValue) )
 	}
 
 
-$scope.allo = 's'
-$scope.over= function(position, event){
-
-		console.log('over ctrl '+position, event);
-		$scope.allo = 'ds'
- 		
- 	//	var start_range = position;
- 	//	var end_range  =  position+10
-		$scope.selectingd = 'd'
-
-
-	}
 $scope.over= function(position, event){
 
 		console.log('over ctrl '+position, event);
 
- 		
- 	//	var start_range = position;
- 	//	var end_range  =  position+10
-	
+		var down_at;
+		var up_at;
+		down_at  = $scope.ui.selected_range.start
+		up_at	 = $scope.ui.selected_range.end
 
+		console.log(event)
+
+		//console.log(letter)
+
+
+		var event_at = position;
+		
+
+		if(event == 'down'){
+			down_at = event_at;
+
+			if(down_at < $scope.ui.selected_range.end){
+				$scope.ui.selected_range.start = down_at
+			}
+			else{
+				$scope.ui.selected_range.start = down_at
+			}
+
+		}
+		if(event == 'up'){
+			var up_at =  event_at;
+			$scope.ui.selected_range.end = up_at
+		}
+        
+
+        // false logic ! should be in up/down test
+		// reverse start/end if selection starts from end .. 		
+		if($scope.ui.selected_range.end < $scope.ui.selected_range.start){
+			var true_end = $scope.ui.selected_range.start
+			var true_start = $scope.ui.selected_range.end
+			$scope.ui.selected_range.start = true_start
+			$scope.ui.selected_range.end = true_end
+		}
+
+
+		// false need section index...
+
+		_.each($scope.containers, function(c, ci){
+			_.each($scope.letters[ci], function(d, id){
+					$scope.letters[ci][id]['classes'] = _.without($scope.letters[ci][id]['classes'],'inrange') 
+
+					for (var i = $scope.ui.selected_range.start; i <= $scope.ui.selected_range.end; i++) {
+							
+
+							// false > need delta..
+							var delta =   i - parseInt(c.start) 
+							//console.log(delta)
+							if($scope.letters[ci][delta]){
+								$scope.letters[ci][delta]['classes'].push('inrange')
+							}
+				}
+
+
+			})
+		})
+
+		
 
 
 		// scan markups in range.
-		_.each($scope.doc.markups, function(c, i){
+		_.each($scope.doc.markups, function(markup, i){
 					//	c.selected= true;
 						//c.selected = true;
-						if(c.start == 5){
-							$scope.letters[c.sectionin][5]['classes'].push('selected')
-							c.selected = true;
+						if(markup.type !=='container'){
+								$scope.ui.selected_objects.push(markup); 
+								markup.selected = true
+
+						}
+						
+/*
+						if( $scope.ui.selected_range.start >= m.start){
+							//
+						
+							// push.
 						//	console.log(c.selecting );
 						}
+						else{
+						m.selected = false
+							//c.selected = !c.selected
+						}
+						*/
+						//m.selected = true
 						
 							/*
 
@@ -368,101 +427,11 @@ $scope.over= function(position, event){
 	
 	
 
-
+		console.log(_.uniq($scope.ui.selected_objects))
 
 }
-	$scope.over_= function(letter, event){
-		
-		var down_at;
-		var up_at;
-		down_at  = $scope.ui.selected_range.start
-		up_at	 = $scope.ui.selected_range.end
-
-		console.log(event)
-
-		//console.log(letter)
-
-
-		var event_at = letter;
-		
-
-		if(event == 'down'){
-			down_at = event_at;
-
-			if(down_at < $scope.ui.selected_range.end){
-				$scope.ui.selected_range.start = down_at
-			}
-			else{
-				$scope.ui.selected_range.start = down_at
-			}
-
-		}
-		if(event == 'up'){
-			var up_at =  event_at;
-			$scope.ui.selected_range.end = up_at
-		}
-		if(event == 'click'){
-			
-			$scope.ui.selected_range.end = letter;
-			$scope.ui.selected_range.start = letter;
-
-
-			console.log(letter)
-
-		}
-
-
-		// if end < start inf case:
-		// var true_end = start
-		// start = end
-        // end = true_end
 
 		
-		$scope.ui.selected_range.textrange = doc.text_range($scope.ui.selected_range.start, $scope.ui.selected_range.end)   
-
-
-		
-
-///
-
-/*
-
-		if(event == 'click'){
-			if(letter.href !==''){
-				//console.log(letter)
-				//alert(letter.href)
-				window.location = letter.href
-			}
-		}
-*/
-
-		//if(event_at <= $scope.ui.selected_range.start){
-		//	$scope.ui.selected_range.start = event_at;
-		//}
-		//else{
-			//$scope.ui.selected_range.start =  event_at;
-		//}
-
-		//if(event_at > $scope.ui.selected_range.end){
-		//	$scope.ui.selected_range.end= event_at;
-		//}
-		//else{
-			//$scope.ui.selected_range.start =  event_at;
-		//}
-		//console.log(letter)
-		//$scope.ui.selected_range.start  = letter.rindex
-		//$scope.ui.selected_range.end = letter.rindex
-		
-
-		// apply selected to objects in ranges
-
-	
-		$scope.objects_in_range('containers');
-
-
-
-	}
-	
 
 	$scope.edit_doc = function(field){
 
@@ -519,26 +488,531 @@ $scope.over= function(position, event){
 
 
 
+	
+
+	$scope.match_selection = function (markup){
+		
+		// apply selection ranges to markup ranges
+		
+		// todo: should check notnull
+		markup.start    = $scope.ui.selected_range.start
+		markup.end 		= $scope.ui.selected_range.end
+
+		// and save (automatic)	
+		doc.markup_save(markup)
+	}
+
+
+	$scope.open_comment_push = function (container_index){
+		
+	   // this way only one menu can me open.. and persistent
+		var cur = $scope.ui.menus.push_comment.open;
+		if(cur == container_index.sectionin){
+			cur = -1	
+			$scope.ui.focus_side = ''
+		}
+		else{
+			cur = container_index.sectionin;
+			$scope.ui.focus_side = 'left'
+		}
+		$scope.ui.menus.push_comment.open = cur;
+		return;
+	}
+
+
+
+    $scope.push = {};
+
+    // short function
+	$scope.push_section= function (){
+		
+		// auto set
+		$scope.push.start  = (_.last($scope.containers).end)+1
+		$scope.push.end  = (_.last($scope.containers).end)+10
+		$scope.push.type = 'container';
+		$scope.push.subtype = 'container';		
+		$scope.push.position = 'inline';
+
+		$scope.push_markup();
+	}
+
+
+
+	$scope.push_generic_from_ranges= function (type, subtype,position){
+
+				$scope.push.type = type;
+				$scope.push.subtype = subtype;
+				$scope.push.start= $scope.ui.selected_range.start;
+				$scope.push.end = $scope.ui.selected_range.end;
+				$scope.push.position = position
+
+				$scope.push_markup();
+
+
+
+	}
+
+	
+
+	$scope.push_comment= function (section){
+
+		// console.log(section.start +'c++'+section.end)
+		$scope.push.type = 'comment';
+		$scope.push.subtype = 'comment';
+
+
+		// use range
+		if($scope.ui.selected_range.start){
+			$scope.push.start = $scope.ui.selected_range.start;
+		}
+		else{
+			$scope.push.start = section.start;
+		}
+
+
+		if($scope.ui.selected_range.end){
+			$scope.push.end = $scope.ui.selected_range.end;
+		}
+		else{
+			$scope.push.end= section.start;
+		}
+		
+		
+		// should use
+	
+		
+		$scope.push.position = 'left';
+
+		$scope.push_markup();
+
+		// close form.
+		$scope.ui.menus.push_comment.open  = -1
+		$scope.ui.focus_side = ''
+
+	}
+
+
+	$scope.push_markup = function (){
+			console.log($scope.push)
+			
+			// sure to set up
+			if(!$scope.push.depth){
+				$scope.push.depth = 1;
+			}
+			if(!$scope.push.start){
+				$scope.push.start = 0;
+			}
+			if(!$scope.push.end){
+				$scope.push.end = 0;
+			}
+			if(!$scope.push.type){
+				$scope.push.type = 'comment';
+			}
+			if(!$scope.push.metadata){
+				$scope.push.metadata= '-';
+			}
+			if(!$scope.push.status){
+				$scope.push.status= 'pending';
+			}
+			if(!$scope.push.subtype){
+				$scope.push.subtype = 'comment';
+			}
+            if(!$scope.push.position){
+				$scope.push.position = 'left';
+			}
+			if(!$scope.push.doc_id_id){
+				$scope.push.doc_id_id = 'null';
+			}
+			// force autoset / force-correct
+			if($scope.push.type == "markup"){ $scope.push.position = 'inline'}
+			if($scope.push.type == "container"){$scope.push.position = 'inline'}
+			if($scope.push.type == "container_class"){$scope.push.position = 'inline'}
+			
+			// object is clean
+
+			doc.push_markup($scope.push)	 // call service
+
+	}
+
+	// change and save a single value of a markup
+	$scope.replace_markup = function(markup, field, value){
+		markup[field] = value;
+		doc.markup_save(markup)
+	}
+
+
+	$scope.offset_markups = function (){
+		doc.offset_markups()
+	}
+	
+	$scope.offset_markup = function (markup, start_qty, end_qty){
+		doc.offset_markup(markup, start_qty, end_qty)
+	}
+
+
+	// section && markup
+	$scope.markup_save = function (markup){
+		doc.markup_save(markup)
+	}
+	
+
+
+	// open tools for markup or section 
+	$scope.object_tools = function (object){
+		if(object.object_tools && object.object_tools === true){
+			return object.object_tools = false;
+		}
+			return object.object_tools = true;
+	}
+
+	$scope.objects_in_range = function(select_by, start_range, end_range){
+		var source = $scope.doc.markups;
+		
+	
+		
+
+		if(select_by == 'containers'){
+			var source = $scope.containers;
+
+		}
+	
+		if(!start_range || !end_range){
+			var start_range = $scope.ui.selected_range.start
+			var end_range = $scope.ui.selected_range.end
+		}
+
+      
+
+		var objects_in_range = []
+
+
+		_.each(source, function(c, i){
+				// should be later test.
+				//if(start_range < c.end || start_range < c.start){
+				//	if(end_range > c.end  || end_range > c.start ){
+						console.log('ok:'+c.type+' ('+c.start+' -- '+c.end+')');
+						console.log(c.objects)
+						console.log(_.keys(c.objects))
+							// loop types
+							_.each(_.keys(c.objects), function(key, u){
+								
+
+								var pos_keys = _.keys(c.objects[key])
+
+									// loop positions
+									_.each(pos_keys, function(skey, u){
+										//	console.log(c.objects[key][skey])
+												
+										// loop objects at type _ position
+										var objs = c.objects[key][skey];
+										_.each(objs, function(ob, w){
+
+
+											ob.selected = false;
+											
+
+
+
+											if(start_range < ob.end || start_range < ob.start){
+												if(ob.type !== 'container' && (end_range > ob.end  || end_range > ob.start) ){
+
+													ob.selected = true;
+													console.log(ob.type)
+												}
+												else{
+													
+												}
+											}
+											
+											//ob.selected = true;
+										})
+
+
+
+									})
+
+								//console.log(c.objects[key])
+							});
+
+
+
+						objects_in_range.push(c)
+
+					//}
+				//}
+
+
+
+
+		});
+		console.log(objects_in_range);
+
+
+
+/*
+
+		_.each(source, function(mk, i){
+
+			if( mk.type !== 'container'){
+				if(start_range < mk.end || start_range < mk.start){
+					if(end_range > mk.end  || end_range > mk.start ){
+						//console.log('ok:'+ mk.type+' ('+mk.start+' -- '+mk.end+')');
+						objects_in_range.push(mk)
+					}
+				}
+			}
+
+		});
+		console.log(objects_in_range);
+		_.each(objects_in_range, function(o, i){
+		
+
+		});
+*/
+$scope.containers[0].selecting = Math.random()
+
+		return objects_in_range;
+
+
+
+
+	}
+
+	$scope.wrapin_section = function(){
+		
+			$scope.objects_in_range('containers');
+			//$scope.objects_in_range('markups');
+
+
+			$scope.push.type = 'container';
+			$scope.push.subtype = 'container';
+			$scope.push.start = $scope.ui.selected_range.start
+			$scope.push.position = 'inline';
+			$scope.push.end = $scope.ui.selected_range.end
+		//	$scope.push_markup();
+
+	}
+
+	
+
+	/**
+	* turn links clickable out of angular routing
+	* @function DocumentCtrl#external_link
+	* @param  {String} link - redirect link
+	*/
+	$scope.external_link = function (link){
+		window.location = link;
+	}
+
+	$scope.expand_tools = function(name){
+
+		//$scope.ui.menus[name].open = $scope.ui.menus[name].open * -1;
+		if($scope.ui.menus[name].open == 'no'){
+			$scope.ui.menus[name].open = 'yes'
+		}
+		else{
+			$scope.ui.menus[name].open = "no"
+		}
+		//return;
+		//alert('d')
+	}
+
+	$scope.toggle_render = function(r){
+		$scope.ui.menus['quick_tools'].open = "no"
+		$scope.ui.renderAvailable_active = r
+	}
+	
+	$scope.upload_file_image = new Object({'uploaded': false});
+	$scope.preuploadFile = function(files){
+		$scope.upload_file_image.file = files[0];
+		return;
+	}
+
+
+	$scope.uploadFile = function(){
+		
+		
+		var fd = new FormData();
+		fd.append("image", $scope.upload_file_image.file);
+
+
+		
+		$http.post(api_url+'/media/upload', fd, 
+			{ 
+				withCredentials: true,
+        		headers: {'Content-Type': undefined },
+        		transformRequest: angular.identity 
+        	
+        	}
+        	).success(function(m) {
+				$scope.upload_file_image.uploaded = true;
+        		$scope.upload_file_image.basename = m[0].basename
+				$scope.upload_file_image.path = m[0].path
+				$scope.upload_file_image.type = m[0].type
+				$scope.upload_file_image.fullpath = root_url+'/uploads/'+m[0].path+m[0].basename
+
+
+				$scope.push.metadata = $scope.upload_file_image.fullpath
+
+
+			}).error(function(err){
+				console.log(err)
+		})
+
+
+	}
+
+
+
+	// UI
+
+	// icon click or section select
 	$scope.toggle_select_markup = function (markup, event_name){
+			
+			if(event_name == 'dblclick'){
+				markup.editing = !markup.editing
+			}
+			if(event_name == 'click'){
+				markup.selected = !markup.selected
+			}
+    }
 
 
-			markup.selected = true
-			markup.editing= true
+
+
+	/**
+	*  EVENTS 
+	* 
+	* Get broadcasted events
+	* @function DocumentCtrl#events
+	*/
+
+	$scope.$on('doc', function(event, args) {
+		if(args.action){
+			console.log('EVENT logger '+args.action)
+			
+
+			if(args.action == 'reload'){
+				//alert('d')
+			}
+
+			if(args.action == 'fulltext'){
+				doc.init_containers()
+			}
+			if(args.action == 'selection'){
+
+					// NOT STABLE
+					// loop each  $scope.ui.selected_objects.
+
+					for (var i = $scope.ui.selected_range.start; i <= $scope.ui.selected_range.end; i++) {
+						if(args.type == 'select'){
+							$scope.letters[$scope.ui.selected_section_index][i]['classes'].push('selected');
+						}
+						if(args.type == 'unselect'){
+							$scope.letters[$scope.ui.selected_section_index][i]['classes'] = _.without($scope.letters[$scope.ui.selected_section_index][i]['classes'], 'selected')
+						}
+
+					}
+				//	socket.emit('news', {doc_id: $scope.doc.title, action: args.action , type: args.type });
+					console.log($scope.ui);
+
+
+			}
+			if(args.action == 'doc_ready'){	
+				doc.init_containers()
+				if(args.type !== 'load'){
+				//	socket.emit('news', {doc_id: $scope.doc.title, action: args.type, collection_type: args.collection_type, collection: args.collection });
+				}
+			}
+			if(args.action == 'containers_ready'){
+				doc.distribute_markups()
+			}
+			if(args.action == 'dispatched_objects'){
+				$scope.ui.loaded = 'loaded'
+
+
+			}
+
+			
+
+
+		}
+
+	});
+
+$scope.init()
+
+//alert(API_SERVER_URL)
+} // CTRL
+
+/** 
+* list all socketed events
+* @class SocketsListCtrl
+**/
+function SocketsListCtrl($scope, $http , $location, $routeParams, socket) {
+		//$scope.docs = DOCS;
+		console.log('SocketsListCtrl')
+		$scope.stack = [];
+		socket.on('newsback', function (data) {
+			//console.log('newsback')
+			//console.log(data);
+			$scope.stack.push(data)
+		})
+		$scope.delete_markup = function (markup,doc_id){
+		
+		 $http.get(root_url+'/api/v1/doc/'+doc_id+'/markups/delete/'+markup._id).success(function(m) {
+			//console.log(m)
+			alert('job done')
+			//$scope.doc = m;
+			//$scope.$emit('docEvent', {action: 'doc_ready' });
+		 })
+		}
+}
+/** 
+* @class DocumentsListCtrl
+**/
+function DocumentsListCtrl($scope, $http , $location, $routeParams, socket) {
+		$scope.docs = DOCS;
+		console.log($scope.docs)
+
+}
+
+
+// used to test jasmine test technique..
+function  DocumentCtrlJasmine($scope, $http , $sce, $location, $routeParams, renderfactory,socket,docfactory){
+			return 'hello';
+} 
+
+function sectionCtrl($scope){
+		//console.log($scope.section)
+}
+function fragmentCtrl($scope){
+		//console.log('fragment')
+		//console.log($scope.markup)
+		
+		$scope.toggle_fragment_ranges = function (markup,value){
+
+			console.log('toggle_fragment_ranges')
+			var source = $scope.doc.markups;
+
+
+		
+		//	return;
+		
 
 
 
 
 			//alert(markup.type)
-			console.log(markup)
+			//console.log(markup)
 			//return;
-			var source = $scope.doc.markups;
-		
+			
 	
 		
 	
 
-			var start_range = markup.start 	- $scope.containers[markup.sectionin].start 
-			var start_range  = markup.end 	- $scope.containers[markup.sectionin].start
+			var start_range =   markup.start - $scope.containers[markup.sectionin].start 
+			var end_range  	= 	markup.end 	 - $scope.containers[markup.sectionin].start
 
 
 
@@ -664,491 +1138,78 @@ $scope.over= function(position, event){
 		console.log(objects_in_range);
 		_.each(objects_in_range, function(o, us){ console.log(o) });
 
-    }
 
-	$scope.match_selection = function (markup){
-		
-		// apply selection ranges to markup ranges
-		
-		// todo: should check notnull
-		markup.start    = $scope.ui.selected_range.start
-		markup.end 		= $scope.ui.selected_range.end
-
-		// and save (automatic)	
-		doc.markup_save(markup)
-	}
-
-
-	$scope.open_comment_push = function (container_index){
-		
-	   // this way only one menu can me open.. and persistent
-		var cur = $scope.ui.menus.push_comment.open;
-		if(cur == container_index.sectionin){
-			cur = -1	
-			$scope.ui.focus_side = ''
 		}
-		else{
-			cur = container_index.sectionin;
-			$scope.ui.focus_side = 'left'
-		}
-		$scope.ui.menus.push_comment.open = cur;
-		return;
-	}
-
-
-
-    $scope.push = {};
-
-    // short function
-	$scope.push_section= function (){
 		
-		// auto set
-		$scope.push.start  = (_.last($scope.containers).end)+1
-		$scope.push.end  = (_.last($scope.containers).end)+10
-		$scope.push.type = 'container';
-		$scope.push.subtype = 'container';		
-		$scope.push.position = 'inline';
-
-		$scope.push_markup();
-	}
-
-
-
-	$scope.push_generic_from_ranges= function (type, subtype,position){
-
-				$scope.push.type = type;
-				$scope.push.subtype = subtype;
-				$scope.push.start= $scope.ui.selected_range.start;
-				$scope.push.end = $scope.ui.selected_range.end;
-				$scope.push.position = position
-
-				$scope.push_markup();
-
-
-
-	}
 
 	
 
-	$scope.push_comment= function (section){
-
-		// console.log(section.start +'c++'+section.end)
-		$scope.push.type = 'comment';
-		$scope.push.subtype = 'comment';
-
-		$scope.push.start= section.start;
-		$scope.push.end = section.end;
-		
-		$scope.push.position = 'left';
-
-		$scope.push_markup();
-
-		// close form.
-		$scope.ui.menus.push_comment.open  = -1
-		$scope.ui.focus_side = ''
-
-	}
-
-
-	$scope.push_markup = function (){
-			console.log($scope.push)
-			
-			// sure to set up
-			if(!$scope.push.depth){
-				$scope.push.depth = 1;
-			}
-			if(!$scope.push.start){
-				$scope.push.start = 0;
-			}
-			if(!$scope.push.end){
-				$scope.push.end = 1;
-			}
-			if(!$scope.push.type){
-				$scope.push.type = 'comment';
-			}
-			if(!$scope.push.metadata){
-				$scope.push.metadata= '-';
-			}
-			if(!$scope.push.status){
-				$scope.push.status= 'pending';
-			}
-			if(!$scope.push.subtype){
-				$scope.push.subtype = 'comment';
-			}
-            if(!$scope.push.position){
-				$scope.push.position = 'left';
-			}
-			if(!$scope.push.doc_id_id){
-				$scope.push.doc_id_id = 'null';
-			}
-			// force autoset / force-correct
-			if($scope.push.type == "markup"){ $scope.push.position = 'inline'}
-			if($scope.push.type == "container"){$scope.push.position = 'inline'}
-			if($scope.push.type == "container_class"){$scope.push.position = 'inline'}
-			
-			// object is clean
-
-			doc.push_markup($scope.push)	 // call service
-
-	}
-
-	// change and save a single value of a markup
-	$scope.replace_markup = function(markup, field, value){
-		markup[field] = value;
-		doc.markup_save(markup)
-	}
-
-
-	$scope.offset_markups = function (){
-		doc.offset_markups()
-	}
-	
-	$scope.offset_markup = function (markup, start_qty, end_qty){
-		doc.offset_markup(markup, start_qty, end_qty)
-	}
-
-
-	$scope.markup_save = function (markup){
-		doc.markup_save(markup)
-	}
-
-
-	// open tools for markup or section 
-	$scope.object_tools = function (object){
-		if(object.object_tools && object.object_tools === true){
-			return object.object_tools = false;
-		}
-			return object.object_tools = true;
-	}
-
-	$scope.objects_in_range = function(select_by, start_range, end_range){
-		var source = $scope.doc.markups;
-		
-	
-		
-
-		if(select_by == 'containers'){
-			var source = $scope.containers;
-
-		}
-	
-		if(!start_range || !end_range){
-			var start_range = $scope.ui.selected_range.start
-			var end_range = $scope.ui.selected_range.end
-		}
-
-      
-
-		var objects_in_range = []
-
-
-		_.each(source, function(c, i){
-
-				// should be later test.
-
-				//if(start_range < c.end || start_range < c.start){
-				//	if(end_range > c.end  || end_range > c.start ){
-						console.log('ok:'+c.type+' ('+c.start+' -- '+c.end+')');
-						
-
-						console.log(c.objects)
-
-						console.log(_.keys(c.objects))
-							// loop types
-							_.each(_.keys(c.objects), function(key, u){
-								
-
-								var pos_keys = _.keys(c.objects[key])
-
-									// loop positions
-									_.each(pos_keys, function(skey, u){
-										//	console.log(c.objects[key][skey])
-												
-										// loop objects at type _ position
-										var objs = c.objects[key][skey];
-										_.each(objs, function(ob, w){
-
-
-											ob.selected = false;
-											
-
-
-
-											if(start_range < ob.end || start_range < ob.start){
-												if(ob.type !== 'container' && (end_range > ob.end  || end_range > ob.start) ){
-
-													ob.selected = true;
-													console.log(ob.type)
-												}
-												else{
-													
-												}
-											}
-											
-											//ob.selected = true;
-										})
-
-
-
-									})
-
-								//console.log(c.objects[key])
-							});
-
-
-
-						objects_in_range.push(c)
-
-					//}
-				//}
-
-
-
-
-		});
-		console.log(objects_in_range);
-
-
-
-/*
-
-		_.each(source, function(mk, i){
-
-			if( mk.type !== 'container'){
-				if(start_range < mk.end || start_range < mk.start){
-					if(end_range > mk.end  || end_range > mk.start ){
-						//console.log('ok:'+ mk.type+' ('+mk.start+' -- '+mk.end+')');
-						objects_in_range.push(mk)
-					}
-				}
-			}
-
-		});
-		console.log(objects_in_range);
-		_.each(objects_in_range, function(o, i){
-		
-
-		});
-*/
-$scope.containers[0].selecting = Math.random()
-
-		return objects_in_range;
-
-
-
-
-	}
-
-	$scope.wrapin_section = function(){
-		
-			$scope.objects_in_range('containers');
-			//$scope.objects_in_range('markups');
-
-
-			$scope.push.type = 'container';
-			$scope.push.subtype = 'container';
-			$scope.push.start = $scope.ui.selected_range.start
-			$scope.push.position = 'inline';
-			$scope.push.end = $scope.ui.selected_range.end
-		//	$scope.push_markup();
-
-	}
 
 	/**
 	* delete a markup on click
 	* @function DocumentCtrl#delete_markup
 	* @param  {Object} markup - markup to delete
 	*/
-	$scope.markup_delete = function (markup){
-		 if(markup.type=="container"){
+	$scope.markup_delete = function (){
+		 if($scope.markup.type=="container"){
 			 //alert('can hold objects!')
 			 //return;
 			 if($scope.sectionstocount == 1){
 			 	alert('can\'t delete last section')
 			 	return
 			 }
-			 doc.markup_delete(markup)
+			 doc.markup_delete($scope.markup)
 		 }
 		else{
-			doc.markup_delete(markup)
+			doc.markup_delete($scope.markup)
 		}
 	}
 
-	/**
-	* turn links clickable out of angular routing
-	* @function DocumentCtrl#external_link
-	* @param  {String} link - redirect link
-	*/
-	$scope.external_link = function (link){
-		window.location = link;
-	}
-
-	$scope.expand_tools = function(name){
-
-		//$scope.ui.menus[name].open = $scope.ui.menus[name].open * -1;
-		if($scope.ui.menus[name].open == 'no'){
-			$scope.ui.menus[name].open = 'yes'
-		}
-		else{
-			$scope.ui.menus[name].open = "no"
-		}
-		//return;
-		//alert('d')
-	}
-
-	$scope.toggle_render = function(r){
-		$scope.ui.menus['quick_tools'].open = "no"
-		$scope.ui.renderAvailable_active = r
-	}
 	
-	$scope.upload_file_image = new Object({'uploaded': false});
-	$scope.preuploadFile = function(files){
-		$scope.upload_file_image.file = files[0];
-		return;
-	}
 
+		$scope.$watchCollection('[markup.start, markup.end]', function(newValue, oldValue) {
+				//console.log($scope)
+				console.log(newValue)
+				console.log(oldValue)
 
-	$scope.uploadFile = function(){
-		
-		
-		var fd = new FormData();
-		fd.append("image", $scope.upload_file_image.file);
+				// can call parent..
+				//doc.init_containers()
 
+		});
 
-		
-		$http.post(api_url+'/media/upload', fd, 
-			{ 
-				withCredentials: true,
-        		headers: {'Content-Type': undefined },
-        		transformRequest: angular.identity 
-        	
-        	}
-        	).success(function(m) {
-				$scope.upload_file_image.uploaded = true;
-        		$scope.upload_file_image.basename = m[0].basename
-				$scope.upload_file_image.path = m[0].path
-				$scope.upload_file_image.type = m[0].type
-				$scope.upload_file_image.fullpath = root_url+'/uploads/'+m[0].path+m[0].basename
+		$scope.$watch('markup.position', function(newValue, oldValue) {
+					// only new value check
+					console.log(newValue)
+					console.log(oldValue)
 
-
-				$scope.push.metadata = $scope.upload_file_image.fullpath
-
-
-			}).error(function(err){
-				console.log(err)
-		})
-
-
-	}
-
-
-
-	/**
-	*  EVENTS 
-	* 
-	* Get broadcasted events
-	* @function DocumentCtrl#events
-	*/
-
-	$scope.$on('doc', function(event, args) {
-		if(args.action){
-			console.log('EVENT logger '+args.action)
-			
-
-			if(args.action == 'reload'){
-				//alert('d')
-			}
-
-			if(args.action == 'fulltext'){
-				doc.init_containers()
-			}
-			if(args.action == 'selection'){
-
-					// NOT STABLE
-					// loop each  $scope.ui.selected_objects.
-
-					for (var i = $scope.ui.selected_range.start; i <= $scope.ui.selected_range.end; i++) {
-						if(args.type == 'select'){
-							$scope.letters[$scope.ui.selected_section_index][i]['classes'].push('selected');
-						}
-						if(args.type == 'unselect'){
-							$scope.letters[$scope.ui.selected_section_index][i]['classes'] = _.without($scope.letters[$scope.ui.selected_section_index][i]['classes'], 'selected')
-						}
-
+					if(oldValue !==newValue && oldValue && oldValue !=='' &&  newValue && newValue !==''){
+						$scope.markup.position = newValue;
+						doc.markup_save($scope.markup)
+						//	alert('s')
 					}
-				//	socket.emit('news', {doc_id: $scope.doc.title, action: args.action , type: args.type });
-					console.log($scope.ui);
-
-
-			}
-			if(args.action == 'doc_ready'){	
-				doc.init_containers()
-				if(args.type !== 'load'){
-				//	socket.emit('news', {doc_id: $scope.doc.title, action: args.type, collection_type: args.collection_type, collection: args.collection });
-				}
-			}
-			if(args.action == 'containers_ready'){
-				doc.distribute_markups()
-			}
-			if(args.action == 'dispatched_objects'){
-				$scope.ui.loaded = 'loaded'
-
-
-			}
-
+					else{
+						console.log('watch position untrigger')
+					}
 			
+		});
 
+		$scope.$watch('markup.selected', function(newValue, oldValue) {
+					// only new value check
+					if(newValue !==''){
+						//console.log(newValue)
+						//console.log(oldValue)
+						$scope.toggle_fragment_ranges($scope.markup, newValue)
+					}
+					else{
+						console.log('watch untrigger')
+					}
+		});
 
-		}
-
-	});
-
-$scope.init()
-
-//alert(API_SERVER_URL)
-} // CTRL
-
-/** 
-* list all socketed events
-* @class SocketsListCtrl
-**/
-function SocketsListCtrl($scope, $http , $location, $routeParams, socket) {
-		//$scope.docs = DOCS;
-		console.log('SocketsListCtrl')
-		$scope.stack = [];
-		socket.on('newsback', function (data) {
-			//console.log('newsback')
-			//console.log(data);
-			$scope.stack.push(data)
-		})
-		$scope.delete_markup = function (markup,doc_id){
-		
-		 $http.get(root_url+'/api/v1/doc/'+doc_id+'/markups/delete/'+markup._id).success(function(m) {
-			//console.log(m)
-			alert('job done')
-			//$scope.doc = m;
-			//$scope.$emit('docEvent', {action: 'doc_ready' });
-		 })
-		}
-}
-/** 
-* @class DocumentsListCtrl
-**/
-function DocumentsListCtrl($scope, $http , $location, $routeParams, socket) {
-		$scope.docs = DOCS;
-		console.log($scope.docs)
-
-}
-
-
-// used to test jasmine test technique..
-function  DocumentCtrlJasmine($scope, $http , $sce, $location, $routeParams, renderfactory,socket,docfactory){
-			return 'hello';
 } 
 
 
-var newdoc_service;
 
+var newdoc_service;
 function DocumentNewCtrl($scope, $http , docfactory) {
 console.log('DocumentNewCtrl')
 

@@ -1,20 +1,17 @@
-div.section_displayer(ng-if="section.type=='container' && ui.renderAvailable_active == 'editor' ")
+div.section_displayer( ng-if="section.type=='container' && ui.renderAvailable_active == 'editor' ")
 	// p {{section._id}}
 	// p {{section.subtype}}
 	// p {{section.start}} - {{section.end}} - {{section.metadata}} - {{section.type}} - {{section.subtype}}
 	
 
-	a.btn.btn_section.btn_section_select(href="",ng-if="section.selected==false", ng-click="toggle_select_markup(section)") Select section
-	a.btn.btn_section.btn_section_unselect(href="", ng-if="section.selected == true ", ng-click="toggle_select_markup(section)") Unselect
-
-
-
+	a.btn.btn_section.btn_section_select(href="",ng-if="section.selected==false", ng-click="toggle_select_markup(section,'click')") Select section
+	a.btn.btn_section.btn_section_unselect(href="", ng-if="section.selected == true ", ng-click="toggle_select_markup(section,'click')") Unselect
 
 	div.section_editor(ng-if="section.selected == true ")
 		
 		.object-tools
 			i.fa.fa-save.btn_action(ng-click="markup_save(section)")
-			i.fa.fa-remove.btn_action(ng-click="markup_delete(section)")
+			i.fa.fa-remove.btn_action(ng-click="markup_delete()")
 			i.fa.fa-sliders.btn_action(ng-click="object_tools(section)")
 		
 		.section_tool_more(ng-if="section.object_tools")
@@ -24,15 +21,10 @@ div.section_displayer(ng-if="section.type=='container' && ui.renderAvailable_act
 			label subtype
 			input(ng-model="section.subtype" ,type="text")
 			
-
 		// p {{$parent.$parent.$index}}
 		
 		//label position
 		input(ng-model="section.position" ,type="hidden")
-		label start
-		input(ng-model="section.start" ,type="number")
-		label end
-		input(ng-model="section.end", type="number")
 		span.field.ranges
 			span.ranges_inputs
 				span.field.numberfloat._start
