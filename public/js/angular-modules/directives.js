@@ -33,18 +33,20 @@ angular.module('musicBox.directives', [])
 
            
            var lt_classes = 'lt '
-           _.each(lt.classes, function(ltc, x){
+          
+          /* _.each(lt.classes, function(ltc, x){
              lt_classes += ' '+ltc 
            });
-
+*/
             if(lt.char === " " || lt.char === ""){
              lt.char = ' '
              //lt_classes += ' blank '
             }
-            text_out += '<lt ng-click="lc()" lettersi="'+lt.sectionin+'" letterorder="'+lt.order+'"  class="'+lt_classes+'"  chars="'+lt.char+'">'+lt.char+'</lt>';
+            //text_out += '<lt ng-click="lc()" lettersi="'+lt.sectionin+'" letterorder="'+lt.order+'"  class="'+lt_classes+'"  chars="'+lt.char+'">'+lt.char+'</lt>';
         });       
         elem.html(text_out);
-       
+          // 
+         console.log('..end')
         //console.log('compile?'+scope.compile_)
       }
       
@@ -68,15 +70,16 @@ angular.module('musicBox.directives', [])
             scope.compiled_once = false;
 
             // a way to load uncompiled letters, as we dont need their binding 
-            elem.bind('mouseover', function() {
+            elem.bind('click', function() {
 
                       if(scope.compiled_once == false){
                           // never compiled 
-                          $compile(elem.contents())(scope);
+                       
                           scope.$apply(function(){
                             scope.compile_ = true;
                             scope.compiled_once == true;
                           });
+                          $compile(elem.contents())(scope);
                       }
                       else{
                         // never triggered after... cause child directives bindings running

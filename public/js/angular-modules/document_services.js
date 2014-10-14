@@ -334,7 +334,9 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
                     //}
                     //else{
                       
-                      $rootScope.letters[index][delta]['classes'].push(markup.subtype);
+                      if($rootScope.letters[index][delta] && markup.subtype){
+                        $rootScope.letters[index][delta]['classes'].push(markup.subtype);
+                      }
                       if( markup.type=='semantic'){
                           $rootScope.letters[index][delta]['classes'].push(markup.type);
 
@@ -459,12 +461,12 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
           ch = content_string[i];
           
           if (ch === " ") {
-                ch = '';
+                ch = ' ';
 
             }
             if (!content_string[i]) {
               // maybe better to unset ? 
-                ch = '';
+                ch = ' ';
             }
           fulltext += ch;
           letter_arr['char'] = ch;

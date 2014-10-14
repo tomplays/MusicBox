@@ -828,8 +828,10 @@ function test_owner_or_key(doc,req){
 			return true;	
 		}
 		else{
-			if(req.body.secret == doc.secret){
-				console.log('but secret match')
+
+			
+			if( (req.body.secret && doc.secret==req.body.secret) || (req.query.secret && doc.secret==req.query.secret) ){
+				console.log('secret match')
 				return true;
 			}
 			else{

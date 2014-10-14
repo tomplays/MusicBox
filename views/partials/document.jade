@@ -1,5 +1,5 @@
 
-div(ng-include="fragments['branding'][0]['url']")
+// div(ng-include="fragments['branding'][0]['url']")
 div(ng-include="fragments['before_doc'][0].url" )
 
 div(class="sections_container")
@@ -48,10 +48,11 @@ div(class="sections_container")
 						
 						
 						// in use, v++++ ! directive and sub dire
-						div.theletters
+						// div.theletters
 							//p {{section.selecting}}
-							my-Text(selecting="section.selecting" , section="section")
+							// my-Text(selecting="section.selecting" , section="section")
 						
+
 
 						// v1
 						// div.theletters
@@ -61,8 +62,12 @@ div(class="sections_container")
 						// div.precompiled(ng-bind-html="section.compiled")
 						
 						// v classic.		
-						// div.theletters
-							span(ng-bind-html="l.char", ng-mousedown="over(l, 'down')", ng-mouseup="over(l, 'up')", ng-class="l.classes", ng-click="over(l, 'click')" , ng-dblclick="switch_editing(l)", data-order="{{$index}}", ng-repeat="l in letters[$parent.$parent.$index]") 
+						div.theletters
+							// h3 {{$parent.$parent.$index}}
+							span(ng-bind-html="l.char", ng-mousedown="over(l.order, 'down')", ng-mouseup="over(l.order, 'up')", ng-class="l.classes", ng-click="over(l.order, 'click')" , ng-dblclick="switch_editing(l)", ng-repeat="l in letters[$parent.$parent.$index]")
+
+
+							// span( ng-repeat="l in letters[$parent.$parent.$index]") {{l.char}}
 								
 		// render into the layout loop, only "if last"
 		// made to apply last section styles to footer
@@ -71,4 +76,5 @@ div(class="sections_container")
 			input(ng-if="ui.editing_footer_center_html",   ng-model="doc_options.footer_center_html.value", name="doc_options.footer_center_html.value")
 
 			// a(href="/doc/{{doc.title}}") permalink
-			// a(href="/") back home
+			// a(href="/") back home							}
+							}
