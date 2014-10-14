@@ -1,6 +1,5 @@
-// div.ct-chart
-//div(ng-include="fragments['branding'][0]['url']")
 
+div(ng-include="fragments['branding'][0]['url']")
 div(ng-include="fragments['before_doc'][0].url" )
 
 div(class="sections_container")
@@ -12,41 +11,34 @@ div(class="sections_container")
 					
 					// h3 
 					div(class="markup_ markup_type_inline", ng-repeat="markup in objects_sections.global_all")
-							.cols-edit(ng-include="fragments['markup_editor'][0].url" )
+							div(ng-include="fragments['markup_editor'][0].url" )
 
 				// title, author, date, ..
 				div(ng-if="(layout.name== 'center') && ($parent.$first) ")
 						
 					div(ng-include="fragments['doc_header'][0].url")
 
-						
+				//div(ng-if="layout.include_objects !==false")
 
-				div(ng-if="layout.include_objects !==false")
-
+				div(ng-if="layout.name == 'right'")
+					div(ng-include="fragments['section_editor'][0].url" )
+										
+					div(class="markup_ container_class_type_inline", ng-if="ui.renderAvailable_active == 'editor'" , ng-repeat="markup in section.objects['container_class']['inline']")
+						.cols-edit(ng-include="fragments['markup_editor'][0].url" )
 					
+					div(class="markup_ markup_type_inline", ng-if="ui.renderAvailable_active == 'editor'" , ng-repeat="markup in section.objects['markup']['inline']")
+						.cols-edit(ng-include="fragments['markup_editor'][0].url" )
 
 
-					div(ng-if="layout.name == 'right'")
-						.cols-edit(ng-include="fragments['section_editor'][0].url" )
-											
-						div(class="markup_ container_class_type_inline", ng-if="ui.renderAvailable_active == 'editor'" , ng-repeat="markup in section.objects['container_class']['inline']")
-							.cols-edit(ng-include="fragments['markup_editor'][0].url" )
-
-						
-						div(class="markup_ markup_type_inline", ng-if="ui.renderAvailable_active == 'editor'" , ng-repeat="markup in section.objects['markup']['inline']")
-							.cols-edit(ng-include="fragments['markup_editor'][0].url" )
-
-
-					
-					.cols-edit(ng-if="layout.name == 'left'", ng-include="fragments['markup_push'][0].url" )
-
-						
-					div(ng-repeat='object in available_sections_objects')
-
-						div(class="markup_ markup_type_{{markup.type}}" ng-repeat="markup in section.objects[object][layout.name]", ng-include="fragments['markup_editor'][0].url")
 				
-				// div(ng-if="(doc.slug !=='about' && layout.name== 'global') && ($parent.$last) " , ng-include="fragments['ad_welcome'][0].url")
+				div(ng-if="layout.name == 'left'", ng-include="fragments['markup_push'][0].url" )
 
+					
+				div(ng-if="layout.include_objects !==false" , ng-repeat='object in available_sections_objects')
+
+					div(class="markup_ markup_type_{{markup.type}}" ng-repeat="markup in section.objects[object][layout.name]", ng-include="fragments['markup_editor'][0].url")
+			
+			
 				
 
 
@@ -76,8 +68,8 @@ div(class="sections_container")
 						// div.theletters
 							span(ng-bind-html="l.char", ng-mousedown="over(l, 'down')", ng-mouseup="over(l, 'up')", ng-class="l.classes", ng-click="over(l, 'click')" , ng-dblclick="switch_editing(l)", data-order="{{$index}}", ng-repeat="l in letters[$parent.$parent.$index]") 
 								
-		
-
+		// render into the layout loop, only "if last"
+		// made to apply last section styles to footer
 		footer(ng-if="$last")
 			p(ng-bind-html="doc_options.footer_center_html.value +'&nbsp;'", class="editing_{{ui.editing_footer_center_html}}" , ng-dblclick="edit_doc_option('footer_center_html')") {{}} &nbsp;
 			input(ng-if="ui.editing_footer_center_html",   ng-model="doc_options.footer_center_html.value", name="doc_options.footer_center_html.value")

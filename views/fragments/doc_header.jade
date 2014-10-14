@@ -28,7 +28,10 @@ div.doc_header()
 								time(ng-bind="doc.formated_date", ng-click="" ) 
 								
 								div.head_left
-									.cols-edit(ng-include="fragments['author_card'][0].url" )
+									div.post-author-info
+										p {{i18n.CUSTOM.DOCUMENT.by_author}} 
+											span(style="color:{{doc.user.color}};", class="post-author-name", rel="author") {{doc.user.username}} 
+
 								div.sharer
 									a(class="twitter-share-icon", ng-class="", href="https://twitter.com/intent/tweet?text={{doc.excerpt}} {{doc.encoded_url}}")
 										i.fa.fa-twitter

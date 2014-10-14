@@ -1,12 +1,3 @@
-// Branding logo
-div.loading(class="is_{{ui.loaded}}") 
-	// span {{ui.loaded}}
-
-div(ng-if="doc.room.name", class="branding {{doc_options.branding_class.value}}")
-	h1
-		a(href="/#!", title="back to {{doc.room.name}}") 
-			span {{doc.room.slug}}
-
 i.fa.fa-cog.inactive.quick_tool_opener(class="inside visible_{{ui.menus.quick_tools.open}}", ng-click="expand_tools('quick_tools')" , ng-dblclick="expand_tools('quick_tools')" )
 
 div.quick_tools(class="visible_{{ui.menus.quick_tools.open}}")

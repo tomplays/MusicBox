@@ -1,4 +1,4 @@
-div(class="branding sc bg_white")
+div(class="branding sc bg_transparent")
 	h1
 		a(href="/#!", title="") 
 			span #{locals.site_title}
@@ -6,32 +6,28 @@ div(class="branding sc bg_white")
 div.main_center.user_account.bordered
 	
 	span.color_avatar(style="background-color:{{user_options['color'].value}}")
-	p Username : {{me.username}}
+	p {{me.username}}
 
 	// p {{me}}
 	// p {{user_options}}
 	p mail : {{me.email}} (hidden from public)
 
-
 	p 
 		img(ng-src="{{me.image_url}}")
 	p 
 		a(href="/doc/create") Create a new doc
-
-	p 
-		
+	p 		
 		a(ng-click="external_link(root_url+'/signout')") Log out
 		i.fa.fa-sign-out 
-	h3 Options
+	// h3 Options
 	ul 
-		li You are an admin ? {{me.is_admin}}
-		li You are an editor ? {{me.is_editor}}
-		li subscribed to newsletter ? {{me.newsletter}}
-			
+		// li You are an admin ? {{me.is_admin}}
+		// li You are an editor ? {{me.is_editor}}
+		// li subscribed to newsletter ? {{me.newsletter}}
 
 	ul(ng-repeat="option in me.user_options")
 		li 
-			{{option.option_name}} : {{option.option_value}}
+			// {{option.option_name}} : {{option.option_value}}
 	h3 Mes documents :
 
 	table.user_documents()
