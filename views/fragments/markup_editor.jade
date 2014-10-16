@@ -1,6 +1,6 @@
 // p {{markup.start}} - {{markup.end}} - {{markup.metadata}} - {{markup.type}} - {{markup.subtype}}
 
-div(ng-controller="fragmentCtrl" , class="markup_box markup_box_depth_{{markup.depth}} markup_box_status_{{markup.status}}   markup_displayer_ markup_displayer markup_displayer_{{markup.type}} markup_displayer_subtype_{{markup.subtype}}  by_me_{{markup.by_me}} is_editing_{{markup.editing}}") 
+div(ng-controller="FragmentCtrl", class="markup_box markup_box_depth_{{markup.depth}} markup_box_status_{{markup.status}}   markup_displayer_ markup_displayer markup_displayer_{{markup.type}} markup_displayer_subtype_{{markup.subtype}}  by_me_{{markup.by_me}} is_editing_{{markup.editing}}") 
 	
 	img.mk_img(ng-if="markup.subtype=='img'" , data-tdid="{{markup.id}}" , ng-src="{{markup.metadata}}")
 
@@ -25,8 +25,6 @@ div(ng-controller="fragmentCtrl" , class="markup_box markup_box_depth_{{markup.d
 			span.mk_val.mk_username( style="color:{{markup.user_options['color'].value}}", ng-if="objSchema[markup.type].show_user") 
 				{{markup.username}}
 			
-
-
 			// span.mk_val.mk_avatar.color_avatar.mini(style="background-color:{{markup.user_options['color'].value}}")
 
 		span(ng-include="fragments['child_markup'][0].url", ng-if="markup.type == 'child' ")
@@ -62,7 +60,6 @@ div(ng-controller="fragmentCtrl" , class="markup_box markup_box_depth_{{markup.d
 						a(ng-click="offset_markup(markup, 1,1)") offset start+1, end+1
 					p
 						a(ng-click="offset_markup(markup, 1,0)") offset start+1
-
 					p
 						a(ng-click="offset_markup(markup, 0,-1)") offset end-1
 					p
@@ -76,9 +73,7 @@ div(ng-controller="fragmentCtrl" , class="markup_box markup_box_depth_{{markup.d
 				span.field.smallinput(ng-if="true")
 					label  depth
 					input( ng-model="markup.depth" type="text" )
-				
-		
-			
+							
 			span.field
 				label.label_type type
 				select(ng-model="markup.type", ng-options="t for t in available_sections_objects")
@@ -100,7 +95,6 @@ div(ng-controller="fragmentCtrl" , class="markup_box markup_box_depth_{{markup.d
 				// input(ng-model="markup.position" ,type="text")
 				select(ng-options="pos for pos in objSchema[markup.type].position_available" , ng-model="markup.position", name="markup.position")
 
-
 			span.field.ranges
 				
 				span.ranges_inputs
@@ -114,10 +108,14 @@ div(ng-controller="fragmentCtrl" , class="markup_box markup_box_depth_{{markup.d
 				span.ranges_tools
 					i.fa.fa-text-width.match_selection(title="re-match ranges from active selection", ng-click="match_selection(markup)" ) 
 					
-
 			span.field.mt_input(class="mt_input_type_{{markup.type}} mt_input_subtype_{{markup.subtype}}", ng-if="objSchema[markup.type].metadata.editor.show") 
 				label {{objSchema[markup.type].metadata.editor.label}}
 				
 				// input or textarea
 				input(ng-if="objSchema[markup.type].metadata.editor.input =='input'", ng-model="markup.metadata", type="text")
 				textarea(ng-if="objSchema[markup.type].metadata.editor.input =='textarea'", ng-model="markup.metadata")
+			
+			span.field.uploader(ng-if="markup.type == 'media' ")
+				input(onchange="angular.element(this).scope().preuploadFile(this.files)", type="file")
+				a(ng-click="uploadFile()" ) send
+				img(ng-if="upload_file_image.uploaded == true", ng-src="{{upload_file_image.fullpath}}")

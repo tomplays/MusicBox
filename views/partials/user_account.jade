@@ -42,7 +42,7 @@ div.main_center.user_account.bordered
 		tbody
 			tr(ng-repeat="doc in documents")
 				td 
-					a(href="/doc/{{doc.slug}}") {{doc.slug}} 
+					a(href="/doc/{{doc.slug}}") {{doc.title}} 
 				td {{doc.published}}
 				td {{doc.room.name}} 
 				td {{doc.created | date }}

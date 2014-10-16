@@ -1,9 +1,10 @@
 
 div(ng-include="fragments['branding'][0]['url']")
 div(ng-include="fragments['before_doc'][0].url" )
+div(ng-if="ui.renderAvailable_active == 'doc_options'" , ng-include="fragments['doc_options'][0].url")
 
-div(class="sections_container")
-	section(ng-controller="sectionCtrl" , ng-repeat='section in containers' , class="{{section.section_classes}}")
+div(ng-hide="ui.renderAvailable_active == 'doc_options'" , class="sections_container")
+	section( ng-repeat='section in containers' ,  style="{{section.section_styles}} background-repeat:no-repeat;", class="focus_ focus_{{ui.focus_side}} {{section.section_classes}} ")
 		div(ng-repeat='layout in available_layouts')
 			div(class="layout_ layout_name_{{layout.name}} has_count_{{section.objects_count.by_positions[layout.name].count}} has_object_{{section.objects_count.by_positions[layout.name].has_object}}")
 				// h3 {{section.objects_count.by_positions[layout.name].count}}
@@ -16,9 +17,10 @@ div(class="sections_container")
 				// title, author, date, ..
 				div(ng-if="(layout.name== 'center') && ($parent.$first) ")
 						
-					div(ng-include="fragments['doc_header'][0].url")
+					div(ng-include="fragments['doc_title'][0].url")
+				
 
-				//div(ng-if="layout.include_objects !==false")
+				// div(ng-if="layout.include_objects !==false")
 
 				div(ng-if="layout.name == 'right'")
 					div(ng-include="fragments['section_editor'][0].url" )
@@ -26,55 +28,28 @@ div(class="sections_container")
 					div(class="markup_ container_class_type_inline", ng-if="ui.renderAvailable_active == 'editor'" , ng-repeat="markup in section.objects['container_class']['inline']" ng-include="fragments['markup_editor'][0].url")
 					
 					div(class="markup_ markup_type_inline", ng-if="ui.renderAvailable_active == 'editor'" , ng-repeat="markup in section.objects['markup']['inline']", ng-include="fragments['markup_editor'][0].url")
-		
-				div(ng-if="layout.name == 'left'", ng-include="fragments['markup_push'][0].url" )
+
+				div(ng-if="layout.name == 'left'")
+
+					span.open_comment(ng-click="open_comment_push(section)") +
+					div.comment_form(ng-if="ui.menus.push_comment.open == section.sectionin ",  ng-include="fragments['comment_form'][0].url")
 
 					
 				div(ng-if="layout.include_objects !==false" , ng-repeat='object in available_sections_objects')
 
 					div(class="markup_ markup_type_{{markup.type}}" ng-repeat="markup in section.objects[object][layout.name]", ng-include="fragments['markup_editor'][0].url")
 			
-			
 				
+				div(ng-if="layout.name == 'inline'")
+					
+					// letters !
+					div.theletters
+						span.lt( ng-class="l.classes", ng-bind-html="l.char", lt="l" , ng-repeat="l in letters[$parent.$parent.$index]")
 
-
-				// to stay on same indent level
-				div
-					div(ng-hide="ui.renderAvailable_active == 'doc_options'", ng-if="layout.name == 'inline'")
-						// p {{section.start}} {{section.end}}
-						// p {{ui.selected_range.start}} - {{ui.selected_range.end}} 
-						// div
-							input(type="text", ng-model="inserttext[$parent.$parent.$index]")
-						
-						
-						// in use, v++++ ! directive and sub dire
-						// div.theletters
-							//p {{section.selecting}}
-							// my-Text(selecting="section.selecting" , section="section")
-						
-
-
-						// v1
-						// div.theletters
-							my-customer(letter="l", ng-repeat="l in letters[$parent.$parent.$index]") 
-						
-						// v -
-						// div.precompiled(ng-bind-html="section.compiled")
-						
-						// v classic.		
-						div.theletters
-							// h3 {{$parent.$parent.$index}}
-							span(ng-bind-html="l.char", ng-mousedown="over(l.order, 'down')", ng-mouseup="over(l.order, 'up')", ng-class="l.classes", ng-click="over(l.order, 'click')" , ng-dblclick="switch_editing(l)", ng-repeat="l in letters[$parent.$parent.$index]")
-
-
-							// span( ng-repeat="l in letters[$parent.$parent.$index]") {{l.char}}
-								
 		// render into the layout loop, only "if last"
 		// made to apply last section styles to footer
 		footer(ng-if="$last")
-			p(ng-bind-html="doc_options.footer_center_html.value +'&nbsp;'", class="editing_{{ui.editing_footer_center_html}}" , ng-dblclick="edit_doc_option('footer_center_html')") {{}} &nbsp;
-			input(ng-if="ui.editing_footer_center_html",   ng-model="doc_options.footer_center_html.value", name="doc_options.footer_center_html.value")
-
-			// a(href="/doc/{{doc.title}}") permalink
-			// a(href="/") back home							}
-							}
+			p(ng-bind-html="doc_options.footer_center_html.value")
+			// input(ng-if="ui.editing_footer_center_html",   ng-model="doc_options.footer_center_html.value", name="doc_options.footer_center_html.value")
+			// p(ng-bind-html="doc_options.footer_center_html.value +'&nbsp;'", class="editing_{{ui.editing_footer_center_html}}" , ng-dblclick="edit_doc_option('footer_center_html')") {{}} &nbsp;
+			// input(ng-if="ui.editing_footer_center_html",   ng-model="doc_options.footer_center_html.value", name="doc_options.footer_center_html.value")
