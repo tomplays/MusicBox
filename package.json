@@ -39,7 +39,7 @@
     "request": "~2.33.0",
     "socket.io": "^1.1.0",
     "socket.io-client": "^1.1.0",
-    "string": "^2.0.1",
+    "string": "^2.1.0",
     "underscore": "*",
     "view-helpers": "~0.1.4",
     "locale": "0.0.20",
