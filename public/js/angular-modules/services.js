@@ -25,7 +25,11 @@ musicBox.run(function($rootScope, $http, $route) {
       //
       // > from '/docs/:mode' to '/doc/:docid'
       //console.log('route.change')
-      console.log($route)
+       console.log($route)
+       $rootScope.doc = '';
+       $rootScope.ui = '';
+
+
   }
   });
 

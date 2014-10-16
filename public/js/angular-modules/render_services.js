@@ -391,7 +391,10 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
               'show_user': false, 
 
               'subtype': {
-                'free_input' : false
+                'free_input' : false,
+                'show_editor': 'hidden',
+                'available' : ['hyperlink'],
+
              },   
              'position_available': ['right', 'left'],
 
