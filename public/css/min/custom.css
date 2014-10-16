@@ -26,11 +26,11 @@ body.debug .debug-only {
 body.text_typography_Esteban {
   font-family: "Esteban";
 }
-body.headings_typography_Droid.Sans h1 {
+body.headings_typography_Droid_Sans h1 {
   font-family: "Droid Sans", serif;
 }
-body.text_typography_Open.Sans,
-body.headings_typography_Open.Sans h1 {
+body.text_typography_Open_Sans,
+body.headings_typography_Open_Sans h1 {
   font-family: 'Open Sans', sans-serif;
 }
 .branding h1 {

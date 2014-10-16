@@ -4,14 +4,10 @@ small layout
 @inline-width:40%;
 @inline-width-neg:-40%;
 */
-[ng\:cloak],
-[ng-cloak],
-[data-ng-cloak],
-[x-ng-cloak],
-.ng-cloak,
-.x-ng-cloak {
-  display: none !important;
-}
+/* ______________________________________ */
+/*                              ♫         */
+/*              RESET                     */
+/* ______♫ ______________________________ */
 html {
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.004);
   -webkit-font-smoothing: antialiased !important;
@@ -50,6 +46,19 @@ h6 {
   text-rendering: optimizelegibility;
   margin: 0px;
   padding: 0px;
+}
+h2,
+.h2-like {
+  font-size: 1.1em;
+  line-height: 1.2em;
+}
+h3,
+.h3-like,
+h4,
+h5,
+.h5-like h6,
+.h6-like {
+  font-size: 1.32em;
 }
 /* Tables */
 table {
@@ -107,58 +116,16 @@ table tbody tr td {
 time {
   font-style: italic;
 }
-.sections_container {
-  width: 100%;
-  float: left;
-}
-.tools_container {
-  width: 80%;
-  float: left;
-}
-section {
-  width: 100%;
-  float: left;
-}
-.bg_debug {
-  background: #2ecc71;
-}
-.fa,
-a.btn_ok {
-  cursor: pointer;
-}
-section {
-  padding-bottom: 10px;
-}
-section.pad-bottom {
-  padding-bottom: 2%;
-}
-section.pad-top-bottom {
-  padding: 2% 0px;
-}
-section.two-cols .theletters {
-  -moz-column-count: 2;
-  -moz-column-gap: 30px;
-  -webkit-column-count: 2;
-  -webkit-column-gap: 30px;
-}
-section.text-right .theletters {
-  text-align: right;
-}
-/*place for editing zone at fixed bottom*/
-body.render_active_editor section:last-child {
-  padding-bottom: 100px;
-}
 img {
   max-width: 100%;
 }
 .float_right {
   float: right;
 }
-/*forms*/
-/*.markup_editor
-
-form
-*/
+/* ______________________________________ */
+/*   ♫                                    */
+/*              INPUT / FORMS             */
+/* ______________________________________ */
 input[type="text"],
 input[type="password"],
 input[type="date"],
@@ -224,7 +191,35 @@ textarea {
   border: 1px solid rgba(189, 195, 199, 0.3);
   padding: 2%;
 }
-/* BUTTONS */
+/* ______________________________________ */
+/*   ♫                                    */
+/*              BRANDING                  */
+/* ______________________________________ */
+div.branding {
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  background: none repeat scroll 0 0 #000;
+  border-radius: 4px;
+  color: #fff;
+  height: 60px;
+  left: 10px;
+  position: absolute;
+  text-align: center;
+  top: 10px;
+  transition: top 0.2s linear 0s, left 0.2s linear 0s, opacity 0.2s linear 0s;
+  width: 60px;
+  z-index: 700;
+}
+div.branding h1 a {
+  display: block;
+  float: left;
+  height: 60px;
+  width: 100%;
+}
+/* ______________________________________ */
+/*           ♫                            */
+/*              ACTION / BUTTONS          */
+/* _______________________________♫ _____ */
 .btn {
   border-radius: 4px;
   font-weight: bold;
@@ -264,47 +259,97 @@ a.btn_ok {
   background: #3498db;
   color: #fff;
 }
-.comment_form {
-  background: none repeat scroll 0 0 rgba(189, 195, 199, 0.5);
-  border-radius: 3px;
-  float: left;
-  margin-bottom: 15px;
-  padding: 5px 2% 7%;
-  width: 96%;
+.fa,
+a.btn_ok {
+  cursor: pointer;
 }
-.comment_form textarea {
-  background: none repeat scroll 0 0 #fff;
-  border: medium none;
-  margin-bottom: 10px;
-  margin-top: 3px;
-  min-height: 100px;
-  width: 94%;
+.bg_debug {
+  background: #2ecc71;
 }
-.comment_form a.loginOrSignup {
-  font-size: 0.8em;
-  line-height: 0.8em;
-  text-decoration: underline;
-}
-.comment_form .logged_in_as {
-  display: block;
-  float: left;
-  font-size: 0.8em;
-  line-height: 1em;
+/* ______________________________________ */
+/*                              ♫         */
+/*           SECTIONS & LAYOUTS           */
+/* ______♫ ______________________________ */
+.sections_container {
   width: 100%;
-  margin-bottom: 10px;
+  float: left;
 }
-.comment_form .logged_in_as a {
-  text-decoration: underline;
+.theletters {
+  width: 100%;
+  float: left;
 }
-.layout_name_wide img,
-.layout_name_center img,
-.layout_name_under img {
+/* .level */
+section {
+  width: 100%;
+  float: left;
+  padding-bottom: 10px;
+  /*layout level (wide, left, center, right, ...) */
+}
+section.pad-bottom {
+  padding-bottom: 2%;
+}
+section.pad-top-bottom {
+  padding: 2% 0px;
+}
+section.two-cols .theletters {
+  -moz-column-count: 2;
+  -moz-column-gap: 30px;
+  -webkit-column-count: 2;
+  -webkit-column-gap: 30px;
+}
+section.text-right .theletters {
+  text-align: right;
+}
+section .layout_ {
+  float: left;
+}
+section.focus_ .layout_name_wide img,
+section.focus_ .layout_name_center img,
+section.focus_ .layout_name_under img {
   max-width: 200%;
   width: 100%;
 }
-/*layout level (wide, left, center, right, ...) */
-.layout_ {
+section.focus_ .layout_name_inline {
+  left: 18%;
+  margin-left: 2%;
+  margin-right: 0;
+  position: relative;
+  width: 60%;
+}
+section.focus_side_left .layout_name_left {
+  left: -48%;
+  width: 30%;
+}
+section.focus_side_left .layout_name_inline {
+  left: 30%;
+  width: 48%;
+}
+section.focus_side_right .layout_name_left {
+  left: -48%;
+  width: 18%;
+}
+section.focus_side_right .layout_name_right {
+  width: 28%;
+}
+section.focus_side_right .layout_name_inline {
+  width: 48%;
+}
+section.focus_side_right.focus_side_left .layout_name_left {
+  left: -40%;
+  width: 28%;
+}
+section.focus_side_right.focus_side_left .layout_name_inline {
+  font-size: 0.9em;
+  left: 28%;
+  width: 40%;
+}
+section.focus_side_right.focus_side_left .layout_name_right {
+  width: 28%;
+}
+.doc_centered {
   float: left;
+  margin-left: 20%;
+  width: 58%;
 }
 /* all layouts positions variantes like: */
 .layout_name_inline_into_after,
@@ -337,21 +382,15 @@ a.btn_ok {
   margin-right: 1%;
   padding: 0 0 0 1%;
 }
-.layout_name_inline {
-  left: 18%;
-  margin-left: 2%;
-  margin-right: 0;
-  position: relative;
-  width: 60%;
-}
 .layout_name_right {
   margin-left: 0;
   padding: 0 0 0 1%;
   width: 18%;
 }
-/* markup level */
-/* all markup types variantes like: */
-/* doc_header */
+/* ______________________________________ */
+/*      ♪                                 */
+/*              DOCUMENT          ♫       */
+/* ______________________________________ */
 .doc_header {
   text-align: left;
   border-bottom: 1px solid rgba(189, 195, 199, 0.3);
@@ -360,8 +399,22 @@ a.btn_ok {
   float: left;
   width: 100%;
 }
+.doc_header h2 {
+  margin-top: 2%;
+  margin-bottom: 1%;
+}
+.doc_header h3 {
+  font-size: 1.1em;
+  line-height: 1.2em;
+  margin-top: 2%;
+  margin-bottom: 1%;
+}
 .doc_header h1 {
-  font-size: 2em;
+  font-size: 2.5em;
+  font-weight: 800;
+  letter-spacing: -1px;
+  line-height: 1;
+  margin-bottom: 1%;
   margin-top: 2%;
 }
 .doc_header .head_left {
@@ -386,6 +439,12 @@ a.btn_ok {
   font-size: 0.8em;
   margin-left: 7px;
 }
+/* special for homepage */
+.is_home_true .doc_header h1,
+.is_home_true .doc_header .post-author-info,
+.is_home_true .doc_header time {
+  display: none;
+}
 .sharer a {
   color: rgba(44, 62, 80, 0.6);
   float: right;
@@ -395,237 +454,6 @@ a.btn_ok {
 }
 .sharer .fa-facebook-square:hover {
   color: #2980b9;
-}
-body.render_active_doc_options .editing_:hover {
-  background: #ecf0f1;
-  padding: 5px 10px;
-}
-html.is_home_true .doc_header h1,
-html.is_home_true .doc_header .post-author-card,
-html.is_home_true .doc_header time {
-  display: none;
-}
-/*render modes active*/
-div.branding {
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  background: none repeat scroll 0 0 #000;
-  border-radius: 4px;
-  color: #fff;
-  height: 60px;
-  left: 10px;
-  position: absolute;
-  text-align: center;
-  top: 10px;
-  transition: top 0.2s linear 0s, left 0.2s linear 0s, opacity 0.2s linear 0s;
-  width: 60px;
-  z-index: 700;
-}
-div.branding h1 a {
-  display: block;
-  float: left;
-  height: 60px;
-  width: 100%;
-}
-.quick_tool_opener {
-  background: none repeat scroll 0 0 #292929;
-  border-radius: 6px;
-  font-size: 1.2em;
-  line-height: 1em;
-  opacity: 0.6;
-  padding: 3px 4px;
-  position: fixed;
-  right: 2.5%;
-  top: 17px;
-  z-index: 99999;
-  color: #fff;
-}
-.quick_tool_opener.visible_yes {
-  opacity: 1;
-  background: #2980b9;
-}
-.quick_tools {
-  top: -536px;
-  position: fixed;
-  width: 96%;
-  font-size: 1.1em;
-  display: block;
-  padding: 2%;
-  background: none repeat scroll 0 0 #fff;
-  z-index: 99;
-}
-.quick_tools.visible_yes {
-  background: none repeat scroll 0 0 #ecf0f1;
-  top: 76px;
-  transition: background 1.2s linear 0s, top 0.2s linear 0s;
-}
-.quick_tools a {
-  text-decoration: underline;
-}
-.quick_tools .inside {
-  float: right;
-  width: 40%;
-}
-.quick_tools .edit_box {
-  background: none repeat scroll 0 0 #fff;
-  border-right: 1px solid #292929;
-  float: left;
-  width: 27%;
-  padding: 0 3% 0% 0%;
-}
-.quick_tools .action_box p,
-.quick_tools .user_box p {
-  margin-bottom: 7px;
-}
-.fixed_tools {
-  /* 
-      background: none repeat scroll 0 0 rgba(0, 0, 0, 0.2);
-    */
-  background: #fff;
-  bottom: 0;
-  display: block;
-  height: auto;
-  padding: 1% 20%;
-  position: fixed;
-  transition: opacity 0.2s linear 20s;
-  width: 60%;
-  z-index: 99999;
-}
-.fixed_tools .ranges {
-  float: left;
-  width: 100%;
-}
-.fixed_tools .ranges .ranges_start_end {
-  background: none repeat scroll 0 0 rgba(231, 76, 60, 0.4);
-  border-radius: 6px;
-  color: #ffffff;
-  padding: 1%;
-}
-.fixed_tools .pusher_items {
-  float: left;
-  width: 100%;
-}
-.btn_pusher {
-  background: none repeat scroll 0 0 #95a5a6;
-  border: 1px solid #7f8c8d;
-  border-radius: 4px;
-  font-size: 13px;
-  margin-left: 2px;
-  margin-right: 2px;
-  padding: 0 2px;
-}
-.doc_editor {
-  background: none repeat scroll 0 0 rgba(236, 240, 241, 0.7);
-  color: #000;
-  float: left;
-  margin-bottom: 4%;
-  padding: 2%;
-  text-align: left;
-  width: 96%;
-}
-.doc_editor label {
-  width: 100%;
-  font-size: 0.8em;
-  font-style: italic;
-  float: left;
-}
-.doc_editor .edit_field_left {
-  float: left;
-  width: 50%;
-}
-.doc_editor .edit_field_right {
-  float: left;
-  width: 50%;
-}
-.doc_editor .excerpt_field,
-.doc_editor .room_field,
-.doc_editor .user_field,
-.doc_editor .published_field,
-.doc_editor .thumbnai_field {
-  float: left;
-  width: 90%;
-}
-.doc_editor .excerpt_field textarea,
-.doc_editor .room_field textarea,
-.doc_editor .user_field textarea,
-.doc_editor .published_field textarea,
-.doc_editor .thumbnai_field textarea {
-  background: #fff;
-  border: 1px solid #bdc3c7;
-  float: left;
-  height: 34px;
-  margin-bottom: 2px;
-  max-width: 80%;
-}
-.doc_editor .excerpt_field h3,
-.doc_editor .room_field h3,
-.doc_editor .user_field h3,
-.doc_editor .published_field h3,
-.doc_editor .thumbnai_field h3 {
-  float: left;
-  width: 90%;
-}
-.doc_editor .excerpt_field input,
-.doc_editor .room_field input,
-.doc_editor .user_field input,
-.doc_editor .published_field input,
-.doc_editor .thumbnai_field input,
-.doc_editor .excerpt_field select,
-.doc_editor .room_field select,
-.doc_editor .user_field select,
-.doc_editor .published_field select,
-.doc_editor .thumbnai_field select {
-  float: left;
-  width: 80%;
-  background: #fff;
-  border: 1px solid #bdc3c7;
-}
-.doc_editor .excerpt_field i.fa.fa-save,
-.doc_editor .room_field i.fa.fa-save,
-.doc_editor .user_field i.fa.fa-save,
-.doc_editor .published_field i.fa.fa-save,
-.doc_editor .thumbnai_field i.fa.fa-save {
-  float: left;
-  margin-left: 10px;
-}
-.doc_editor img.thumbnail_input {
-  border: 1px solid #cccccc;
-  display: inline;
-  float: left;
-  height: auto;
-  margin-right: 0;
-  max-height: 20%;
-  max-width: 100%;
-  padding: 2px;
-  width: auto;
-}
-.doc_editor .doc_options_table {
-  clear: both;
-  border-top: 1px solid #dadada;
-  padding-bottom: 10px;
-}
-.doc_editor .doc_options_table input {
-  float: left;
-  margin-right: 2%;
-  width: 86%;
-}
-.doc_editor .doc_options_table i.fa {
-  border: medium none;
-  float: left;
-  font-size: 1em;
-  line-height: 2em;
-  padding-left: 8px;
-  padding-right: 7px;
-  padding-top: 2px;
-  width: auto;
-}
-.doc_editor .doc_options_item {
-  float: left;
-  width: 100%;
-}
-.theletters {
-  width: 100%;
-  float: left;
 }
 .open_comment {
   float: left;
@@ -637,48 +465,52 @@ div.branding h1 a {
 .open_comment:hover {
   color: #000;
 }
-.doc_centered {
+.comment_form {
+  background: none repeat scroll 0 0 rgba(189, 195, 199, 0.5);
+  border-radius: 3px;
   float: left;
-  margin-left: 20%;
-  width: 58%;
+  margin-bottom: 15px;
+  padding: 5px 2% 7%;
+  width: 96%;
 }
-.editor_zone {
-  border-bottom: 1px solid rgba(189, 195, 199, 0.3);
-  padding-bottom: 10px;
-  padding-right: 0;
-  padding-top: 2%;
-  text-align: left;
+.comment_form textarea {
+  background: none repeat scroll 0 0 #fff;
+  border: medium none;
+  margin-bottom: 10px;
+  margin-top: 3px;
+  min-height: 100px;
+  width: 94%;
 }
-.editor_zone label {
-  float: left;
-  width: 100%;
-  font-style: italic;
+.comment_form a.loginOrSignup {
+  font-size: 0.8em;
+  line-height: 0.8em;
+  text-decoration: underline;
 }
-.editor_zone textarea {
-  min-height: 200px;
-  margin-bottom: 20px;
-}
-.section_debug li {
-  background: #ecf0f1;
+.comment_form .logged_in_as {
   display: block;
   float: left;
-  margin-bottom: 2px;
-  padding: 1%;
+  font-size: 0.8em;
+  line-height: 1em;
   width: 100%;
+  margin-bottom: 10px;
 }
-.section_debug input {
-  float: left;
-  margin-right: 1%;
-  width: 66px;
+.comment_form .logged_in_as a {
+  text-decoration: underline;
 }
-.section_debug textarea {
-  min-height: 130px;
-  width: 90%;
-}
-.section_debug span {
-  float: left;
-  width: 100%;
-}
+/* ______________________________________ */
+/*                                        */
+/*     ♪          MARKUPS         ♫       */
+/* ______________________________________ */
+/* markup level */
+/* all markup types variantes like: */
+/* 
+
+refactring to :
+
+markup_box
+
+
+*/
 .section_displayer input {
   width: 60%;
   background: none repeat scroll 0 0 #fff;
@@ -1013,6 +845,251 @@ div.markup_displayer_media .icon_col {
 .markup_box.is_editing_true {
   opacity: 1;
 }
+/* ______________________________________ */
+/*                                   ♫    */
+/*             TOOLS & EDITORS            */
+/* ______♫ ______________________________ */
+.quick_tool_opener {
+  background: #292929;
+  border-radius: 6px;
+  font-size: 1.2em;
+  line-height: 1em;
+  opacity: 0.6;
+  padding: 3px 4px;
+  position: fixed;
+  right: 2.5%;
+  top: 17px;
+  z-index: 99999;
+  color: #fff;
+}
+.quick_tool_opener.visible_yes {
+  opacity: 1;
+  background: #2980b9;
+}
+.quick_tools {
+  top: -536px;
+  position: fixed;
+  width: 96%;
+  font-size: 1.1em;
+  display: block;
+  padding: 2%;
+  background: none repeat scroll 0 0 #fff;
+  z-index: 99;
+}
+.quick_tools.visible_yes {
+  background: none repeat scroll 0 0 #ecf0f1;
+  top: 76px;
+  transition: background 1.2s linear 0s, top 0.2s linear 0s;
+}
+.quick_tools a {
+  text-decoration: underline;
+}
+.quick_tools .inside {
+  float: right;
+  width: 40%;
+}
+.quick_tools .edit_box {
+  background: none repeat scroll 0 0 #fff;
+  border-right: 1px solid #292929;
+  float: left;
+  width: 27%;
+  padding: 0 3% 0% 0%;
+}
+.quick_tools .action_box p,
+.quick_tools .user_box p {
+  margin-bottom: 7px;
+}
+.fixed_tools {
+  /* 
+      background: none repeat scroll 0 0 rgba(0, 0, 0, 0.2);
+    */
+  background: #fff;
+  bottom: 0;
+  display: block;
+  height: auto;
+  padding: 1% 20%;
+  position: fixed;
+  transition: opacity 0.2s linear 20s;
+  width: 60%;
+  z-index: 99999;
+}
+.fixed_tools .ranges {
+  float: left;
+  width: 100%;
+}
+.fixed_tools .ranges .ranges_start_end {
+  background: none repeat scroll 0 0 rgba(231, 76, 60, 0.4);
+  border-radius: 6px;
+  color: #ffffff;
+  padding: 1%;
+}
+.fixed_tools .pusher_items {
+  float: left;
+  width: 100%;
+}
+.btn_pusher {
+  background: none repeat scroll 0 0 #95a5a6;
+  border: 1px solid #7f8c8d;
+  border-radius: 4px;
+  font-size: 13px;
+  margin-left: 2px;
+  margin-right: 2px;
+  padding: 0 2px;
+}
+.doc_editor {
+  background: none repeat scroll 0 0 rgba(236, 240, 241, 0.7);
+  color: #000;
+  float: left;
+  margin-bottom: 4%;
+  padding: 90px 2% 2%;
+  text-align: left;
+  width: 96%;
+}
+.doc_editor label {
+  width: 100%;
+  font-size: 0.8em;
+  font-style: italic;
+  float: left;
+}
+.doc_editor .edit_field_left {
+  float: left;
+  width: 50%;
+}
+.doc_editor .edit_field_right {
+  float: left;
+  width: 50%;
+}
+.doc_editor .excerpt_field,
+.doc_editor .room_field,
+.doc_editor .user_field,
+.doc_editor .published_field,
+.doc_editor .thumbnai_field {
+  float: left;
+  width: 90%;
+}
+.doc_editor .excerpt_field textarea,
+.doc_editor .room_field textarea,
+.doc_editor .user_field textarea,
+.doc_editor .published_field textarea,
+.doc_editor .thumbnai_field textarea {
+  background: #fff;
+  border: 1px solid #bdc3c7;
+  float: left;
+  height: 34px;
+  margin-bottom: 2px;
+  max-width: 80%;
+}
+.doc_editor .excerpt_field h3,
+.doc_editor .room_field h3,
+.doc_editor .user_field h3,
+.doc_editor .published_field h3,
+.doc_editor .thumbnai_field h3 {
+  float: left;
+  width: 90%;
+}
+.doc_editor .excerpt_field input,
+.doc_editor .room_field input,
+.doc_editor .user_field input,
+.doc_editor .published_field input,
+.doc_editor .thumbnai_field input,
+.doc_editor .excerpt_field select,
+.doc_editor .room_field select,
+.doc_editor .user_field select,
+.doc_editor .published_field select,
+.doc_editor .thumbnai_field select {
+  float: left;
+  width: 80%;
+  background: #fff;
+  border: 1px solid #bdc3c7;
+}
+.doc_editor .excerpt_field i.fa.fa-save,
+.doc_editor .room_field i.fa.fa-save,
+.doc_editor .user_field i.fa.fa-save,
+.doc_editor .published_field i.fa.fa-save,
+.doc_editor .thumbnai_field i.fa.fa-save {
+  float: left;
+  margin-left: 10px;
+}
+.doc_editor img.thumbnail_input {
+  border: 1px solid #cccccc;
+  display: inline;
+  float: left;
+  height: auto;
+  margin-right: 0;
+  max-height: 20%;
+  max-width: 100%;
+  padding: 2px;
+  width: auto;
+}
+.doc_editor .doc_options_table {
+  clear: both;
+  border-top: 1px solid #dadada;
+  padding-bottom: 10px;
+}
+.doc_editor .doc_options_table input {
+  float: left;
+  margin-right: 2%;
+  width: 86%;
+}
+.doc_editor .doc_options_table i.fa {
+  border: medium none;
+  float: left;
+  font-size: 1em;
+  line-height: 2em;
+  padding-left: 8px;
+  padding-right: 7px;
+  padding-top: 2px;
+  width: auto;
+}
+.doc_editor .doc_options_item {
+  float: left;
+  width: 100%;
+}
+.editor_zone {
+  border-bottom: 1px solid rgba(189, 195, 199, 0.3);
+  padding-bottom: 10px;
+  padding-right: 0;
+  padding-top: 2%;
+  text-align: left;
+}
+.editor_zone label {
+  float: left;
+  width: 100%;
+  font-style: italic;
+}
+.editor_zone textarea {
+  min-height: 200px;
+  margin-bottom: 20px;
+}
+.section_debug li {
+  background: #ecf0f1;
+  display: block;
+  float: left;
+  margin-bottom: 2px;
+  padding: 1%;
+  width: 100%;
+}
+.section_debug input {
+  float: left;
+  margin-right: 1%;
+  width: 66px;
+}
+.section_debug textarea {
+  min-height: 130px;
+  width: 90%;
+}
+.section_debug span {
+  float: left;
+  width: 100%;
+}
+/* ______________________________________ */
+/*                              ♫         */
+/*              RESPONSIVE                */
+/* ______♫ ______________________________ */
+body.render_active_doc_options .editing_:hover {
+  background: #ecf0f1;
+  padding: 5px 10px;
+}
 i.fa-img {
   background: none repeat scroll 0 0 #ffffff;
   float: right;
@@ -1091,53 +1168,15 @@ footer {
   width: 100%;
 }
 /* mixins */
-body.focus_side_left .layout_name_left {
-  left: -37%;
-  margin-left: 0;
-  margin-right: 0;
-  padding: 2%;
-  position: relative;
-  width: 41%;
-}
-body.focus_side_left .layout_name_inline {
-  left: 44%;
-  margin-left: 2%;
-  margin-right: 0;
-  position: relative;
-  width: 34%;
-}
-body.focus_side_left .layout_name_right {
-  margin-left: 1%;
-  padding: 0 0 0 1%;
-  width: 15%;
-}
-body.focus_side_right .layout_name_left {
-  left: -35%;
-  margin-left: -2%;
-  margin-right: 1%;
-  padding: 2%;
-  position: relative;
-  width: 15%;
-}
-body.focus_side_right .layout_name_inline {
-  left: 18%;
-  margin-left: 2%;
-  margin-right: 0;
-  position: relative;
-  width: 34%;
-}
-body.focus_side_right .layout_name_right {
-  margin-left: 2%;
-  padding: 0 0 0 1%;
-  width: 41%;
-}
-/* RESPONSIVE */
+/* ______________________________________ */
+/*                              ♫         */
+/*              RESPONSIVE                */
+/* ______♫ ______________________________ */
 @media (max-width: 720px) {
   body {
-    /* padding-top:60px */
     font-size: .8em;
   }
-  div.branding {
+  body div.branding {
     -webkit-border-radius: 1px;
     -moz-border-radius: 1px;
     border-radius: 1px;
@@ -1149,32 +1188,34 @@ body.focus_side_right .layout_name_right {
     /* background: transparent; */
     background: rgba(0, 0, 0, 0.5);
   }
-  div.branding h1 a {
-    background: transparent;
+  body div.branding.bg_transparent,
+  body div.branding:hover {
+    background-color: rgba(0, 0, 0, 0.5);
   }
-  .quick_tools .inside {
+  body .quick_tools .inside {
     width: 90%;
   }
-  .quick_tool_opener {
-    padding: 5px 5px 6px 7px;
+  body .quick_tool_opener {
+    padding: 5px 5px 4px 6px;
     right: 3.5%;
+    text-align: center;
     top: 17px;
+    width: 21px;
   }
-  .quick_tool_opener.fa:before {
+  body .quick_tool_opener.fa:before {
     font-size: 1.9em;
   }
-  .quick_tools.visible_yes {
+  body .quick_tools.visible_yes {
     top: 74px;
   }
-  .doc_header {
+  body .doc_header {
     margin-top: 80px;
   }
-  /*
-  body,  
-  body.focus_side_left, body.focus_side_right, body.focus_side_center, body.focus_side_ {
-           
-*/
-  .layout_name_right {
+  body section .layout_name_right,
+  body section.focus_ .layout_name_right,
+  body section.focus_side_right .layout_name_right,
+  body section.focus_side_left .layout_name_right,
+  body section.focus_side_left.focus_side_right .layout_name_right {
     /* border-bottom: @light-border; */
     left: 0;
     margin-left: 2%;
@@ -1182,48 +1223,70 @@ body.focus_side_right .layout_name_right {
     padding: 0;
     width: 95%;
   }
-  .layout_name_right.has_count_0 {
+  body section .layout_name_right.has_count_0,
+  body section.focus_ .layout_name_right.has_count_0,
+  body section.focus_side_right .layout_name_right.has_count_0,
+  body section.focus_side_left .layout_name_right.has_count_0,
+  body section.focus_side_left.focus_side_right .layout_name_right.has_count_0 {
     border-bottom: none;
     margin-bottom: 10px;
   }
-  .layout_name_left {
+  body section .layout_name_left,
+  body section.focus_ .layout_name_left,
+  body section.focus_side_right .layout_name_left,
+  body section.focus_side_left .layout_name_left,
+  body section.focus_side_left.focus_side_right .layout_name_left {
     /* border-top: @light-border; */
     left: 4%;
     margin-top: 0;
     padding: 0;
     width: 95%;
   }
-  .layout_name_center,
-  .layout_name_under,
-  .layout_name_global {
+  body section .layout_name_center,
+  body section.focus_ .layout_name_center,
+  body section.focus_side_right .layout_name_center,
+  body section.focus_side_left .layout_name_center,
+  body section.focus_side_left.focus_side_right .layout_name_center,
+  body section .layout_name_under,
+  body section.focus_ .layout_name_under,
+  body section.focus_side_right .layout_name_under,
+  body section.focus_side_left .layout_name_under,
+  body section.focus_side_left.focus_side_right .layout_name_under,
+  body section .layout_name_global,
+  body section.focus_ .layout_name_global,
+  body section.focus_side_right .layout_name_global,
+  body section.focus_side_left .layout_name_global,
+  body section.focus_side_left.focus_side_right .layout_name_global {
     padding: 0 0;
     width: 95%;
   }
-  .layout_name_inline {
+  body section .layout_name_inline,
+  body section.focus_ .layout_name_inline,
+  body section.focus_side_right .layout_name_inline,
+  body section.focus_side_left .layout_name_inline,
+  body section.focus_side_left.focus_side_right .layout_name_inline {
     left: 0;
     padding: 0 0;
     width: 95%;
   }
-  /*  }
-*/
-  .markup_displayer .data_col {
+  body .markup_displayer .data_col {
     width: 90%;
   }
-  .open_comment {
-    margin-left: -8px;
-    margin-top: -17px;
+  body .open_comment {
+    position: absolute;
+    right: 3%;
   }
-  input[type="text"],
-  input[type="password"],
-  input[type="date"],
-  input[type="datetime"],
-  input[type="email"],
-  input[type="number"],
-  input[type="search"],
-  input[type="tel"],
-  input[type="time"],
-  input[type="url"],
-  textarea {
+  body input[type="text"],
+  body input[type="password"],
+  body input[type="date"],
+  body input[type="datetime"],
+  body input[type="email"],
+  body input[type="number"],
+  body input[type="search"],
+  body input[type="tel"],
+  body input[type="time"],
+  body input[type="url"],
+  body textarea {
     width: 94%;
     margin-right: 1%;
   }
