@@ -291,13 +291,17 @@ if(newValue !==undefined  && oldValue !==undefined && (newValue !== oldValue) )
 
 $scope.over= function(l, event){
 
+		var letter = l.l;
+		
+
 		//console.log('over ctrl '+position, event);
 
 		if(event == 'click')
 		{
-			console.log(l)
-		
-
+			console.log(letter)
+			if(letter.href){
+				window.location= letter.href;	
+			}
 		}
 
 		var down_at;
@@ -712,6 +716,7 @@ $scope.over= function(l, event){
 
 	// section && markup
 	$scope.markup_save = function (markup){
+		$scope.ui.focus_side = ''
 		doc.markup_save(markup)
 	}
 	
@@ -750,6 +755,7 @@ $scope.over= function(l, event){
 	* @param  {String} link - redirect link
 	*/
 	$scope.external_link = function (link){
+		$scope.doc = '';
 		window.location = link;
 	}
 
@@ -843,7 +849,7 @@ $scope.over= function(l, event){
 
 	$scope.toggle_fragment_ranges = function (kind,classname, markup, value, trigger){
 
-		//	console.log('toggle_fragment_ranges'+kind)
+			console.log('toggle_fragment_ranges'+kind)
 			var source = $scope.doc.markups;
 
 
@@ -876,11 +882,8 @@ $scope.over= function(l, event){
 
 					}
 
-
-				
-				
-
 			}
+	
 			if(kind=='by_range'){
 
 				
@@ -981,6 +984,9 @@ $scope.over= function(l, event){
 			else{
 				doc.markup_delete(markup)
 			}
+
+			// toggle
+			$scope.ui.focus_side = ''
 		}
 
 	/**
@@ -996,7 +1002,7 @@ $scope.over= function(l, event){
 			
 
 			if(args.action == 'reload'){
-								alert('refactored')
+							//	alert('refactored')
 
 			}
 
@@ -1023,9 +1029,7 @@ $scope.over= function(l, event){
 
 
 			}
-			if(args.action == 'doc_ready'){	
-				alert('refactored')
-			}
+			
 			if(args.action == 'containers_ready'){
 				doc.distribute_markups()
 			}
@@ -1118,7 +1122,7 @@ angular.module('musicBox.controller', []).controller('FragmentCtrl', function($s
 
     });
 */
-/*
+
     $scope.$watch('markup.position', function(newValue, oldValue) {
           // only new value check
           console.log(newValue)
@@ -1126,6 +1130,7 @@ angular.module('musicBox.controller', []).controller('FragmentCtrl', function($s
 
           if(oldValue !==newValue && oldValue && oldValue !=='' &&  newValue && newValue !==''){
             $scope.markup.position = newValue;
+            	// no toggle $scope.ui.focus_side = ''
             doc.markup_save($scope.markup)
             //  alert('s')
           }
@@ -1134,18 +1139,23 @@ angular.module('musicBox.controller', []).controller('FragmentCtrl', function($s
           }
       
     });
-*/
+
+
     $scope.$watch('markup.selected', function(newValue, oldValue) {
           // only new value check
-          if(newValue !==''){
+          if(oldValue !== newValue ){
             //console.log(newValue)
             //console.log(oldValue)
             $scope.toggle_fragment_ranges('single_markup', 'selected', $scope.markup, newValue, true)
+            
+
           }
           else{
             console.log('watch untrigger')
           }
     });
+
+/*
 	$scope.$watch('markup.inrange', function(newValue, oldValue) {
           // only new value check
           if(newValue !==''){
@@ -1157,6 +1167,7 @@ angular.module('musicBox.controller', []).controller('FragmentCtrl', function($s
             console.log('watch untrigger')
           }
     });
+*/
 
 });
 

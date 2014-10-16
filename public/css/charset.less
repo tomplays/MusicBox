@@ -62,9 +62,8 @@
     }
 }
 
-.lt.link{
-    text-decoration: underline;
-}  
+
+
 .lt.em{
     font-style: italic
 }
@@ -230,6 +229,11 @@ i.fa-mark:before {
      text-decoration: line-through;  
 }
 
+
+i.fa-hyperlink:before{
+      content: "";
+}
+
 i.fa-strong:before {
     content: "b";
     display: block;
@@ -260,15 +264,35 @@ i.fa-note:before {
 
 .lt.comment{
     background: none repeat scroll 0 0 rgba(39, 174, 96, 0.3);
-     border-top:1px solid rgba(39, 174, 96, 0);
+    
     &.selected {
-        border-top:1px solid rgba(39, 174, 96, 0.7);
+      
       background: none repeat scroll 0 0 rgba(39, 174, 96, 0.7);
+    }
+    /*
+     &.depth_70{
+            opacity:.6;
+    }
+    */
+   
+}
+
+.lt.response{
+    background: none repeat scroll 0 0 rgba(22, 160, 133, 0.3);
+    
+
+      border-top:3px solid rgba(22, 160, 133, 0.7);
+    &.selected {
+        border-top:3px solid rgba(22, 160, 133,  0.7);
+      background: none repeat scroll 0 0 rgba(22, 160, 133, 0.7);
     }
    
 }
 
 
+.lt.comment.comment_{
+     background:green;
+}
 
 i.fa.fa-comment{
     background: none repeat scroll 0 0 rgba(39, 174, 96, 0.5);
@@ -319,8 +343,16 @@ i.fa.fa-container_class{
     }   
 }
 
+/* "focus_on" */
+.lt.hyperlink{
+    text-decoration: underline;
+    color:#9b59b6;
+     &.selected{
+      border-bottom:3px solid #9b59b6;
+       text-decoration: none;
+    }
+}  
 
-   
   
 
 

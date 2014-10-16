@@ -138,7 +138,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
 
 
       objAvailable:function (){
-        var arr = new Array('media','generic','container','container_class', 'comment','note','summary','summary-block','player','markup','css_styles','classes','child_section','child' ,'semantic');
+        var arr = new Array('media','generic','container','container_class', 'comment','note','markup','child' ,'semantic', 'hyperlink');
         return arr 
       },
       markupSchema:function (){
@@ -338,14 +338,15 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
               'position_available': ['wide','center','left', 'right', 'under', 'global', 'background'],
             });
 
+            
             arr.markup = new Object({
               'type':obj_base.type ,
               'only':'',
               'metadata': { 
                 'editor': {
                     'show' : false,
-                    'label':'-',
-                    'input' : '-'
+                     'label':'link url',
+                    'input' : 'input'
                   }
                   ,
                   'render': {
@@ -362,9 +363,37 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
 
               'subtype': {
                 'free_input' : false,
-                'available' : ['h1','h2', 'h3', 'h4', 'h5','h6','em', 'strong', 'code']
+                'available' : ['h1','h2', 'h3', 'h4', 'h5','h6','em', 'strong', 'code', 'quote', 'super-quote']
              },   
              'position_available': ['inline'],
+
+            });
+            arr.hyperlink = new Object({
+              'type':obj_base.type ,
+              'only':'',
+              'metadata': { 
+                'editor': {
+                    'show' : true,
+                    'label':'link url',
+                    'input' : 'input'
+                  }
+                  ,
+                  'render': {
+                   'show' : true
+                  }
+              }, 
+              'show_date': false, 
+              'icon': { 
+                'before': {
+                   'show' : true
+                  }
+              }, 
+              'show_user': false, 
+
+              'subtype': {
+                'free_input' : false
+             },   
+             'position_available': ['right', 'left'],
 
             });
 
@@ -379,15 +408,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
 
 
 
-      fragmentTypes:function (){
-        var arr = new Array('note','data','summary','summary-block','img','player','child_section');
-        return arr 
-      },
-      fragmentSubTypes:function (){
-        // todo : groups
-        var arr = new Array('pick one', 'world','city', 'hyperlocal', 'comment','place','code_block','data','year','unit','x','y','version','sc-track', 'translation','comment','wikipedia','youtube','vimeo','soundcloud','freebase','person-bio','summary','summary-block','img','child_section','semantic');
-        return arr 
-      },
+      
       posAvailable:function (){
 
 

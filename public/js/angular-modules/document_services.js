@@ -246,7 +246,7 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
               markup.isolated = false;
               /// keep open test :
               //console.log('keep open')
-              markup.selected = '';
+              markup.selected = false;
               markup.editing  = '';
               markup.inrange  = true;
               markup.uptodate = '';
@@ -262,7 +262,7 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
               _.each($rootScope.ui.selected_objects, function(obj){
                 //console.log('keep opn'+obj._id)
                 if(markup._id == obj._id){
-                  markup.selected = true;
+                 // markup.selected = true;
                   // should select ranges too..
                 }
               })
@@ -315,7 +315,7 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
                 //console.log('children call ...')
               }
           
-              if(markup.type=='markup' || markup.type=='comment' || markup.type=='note' || markup.type=='semantic'  ){ // or pos == inlined
+              if(markup.type=='markup' || markup.type == 'hyperlink'  || markup.type=='comment' || markup.type=='note' || markup.type=='semantic'  ){ // or pos == inlined
 
                   var j_arr=0;
                   var into_for = 0;
@@ -362,7 +362,7 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
                       /* L+ */
                     }
                     if(markup.selected === true){
-                      temp_letters[delta]['classes'].push('selected')
+                     // temp_letters[delta]['classes'].push('selected')
                        /* L+ */
                     }
 
@@ -375,22 +375,36 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
                     //else{
                       
                       if(temp_letters[delta] && markup.subtype){
-                           temp_letters[delta]['classes'].push(markup.subtype);
-                         /* L+ */
+                          
+                          // if twice, adds "_" to subtype-class
+                          if(_.contains(temp_letters[delta]['classes'], markup.subtype) ) {
+                                  temp_letters[delta]['classes'].push('_'+markup.subtype);
+                          } 
+                          else{
+                                temp_letters[delta]['classes'].push(markup.subtype);
+                          }
                       }
+
+                      if(temp_letters[delta] && markup.depth){
+                           temp_letters[delta]['classes'].push('depth_'+markup.depth);
+                      }
+
+                      if(temp_letters[delta] && markup.status){
+                           temp_letters[delta]['classes'].push('status_'+markup.status);
+                      }
+
+
+
                       if( markup.type=='semantic'){
                           temp_letters[delta]['classes'].push(markup.type);
-                         
-                           /* L+ */
-
+                        
                       }
                       //$rootScope.letters[section_count][delta]['objects'].push(a);
                           //      $rootScope.letters[section_count][delta]['classes'].push('c-'+a.id);
 
                     //}
-                    if(markup.subtype == 'link' && markup.metadata){
-                      temp_letters[delta]['href']= markup.metadata
-                       /* L+ */
+                    if(markup.type == 'hyperlink' && markup.metadata){
+                      temp_letters[delta]['href'] = markup.metadata
                     }
                     i_array++;
                     j_arr++

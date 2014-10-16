@@ -47,6 +47,7 @@ div(ng-hide="ui.renderAvailable_active == 'doc_options'" , class="sections_conta
 					// letters !
 					// *ng-class="l.classes"
 					div.theletters
+						// span.lt(class="{{l.classes_flat}}", ng-bind-html="l.char", lt="l" , ng-repeat="l in section.letters")
 						span.lt(ng-class="l.classes", ng-bind-html="l.char", lt="l" , ng-repeat="l in section.letters")
 
 		// render into the layout loop, only "if last"
