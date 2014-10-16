@@ -20,6 +20,7 @@ misc. function (access/right)
 
 var mongoose = require('mongoose'),
  _ = require('underscore'),
+ S = require('string'),
 Document = mongoose.model('Document'),
 Markup  = mongoose.model('Markup');
 var nconf = require('nconf');
@@ -27,10 +28,12 @@ nconf.argv().env().file({file:'config.json'});
 var chalk = require('chalk');
 var app;
 
+
 exports.doc_sync= function(req, res) {
 	//console.log('req.body.markups')
 	//console.log(req.body.markups)
 	var query = Document.findOne({ 'slug':req.params.slug });
+	// complete query 
 	query.populate('user','-email -hashed_password -salt').populate( {path:'markups.user_id', select:'-salt', model:'User'}).populate({path:'markups.doc_id', select:'-markups -secret', model:'Document'}).populate('markups.doc_id.user').populate('room').exec(function (err, doc) {
 		if (err){
 			res.json(err)
@@ -118,7 +121,7 @@ exports.index_doc= function(req, res) {
 			if (err){
 				res.json(err)
 			} else{
-				console.log(doc)	
+				
 				if(doc.published =='draft')
 				{
 							var user_can	= test_owner_or_key(doc,req)
@@ -128,6 +131,10 @@ exports.index_doc= function(req, res) {
 								return;
 							}
 				}
+
+				console.log('public doc rendered')	
+			
+
 				res.render('index_v1', {
 						user_in : user_,
 						doc_title : doc.title,
@@ -147,18 +154,8 @@ exports.docByIdOrTitle = function(req, res) {
 		res.json(err)
 	} else{
 		//var markups_type = new Array()
-		var markups_f = new Array()
-		if(doc && doc.markups){
-		 	//_.each(doc.markups , function (markup, i){
-				//if(markup.type){
-			 		//markups_type.push(markup.type)
-			 	//}
-			//})
- 			//markups_type = _.uniq(markups_type)
-			//doc.markups_type = new Array()
-		}
 		if(doc){
-			var out 			= new Object();
+			var out 			= {};
 			out.doc 			= doc.toObject();
 			if(req.user){
 				 out.userin 	= req.user.toObject();
@@ -267,15 +264,13 @@ exports.doc_clone = function(req,res){
 exports.doc_create = function(req,res){
 
 	// to filter a better way
-	var raw_title =req.body.raw_title;
-	var raw_content   = req.body.raw_content;
- 	var filtered_title = raw_title;
-	var filtered_content =raw_content;
-	var slug= raw_title.replace(/\s/g, '-')
-	slug= slug.replace('?', '_')
-	slug = slug.replace('!', '_')
-	slug = slug.replace('#', '_')
-	slug = slug.replace('/', '_')
+	var raw_title        =     req.body.raw_title;
+	var raw_content      =     req.body.raw_content;
+ 	var filtered_title   =     raw_title;
+	var filtered_content =     raw_content;
+	var slug             =     S(raw_title).slugify().s 
+
+	
 
 	//var ar = new Object({'title':'bloue'+Math.random()})
 	var new_doc = new Object({'title':filtered_title, 'slug': slug, 'content': filtered_content})
@@ -437,14 +432,8 @@ exports.doc_edit  = function(req, res) {
 			// 'create' is a routes keyword..
 			if(field == 'title' && value !== 'create' ){
 				// and todo : clean
-				var slugify = value.replace(/\s/g, '-')
-				slugify = slugify.replace('?', '_')
-				slugify = slugify.replace('.', '_')
-				slugify = slugify.replace('/', '_')
-				slugify = slugify.replace('!', '_')
-				slugify = slugify.replace('#', '_')
-				doc['slug'] =slugify
-		
+
+				doc['slug'] = S(value).slugify().s 
 				doc[field] = value;
 			}
 
@@ -555,7 +544,7 @@ exports.markup_edit = function(req, res) {
 	console.log(req.body)
 	
 	var req_user_id = req.user.toObject()._id;
-		console.log('req_user_id:::'+req_user_id)
+	console.log('req_user_id:::'+req_user_id)
 
 	var query = Document.findOne({ 'slug':req.params.slug });
 		query.populate('user','-email -hashed_password -salt').populate( {path:'markups.user_id', select:'-salt', model:'User'}).populate({path:'markups.doc_id', select:'-markups -secret', model:'Document'}).populate('markups.doc_id.user').populate('room').exec(function (err, doc) {
@@ -644,27 +633,32 @@ exports.markup_create = function(req, res) {
 	// console.log(req.body.username)
 	query.populate('user','-email -hashed_password -salt').populate( {path:'markups.user_id', select:'-salt', model:'User'}).populate({path:'markups.doc_id', select:'-markups -secret', model:'Document'}).populate('markups.doc_id.user').populate('room').exec(function (err, doc) {
 	if (err) {
-		res.send(err)
+		res.json(err)
 	}
 	else{
 		var markup  = new Object( {'user_id': req.body.user_id , 'username': req.body.username, 'position': req.body.position, 'start':req.body.start, 'end':req.body.end, 'subtype': req.body.subtype, 'type': req.body.type, 'status': req.body.status, 'metadata': req.body.metadata, 'depth': req.body.depth} )
 		//console.log(doc.markups)
 		doc.markups.push(markup)
-		console.log('doc.markups after')
+		//console.log('doc.markups after')
 		//console.log(doc.markups)
 		var inserted = _.last(doc.markups);
 		// console.log(inserted)
 		doc.save(function(err,doc) {
 			if (err) {
-				res.send(err)
+				res.json(err)
 			} else {
-				var out = new Object();
-				out.doc = doc
-				out.inserted = new Array();
-				out.inserted.push(inserted)
-				//console.log(out)
-				//console.log(doc)
-				res.json(out)
+				
+
+				var out = {}
+	        	out.doc 			= doc.toObject()
+				if(req.user){
+					out.userin 		= req.user.toObject()
+				}
+				out.is_owner 		=  test_owner_or_key(doc,req)	
+				out.doc.secret 		= 'api_secret'
+
+				out.inserted = new Array(inserted);
+				res.json(out);
 			}
 		});
 	  }
@@ -674,69 +668,58 @@ exports.markup_create = function(req, res) {
 
 // /api/v1/doc/:doc_id_or_title/markups/delete/:markup_id
 exports.markup_delete = function(req, res) {
-	console.log(req.params.doc_id_or_title)
+	//console.log(req.params.doc_id_or_title)
 	var deleted= new Array();
 	var query = Document.findOne({ 'slug':req.params.slug });
 	
-
-
-		query.populate('user','-email -hashed_password -salt').populate( {path:'markups.user_id', select:'-salt', model:'User'}).populate({path:'markups.doc_id', select:'-markups -secret', model:'Document'}).populate('markups.doc_id.user').populate('room').exec(function (err, doc) {
-
+    // complete query 
+	query.populate('user','-email -hashed_password -salt').populate( {path:'markups.user_id', select:'-salt', model:'User'}).populate({path:'markups.doc_id', select:'-markups -secret', model:'Document'}).populate('markups.doc_id.user').populate('room').exec(function (err, doc) {
+	
 	  if(err) {
 	  	res.send(err)
 	  }
 	  else{
-	  		if(req.params.markup_id && req.params.markup_id == 'all'){
-					deleted= doc.markups
-					doc.markups = new Array();
+	  	if(req.params.markup_id && req.params.markup_id == 'all'){
+			var deleted = doc.markups
+			doc.markups = []
 
-					doc.save(function(err,doc) {
-			        if (err) {
-			           res.send(err)
-			        } else {
-			        	var out = new Object();
-						out.doc = doc
-						out.deleted= new Array();
-						out.deleted.push(deleted)
-						res.json(out)
-			        }
-			 		});
+		}
 
-	  		}
-			else{
-				//console.log(req.params.markup_id)
-				var deleted= new Array();
-				//console.log(doc.markups)
+		else{
+			var deleted= [];
+			var after_markups =[];
+		 	_.each(doc.markups , function (m, i){
+				if(m._id == req.params.markup_id){
+					// console.log(m)
+					deleted.push(m)
+				}
+				else{
+					after_markups.push(m)
+				}
+			});
 
-				//console.log(doc)
-					var after_markups = new Array();
-				  _.each(doc.markups , function (m, i){
-			       if(m._id == req.params.markup_id){
-			      	 	console.log(m)
-			       		deleted.push(m)
+			doc.markups = after_markups;
+	
+		}
 
-			       }
-			       else{
-			       		after_markups.push(m)
-			       }
-			      });
-				  doc.markups = new Array()
-			      doc.markups = after_markups;
+		doc.save(function(err,doc) {
+			if (err) {
+			  res.send(err)
+			} 
+	        else {
 
-			      doc.save(function(err,doc) {
-			        if (err) {
-			           res.send(err)
-			        } else {
-			        	var out = new Object();
-						out.doc = doc
-						out.deleted= new Array(deleted);
-						//out.deleted.push(deleted[0])
-						res.json(out)
-			        }
-			 	});
+	        	var out = {}
+	        	out.doc 			= doc.toObject()
+				if(req.user){
+					out.userin 		= req.user.toObject()
+				}
+				out.is_owner 		=  test_owner_or_key(doc,req)	
+				out.doc.secret 		= 'api_secret'
+				out.deleted         =  new Array(deleted);
+				res.json(out)
 			}
-			// both case save
-			
+		});
+
 	  }
 	});
 }

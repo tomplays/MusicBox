@@ -10,30 +10,25 @@ var mongoose = require('mongoose'),
     auth = require('../authorization');
 
 
-/**
- * Auth callback
- */
-exports.authCallback = function(req, res) {
-    res.redirect('/');
+
+
+
+exports.login = function(req, res) {
+         var user_ = new Object({'username': null,  'image_url':null})
+         res.render('index_v1', { user_in:user_ } );
 };
 
-
-exports.signin = function(req, res) {
-
+exports.signup = function(req, res) {
+  var user_ = new Object({'username': null,  'image_url':null})
+  res.render('index_v1', { user_in:user_ } ); 
 };
 
 exports.signin_login= function(req, res) {
-
-
-    console.log(req.body.redirect_url)
     if(req.user){
-        console.log('yoo')
         var out = new Object({'redirect_url': req.body.redirect_url})
         res.json(out)
-        
     }
 };
-
 
 /**
  * Logout
@@ -43,16 +38,13 @@ exports.signout = function(req, res) {
     res.redirect('');
 };
 
-/**
- * Session
- */
-exports.session = function(req, res) {
 
-
-    //return res.redirect('/');
-    res.json('ok');
+exports.authCallback = function(req, res) {
+    res.redirect('/');
 };
 
+
+exports.signin = function(req, res) {};
 
 exports.account = function(req, res) {
        

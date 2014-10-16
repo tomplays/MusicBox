@@ -29,6 +29,8 @@ var auth = require('./api/authorization');
 var db = mongoose.connection;
 var dbz = mongoose.connect('mongodb://localhost/'+nconf.get('DB_NAME'));
 
+
+
 // models auto load
 var models_path = __dirname + '/api/models';
 var walk = function(path) {
@@ -162,6 +164,10 @@ var io;
 exports.io = io =  require('socket.io').listen(server, {log:false, origins:'*:*'}, function(){
   console.log(chalk.green('Hello io') );
 })
+
+
+
+
 io.on('connection', function(socket){ 
     console.log(chalk.green('Hello client'+socket.handshake.address))
     //console.log(socket);
@@ -171,4 +177,14 @@ io.on('connection', function(socket){
   });
 // logger.init(app, passport, mongoose);
 //expose app
+/*
+exports.stat = function(){
+    console.log('internal sockets says:')
+    return 'ui';
+};
+*/
+
+ // test function for internal use
 exports = module.exports = app;
+
+
