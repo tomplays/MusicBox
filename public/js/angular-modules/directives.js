@@ -46,7 +46,7 @@ angular.module('musicBox.directives', [])
         });       
         elem.html(text_out);
           // 
-         console.log('..end')
+       //  console.log('..end')
         //console.log('compile?'+scope.compile_)
       }
       
@@ -170,9 +170,9 @@ angular.module('musicBox.directives', [])
    // replace :true,
       restrict: 'EA',
       link: function(scope, elem, attrs) { 
-          elem.bind('click', function(e) {
+          elem.bind('click', function() {
             console.log(scope)
-            alert('sd') 
+          //  alert('sd') 
           });
           elem.bind('mousedown', function() {
               console.log('mousedown')
