@@ -171,14 +171,20 @@ angular.module('musicBox.directives', [])
       restrict: 'EA',
       link: function(scope, elem, attrs) { 
           elem.bind('click', function() {
-            console.log(scope)
+            scope.$parent.$parent.over(scope, 'click')
+            //console.log(scope)
           //  alert('sd') 
           });
           elem.bind('mousedown', function() {
-              console.log('mousedown')
+             
               // console.log(scope.ltLetterorder)
               //alert(attrs.chars)
-             // scope.$parent.$parent.over( scope.ltLetterorder, 'down')
+            scope.$parent.$parent.over( scope, 'down')
+          });
+          elem.bind('mouseup', function() {
+              // console.log(scope.ltLetterorder)
+              //alert(attrs.chars)
+            scope.$parent.$parent.over( scope, 'up')
           });
       }
     };

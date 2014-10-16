@@ -84,7 +84,9 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
                 // test
                 // $rootScope.selectingd = 'init';        
 
-                self.init_containers();
+                self.init_containers()
+                return
+
                 // equivalent : 
                 //$rootScope.$emit('docEvent', {action: 'doc_ready', type: 'load', collection_type: 'doc', collection:doc});
       },
@@ -166,6 +168,7 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
         // START Looping each SECTION
         // 
         $rootScope.letters = [];
+        var temp_letters = [];
          //var data_serie = new Array()
 
 
@@ -189,7 +192,14 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
             }
           
           //console.log(section)
-          self.fill_chars(container,index);
+         
+          // populate letters as objects.
+
+         // self.fill_chars(container,index);
+         $rootScope.containers[index]['letters'] = []
+         var  temp_letters  =  self.fill_chars(container,index);
+       
+
           // data_serie.push(container.start)
           //$rootScope.objects_sections[index] = new Array();
           $rootScope.containers[index]['objects'] = [];
@@ -325,10 +335,12 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
                     if( markup.subtype=='h1' ||  markup.subtype=='h2' ||  markup.subtype=='h3' || markup.subtype=='h4' || markup.subtype=='h5' || markup.subtype=='h6' || markup.subtype=='list-item')  {
 
                           if(pos == markup.start ){
-                             $rootScope.letters[index][delta]['classes'].push('fi')
+                             temp_letters[delta]['classes'].push('fi')
+                            
                           }
                           if( size_object ==  j_arr){
-                            $rootScope.letters[index][delta+1]['classes'].push('nd')
+                            temp_letters[delta+1]['classes'].push('nd')
+
                           }
                           if(j_arr == 0){
                             //$rootScope.letters[index][delta]['classes'].push('nd')
@@ -344,10 +356,14 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
                     //$rootScope.letters[index][delta]['classes'] = _.without($rootScope.letters[index][delta]['classes'],'editing')
 
                     if(markup.editing === true ){
-                      $rootScope.letters[index][delta]['classes'].push('editing')
+                     // $rootScope.letters[index][delta]['classes'].push('editing')
+                      temp_letters[delta]['classes'].push('editing')
+
+                      /* L+ */
                     }
                     if(markup.selected === true){
-                      $rootScope.letters[index][delta]['classes'].push('selected')
+                      temp_letters[delta]['classes'].push('selected')
+                       /* L+ */
                     }
 
                     //$rootScope.letters[section_count][delta]['char'] =  j_arr;
@@ -358,11 +374,14 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
                     //}
                     //else{
                       
-                      if($rootScope.letters[index][delta] && markup.subtype){
-                        $rootScope.letters[index][delta]['classes'].push(markup.subtype);
+                      if(temp_letters[delta] && markup.subtype){
+                           temp_letters[delta]['classes'].push(markup.subtype);
+                         /* L+ */
                       }
                       if( markup.type=='semantic'){
-                          $rootScope.letters[index][delta]['classes'].push(markup.type);
+                          temp_letters[delta]['classes'].push(markup.type);
+                         
+                           /* L+ */
 
                       }
                       //$rootScope.letters[section_count][delta]['objects'].push(a);
@@ -370,7 +389,8 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
 
                     //}
                     if(markup.subtype == 'link' && markup.metadata){
-                      $rootScope.letters[index][delta]['href']= markup.metadata
+                      temp_letters[delta]['href']= markup.metadata
+                       /* L+ */
                     }
                     i_array++;
                     j_arr++
@@ -387,6 +407,7 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
 
                  }
                  else{
+
                     $rootScope.containers[index].objects[markup.type][markup.position].push(markup) 
 
                  }
@@ -403,9 +424,32 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
             }
           })
           //$rootScope.containers[index].objects = $rootScope.objects_sections[index]    
-          $rootScope.containers[index].letters = $rootScope.letters[index]
+         // $rootScope.containers[index].letters = $rootScope.letters[index]
+        
+
+         // set letters to their the container
+
+          _.each(temp_letters, function(lc, w){
+              _.each(lc.classes, function(c, i){ 
+                temp_letters[w]['classes_flat'] +=  c +' ';
+              });
+          })
+
+        
+         $rootScope.containers[index].letters = temp_letters;
+        
+
+
+
+        //console.log($rootScope.containers[index])
+
          //  console.log($rootScope.containers[index])
         }); // end of containers loop
+
+          // if need special class to add only once.
+          //_.each($rootScope.containers[index].letters, function(lc, wb){
+           //  lc['classes_flat'] += 'lt-def '
+          //});
 
 /*
 
@@ -467,7 +511,14 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
       * @link DocumentCtrl#distribute_markups 
       * @todo remove section count param
       */
-  
+  // util flatten array to string
+    
+     flatten_classes: function (n) {
+    //console.log(n);
+    var out = '';
+      _.each(n, function(c, i){out +=  n[i]+' ';});
+    return out;
+}, 
       fill_chars : function (section, section_count){
         var temp_letters = [];
         var i;
@@ -497,8 +548,8 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
 
           //letter_arr['fi_nd'] = new Object({'fi': false, 'nd':false/*, 'md':false*/});
           letter_arr.fi_nd = new Object({'fi': false, 'nd':false/*, 'md':false*/});
-          letter_arr.classes = new Array('lt');
-          letter_arr.classes_flat = 'lt em';
+          letter_arr.classes = new Array('');
+          letter_arr.classes_flat = '';
 
           /** 
           * @something here
@@ -526,8 +577,14 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
           fulltext = '-';
          }
 
-        $rootScope.letters[section_count]= temp_letters;
+        //$rootScope.letters[section_count]= temp_letters;
+        //$rootScope.containers[section_count].letters = temp_letters;
+        //console.log( $rootScope.containers[section_count].letters)
         $rootScope.containers[section_count].fulltext = fulltext;
+
+
+
+        return temp_letters;
       },
 
 
@@ -806,7 +863,7 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
             }
             else{
                 doc.init(m);
-               $rootScope.$emit('docEvent', {action: 'doc_ready', type: 'edit', collection_type: 'markup', collection:m.edited });
+                $rootScope.$emit('docEvent', {action: 'doc_ready', type: 'edit', collection_type: 'markup', collection:m.edited });
 
             }
           })

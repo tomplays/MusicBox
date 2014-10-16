@@ -293,6 +293,13 @@ $scope.over= function(l, event){
 
 		//console.log('over ctrl '+position, event);
 
+		if(event == 'click')
+		{
+			console.log(l)
+		
+
+		}
+
 		var down_at;
 		var up_at;
 		down_at  = $scope.ui.selected_range.start
@@ -306,13 +313,17 @@ $scope.over= function(l, event){
 		//console.log(letter)
 
 
-		var event_at = l.lindex;
+		var event_at = l.l.lindex;
 			   	console.log('event_at'+event_at)
 
 		
 
 		if(event == 'down'){
+
+
 			down_at = event_at;
+
+
 
 			if(down_at < $scope.ui.selected_range.end){
 				$scope.ui.selected_range.start = down_at
@@ -826,6 +837,10 @@ $scope.over= function(l, event){
 			}
 
     }	
+
+
+
+
 	$scope.toggle_fragment_ranges = function (kind,classname, markup, value, trigger){
 
 		//	console.log('toggle_fragment_ranges'+kind)
@@ -841,19 +856,19 @@ $scope.over= function(l, event){
 						//
 						//console.log(delta)
 
-						if($scope.letters[markup.sectionin][delta]){
-							var _classes = $scope.letters[markup.sectionin][delta]['classes'];
+						if($scope.containers[markup.sectionin].letters[delta]){
+							var _classes = $scope.containers[markup.sectionin].letters[delta]['classes'];
 
 						//$scope.letters[markup.sectionin][i]['classes'].push("editing")
 						//$scope.letters[markup.sectionin][i]['classes'].push("selected")
 						//console.log($scope.letters[markup.sectionin][i]['classes'])
 
 						if(_.contains(_classes, classname)  ){
-							 $scope.letters[markup.sectionin][delta]['classes'] = _.without( _classes,classname)
+							 $scope.containers[markup.sectionin].letters[delta]['classes'] = _.without( _classes,classname)
 
 						}
 						else{
-							$scope.letters[markup.sectionin][delta]['classes'].push(classname)
+							$scope.containers[markup.sectionin].letters[delta]['classes'].push(classname)
 
 						}
 						}
@@ -1131,7 +1146,17 @@ angular.module('musicBox.controller', []).controller('FragmentCtrl', function($s
             console.log('watch untrigger')
           }
     });
-
+	$scope.$watch('markup.inrange', function(newValue, oldValue) {
+          // only new value check
+          if(newValue !==''){
+            //console.log(newValue)
+            //console.log(oldValue)
+            $scope.toggle_fragment_ranges('single_markup', 'selected', $scope.markup, newValue, true)
+          }
+          else{
+            console.log('watch untrigger')
+          }
+    });
 
 });
 
