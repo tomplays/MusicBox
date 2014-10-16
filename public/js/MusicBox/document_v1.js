@@ -33,6 +33,7 @@ var GLOBALS;
 var render;
 var doc;
 
+//console.log(musicBox)
 
  /**
  * Represents a document.
@@ -67,13 +68,12 @@ function DocumentCtrl($scope, $http , $sce, $location, $routeParams, renderfacto
 	    * @function DocumentCtrl#init
 		*/
 		$scope.init = function (){
-			console.log('DocumentCtrl init');
 
-		
-			render = renderfactory();
+			render        = renderfactory();
+			doc           =  docfactory();
+
 			$scope.render = render.init();
-			doc =  docfactory();
-			doc.init();
+			doc.load();
 			
 		}
 
@@ -289,7 +289,7 @@ if(newValue !==undefined  && oldValue !==undefined && (newValue !== oldValue) )
 	}
 
 
-$scope.over= function(position, event){
+$scope.over= function(l, event){
 
 		//console.log('over ctrl '+position, event);
 
@@ -297,8 +297,8 @@ $scope.over= function(position, event){
 		var up_at;
 		down_at  = $scope.ui.selected_range.start
 		up_at	 = $scope.ui.selected_range.end
-
-
+        console.log(l)
+	    var sectionin	 = l.sectionin
 
 
 		// console.log(event)
@@ -306,7 +306,9 @@ $scope.over= function(position, event){
 		//console.log(letter)
 
 
-		var event_at = position;
+		var event_at = l.lindex;
+			   	console.log('event_at'+event_at)
+
 		
 
 		if(event == 'down'){
@@ -364,9 +366,31 @@ $scope.over= function(position, event){
 		_.each($scope.doc.markups, function(markup, i){
 					//	c.selected= true;
 						//c.selected = true;
-						if(markup.type !=='container'){
-								$scope.ui.selected_objects.push(markup); 
-								
+						if(markup.type && markup.type !=='container'){
+
+							if(markup.sectionin && markup.sectionin == sectionin){
+								console.log('markups in s.'+markup.start+'-'+markup.type);
+								if(markup.start > event_at){
+
+									$scope.ui.selected_objects.push(markup); 
+								}
+
+
+							}
+							else{
+                 					console.log('markups not in s.'+markup.start+'-'+markup.type)
+							}
+
+
+
+
+                                
+
+
+
+
+								//
+								//console.log(markup.sectionin)
 
 						}
 						
@@ -538,7 +562,7 @@ $scope.over= function(position, event){
 		}
 		else{
 			cur = container_index.sectionin;
-			$scope.ui.focus_side = 'left'
+			$scope.ui.focus_side = 'side_left'
 		}
 		$scope.ui.menus.push_comment.open = cur;
 		return;
@@ -766,8 +790,8 @@ $scope.over= function(position, event){
 				$scope.upload_file_image.fullpath = root_url+'/uploads/'+m[0].path+m[0].basename
 
 
-				$scope.push.metadata = $scope.upload_file_image.fullpath
-
+				//$scope.push.metadata = $scope.upload_file_image.fullpath
+				$scope.markup.metadata        = $scope.upload_file_image.fullpath
 
 			}).error(function(err){
 				console.log(err)
@@ -789,7 +813,19 @@ $scope.over= function(position, event){
 			if(event_name == 'click'){
 				markup.selected = !markup.selected
 			}
-    }
+
+			// focus'
+			if(markup.position=="left" && markup.editing){
+				$scope.ui.focus_side = 'side_left'
+			}
+			else if(markup.position=="right" && markup.editing){
+				$scope.ui.focus_side = 'side_right'
+			}
+			else{
+				$scope.ui.focus_side = ''
+			}
+
+    }	
 	$scope.toggle_fragment_ranges = function (kind,classname, markup, value, trigger){
 
 		//	console.log('toggle_fragment_ranges'+kind)
@@ -945,11 +981,13 @@ $scope.over= function(position, event){
 			
 
 			if(args.action == 'reload'){
-				//alert('d')
+								alert('refactored')
+
 			}
 
 			if(args.action == 'fulltext'){
-				doc.init_containers()
+								alert('refactored')
+
 			}
 			if(args.action == 'selection'){
 
@@ -971,10 +1009,7 @@ $scope.over= function(position, event){
 
 			}
 			if(args.action == 'doc_ready'){	
-				doc.init_containers()
-				if(args.type !== 'load'){
-				//	socket.emit('news', {doc_id: $scope.doc.title, action: args.type, collection_type: args.collection_type, collection: args.collection });
-				}
+				alert('refactored')
 			}
 			if(args.action == 'containers_ready'){
 				doc.distribute_markups()
@@ -1035,66 +1070,71 @@ function  DocumentCtrlJasmine($scope, $http , $sce, $location, $routeParams, ren
 			return 'hello';
 } 
 
-function sectionCtrl($scope){
+function SectionCtrl($scope, $http , $sce, $location, $routeParams, renderfactory,socket,docfactory){
 		//console.log($scope.section)
+		retrun;
 }
-function fragmentCtrl($scope){
-		//console.log('fragment')
-		//console.log($scope.markup)
-		
-	
-
-	
 
 
-	
-
-		/*
-
-		$scope.$watchCollection('[markup.start, markup.end]', function(newValue, oldValue) {
-				//console.log($scope)
-				//console.log(newValue)
-				//console.log(oldValue)
-
-				// can call parent..
-				//doc.init_containers()
-				if(oldValue !==newValue && oldValue && oldValue !=='' &&  newValue && newValue !==''){
-
-				}
+angular.module('musicBox.controller', []).controller('FragmentCtrl', function($scope) {
 
 
-		});
+
+  //console.log($scope.section)
+
+  
+
+
+  
+
+    /*
+
+    $scope.$watchCollection('[markup.start, markup.end]', function(newValue, oldValue) {
+        //console.log($scope)
+        //console.log(newValue)
+        //console.log(oldValue)
+
+        // can call parent..
+        //doc.init_containers()
+        if(oldValue !==newValue && oldValue && oldValue !=='' &&  newValue && newValue !==''){
+
+        }
+
+
+    });
 */
+/*
+    $scope.$watch('markup.position', function(newValue, oldValue) {
+          // only new value check
+          console.log(newValue)
+          console.log(oldValue)
 
-		$scope.$watch('markup.position', function(newValue, oldValue) {
-					// only new value check
-					console.log(newValue)
-					console.log(oldValue)
+          if(oldValue !==newValue && oldValue && oldValue !=='' &&  newValue && newValue !==''){
+            $scope.markup.position = newValue;
+            doc.markup_save($scope.markup)
+            //  alert('s')
+          }
+          else{
+            console.log('watch position untrigger')
+          }
+      
+    });
+*/
+    $scope.$watch('markup.selected', function(newValue, oldValue) {
+          // only new value check
+          if(newValue !==''){
+            //console.log(newValue)
+            //console.log(oldValue)
+            $scope.toggle_fragment_ranges('single_markup', 'selected', $scope.markup, newValue, true)
+          }
+          else{
+            console.log('watch untrigger')
+          }
+    });
 
-					if(oldValue !==newValue && oldValue && oldValue !=='' &&  newValue && newValue !==''){
-						$scope.markup.position = newValue;
-						doc.markup_save($scope.markup)
-						//	alert('s')
-					}
-					else{
-						console.log('watch position untrigger')
-					}
-			
-		});
 
-		$scope.$watch('markup.selected', function(newValue, oldValue) {
-					// only new value check
-					if(newValue !==''){
-						//console.log(newValue)
-						//console.log(oldValue)
-						$scope.toggle_fragment_ranges('single_markup', 'selected', $scope.markup, newValue, true)
-					}
-					else{
-						console.log('watch untrigger')
-					}
-		});
+});
 
-} 
 
 
 

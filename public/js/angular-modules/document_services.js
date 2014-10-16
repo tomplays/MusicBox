@@ -1,38 +1,57 @@
-// todo doc     
+// todo doc   
+
+
+// main "service / angular factory"
+// handle POST/GET calls to api (rest) for document, doc_options, markups .. backend methods
+
+// mainly called from contollers (on load, save / edits from UI )
+// can emit events
+
+// "MusicBox" algorythm (sorting, distribution, letters system)
+
 
 
 musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $routeParams, socket, renderfactory, $locale) {
  return function (inf) {
     var self = {
 
+     
+
       load: function () {
-          var docid = 'homepage'
-          if($routeParams.docid){
+        var docid = 'homepage';
+        if($routeParams.docid){
             docid = $routeParams.docid
-          }
+        }
+
+        
+        $http.get(api_url+'/doc/'+docid).success(function(d) {
+              // redirects if doc is null
+              if(!d.doc && docid !=='homepage'){
+               // api routing should already had redirects..
+               window.location = root_url+'/doc'; // error page 
+               return;
+              }
+              // enough for load.
+              // init-set 
+              self.init(d);
+         });
+        
       },
+      
 
-      init: function () {
-          var docid = 'homepage';
-          if($routeParams.docid){
-            docid = $routeParams.docid
-          }
-         $rootScope.selectingd = 'ydu';
-         $rootScope.userin = new Object({'username':''});
 
-          $http.get(api_url+'/doc/'+docid).success(function(d) {
+      // set doc object after an api call (first load or any other callback)
+      init: function (d) {
 
-              if(d.userin){
-                //console.log(USERIN)
+             if(d.userin){
+                // not an absulte condition, api will always check rights
                 $rootScope.userin = d.userin;
                 //console.log($rootScope.userin)
               }
-
-              //console.log(m)
-              if(!d.doc && docid !=='homepage'){
-               window.location = root_url+'/';
-               return;
+              else{
+                $rootScope.userin = new Object({'username':''});
               }
+
               $rootScope.doc = d.doc;
               $rootScope.doc.formated_date=  moment(d.doc.updated).calendar() +', '+moment(d.doc.updated).fromNow(); 
               //$rootScope.doc.formated_date = d.doc.updated
@@ -43,30 +62,32 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
                
                if(d.doc.room){
                   $rootScope.doc.room__id = d.doc.room._id;
-  //                self.apply_object_options('room', d.doc.room.room_options)
-
+                  // self.apply_object_options('room', d.doc.room.room_options)
                }
                else{
                    $rootScope.doc.room__id = '';
                    $rootScope.doc.room = new Object({'_id':'-'});
-
                }
                //console.log(d.markups_type)
 
                 $rootScope.doc_owner = d.is_owner;
-                console.log('is owner:'+$rootScope.doc_owner)
+                console.log('is owner:'+ $rootScope.doc_owner)
                 document.title = $rootScope.doc.title
-
                 // $rootScope.available_sections_objects   = d.markups_type[0]
                
-                self.init_containers()  
-         })
-        
-        // equivalence
-        //$rootScope.$emit('docEvent', {action: 'doc_ready', type: 'load', collection_type: 'doc', collection:doc});
-      
-      },
+                var encoded_url = root_url;
+                if($rootScope.doc.slug !=='homepage'){
+                    encoded_url += '/doc/'+$rootScope.doc.slug;
+                }
+                $rootScope.doc.encoded_url = urlencode(encoded_url);
+                
+                // test
+                // $rootScope.selectingd = 'init';        
 
+                self.init_containers();
+                // equivalent : 
+                //$rootScope.$emit('docEvent', {action: 'doc_ready', type: 'load', collection_type: 'doc', collection:doc});
+      },
 
       /**
       * init containers
@@ -75,21 +96,6 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
 
 
       init_containers: function () {
-
-
-        // ***  ALWAYS REINIT, avoids non formatting of objects 
-        // ..sometime..
-        // todo : isolate into function
-        var encoded_url = root_url;
-        if($rootScope.doc.slug !=='homepage'){
-             encoded_url += '/doc/'+$rootScope.doc.slug;
-        }
-        $rootScope.doc.encoded_url = urlencode(encoded_url);
-        
-        
-
-
-        // 
 
         $rootScope.sectionstocount = 0;
         $rootScope.doc.markups  = _.sortBy($rootScope.doc.markups,function (num) {
@@ -191,7 +197,12 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
           $rootScope.containers[index]['objects_count']['by_positions'] = [];
           $rootScope.containers[index]['objects_count']['all'] = [];
 
-           $rootScope.containers[index].section_classes = '';
+
+          // section can have css classes and inlined styles (background-image)
+          $rootScope.containers[index].section_classes = '';
+          $rootScope.containers[index].section_styles  = '';
+
+
 //          $rootScope.containers[index]['classes'] =[];
           //$rootScope.objects_sections[index]['global'] = [];
           _.each($rootScope.available_sections_objects, function(o, obj_index){
@@ -257,6 +268,18 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
                 //console.log(markup)
                 //$rootScope.containers[index]['classes'].push(markup.metadata)
                    $rootScope.containers[index].section_classes += markup.metadata+' ';
+
+              }
+
+              if(markup.subtype == 'img'){
+                     $rootScope.containers[index].section_classes += 'has_image ';
+                     if(markup.position){
+                        $rootScope.containers[index].section_classes += ' focus_side_'+markup.position +' ';
+                     }
+
+                     if(markup.position == 'background'){
+                        $rootScope.containers[index].section_styles = 'background-image:url('+markup.metadata+')' ;
+                     }
 
               }
 
@@ -428,7 +451,7 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
         $rootScope.$emit('docEvent', {action: 'dispatched_objects' });
        // console.log( $rootScope.objects_sections['global_by_type'])
 
-
+        console.log($rootScope.containers)
 
       },
 
@@ -475,6 +498,7 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
           //letter_arr['fi_nd'] = new Object({'fi': false, 'nd':false/*, 'md':false*/});
           letter_arr.fi_nd = new Object({'fi': false, 'nd':false/*, 'md':false*/});
           letter_arr.classes = new Array('lt');
+          letter_arr.classes_flat = 'lt em';
 
           /** 
           * @something here
@@ -532,6 +556,8 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
                    families: [op_value]
                   }
               }); 
+               var fixed = options_array[op_name]['value'];
+               options_array[op_name]['fixed'] =  fixed.replace(/ /g, '_').replace(/,/g, '').replace(/:/g, '').replace(/400/g, '').replace(/700/g, '') 
             }
         });
 
@@ -598,7 +624,7 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
           var data = new Object();
          
           data =  $rootScope.newdoc;
-         
+    
           $http.post(api_url+'/doc/create', serialize(data) ).
           success(function(doc) {
               // hard redirect
@@ -606,34 +632,24 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
               //console.log(doc)
               $rootScope.newdoc.created_link = doc.slug;
               $rootScope.newdoc.created_link_title = doc.title;
-
-    
            });  
-
-
-
-
       },
 
       docsync: function(){
-          ///api/v1/doc/create
-          var data = new Object();
+        ///api/v1/doc/create
+        var data = new Object();
          
-          //console.log($rootScope.ui.selected_range.markups_to_offset)
-          data.doc_content = $rootScope.doc.content;
-          data.markups = []
+        //console.log($rootScope.ui.selected_range.markups_to_offset)
+        data.doc_content = $rootScope.doc.content;
+        data.markups = []
         // prepare / clean 
         _.each($rootScope.ui.selected_range.markups_to_offset, function(mk){
                 var a_mk = new Object({'id':mk._id, 'offset_start':mk.offset_start, 'offset_end':mk.offset_end})
                 data.markups.push(a_mk)
         });
-        //
         //console.log(serialize(data))
-
-           $http.post(api_url+'/doc/'+$rootScope.doc.slug+'/sync', serialize(data) ).
+        $http.post(api_url+'/doc/'+$rootScope.doc.slug+'/sync', serialize(data) ).
            success(function(doc) {
-              
-
               // reinit array of offsets markups ! 
               $rootScope.ui.selected_range.markups_to_offset = []
               
@@ -642,13 +658,7 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
               $rootScope.doc.content = doc.content;
               $rootScope.doc.markups = doc.markups;
               $rootScope.$emit('docEvent', {action: 'doc_ready', type: '-', collection_type: 'doc', collection:doc });
-
-    
-           });  
-
-
-
-
+        });  
       },
 
       save_doc: function (field) {
@@ -730,18 +740,17 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
           data.user_id = $rootScope.userin._id;
 
          // APi call
-          $http.post(api_url+'/doc/'+ $rootScope.doc.slug+'/markups/push', serialize(data) ).success(function(m) {
-               console.log(m)
-              $rootScope.doc.markups = m.doc.markups;
-              //$rootScope.$emit('docEvent', {action: 'doc_ready' });
-              $rootScope.$emit('docEvent', {action: 'doc_ready', type: 'push', collection_type: 'markup', collection:m.inserted[0] });
+          $http.post(api_url+'/doc/'+ $rootScope.doc.slug+'/markup/push', serialize(data) ).success(function(d) {
+               console.log(d)
+                doc.init(d);
+              //$rootScope.$emit('docEvent', {action: 'doc_ready', type: 'push', collection_type: 'markup', collection:d.inserted[0] });
            });
      },
      offset_markups : function (){
-          $http.get(api_url+'/doc/'+$rootScope.doc.slug+'/markups/offset/left/0/1/1').success(function(m) {
-            console.log(m)
-            $rootScope.doc = m;
-            $rootScope.$emit('docEvent', {action: 'doc_ready', type: 'offset', collection_type: 'markup', collection:m.markups });
+          $http.get(api_url+'/doc/'+$rootScope.doc.slug+'/markups/offset/left/0/1/1').success(function(d) {
+            console.log(d)
+            doc.init(d);
+            $rootScope.$emit('docEvent', {action: 'doc_ready', type: 'offset', collection_type: 'markup', collection:d.markups });
           })
       },
       offset_markup: function (markup,start_qty, end_qty){
@@ -796,7 +805,7 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
               alert(m.message)
             }
             else{
-               $rootScope.doc.markups = m.doc.markups
+                doc.init(m);
                $rootScope.$emit('docEvent', {action: 'doc_ready', type: 'edit', collection_type: 'markup', collection:m.edited });
 
             }
@@ -804,13 +813,9 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
       },
 
       markup_delete: function (markup){
-        $http.get(api_url+'/doc/'+$rootScope.doc.slug+'/markups/delete/'+markup._id).success(function(m) {
-        //console.log(m)
-        $rootScope.doc = []
-        $rootScope.doc = m.doc
-        $rootScope.doc.markups = m.doc.markups
-        console.log($rootScope.doc.markups)
-        doc.init_containers()
+        $http.get(api_url+'/doc/'+$rootScope.doc.slug+'/markup/delete/'+markup._id).success(function(d) {
+        console.log(d)
+        doc.init(d)
         //$scope.$emit('docEvent', {action: 'doc_ready', type: 'delete', collection_type: 'markup', collection:m.deleted[0] });
         //$scope.$emit('docEvent', {action: 'doc_ready' });
       });
@@ -818,7 +823,7 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
      },
      virtualize : function(){
 
-          /**
+            /**
             * construct virtual collection  
             *  use case : summarization
             *  @params collection_name (header, name , auto{}, implicit{}, explicit{})
@@ -888,6 +893,9 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
 
 
 /*
+
+
+misc/ tests
 
 
        var data = {

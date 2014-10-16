@@ -42,7 +42,7 @@ angular.module('musicBox.directives', [])
              lt.char = ' '
              //lt_classes += ' blank '
             }
-            //text_out += '<lt ng-click="lc()" lettersi="'+lt.sectionin+'" letterorder="'+lt.order+'"  class="'+lt_classes+'"  chars="'+lt.char+'">'+lt.char+'</lt>';
+            //text_out += '<lte ng-click="lc()" lettersi="'+lt.sectionin+'" letterorder="'+lt.order+'"  class="'+lt_classes+'"  chars="'+lt.char+'">'+lt.char+'</lte>';
         });       
         elem.html(text_out);
           // 
@@ -97,7 +97,7 @@ angular.module('musicBox.directives', [])
  })
 
 
-.directive('lt', function($rootScope) {
+.directive('lte', function($rootScope) {
   // parsing avoid scope...
     return {
      
@@ -158,6 +158,28 @@ angular.module('musicBox.directives', [])
 
 
 
+      }
+    };
+  })
+
+
+.directive('lt', function() {
+    return {
+  // template: '{{l.char}}',
+   transclude :true,
+   // replace :true,
+      restrict: 'EA',
+      link: function(scope, elem, attrs) { 
+          elem.bind('click', function(e) {
+            console.log(scope)
+            alert('sd') 
+          });
+          elem.bind('mousedown', function() {
+              console.log('mousedown')
+              // console.log(scope.ltLetterorder)
+              //alert(attrs.chars)
+             // scope.$parent.$parent.over( scope.ltLetterorder, 'down')
+          });
       }
     };
   });

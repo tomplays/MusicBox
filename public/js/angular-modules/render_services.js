@@ -335,7 +335,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
                 'free_input' :false,
                 'available' : ['img']
              },   
-              'position_available': ['wide','center','left', 'right', 'under', 'global'],
+              'position_available': ['wide','center','left', 'right', 'under', 'global', 'background'],
             });
 
             arr.markup = new Object({
@@ -397,54 +397,54 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
           {name:'slidewide', order:1, ID:1},
           {name:'center', order:2, include_title:true,  ID:2},
           {name:'left', order:7, ID:3},  // "left" layout is after inline (css-technique : margin-left:-50%)
-        //  {name:'inline_into_before',  order:3, ID:4},
+          {name:'inline_into',  order:3, ID:6},
           {name:'inline', order:4, include_objects:false, ID:5}, 
-          {name:'inline-implicit', order:5, ID:6},
+          {name:'inline-implicit', order:6, ID:6},
         //  {name:'inline_into_after', order:6, ID:7},
           
           {name:'right', order:8, ID:8},
          
           {name:'under', order:9, ID:9},
          
-          {name:'global', order:10, ID:10});
+          {name:'global', order:10, ID:10},
+          {name:'background', order:11, include_objects:false, ID:11} 
+
+          );
 
         arr  = _.sortBy(arr,function (num) {
          return num.order;
         });
         return arr;
       },
-      posAvailableFlat:function (){
-        var arr = new Array('left', 'right', 'wide', 'slidewide', 'center', 'under','global');
-        return arr;
-      },
+    
       InlineMarkupAvailable:function (){
         var arr = new Array('h1', 'h2');
         return arr;
       },
 
       renderAvailable:function (){
-        var arr = new Array('lire','read','fragments','doc_options','editor','dataset','logs', 'card', 'media');
+        var arr = new Array('read','fragments','doc_options','editor','dataset','logs', 'card', 'media');
         return arr 
       },
       fragmentsAvailable:function (){
         var arr = [];
 
-
             arr['markup_editor']             = [ {  url: 'fragments/markup_editor.jade'} ];
             arr['section_editor']            = [ {  url: 'fragments/section_editor.jade'} ];
+            
             arr['markup_push']               = [{  url: 'fragments/markup_push.jade'} ];
+            
             arr['author_card']               = [ {  url: 'fragments/author_card'} ]; 
             arr['branding']                  = [ {  url: 'fragments/branding.jade'} ];
             arr['before_doc']                = [ {  url: 'fragments/before_doc.jade'} ];
 
-            arr['doc_header']                = [ {  url: 'fragments/doc_header.jade'} ];
-            //arr['ad_welcome']                = [ {  url: 'fragments/ad_welcome.jade'} ];
+            arr['doc_title']                 = [ {  url: 'fragments/doc_title.jade'} ];
+            arr['doc_options']               = [{url: 'fragments/doc_options.jade'} ];
+
+            //arr['ad_welcome']              = [ {  url: 'fragments/ad_welcome.jade'} ];
             arr['comment_form']              = [ {  url: 'fragments/comment_form.jade'} ];
-            //arr['doc_real']              = [ {  url: 'fragments/doc_real.jade'} ];
+            //arr['doc_real']                = [ {  url: 'fragments/doc_real.jade'} ];
             arr['child_markup']              = [ {  url: 'fragments/child_markup.jade'} ];
-
-  
-
         return arr;
       },
       classesAvailable:function (){
