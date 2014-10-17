@@ -1,5 +1,8 @@
 'use strict';
 
+var nconf = require('nconf');
+nconf.argv().env().file({file:'config.json'});
+
 exports.partial = function (req, res) {
   var name = req.params.name;
   var extraparam = '';
