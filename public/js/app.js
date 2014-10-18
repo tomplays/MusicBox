@@ -5,7 +5,7 @@
 
 
 angular.module('musicBox',  ['musicBox.controller','ngLocale', 'ngResource', 'ngRoute','musicBox.services', 'musicBox.directives', 'ngSanitize']).
-  config(['$localeProvider','$routeProvider', '$locationProvider', '$sceProvider', function($localeProvider,$routeProvider, $locationProvider, $sceProvider ) {
+  config(['$localeProvider','$routeProvider', '$locationProvider','$sceDelegateProvider', '$sceProvider', function($localeProvider,$routeProvider, $locationProvider, $sceDelegateProvider,$sceProvider ) {
     $routeProvider.
  	   when('/', {
         templateUrl: 'partials/document',
@@ -52,9 +52,11 @@ angular.module('musicBox',  ['musicBox.controller','ngLocale', 'ngResource', 'ng
       });
       $locationProvider.html5Mode(true);
       $locationProvider.hashPrefix('!');
+     // $sceDelegateProvider.resourceUrlWhitelist(['self', new RegExp('^(http[s]?):\/\/(w{3}.)?soundcloud\.com/.+$')]);
+
       //console.log($localeProvider)
-      // $sceProvider.enabled(false);
-     //$sceDelegateProvider.resourceUrlWhitelist(['.*']);
+      $sceProvider.enabled(false);
+   //  $sceDelegateProvider.resourceUrlWhitelist(['*']);
     }
   ])
   // .config( ['$controllerProvider', function($controllerProvider) { $controllerProvider.allowGlobals(); }]);
@@ -63,7 +65,3 @@ angular.module('musicBox',  ['musicBox.controller','ngLocale', 'ngResource', 'ng
 
 // instead of empty file include, but files exist #v+
 // if/not included switcher
-angular.module('musicBox.filters', [])
-
-
-

@@ -23,15 +23,83 @@ body.loading_loaded{
 body.debug .debug-only {
   display: block;
 }
-body.text_typography_Esteban {
+body.text_typography_Esteban,
+body.headings_typography_Esteban h1,
+section.text_typography_Esteban {
   font-family: "Esteban";
 }
-body.headings_typography_Droid_Sans h1 {
+body.text_typography_Esteban h1,
+body.headings_typography_Esteban h1 h1,
+section.text_typography_Esteban h1,
+body.text_typography_Esteban h2,
+body.headings_typography_Esteban h1 h2,
+section.text_typography_Esteban h2,
+body.text_typography_Esteban h3,
+body.headings_typography_Esteban h1 h3,
+section.text_typography_Esteban h3,
+body.text_typography_Esteban h4,
+body.headings_typography_Esteban h1 h4,
+section.text_typography_Esteban h4,
+body.text_typography_Esteban h5,
+body.headings_typography_Esteban h1 h5,
+section.text_typography_Esteban h5,
+body.text_typography_Esteban h6,
+body.headings_typography_Esteban h1 h6,
+section.text_typography_Esteban h6 {
+  font-family: "Esteban";
+}
+body.text_typography__Droid_Sans,
+body.headings_typography_Droid_Sans,
+section.text_typography_Droid_Sans {
+  font-family: "Droid Sans", serif;
+}
+body.text_typography__Droid_Sans h1,
+body.headings_typography_Droid_Sans h1,
+section.text_typography_Droid_Sans h1,
+body.text_typography__Droid_Sans h2,
+body.headings_typography_Droid_Sans h2,
+section.text_typography_Droid_Sans h2,
+body.text_typography__Droid_Sans h3,
+body.headings_typography_Droid_Sans h3,
+section.text_typography_Droid_Sans h3,
+body.text_typography__Droid_Sans h4,
+body.headings_typography_Droid_Sans h4,
+section.text_typography_Droid_Sans h4,
+body.text_typography__Droid_Sans h5,
+body.headings_typography_Droid_Sans h5,
+section.text_typography_Droid_Sans h5,
+body.text_typography__Droid_Sans h6,
+body.headings_typography_Droid_Sans h6,
+section.text_typography_Droid_Sans h6 {
   font-family: "Droid Sans", serif;
 }
 body.text_typography_Open_Sans,
-body.headings_typography_Open_Sans h1 {
+section.text_typography_Open_Sans,
+body.headings_typography_Open_Sans {
   font-family: 'Open Sans', sans-serif;
+}
+body.text_typography_Open_Sans h1,
+section.text_typography_Open_Sans h1,
+body.headings_typography_Open_Sans h1,
+body.text_typography_Open_Sans h2,
+section.text_typography_Open_Sans h2,
+body.headings_typography_Open_Sans h2,
+body.text_typography_Open_Sans h3,
+section.text_typography_Open_Sans h3,
+body.headings_typography_Open_Sans h3,
+body.text_typography_Open_Sans h4,
+section.text_typography_Open_Sans h4,
+body.headings_typography_Open_Sans h4,
+body.text_typography_Open_Sans h5,
+section.text_typography_Open_Sans h5,
+body.headings_typography_Open_Sans h5,
+body.text_typography_Open_Sans h6,
+section.text_typography_Open_Sans h6,
+body.headings_typography_Open_Sans h6 {
+  font-family: 'Open Sans', sans-serif;
+}
+body.text_typography_Open_Sans {
+  font-size: .9em;
 }
 .branding h1 {
   margin: 0;

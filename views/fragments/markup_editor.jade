@@ -1,7 +1,14 @@
 // p {{markup.start}} - {{markup.end}} - {{markup.metadata}} - {{markup.type}} - {{markup.subtype}}
 
+
+
 div(ng-controller="FragmentCtrl", class="markup_box markup_box_depth_{{markup.depth}} markup_box_status_{{markup.status}}   markup_displayer_ markup_displayer markup_displayer_{{markup.type}} markup_displayer_subtype_{{markup.subtype}}  by_me_{{markup.by_me}} is_editing_{{markup.editing}}") 
 	
+
+	div(class="iframe_container iframe_{{markup.subtype}}", fluid, subtype="{{markup.subtype}}", url="{{markup.metadata}}",  ng-if="markup.type=='media'" , ng-hide="markup.subtype=='img'")
+		
+	
+
 	img.mk_img(ng-if="markup.subtype=='img'" , data-tdid="{{markup.id}}" , ng-src="{{markup.metadata}}")
 
 	// p {{objSchema[markup.type].icon.before.show}}
@@ -74,26 +81,46 @@ div(ng-controller="FragmentCtrl", class="markup_box markup_box_depth_{{markup.de
 					label  depth
 					input( ng-model="markup.depth" type="text" )
 							
-			span.field
+			span.field.typer
 				label.label_type type
-				select(ng-model="markup.type", ng-options="t for t in available_sections_objects")
-					option(value="markup.type")
-					option(value="t") {{t}}
+				ul.typer
+					li(ng-repeat="t in available_sections_objects")
+						span {{t}}
+						i.fa.btn_action(ng-class="{ 'selected' : markup.type == t,}" , class="fa-{{t}}" , ng-click="markup_type(markup, t)") 
+				
+
+					// select(ng-model="markup.type", ng-options="t for t in available_sections_objects")
+					// option(value="markup.type")
+					// option(value="t") {{t}}
 			
-			span.field
+			span.field.typer.sub
 				label sub-type
 				// input(ng-model="markup.subtype" , type="text")
+
+
+				ul.typer.sub
+					li(ng-repeat="t in objSchema[markup.type].subtype.available")
+						span {{t}}
+						i.fa.btn_action(ng-class="{ 'selected' : markup.subtype == t,}" , class="fa-{{t}}" , ng-click="markup_subtype(markup, t)") 
 				
-				select(ng-options="sub for sub in objSchema[markup.type].subtype.available" , ng-model="markup.subtype", name="markup.subtype")
+				
+				// select(ng-options="sub for sub in objSchema[markup.type].subtype.available" , ng-model="markup.subtype", name="markup.subtype")
 								
-			span.field(ng-if="markup.subtype=='doc_content_block' ")
+			span.field(ng-if="markup.type =='child' ")
 				label sub-doc id
 				input(ng-model="markup.doc_id_id" , type="text")
 
 			span.field 
 				label position
+
+				ul.typer.position
+					li(ng-repeat="t in objSchema[markup.type].position_available")
+						span {{t}}
+						i.fa.btn_action(ng-class="{ 'selected' : markup.position == t,}" , class="fa-{{t}}" , ng-click="markup_position(markup, t)") 
+				
+
 				// input(ng-model="markup.position" ,type="text")
-				select(ng-options="pos for pos in objSchema[markup.type].position_available" , ng-model="markup.position", name="markup.position")
+				// select(ng-options="pos for pos in objSchema[markup.type].position_available" , ng-model="markup.position", name="markup.position")
 
 			span.field.ranges
 				

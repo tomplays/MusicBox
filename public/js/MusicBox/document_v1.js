@@ -288,11 +288,27 @@ if(newValue !==undefined  && oldValue !==undefined && (newValue !== oldValue) )
 		doc.markup_save(markup)
 	}
 
+	$scope.markup_type = function(markup, t){
+			markup.type = t;
+			return;
 
+	}
+		$scope.markup_subtype = function(markup, t){
+			console.log(t)
+			markup.subtype = t;
+			return;
+
+	}
+		$scope.markup_position = function(markup, t){
+			console.log(t)
+			markup.position = t;
+			return;
+
+	}
 $scope.over= function(l, event){
 
 		var letter = l.l;
-		
+
 
 		//console.log('over ctrl '+position, event);
 
@@ -1122,20 +1138,22 @@ angular.module('musicBox.controller', []).controller('FragmentCtrl', function($s
 
     });
 */
-
+	var autosave = false;
     $scope.$watch('markup.position', function(newValue, oldValue) {
           // only new value check
-          console.log(newValue)
-          console.log(oldValue)
+          //console.log(newValue)
+         // console.log(oldValue)
 
           if(oldValue !==newValue && oldValue && oldValue !=='' &&  newValue && newValue !==''){
             $scope.markup.position = newValue;
             	// no toggle $scope.ui.focus_side = ''
-            doc.markup_save($scope.markup)
+              if(autosave){
+              	doc.markup_save($scope.markup)
+              }  
             //  alert('s')
           }
           else{
-            console.log('watch position untrigger')
+            //console.log('watch position untrigger')
           }
       
     });
@@ -1151,7 +1169,7 @@ angular.module('musicBox.controller', []).controller('FragmentCtrl', function($s
 
           }
           else{
-            console.log('watch untrigger')
+    //        console.log('watch untrigger')
           }
     });
 

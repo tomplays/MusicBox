@@ -6,6 +6,35 @@
 
 angular.module('musicBox.directives', [])
 
+
+.directive('fluid', function ( $rootScope ) {
+     // http://www.openstreetmap.org/export/embed.html?bbox=-407.8125%2C-85.45805784937232%2C226.40625%2C85.56806584676865&amp;layer=hot
+    function link(scope, elem, attr) {
+         
+         // uh ?? 
+         console.log(scope.$parent.$parent.$parent.markup.position)
+         
+         if(scope.subtype == 'open-street-map'){
+
+           elem.children(0)[0].style.width = '800px'
+           elem.children(0)[0].style.height ='800px'
+
+         }
+         else{
+            elem.children(0)[0].style.width = '800px'
+            elem.children(0)[0].style.height ='800px'
+         }
+    }
+    return {
+          scope: {
+            url   : '@',
+            subtype   : '@', 
+          },
+          link:link,
+          template: '<iframe  webkitallowfullscreen mozallowfullscreen allowfullscreen scrolling="no" frameborder="no" src="{{url}}"></iframe><p>{{subtype}}</p>'
+    };
+})
+
 .directive('myText', 
 
 

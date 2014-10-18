@@ -185,6 +185,39 @@
 .fa-h1:before, .fa-h2:before, .fa-h3:before, .fa-h4:before,.fa-h5:before, .fa-h6:before{
     content: "";   
 }
+ .fa-quote:before{
+     content: "quote";   
+    }
+ .fa-super-quote:before{
+     content: "quote+";   
+    }
+
+ul.typer{
+    
+    
+    .fa-h1:before{
+     content: "H1";   
+    }
+     .fa-h2:before{
+     content: "H1";   
+    }
+     .fa-h3:before{
+     content: "H1";   
+    }
+     .fa-h4:before{
+     content: "H1";   
+    }
+     .fa-h5:before{
+     content: "H1";   
+    }
+     .fa-h5:before{
+     content: "H1";   
+    }
+     .fa-h6:before{
+     content: "H1";   
+    }
+
+}
 
 .mk_val_subtype_h1, .mk_val_subtype_h2, .mk_val_subtype_h3, .mk_val_subtype_h4, .mk_val_subtype_h5, .mk_val_subtype_h6{
     text-transform:uppercase;
@@ -230,9 +263,24 @@ i.fa-mark:before {
 }
 
 
-i.fa-hyperlink:before{
-      content: "";
+i.fa-hyperlink{
+  background:none repeat scroll 0 0 rgb(52, 152, 219);
+  color:#fff;
+  &:before{ 
+     content: "";
+    }
 }
+
+
+i.fa-child{
+background:none repeat scroll 0 0 rgb(52, 152, 219);
+         color:#fff;
+    &:before{
+        
+        }
+      
+}
+
 
 i.fa-strong:before {
     content: "b";
@@ -388,5 +436,10 @@ i.fa-semantic:before {
     }
    
 }
+
+/* into editor */
+
+
+
 
 

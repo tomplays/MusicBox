@@ -84,7 +84,18 @@ exports.markup_edit = function(req, res) {
 						
 						if(m_body.doc_id){
 							console.log('DOC sub _id: '+m_body.doc_id)
-							m.doc_id = m_body.doc_id;
+							console.log(m)
+							var memo_doc = m.doc_id;
+							
+							if(m.doc_id._id){
+								m.doc_id._id = m_body.doc_id;
+							}
+							else{
+								m.doc_id = m_body.doc_id;
+							}
+							
+						
+
 						}
 
 						 // arrays updated  
@@ -108,10 +119,11 @@ exports.markup_edit = function(req, res) {
 						if(req.user){
 							out.userin 	= req.user.toObject();
 						}
-						out.is_owner 		=documents.test_owner_or_key(doc,req);
+						out.is_owner 		= documents.test_owner_or_key(doc,req);
 						out.doc = doc
 						out.edited = [];
 						out.edited.push(edited)
+						console.log(edited)
 						res.json(out)
 					}
 			}); // save

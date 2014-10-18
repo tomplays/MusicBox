@@ -281,7 +281,7 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
 
               }
 
-              if(markup.subtype == 'img'){
+              if(markup.type == 'media' || markup.type == 'child'){
                      $rootScope.containers[index].section_classes += 'has_image ';
                      if(markup.position){
                         $rootScope.containers[index].section_classes += ' focus_side_'+markup.position +' ';
@@ -509,7 +509,7 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
         $rootScope.$emit('docEvent', {action: 'dispatched_objects' });
        // console.log( $rootScope.objects_sections['global_by_type'])
 
-        console.log($rootScope.containers)
+        //console.log($rootScope.containers)
 
       },
 

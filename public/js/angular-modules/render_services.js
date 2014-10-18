@@ -138,7 +138,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
 
 
       objAvailable:function (){
-        var arr = new Array('media','generic','container','container_class', 'comment','note','markup','child' ,'semantic', 'hyperlink');
+        var arr = new Array('markup','media','hyperlink', 'container','container_class', 'comment','note','child' ,'semantic','generic');
         return arr 
       },
       markupSchema:function (){
@@ -197,6 +197,32 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
               'subtype': {
                 'free_input' : false,
                 'available' : ['freebase', 'about']
+             },   
+              'position_available': ['left', 'right', 'under', 'global'],
+            });
+             arr.semantic= new Object({
+              'type':obj_base.type ,
+              'only':'',
+              'metadata': { 
+                'editor': {
+                   'show' : true,
+                    'label':'semantic data',
+                     'input' : 'textarea'
+                  },
+                  'render': {
+                   'show' : true
+                  }
+              }, 
+              'show_date': false,
+              'icon': { 
+                'before': {
+                   'show' : true
+                  }
+              }, 
+              'show_user': false, 
+              'subtype': {
+                'free_input' : false,
+                'available' : ['translation']
              },   
               'position_available': ['left', 'right', 'under', 'global'],
             });
@@ -305,7 +331,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
               'show_user': false, 
               'subtype': {
                 'free_input' : false,
-                'available' : ['doc_content_block','share_excerpt','b','c']
+                'available' : ['doc_content_block','simple_page','share_excerpt','b','c']
              },   
               'position_available': ['left', 'right', 'under', 'global'],
             });
@@ -333,7 +359,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
               'show_user': false, 
               'subtype': {
                 'free_input' :false,
-                'available' : ['img']
+                'available' : ['img', 'soundcloud-track', 'vimeo-video', 'youtube-video', 'open-street-map', 'google-map']
              },   
               'position_available': ['wide','center','left', 'right', 'under', 'global', 'background'],
             });

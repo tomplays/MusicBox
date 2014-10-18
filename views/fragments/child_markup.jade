@@ -19,6 +19,15 @@ div.inside_child(style="background:{{markup.child_options.block_color}}")
 			a(style="color:{{markup.child_options.title_color}}", href="#{root_url}/doc/{{markup.doc_id.slug}}", ng-bind-html="markup.doc_id.excerpt")
 	
 
+	div(ng-if="markup.subtype == 'simple_page'")
+		h4(ng-if="markup.metadata")
+			a(style="color:{{markup.child_options.title_color}}" , ng-bind-html="markup.metadata" , href="#{root_url}/doc/{{markup.doc_id.slug}}")
+		h3 
+			a(style="color:{{markup.child_options.title_color}}" , href="#{root_url}/doc/{{markup.doc_id.slug}}") {{markup.doc_id.title}}
+	
+		
+	
+
 
 	div(ng-if="markup.subtype == 'share_excerpt'")
 
