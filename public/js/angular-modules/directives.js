@@ -9,6 +9,9 @@ angular.module('musicBox.directives', [])
 
 .directive('fluid', function ( $rootScope ) {
      // http://www.openstreetmap.org/export/embed.html?bbox=-407.8125%2C-85.45805784937232%2C226.40625%2C85.56806584676865&amp;layer=hot
+    // http://www.openstreetmap.org/export/embed.html?bbox=0.68115234375%2C43.78695837311561%2C20.06103515625%2C51.795027225829145&amp;layer=mapnik
+// http://player.vimeo.com/video/107038653
+//  https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/172455259&amp;auto_play=false&amp;hide_related=false&amp;show_comments=true&amp;show_user=true&amp;show_reposts=false&amp;visual=true
     function link(scope, elem, attr) {
          
          // uh ?? 

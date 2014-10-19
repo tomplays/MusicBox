@@ -331,7 +331,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
               'show_user': false, 
               'subtype': {
                 'free_input' : false,
-                'available' : ['doc_content_block','simple_page','share_excerpt','b','c']
+                'available' : ['doc_content_block','simple_page','share_excerpt']
              },   
               'position_available': ['left', 'right', 'under', 'global'],
             });
@@ -478,6 +478,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
       },
       fragmentsAvailable:function (){
         var arr = [];
+            arr['markup']             = [ {  url: 'fragments/markup'} ];
 
             arr['markup_editor']             = [ {  url: 'fragments/markup_editor.jade'} ];
             arr['section_editor']            = [ {  url: 'fragments/section_editor.jade'} ];

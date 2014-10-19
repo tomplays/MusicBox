@@ -132,7 +132,7 @@ exports.index_doc= function(req, res) {
 								if(!user_can){
 									var redirect_to = nconf.get('ROOT_URL')
 									if(req.params.slug){
-										redirect_to += '/doc/'+req.params.slug
+										redirect_to += '/doc/'+req.params.slug;
 									}
 									
 									var message = 'This doc is a draft : <a style="text-decoration:underline;" href="/login?redirect_url='+redirect_to+'">login</a> if your are doc owner or grab "secret key" <a style="text-decoration:underline;" href="'+nconf.get('ROOT_URL')+'"> &laquo; Back </a>';

@@ -967,6 +967,18 @@ i.fa.fa-global {
 i.fa.fa-global:before {
   content: "global";
 }
+.position_ghost {
+  background-image: url("/img/test-a.png");
+  background-repeat: no-repeat;
+  background-size: 100% auto;
+  float: left;
+  height: 178px;
+  width: 100px;
+  transition: background .4s linear 0s;
+}
+.position_ghost:hover {
+  background-image: url("/img/b.png");
+}
 .markup_displayer.markup_displayer_doc_dark_block {
   background: #000;
   color: #fff;
