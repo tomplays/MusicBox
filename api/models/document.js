@@ -117,7 +117,7 @@ var DocumentSchema = new Schema({
     },
     excerpt: {
         type: String,
-        default: '...',
+        default: '[&hellip;]',
         trim: true
     },
     markups: [MarkupSchema], 

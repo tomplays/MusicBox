@@ -87,11 +87,17 @@ exports.markup_edit = function(req, res) {
 							console.log(m)
 							var memo_doc = m.doc_id;
 							
-							if(m.doc_id._id){
+							if(m.doc_id && m.doc_id._id){
 								m.doc_id._id = m_body.doc_id;
 							}
 							else{
-								m.doc_id = m_body.doc_id;
+								if( m_body.doc_id){
+										m.doc_id = m_body.doc_id;
+								}
+								else{
+
+								}
+								
 							}
 							
 						
