@@ -30,58 +30,57 @@ html(class="is_home_{{ui.is_home}} is_single_{{ui.is_single}} doc_id_{{doc._id}}
 			var USERIN = new Object({'username':'#{user_in.username}', 'image_url': '#{user_in.image_url}', '_id': '#{user_in._id}'} );
 
 		if (socket_url !== '')
-				script(src="#{socket_url}/socket.io/socket.io.js")
+				// script(src="#{socket_url}/socket.io/socket.io.js")
 		
 		// angularJS / 
 		
 
-		script(src="/bower_components/angular/angular.js")
-		script(src='/bower_components/angular-sanitize/angular-sanitize.min.js')
-		script(src='/bower_components/angular-route/angular-route.min.js')
-		script(src='/bower_components/angular-resource/angular-resource.min.js')
+		script(type='text/javascript',  src="/bower_components/angular/angular.min.js")
+	
 		
 		//i18n dynamic load
-		script(src="#{root_url}/#{lang_js_url}")
-		script(src='/js/angular-modules/filters.js')
-		script(src='/js/angular-modules/directives.js')
+		script(type='text/javascript',  src="#{root_url}/#{lang_js_url}")
+		
 
 		if (env == 'dev')
 			
-			// sub if (hard version of file minified or kept locally)
+			script(type='text/javascript', src='/bower_components/angular-sanitize/angular-sanitize.min.js')
+			script(type='text/javascript', src='/bower_components/angular-route/angular-route.min.js')
+			script(type='text/javascript', src='/bower_components/angular-resource/angular-resource.min.js')
 			
+			// sub if (hard version of file minified or kept locally)
+			script(type='text/javascript', src='/js/angular-modules/filters.js')
+			script(type='text/javascript', src='/js/angular-modules/directives.js')
 
 			// Misc libs/utils
-			script(src="/bower_components/jquery/dist/jquery.min.js")
-			script(src='/bower_components/underscore/underscore-min.js')
+			script(type='text/javascript', src="/bower_components/jquery/dist/jquery.min.js")
+			script(type='text/javascript', src='/bower_components/underscore/underscore-min.js')
 			
 			// font loader kept local
-			script(src='/js/lib/webfont.js')
+			script(type='text/javascript', src='/js/lib/webfont.js')
 
 			// calendar functions lib. (momentjs)
-			script(src='/bower_components/momentjs/min/moment-with-langs.min.js')
+			script(type='text/javascript', src='/bower_components/momentjs/min/moment-with-langs.min.js')
 
 			// tests for charts
-			// script(src='/bower_components/chartist/libdist/chartist.min.js')
+			// script(type='text/javascript', src='/bower_components/chartist/libdist/chartist.min.js')
 			// link(rel='stylesheet', href='/bower_components/chartist/libdist/chartist.min.css')
 
-			script(src='/js/angular-modules/services.js')
-			script(src='/js/angular-modules/render_services.js')
-			script(src='/js/angular-modules/document_services.js')
+			script(type='text/javascript', src='/js/angular-modules/services.js')
+			script(type='text/javascript', src='/js/angular-modules/render_services.js')
+			script(type='text/javascript', src='/js/angular-modules/document_services.js')
 
 		
-			//link(rel='stylesheet', href='/css/grid.css')
-			//link(rel='stylesheet', href='/css/charset.css')
-			//link(rel='stylesheet', href='/css/custom.css')
-
+			
 			link(rel='stylesheet', href='/css/min/main.css')
 
 			// Angular controllers
-			script(src='/js/MusicBox/document_v1.js')
+			script(type='text/javascript', src='/js/MusicBox/document_v1.js')
 
-			script(src='/js/MusicBox/userCtrl.js')
+			script(type='text/javascript', src='/js/MusicBox/userCtrl.js')
 			
 			// Angular top level 'app' routing 
-			script(src='/js/app.js')
+			script(type='text/javascript', src='/js/app.js')
 		
 
 		// same in dev and prod env 
@@ -93,9 +92,9 @@ html(class="is_home_{{ui.is_home}} is_single_{{ui.is_single}} doc_id_{{doc._id}}
 
 			// Calling 9 js files, minified crash for angular, whereas .debug no, why ?
 				
-			//script(src='/js/min/MusicBox.min.js')
+			// script(type='text/javascript', src='/js/min/MusicBox.min.js')
 
-			script(src='/js/min/MusicBox.min-debug.js')
+			script(type='text/javascript',  src='/js/min/MusicBox.min-debug.js')
 
 	body(class="render_active_{{ui.renderAvailable_active}} text_typography_{{doc_options.text_typography.fixed}} headings_typography_{{doc_options.headings_typography.fixed}}")
 		div(ng-view)

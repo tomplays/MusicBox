@@ -813,7 +813,9 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
          // APi call
           $http.post(api_url+'/doc/'+ $rootScope.doc.slug+'/markup/push', serialize(data) ).success(function(d) {
                console.log(d)
+               
                 doc.init(d);
+
               //$rootScope.$emit('docEvent', {action: 'doc_ready', type: 'push', collection_type: 'markup', collection:d.inserted[0] });
            });
      },

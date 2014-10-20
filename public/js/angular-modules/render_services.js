@@ -198,7 +198,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
                 'free_input' : false,
                 'available' : ['freebase', 'about']
              },   
-              'position_available': ['left', 'right', 'under', 'global'],
+              'position_available': ['left', 'right', 'under', 'center', 'global'],
             });
              arr.semantic= new Object({
               'type':obj_base.type ,
@@ -222,7 +222,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
               'show_user': false, 
               'subtype': {
                 'free_input' : false,
-                'available' : ['translation']
+                'available' : ['translation', 'date']
              },   
               'position_available': ['left', 'right', 'under', 'global'],
             });
@@ -248,9 +248,9 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
               'show_user': false,
               'subtype': {
                 'free_input' : true,
-                'available' : 'any'
+                'available' : ['', 'date', 'info']
              },   
-              'position_available': ['left', 'right', 'under', 'global'],
+              'position_available': ['left', 'right', 'under', 'center','global'],
             });
            arr.container= new Object({
               'type':obj_base.type ,

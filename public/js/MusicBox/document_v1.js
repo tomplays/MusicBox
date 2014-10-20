@@ -47,12 +47,18 @@ var doc;
 
  */
 
+var app = angular.module('musicBox', []);
 
+
+musicBox.controller('DocumentCtrl', DocumentCtrl);
 
 
 
 function DocumentCtrl($scope, $http , $sce, $location, $routeParams, renderfactory,socket,docfactory) {
-		
+
+		DocumentCtrl.$inject = ['$scope', '$http', '$sce', '$location', '$routeParams', 'renderfactory','socket','docfactory'];
+
+			
 		console.log('DocumentCtrl on');
 
 		socket.on('news', function (data) {
@@ -1111,6 +1117,7 @@ function SectionCtrl($scope, $http , $sce, $location, $routeParams, renderfactor
 }
 
 
+
 angular.module('musicBox.controller', []).controller('FragmentCtrl', function($scope) {
 
 
@@ -1197,6 +1204,7 @@ function DocumentNewCtrl($scope, $http , docfactory) {
 console.log('DocumentNewCtrl')
 
 	$scope.init_new_doc = function (){
+		     //$scope.docs = '';
        	 	 $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
 			 newdoc_service =  docfactory();
 			 newdoc_service.init_new();
@@ -1209,7 +1217,7 @@ console.log('DocumentNewCtrl')
 	$scope.init_new_doc()
 	//alert('0')
 }
-DocumentNewCtrl.$inject = ['$scope', '$http' , 'docfactory'];
+DocumentNewCtrl.$inject = ['$scope', '$http' ,'docfactory'];
 
 
 // MISC UTILS

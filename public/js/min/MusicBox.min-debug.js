@@ -18199,27 +18199,2385 @@ $.prototype.v=function(a,b){var c=this.d.id,d=this.c.u,e=this;c?(d.__webfontfont
         makeGlobal();
     }
 }).call(this);
+/**
+ * @license AngularJS v1.3.0
+ * (c) 2010-2014 Google, Inc. http://angularjs.org
+ * License: MIT
+ */
+(function(window, angular, undefined) {'use strict';
+
+/**
+ * @ngdoc module
+ * @name ngRoute
+ * @description
+ *
+ * # ngRoute
+ *
+ * The `ngRoute` module provides routing and deeplinking services and directives for angular apps.
+ *
+ * ## Example
+ * See {@link ngRoute.$route#example $route} for an example of configuring and using `ngRoute`.
+ *
+ *
+ * <div doc-module-components="ngRoute"></div>
+ */
+ /* global -ngRouteModule */
+var ngRouteModule = angular.module('ngRoute', ['ng']).
+                        provider('$route', $RouteProvider),
+    $routeMinErr = angular.$$minErr('ngRoute');
+
+/**
+ * @ngdoc provider
+ * @name $routeProvider
+ *
+ * @description
+ *
+ * Used for configuring routes.
+ *
+ * ## Example
+ * See {@link ngRoute.$route#example $route} for an example of configuring and using `ngRoute`.
+ *
+ * ## Dependencies
+ * Requires the {@link ngRoute `ngRoute`} module to be installed.
+ */
+function $RouteProvider(){
+  function inherit(parent, extra) {
+    return angular.extend(new (angular.extend(function() {}, {prototype:parent}))(), extra);
+  }
+
+  var routes = {};
+
+  /**
+   * @ngdoc method
+   * @name $routeProvider#when
+   *
+   * @param {string} path Route path (matched against `$location.path`). If `$location.path`
+   *    contains redundant trailing slash or is missing one, the route will still match and the
+   *    `$location.path` will be updated to add or drop the trailing slash to exactly match the
+   *    route definition.
+   *
+   *    * `path` can contain named groups starting with a colon: e.g. `:name`. All characters up
+   *        to the next slash are matched and stored in `$routeParams` under the given `name`
+   *        when the route matches.
+   *    * `path` can contain named groups starting with a colon and ending with a star:
+   *        e.g.`:name*`. All characters are eagerly stored in `$routeParams` under the given `name`
+   *        when the route matches.
+   *    * `path` can contain optional named groups with a question mark: e.g.`:name?`.
+   *
+   *    For example, routes like `/color/:color/largecode/:largecode*\/edit` will match
+   *    `/color/brown/largecode/code/with/slashes/edit` and extract:
+   *
+   *    * `color: brown`
+   *    * `largecode: code/with/slashes`.
+   *
+   *
+   * @param {Object} route Mapping information to be assigned to `$route.current` on route
+   *    match.
+   *
+   *    Object properties:
+   *
+   *    - `controller` – `{(string|function()=}` – Controller fn that should be associated with
+   *      newly created scope or the name of a {@link angular.Module#controller registered
+   *      controller} if passed as a string.
+   *    - `controllerAs` – `{string=}` – A controller alias name. If present the controller will be
+   *      published to scope under the `controllerAs` name.
+   *    - `template` – `{string=|function()=}` – html template as a string or a function that
+   *      returns an html template as a string which should be used by {@link
+   *      ngRoute.directive:ngView ngView} or {@link ng.directive:ngInclude ngInclude} directives.
+   *      This property takes precedence over `templateUrl`.
+   *
+   *      If `template` is a function, it will be called with the following parameters:
+   *
+   *      - `{Array.<Object>}` - route parameters extracted from the current
+   *        `$location.path()` by applying the current route
+   *
+   *    - `templateUrl` – `{string=|function()=}` – path or function that returns a path to an html
+   *      template that should be used by {@link ngRoute.directive:ngView ngView}.
+   *
+   *      If `templateUrl` is a function, it will be called with the following parameters:
+   *
+   *      - `{Array.<Object>}` - route parameters extracted from the current
+   *        `$location.path()` by applying the current route
+   *
+   *    - `resolve` - `{Object.<string, function>=}` - An optional map of dependencies which should
+   *      be injected into the controller. If any of these dependencies are promises, the router
+   *      will wait for them all to be resolved or one to be rejected before the controller is
+   *      instantiated.
+   *      If all the promises are resolved successfully, the values of the resolved promises are
+   *      injected and {@link ngRoute.$route#$routeChangeSuccess $routeChangeSuccess} event is
+   *      fired. If any of the promises are rejected the
+   *      {@link ngRoute.$route#$routeChangeError $routeChangeError} event is fired. The map object
+   *      is:
+   *
+   *      - `key` – `{string}`: a name of a dependency to be injected into the controller.
+   *      - `factory` - `{string|function}`: If `string` then it is an alias for a service.
+   *        Otherwise if function, then it is {@link auto.$injector#invoke injected}
+   *        and the return value is treated as the dependency. If the result is a promise, it is
+   *        resolved before its value is injected into the controller. Be aware that
+   *        `ngRoute.$routeParams` will still refer to the previous route within these resolve
+   *        functions.  Use `$route.current.params` to access the new route parameters, instead.
+   *
+   *    - `redirectTo` – {(string|function())=} – value to update
+   *      {@link ng.$location $location} path with and trigger route redirection.
+   *
+   *      If `redirectTo` is a function, it will be called with the following parameters:
+   *
+   *      - `{Object.<string>}` - route parameters extracted from the current
+   *        `$location.path()` by applying the current route templateUrl.
+   *      - `{string}` - current `$location.path()`
+   *      - `{Object}` - current `$location.search()`
+   *
+   *      The custom `redirectTo` function is expected to return a string which will be used
+   *      to update `$location.path()` and `$location.search()`.
+   *
+   *    - `[reloadOnSearch=true]` - {boolean=} - reload route when only `$location.search()`
+   *      or `$location.hash()` changes.
+   *
+   *      If the option is set to `false` and url in the browser changes, then
+   *      `$routeUpdate` event is broadcasted on the root scope.
+   *
+   *    - `[caseInsensitiveMatch=false]` - {boolean=} - match routes without being case sensitive
+   *
+   *      If the option is set to `true`, then the particular route can be matched without being
+   *      case sensitive
+   *
+   * @returns {Object} self
+   *
+   * @description
+   * Adds a new route definition to the `$route` service.
+   */
+  this.when = function(path, route) {
+    routes[path] = angular.extend(
+      {reloadOnSearch: true},
+      route,
+      path && pathRegExp(path, route)
+    );
+
+    // create redirection for trailing slashes
+    if (path) {
+      var redirectPath = (path[path.length-1] == '/')
+            ? path.substr(0, path.length-1)
+            : path +'/';
+
+      routes[redirectPath] = angular.extend(
+        {redirectTo: path},
+        pathRegExp(redirectPath, route)
+      );
+    }
+
+    return this;
+  };
+
+   /**
+    * @param path {string} path
+    * @param opts {Object} options
+    * @return {?Object}
+    *
+    * @description
+    * Normalizes the given path, returning a regular expression
+    * and the original path.
+    *
+    * Inspired by pathRexp in visionmedia/express/lib/utils.js.
+    */
+  function pathRegExp(path, opts) {
+    var insensitive = opts.caseInsensitiveMatch,
+        ret = {
+          originalPath: path,
+          regexp: path
+        },
+        keys = ret.keys = [];
+
+    path = path
+      .replace(/([().])/g, '\\$1')
+      .replace(/(\/)?:(\w+)([\?\*])?/g, function(_, slash, key, option){
+        var optional = option === '?' ? option : null;
+        var star = option === '*' ? option : null;
+        keys.push({ name: key, optional: !!optional });
+        slash = slash || '';
+        return ''
+          + (optional ? '' : slash)
+          + '(?:'
+          + (optional ? slash : '')
+          + (star && '(.+?)' || '([^/]+)')
+          + (optional || '')
+          + ')'
+          + (optional || '');
+      })
+      .replace(/([\/$\*])/g, '\\$1');
+
+    ret.regexp = new RegExp('^' + path + '$', insensitive ? 'i' : '');
+    return ret;
+  }
+
+  /**
+   * @ngdoc method
+   * @name $routeProvider#otherwise
+   *
+   * @description
+   * Sets route definition that will be used on route change when no other route definition
+   * is matched.
+   *
+   * @param {Object|string} params Mapping information to be assigned to `$route.current`.
+   * If called with a string, the value maps to `redirectTo`.
+   * @returns {Object} self
+   */
+  this.otherwise = function(params) {
+    if (typeof params === 'string') {
+      params = {redirectTo: params};
+    }
+    this.when(null, params);
+    return this;
+  };
+
+
+  this.$get = ['$rootScope',
+               '$location',
+               '$routeParams',
+               '$q',
+               '$injector',
+               '$templateRequest',
+               '$sce',
+      function($rootScope, $location, $routeParams, $q, $injector, $templateRequest, $sce) {
+
+    /**
+     * @ngdoc service
+     * @name $route
+     * @requires $location
+     * @requires $routeParams
+     *
+     * @property {Object} current Reference to the current route definition.
+     * The route definition contains:
+     *
+     *   - `controller`: The controller constructor as define in route definition.
+     *   - `locals`: A map of locals which is used by {@link ng.$controller $controller} service for
+     *     controller instantiation. The `locals` contain
+     *     the resolved values of the `resolve` map. Additionally the `locals` also contain:
+     *
+     *     - `$scope` - The current route scope.
+     *     - `$template` - The current route template HTML.
+     *
+     * @property {Object} routes Object with all route configuration Objects as its properties.
+     *
+     * @description
+     * `$route` is used for deep-linking URLs to controllers and views (HTML partials).
+     * It watches `$location.url()` and tries to map the path to an existing route definition.
+     *
+     * Requires the {@link ngRoute `ngRoute`} module to be installed.
+     *
+     * You can define routes through {@link ngRoute.$routeProvider $routeProvider}'s API.
+     *
+     * The `$route` service is typically used in conjunction with the
+     * {@link ngRoute.directive:ngView `ngView`} directive and the
+     * {@link ngRoute.$routeParams `$routeParams`} service.
+     *
+     * @example
+     * This example shows how changing the URL hash causes the `$route` to match a route against the
+     * URL, and the `ngView` pulls in the partial.
+     *
+     * <example name="$route-service" module="ngRouteExample"
+     *          deps="angular-route.js" fixBase="true">
+     *   <file name="index.html">
+     *     <div ng-controller="MainController">
+     *       Choose:
+     *       <a href="Book/Moby">Moby</a> |
+     *       <a href="Book/Moby/ch/1">Moby: Ch1</a> |
+     *       <a href="Book/Gatsby">Gatsby</a> |
+     *       <a href="Book/Gatsby/ch/4?key=value">Gatsby: Ch4</a> |
+     *       <a href="Book/Scarlet">Scarlet Letter</a><br/>
+     *
+     *       <div ng-view></div>
+     *
+     *       <hr />
+     *
+     *       <pre>$location.path() = {{$location.path()}}</pre>
+     *       <pre>$route.current.templateUrl = {{$route.current.templateUrl}}</pre>
+     *       <pre>$route.current.params = {{$route.current.params}}</pre>
+     *       <pre>$route.current.scope.name = {{$route.current.scope.name}}</pre>
+     *       <pre>$routeParams = {{$routeParams}}</pre>
+     *     </div>
+     *   </file>
+     *
+     *   <file name="book.html">
+     *     controller: {{name}}<br />
+     *     Book Id: {{params.bookId}}<br />
+     *   </file>
+     *
+     *   <file name="chapter.html">
+     *     controller: {{name}}<br />
+     *     Book Id: {{params.bookId}}<br />
+     *     Chapter Id: {{params.chapterId}}
+     *   </file>
+     *
+     *   <file name="script.js">
+     *     angular.module('ngRouteExample', ['ngRoute'])
+     *
+     *      .controller('MainController', function($scope, $route, $routeParams, $location) {
+     *          $scope.$route = $route;
+     *          $scope.$location = $location;
+     *          $scope.$routeParams = $routeParams;
+     *      })
+     *
+     *      .controller('BookController', function($scope, $routeParams) {
+     *          $scope.name = "BookController";
+     *          $scope.params = $routeParams;
+     *      })
+     *
+     *      .controller('ChapterController', function($scope, $routeParams) {
+     *          $scope.name = "ChapterController";
+     *          $scope.params = $routeParams;
+     *      })
+     *
+     *     .config(function($routeProvider, $locationProvider) {
+     *       $routeProvider
+     *        .when('/Book/:bookId', {
+     *         templateUrl: 'book.html',
+     *         controller: 'BookController',
+     *         resolve: {
+     *           // I will cause a 1 second delay
+     *           delay: function($q, $timeout) {
+     *             var delay = $q.defer();
+     *             $timeout(delay.resolve, 1000);
+     *             return delay.promise;
+     *           }
+     *         }
+     *       })
+     *       .when('/Book/:bookId/ch/:chapterId', {
+     *         templateUrl: 'chapter.html',
+     *         controller: 'ChapterController'
+     *       });
+     *
+     *       // configure html5 to get links working on jsfiddle
+     *       $locationProvider.html5Mode(true);
+     *     });
+     *
+     *   </file>
+     *
+     *   <file name="protractor.js" type="protractor">
+     *     it('should load and compile correct template', function() {
+     *       element(by.linkText('Moby: Ch1')).click();
+     *       var content = element(by.css('[ng-view]')).getText();
+     *       expect(content).toMatch(/controller\: ChapterController/);
+     *       expect(content).toMatch(/Book Id\: Moby/);
+     *       expect(content).toMatch(/Chapter Id\: 1/);
+     *
+     *       element(by.partialLinkText('Scarlet')).click();
+     *
+     *       content = element(by.css('[ng-view]')).getText();
+     *       expect(content).toMatch(/controller\: BookController/);
+     *       expect(content).toMatch(/Book Id\: Scarlet/);
+     *     });
+     *   </file>
+     * </example>
+     */
+
+    /**
+     * @ngdoc event
+     * @name $route#$routeChangeStart
+     * @eventType broadcast on root scope
+     * @description
+     * Broadcasted before a route change. At this  point the route services starts
+     * resolving all of the dependencies needed for the route change to occur.
+     * Typically this involves fetching the view template as well as any dependencies
+     * defined in `resolve` route property. Once  all of the dependencies are resolved
+     * `$routeChangeSuccess` is fired.
+     *
+     * The route change (and the `$location` change that triggered it) can be prevented
+     * by calling `preventDefault` method of the event. See {@link ng.$rootScope.Scope#$on}
+     * for more details about event object.
+     *
+     * @param {Object} angularEvent Synthetic event object.
+     * @param {Route} next Future route information.
+     * @param {Route} current Current route information.
+     */
+
+    /**
+     * @ngdoc event
+     * @name $route#$routeChangeSuccess
+     * @eventType broadcast on root scope
+     * @description
+     * Broadcasted after a route dependencies are resolved.
+     * {@link ngRoute.directive:ngView ngView} listens for the directive
+     * to instantiate the controller and render the view.
+     *
+     * @param {Object} angularEvent Synthetic event object.
+     * @param {Route} current Current route information.
+     * @param {Route|Undefined} previous Previous route information, or undefined if current is
+     * first route entered.
+     */
+
+    /**
+     * @ngdoc event
+     * @name $route#$routeChangeError
+     * @eventType broadcast on root scope
+     * @description
+     * Broadcasted if any of the resolve promises are rejected.
+     *
+     * @param {Object} angularEvent Synthetic event object
+     * @param {Route} current Current route information.
+     * @param {Route} previous Previous route information.
+     * @param {Route} rejection Rejection of the promise. Usually the error of the failed promise.
+     */
+
+    /**
+     * @ngdoc event
+     * @name $route#$routeUpdate
+     * @eventType broadcast on root scope
+     * @description
+     *
+     * The `reloadOnSearch` property has been set to false, and we are reusing the same
+     * instance of the Controller.
+     */
+
+    var forceReload = false,
+        preparedRoute,
+        preparedRouteIsUpdateOnly,
+        $route = {
+          routes: routes,
+
+          /**
+           * @ngdoc method
+           * @name $route#reload
+           *
+           * @description
+           * Causes `$route` service to reload the current route even if
+           * {@link ng.$location $location} hasn't changed.
+           *
+           * As a result of that, {@link ngRoute.directive:ngView ngView}
+           * creates new scope, reinstantiates the controller.
+           */
+          reload: function() {
+            forceReload = true;
+            $rootScope.$evalAsync(function() {
+              // Don't support cancellation of a reload for now...
+              prepareRoute();
+              commitRoute();
+            });
+          },
+
+          /**
+           * @ngdoc method
+           * @name $route#updateParams
+           *
+           * @description
+           * Causes `$route` service to update the current URL, replacing
+           * current route parameters with those specified in `newParams`.
+           * Provided property names that match the route's path segment
+           * definitions will be interpolated into the location's path, while
+           * remaining properties will be treated as query params.
+           *
+           * @param {Object} newParams mapping of URL parameter names to values
+           */
+          updateParams: function(newParams) {
+            if (this.current && this.current.$$route) {
+              var searchParams = {}, self=this;
+
+              angular.forEach(Object.keys(newParams), function(key) {
+                if (!self.current.pathParams[key]) searchParams[key] = newParams[key];
+              });
+
+              newParams = angular.extend({}, this.current.params, newParams);
+              $location.path(interpolate(this.current.$$route.originalPath, newParams));
+              $location.search(angular.extend({}, $location.search(), searchParams));
+            }
+            else {
+              throw $routeMinErr('norout', 'Tried updating route when with no current route');
+            }
+          }
+        };
+
+    $rootScope.$on('$locationChangeStart', prepareRoute);
+    $rootScope.$on('$locationChangeSuccess', commitRoute);
+
+    return $route;
+
+    /////////////////////////////////////////////////////
+
+    /**
+     * @param on {string} current url
+     * @param route {Object} route regexp to match the url against
+     * @return {?Object}
+     *
+     * @description
+     * Check if the route matches the current url.
+     *
+     * Inspired by match in
+     * visionmedia/express/lib/router/router.js.
+     */
+    function switchRouteMatcher(on, route) {
+      var keys = route.keys,
+          params = {};
+
+      if (!route.regexp) return null;
+
+      var m = route.regexp.exec(on);
+      if (!m) return null;
+
+      for (var i = 1, len = m.length; i < len; ++i) {
+        var key = keys[i - 1];
+
+        var val = m[i];
+
+        if (key && val) {
+          params[key.name] = val;
+        }
+      }
+      return params;
+    }
+
+    function prepareRoute($locationEvent) {
+      var lastRoute = $route.current;
+
+      preparedRoute = parseRoute();
+      preparedRouteIsUpdateOnly = preparedRoute && lastRoute && preparedRoute.$$route === lastRoute.$$route
+          && angular.equals(preparedRoute.pathParams, lastRoute.pathParams)
+          && !preparedRoute.reloadOnSearch && !forceReload;
+
+      if (!preparedRouteIsUpdateOnly && (lastRoute || preparedRoute)) {
+        if ($rootScope.$broadcast('$routeChangeStart', preparedRoute, lastRoute).defaultPrevented) {
+          if ($locationEvent) {
+            $locationEvent.preventDefault();
+          }
+        }
+      }
+    }
+
+    function commitRoute() {
+      var lastRoute = $route.current;
+      var nextRoute = preparedRoute;
+
+      if (preparedRouteIsUpdateOnly) {
+        lastRoute.params = nextRoute.params;
+        angular.copy(lastRoute.params, $routeParams);
+        $rootScope.$broadcast('$routeUpdate', lastRoute);
+      } else if (nextRoute || lastRoute) {
+        forceReload = false;
+        $route.current = nextRoute;
+        if (nextRoute) {
+          if (nextRoute.redirectTo) {
+            if (angular.isString(nextRoute.redirectTo)) {
+              $location.path(interpolate(nextRoute.redirectTo, nextRoute.params)).search(nextRoute.params)
+                       .replace();
+            } else {
+              $location.url(nextRoute.redirectTo(nextRoute.pathParams, $location.path(), $location.search()))
+                       .replace();
+            }
+          }
+        }
+
+        $q.when(nextRoute).
+          then(function() {
+            if (nextRoute) {
+              var locals = angular.extend({}, nextRoute.resolve),
+                  template, templateUrl;
+
+              angular.forEach(locals, function(value, key) {
+                locals[key] = angular.isString(value) ?
+                    $injector.get(value) : $injector.invoke(value, null, null, key);
+              });
+
+              if (angular.isDefined(template = nextRoute.template)) {
+                if (angular.isFunction(template)) {
+                  template = template(nextRoute.params);
+                }
+              } else if (angular.isDefined(templateUrl = nextRoute.templateUrl)) {
+                if (angular.isFunction(templateUrl)) {
+                  templateUrl = templateUrl(nextRoute.params);
+                }
+                templateUrl = $sce.getTrustedResourceUrl(templateUrl);
+                if (angular.isDefined(templateUrl)) {
+                  nextRoute.loadedTemplateUrl = templateUrl;
+                  template = $templateRequest(templateUrl);
+                }
+              }
+              if (angular.isDefined(template)) {
+                locals['$template'] = template;
+              }
+              return $q.all(locals);
+            }
+          }).
+          // after route change
+          then(function(locals) {
+            if (nextRoute == $route.current) {
+              if (nextRoute) {
+                nextRoute.locals = locals;
+                angular.copy(nextRoute.params, $routeParams);
+              }
+              $rootScope.$broadcast('$routeChangeSuccess', nextRoute, lastRoute);
+            }
+          }, function(error) {
+            if (nextRoute == $route.current) {
+              $rootScope.$broadcast('$routeChangeError', nextRoute, lastRoute, error);
+            }
+          });
+      }
+    }
+
+
+    /**
+     * @returns {Object} the current active route, by matching it against the URL
+     */
+    function parseRoute() {
+      // Match a route
+      var params, match;
+      angular.forEach(routes, function(route, path) {
+        if (!match && (params = switchRouteMatcher($location.path(), route))) {
+          match = inherit(route, {
+            params: angular.extend({}, $location.search(), params),
+            pathParams: params});
+          match.$$route = route;
+        }
+      });
+      // No route matched; fallback to "otherwise" route
+      return match || routes[null] && inherit(routes[null], {params: {}, pathParams:{}});
+    }
+
+    /**
+     * @returns {string} interpolation of the redirect path with the parameters
+     */
+    function interpolate(string, params) {
+      var result = [];
+      angular.forEach((string||'').split(':'), function(segment, i) {
+        if (i === 0) {
+          result.push(segment);
+        } else {
+          var segmentMatch = segment.match(/(\w+)(.*)/);
+          var key = segmentMatch[1];
+          result.push(params[key]);
+          result.push(segmentMatch[2] || '');
+          delete params[key];
+        }
+      });
+      return result.join('');
+    }
+  }];
+}
+
+ngRouteModule.provider('$routeParams', $RouteParamsProvider);
+
+
+/**
+ * @ngdoc service
+ * @name $routeParams
+ * @requires $route
+ *
+ * @description
+ * The `$routeParams` service allows you to retrieve the current set of route parameters.
+ *
+ * Requires the {@link ngRoute `ngRoute`} module to be installed.
+ *
+ * The route parameters are a combination of {@link ng.$location `$location`}'s
+ * {@link ng.$location#search `search()`} and {@link ng.$location#path `path()`}.
+ * The `path` parameters are extracted when the {@link ngRoute.$route `$route`} path is matched.
+ *
+ * In case of parameter name collision, `path` params take precedence over `search` params.
+ *
+ * The service guarantees that the identity of the `$routeParams` object will remain unchanged
+ * (but its properties will likely change) even when a route change occurs.
+ *
+ * Note that the `$routeParams` are only updated *after* a route change completes successfully.
+ * This means that you cannot rely on `$routeParams` being correct in route resolve functions.
+ * Instead you can use `$route.current.params` to access the new route's parameters.
+ *
+ * @example
+ * ```js
+ *  // Given:
+ *  // URL: http://server.com/index.html#/Chapter/1/Section/2?search=moby
+ *  // Route: /Chapter/:chapterId/Section/:sectionId
+ *  //
+ *  // Then
+ *  $routeParams ==> {chapterId:'1', sectionId:'2', search:'moby'}
+ * ```
+ */
+function $RouteParamsProvider() {
+  this.$get = function() { return {}; };
+}
+
+ngRouteModule.directive('ngView', ngViewFactory);
+ngRouteModule.directive('ngView', ngViewFillContentFactory);
+
+
+/**
+ * @ngdoc directive
+ * @name ngView
+ * @restrict ECA
+ *
+ * @description
+ * # Overview
+ * `ngView` is a directive that complements the {@link ngRoute.$route $route} service by
+ * including the rendered template of the current route into the main layout (`index.html`) file.
+ * Every time the current route changes, the included view changes with it according to the
+ * configuration of the `$route` service.
+ *
+ * Requires the {@link ngRoute `ngRoute`} module to be installed.
+ *
+ * @animations
+ * enter - animation is used to bring new content into the browser.
+ * leave - animation is used to animate existing content away.
+ *
+ * The enter and leave animation occur concurrently.
+ *
+ * @scope
+ * @priority 400
+ * @param {string=} onload Expression to evaluate whenever the view updates.
+ *
+ * @param {string=} autoscroll Whether `ngView` should call {@link ng.$anchorScroll
+ *                  $anchorScroll} to scroll the viewport after the view is updated.
+ *
+ *                  - If the attribute is not set, disable scrolling.
+ *                  - If the attribute is set without value, enable scrolling.
+ *                  - Otherwise enable scrolling only if the `autoscroll` attribute value evaluated
+ *                    as an expression yields a truthy value.
+ * @example
+    <example name="ngView-directive" module="ngViewExample"
+             deps="angular-route.js;angular-animate.js"
+             animations="true" fixBase="true">
+      <file name="index.html">
+        <div ng-controller="MainCtrl as main">
+          Choose:
+          <a href="Book/Moby">Moby</a> |
+          <a href="Book/Moby/ch/1">Moby: Ch1</a> |
+          <a href="Book/Gatsby">Gatsby</a> |
+          <a href="Book/Gatsby/ch/4?key=value">Gatsby: Ch4</a> |
+          <a href="Book/Scarlet">Scarlet Letter</a><br/>
+
+          <div class="view-animate-container">
+            <div ng-view class="view-animate"></div>
+          </div>
+          <hr />
+
+          <pre>$location.path() = {{main.$location.path()}}</pre>
+          <pre>$route.current.templateUrl = {{main.$route.current.templateUrl}}</pre>
+          <pre>$route.current.params = {{main.$route.current.params}}</pre>
+          <pre>$routeParams = {{main.$routeParams}}</pre>
+        </div>
+      </file>
+
+      <file name="book.html">
+        <div>
+          controller: {{book.name}}<br />
+          Book Id: {{book.params.bookId}}<br />
+        </div>
+      </file>
+
+      <file name="chapter.html">
+        <div>
+          controller: {{chapter.name}}<br />
+          Book Id: {{chapter.params.bookId}}<br />
+          Chapter Id: {{chapter.params.chapterId}}
+        </div>
+      </file>
+
+      <file name="animations.css">
+        .view-animate-container {
+          position:relative;
+          height:100px!important;
+          position:relative;
+          background:white;
+          border:1px solid black;
+          height:40px;
+          overflow:hidden;
+        }
+
+        .view-animate {
+          padding:10px;
+        }
+
+        .view-animate.ng-enter, .view-animate.ng-leave {
+          -webkit-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1.5s;
+          transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1.5s;
+
+          display:block;
+          width:100%;
+          border-left:1px solid black;
+
+          position:absolute;
+          top:0;
+          left:0;
+          right:0;
+          bottom:0;
+          padding:10px;
+        }
+
+        .view-animate.ng-enter {
+          left:100%;
+        }
+        .view-animate.ng-enter.ng-enter-active {
+          left:0;
+        }
+        .view-animate.ng-leave.ng-leave-active {
+          left:-100%;
+        }
+      </file>
+
+      <file name="script.js">
+        angular.module('ngViewExample', ['ngRoute', 'ngAnimate'])
+          .config(['$routeProvider', '$locationProvider',
+            function($routeProvider, $locationProvider) {
+              $routeProvider
+                .when('/Book/:bookId', {
+                  templateUrl: 'book.html',
+                  controller: 'BookCtrl',
+                  controllerAs: 'book'
+                })
+                .when('/Book/:bookId/ch/:chapterId', {
+                  templateUrl: 'chapter.html',
+                  controller: 'ChapterCtrl',
+                  controllerAs: 'chapter'
+                });
+
+              $locationProvider.html5Mode(true);
+          }])
+          .controller('MainCtrl', ['$route', '$routeParams', '$location',
+            function($route, $routeParams, $location) {
+              this.$route = $route;
+              this.$location = $location;
+              this.$routeParams = $routeParams;
+          }])
+          .controller('BookCtrl', ['$routeParams', function($routeParams) {
+            this.name = "BookCtrl";
+            this.params = $routeParams;
+          }])
+          .controller('ChapterCtrl', ['$routeParams', function($routeParams) {
+            this.name = "ChapterCtrl";
+            this.params = $routeParams;
+          }]);
+
+      </file>
+
+      <file name="protractor.js" type="protractor">
+        it('should load and compile correct template', function() {
+          element(by.linkText('Moby: Ch1')).click();
+          var content = element(by.css('[ng-view]')).getText();
+          expect(content).toMatch(/controller\: ChapterCtrl/);
+          expect(content).toMatch(/Book Id\: Moby/);
+          expect(content).toMatch(/Chapter Id\: 1/);
+
+          element(by.partialLinkText('Scarlet')).click();
+
+          content = element(by.css('[ng-view]')).getText();
+          expect(content).toMatch(/controller\: BookCtrl/);
+          expect(content).toMatch(/Book Id\: Scarlet/);
+        });
+      </file>
+    </example>
+ */
+
+
+/**
+ * @ngdoc event
+ * @name ngView#$viewContentLoaded
+ * @eventType emit on the current ngView scope
+ * @description
+ * Emitted every time the ngView content is reloaded.
+ */
+ngViewFactory.$inject = ['$route', '$anchorScroll', '$animate'];
+function ngViewFactory(   $route,   $anchorScroll,   $animate) {
+  return {
+    restrict: 'ECA',
+    terminal: true,
+    priority: 400,
+    transclude: 'element',
+    link: function(scope, $element, attr, ctrl, $transclude) {
+        var currentScope,
+            currentElement,
+            previousLeaveAnimation,
+            autoScrollExp = attr.autoscroll,
+            onloadExp = attr.onload || '';
+
+        scope.$on('$routeChangeSuccess', update);
+        update();
+
+        function cleanupLastView() {
+          if(previousLeaveAnimation) {
+            $animate.cancel(previousLeaveAnimation);
+            previousLeaveAnimation = null;
+          }
+
+          if(currentScope) {
+            currentScope.$destroy();
+            currentScope = null;
+          }
+          if(currentElement) {
+            previousLeaveAnimation = $animate.leave(currentElement);
+            previousLeaveAnimation.then(function() {
+              previousLeaveAnimation = null;
+            });
+            currentElement = null;
+          }
+        }
+
+        function update() {
+          var locals = $route.current && $route.current.locals,
+              template = locals && locals.$template;
+
+          if (angular.isDefined(template)) {
+            var newScope = scope.$new();
+            var current = $route.current;
+
+            // Note: This will also link all children of ng-view that were contained in the original
+            // html. If that content contains controllers, ... they could pollute/change the scope.
+            // However, using ng-view on an element with additional content does not make sense...
+            // Note: We can't remove them in the cloneAttchFn of $transclude as that
+            // function is called before linking the content, which would apply child
+            // directives to non existing elements.
+            var clone = $transclude(newScope, function(clone) {
+              $animate.enter(clone, null, currentElement || $element).then(function onNgViewEnter () {
+                if (angular.isDefined(autoScrollExp)
+                  && (!autoScrollExp || scope.$eval(autoScrollExp))) {
+                  $anchorScroll();
+                }
+              });
+              cleanupLastView();
+            });
+
+            currentElement = clone;
+            currentScope = current.scope = newScope;
+            currentScope.$emit('$viewContentLoaded');
+            currentScope.$eval(onloadExp);
+          } else {
+            cleanupLastView();
+          }
+        }
+    }
+  };
+}
+
+// This directive is called during the $transclude call of the first `ngView` directive.
+// It will replace and compile the content of the element with the loaded template.
+// We need this directive so that the element content is already filled when
+// the link function of another directive on the same element as ngView
+// is called.
+ngViewFillContentFactory.$inject = ['$compile', '$controller', '$route'];
+function ngViewFillContentFactory($compile, $controller, $route) {
+  return {
+    restrict: 'ECA',
+    priority: -400,
+    link: function(scope, $element) {
+      var current = $route.current,
+          locals = current.locals;
+
+      $element.html(locals.$template);
+
+      var link = $compile($element.contents());
+
+      if (current.controller) {
+        locals.$scope = scope;
+        var controller = $controller(current.controller, locals);
+        if (current.controllerAs) {
+          scope[current.controllerAs] = controller;
+        }
+        $element.data('$ngControllerController', controller);
+        $element.children().data('$ngControllerController', controller);
+      }
+
+      link(scope);
+    }
+  };
+}
+
+
+})(window, window.angular);
+/**
+ * @license AngularJS v1.3.0
+ * (c) 2010-2014 Google, Inc. http://angularjs.org
+ * License: MIT
+ */
+(function(window, angular, undefined) {'use strict';
+
+var $resourceMinErr = angular.$$minErr('$resource');
+
+// Helper functions and regex to lookup a dotted path on an object
+// stopping at undefined/null.  The path must be composed of ASCII
+// identifiers (just like $parse)
+var MEMBER_NAME_REGEX = /^(\.[a-zA-Z_$][0-9a-zA-Z_$]*)+$/;
+
+function isValidDottedPath(path) {
+  return (path != null && path !== '' && path !== 'hasOwnProperty' &&
+      MEMBER_NAME_REGEX.test('.' + path));
+}
+
+function lookupDottedPath(obj, path) {
+  if (!isValidDottedPath(path)) {
+    throw $resourceMinErr('badmember', 'Dotted member path "@{0}" is invalid.', path);
+  }
+  var keys = path.split('.');
+  for (var i = 0, ii = keys.length; i < ii && obj !== undefined; i++) {
+    var key = keys[i];
+    obj = (obj !== null) ? obj[key] : undefined;
+  }
+  return obj;
+}
+
+/**
+ * Create a shallow copy of an object and clear other fields from the destination
+ */
+function shallowClearAndCopy(src, dst) {
+  dst = dst || {};
+
+  angular.forEach(dst, function(value, key){
+    delete dst[key];
+  });
+
+  for (var key in src) {
+    if (src.hasOwnProperty(key) && !(key.charAt(0) === '$' && key.charAt(1) === '$')) {
+      dst[key] = src[key];
+    }
+  }
+
+  return dst;
+}
+
+/**
+ * @ngdoc module
+ * @name ngResource
+ * @description
+ *
+ * # ngResource
+ *
+ * The `ngResource` module provides interaction support with RESTful services
+ * via the $resource service.
+ *
+ *
+ * <div doc-module-components="ngResource"></div>
+ *
+ * See {@link ngResource.$resource `$resource`} for usage.
+ */
+
+/**
+ * @ngdoc service
+ * @name $resource
+ * @requires $http
+ *
+ * @description
+ * A factory which creates a resource object that lets you interact with
+ * [RESTful](http://en.wikipedia.org/wiki/Representational_State_Transfer) server-side data sources.
+ *
+ * The returned resource object has action methods which provide high-level behaviors without
+ * the need to interact with the low level {@link ng.$http $http} service.
+ *
+ * Requires the {@link ngResource `ngResource`} module to be installed.
+ *
+ * By default, trailing slashes will be stripped from the calculated URLs,
+ * which can pose problems with server backends that do not expect that
+ * behavior.  This can be disabled by configuring the `$resourceProvider` like
+ * this:
+ *
+ * ```js
+     app.config(['$resourceProvider', function ($resourceProvider) {
+       // Don't strip trailing slashes from calculated URLs
+       $resourceProvider.defaults.stripTrailingSlashes = false;
+     }]);
+ * ```
+ *
+ * @param {string} url A parametrized URL template with parameters prefixed by `:` as in
+ *   `/user/:username`. If you are using a URL with a port number (e.g.
+ *   `http://example.com:8080/api`), it will be respected.
+ *
+ *   If you are using a url with a suffix, just add the suffix, like this:
+ *   `$resource('http://example.com/resource.json')` or `$resource('http://example.com/:id.json')`
+ *   or even `$resource('http://example.com/resource/:resource_id.:format')`
+ *   If the parameter before the suffix is empty, :resource_id in this case, then the `/.` will be
+ *   collapsed down to a single `.`.  If you need this sequence to appear and not collapse then you
+ *   can escape it with `/\.`.
+ *
+ * @param {Object=} paramDefaults Default values for `url` parameters. These can be overridden in
+ *   `actions` methods. If any of the parameter value is a function, it will be executed every time
+ *   when a param value needs to be obtained for a request (unless the param was overridden).
+ *
+ *   Each key value in the parameter object is first bound to url template if present and then any
+ *   excess keys are appended to the url search query after the `?`.
+ *
+ *   Given a template `/path/:verb` and parameter `{verb:'greet', salutation:'Hello'}` results in
+ *   URL `/path/greet?salutation=Hello`.
+ *
+ *   If the parameter value is prefixed with `@` then the value for that parameter will be extracted
+ *   from the corresponding property on the `data` object (provided when calling an action method).  For
+ *   example, if the `defaultParam` object is `{someParam: '@someProp'}` then the value of `someParam`
+ *   will be `data.someProp`.
+ *
+ * @param {Object.<Object>=} actions Hash with declaration of custom action that should extend
+ *   the default set of resource actions. The declaration should be created in the format of {@link
+ *   ng.$http#usage $http.config}:
+ *
+ *       {action1: {method:?, params:?, isArray:?, headers:?, ...},
+ *        action2: {method:?, params:?, isArray:?, headers:?, ...},
+ *        ...}
+ *
+ *   Where:
+ *
+ *   - **`action`** – {string} – The name of action. This name becomes the name of the method on
+ *     your resource object.
+ *   - **`method`** – {string} – Case insensitive HTTP method (e.g. `GET`, `POST`, `PUT`,
+ *     `DELETE`, `JSONP`, etc).
+ *   - **`params`** – {Object=} – Optional set of pre-bound parameters for this action. If any of
+ *     the parameter value is a function, it will be executed every time when a param value needs to
+ *     be obtained for a request (unless the param was overridden).
+ *   - **`url`** – {string} – action specific `url` override. The url templating is supported just
+ *     like for the resource-level urls.
+ *   - **`isArray`** – {boolean=} – If true then the returned object for this action is an array,
+ *     see `returns` section.
+ *   - **`transformRequest`** –
+ *     `{function(data, headersGetter)|Array.<function(data, headersGetter)>}` –
+ *     transform function or an array of such functions. The transform function takes the http
+ *     request body and headers and returns its transformed (typically serialized) version.
+ *     By default, transformRequest will contain one function that checks if the request data is
+ *     an object and serializes to using `angular.toJson`. To prevent this behavior, set
+ *     `transformRequest` to an empty array: `transformRequest: []`
+ *   - **`transformResponse`** –
+ *     `{function(data, headersGetter)|Array.<function(data, headersGetter)>}` –
+ *     transform function or an array of such functions. The transform function takes the http
+ *     response body and headers and returns its transformed (typically deserialized) version.
+ *     By default, transformResponse will contain one function that checks if the response looks like
+ *     a JSON string and deserializes it using `angular.fromJson`. To prevent this behavior, set
+ *     `transformResponse` to an empty array: `transformResponse: []`
+ *   - **`cache`** – `{boolean|Cache}` – If true, a default $http cache will be used to cache the
+ *     GET request, otherwise if a cache instance built with
+ *     {@link ng.$cacheFactory $cacheFactory}, this cache will be used for
+ *     caching.
+ *   - **`timeout`** – `{number|Promise}` – timeout in milliseconds, or {@link ng.$q promise} that
+ *     should abort the request when resolved.
+ *   - **`withCredentials`** - `{boolean}` - whether to set the `withCredentials` flag on the
+ *     XHR object. See
+ *     [requests with credentials](https://developer.mozilla.org/en/http_access_control#section_5)
+ *     for more information.
+ *   - **`responseType`** - `{string}` - see
+ *     [requestType](https://developer.mozilla.org/en-US/docs/DOM/XMLHttpRequest#responseType).
+ *   - **`interceptor`** - `{Object=}` - The interceptor object has two optional methods -
+ *     `response` and `responseError`. Both `response` and `responseError` interceptors get called
+ *     with `http response` object. See {@link ng.$http $http interceptors}.
+ *
+ * @param {Object} options Hash with custom settings that should extend the
+ *   default `$resourceProvider` behavior.  The only supported option is
+ *
+ *   Where:
+ *
+ *   - **`stripTrailingSlashes`** – {boolean} – If true then the trailing
+ *   slashes from any calculated URL will be stripped. (Defaults to true.)
+ *
+ * @returns {Object} A resource "class" object with methods for the default set of resource actions
+ *   optionally extended with custom `actions`. The default set contains these actions:
+ *   ```js
+ *   { 'get':    {method:'GET'},
+ *     'save':   {method:'POST'},
+ *     'query':  {method:'GET', isArray:true},
+ *     'remove': {method:'DELETE'},
+ *     'delete': {method:'DELETE'} };
+ *   ```
+ *
+ *   Calling these methods invoke an {@link ng.$http} with the specified http method,
+ *   destination and parameters. When the data is returned from the server then the object is an
+ *   instance of the resource class. The actions `save`, `remove` and `delete` are available on it
+ *   as  methods with the `$` prefix. This allows you to easily perform CRUD operations (create,
+ *   read, update, delete) on server-side data like this:
+ *   ```js
+ *   var User = $resource('/user/:userId', {userId:'@id'});
+ *   var user = User.get({userId:123}, function() {
+ *     user.abc = true;
+ *     user.$save();
+ *   });
+ *   ```
+ *
+ *   It is important to realize that invoking a $resource object method immediately returns an
+ *   empty reference (object or array depending on `isArray`). Once the data is returned from the
+ *   server the existing reference is populated with the actual data. This is a useful trick since
+ *   usually the resource is assigned to a model which is then rendered by the view. Having an empty
+ *   object results in no rendering, once the data arrives from the server then the object is
+ *   populated with the data and the view automatically re-renders itself showing the new data. This
+ *   means that in most cases one never has to write a callback function for the action methods.
+ *
+ *   The action methods on the class object or instance object can be invoked with the following
+ *   parameters:
+ *
+ *   - HTTP GET "class" actions: `Resource.action([parameters], [success], [error])`
+ *   - non-GET "class" actions: `Resource.action([parameters], postData, [success], [error])`
+ *   - non-GET instance actions:  `instance.$action([parameters], [success], [error])`
+ *
+ *   Success callback is called with (value, responseHeaders) arguments. Error callback is called
+ *   with (httpResponse) argument.
+ *
+ *   Class actions return empty instance (with additional properties below).
+ *   Instance actions return promise of the action.
+ *
+ *   The Resource instances and collection have these additional properties:
+ *
+ *   - `$promise`: the {@link ng.$q promise} of the original server interaction that created this
+ *     instance or collection.
+ *
+ *     On success, the promise is resolved with the same resource instance or collection object,
+ *     updated with data from server. This makes it easy to use in
+ *     {@link ngRoute.$routeProvider resolve section of $routeProvider.when()} to defer view
+ *     rendering until the resource(s) are loaded.
+ *
+ *     On failure, the promise is resolved with the {@link ng.$http http response} object, without
+ *     the `resource` property.
+ *
+ *     If an interceptor object was provided, the promise will instead be resolved with the value
+ *     returned by the interceptor.
+ *
+ *   - `$resolved`: `true` after first server interaction is completed (either with success or
+ *      rejection), `false` before that. Knowing if the Resource has been resolved is useful in
+ *      data-binding.
+ *
+ * @example
+ *
+ * # Credit card resource
+ *
+ * ```js
+     // Define CreditCard class
+     var CreditCard = $resource('/user/:userId/card/:cardId',
+      {userId:123, cardId:'@id'}, {
+       charge: {method:'POST', params:{charge:true}}
+      });
+
+     // We can retrieve a collection from the server
+     var cards = CreditCard.query(function() {
+       // GET: /user/123/card
+       // server returns: [ {id:456, number:'1234', name:'Smith'} ];
+
+       var card = cards[0];
+       // each item is an instance of CreditCard
+       expect(card instanceof CreditCard).toEqual(true);
+       card.name = "J. Smith";
+       // non GET methods are mapped onto the instances
+       card.$save();
+       // POST: /user/123/card/456 {id:456, number:'1234', name:'J. Smith'}
+       // server returns: {id:456, number:'1234', name: 'J. Smith'};
+
+       // our custom method is mapped as well.
+       card.$charge({amount:9.99});
+       // POST: /user/123/card/456?amount=9.99&charge=true {id:456, number:'1234', name:'J. Smith'}
+     });
+
+     // we can create an instance as well
+     var newCard = new CreditCard({number:'0123'});
+     newCard.name = "Mike Smith";
+     newCard.$save();
+     // POST: /user/123/card {number:'0123', name:'Mike Smith'}
+     // server returns: {id:789, number:'0123', name: 'Mike Smith'};
+     expect(newCard.id).toEqual(789);
+ * ```
+ *
+ * The object returned from this function execution is a resource "class" which has "static" method
+ * for each action in the definition.
+ *
+ * Calling these methods invoke `$http` on the `url` template with the given `method`, `params` and
+ * `headers`.
+ * When the data is returned from the server then the object is an instance of the resource type and
+ * all of the non-GET methods are available with `$` prefix. This allows you to easily support CRUD
+ * operations (create, read, update, delete) on server-side data.
+
+   ```js
+     var User = $resource('/user/:userId', {userId:'@id'});
+     User.get({userId:123}, function(user) {
+       user.abc = true;
+       user.$save();
+     });
+   ```
+ *
+ * It's worth noting that the success callback for `get`, `query` and other methods gets passed
+ * in the response that came from the server as well as $http header getter function, so one
+ * could rewrite the above example and get access to http headers as:
+ *
+   ```js
+     var User = $resource('/user/:userId', {userId:'@id'});
+     User.get({userId:123}, function(u, getResponseHeaders){
+       u.abc = true;
+       u.$save(function(u, putResponseHeaders) {
+         //u => saved user object
+         //putResponseHeaders => $http header getter
+       });
+     });
+   ```
+ *
+ * You can also access the raw `$http` promise via the `$promise` property on the object returned
+ *
+   ```
+     var User = $resource('/user/:userId', {userId:'@id'});
+     User.get({userId:123})
+         .$promise.then(function(user) {
+           $scope.user = user;
+         });
+   ```
+
+ * # Creating a custom 'PUT' request
+ * In this example we create a custom method on our resource to make a PUT request
+ * ```js
+ *    var app = angular.module('app', ['ngResource', 'ngRoute']);
+ *
+ *    // Some APIs expect a PUT request in the format URL/object/ID
+ *    // Here we are creating an 'update' method
+ *    app.factory('Notes', ['$resource', function($resource) {
+ *    return $resource('/notes/:id', null,
+ *        {
+ *            'update': { method:'PUT' }
+ *        });
+ *    }]);
+ *
+ *    // In our controller we get the ID from the URL using ngRoute and $routeParams
+ *    // We pass in $routeParams and our Notes factory along with $scope
+ *    app.controller('NotesCtrl', ['$scope', '$routeParams', 'Notes',
+                                      function($scope, $routeParams, Notes) {
+ *    // First get a note object from the factory
+ *    var note = Notes.get({ id:$routeParams.id });
+ *    $id = note.id;
+ *
+ *    // Now call update passing in the ID first then the object you are updating
+ *    Notes.update({ id:$id }, note);
+ *
+ *    // This will PUT /notes/ID with the note object in the request payload
+ *    }]);
+ * ```
+ */
+angular.module('ngResource', ['ng']).
+  provider('$resource', function () {
+    var provider = this;
+
+    this.defaults = {
+      // Strip slashes by default
+      stripTrailingSlashes: true,
+
+      // Default actions configuration
+      actions: {
+        'get': {method: 'GET'},
+        'save': {method: 'POST'},
+        'query': {method: 'GET', isArray: true},
+        'remove': {method: 'DELETE'},
+        'delete': {method: 'DELETE'}
+      }
+    };
+
+    this.$get = ['$http', '$q', function ($http, $q) {
+
+      var noop = angular.noop,
+        forEach = angular.forEach,
+        extend = angular.extend,
+        copy = angular.copy,
+        isFunction = angular.isFunction;
+
+      /**
+       * We need our custom method because encodeURIComponent is too aggressive and doesn't follow
+       * http://www.ietf.org/rfc/rfc3986.txt with regards to the character set
+       * (pchar) allowed in path segments:
+       *    segment       = *pchar
+       *    pchar         = unreserved / pct-encoded / sub-delims / ":" / "@"
+       *    pct-encoded   = "%" HEXDIG HEXDIG
+       *    unreserved    = ALPHA / DIGIT / "-" / "." / "_" / "~"
+       *    sub-delims    = "!" / "$" / "&" / "'" / "(" / ")"
+       *                     / "*" / "+" / "," / ";" / "="
+       */
+      function encodeUriSegment(val) {
+        return encodeUriQuery(val, true).
+          replace(/%26/gi, '&').
+          replace(/%3D/gi, '=').
+          replace(/%2B/gi, '+');
+      }
+
+
+      /**
+       * This method is intended for encoding *key* or *value* parts of query component. We need a
+       * custom method because encodeURIComponent is too aggressive and encodes stuff that doesn't
+       * have to be encoded per http://tools.ietf.org/html/rfc3986:
+       *    query       = *( pchar / "/" / "?" )
+       *    pchar         = unreserved / pct-encoded / sub-delims / ":" / "@"
+       *    unreserved    = ALPHA / DIGIT / "-" / "." / "_" / "~"
+       *    pct-encoded   = "%" HEXDIG HEXDIG
+       *    sub-delims    = "!" / "$" / "&" / "'" / "(" / ")"
+       *                     / "*" / "+" / "," / ";" / "="
+       */
+      function encodeUriQuery(val, pctEncodeSpaces) {
+        return encodeURIComponent(val).
+          replace(/%40/gi, '@').
+          replace(/%3A/gi, ':').
+          replace(/%24/g, '$').
+          replace(/%2C/gi, ',').
+          replace(/%20/g, (pctEncodeSpaces ? '%20' : '+'));
+      }
+
+      function Route(template, defaults) {
+        this.template = template;
+        this.defaults = extend({}, provider.defaults, defaults);
+        this.urlParams = {};
+      }
+
+      Route.prototype = {
+        setUrlParams: function (config, params, actionUrl) {
+          var self = this,
+            url = actionUrl || self.template,
+            val,
+            encodedVal;
+
+          var urlParams = self.urlParams = {};
+          forEach(url.split(/\W/), function (param) {
+            if (param === 'hasOwnProperty') {
+              throw $resourceMinErr('badname', "hasOwnProperty is not a valid parameter name.");
+            }
+            if (!(new RegExp("^\\d+$").test(param)) && param &&
+              (new RegExp("(^|[^\\\\]):" + param + "(\\W|$)").test(url))) {
+              urlParams[param] = true;
+            }
+          });
+          url = url.replace(/\\:/g, ':');
+
+          params = params || {};
+          forEach(self.urlParams, function (_, urlParam) {
+            val = params.hasOwnProperty(urlParam) ? params[urlParam] : self.defaults[urlParam];
+            if (angular.isDefined(val) && val !== null) {
+              encodedVal = encodeUriSegment(val);
+              url = url.replace(new RegExp(":" + urlParam + "(\\W|$)", "g"), function (match, p1) {
+                return encodedVal + p1;
+              });
+            } else {
+              url = url.replace(new RegExp("(\/?):" + urlParam + "(\\W|$)", "g"), function (match,
+                  leadingSlashes, tail) {
+                if (tail.charAt(0) == '/') {
+                  return tail;
+                } else {
+                  return leadingSlashes + tail;
+                }
+              });
+            }
+          });
+
+          // strip trailing slashes and set the url (unless this behavior is specifically disabled)
+          if (self.defaults.stripTrailingSlashes) {
+            url = url.replace(/\/+$/, '') || '/';
+          }
+
+          // then replace collapse `/.` if found in the last URL path segment before the query
+          // E.g. `http://url.com/id./format?q=x` becomes `http://url.com/id.format?q=x`
+          url = url.replace(/\/\.(?=\w+($|\?))/, '.');
+          // replace escaped `/\.` with `/.`
+          config.url = url.replace(/\/\\\./, '/.');
+
+
+          // set params - delegate param encoding to $http
+          forEach(params, function (value, key) {
+            if (!self.urlParams[key]) {
+              config.params = config.params || {};
+              config.params[key] = value;
+            }
+          });
+        }
+      };
+
+
+      function resourceFactory(url, paramDefaults, actions, options) {
+        var route = new Route(url, options);
+
+        actions = extend({}, provider.defaults.actions, actions);
+
+        function extractParams(data, actionParams) {
+          var ids = {};
+          actionParams = extend({}, paramDefaults, actionParams);
+          forEach(actionParams, function (value, key) {
+            if (isFunction(value)) { value = value(); }
+            ids[key] = value && value.charAt && value.charAt(0) == '@' ?
+              lookupDottedPath(data, value.substr(1)) : value;
+          });
+          return ids;
+        }
+
+        function defaultResponseInterceptor(response) {
+          return response.resource;
+        }
+
+        function Resource(value) {
+          shallowClearAndCopy(value || {}, this);
+        }
+
+        Resource.prototype.toJSON = function () {
+          var data = extend({}, this);
+          delete data.$promise;
+          delete data.$resolved;
+          return data;
+        };
+
+        forEach(actions, function (action, name) {
+          var hasBody = /^(POST|PUT|PATCH)$/i.test(action.method);
+
+          Resource[name] = function (a1, a2, a3, a4) {
+            var params = {}, data, success, error;
+
+            /* jshint -W086 */ /* (purposefully fall through case statements) */
+            switch (arguments.length) {
+              case 4:
+                error = a4;
+                success = a3;
+              //fallthrough
+              case 3:
+              case 2:
+                if (isFunction(a2)) {
+                  if (isFunction(a1)) {
+                    success = a1;
+                    error = a2;
+                    break;
+                  }
+
+                  success = a2;
+                  error = a3;
+                  //fallthrough
+                } else {
+                  params = a1;
+                  data = a2;
+                  success = a3;
+                  break;
+                }
+              case 1:
+                if (isFunction(a1)) success = a1;
+                else if (hasBody) data = a1;
+                else params = a1;
+                break;
+              case 0: break;
+              default:
+                throw $resourceMinErr('badargs',
+                  "Expected up to 4 arguments [params, data, success, error], got {0} arguments",
+                  arguments.length);
+            }
+            /* jshint +W086 */ /* (purposefully fall through case statements) */
+
+            var isInstanceCall = this instanceof Resource;
+            var value = isInstanceCall ? data : (action.isArray ? [] : new Resource(data));
+            var httpConfig = {};
+            var responseInterceptor = action.interceptor && action.interceptor.response ||
+              defaultResponseInterceptor;
+            var responseErrorInterceptor = action.interceptor && action.interceptor.responseError ||
+              undefined;
+
+            forEach(action, function (value, key) {
+              if (key != 'params' && key != 'isArray' && key != 'interceptor') {
+                httpConfig[key] = copy(value);
+              }
+            });
+
+            if (hasBody) httpConfig.data = data;
+            route.setUrlParams(httpConfig,
+              extend({}, extractParams(data, action.params || {}), params),
+              action.url);
+
+            var promise = $http(httpConfig).then(function (response) {
+              var data = response.data,
+                promise = value.$promise;
+
+              if (data) {
+                // Need to convert action.isArray to boolean in case it is undefined
+                // jshint -W018
+                if (angular.isArray(data) !== (!!action.isArray)) {
+                  throw $resourceMinErr('badcfg',
+                      'Error in resource configuration for action `{0}`. Expected response to ' +
+                      'contain an {1} but got an {2}', name, action.isArray ? 'array' : 'object',
+                    angular.isArray(data) ? 'array' : 'object');
+                }
+                // jshint +W018
+                if (action.isArray) {
+                  value.length = 0;
+                  forEach(data, function (item) {
+                    if (typeof item === "object") {
+                      value.push(new Resource(item));
+                    } else {
+                      // Valid JSON values may be string literals, and these should not be converted
+                      // into objects. These items will not have access to the Resource prototype
+                      // methods, but unfortunately there
+                      value.push(item);
+                    }
+                  });
+                } else {
+                  shallowClearAndCopy(data, value);
+                  value.$promise = promise;
+                }
+              }
+
+              value.$resolved = true;
+
+              response.resource = value;
+
+              return response;
+            }, function (response) {
+              value.$resolved = true;
+
+              (error || noop)(response);
+
+              return $q.reject(response);
+            });
+
+            promise = promise.then(
+              function (response) {
+                var value = responseInterceptor(response);
+                (success || noop)(value, response.headers);
+                return value;
+              },
+              responseErrorInterceptor);
+
+            if (!isInstanceCall) {
+              // we are creating instance / collection
+              // - set the initial promise
+              // - return the instance / collection
+              value.$promise = promise;
+              value.$resolved = false;
+
+              return value;
+            }
+
+            // instance call
+            return promise;
+          };
+
+
+          Resource.prototype['$' + name] = function (params, success, error) {
+            if (isFunction(params)) {
+              error = success; success = params; params = {};
+            }
+            var result = Resource[name].call(this, params, this, success, error);
+            return result.$promise || result;
+          };
+        });
+
+        Resource.bind = function (additionalParamDefaults) {
+          return resourceFactory(url, extend({}, paramDefaults, additionalParamDefaults), actions);
+        };
+
+        return Resource;
+      }
+
+      return resourceFactory;
+    }];
+  });
+
+
+})(window, window.angular);
+/**
+ * @license AngularJS v1.3.0
+ * (c) 2010-2014 Google, Inc. http://angularjs.org
+ * License: MIT
+ */
+(function(window, angular, undefined) {'use strict';
+
+var $sanitizeMinErr = angular.$$minErr('$sanitize');
+
+/**
+ * @ngdoc module
+ * @name ngSanitize
+ * @description
+ *
+ * # ngSanitize
+ *
+ * The `ngSanitize` module provides functionality to sanitize HTML.
+ *
+ *
+ * <div doc-module-components="ngSanitize"></div>
+ *
+ * See {@link ngSanitize.$sanitize `$sanitize`} for usage.
+ */
+
+/*
+ * HTML Parser By Misko Hevery (misko@hevery.com)
+ * based on:  HTML Parser By John Resig (ejohn.org)
+ * Original code by Erik Arvidsson, Mozilla Public License
+ * http://erik.eae.net/simplehtmlparser/simplehtmlparser.js
+ *
+ * // Use like so:
+ * htmlParser(htmlString, {
+ *     start: function(tag, attrs, unary) {},
+ *     end: function(tag) {},
+ *     chars: function(text) {},
+ *     comment: function(text) {}
+ * });
+ *
+ */
+
+
+/**
+ * @ngdoc service
+ * @name $sanitize
+ * @kind function
+ *
+ * @description
+ *   The input is sanitized by parsing the html into tokens. All safe tokens (from a whitelist) are
+ *   then serialized back to properly escaped html string. This means that no unsafe input can make
+ *   it into the returned string, however, since our parser is more strict than a typical browser
+ *   parser, it's possible that some obscure input, which would be recognized as valid HTML by a
+ *   browser, won't make it through the sanitizer.
+ *   The whitelist is configured using the functions `aHrefSanitizationWhitelist` and
+ *   `imgSrcSanitizationWhitelist` of {@link ng.$compileProvider `$compileProvider`}.
+ *
+ * @param {string} html Html input.
+ * @returns {string} Sanitized html.
+ *
+ * @example
+   <example module="sanitizeExample" deps="angular-sanitize.js">
+   <file name="index.html">
+     <script>
+         angular.module('sanitizeExample', ['ngSanitize'])
+           .controller('ExampleController', ['$scope', '$sce', function($scope, $sce) {
+             $scope.snippet =
+               '<p style="color:blue">an html\n' +
+               '<em onmouseover="this.textContent=\'PWN3D!\'">click here</em>\n' +
+               'snippet</p>';
+             $scope.deliberatelyTrustDangerousSnippet = function() {
+               return $sce.trustAsHtml($scope.snippet);
+             };
+           }]);
+     </script>
+     <div ng-controller="ExampleController">
+        Snippet: <textarea ng-model="snippet" cols="60" rows="3"></textarea>
+       <table>
+         <tr>
+           <td>Directive</td>
+           <td>How</td>
+           <td>Source</td>
+           <td>Rendered</td>
+         </tr>
+         <tr id="bind-html-with-sanitize">
+           <td>ng-bind-html</td>
+           <td>Automatically uses $sanitize</td>
+           <td><pre>&lt;div ng-bind-html="snippet"&gt;<br/>&lt;/div&gt;</pre></td>
+           <td><div ng-bind-html="snippet"></div></td>
+         </tr>
+         <tr id="bind-html-with-trust">
+           <td>ng-bind-html</td>
+           <td>Bypass $sanitize by explicitly trusting the dangerous value</td>
+           <td>
+           <pre>&lt;div ng-bind-html="deliberatelyTrustDangerousSnippet()"&gt;
+&lt;/div&gt;</pre>
+           </td>
+           <td><div ng-bind-html="deliberatelyTrustDangerousSnippet()"></div></td>
+         </tr>
+         <tr id="bind-default">
+           <td>ng-bind</td>
+           <td>Automatically escapes</td>
+           <td><pre>&lt;div ng-bind="snippet"&gt;<br/>&lt;/div&gt;</pre></td>
+           <td><div ng-bind="snippet"></div></td>
+         </tr>
+       </table>
+       </div>
+   </file>
+   <file name="protractor.js" type="protractor">
+     it('should sanitize the html snippet by default', function() {
+       expect(element(by.css('#bind-html-with-sanitize div')).getInnerHtml()).
+         toBe('<p>an html\n<em>click here</em>\nsnippet</p>');
+     });
+
+     it('should inline raw snippet if bound to a trusted value', function() {
+       expect(element(by.css('#bind-html-with-trust div')).getInnerHtml()).
+         toBe("<p style=\"color:blue\">an html\n" +
+              "<em onmouseover=\"this.textContent='PWN3D!'\">click here</em>\n" +
+              "snippet</p>");
+     });
+
+     it('should escape snippet without any filter', function() {
+       expect(element(by.css('#bind-default div')).getInnerHtml()).
+         toBe("&lt;p style=\"color:blue\"&gt;an html\n" +
+              "&lt;em onmouseover=\"this.textContent='PWN3D!'\"&gt;click here&lt;/em&gt;\n" +
+              "snippet&lt;/p&gt;");
+     });
+
+     it('should update', function() {
+       element(by.model('snippet')).clear();
+       element(by.model('snippet')).sendKeys('new <b onclick="alert(1)">text</b>');
+       expect(element(by.css('#bind-html-with-sanitize div')).getInnerHtml()).
+         toBe('new <b>text</b>');
+       expect(element(by.css('#bind-html-with-trust div')).getInnerHtml()).toBe(
+         'new <b onclick="alert(1)">text</b>');
+       expect(element(by.css('#bind-default div')).getInnerHtml()).toBe(
+         "new &lt;b onclick=\"alert(1)\"&gt;text&lt;/b&gt;");
+     });
+   </file>
+   </example>
+ */
+function $SanitizeProvider() {
+  this.$get = ['$$sanitizeUri', function($$sanitizeUri) {
+    return function(html) {
+      var buf = [];
+      htmlParser(html, htmlSanitizeWriter(buf, function(uri, isImage) {
+        return !/^unsafe/.test($$sanitizeUri(uri, isImage));
+      }));
+      return buf.join('');
+    };
+  }];
+}
+
+function sanitizeText(chars) {
+  var buf = [];
+  var writer = htmlSanitizeWriter(buf, angular.noop);
+  writer.chars(chars);
+  return buf.join('');
+}
+
+
+// Regular Expressions for parsing tags and attributes
+var START_TAG_REGEXP =
+       /^<((?:[a-zA-Z])[\w:-]*)((?:\s+[\w:-]+(?:\s*=\s*(?:(?:"[^"]*")|(?:'[^']*')|[^>\s]+))?)*)\s*(\/?)\s*(>?)/,
+  END_TAG_REGEXP = /^<\/\s*([\w:-]+)[^>]*>/,
+  ATTR_REGEXP = /([\w:-]+)(?:\s*=\s*(?:(?:"((?:[^"])*)")|(?:'((?:[^'])*)')|([^>\s]+)))?/g,
+  BEGIN_TAG_REGEXP = /^</,
+  BEGING_END_TAGE_REGEXP = /^<\//,
+  COMMENT_REGEXP = /<!--(.*?)-->/g,
+  DOCTYPE_REGEXP = /<!DOCTYPE([^>]*?)>/i,
+  CDATA_REGEXP = /<!\[CDATA\[(.*?)]]>/g,
+  SURROGATE_PAIR_REGEXP = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g,
+  // Match everything outside of normal chars and " (quote character)
+  NON_ALPHANUMERIC_REGEXP = /([^\#-~| |!])/g;
+
+
+// Good source of info about elements and attributes
+// http://dev.w3.org/html5/spec/Overview.html#semantics
+// http://simon.html5.org/html-elements
+
+// Safe Void Elements - HTML5
+// http://dev.w3.org/html5/spec/Overview.html#void-elements
+var voidElements = makeMap("area,br,col,hr,img,wbr");
+
+// Elements that you can, intentionally, leave open (and which close themselves)
+// http://dev.w3.org/html5/spec/Overview.html#optional-tags
+var optionalEndTagBlockElements = makeMap("colgroup,dd,dt,li,p,tbody,td,tfoot,th,thead,tr"),
+    optionalEndTagInlineElements = makeMap("rp,rt"),
+    optionalEndTagElements = angular.extend({},
+                                            optionalEndTagInlineElements,
+                                            optionalEndTagBlockElements);
+
+// Safe Block Elements - HTML5
+var blockElements = angular.extend({}, optionalEndTagBlockElements, makeMap("address,article," +
+        "aside,blockquote,caption,center,del,dir,div,dl,figure,figcaption,footer,h1,h2,h3,h4,h5," +
+        "h6,header,hgroup,hr,ins,map,menu,nav,ol,pre,script,section,table,ul"));
+
+// Inline Elements - HTML5
+var inlineElements = angular.extend({}, optionalEndTagInlineElements, makeMap("a,abbr,acronym,b," +
+        "bdi,bdo,big,br,cite,code,del,dfn,em,font,i,img,ins,kbd,label,map,mark,q,ruby,rp,rt,s," +
+        "samp,small,span,strike,strong,sub,sup,time,tt,u,var"));
+
+
+// Special Elements (can contain anything)
+var specialElements = makeMap("script,style");
+
+var validElements = angular.extend({},
+                                   voidElements,
+                                   blockElements,
+                                   inlineElements,
+                                   optionalEndTagElements);
+
+//Attributes that have href and hence need to be sanitized
+var uriAttrs = makeMap("background,cite,href,longdesc,src,usemap");
+var validAttrs = angular.extend({}, uriAttrs, makeMap(
+    'abbr,align,alt,axis,bgcolor,border,cellpadding,cellspacing,class,clear,'+
+    'color,cols,colspan,compact,coords,dir,face,headers,height,hreflang,hspace,'+
+    'ismap,lang,language,nohref,nowrap,rel,rev,rows,rowspan,rules,'+
+    'scope,scrolling,shape,size,span,start,summary,target,title,type,'+
+    'valign,value,vspace,width'));
+
+function makeMap(str) {
+  var obj = {}, items = str.split(','), i;
+  for (i = 0; i < items.length; i++) obj[items[i]] = true;
+  return obj;
+}
+
+
+/**
+ * @example
+ * htmlParser(htmlString, {
+ *     start: function(tag, attrs, unary) {},
+ *     end: function(tag) {},
+ *     chars: function(text) {},
+ *     comment: function(text) {}
+ * });
+ *
+ * @param {string} html string
+ * @param {object} handler
+ */
+function htmlParser( html, handler ) {
+  if (typeof html !== 'string') {
+    if (html === null || typeof html === 'undefined') {
+      html = '';
+    } else {
+      html = '' + html;
+    }
+  }
+  var index, chars, match, stack = [], last = html, text;
+  stack.last = function() { return stack[ stack.length - 1 ]; };
+
+  while ( html ) {
+    text = '';
+    chars = true;
+
+    // Make sure we're not in a script or style element
+    if ( !stack.last() || !specialElements[ stack.last() ] ) {
+
+      // Comment
+      if ( html.indexOf("<!--") === 0 ) {
+        // comments containing -- are not allowed unless they terminate the comment
+        index = html.indexOf("--", 4);
+
+        if ( index >= 0 && html.lastIndexOf("-->", index) === index) {
+          if (handler.comment) handler.comment( html.substring( 4, index ) );
+          html = html.substring( index + 3 );
+          chars = false;
+        }
+      // DOCTYPE
+      } else if ( DOCTYPE_REGEXP.test(html) ) {
+        match = html.match( DOCTYPE_REGEXP );
+
+        if ( match ) {
+          html = html.replace( match[0], '');
+          chars = false;
+        }
+      // end tag
+      } else if ( BEGING_END_TAGE_REGEXP.test(html) ) {
+        match = html.match( END_TAG_REGEXP );
+
+        if ( match ) {
+          html = html.substring( match[0].length );
+          match[0].replace( END_TAG_REGEXP, parseEndTag );
+          chars = false;
+        }
+
+      // start tag
+      } else if ( BEGIN_TAG_REGEXP.test(html) ) {
+        match = html.match( START_TAG_REGEXP );
+
+        if ( match ) {
+          // We only have a valid start-tag if there is a '>'.
+          if ( match[4] ) {
+            html = html.substring( match[0].length );
+            match[0].replace( START_TAG_REGEXP, parseStartTag );
+          }
+          chars = false;
+        } else {
+          // no ending tag found --- this piece should be encoded as an entity.
+          text += '<';
+          html = html.substring(1);
+        }
+      }
+
+      if ( chars ) {
+        index = html.indexOf("<");
+
+        text += index < 0 ? html : html.substring( 0, index );
+        html = index < 0 ? "" : html.substring( index );
+
+        if (handler.chars) handler.chars( decodeEntities(text) );
+      }
+
+    } else {
+      html = html.replace(new RegExp("(.*)<\\s*\\/\\s*" + stack.last() + "[^>]*>", 'i'),
+        function(all, text){
+          text = text.replace(COMMENT_REGEXP, "$1").replace(CDATA_REGEXP, "$1");
+
+          if (handler.chars) handler.chars( decodeEntities(text) );
+
+          return "";
+      });
+
+      parseEndTag( "", stack.last() );
+    }
+
+    if ( html == last ) {
+      throw $sanitizeMinErr('badparse', "The sanitizer was unable to parse the following block " +
+                                        "of html: {0}", html);
+    }
+    last = html;
+  }
+
+  // Clean up any remaining tags
+  parseEndTag();
+
+  function parseStartTag( tag, tagName, rest, unary ) {
+    tagName = angular.lowercase(tagName);
+    if ( blockElements[ tagName ] ) {
+      while ( stack.last() && inlineElements[ stack.last() ] ) {
+        parseEndTag( "", stack.last() );
+      }
+    }
+
+    if ( optionalEndTagElements[ tagName ] && stack.last() == tagName ) {
+      parseEndTag( "", tagName );
+    }
+
+    unary = voidElements[ tagName ] || !!unary;
+
+    if ( !unary )
+      stack.push( tagName );
+
+    var attrs = {};
+
+    rest.replace(ATTR_REGEXP,
+      function(match, name, doubleQuotedValue, singleQuotedValue, unquotedValue) {
+        var value = doubleQuotedValue
+          || singleQuotedValue
+          || unquotedValue
+          || '';
+
+        attrs[name] = decodeEntities(value);
+    });
+    if (handler.start) handler.start( tagName, attrs, unary );
+  }
+
+  function parseEndTag( tag, tagName ) {
+    var pos = 0, i;
+    tagName = angular.lowercase(tagName);
+    if ( tagName )
+      // Find the closest opened tag of the same type
+      for ( pos = stack.length - 1; pos >= 0; pos-- )
+        if ( stack[ pos ] == tagName )
+          break;
+
+    if ( pos >= 0 ) {
+      // Close all the open elements, up the stack
+      for ( i = stack.length - 1; i >= pos; i-- )
+        if (handler.end) handler.end( stack[ i ] );
+
+      // Remove the open elements from the stack
+      stack.length = pos;
+    }
+  }
+}
+
+var hiddenPre=document.createElement("pre");
+var spaceRe = /^(\s*)([\s\S]*?)(\s*)$/;
+/**
+ * decodes all entities into regular string
+ * @param value
+ * @returns {string} A string with decoded entities.
+ */
+function decodeEntities(value) {
+  if (!value) { return ''; }
+
+  // Note: IE8 does not preserve spaces at the start/end of innerHTML
+  // so we must capture them and reattach them afterward
+  var parts = spaceRe.exec(value);
+  var spaceBefore = parts[1];
+  var spaceAfter = parts[3];
+  var content = parts[2];
+  if (content) {
+    hiddenPre.innerHTML=content.replace(/</g,"&lt;");
+    // innerText depends on styling as it doesn't display hidden elements.
+    // Therefore, it's better to use textContent not to cause unnecessary
+    // reflows. However, IE<9 don't support textContent so the innerText
+    // fallback is necessary.
+    content = 'textContent' in hiddenPre ?
+      hiddenPre.textContent : hiddenPre.innerText;
+  }
+  return spaceBefore + content + spaceAfter;
+}
+
+/**
+ * Escapes all potentially dangerous characters, so that the
+ * resulting string can be safely inserted into attribute or
+ * element text.
+ * @param value
+ * @returns {string} escaped text
+ */
+function encodeEntities(value) {
+  return value.
+    replace(/&/g, '&amp;').
+    replace(SURROGATE_PAIR_REGEXP, function (value) {
+      var hi = value.charCodeAt(0);
+      var low = value.charCodeAt(1);
+      return '&#' + (((hi - 0xD800) * 0x400) + (low - 0xDC00) + 0x10000) + ';';
+    }).
+    replace(NON_ALPHANUMERIC_REGEXP, function(value){
+      return '&#' + value.charCodeAt(0) + ';';
+    }).
+    replace(/</g, '&lt;').
+    replace(/>/g, '&gt;');
+}
+
+/**
+ * create an HTML/XML writer which writes to buffer
+ * @param {Array} buf use buf.jain('') to get out sanitized html string
+ * @returns {object} in the form of {
+ *     start: function(tag, attrs, unary) {},
+ *     end: function(tag) {},
+ *     chars: function(text) {},
+ *     comment: function(text) {}
+ * }
+ */
+function htmlSanitizeWriter(buf, uriValidator){
+  var ignore = false;
+  var out = angular.bind(buf, buf.push);
+  return {
+    start: function(tag, attrs, unary){
+      tag = angular.lowercase(tag);
+      if (!ignore && specialElements[tag]) {
+        ignore = tag;
+      }
+      if (!ignore && validElements[tag] === true) {
+        out('<');
+        out(tag);
+        angular.forEach(attrs, function(value, key){
+          var lkey=angular.lowercase(key);
+          var isImage = (tag === 'img' && lkey === 'src') || (lkey === 'background');
+          if (validAttrs[lkey] === true &&
+            (uriAttrs[lkey] !== true || uriValidator(value, isImage))) {
+            out(' ');
+            out(key);
+            out('="');
+            out(encodeEntities(value));
+            out('"');
+          }
+        });
+        out(unary ? '/>' : '>');
+      }
+    },
+    end: function(tag){
+        tag = angular.lowercase(tag);
+        if (!ignore && validElements[tag] === true) {
+          out('</');
+          out(tag);
+          out('>');
+        }
+        if (tag == ignore) {
+          ignore = false;
+        }
+      },
+    chars: function(chars){
+        if (!ignore) {
+          out(encodeEntities(chars));
+        }
+      }
+  };
+}
+
+
+// define ngSanitize module and register $sanitize service
+angular.module('ngSanitize', []).provider('$sanitize', $SanitizeProvider);
+
+/* global sanitizeText: false */
+
+/**
+ * @ngdoc filter
+ * @name linky
+ * @kind function
+ *
+ * @description
+ * Finds links in text input and turns them into html links. Supports http/https/ftp/mailto and
+ * plain email address links.
+ *
+ * Requires the {@link ngSanitize `ngSanitize`} module to be installed.
+ *
+ * @param {string} text Input text.
+ * @param {string} target Window (_blank|_self|_parent|_top) or named frame to open links in.
+ * @returns {string} Html-linkified text.
+ *
+ * @usage
+   <span ng-bind-html="linky_expression | linky"></span>
+ *
+ * @example
+   <example module="linkyExample" deps="angular-sanitize.js">
+     <file name="index.html">
+       <script>
+         angular.module('linkyExample', ['ngSanitize'])
+           .controller('ExampleController', ['$scope', function($scope) {
+             $scope.snippet =
+               'Pretty text with some links:\n'+
+               'http://angularjs.org/,\n'+
+               'mailto:us@somewhere.org,\n'+
+               'another@somewhere.org,\n'+
+               'and one more: ftp://127.0.0.1/.';
+             $scope.snippetWithTarget = 'http://angularjs.org/';
+           }]);
+       </script>
+       <div ng-controller="ExampleController">
+       Snippet: <textarea ng-model="snippet" cols="60" rows="3"></textarea>
+       <table>
+         <tr>
+           <td>Filter</td>
+           <td>Source</td>
+           <td>Rendered</td>
+         </tr>
+         <tr id="linky-filter">
+           <td>linky filter</td>
+           <td>
+             <pre>&lt;div ng-bind-html="snippet | linky"&gt;<br>&lt;/div&gt;</pre>
+           </td>
+           <td>
+             <div ng-bind-html="snippet | linky"></div>
+           </td>
+         </tr>
+         <tr id="linky-target">
+          <td>linky target</td>
+          <td>
+            <pre>&lt;div ng-bind-html="snippetWithTarget | linky:'_blank'"&gt;<br>&lt;/div&gt;</pre>
+          </td>
+          <td>
+            <div ng-bind-html="snippetWithTarget | linky:'_blank'"></div>
+          </td>
+         </tr>
+         <tr id="escaped-html">
+           <td>no filter</td>
+           <td><pre>&lt;div ng-bind="snippet"&gt;<br>&lt;/div&gt;</pre></td>
+           <td><div ng-bind="snippet"></div></td>
+         </tr>
+       </table>
+     </file>
+     <file name="protractor.js" type="protractor">
+       it('should linkify the snippet with urls', function() {
+         expect(element(by.id('linky-filter')).element(by.binding('snippet | linky')).getText()).
+             toBe('Pretty text with some links: http://angularjs.org/, us@somewhere.org, ' +
+                  'another@somewhere.org, and one more: ftp://127.0.0.1/.');
+         expect(element.all(by.css('#linky-filter a')).count()).toEqual(4);
+       });
+
+       it('should not linkify snippet without the linky filter', function() {
+         expect(element(by.id('escaped-html')).element(by.binding('snippet')).getText()).
+             toBe('Pretty text with some links: http://angularjs.org/, mailto:us@somewhere.org, ' +
+                  'another@somewhere.org, and one more: ftp://127.0.0.1/.');
+         expect(element.all(by.css('#escaped-html a')).count()).toEqual(0);
+       });
+
+       it('should update', function() {
+         element(by.model('snippet')).clear();
+         element(by.model('snippet')).sendKeys('new http://link.');
+         expect(element(by.id('linky-filter')).element(by.binding('snippet | linky')).getText()).
+             toBe('new http://link.');
+         expect(element.all(by.css('#linky-filter a')).count()).toEqual(1);
+         expect(element(by.id('escaped-html')).element(by.binding('snippet')).getText())
+             .toBe('new http://link.');
+       });
+
+       it('should work with the target property', function() {
+        expect(element(by.id('linky-target')).
+            element(by.binding("snippetWithTarget | linky:'_blank'")).getText()).
+            toBe('http://angularjs.org/');
+        expect(element(by.css('#linky-target a')).getAttribute('target')).toEqual('_blank');
+       });
+     </file>
+   </example>
+ */
+angular.module('ngSanitize').filter('linky', ['$sanitize', function($sanitize) {
+  var LINKY_URL_REGEXP =
+        /((ftp|https?):\/\/|(mailto:)?[A-Za-z0-9._%+-]+@)\S*[^\s.;,(){}<>"]/,
+      MAILTO_REGEXP = /^mailto:/;
+
+  return function(text, target) {
+    if (!text) return text;
+    var match;
+    var raw = text;
+    var html = [];
+    var url;
+    var i;
+    while ((match = raw.match(LINKY_URL_REGEXP))) {
+      // We can not end in these as they are sometimes found at the end of the sentence
+      url = match[0];
+      // if we did not match ftp/http/mailto then assume mailto
+      if (match[2] == match[3]) url = 'mailto:' + url;
+      i = match.index;
+      addText(raw.substr(0, i));
+      addLink(url, match[0].replace(MAILTO_REGEXP, ''));
+      raw = raw.substring(i + match[0].length);
+    }
+    addText(raw);
+    return $sanitize(html.join(''));
+
+    function addText(text) {
+      if (!text) {
+        return;
+      }
+      html.push(sanitizeText(text));
+    }
+
+    function addLink(url, text) {
+      html.push('<a ');
+      if (angular.isDefined(target)) {
+        html.push('target="');
+        html.push(target);
+        html.push('" ');
+      }
+      html.push('href="');
+      html.push(url);
+      html.push('">');
+      addText(text);
+      html.push('</a>');
+    }
+  };
+}]);
+
+
+})(window, window.angular);
+'use strict';
+
+// custom musicBox directives
+// not very used.. only for video players in v1.
+// some tests for a reafactoring commented
+
+angular.module('musicBox.directives', []).directive('fluid', 
+
+  function($rootScope) {
+     // http://www.openstreetmap.org/export/embed.html?bbox=-407.8125%2C-85.45805784937232%2C226.40625%2C85.56806584676865&amp;layer=hot
+    // http://www.openstreetmap.org/export/embed.html?bbox=0.68115234375%2C43.78695837311561%2C20.06103515625%2C51.795027225829145&amp;layer=mapnik
+// http://player.vimeo.com/video/107038653
+//  https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/172455259&amp;auto_play=false&amp;hide_related=false&amp;show_comments=true&amp;show_user=true&amp;show_reposts=false&amp;visual=true
+    function link(scope, elem, attr) {
+         
+         // uh ?? 
+         console.log(scope.$parent.$parent.$parent.markup.position)
+         
+         if(scope.subtype == 'open-street-map'){
+
+           elem.children(0)[0].style.width = '800px';
+           elem.children(0)[0].style.height ='800px';
+
+         }
+         else{
+            elem.children(0)[0].style.width = '800px'
+            elem.children(0)[0].style.height ='800px'
+         }
+    }
+    return {
+          scope: {
+            url   : '@',
+            subtype   : '@', 
+          },
+          link:link,
+          template: '<iframe  webkitallowfullscreen mozallowfullscreen allowfullscreen scrolling="no" frameborder="no" src="{{url}}"></iframe><p>{{subtype}}</p>'
+    };
+}).directive('lt', function() {
+    return {
+  // template: '{{l.char}}',
+   transclude :true,
+   // replace :true,
+      restrict: 'EA',
+      link: function(scope, elem, attrs) { 
+          elem.bind('click', function() {
+            scope.$parent.$parent.over(scope, 'click')
+            //console.log(scope)
+          //  alert('sd') 
+          });
+          elem.bind('mousedown', function() {
+             
+              // console.log(scope.ltLetterorder)
+              //alert(attrs.chars)
+            scope.$parent.$parent.over( scope, 'down')
+          });
+          elem.bind('mouseup', function() {
+              // console.log(scope.ltLetterorder)
+              //alert(attrs.chars)
+            scope.$parent.$parent.over( scope, 'up')
+          });
+      }
+    };
+  });
 'use strict';
 
 // Declare app level module which depends on filters, and services
-angular.module('musicBox',  ['ngLocale', 'ngResource', 'musicBox.filters', 'ngRoute', 'musicBox.services', 'musicBox.directives', 'ngSanitize']).
-  config(['$localeProvider','$routeProvider', '$locationProvider', '$sceProvider', function($localeProvider,$routeProvider, $locationProvider, $sceProvider ) {
+
+
+
+angular.module('musicBox',  ['musicBox.controller','ngLocale', 'ngResource', 'ngRoute','musicBox.services', 'musicBox.directives', 'ngSanitize']).
+  config(['$localeProvider','$routeProvider', '$locationProvider','$sceDelegateProvider', '$sceProvider', function($localeProvider,$routeProvider, $locationProvider, $sceDelegateProvider,$sceProvider ) {
     $routeProvider.
  	   when('/', {
         templateUrl: 'partials/document',
         controller: DocumentCtrl
       }).
       when('/doc/create', {
-         templateUrl: '/partials/document_new',
+        templateUrl: '/partials/document_new',
         controller: DocumentNewCtrl
       }).
        when('/login', {
-         templateUrl: '/partials/document_new',
-        controller: DocumentNewCtrl
+         templateUrl: '/partials/login',
+        controller: UserCtrl
       }).
        when('/signup', {
         templateUrl: '/partials/signup',
-        controller: SignUpCtrl
+        controller: UserCtrl
       }).
       when('/doc/:docid', {
         templateUrl: '/../partials/document',
@@ -18236,55 +20594,44 @@ angular.module('musicBox',  ['ngLocale', 'ngResource', 'musicBox.filters', 'ngRo
      
       when('/me/account', {
         templateUrl: '/partials/user_account',
-        controller: UserCtrl
+        controller: UserProfileCtrl
       }).
-      when('_=_', {
-        redirectTo: '/!'
+       when('/room/:room_slug', {
+        templateUrl: '/partials/sockets_list',
+        controller: SocketsListCtrl
       }).
-      
-     //     
-
-     
+      when('#_=_', {
+        redirectTo: '/'
+      }).
       otherwise({
-        redirectTo: '/!'
+        redirectTo: '/'
       });
       $locationProvider.html5Mode(true);
       $locationProvider.hashPrefix('!');
-
+     // $sceDelegateProvider.resourceUrlWhitelist(['self', new RegExp('^(http[s]?):\/\/(w{3}.)?soundcloud\.com/.+$')]);
 
       //console.log($localeProvider)
-
-     
-     
-
-      // $sceProvider.enabled(false);
-     //$sceDelegateProvider.resourceUrlWhitelist(['.*']);
+      $sceProvider.enabled(false);
+   //  $sceDelegateProvider.resourceUrlWhitelist(['*']);
     }
-  ]);
+  ])
+  // .config( ['$controllerProvider', function($controllerProvider) { $controllerProvider.allowGlobals(); }]);
+
 
 
 // instead of empty file include, but files exist #v+
 // if/not included switcher
-angular.module('musicBox.filters', [])
-angular.module('musicBox.directives', [])
-
-
-// todo doc     
-
-/**
+ /**
 * @constructor
 */
 // this file contains 
 // event register
 // thx to btford seed  : https://github.com/btford/angular-socket-io-im/
 var musicBox =  angular.module('musicBox.services', []);
-/// to load with config.json via index / routes.
-//console.log(USE_SOCKET_SERVER)
-//var USE_SOCKET_SERVER = true;
 musicBox.run(function($rootScope) {
     console.log('cross controllers service listening ..')
     /*
-        Receive emitted message and broadcast it.
+      Receive emitted message and broadcast it.
     */
     // $rootScope.$on('summarizeEvent', function(event, args) {
        // $rootScope.$broadcast('summarize', args);
@@ -18296,18 +20643,16 @@ musicBox.run(function($rootScope, $http, $route) {
     if(cur && prev && cur !== prev){
       console.log(prev.originalPath)
       console.log(cur.originalPath)
-
-
-
-     // $rootScope.$emit('docEvent', {action: 'reload' });
-
+       // $rootScope.$emit('docEvent', {action: 'reload' });
       ///////if(prev.originalPath == '')
       //
       // > from '/docs/:mode' to '/doc/:docid'
-
       //console.log('route.change')
+       console.log($route)
+       $rootScope.doc = '';
+       $rootScope.ui = '';
 
-      console.log($route)
+
   }
   });
 
@@ -18335,88 +20680,107 @@ musicBox.run(function($rootScope, $http, $route) {
     $rootScope.$on('keyEvent', function(event, args) {
         $rootScope.$broadcast('key', args);
     });
+});// todo doc   
+
+
+// main "service / angular factory"
+// handle POST/GET calls to api (rest) for document, doc_options, markups .. backend methods
+
+// mainly called from contollers (on load, save / edits from UI )
+// can emit events
+
+// "MusicBox" algorythm (sorting, distribution, letters system)
 
 
 
-})
-
-
-
-// todo doc     
-
-// 
-
-// this file contains 
-
-
-// document service
-
-// init
-//
-
-
-
-// All you need to do is pass your configuration as third parameter to the chart function
-
-
-musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $routeParams, socket, renderfactory) {
-   
-    return function (inf) {
+musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $routeParams, socket, renderfactory, $locale) {
+ return function (inf) {
     var self = {
-      init: function () {
-          var docid = '';
-          if($routeParams.docid){
+
+     
+
+      load: function () {
+        var docid = 'homepage';
+        if($routeParams.docid){
             docid = $routeParams.docid
-          }
-          else{
-            docid = 'homepage'
-          }
-          
+        }
 
-          if(USERIN){
-            //console.log(USERIN)
-            $rootScope.userin = USERIN;
-          }
+        
+        $http.get(api_url+'/doc/'+docid).success(function(d) {
+              // redirects if doc is null
+              if(!d.doc && docid !=='homepage'){
+               // api routing should already had redirects..
+               window.location = root_url+'/doc'; // error page 
+               return;
+              }
+              // enough for load.
+              // init-set 
+              self.init(d);
+         });
+        
+      },
+      
 
 
-          $http.get(api_url+'/doc/'+docid).success(function(d) {
-             //console.log(m)
+      // set doc object after an api call (first load or any other callback)
+      init: function (d) {
+
+             if(d.userin){
+                // not an absulte condition, api will always check rights
+                $rootScope.userin = d.userin;
+                //console.log($rootScope.userin)
+              }
+              else{
+                $rootScope.userin = new Object({'username':''});
+              }
+
               $rootScope.doc = d.doc;
-              /// $rootScope.doc.formated_date= 'last update '+moment(d.doc.updated).calendar() +', '+moment(d.doc.updated).fromNow(); 
-              $rootScope.doc.formated_date = d.doc.updated
+              $rootScope.doc.formated_date=  moment(d.doc.updated).calendar() +', '+moment(d.doc.updated).fromNow(); 
+              //$rootScope.doc.formated_date = d.doc.updated
                // console.log($rootScope.doc.user)
              
                self.apply_object_options('document', $rootScope.doc.doc_options)
                self.apply_object_options('author', d.doc.user.user_options)
+               
                if(d.doc.room){
-                               self.apply_object_options('room', d.doc.room.room_options)
-
+                  $rootScope.doc.room__id = d.doc.room._id;
+                  // self.apply_object_options('room', d.doc.room.room_options)
+               }
+               else{
+                   $rootScope.doc.room__id = '';
+                   $rootScope.doc.room = new Object({'_id':'-'});
                }
                //console.log(d.markups_type)
 
-               if($rootScope.userin._id ==  $rootScope.doc.user._id ){
-                console.log('is owner')
-               }
-               else{
-                  console.log('is !owner')
+                $rootScope.doc_owner = d.is_owner;
+                console.log('is owner:'+ $rootScope.doc_owner)
+                document.title = $rootScope.doc.title
+                // $rootScope.available_sections_objects   = d.markups_type[0]
+               
+                var encoded_url = root_url;
+                if($rootScope.doc.slug !=='homepage'){
+                    encoded_url += '/doc/'+$rootScope.doc.slug;
+                }
+                $rootScope.doc.encoded_url = urlencode(encoded_url);
+                
+                // test
+                // $rootScope.selectingd = 'init';        
 
-               }
+                self.init_containers()
+                return
 
-            $rootScope.available_sections_objects  = d.markups_type[0]
-            self.init_containers()  
-         })
-        
-        // equivalence
-        //$rootScope.$emit('docEvent', {action: 'doc_ready', type: 'load', collection_type: 'doc', collection:doc});
-       
-
+                // equivalent : 
+                //$rootScope.$emit('docEvent', {action: 'doc_ready', type: 'load', collection_type: 'doc', collection:doc});
       },
 
       /**
       * init containers
       * @function DocumentCtrl#init_containers
       */
+
+
       init_containers: function () {
+
         $rootScope.sectionstocount = 0;
         $rootScope.doc.markups  = _.sortBy($rootScope.doc.markups,function (num) {
           return num.start;
@@ -18485,26 +20849,63 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
         //  
         // START Looping each SECTION
         // 
-        $rootScope.letters = new Array()
+        $rootScope.letters = [];
+        var temp_letters = [];
          //var data_serie = new Array()
 
+
+         $rootScope.max_reached_letter = 0;
         _.each($rootScope.containers, function(container, index){
+
+
+            container.selecting = -1;
+    
+            // reach letter max test
+            if(container.end > $rootScope.max_reached_letter){
+              $rootScope.max_reached_letter = container.end
+            } 
+
+            // continous test (prev end match current start)
+            if($rootScope.containers[index-1]){
+              var container_prev_end = ($rootScope.containers[index-1].end)+1;
+              if(container_prev_end !== container.start){
+                console.log('discontinous section found '+container_prev_end+' /vs/'+container.start)
+              }
+            }
+          
           //console.log(section)
-          self.fill_chars(container,index);
+         
+          // populate letters as objects.
+
+         // self.fill_chars(container,index);
+         $rootScope.containers[index]['letters'] = []
+         var  temp_letters  =  self.fill_chars(container,index);
+       
+
           // data_serie.push(container.start)
           //$rootScope.objects_sections[index] = new Array();
-          $rootScope.containers[index]['objects'] = new Array();
-          $rootScope.containers[index]['objects_count'] = new Array();
-          $rootScope.containers[index]['objects_count']['by_positions'] = new Array();
-           $rootScope.containers[index].section_classes = '';
-//          $rootScope.containers[index]['classes'] = new Array();
-          //$rootScope.objects_sections[index]['global'] = new Array();
+          $rootScope.containers[index]['objects'] = [];
+          $rootScope.containers[index]['objects_count'] = [];
+          $rootScope.containers[index]['objects_count']['by_positions'] = [];
+          $rootScope.containers[index]['objects_count']['all'] = [];
+
+
+          // section can have css classes and inlined styles (background-image)
+          $rootScope.containers[index].section_classes = '';
+          $rootScope.containers[index].section_styles  = '';
+
+
+//          $rootScope.containers[index]['classes'] =[];
+          //$rootScope.objects_sections[index]['global'] = [];
           _.each($rootScope.available_sections_objects, function(o, obj_index){
-            $rootScope.containers[index]['objects'][$rootScope.available_sections_objects[obj_index]] = new Array();
+            $rootScope.containers[index]['objects'][$rootScope.available_sections_objects[obj_index]] = [];
               // and each subs objects an array of each positions
+               $rootScope.containers[index]['objects_count']['all']= new Object({'count':0, 'has_object':false})
+
+
               _.each(render.posAvailable() , function(op){ // op: left, right, ..
                 $rootScope.containers[index]['objects_count']['by_positions'][op.name] = new Object({'count':0, 'has_object':false})
-                $rootScope.containers[index]['objects'][$rootScope.available_sections_objects[obj_index]][op.name] = new Array();
+                $rootScope.containers[index]['objects'][$rootScope.available_sections_objects[obj_index]][op.name] =[];
               });
           });
 
@@ -18512,6 +20913,10 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
           // START Looping each TEXTDATAS
           //
           _.each($rootScope.doc.markups, function(markup){
+            markup.offset_start = 0;
+            markup.offset_end = 0;
+            //markup.sectionin = false;
+            markup.isolated = true;
 
             var i_array = 0;  
               //Only if textdata is in sections ranges
@@ -18520,16 +20925,26 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
               // some commons attributes
               // > todo use states objects
               markup.sectionin = index;
+              markup.isolated = false;
               /// keep open test :
               //console.log('keep open')
               markup.selected = false;
-              markup.editing  = false;
+              markup.editing  = '';
+              markup.inrange  = true;
+              markup.uptodate = '';
 
+              // user by_me test
+              markup.by_me = 'false'
+              if( markup.user_id._id && $rootScope.userin._id  && ($rootScope.userin._id == markup.user_id._id ) )  {
+                   markup.by_me = 'true';
+              }
+
+               markup.user_options =  self.apply_object_options('markup_user_options',markup.user_id.user_options)
 
               _.each($rootScope.ui.selected_objects, function(obj){
                 //console.log('keep opn'+obj._id)
                 if(markup._id == obj._id){
-                  markup.selected = true;
+                 // markup.selected = true;
                   // should select ranges too..
                 }
               })
@@ -18539,58 +20954,99 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
                   markup.editing = true;
                 }
               })
-              
-
-              
-              markup.explicit_string  =   '';
-              var i;
-              for (i = markup.start; i < markup.end; i++) {
-                var j = i - $rootScope.containers[index].start;
-                markup.explicit_string += $rootScope.containers[index].fulltext[j];
-              }
-
+        
 
               if(markup.type=='container_class' ){ // or pos == inlined
                 //console.log(markup)
                 //$rootScope.containers[index]['classes'].push(markup.metadata)
                    $rootScope.containers[index].section_classes += markup.metadata+' ';
+
               }
 
-              
-              if(markup.type=='markup' ){ // or pos == inlined
+              if(markup.type == 'media' || markup.type == 'child'){
+                     $rootScope.containers[index].section_classes += 'has_image ';
+                     if(markup.position){
+                        $rootScope.containers[index].section_classes += ' focus_side_'+markup.position +' ';
+                     }
 
+                     if(markup.position == 'background'){
+                        $rootScope.containers[index].section_styles = 'background-image:url('+markup.metadata+')' ;
+                     }
+
+              }
+
+              // special cases for chil documents (refs as doc_id in markup record)
+              markup.doc_id_id = '';
+              if(markup.type =='child'){ 
+                // to keep doc_id._id (just id as string) in model and not pass to post object later..
+                if(markup.doc_id){ 
+                   markup.doc_id_id = markup.doc_id._id;
+                    // markup.doc_id_id.uuser = markup.doc_id.user;
+                    // console.log( markup.doc_id)
+
+                   if(markup.doc_id.doc_options){
+                     // m.markup.child_options = [];
+                     var  options_array =  [];
+                      markup.child_options = [];
+                      _.each(markup.doc_id.doc_options , function(option){
+                        options_array[option.option_name] = option.option_value
+                      });
+                      markup.child_options = options_array
+                    }
+                }
+                //console.log('children call ...')
+              }
+          
+              if(markup.type=='markup' || markup.type == 'hyperlink'  || markup.type=='comment' || markup.type=='note' || markup.type=='semantic'  ){ // or pos == inlined
 
                   var j_arr=0;
                   var into_for = 0;
                   //console.log('section end:'+section.end)
                   //console.log('fc:'+ parseInt(section.end) - parseInt(section.start) );
                   var size_object = parseInt(markup.end) - parseInt(markup.start) -1;
-                  
+                  markup.explicit_string  =   '';
                   for (var pos= markup.start; pos<=markup.end; pos++){ 
-
-                    // pushing class to each letter..
+                    
+                    // push class to each letter..
                     var delta = parseInt(markup.start) - parseInt(container.start) + j_arr;
                     
-                    if( pos == markup.start  && (markup.subtype== 'list-item' || markup.subtype== 'h1'  || markup.subtype== 'h2' || markup.subtype== 'h3'  || markup.subtype== 'h4'  || markup.subtype== 'h5'  || markup.subtype== 'h6' || markup.subtype== 'cite' || markup.subtype== 'code'   )  )   {
-                      //as object ?  
-                      //$rootScope.letters[index][delta].fi_nd.fi = true; 
+                    if($rootScope.doc.content[delta]){
+                        markup.explicit_string += $rootScope.doc.content[delta];
+                    }
+                    // only to markup with type markup
+                    if( markup.subtype=='h1' ||  markup.subtype=='h2' ||  markup.subtype=='h3' || markup.subtype=='h4' || markup.subtype=='h5' || markup.subtype=='h6' || markup.subtype=='list-item')  {
+
+                          if(pos == markup.start ){
+                             temp_letters[delta]['classes'].push('fi')
+                            
+                          }
+                          if( size_object ==  j_arr){
+                            temp_letters[delta+1]['classes'].push('nd')
+
+                          }
+                          if(j_arr == 0){
+                            //$rootScope.letters[index][delta]['classes'].push('nd')
+                          }
+                          //as object ?  
+                          //$rootScope.letters[index][delta].fi_nd.fi = true; 
+                    }
+
                     
-                      $rootScope.letters[index][delta]['classes'].push('fi')
+           
 
+                    //$rootScope.letters[index][delta]['classes'] = _.without($rootScope.letters[index][delta]['classes'],'selected')
+                    //$rootScope.letters[index][delta]['classes'] = _.without($rootScope.letters[index][delta]['classes'],'editing')
 
+                    if(markup.editing === true ){
+                     // $rootScope.letters[index][delta]['classes'].push('editing')
+                      temp_letters[delta]['classes'].push('editing')
+
+                      /* L+ */
                     }
-
-                    //console.log(size_object +'/'+ j_arr)
-                    //console.log(delta+ '-' +section.start+'--'+a.start+'--'+deltaz+'?end'+into_for+' / '+j_arr +'/'+i_array)
-                    if( ( size_object ==  j_arr ) && (markup.subtype== 'list-item' || markup.subtype== 'h1'  || markup.subtype== 'h2' || markup.subtype== 'h3'  || markup.subtype== 'h4'  || markup.subtype== 'h5'  || markup.subtype== 'h6' || markup.subtype== 'cite' || markup.subtype== 'code'  )  )   {
-                       // $rootScope.letters[index][delta+1].fi_nd.nd = true; 
-                       $rootScope.letters[index][delta+1]['classes'].push('nd')
-                    }
-
                     if(markup.selected === true){
-                      $rootScope.letters[index][delta]['classes'].push('selected')
+                     // temp_letters[delta]['classes'].push('selected')
+                       /* L+ */
                     }
-
 
                     //$rootScope.letters[section_count][delta]['char'] =  j_arr;
                     //if(ztype && ztype== 'note'){
@@ -18599,16 +21055,38 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
 
                     //}
                     //else{
-                      $rootScope.letters[index][delta]['classes'].push(markup.subtype);
+                      
+                      if(temp_letters[delta] && markup.subtype){
+                          
+                          // if twice, adds "_" to subtype-class
+                          if(_.contains(temp_letters[delta]['classes'], markup.subtype) ) {
+                                  temp_letters[delta]['classes'].push('_'+markup.subtype);
+                          } 
+                          else{
+                                temp_letters[delta]['classes'].push(markup.subtype);
+                          }
+                      }
+
+                      if(temp_letters[delta] && markup.depth){
+                           temp_letters[delta]['classes'].push('depth_'+markup.depth);
+                      }
+
+                      if(temp_letters[delta] && markup.status){
+                           temp_letters[delta]['classes'].push('status_'+markup.status);
+                      }
+
+
+
+                      if( markup.type=='semantic'){
+                          temp_letters[delta]['classes'].push(markup.type);
+                        
+                      }
                       //$rootScope.letters[section_count][delta]['objects'].push(a);
                           //      $rootScope.letters[section_count][delta]['classes'].push('c-'+a.id);
 
                     //}
-                    if(markup.subtype == 'link' && markup.metadata){
-                      $rootScope.letters[index][delta]['href']= markup.metadata
-                    }
-                    if(markup.selected === true){
-                      $rootScope.letters[index][delta]['classes'].push('selected')
+                    if(markup.type == 'hyperlink' && markup.metadata){
+                      temp_letters[delta]['href'] = markup.metadata
                     }
                     i_array++;
                     j_arr++
@@ -18616,11 +21094,6 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
                   //$rootScope.containers[index].objects[markup.type]['inline'].push(markup); 
                   //console.log($rootScope.objects_sections[index][td.type])
             }
-
-
-    
-
-         
 
            if(markup.type !== "" && markup.position){
 
@@ -18630,27 +21103,554 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
 
                  }
                  else{
+
                     $rootScope.containers[index].objects[markup.type][markup.position].push(markup) 
 
                  }
 
                 $rootScope.containers[index].objects_count['by_positions'][markup.position].count++;
                 $rootScope.containers[index].objects_count['by_positions'][markup.position].has_object  = true;
+            
+                $rootScope.containers[index].objects_count['all'].count++;
+                $rootScope.containers[index].objects_count['all'].has_object  = true;
+
             }
               //console.log($rootScope.containers[index]['objects'][markup.type][markup.position])
               //console.log('pushed'+markup.position)
             }
           })
           //$rootScope.containers[index].objects = $rootScope.objects_sections[index]    
-          $rootScope.containers[index].letters = $rootScope.letters[index]
+         // $rootScope.containers[index].letters = $rootScope.letters[index]
+        
+
+         // set letters to their the container
+
+          _.each(temp_letters, function(lc, w){
+              _.each(lc.classes, function(c, i){ 
+                temp_letters[w]['classes_flat'] +=  c +' ';
+              });
+          })
+
+        
+         $rootScope.containers[index].letters = temp_letters;
+        
+
+
+
+        //console.log($rootScope.containers[index])
+
          //  console.log($rootScope.containers[index])
-        });
+        }); // end of containers loop
+
+          // if need special class to add only once.
+          //_.each($rootScope.containers[index].letters, function(lc, wb){
+           //  lc['classes_flat'] += 'lt-def '
+          //});
+
+/*
+
+           _.each($rootScope.containers, function(container, index){
+                      $rootScope.containers[index].compiled = '';
+                      
+
+                       _.each($rootScope.containers[index].letters, function(l, l_index){
+                          $rootScope.containers[index].compiled += "<my-customer></my-customer>";
+                       });
+                     
+
+           }); // end of containers loop        
+
+        */
+
+        if($rootScope.max_reached_letter !==  $rootScope.doc.content.length){
+              console.log('unreached letter found :'+ $rootScope.max_reached_letter +'--'+$rootScope.doc.content.length)
+              //max_reached_letter.end = container.end
+
+              if(_.last($rootScope.containers) && $rootScope.max_reached_letter  <  $rootScope.doc.content.length){
+
+                  console.log('should patch last section from :'+ _.last($rootScope.containers).end+ ' to'+$rootScope.doc.content.length)
+              } 
+        } 
+
+        // reloop to find isolate markups
+
+          $rootScope.ui.isolated_markups = []
+          _.each($rootScope.doc.markups, function(markup){
+            if(markup.isolated == true && markup.type !=="container"){
+                console.log('isolate markup: '+markup.start+' - '+markup.type)
+               // console.log(markup)
+                $rootScope.ui.isolated_markups.push(markup)
+            }
+
+          })
+
+
+
   
         // console.log($rootScope.letters)
         $rootScope.$emit('docEvent', {action: 'dispatched_objects' });
        // console.log( $rootScope.objects_sections['global_by_type'])
 
+        //console.log($rootScope.containers)
+
+      },
+
+
+      /**
+      * fill arrays of letters for each section  {@link DocumentCtrl#distribute_markups} 
+      * @param {Object} section - section object
+      * @param {Start-range} section.start  -    section start
+      * @param {End-range} section.end    -  section end
+      * @param {Number} [section_count] - section index value 
+      * @function DocumentCtrl#fill_chars
+      * @return {Object} letters of a section
+      * @link DocumentCtrl#distribute_markups 
+      * @todo remove section count param
+      */
+  // util flatten array to string
+    
+     flatten_classes: function (n) {
+    //console.log(n);
+    var out = '';
+      _.each(n, function(c, i){out +=  n[i]+' ';});
+    return out;
+}, 
+      fill_chars : function (section, section_count){
+        var temp_letters = [];
+        var i;
+        var i_array     =   0;
+        var fulltext    =   '';
+        var str_start   =   section.start;
+        var str_end     =   section.end;
+
+        // confing could be a option/mode feature
+        var content_string  = $rootScope.doc.content
+
+        for (i = str_start; i <= str_end; i++) {
+          var letter_arr = new Object();
+          var ch = '';
+          ch = content_string[i];
+          
+          if (ch === " ") {
+                ch = ' ';
+
+            }
+            if (!content_string[i]) {
+              // maybe better to unset ? 
+                ch = ' ';
+            }
+          fulltext += ch;
+          letter_arr['char'] = ch;
+
+          //letter_arr['fi_nd'] = new Object({'fi': false, 'nd':false/*, 'md':false*/});
+          letter_arr.fi_nd = new Object({'fi': false, 'nd':false/*, 'md':false*/});
+          letter_arr.classes = new Array('');
+          letter_arr.classes_flat = '';
+
+          /** 
+          * @something here
+          * @link DocumentCtrl#fill_chars
+          */
+
+          letter_arr.order = i;
+          letter_arr.action = '';
+          letter_arr.rindex = i_array;
+          letter_arr.lindex= i;
+          
+          //unsued a heavy  letter_arr.objects = [];
+          letter_arr.href= '';
+          letter_arr.sectionin = section_count;
+          letter_arr.mode= 'display';
+
+
+          letter_arr.state = new Object({ 'statemode' : 'loading','select' : false,'clicked' : false,'inrange' : false , 'flat': {}  });
+          letter_arr.sel = false;
+          temp_letters[i_array]  = letter_arr;
+          i_array++;
+        }
+         
+         if(!fulltext){
+          fulltext = '-';
+         }
+
+        //$rootScope.letters[section_count]= temp_letters;
+        //$rootScope.containers[section_count].letters = temp_letters;
+        //console.log( $rootScope.containers[section_count].letters)
+        $rootScope.containers[section_count].fulltext = fulltext;
+
+
+
+        return temp_letters;
+      },
+
+
+
+
+
+      /**
+      * sub loop _d (not really musicbox, rather objects options (doc_options, users_options, etc..))
+      */
+
+      apply_object_options : function(object, options){
+        //console.log(' apply doc_options to object'+object)
+        var options_array = [];
+        _.each(options , function(option){
+           // console.log(option)
+            var op_name = option.option_name;
+            var op_value = option.option_value;
+            var op_type = option.option_type;
+
+            options_array[op_name]= [];
+            options_array[op_name]['value'] = op_value;
+
+            if(op_type == 'google_typo' && object == 'document'){
+               WebFont.load({
+                  google: {
+                   families: [op_value]
+                  }
+              }); 
+               var fixed = options_array[op_name]['value'];
+               options_array[op_name]['fixed'] =  fixed.replace(/ /g, '_').replace(/,/g, '').replace(/:/g, '').replace(/400/g, '').replace(/700/g, '') 
+            }
+        });
+
+
+
+        if(object == 'document')  {
+          $rootScope.doc_options = [];
+          $rootScope.doc_options = options_array
+           //console.log($rootScope.doc_options)
+         }
+         else if(object == 'author')  {
+          $rootScope.author_options = [];
+          $rootScope.author_options = options_array
+          //console.log($rootScope.author_options)
+         }
+         else if(object == 'room')  {
+          $rootScope.room_options = [];
+          $rootScope.room_options = options_array
+          //console.log($rootScope.room_options)
+         }
+         else if(object =='markup_user_options'){
+            //  console.log(options_array)
+              return options_array;
+
+         }
+
+         else{
+          console.log('undef object')
+         }
+  
+
+      },
+
+      text_range: function (start, end) {
+         var content_string  = $rootScope.doc.content
+         var text_range = '';
+
+         if(end-start > 70){
+          var i_s = start;
+          var i_e =  end
+          text_range = content_string[i_s]+content_string[i_s+1]+content_string[i_s+2]+content_string[i_s+3]+content_string[i_s+4]+' ..('+ (end-start) +' letters)..'+content_string[end-1]+content_string[end];
+         }
+         else{
+            for (var i = start; i <= end; i++) {
+             text_range += content_string[i];
+          }
+
+         }
+         
+         return text_range;
+
+
+      },
+      init_new: function () {
+        $rootScope.i18n                    =   $locale;         
+        $rootScope.newdoc                  =   new Object();
+        $rootScope.newdoc.raw_content      =   $rootScope.i18n.CUSTOM.DOCUMENT.default_content
+        $rootScope.newdoc.raw_title        =   $rootScope.i18n.CUSTOM.DOCUMENT.default_title
+        $rootScope.newdoc.created_link     =   '';
+      },
+
+      newdoc: function(){
+          ///api/v1/doc/create
+          var data = new Object();
+         
+          data =  $rootScope.newdoc;
+    
+          $http.post(api_url+'/doc/create', serialize(data) ).
+          success(function(doc) {
+              // hard redirect
+              console.log(doc)
+              //console.log(doc)
+              $rootScope.newdoc.created_link = doc.slug;
+              $rootScope.newdoc.created_link_title = doc.title;
+           });  
+      },
+
+      docsync: function(){
+        ///api/v1/doc/create
+        var data = new Object();
+         
+        //console.log($rootScope.ui.selected_range.markups_to_offset)
+        data.doc_content = $rootScope.doc.content;
+        data.markups = []
+        // prepare / clean 
+        _.each($rootScope.ui.selected_range.markups_to_offset, function(mk){
+                var a_mk = new Object({'id':mk._id, 'offset_start':mk.offset_start, 'offset_end':mk.offset_end})
+                data.markups.push(a_mk)
+        });
+        //console.log(serialize(data))
+        $http.post(api_url+'/doc/'+$rootScope.doc.slug+'/sync', serialize(data) ).
+           success(function(doc) {
+              // reinit array of offsets markups ! 
+              $rootScope.ui.selected_range.markups_to_offset = []
+              
+              console.log(doc)
+              // re-set doc "softest" way (#no date bug)
+              $rootScope.doc.content = doc.content;
+              $rootScope.doc.markups = doc.markups;
+              $rootScope.$emit('docEvent', {action: 'doc_ready', type: '-', collection_type: 'doc', collection:doc });
+        });  
+      },
+
+      save_doc: function (field) {
+          var data = new Object()
+          data.field = field;     
+          if(field == 'room_id'){
+          data.value =  $rootScope.doc.room__id;
+              //alert(data.value) 
+          }
+          else if(field== 'user_id'){
+            //alert('d')
+            data.value =  $rootScope.doc.user._id;
+          }
+          else{
+            data.value =  $rootScope.doc[field]
+          }
+          
+          $http.post(api_url+'/doc/'+$rootScope.doc._id+'/edit', serialize(data) ).
+            success(function(doc) {
+              
+              // was  // re-set.
+              if(field == 'room_id'){
+                   $rootScope.doc.room     = doc.doc.room;
+                   $rootScope.doc.room__id = doc.doc.room;            
+              }
+              console.log(doc)
+              // hard redirect
+              if(field == 'title'){
+                window.location = root_url+'/doc/'+doc.doc.slug;
+              }
+              else if(field == 'content'){
+                $rootScope.$emit('docEvent', {action: 'doc_ready', type: '-', collection_type: 'doc', collection:doc });
+              }
+              else{
+                  console.log('emit?')
+              }
+
+             });  
+        },
+        save_doc_option: function (field) {
+          var data = new Object()
+          data.field = field;
+          //data.value =  $rootScope.doc[field]
+          data.value = $rootScope.doc_options[field].value;
+          $rootScope.doc_options[field].value = data.value
+          $http.post(api_url+'/doc/'+$rootScope.doc.slug+'/edit_option', serialize(data) ).
+          success(function(doc) {
+            // # todo reset doc event/ cb
+                     // hard redirect
+           
+           });  
+        },
+
+        // # CRUD 
+       delete_doc_option: function (field) {
+        var data = new Object()
+         data.option_name = field;
+         $http.post(api_url+'/doc/'+$rootScope.doc.slug+'/delete_option', serialize(data) ).
+                success(function(doc) {
+                  alert(doc)
+         });
+       },
+
+       // # CRUD 
+      create_doc_option: function () {
+         // calling service
+         $http.post(api_url+'/doc/'+$rootScope.doc.slug+'/create_option' ).
+                success(function(doc) {
+                //alert(doc)
+         }); 
+      },
+
+      // # CRUD 
+      push_markup : function (markup){
+          console.log($rootScope.userin)
+          // todo : post api
+          var data = new Object(markup);
+          data.username = $rootScope.userin.username;
+          data.user_id = $rootScope.userin._id;
+
+         // APi call
+          $http.post(api_url+'/doc/'+ $rootScope.doc.slug+'/markup/push', serialize(data) ).success(function(d) {
+               console.log(d)
+               
+                doc.init(d);
+
+              //$rootScope.$emit('docEvent', {action: 'doc_ready', type: 'push', collection_type: 'markup', collection:d.inserted[0] });
+           });
+     },
+     offset_markups : function (){
+          $http.get(api_url+'/doc/'+$rootScope.doc.slug+'/markups/offset/left/0/1/1').success(function(d) {
+            console.log(d)
+            doc.init(d);
+            $rootScope.$emit('docEvent', {action: 'doc_ready', type: 'offset', collection_type: 'markup', collection:d.markups });
+          })
+      },
+      offset_markup: function (markup,start_qty, end_qty){
+
+          var data = {}
+          data.markup_id  = markup._id;
+          data.start_qty  = start_qty
+          data.end_qty    = end_qty
+        
+
+          $http.post(api_url+'/doc/'+$rootScope.doc.slug+'/markup/'+markup._id+'/offset', serialize(data) ).success(function(m) {
+            console.log(m)
+            $rootScope.doc = m;
+            $rootScope.$emit('docEvent', {action: 'doc_ready', type: 'offset', collection_type: 'markup', collection:m.markups });
+          })
+      },
+      markup_save: function (markup){
+          //var data = new Object({'start': markup.start})
+           console.log(markup)
+           var temp = markup;
+      
+           var save = new Object({
+            'metadata':markup.metadata,
+            'start':markup.start,
+            'end':markup.end,
+            'depth':markup.depth,
+            'status':markup.status,
+            'type':markup.type,
+            'subtype':markup.subtype,
+            'position':markup.position,
+            'doc_id': markup.doc_id_id
+          });
 /*
+           if(markup.type =='container'){
+                markup.letters =[];
+                markup.objects =[];
+                markup.objects_count =[];
+           }
+           else{
+               if(markup.doc_id){
+                  temp.child_options = ''
+                  temp.doc_id = markup.doc_id._id;
+               }
+           }
+           */
+          save.secret = $rootScope.ui.secret;
+          console.log(save)
+          var data = serialize(save)
+          $http.post(api_url+'/doc/'+$rootScope.doc.slug+'/markup/'+markup._id+'/edit', data ).success(function(m) {
+            console.log(m)
+            if(m.err_code){
+              alert(m.message)
+            }
+            else{
+                doc.init(m);
+                $rootScope.$emit('docEvent', {action: 'doc_ready', type: 'edit', collection_type: 'markup', collection:m.edited });
+
+            }
+          })
+      },
+
+      markup_delete: function (markup){
+        $http.get(api_url+'/doc/'+$rootScope.doc.slug+'/markup/delete/'+markup._id).success(function(d) {
+        console.log(d)
+        doc.init(d)
+        //$scope.$emit('docEvent', {action: 'doc_ready', type: 'delete', collection_type: 'markup', collection:m.deleted[0] });
+        //$scope.$emit('docEvent', {action: 'doc_ready' });
+      });
+
+     },
+     virtualize : function(){
+
+            /**
+            * construct virtual collection  
+            *  use case : summarization
+            *  @params collection_name (header, name , auto{}, implicit{}, explicit{})
+            *  @return text string
+            *  A. auto : use h1>h6
+            *  B  implicit : subtype using corresponding ranges of text (implicit)
+            *  C  explicit : subtype collection . > using markup metavalue (explicit)
+
+            */ 
+
+            _.each($rootScope.virtuals, function(virtual, vi){
+             console.log('> virtualize '+virtual.slug)
+              if(!virtual.visible){
+                virtual.visible = true
+              }
+              else{
+                 virtual.visible = false
+              }
+              virtual.string = '<h2 class="'+virtual.slug+'summarize_header">'+virtual.header+'</h2>';
+              // setup 'at least one'
+              var found_element = false;
+               //loop
+              _.each($rootScope.doc.markups, function(markup){
+
+                if(virtual.implicit.bytype && markup.type == virtual.implicit.bytype){
+                    found_element = true
+                     for (var i=markup.start;i<=markup.end;i++){ 
+                        // $scope.text_summary += content[i]; 
+                        virtual.string += $rootScope.doc.content[i]; 
+                     }
+                }
+                /*
+                // AUTO
+                //// CHECK ORDER !!!!
+                if(t.type == 'markup' && (t.subtype =='h1' || t.subtype =='h2' || t.subtype =='h3' || t.subtype =='h4' || t.subtype =='h5') ){
+                  $scope.text_summary += '<'+t.subtype+'>';
+                  for (var i=t.start;i<=t.end;i++){ 
+                    if(content[i]){
+                      $scope.text_summary += content[i];    
+                    }
+                  }
+                  $scope.text_summary += '</'+t.subtype +'>'
+                }
+                EXPLICIT
+                if(t.subtype == 'summary_block'){
+                  $scope.text_summary += '<p>'+t.metadata+'</p>';
+                } 
+                */  
+
+              });
+              $rootScope.virtuals[vi] = virtual
+          }); // each   virtuals
+        console.log($rootScope.virtuals)
+     } // virtual function end
+
+// closing factory 
+   };
+  return self
+  }
+});
+
+
+
+
+
+
+
+
+/*
+
+
+misc/ tests
 
 
        var data = {
@@ -18696,328 +21696,6 @@ var options = {
 
 
 
-      },
-
-
-      /**
-      * fill arrays of letters for each section  {@link DocumentCtrl#distribute_markups} 
-      * @param {Object} section - section object
-      * @param {Start-range} section.start  -    section start
-      * @param {End-range} section.end    -  section end
-      * @param {Number} [section_count] - section index value 
-      * @function DocumentCtrl#fill_chars
-      * @return {Object} letters of a section
-      * @link DocumentCtrl#distribute_markups 
-      * @todo remove section count param
-      */
-  
-      fill_chars : function (section, section_count){
-        var temp_letters = new Array(); 
-        var i;
-        var i_array     =   0;
-        var fulltext    =   '';
-        var str_start     =   section.start;
-        var str_end     =   section.end;
-        /*var content_string  =   'Scripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts useScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asd as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts  used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for(see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asd as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts  used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see Music MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBo'
-        content_string  +=  'Scripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts useScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asd as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts  used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for(see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asd as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts  used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see Music MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBo'
-        content_string  +=  'Scripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts useScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asd as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts  used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for(see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asd as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts  used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see Music MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBo'
-        content_string  +=  'Scripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts useScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asd as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts  used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for(see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asd as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts  used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see Music MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBo'
-        content_string  +=  'Scripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts useScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asd as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts  used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for(see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used asd as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts  used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBoScripts used as backend for MusicBox (see Music MusicBox (see MusicBoScripts used as backend for MusicBox (see MusicBo'
-
-        */
-        var content_string  = $rootScope.doc.content
-
-
-        //$rootScope.doc.content;
-
-        for (i = str_start; i <= str_end; i++) {
-          var letter_arr = new Object();
-          var ch = '';
-          ch = content_string[i];
-          
-          if (ch === " ") {
-                ch = ' ';
-
-            }
-            if (!content_string[i]) {
-                ch = ' ';
-            }
-              fulltext += ch;
-          letter_arr['char'] = ch;
-
-          //letter_arr['fi_nd'] = new Object({'fi': false, 'nd':false/*, 'md':false*/});
-          letter_arr.fi_nd = new Object({'fi': false, 'nd':false/*, 'md':false*/});
-          letter_arr.classes = new Array('lt');
-
-          /** 
-          * @something here
-          * @link DocumentCtrl#fill_chars
-          */
-
-          letter_arr.order = i;
-          letter_arr.action = '';
-          letter_arr.rindex = i_array;
-          letter_arr.lindex= i;
-          
-          //unsued a heavy  letter_arr.objects = new Array();
-          letter_arr.href= '';
-          letter_arr.sectionin = section_count;
-          letter_arr.mode= 'display';
-
-
-          letter_arr.state = new Object({ 'statemode' : 'loading','select' : false,'clicked' : false,'inrange' : false , 'flat': {}  });
-          letter_arr.sel = false;
-          temp_letters[i_array]  = letter_arr;
-          i_array++;
-        }
-         
-         if(!fulltext){
-          fulltext = '-';
-         }
-
-        $rootScope.letters[section_count]= temp_letters;
-        $rootScope.containers[section_count].fulltext = fulltext;
-      },
-
-      /**
-      * sub loop _d (not really musicbox, rather objects options (doc_options, users_options, etc..))
-      */
-
-      apply_object_options : function(object, options){
-        //console.log(' apply doc_options to object'+object)
-        var options_array = new Array()
-        _.each(options , function(option){
-           // console.log(option)
-            var op_name = option.option_name;
-            var op_value = option.option_value;
-            var op_type = option.option_type;
-
-            options_array[op_name]= new Array()
-            options_array[op_name]['value'] = op_value;
-
-            if(op_type == 'google_typo' && object == 'document'){
-               WebFont.load({
-                  google: {
-                   families: [op_value]
-                  }
-              }); 
-            }
-        });
-        if(object == 'document')  {
-          $rootScope.doc_options = new Array()
-          $rootScope.doc_options = options_array
-           //console.log($rootScope.doc_options)
-         }
-         else if(object == 'author')  {
-          $rootScope.author_options = new Array()
-          $rootScope.author_options = options_array
-          //console.log($rootScope.author_options)
-         }
-         else if(object == 'room')  {
-          $rootScope.room_options = new Array()
-          $rootScope.room_options = options_array
-          //console.log($rootScope.room_options)
-         }
-
-
-         else{
-          console.log('undef object')
-         }
-  
-
-      },
-      save_doc: function (field) {
-          var data = new Object()
-          data.field = field;
-          data.value =  $rootScope.doc[field]
-         
-          $http.post(api_url+'/doc/'+$rootScope.doc._id+'/edit', serialize(data) ).
-          success(function(doc) {
-            // hard redirect
-            if(field == 'title'){
-               window.location = root_url+'/doc/'+doc.slug;
-            } 
-            if(field == 'content'){
-            $rootScope.$emit('docEvent', {action: 'doc_ready', type: '-', collection_type: 'doc', collection:doc });
-
-
-            }
-           });  
-        },
-          save_doc_option: function (field) {
-          var data = new Object()
-          data.field = field;
-          //data.value =  $rootScope.doc[field]
-          data.value = $rootScope.doc_options[field].value
-
-          $http.post(api_url+'/doc/'+$rootScope.doc.slug+'/edit_options', serialize(data) ).
-          success(function(doc) {
-            // hard redirect
-           
-           });  
-        },
-
-      push_markup : function (markup){
-        console.log($rootScope.userin.username)
-          // todo : post api
-          var data = new Object(markup)
-          data.username = $rootScope.userin.username;
-          data.user_id = $rootScope.userin._id;
-
-         
-
-        $http.post(api_url+'/doc/'+ $rootScope.doc.slug+'/markups/push', serialize(data) ).success(function(m) {
-             //console.log(m)
-            $rootScope.doc = m.doc;
-            //$rootScope.$emit('docEvent', {action: 'doc_ready' });
-            $rootScope.$emit('docEvent', {action: 'doc_ready', type: 'push', collection_type: 'markup', collection:m.inserted[0] });
-         })
-
-
-
-
-/*
-
-         $http.get(api_url+'/doc/'+ $rootScope.doc.title+'/markups/push/'+markup.type+'/'+markup.subtype+'/'+markup.start+'/'+markup.end+'/'+markup.position+'/'+markup.metadata+'/'+markup.status+'/'+markup.depth).success(function(m) {
-             //console.log(m)
-            $rootScope.doc = m.doc;
-            //$rootScope.$emit('docEvent', {action: 'doc_ready' });
-            $rootScope.$emit('docEvent', {action: 'doc_ready', type: 'push', collection_type: 'markup', collection:m.inserted[0] });
-        })
-*/
-
-     },
-     offset_markups : function (){
-          $http.get(api_url+'/doc/'+$rootScope.doc.slug+'/markups/offset/left/0/1/1').success(function(m) {
-            console.log(m)
-            $rootScope.doc = m;
-            $rootScope.$emit('docEvent', {action: 'doc_ready', type: 'offset', collection_type: 'markup', collection:m.markups });
-          })
-      },
-      offset_markup: function (markup){
-          $http.get(api_url+'/doc/'+$rootScope.doc.slug+'/markup/'+markup._id+'/offset/left/0/1/1').success(function(m) {
-            console.log(m)
-            //$rootScope.doc = m;
-            //$rootScope.$emit('docEvent', {action: 'doc_ready' });
-          })
-      },
-      markup_save: function (markup){
-          //var data = new Object({'start': markup.start})
-            console.log(markup)
-           if(markup.type =='container'){
-                var temp = markup;
-                markup.letters = new Array()
-                markup.objects = new Array()
-                markup.objects_count = new Array()
-                console.log(markup)
-                var data  = serialize(temp)
-
-           }
-           else{
-               var data =  serialize(markup)
-               console.log(data)
-               console.log(data)
-           }
-     
-         
-          $http.post(api_url+'/doc/'+$rootScope.doc.slug+'/markup/'+markup._id+'/edit', data ).success(function(m) {
-            console.log(m)
-             $rootScope.doc = m.doc;
-            $rootScope.$emit('docEvent', {action: 'doc_ready', type: 'edit', collection_type: 'markup', collection:m.edited });
-
-          })
-
-      },
-    markup_delete: function (markup){
-       $http.get(api_url+'/doc/'+$rootScope.doc.slug+'/markups/delete/'+markup._id).success(function(m) {
-      //console.log(m)
-      $rootScope.doc = new Array()
-     $rootScope.doc = m.doc;
-    $rootScope.doc.markups = m.doc.markups;
-      console.log($rootScope.doc.markups)
-    
-      doc.init_containers()
-      //$scope.$emit('docEvent', {action: 'doc_ready', type: 'delete', collection_type: 'markup', collection:m.deleted[0] });
-
-      //$scope.$emit('docEvent', {action: 'doc_ready' });
-    })
-
-     },
-     virtualize : function(){
-
-/**
-  * construct virtual collection  
-  *  use case : summarization
-  *  @params collection_name (header, name , auto{}, implicit{}, explicit{})
-  *  @return text string
-  *  A. auto : use h1>h6
-  *  B  implicit : subtype using corresponding ranges of text (implicit)
-  *  C  explicit : subtype collection . > using markup metavalue (explicit)
-
-  */ 
-    _.each($rootScope.virtuals, function(virtual, vi){
-     console.log('> virtualize '+virtual.slug)
-
-
-      if(!virtual.visible){
-
-        virtual.visible = true;
-      }
-      else{
-         virtual.visible = false;
-      }
-      virtual.string = '<h2 class="'+virtual.slug+'summarize_header">'+virtual.header+'</h2>';
-      // setup 'at least one'
-      var found_element = false;
-       //loop
-      _.each($rootScope.doc.markups, function(markup){
-
-        if(virtual.implicit.bytype && markup.type == virtual.implicit.bytype){
-            found_element = true
-             for (var i=markup.start;i<=markup.end;i++){ 
-            // $scope.text_summary += content[i]; 
-                virtual.string += $rootScope.doc.content[i]; 
-             }
-        }
-
-       
-
-        /*
-        // AUTO
-        //// CHECK ORDER !!!!
-        if(t.type == 'markup' && (t.subtype =='h1' || t.subtype =='h2' || t.subtype =='h3' || t.subtype =='h4' || t.subtype =='h5') ){
-          $scope.text_summary += '<'+t.subtype+'>';
-          for (var i=t.start;i<=t.end;i++){ 
-            if(content[i]){
-              $scope.text_summary += content[i];    
-            }
-            
-          }
-          $scope.text_summary += '</'+t.subtype +'>'
-        }
-        
-
-        EXPLICIT
-        if(t.subtype == 'summary_block'){
-          $scope.text_summary += '<p>'+t.metadata+'</p>';
-        } 
-        */  
-
-      });
-
-      $rootScope.virtuals[vi] = virtual
-
-  }); // each   virtuals
-      // after
-  //  }
-
-        console.log($rootScope.virtuals)
-
-     }
-      };
-      return self;
-    }
-});
 // todo doc      
 
 // SOCKET part 
@@ -19071,8 +21749,8 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
         // inject locale service. defined in public/js/angualr-modules/i18n/angular_lang-lang.js
         $rootScope.i18n = $locale;
         //$rootScope.$emit('renderEvent', { action:'render_ready' });
-        self.config= new Array();
-        self.state= new Array();
+        self.config= [];
+        self.state= [];
         //$rootScope.r = 7;
         self.config.hasbranding = true;
         self.state.logs = 'closed';
@@ -19080,39 +21758,72 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
         $rootScope.globals = GLOBALS;
         $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
 
-        // $rootScope.available_sections_objectsd        =   self.objAvailable(); 
+        
+         $rootScope.objSchema           =   self.objSchema(); 
+
+        $rootScope.available_sections_objects =   self.objAvailable(); 
+
         // console.log($rootScope.available_sections_objectsd )
 
-
-
         $rootScope.available_layouts                 =   self.posAvailable();
+        $rootScope.item_position  = '';
+
+
         $rootScope.fragments                         =   self.fragmentsAvailable();
-        // $rootScope.classesofsections                 =   self.classesAvailable();
+        // $rootScope.classesofsections              =   self.classesAvailable();
 
         // ui set up.
         // this var never change as long a doc is loaded... (no reset at rebuild)
 
         $rootScope.ui = new Object();
-        $rootScope.ui.selected_range  = new Object({start:null, end:null});
+        $rootScope.ui.selected_range  = new Object({start:0, end:0, 'textrange':''});
         $rootScope.ui.selected_section_index = null;
-        $rootScope.ui.selected_objects = new Array()
+        $rootScope.ui.selected_objects =[];
 
         $rootScope.ui.renderAvailable = self.renderAvailable()
-        $rootScope.ui.renderAvailable_active =  $rootScope.ui.renderAvailable[0]
+
+        // used in section editing
+        $rootScope.ui.sync_sections  = true;
+        
+        $rootScope.ui.focus_side = ''
+        if($routeParams.mode){
+          $rootScope.ui.renderAvailable_active =  $routeParams.mode
+        }
+        else{
+          $rootScope.ui.renderAvailable_active =  $rootScope.ui.renderAvailable[0]
+        }
+      
+        $rootScope.ui.secret = false;
+        if($routeParams.secret){
+               $rootScope.ui.secret =  $routeParams.secret
+               console.log('using secret')
+        }
+
+        if($routeParams.debug){
+           $rootScope.ui.debug = true;
+        }
 
 
-        $rootScope.ui.menus = new Array();
-        $rootScope.ui.menus.push_markup = new Array();
+        if($routeParams.docid){
+              $rootScope.ui.is_home = 'false'
+              $rootScope.ui.is_single = 'true'
+        }
+        else{
+            $rootScope.ui.is_home = 'true'
+            $rootScope.ui.is_single = 'false'
+        }
+
+        $rootScope.ui.menus = [];
+        $rootScope.ui.menus.push_markup = [];
         $rootScope.ui.menus.push_markup.open = -1;
-
+        $rootScope.ui.menus.push_comment = [];
+        $rootScope.ui.menus.push_comment.open = -1;
         // top page menu tools
-        $rootScope.ui.menus.quick_tools = new Array();
-        $rootScope.ui.menus.quick_tools.open = -1;
+        $rootScope.ui.menus['quick_tools'] = [];
+        $rootScope.ui.menus['quick_tools'].open = 'no';
 
-        // top page menu user
-        $rootScope.ui.menus.user_tools = new Array();
-        $rootScope.ui.menus.user_tools.open = -1;
-        $rootScope.inserttext = new Array()
+      
+        $rootScope.inserttext = [];
         $rootScope.inserttext[0] =''
 
 
@@ -19124,115 +21835,364 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
 
 
       objAvailable:function (){
-        var arr = new Array('media','generic','container','container_class','img', 'comment','place','data','version', 'translation','note','summary','summary-block','freebase','player','markup','css_styles','classes','child_section', 'semantic');
+        var arr = new Array('markup','media','hyperlink', 'container','container_class', 'comment','note','child' ,'semantic','generic');
         return arr 
       },
-      fragmentTypes:function (){
-        var arr = new Array('note','data','summary','summary-block','img','player','child_section');
-        return arr 
+      markupSchema:function (){
+        // start end metavalue, .......
+
       },
-      fragmentSubTypes:function (){
-        // todo : groups
-        var arr = new Array('pick one', 'world','city', 'hyperlocal', 'comment','place','code_block','data','year','unit','x','y','version','sc-track', 'translation','comment','wikipedia','youtube','vimeo','soundcloud','freebase','person-bio','summary','summary-block','img','child_section','semantic');
-        return arr 
-      },
+      objSchema:function (){
+
+            var obj_base  = new Object({'type':'block', 'only':'metadata'});
+
+
+            var arr = new Array();
+            
+            
+            arr.comment = new Object({
+              'type':obj_base.type ,
+              'only':'',
+              'metadata': { 
+                'editor': {
+                   'show' : true,
+                    'label':'comment text',
+                     'input' : 'textarea'
+                  },
+                  'render': {
+                   'show' : true
+                  }
+              }, 
+              'show_date': true, 
+              'show_user': true, 
+              'subtype': {
+                'free_input' : false,
+                'available' : ['comment', 'response']
+             },   
+              'position_available': ['left', 'right', 'under', 'global'],
+            });
+            arr.note = new Object({
+              'type':obj_base.type ,
+              'only':'',
+              'metadata': { 
+                'editor': {
+                   'show' : true,
+                    'label':'note text',
+                     'input' : 'textarea'
+                  },
+                  'render': {
+                   'show' : true
+                  }
+              }, 
+              'show_date': true,
+              'icon': { 
+                'before': {
+                   'show' : true
+                  }
+              }, 
+              'show_user': true, 
+              'subtype': {
+                'free_input' : false,
+                'available' : ['freebase', 'about']
+             },   
+              'position_available': ['left', 'right', 'under', 'center', 'global'],
+            });
+             arr.semantic= new Object({
+              'type':obj_base.type ,
+              'only':'',
+              'metadata': { 
+                'editor': {
+                   'show' : true,
+                    'label':'semantic data',
+                     'input' : 'textarea'
+                  },
+                  'render': {
+                   'show' : true
+                  }
+              }, 
+              'show_date': false,
+              'icon': { 
+                'before': {
+                   'show' : true
+                  }
+              }, 
+              'show_user': false, 
+              'subtype': {
+                'free_input' : false,
+                'available' : ['translation', 'date']
+             },   
+              'position_available': ['left', 'right', 'under', 'global'],
+            });
+            arr.generic = new Object({
+              'type':obj_base.type ,
+              'only':'',
+              'metadata': { 
+                'editor': {
+                   'show' : true,
+                    'label':'text',
+                     'input' : 'textarea'
+                  },
+                  'render': {
+                   'show' : true
+                  }
+              }, 
+              'show_date': false,
+              'icon': { 
+                'before': {
+                   'show' : true
+                  }
+              }, 
+              'show_user': false,
+              'subtype': {
+                'free_input' : true,
+                'available' : ['', 'date', 'info']
+             },   
+              'position_available': ['left', 'right', 'under', 'center','global'],
+            });
+           arr.container= new Object({
+              'type':obj_base.type ,
+              'only':'',
+              'metadata': { 
+                'editor': {
+                   'show' : false,
+                    'label':'-',
+                     'input' : '-'
+                  },
+                  'render': {
+                   'show' : true
+                  }
+              }, 
+              'show_date': false,
+              'icon': { 
+                'before': {
+                   'show' : true
+                  }
+              }, 
+              'show_user': false,
+              'subtype': {
+                'free_input' : false,
+                'available' : ['section']
+             },   
+              'position_available': ['inline'],
+            });
+
+            arr.container_class = new Object({
+              'type':obj_base.type ,
+              'only':'',
+              'metadata': { 
+                'editor': {
+                   'show' : true,
+                    'label':'css class(es)',
+                     'input' : 'input'
+                  },
+                  'render': {
+                   'show' : true
+                  }
+              }, 
+              'show_date': false,
+              'icon': { 
+                'before': {
+                   'show' : true
+                  }
+              }, 
+              'show_user': false,
+              'subtype': {
+                'free_input' : false,
+                'available' : ['css']
+             },   
+              'position_available': ['inline'],
+            });
+
+
+
+            arr.child = new Object({
+              'type':obj_base.type ,
+              'only':'',
+              'metadata': { 
+                'editor': {
+                   'show' : true,
+                    'label':'block text',
+                     'input' : 'input'
+                  }
+                  ,
+                  'render': {
+                   'show' : false
+                  }
+              }, 
+              'show_date': false,
+              'icon': { 
+                'before': {
+                   'show' : true
+                  }
+              }, 
+              'show_user': false, 
+              'subtype': {
+                'free_input' : false,
+                'available' : ['doc_content_block','simple_page','share_excerpt']
+             },   
+              'position_available': ['left', 'right', 'under', 'global'],
+            });
+
+            arr.media = new Object({
+              'type':obj_base.type ,
+              'only':'',
+              'metadata': { 
+                'editor': {
+                    'show' : true,
+                    'label':'media url',
+                    'input' : 'input'
+                  }
+                  ,
+                  'render': {
+                   'show' :false
+                  }
+              }, 
+              'show_date': false,
+              'icon': { 
+                'before': {
+                   'show' : true
+                  }
+              }, 
+              'show_user': false, 
+              'subtype': {
+                'free_input' :false,
+                'available' : ['img', 'soundcloud-track', 'vimeo-video', 'youtube-video', 'open-street-map', 'google-map']
+             },   
+              'position_available': ['wide','center','left', 'right', 'under', 'global', 'background'],
+            });
+
+            
+            arr.markup = new Object({
+              'type':obj_base.type ,
+              'only':'',
+              'metadata': { 
+                'editor': {
+                    'show' : false,
+                     'label':'link url',
+                    'input' : 'input'
+                  }
+                  ,
+                  'render': {
+                   'show' : false
+                  }
+              }, 
+              'show_date': false, 
+              'icon': { 
+                'before': {
+                   'show' : true
+                  }
+              }, 
+              'show_user': false, 
+
+              'subtype': {
+                'free_input' : false,
+                'available' : ['h1','h2', 'h3', 'h4', 'h5','h6','em', 'strong', 'code', 'quote', 'super-quote']
+             },   
+             'position_available': ['inline'],
+
+            });
+            arr.hyperlink = new Object({
+              'type':obj_base.type ,
+              'only':'',
+              'metadata': { 
+                'editor': {
+                    'show' : true,
+                    'label':'link url',
+                    'input' : 'input'
+                  }
+                  ,
+                  'render': {
+                   'show' : true
+                  }
+              }, 
+              'show_date': false, 
+              'icon': { 
+                'before': {
+                   'show' : true
+                  }
+              }, 
+              'show_user': false, 
+
+              'subtype': {
+                'free_input' : false,
+                'show_editor': 'hidden',
+                'available' : ['hyperlink'],
+
+             },   
+             'position_available': ['right', 'left'],
+
+            });
+
+
+
+    
+            // console.log(arr)
+            return arr;
+        },
+
+
+
+
+
+      
       posAvailable:function (){
 
+
+
         var arr = new Array(
-          {name:'wide', order:0},
-          {name:'slidewide', order:1},
-          {name:'center', order:2, include_title:true},
-          {name:'left', order:3},
-          {name:'inline_into_before',  order:4},
-          {name:'inline', order:5, include_objects:false}, 
-          {name:'inline-implicit', order:6},
-          {name:'inline_into_after', order:7},
+          {name:'wide', order:0, ID:0},
+          {name:'slidewide', order:1, ID:1},
+          {name:'center', order:2, include_title:true,  ID:2},
+          {name:'left', order:7, ID:3},  // "left" layout is after inline (css-technique : margin-left:-50%)
+          {name:'inline_into',  order:3, ID:6},
+          {name:'inline', order:4, include_objects:false, ID:5}, 
+          {name:'inline-implicit', order:6, ID:6},
+        //  {name:'inline_into_after', order:6, ID:7},
           
-          {name:'right', order:8},
+          {name:'right', order:8, ID:8},
          
-          {name:'under', order:9},
+          {name:'under', order:9, ID:9},
          
-          {name:'global', order:10});
+          {name:'global', order:10, ID:10},
+          {name:'background', order:11, include_objects:false, ID:11} 
+
+          );
 
         arr  = _.sortBy(arr,function (num) {
          return num.order;
         });
         return arr;
       },
-      posAvailableFlat:function (){
-        var arr = new Array('left', 'right', 'wide', 'slidewide', 'center', 'under','global');
-        return arr;
-      },
+    
       InlineMarkupAvailable:function (){
         var arr = new Array('h1', 'h2');
         return arr;
       },
 
       renderAvailable:function (){
-        var arr = new Array('lire','read','fragments','sections','editor','dataset','logs', 'card', 'media');
+        var arr = new Array('read','fragments','doc_options','editor','dataset','logs', 'card', 'media');
         return arr 
       },
       fragmentsAvailable:function (){
-        var arr = new Array();
-
+        var arr = [];
+            arr['markup']             = [ {  url: 'fragments/markup'} ];
 
             arr['markup_editor']             = [ {  url: 'fragments/markup_editor.jade'} ];
             arr['section_editor']            = [ {  url: 'fragments/section_editor.jade'} ];
+            
             arr['markup_push']               = [{  url: 'fragments/markup_push.jade'} ];
+            
             arr['author_card']               = [ {  url: 'fragments/author_card'} ]; 
             arr['branding']                  = [ {  url: 'fragments/branding.jade'} ];
             arr['before_doc']                = [ {  url: 'fragments/before_doc.jade'} ];
-            arr['ad_welcome']                = [ {  url: 'fragments/ad_welcome.jade'} ];
 
+            arr['doc_title']                 = [ {  url: 'fragments/doc_title.jade'} ];
+            arr['doc_options']               = [{url: 'fragments/doc_options.jade'} ];
+
+            //arr['ad_welcome']              = [ {  url: 'fragments/ad_welcome.jade'} ];
             arr['comment_form']              = [ {  url: 'fragments/comment_form.jade'} ];
-
-
-
-            /*
-
-            arr['share']                = [ {  url: 'fragments/share'} ];
-            arr['comment_global']       = [ {  url: 'fragments/comment_global'} ];
-            arr['docnodes']             = [ {  url: 'fragments/nodes'} ];
-         
-            arr['child_section']        = [ {  url: 'fragments/child_section.jade'} ];
-            arr['date']                 = [ {  url: 'fragments/date'} ];
-            
-            arr['generic']              = [ {  url: 'fragments/generic'} ];
-            
-            arr['page_footer']          = [ {  url: 'fragments/page_footer'} ];
-            arr['doc_footer']           = [ {  url: 'fragments/doc_footer'} ];
-            arr['titles']               = [ {  url: 'fragments/titles'} ];
-            arr['main']                 = [ {  url: 'fragments/main'} ];
-
-            arr['main_d']                 = [ {  url: 'fragments/main_d'} ];
-            arr['main_e']                 = [ {  url: 'fragments/main_e'} ];
-            arr['main_f']                 = [ {  url: 'fragments/main_f'} ];
-            arr['main_g']                 = [ {  url: 'fragments/main_g'} ];
-
-            // generic ! (beacuse of 'tricky' param injection (with Express.routes / as jade/ partial param use..) )
-            arr['col_generic_wide']     = [ {  url: 'column?side=wide'} ];
-            arr['col_generic_center']   = [ {  url: 'column?side=center'} ];
-            arr['col_generic_right']    = [ {  url: 'column?side=right'} ];
-            arr['col_generic_left']     = [ {  url: 'column?side=left'} ];
-            arr['col_generic_under']    = [ {  url: 'column?side=under'} ];
-            arr['col_generic_global']   = [ {  url: 'column?side=global'} ];
-
-            // render modes
-            arr['dataset']              = [ {  url: 'fragments/dataset'} ];
-            arr['media']                = [ {  url: 'fragments/media'} ];
-            arr['card']                 = [ {  url: 'fragments/card'} ];
-
-            // editor
-            arr['editleft']             = [{  url: 'editor/edit_side/left'} ];
-            arr['editright']             = [{ url: 'editor/edit_side/right'} ];
-            arr['section_tool']         = [ {  url: 'editor/section_tool'} ];
-            arr['section_tool_lab']     = [ {  url: 'editor/section_tool_lab'} ];
-            arr['bottom_editor']        = [ {  url: 'editor/bottom_editor'} ];
-            arr['logs']     = [ {  url: 'fragments/logs'} ];
-
-*/
-
-
+            //arr['doc_real']                = [ {  url: 'fragments/doc_real.jade'} ];
+            arr['child_markup']              = [ {  url: 'fragments/child_markup.jade'} ];
         return arr;
       },
       classesAvailable:function (){
@@ -19312,6 +22272,7 @@ var GLOBALS;
 var render;
 var doc;
 
+//console.log(musicBox)
 
  /**
  * Represents a document.
@@ -19324,24 +22285,19 @@ var doc;
   * @param {Factory} docfactory -  angular custom factory for document 
 
  */
-function DocumentNewCtrl($scope, $http , $sce, $location, $routeParams, renderfactory,socket,docfactory) {
-console.log('DocumentNewCtrl')
+
+var app = angular.module('musicBox', []);
 
 
+musicBox.controller('DocumentCtrl', DocumentCtrl);
 
-	$scope.init = function (){
-			render = renderfactory();
-			$scope.render = render.init();
-			$scope.ui.loaded = 'loaded' 
-	}
-
-		$scope.init()
-}
 
 
 function DocumentCtrl($scope, $http , $sce, $location, $routeParams, renderfactory,socket,docfactory) {
-		
 
+		DocumentCtrl.$inject = ['$scope', '$http', '$sce', '$location', '$routeParams', 'renderfactory','socket','docfactory'];
+
+			
 		console.log('DocumentCtrl on');
 
 		socket.on('news', function (data) {
@@ -19357,18 +22313,14 @@ function DocumentCtrl($scope, $http , $sce, $location, $routeParams, renderfacto
 	    * @function DocumentCtrl#init
 		*/
 		$scope.init = function (){
-			console.log('DocumentCtrl init');
 
-		
-			render = renderfactory();
+			render        = renderfactory();
+			doc           =  docfactory();
+
 			$scope.render = render.init();
-			doc =  docfactory();
-			doc.init();
+			doc.load();
 			
 		}
-
-
-
 
 
 // util flatten array to string
@@ -19425,61 +22377,395 @@ $scope.$emit('docEvent', {action: 'fulltext', type: 'edit', collection_type: 'do
 */
 
 }
+	
 
-	$scope.over= function(letter, event){
+$scope.textarea_event= function( event){
+		
+			//alert(event)
+
+}
+
+
+$scope.$watch('doc.content', function(newValue, oldValue) {
+	//console.log(newValue +'-'+ oldValue)
+if(newValue !==undefined  && oldValue !==undefined && (newValue !== oldValue) )
+{
+	
+
+		
+
+					var diff = 99999999999999;
+					
+
+					for (var i = 0; i <= _.size(newValue); i++) {
+							//console.log( newValue[i] )
+							//console.log( oldValue[i] )
+							//console.log('at index #'+i+'|newletter|'+newValue[i]+' |oldletter|'+oldValue[i])
+							if(newValue[i] !== oldValue[i]){
+									if(i < diff){
+										diff = i;
+									}
+							}
+					}
+					//console.log('mini diff at '+diff)
+
+
+
+	//console.log(_.size(oldValue))
+	//console.log(_.size(newValue))
+
+	$scope.ui.selected_range.diff_old_size  = _.size(oldValue)
+	$scope.ui.selected_range.diff_new_size  = _.size(newValue)
+
+	$scope.ui.selected_range.diff_at  = diff
+
+	if(_.size(oldValue) > _.size(newValue) ){
+		//console.log('old > new (text is shorter) ')
+		//console.log('diff'+ ( _.size(newValue) - _.size(oldValue)) )
+		$scope.ui.selected_range.diff_qty=  _.size(newValue) - _.size(oldValue)
+		$scope.ui.selected_range.diff_dir= 'reduced'
+
+
+	} 
+	if(_.size(oldValue) < _.size(newValue) ){
+		//console.log('old < new (text is longer) ')
+		//console.log('diff'+ ( _.size(newValue) - _.size(oldValue)) )
+		$scope.ui.selected_range.diff_qty= _.size(newValue) - _.size(oldValue)
+		$scope.ui.selected_range.diff_dir= 'expanded'
+
+	} 
+	if(_.size(oldValue) == _.size(newValue) ){
+		//console.log('same size ')
+		$scope.ui.selected_range.diff_qty= 0;
+		$scope.ui.selected_range.diff_dir= 'inplaced';
+	} 
+
+	// each markup concerned by edit (text was edited before or into a markup range)
+	
+	$scope.ui.selected_range.markups_to_offset = []
+
+	$scope.ui.selected_range.diff_objects_concerned_count = 0;
+	
+
+	if($scope.ui.selected_range.diff_dir == 'expanded' || $scope.ui.selected_range.diff_dir =='reduced'){
+		_.each($scope.doc.markups, function(mk, i){
+
+			var touched = false;
+			// nothing to to if after range
+			if(  diff >  mk.end) {
+					
+			}
+			// means "on" the left of range
+			else{
+
+					// means between the range
+					if(  diff >=  mk.start) {
+							// offset end only
+							mk.offset_end = mk.offset_end+$scope.ui.selected_range.diff_qty
+							touched = true;
+
+					}
+					// means before both start and end..
+					else{
+						
+						// offset both
+	 					mk.offset_start = mk.offset_start+$scope.ui.selected_range.diff_qty
+	 					mk.offset_end   = mk.offset_end+$scope.ui.selected_range.diff_qty;
+
+						touched = true;
+
+
+					}
+
+
+
+			}
+
+
+			if(touched){
+				console.log(mk.type)
+				$scope.ui.selected_range.markups_to_offset.push(mk)
+			}
+
+
 		
 
 
-		console.log(letter)
-		var event_at = letter.order
-		if(event == 'down'){
-			$scope.ui.selected_range.start = event_at;
-		}
-		if(event == 'up'){
-			$scope.ui.selected_range.end = event_at;
-		}
 
 
-		if(event == 'click'){
-			if(letter.href !==''){
-				//console.log(letter)
-				//alert(letter.href)
-				window.location = letter.href
+
+
+		});
+	}
+
+
+
+
+
+
+
+}
+
+});
+
+
+
+
+	$scope.doc_sync = function(){
+		doc.docsync();
+	}
+
+
+	$scope.sync_section_next = function(section, index){
+		//alert(index)
+		//alert(index+1)
+		//alert('d')
+		console.log(index)
+		$scope.containers[index+1].start = $scope.containers[index+1].start+1;
+	}
+
+	// re set a markup to "safe" place {O,1,comment,left}
+	$scope.reset_markup = function(markup){
+		markup.start = 0;
+		markup.end= 1;
+		markup.type = 'comment';
+		markup.position = 'left';
+		doc.markup_save(markup)
+	}
+
+	$scope.markup_type = function(markup, t){
+			markup.type = t;
+			return;
+
+	}
+		$scope.markup_subtype = function(markup, t){
+			console.log(t)
+			markup.subtype = t;
+			return;
+
+	}
+		$scope.markup_position = function(markup, t){
+			console.log(t)
+			markup.position = t;
+			return;
+
+	}
+$scope.over= function(l, event){
+
+		var letter = l.l;
+
+
+		//console.log('over ctrl '+position, event);
+
+		if(event == 'click')
+		{
+			console.log(letter)
+			if(letter.href){
+				window.location= letter.href;	
 			}
 		}
 
+		var down_at;
+		var up_at;
+		down_at  = $scope.ui.selected_range.start
+		up_at	 = $scope.ui.selected_range.end
+        console.log(l)
+	    var sectionin	 = l.sectionin
 
-		//if(event_at <= $scope.ui.selected_range.start){
-		//	$scope.ui.selected_range.start = event_at;
-		//}
-		//else{
-			//$scope.ui.selected_range.start =  event_at;
-		//}
 
-		//if(event_at > $scope.ui.selected_range.end){
-		//	$scope.ui.selected_range.end= event_at;
-		//}
-		//else{
-			//$scope.ui.selected_range.start =  event_at;
-		//}
+		// console.log(event)
+
 		//console.log(letter)
-		//$scope.ui.selected_range.start  = letter.rindex
-		//$scope.ui.selected_range.end = letter.rindex
+
+
+		var event_at = l.l.lindex;
+			   	console.log('event_at'+event_at)
+
+		
+
+		if(event == 'down'){
+
+
+			down_at = event_at;
+
+
+
+			if(down_at < $scope.ui.selected_range.end){
+				$scope.ui.selected_range.start = down_at
+			}
+			else{
+				$scope.ui.selected_range.start = down_at
+			}
+
+		}
+		if(event == 'up'){
+			var up_at =  event_at;
+			$scope.ui.selected_range.end = up_at
+		}
+        
+
+        // false logic ! should be in up/down test
+		// reverse start/end if selection starts from end .. 		
+		if($scope.ui.selected_range.end < $scope.ui.selected_range.start){
+			var true_end = $scope.ui.selected_range.start
+			var true_start = $scope.ui.selected_range.end
+			$scope.ui.selected_range.start = true_start
+			$scope.ui.selected_range.end = true_end
+		}
+
+
+		// false need section index...
+/*
+		_.each($scope.containers, function(c, ci){
+			_.each($scope.letters[ci], function(d, id){
+					$scope.letters[ci][id]['classes'] = _.without($scope.letters[ci][id]['classes'],'inrange') 
+
+					for (var i = $scope.ui.selected_range.start; i <= $scope.ui.selected_range.end; i++) {
+							
+
+							// false > need delta..
+							var delta =   i - parseInt(c.start) 
+							//console.log(delta)
+							if($scope.letters[ci][delta]){
+								$scope.letters[ci][delta]['classes'].push('inrange')
+							}
+				}
+
+
+			})
+		})
+
+*/
+
+
+		// scan markups in range.
+		_.each($scope.doc.markups, function(markup, i){
+					//	c.selected= true;
+						//c.selected = true;
+						if(markup.type && markup.type !=='container'){
+
+							if(markup.sectionin && markup.sectionin == sectionin){
+								console.log('markups in s.'+markup.start+'-'+markup.type);
+								if(markup.start > event_at){
+
+									$scope.ui.selected_objects.push(markup); 
+								}
+
+
+							}
+							else{
+                 					console.log('markups not in s.'+markup.start+'-'+markup.type)
+							}
 
 
 
 
-	}
-	
+                                
+
+
+
+
+								//
+								//console.log(markup.sectionin)
+
+						}
+						
+/*
+						if( $scope.ui.selected_range.start >= m.start){
+							//
+						
+							// push.
+						//	console.log(c.selecting );
+						}
+						else{
+						m.selected = false
+							//c.selected = !c.selected
+						}
+						*/
+						//m.selected = true
+						
+							/*
+
+						if(c.end<= end_range || c.start == start_range  || c.start <= start_range ){
+							console.log('container:'+c.type+' ('+c.start+' -- '+c.end+')');
+							c.selected= true;
+
+
+
+
+													for (var i = c.start; i <= c.end; i++) {
+													//	console.log(i)
+													var _classes = $scope.letters[c.sectionin][i]['classes'];
+
+												
+												if(_.contains(_classes, 'selected')  ){
+													 $scope.letters[c.sectionin][i]['classes'] = _.without( _classes,'selected')
+
+												}
+												else{
+													$scope.letters[c.sectionin][i]['classes'].push('selected')
+
+												}
+												console.log(_classes)
+
+											}
+
+						
+
+						}
+						*/
+
+						// console.log(c.objects)
+
+
+
+
+
+
+
+
+
+
+		});
+		
+
+		var selected_objects = _.uniq($scope.ui.selected_objects);
+		_.each(selected_objects , function(markup, i){
+				//console.log(markup.sectionin)
+				
+				markup.inrange = true;
+				//if(!markup.sectionin && markup.sectionin !==0){
+				//	console.log("not in")
+				//	console.log(markup)
+				//}
+				//else{
+					//console.log("in")
+					//console.log(markup)
+					$scope.toggle_fragment_ranges('by_range','inrange', markup, true, false)
+
+				//}
+				
+		});
+		_.each($scope.containers , function(c, ci){
+			$scope.containers[ci].selecting = Math.random()
+		});
+		
+
+
+
+
+}
+
+		
 
 	$scope.edit_doc = function(field){
+
 
 		if(field == 'content'){
 			//alert('content change without api offset!')
 		}	
-		if(!$scope.userin){
-			alert('no user')
-			return;
+		if($scope.userin.username ==''){
+			return false;
 		}
 
 
@@ -19493,9 +22779,8 @@ $scope.$emit('docEvent', {action: 'fulltext', type: 'edit', collection_type: 'do
 	}
 
 	$scope.edit_doc_option = function(field){
-		if(!$scope.userin){
-			alert('no user')
-			return;
+		if($scope.userin.username ==''){
+			return false;
 		}
 		if($scope.ui['editing_'+field] === true){
 				$scope.ui['editing_'+field] = false;
@@ -19509,83 +22794,104 @@ $scope.$emit('docEvent', {action: 'fulltext', type: 'edit', collection_type: 'do
 				
 	}
 
+	$scope.switch_focus_side = function(side){
 
-
-	$scope.toggle_select_markup = function (markup, event_name){
-		if(!event_name){
-			var event_name = 'click'
-		}
-
-
-
-		var real_start = markup.start 	- $scope.containers[markup.sectionin].start 
-		var real_end   = markup.end 	- $scope.containers[markup.sectionin].start
-		
-
-		if(markup.selected===true && event_name == 'click'){
-			markup.selected = false
-		}
-		else if(markup.selected===false && event_name == 'click'){
-			markup.selected =true
-		}
-		
-
-		if(markup.editing===true && event_name == 'dblclick'){
-			markup.editing = false
-		}
-		else if(markup.editing===false && event_name == 'dblclick'){
-			markup.editing =true
-		}
-		console.log(markup)
-
-
-		$scope.ui.selected_range.start = real_start
-		$scope.ui.selected_range.end = real_end
-		$scope.ui.selected_section_index = markup.sectionin
-
-		if(markup.selected == true){
-			$scope.ui.selected_objects.push(markup)
-			$scope.$emit('docEvent', {action: 'selection', type: 'select' });
-		}
-		if(markup.selected == false){
-			$scope.ui.selected_objects = _.without($scope.ui.selected_objects, markup)
-			$scope.$emit('docEvent', {action: 'selection', type: 'unselect' });
-		}
+		$scope.ui.focus_side = side;
 	}
+
+
+	$scope.newDm = function (){
+		doc.create_doc_option();
+	}
+	$scope.deleteDm = function (opt_name){	
+		doc.delete_doc_option(opt_name);
+	}
+	// save to api 
+	$scope.saveDm = function (opt_name){
+		doc.save_doc_option(opt_name);
+	}
+
+
+
 	
-	$scope.open_markup_push = function (container_index){
-	// this way only one menu can me open.. and persistent
-		var cur = $scope.ui.menus.push_markup.open;
+
+	$scope.match_selection = function (markup){
+		
+		// apply selection ranges to markup ranges
+		
+		// todo: should check notnull
+		markup.start    = $scope.ui.selected_range.start
+		markup.end 		= $scope.ui.selected_range.end
+
+		// and save (automatic)	
+		doc.markup_save(markup)
+	}
+
+
+	$scope.open_comment_push = function (container_index){
+		
+	   // this way only one menu can me open.. and persistent
+		var cur = $scope.ui.menus.push_comment.open;
 		if(cur == container_index.sectionin){
 			cur = -1	
+			$scope.ui.focus_side = ''
 		}
 		else{
 			cur = container_index.sectionin;
+			$scope.ui.focus_side = 'side_left'
 		}
-		$scope.ui.menus.push_markup.open = cur;
+		$scope.ui.menus.push_comment.open = cur;
 		return;
-
 	}
 
-    $scope.push = new Object;
+
+
+    $scope.push = {};
+
+    // short function
 	$scope.push_section= function (){
+		
+		// auto set
+		$scope.push.start  = (_.last($scope.containers).end)+1
+		$scope.push.end  = (_.last($scope.containers).end)+10
 		$scope.push.type = 'container';
-		$scope.push.subtype = 'container';
-		$scope.push.start =100;
-		$scope.push.end = 200;
+		$scope.push.subtype = 'container';		
+		$scope.push.position = 'inline';
+
 		$scope.push_markup();
+	}
+
+
+
+	$scope.push_generic_from_ranges= function (type, subtype,position){
+
+				$scope.push.type = type;
+				$scope.push.subtype = subtype;
+				$scope.push.start= $scope.ui.selected_range.start;
+				$scope.push.end = $scope.ui.selected_range.end;
+				$scope.push.position = position
+
+				$scope.push_markup();
+
+
 
 	}
 
-	$scope.push_comment= function (){
+	
+
+	$scope.push_comment= function (section){
+
+		// console.log(section.start +'c++'+section.end)
 		$scope.push.type = 'comment';
 		$scope.push.subtype = 'comment';
 
+
+		// use range
 		if($scope.ui.selected_range.start){
 			$scope.push.start = $scope.ui.selected_range.start;
 		}
 		else{
-			$scope.push.start = 0;
+			$scope.push.start = section.start;
 		}
 
 
@@ -19593,81 +22899,116 @@ $scope.$emit('docEvent', {action: 'fulltext', type: 'edit', collection_type: 'do
 			$scope.push.end = $scope.ui.selected_range.end;
 		}
 		else{
-			$scope.push.end = 1;
+			$scope.push.end= section.start;
 		}
-
 		
+		
+		// should use
+	
 		
 		$scope.push.position = 'left';
 
 		$scope.push_markup();
+
+		// close form.
+		$scope.ui.menus.push_comment.open  = -1
+		$scope.ui.focus_side = ''
 
 	}
 
 
 	$scope.push_markup = function (){
 			console.log($scope.push)
-		// clean up object
+			
+			// sure to set up
 			if(!$scope.push.depth){
 				$scope.push.depth = 1;
 			}
 			if(!$scope.push.start){
-				$scope.push.start = 10;
+				$scope.push.start = 0;
 			}
 			if(!$scope.push.end){
-				$scope.push.end = 88;
+				$scope.push.end = 0;
 			}
 			if(!$scope.push.type){
-				$scope.push.type = 'markup';
+				$scope.push.type = 'comment';
 			}
 			if(!$scope.push.metadata){
 				$scope.push.metadata= '-';
 			}
-			else{
-				$scope.push.metadata =encodeURIComponent($scope.push.metadata);
-			}
 			if(!$scope.push.status){
-				$scope.push.status= '-';
+				$scope.push.status= 'pending';
 			}
 			if(!$scope.push.subtype){
-				$scope.push.subtype = 'h1';
+				$scope.push.subtype = 'comment';
 			}
             if(!$scope.push.position){
-				$scope.push.position = 'inline';
+				$scope.push.position = 'left';
 			}
+			if(!$scope.push.doc_id_id){
+				$scope.push.doc_id_id = 'null';
+			}
+			// force autoset / force-correct
+			if($scope.push.type == "markup"){ $scope.push.position = 'inline'}
+			if($scope.push.type == "container"){$scope.push.position = 'inline'}
+			if($scope.push.type == "container_class"){$scope.push.position = 'inline'}
+			
+			// object is clean
 
-		//call service
-		doc.push_markup($scope.push)
-
-		
+			doc.push_markup($scope.push)	 // call service
 
 	}
+
+	// change and save a single value of a markup
+	$scope.replace_markup = function(markup, field, value){
+		markup[field] = value;
+		doc.markup_save(markup)
+	}
+
+
 	$scope.offset_markups = function (){
 		doc.offset_markups()
 	}
-	$scope.offset_markup = function (markup){
-		doc.offset_markup(m)
+	
+	$scope.offset_markup = function (markup, start_qty, end_qty){
+		doc.offset_markup(markup, start_qty, end_qty)
 	}
+
+
+	// section && markup
 	$scope.markup_save = function (markup){
+		$scope.ui.focus_side = ''
 		doc.markup_save(markup)
 	}
 	
 
-	/**
-	* delete a markup on click
-	* @function DocumentCtrl#delete_markup
-	* @param  {Object} markup - markup to delete
-	*/
-	$scope.markup_delete = function (markup){
-		 if(markup.type=="container"){
-			 //alert('can hold objects!')
-			 //return;
-			 doc.markup_delete(markup)
-		 }
-		else{
-			doc.markup_delete(markup)
+
+	// open tools for markup or section 
+	$scope.object_tools = function (object){
+		if(object.object_tools && object.object_tools === true){
+			return object.object_tools = false;
 		}
+			return object.object_tools = true;
 	}
+
+	
+
+	$scope.wrapin_section = function(){
+		
+			$scope.objects_in_range('containers');
+			//$scope.objects_in_range('markups');
+
+
+			$scope.push.type = 'container';
+			$scope.push.subtype = 'container';
+			$scope.push.start = $scope.ui.selected_range.start
+			$scope.push.position = 'inline';
+			$scope.push.end = $scope.ui.selected_range.end
+		//	$scope.push_markup();
+
+	}
+
+	
 
 	/**
 	* turn links clickable out of angular routing
@@ -19675,16 +23016,25 @@ $scope.$emit('docEvent', {action: 'fulltext', type: 'edit', collection_type: 'do
 	* @param  {String} link - redirect link
 	*/
 	$scope.external_link = function (link){
+		$scope.doc = '';
 		window.location = link;
 	}
 
 	$scope.expand_tools = function(name){
-		$scope.ui.menus[name].open = $scope.ui.menus[name].open * -1;
+
+		//$scope.ui.menus[name].open = $scope.ui.menus[name].open * -1;
+		if($scope.ui.menus[name].open == 'no'){
+			$scope.ui.menus[name].open = 'yes'
+		}
+		else{
+			$scope.ui.menus[name].open = "no"
+		}
 		//return;
 		//alert('d')
 	}
 
 	$scope.toggle_render = function(r){
+		$scope.ui.menus['quick_tools'].open = "no"
 		$scope.ui.renderAvailable_active = r
 	}
 	
@@ -19718,8 +23068,8 @@ $scope.$emit('docEvent', {action: 'fulltext', type: 'edit', collection_type: 'do
 				$scope.upload_file_image.fullpath = root_url+'/uploads/'+m[0].path+m[0].basename
 
 
-				$scope.push.metadata = $scope.upload_file_image.fullpath
-
+				//$scope.push.metadata = $scope.upload_file_image.fullpath
+				$scope.markup.metadata        = $scope.upload_file_image.fullpath
 
 			}).error(function(err){
 				console.log(err)
@@ -19729,6 +23079,176 @@ $scope.$emit('docEvent', {action: 'fulltext', type: 'edit', collection_type: 'do
 	}
 
 
+
+	// UI
+
+	// icon click or section select
+	$scope.toggle_select_markup = function (markup, event_name){
+			
+			if(event_name == 'dblclick'){
+				markup.editing = !markup.editing
+			}
+			if(event_name == 'click'){
+				markup.selected = !markup.selected
+			}
+
+			// focus'
+			if(markup.position=="left" && markup.editing){
+				$scope.ui.focus_side = 'side_left'
+			}
+			else if(markup.position=="right" && markup.editing){
+				$scope.ui.focus_side = 'side_right'
+			}
+			else{
+				$scope.ui.focus_side = ''
+			}
+
+    }	
+
+
+
+
+	$scope.toggle_fragment_ranges = function (kind,classname, markup, value, trigger){
+
+			console.log('toggle_fragment_ranges'+kind)
+			var source = $scope.doc.markups;
+
+
+
+			if(kind=='single_markup'){
+					for (var i = markup.start; i <= markup.end; i++) {
+						
+
+						var delta =  i  - $scope.containers[markup.sectionin].start;
+						//
+						//console.log(delta)
+
+						if($scope.containers[markup.sectionin].letters[delta]){
+							var _classes = $scope.containers[markup.sectionin].letters[delta]['classes'];
+
+						//$scope.letters[markup.sectionin][i]['classes'].push("editing")
+						//$scope.letters[markup.sectionin][i]['classes'].push("selected")
+						//console.log($scope.letters[markup.sectionin][i]['classes'])
+
+						if(_.contains(_classes, classname)  ){
+							 $scope.containers[markup.sectionin].letters[delta]['classes'] = _.without( _classes,classname)
+
+						}
+						else{
+							$scope.containers[markup.sectionin].letters[delta]['classes'].push(classname)
+
+						}
+						}
+						
+
+					}
+
+			}
+	
+			if(kind=='by_range'){
+
+				
+ 				//	console.log('apply '+classname+' from '+$scope.ui.selected_range.start+ ' to: '+ $scope.ui.selected_range.end)
+
+					for (var i = $scope.ui.selected_range.start; i <= $scope.ui.selected_range.end; i++) {
+							//if($scope.containers[markup.sectionin].start){
+								
+								// - $scope.containers[markup.sectionin].start;
+								if(markup.sectionin && $scope.letters[markup.sectionin][i]){
+									var delta =  i
+									//console.log('delta;'+delta+ ' cs/'+ markup.start)
+									
+
+						//			var _classes = $scope.letters[markup.sectionin][delta]['classes'];
+									
+/*
+						if(_.contains(_classes, classname)  ){
+						//	$scope.letters[markup.sectionin][delta]['classes'] = _.without( _classes,classname)
+
+						}
+						else{
+						//	$scope.letters[markup.sectionin][delta]['classes'].push(classname)
+
+						}
+
+*/
+
+
+
+
+								}
+							//}
+							
+						
+
+
+					}
+					
+
+			}
+
+            // trigger 
+			//	console.log('TRIGGER ?'+trigger)
+
+			if(trigger){
+					$scope.containers[markup.sectionin].selecting = Math.random()
+			}
+
+
+			/*
+	
+			if($scope.containers[markup.sectionin].start ){
+					var start_range =   markup.start - $scope.containers[markup.sectionin].start 
+					var end_range  	= 	markup.end 	 - $scope.containers[markup.sectionin].start
+			}
+			*/
+
+			return;
+			// match from an object and its range.
+			//if(markup.type !== 'container'){
+					
+//for (var i = 0; i <= 100; i++) {
+
+					
+			//}
+
+			// match
+			if(markup.type == 'container'){
+				console.log('range--in-g section')
+
+			}
+
+
+			
+			
+			return;
+
+
+		}
+		
+
+	/**
+		* delete a markup on click
+		* @function DocumentCtrl#delete_markup
+		* @param  {Object} markup - markup to delete
+		*/
+		$scope.markup_delete = function (markup){
+			 if(markup.type=="container"){
+				 //alert('can hold objects!')
+				 //return;
+				 if($scope.sectionstocount == 1){
+				 	alert('can\'t delete last section')
+				 	return
+				 }
+				 doc.markup_delete(markup)
+			 }
+			else{
+				doc.markup_delete(markup)
+			}
+
+			// toggle
+			$scope.ui.focus_side = ''
+		}
 
 	/**
 	*  EVENTS 
@@ -19743,42 +23263,41 @@ $scope.$emit('docEvent', {action: 'fulltext', type: 'edit', collection_type: 'do
 			
 
 			if(args.action == 'reload'){
-				//alert('d')
+							//	alert('refactored')
+
 			}
 
 			if(args.action == 'fulltext'){
-				doc.init_containers()
+								alert('refactored')
+
 			}
 			if(args.action == 'selection'){
 
 					// NOT STABLE
 					// loop each  $scope.ui.selected_objects.
 
-					for (var i = $scope.ui.selected_range.start; i < $scope.ui.selected_range.end; i++) {
+					for (var i = $scope.ui.selected_range.start; i <= $scope.ui.selected_range.end; i++) {
 						if(args.type == 'select'){
-							$scope.letters[$scope.ui.selected_section_index][i]['classes'].push('selected');
+						//	$scope.letters[$scope.ui.selected_section_index][i]['classes'].push('selected');
 						}
 						if(args.type == 'unselect'){
-							$scope.letters[$scope.ui.selected_section_index][i]['classes'] = _.without($scope.letters[$scope.ui.selected_section_index][i]['classes'], 'selected')
+						//	$scope.letters[$scope.ui.selected_section_index][i]['classes'] = _.without($scope.letters[$scope.ui.selected_section_index][i]['classes'], 'selected')
 						}
 
 					}
-					socket.emit('news', {doc_id: $scope.doc.title, action: args.action , type: args.type });
+				//	socket.emit('news', {doc_id: $scope.doc.title, action: args.action , type: args.type });
 					console.log($scope.ui);
 
 
 			}
-			if(args.action == 'doc_ready'){	
-				doc.init_containers()
-				if(args.type !== 'load'){
-				//	socket.emit('news', {doc_id: $scope.doc.title, action: args.type, collection_type: args.collection_type, collection: args.collection });
-				}
-			}
+			
 			if(args.action == 'containers_ready'){
 				doc.distribute_markups()
 			}
 			if(args.action == 'dispatched_objects'){
 				$scope.ui.loaded = 'loaded'
+
+
 			}
 
 			
@@ -19800,7 +23319,7 @@ $scope.init()
 function SocketsListCtrl($scope, $http , $location, $routeParams, socket) {
 		//$scope.docs = DOCS;
 		console.log('SocketsListCtrl')
-		$scope.stack = new Array();
+		$scope.stack = [];
 		socket.on('newsback', function (data) {
 			//console.log('newsback')
 			//console.log(data);
@@ -19826,11 +23345,124 @@ function DocumentsListCtrl($scope, $http , $location, $routeParams, socket) {
 }
 
 
+// used to test jasmine test technique..
+function  DocumentCtrlJasmine($scope, $http , $sce, $location, $routeParams, renderfactory,socket,docfactory){
+			return 'hello';
+} 
+
+function SectionCtrl($scope, $http , $sce, $location, $routeParams, renderfactory,socket,docfactory){
+		//console.log($scope.section)
+		retrun;
+}
+
+
+
+angular.module('musicBox.controller', []).controller('FragmentCtrl', function($scope) {
+
+
+
+  //console.log($scope.section)
+
+  
+
+
+  
+
+    /*
+
+    $scope.$watchCollection('[markup.start, markup.end]', function(newValue, oldValue) {
+        //console.log($scope)
+        //console.log(newValue)
+        //console.log(oldValue)
+
+        // can call parent..
+        //doc.init_containers()
+        if(oldValue !==newValue && oldValue && oldValue !=='' &&  newValue && newValue !==''){
+
+        }
+
+
+    });
+*/
+	var autosave = false;
+    $scope.$watch('markup.position', function(newValue, oldValue) {
+          // only new value check
+          //console.log(newValue)
+         // console.log(oldValue)
+
+          if(oldValue !==newValue && oldValue && oldValue !=='' &&  newValue && newValue !==''){
+            $scope.markup.position = newValue;
+            	// no toggle $scope.ui.focus_side = ''
+              if(autosave){
+              	doc.markup_save($scope.markup)
+              }  
+            //  alert('s')
+          }
+          else{
+            //console.log('watch position untrigger')
+          }
+      
+    });
+
+
+    $scope.$watch('markup.selected', function(newValue, oldValue) {
+          // only new value check
+          if(oldValue !== newValue ){
+            //console.log(newValue)
+            //console.log(oldValue)
+            $scope.toggle_fragment_ranges('single_markup', 'selected', $scope.markup, newValue, true)
+            
+
+          }
+          else{
+    //        console.log('watch untrigger')
+          }
+    });
+
+/*
+	$scope.$watch('markup.inrange', function(newValue, oldValue) {
+          // only new value check
+          if(newValue !==''){
+            //console.log(newValue)
+            //console.log(oldValue)
+            $scope.toggle_fragment_ranges('single_markup', 'selected', $scope.markup, newValue, true)
+          }
+          else{
+            console.log('watch untrigger')
+          }
+    });
+*/
+
+});
+
+
+
+
+var newdoc_service;
+function DocumentNewCtrl($scope, $http , docfactory) {
+console.log('DocumentNewCtrl')
+
+	$scope.init_new_doc = function (){
+		     //$scope.docs = '';
+       	 	 $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
+			 newdoc_service =  docfactory();
+			 newdoc_service.init_new();
+			//alert('A')
+	}
+	$scope.create_doc = function(){
+		console.log($scope.newdoc)
+		 newdoc_service.newdoc();
+	}
+	$scope.init_new_doc()
+	//alert('0')
+}
+DocumentNewCtrl.$inject = ['$scope', '$http' ,'docfactory'];
+
+
 // MISC UTILS
 function urlencode(str) {
     return escape(str.replace(/%/g, '%25').replace(/\+/g, '%2B')).replace(/%25/g, '%');
 }
-
 function serialize(obj, prefix) {
   var str = [];
   for(var p in obj) {
@@ -19850,29 +23482,107 @@ var render;
 /** 
 * @class UserCtrl
 **/
-function UserCtrl($scope, $http , $location, $routeParams) {
+
+
+function UserProfileCtrl($scope, $http , $location, $routeParams,  $locale) {
+
+		$scope.i18n = $locale;
+ 		$scope.globals = GLOBALS;
+        $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
+		$scope.documents = [];
+
+
+         $http.get(api_url+'/me/account').success(function(d) {
+
+         	$scope.me = d.user;
+         	$scope.documents = d.user_documents;
+         	console.log(d)
+
+
+
+         	var options_array = [];
+        _.each(d.user.user_options , function(option){
+        	console.log(option)
+           // console.log(option)
+            var op_name = option.option_name;
+            var op_value = option.option_value;
+            var op_type = option.option_type;
+
+            options_array[op_name]= [];
+            options_array[op_name]['value'] = op_value;
+
+           
+        });
+       
+          $scope.user_options = [];
+          $scope.user_options = options_array
+          console.log($scope.user_options)
+           //console.log($rootScope.doc_options)
+       
+
+
+
+         })
+
+         $scope.delete_document= function(doc){
+         	  $http.post(api_url+'/doc/'+doc.slug+'/delete').success(function(d) {
+         	  	console.log(d)
+         	  	console.log($scope.documents)
+         	  //	$scope.documents = _.without($scope.documents,d)
+
+					$scope.documents  = _.reject($scope.documents , function(doc){ return doc._id  == d._id; });
+
+         	  })
+
+         }
+
+
+
+         $scope.external_link = function (link){
+			window.location = link;
+		}
+
+
+}
+function UserCtrl($scope, $http , $location, $routeParams,  $locale) {
 	
 		console.log('User Controller')
 		if(USERIN){
 				//console.log(USERIN)
 				$scope.userin = USERIN;
+
 		}
 
-}
+			$scope.register_url = root_url+'/signup';
+			$scope.created_user_link   = root_url+'/me/account?welcome';
 
 
-function SignUpCtrl($scope, $http ) {
-		console.log('SignUpCtrl')
-		$scope.errors= '';
-$scope.init = function (){
+			if($routeParams.redirect_url){
+				$scope.created_user_link 	= $routeParams.redirect_url;
+				$scope.register_url 		+= '?redirect_url='+$routeParams.redirect_url
+			}
+         
+
+		$scope.i18n = $locale;
+ 		$scope.globals = GLOBALS;
         $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
+		$scope.errors= '';
+		$scope.password  ='';
+		$scope.username = ''
 
-	$scope.password  ='';
-	$scope.username = ''
-}
 
 
-		$scope.checkpost = function (){
+		$scope.checklogin = function(){
+			var data = new Object({'username': $scope.username, 'password': $scope.password, 'redirect_url':$routeParams.redirect_url})
+			//console.log($routeParams.redirect_url)
+			$http.post(root_url+'/api/v1/userlogin', serialize(data) ).
+         	success(function(e) {
+         		 //console.log(e)
+         		 window.location = e.redirect_url;
+          	}).error(function(data, status) {});  
+		}
+
+		$scope.checkregister = function (){
 		
 
 			if($scope.password && $scope.username && $scope.password !=="" && $scope.username !=="" ){
@@ -19880,11 +23590,14 @@ $scope.init = function (){
 				var data = new Object()
 				data.username = $scope.username;
 				data.password = $scope.password;
+				data.email = $scope.email;
 				// data = serialize(data);
 			 	console.log(data)
  				$http.post(root_url+'/register', serialize(data) ).
          		 success(function(e) {
-          			$scope.success= 'welcome '+$scope.username +' !'
+         		 		
+         		 		 window.location = $scope.created_user_link 
+          			
            
           		 });  
 
@@ -19894,6 +23607,26 @@ $scope.init = function (){
 			}
 
 		}
+
+
+}
+
+
+
+
+function SignUpCtrl($scope, $http,$routeParams ) {
+		console.log('SignUpCtrl')
+
+//
+
+		$scope.init = function (){
+		   $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
+
+		
+		}
+
+
+		
 	$scope.init()
 	
 

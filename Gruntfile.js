@@ -6,15 +6,10 @@ module.exports = function(grunt) {
     less: {
 
 
-         dev: {
-
-
-        }, 
-
-
+        
        options: {
             paths: ["public/css"],
-          //  compress: true
+           compress: true
         },
 
         src: {

@@ -112,7 +112,12 @@ exports.index_doc= function(req, res) {
 		var doc_slug_discret  =  nconf.get('ROOT_URL')+'/'
 
 		
+
 		if(req.params.slug){
+
+
+			
+
 			doc_req_slug = req.params.slug;
 			doc_slug_discret  +=  '/doc/'+req.params.slug;
 		}
