@@ -11,7 +11,11 @@ var mongoose = require('mongoose'),
 
 
 
-
+exports.list= function(req, res) {
+   
+        res.json('list')
+    
+};
 
 exports.login = function(req, res) {
          var user_ = new Object({'username': null,  'image_url':null})

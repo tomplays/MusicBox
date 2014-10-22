@@ -2,6 +2,16 @@
 // + document options editor
 
 div.doc_header
+	// div.debugg 
+		// h1(ng-bind-html="ui.lastover")
+		ul
+			li(ng-repeat="s in ui.selected_objects")
+				p {{s.start}} {{s.end}} {{s.type}}
+
+		h3(ng-bind-html="ui.selected_range.start")
+		h3(ng-bind-html="ui.selected_range.end")
+
+
 
 	h2(ng-bind-html="doc_options.doc_notices_before_title.value")
 

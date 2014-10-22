@@ -46,6 +46,9 @@ module.exports = function(app, passport, auth) {
    
     app.get('/',                            docs.index_doc);
 
+    app.get('/doc/create',  auth.requiresLogin, docs.index_doc ); // load sub-blocks ? express/angualar..?
+
+
     // routes errors
     app.get('/doc',                         index.errors);
     app.get('/docs',                        index.errors);
@@ -57,7 +60,6 @@ module.exports = function(app, passport, auth) {
     app.get('/doc/fragments/:name/:param?', index.fragments); // load sub-blocks ? express/angualar..?
 
   
-    app.get('/doc/create',  auth.requiresLogin, docs.index_doc ); // load sub-blocks ? express/angualar..?
 
     app.get('/api/v1/docs',                         docs.list);
 
@@ -103,7 +105,12 @@ module.exports = function(app, passport, auth) {
     app.get('/api/v1/room/create/:slug?',  auth.requiresLogin, rooms.createroom);
     app.get('/api/v1/rooms/list', rooms.list);
     app.get('/api/v1/rooms/list/:filter?/:filter_value', rooms.list);
+
     app.get('/room/:slug', rooms.room_view);
+
+
+    app.get('/api/v1/users', users.list);
+
 
 
 };

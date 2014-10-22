@@ -1,3 +1,5 @@
+
+
 i.fa.fa-cog.inactive.quick_tool_opener(class="inside visible_{{ui.menus.quick_tools.open}}", ng-click="expand_tools('quick_tools')" , ng-dblclick="expand_tools('quick_tools')" )
 
 div.quick_tools(class="visible_{{ui.menus.quick_tools.open}}")
@@ -11,12 +13,16 @@ div.quick_tools(class="visible_{{ui.menus.quick_tools.open}}")
 							
 				div.action_box(ng-if="doc_owner == true  || ui.secret " )
 					
-					p(ng-if="ui.renderAvailable_active !=='read'") Switch to 
+					p(ng-if="ui.renderAvailable_active !=='read'")
 						a(ng-click="toggle_render('read')") "reading" mode
-					p(ng-if="ui.renderAvailable_active !=='editor'")  Switch to 
-						a(ng-click="toggle_render('editor')") "editor" mode
+					p(ng-if="ui.renderAvailable_active !=='editor'")  
+						a(ng-click="toggle_render('editor')") "Editor" mode
 					p(ng-if="ui.renderAvailable_active !=='doc_options'")  Edit 
-						a(ng-click="toggle_render('doc_options')") document options
+						a(ng-click="toggle_render('doc_options')") Document options
+
+					p()  
+						a(href="#{root_url}/doc/{{doc.slug}}?secret={{doc.secret}}") Share secret key
+
 
 		div.user_not_in(ng-if="userin.username == '' ")
 			div.user_box
@@ -27,11 +33,11 @@ div.quick_tools(class="visible_{{ui.menus.quick_tools.open}}")
 div.fixed_tools()
 	
 	.inside
-		div(ng-if="ui.selected_range.end !==0" )
+		div(ng-if="ui.selected_range.end && ui.selected_range.start || ui.selected_range.start ===0" )
 			span.ranges
-				span.ranges_start_end selection from {{ui.selected_range.start}}  to {{ui.selected_range.end}}
-			span.textrange
-				{{ui.selected_range.textrange}} 
+				span.ranges_start_end Selected letters from {{ui.selected_range.start}}  to {{ui.selected_range.end}}
+				span.textrange
+					{{ui.selected_range.textrange}} 
 		
 
 

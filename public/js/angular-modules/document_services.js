@@ -663,22 +663,7 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
       },
 
       text_range: function (start, end) {
-         var content_string  = $rootScope.doc.content
-         var text_range = '';
-
-         if(end-start > 70){
-          var i_s = start;
-          var i_e =  end
-          text_range = content_string[i_s]+content_string[i_s+1]+content_string[i_s+2]+content_string[i_s+3]+content_string[i_s+4]+' ..('+ (end-start) +' letters)..'+content_string[end-1]+content_string[end];
-         }
-         else{
-            for (var i = start; i <= end; i++) {
-             text_range += content_string[i];
-          }
-
-         }
-         
-         return text_range;
+       
 
 
       },
@@ -766,7 +751,7 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
               else{
                   console.log('emit?')
               }
-
+              self.init(doc)
              });  
         },
         save_doc_option: function (field) {
@@ -779,6 +764,8 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
           success(function(doc) {
             // # todo reset doc event/ cb
                      // hard redirect
+                     console.log(doc)
+                     self.init(doc)
            
            });  
         },

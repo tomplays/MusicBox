@@ -32,74 +32,6 @@ var app;
 
 
 
-exports.doc_sync= function(req, res) {
-	//console.log('req.body.markups')
-	//console.log(req.body.markups)
-	var query = Document.findOne({ 'slug':req.params.slug });
-	// complete query 
-	query.populate('user','-email -hashed_password -salt').populate( {path:'markups.user_id', select:'-salt', model:'User'}).populate({path:'markups.doc_id', select:'-markups -secret', model:'Document'}).populate('markups.doc_id.user').populate('room').exec(function (err, doc) {
-		if (err){
-			res.json(err)
-		} 
-		else{
-			//console.log(req.body.doc_content)
-			console.log('doc.markups')
-			console.log('#######')
-			//console.log(doc.markups)
-			console.log('#######################')
-			console.log('req.body.markups')
-			console.log('#######')
-	
-			_.each(doc.markups, function(doc_mk, i){
-
-					//console.log(mk)
-					var match = _.find(req.body.markups, function(m){ return m.id  == doc_mk._id; });
-					if(match){
-						/*
-						console.log('original start: '+doc_mk.start)
-						console.log('offset start : '+match.offset_start)
-						console.log('original end: '+doc_mk.end )
-						console.log('offset end : '+parseFloat(match.offset_end))
-						//console.log('doc.markups[i] before')
-						//console.log(doc.markups[i])
-						*/
-						
-						doc.markups[i].start 	=  parseFloat(doc.markups[i].start) + parseFloat(match.offset_start);
-						doc.markups[i].end 		=  parseFloat(doc.markups[i].end)   + parseFloat(match.offset_end);
-						
-						//console.log('doc.markups[i] after')
-						//console.log(doc.markups[i])
-						//match.start = mk.start;
-						//console.log(match)
-					}
-					else{
-
-						console.log(chalk.red('doc_sync should not mismatch >>' ) );
-						console.log(doc_mk)
-
-					}
-			});
-
-
-			// save content
-			doc.content = req.body.doc_content;
-			doc.save(function(err,docsaved) {
-				if (err) {
-					res.send(err)
-				} 
-				else {
-				  	console.log(chalk.green('doc saved') );
-					var out = new Object();
-					out = docsaved;
-					//console.log(out)
-					res.json(out)
-				}
-			});
-
-
-		}
-	});
-}
 
 exports.index_doc= function(req, res) {
 		var user_ = ''
@@ -184,7 +116,7 @@ exports.index_doc= function(req, res) {
 
 exports.doc_get = function(req, res) {
 	var query = Document.findOne({ 'slug':req.params.slug })
-	query.populate('user','-email -hashed_password -salt').populate( {path:'markups.user_id', select:'-salt -email -hashed_password', model:'User'}).populate({path:'markups.doc_id', select:'-markups -secret', model:'Document'}).populate('markups.doc_id.user').populate('room').exec(function (err, doc) {
+	query.populate('user','-email -hashed_password -salt').populate( {path:'markups.user_id', select:'-salt -email -hashed_password', model:'User'}).populate({path:'markups.doc_id', select:'-markups -secret', model:'Document'}).populate('markups.doc_id.user').populate('room', {secret:0}).exec(function (err, doc) {
 		if (err){
 			res.json(err)
 		} 
@@ -207,8 +139,19 @@ exports.doc_get = function(req, res) {
 				if(req.user){
 					 out.userin 	= req.user.toObject()
 				}
+
+
 				out.is_owner 		= exports.test_owner_or_key(doc,req)
-				out.doc.secret 		= 'api_secret'
+
+				if(out.is_owner == true){
+						
+				}
+
+				else{
+					out.doc.secret 		= 'api_secret'
+				}
+
+				
 				res.json(out)
 			}
 			else{
@@ -239,6 +182,75 @@ exports.listRender = function(req, res) {
 			});
 	})
 };
+exports.doc_sync= function(req, res) {
+	//console.log('req.body.markups')
+	//console.log(req.body.markups)
+	var query = Document.findOne({ 'slug':req.params.slug });
+	// complete query 
+	query.populate('user','-email -hashed_password -salt').populate( {path:'markups.user_id', select:'-salt', model:'User'}).populate({path:'markups.doc_id', select:'-markups -secret', model:'Document'}).populate('markups.doc_id.user').populate('room').exec(function (err, doc) {
+		if (err){
+			res.json(err)
+		} 
+		else{
+			//console.log(req.body.doc_content)
+			console.log('doc.markups')
+			console.log('#######')
+			//console.log(doc.markups)
+			console.log('#######################')
+			console.log('req.body.markups')
+			console.log('#######')
+	
+			_.each(doc.markups, function(doc_mk, i){
+
+					//console.log(mk)
+					var match = _.find(req.body.markups, function(m){ return m.id  == doc_mk._id; });
+					if(match){
+						/*
+						console.log('original start: '+doc_mk.start)
+						console.log('offset start : '+match.offset_start)
+						console.log('original end: '+doc_mk.end )
+						console.log('offset end : '+parseFloat(match.offset_end))
+						//console.log('doc.markups[i] before')
+						//console.log(doc.markups[i])
+						*/
+						
+						doc.markups[i].start 	=  parseFloat(doc.markups[i].start) + parseFloat(match.offset_start);
+						doc.markups[i].end 		=  parseFloat(doc.markups[i].end)   + parseFloat(match.offset_end);
+						
+						//console.log('doc.markups[i] after')
+						//console.log(doc.markups[i])
+						//match.start = mk.start;
+						//console.log(match)
+					}
+					else{
+
+						console.log(chalk.red('doc_sync should not mismatch >>' ) );
+						console.log(doc_mk)
+
+					}
+			});
+
+
+			// save content
+			doc.content = req.body.doc_content;
+			doc.save(function(err,docsaved) {
+				if (err) {
+					res.send(err)
+				} 
+				else {
+				  	console.log(chalk.green('doc saved') );
+					var out = new Object();
+					out = docsaved;
+					//console.log(out)
+					res.json(out)
+				}
+			});
+
+
+		}
+	});
+}
+
 
 
 exports.doc_clone = function(req,res){
@@ -507,16 +519,21 @@ exports.doc_edit  = function(req, res) {
 
 	  			doc[field] = value;	
 			}
+               var out 			= {}
+               if(req.user){
+					 out.userin 	= req.user.toObject()
+				}
+				out.is_owner 		= exports.test_owner_or_key(doc,req)
+
 
 			doc.save(function(err,doc) {
 				if (err) {
 					res.send(err)
 				} 
 				else {
-				  	console.log(chalk.green('doc saved') );
-					var out = new Object();
-					out.doc = doc;
-					console.log(out)
+					out.doc 			= doc.toObject()
+					out.doc.secret 		= 'api_secret'
+					console.log(chalk.green('doc saved') );
 					res.json(out)
 				}
 			});

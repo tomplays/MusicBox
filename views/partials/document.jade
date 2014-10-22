@@ -12,16 +12,19 @@ div(ng-include="fragments['branding'][0]['url']")
 div(ng-include="fragments['before_doc'][0].url" )
 div(ng-if="ui.renderAvailable_active == 'doc_options'" , ng-include="fragments['doc_options'][0].url")
 
+
 div(ng-hide="ui.renderAvailable_active == 'doc_options'" , class="sections_container")
 	section( ng-repeat='section in containers' ,  style="{{section.section_styles}} background-repeat:no-repeat;", class="focus_ focus_{{ui.focus_side}} {{section.section_classes}} ")
 		div(ng-repeat='layout in available_layouts')
 			div(class="layout_ layout_name_{{layout.name}} has_count_{{section.objects_count.by_positions[layout.name].count}} has_object_{{section.objects_count.by_positions[layout.name].has_object}}")
 				// h3 {{section.objects_count.by_positions[layout.name].count}}
+				
+
+
+
 				div(ng-if="layout.name == 'global' && $parent.$last")
-					
-					// h3 
-					//div(class="markup_ markup_type_inline", ng-repeat="markup in objects_sections.global_all")
-						div(ng-include="fragments['markup'][0].url" )
+					p globlas	
+				
 
 				// title, author, date, ..
 				div(ng-if="(layout.name== 'center') && ($parent.$first)", ng-include="fragments['doc_title'][0].url")
@@ -48,7 +51,7 @@ div(ng-hide="ui.renderAvailable_active == 'doc_options'" , class="sections_conta
 					// *ng-class="l.classes"
 					div.theletters
 						// span.lt(class="{{l.classes_flat}}", ng-bind-html="l.char", lt="l" , ng-repeat="l in section.letters")
-						span.lt(ng-class="l.classes", ng-bind-html="l.char", lt="l" , ng-repeat="l in section.letters")
+						span.lt(ng-class="l.classes", class="in_range_{{l.inrange}}", ng-bind-html="l.char", lt="l" , ng-repeat="l in section.letters")
 
 		// render into the layout loop, only "if last"
 		// made to apply last section styles to footer

@@ -56,7 +56,7 @@ musicBox.controller('DocumentCtrl', DocumentCtrl);
 
 function DocumentCtrl($scope, $http , $sce, $location, $routeParams, renderfactory,socket,docfactory) {
 
-		DocumentCtrl.$inject = ['$scope', '$http', '$sce', '$location', '$routeParams', 'renderfactory','socket','docfactory'];
+	//	DocumentCtrl.$inject = ['$scope', '$http', '$sce', '$location', '$routeParams', 'renderfactory','socket','docfactory'];
 
 			
 		console.log('DocumentCtrl on');
@@ -311,211 +311,7 @@ if(newValue !==undefined  && oldValue !==undefined && (newValue !== oldValue) )
 			return;
 
 	}
-$scope.over= function(l, event){
-
-		var letter = l.l;
-
-
-		//console.log('over ctrl '+position, event);
-
-		if(event == 'click')
-		{
-			console.log(letter)
-			if(letter.href){
-				window.location= letter.href;	
-			}
-		}
-
-		var down_at;
-		var up_at;
-		down_at  = $scope.ui.selected_range.start
-		up_at	 = $scope.ui.selected_range.end
-        console.log(l)
-	    var sectionin	 = l.sectionin
-
-
-		// console.log(event)
-
-		//console.log(letter)
-
-
-		var event_at = l.l.lindex;
-			   	console.log('event_at'+event_at)
-
-		
-
-		if(event == 'down'){
-
-
-			down_at = event_at;
-
-
-
-			if(down_at < $scope.ui.selected_range.end){
-				$scope.ui.selected_range.start = down_at
-			}
-			else{
-				$scope.ui.selected_range.start = down_at
-			}
-
-		}
-		if(event == 'up'){
-			var up_at =  event_at;
-			$scope.ui.selected_range.end = up_at
-		}
-        
-
-        // false logic ! should be in up/down test
-		// reverse start/end if selection starts from end .. 		
-		if($scope.ui.selected_range.end < $scope.ui.selected_range.start){
-			var true_end = $scope.ui.selected_range.start
-			var true_start = $scope.ui.selected_range.end
-			$scope.ui.selected_range.start = true_start
-			$scope.ui.selected_range.end = true_end
-		}
-
-
-		// false need section index...
-/*
-		_.each($scope.containers, function(c, ci){
-			_.each($scope.letters[ci], function(d, id){
-					$scope.letters[ci][id]['classes'] = _.without($scope.letters[ci][id]['classes'],'inrange') 
-
-					for (var i = $scope.ui.selected_range.start; i <= $scope.ui.selected_range.end; i++) {
-							
-
-							// false > need delta..
-							var delta =   i - parseInt(c.start) 
-							//console.log(delta)
-							if($scope.letters[ci][delta]){
-								$scope.letters[ci][delta]['classes'].push('inrange')
-							}
-				}
-
-
-			})
-		})
-
-*/
-
-
-		// scan markups in range.
-		_.each($scope.doc.markups, function(markup, i){
-					//	c.selected= true;
-						//c.selected = true;
-						if(markup.type && markup.type !=='container'){
-
-							if(markup.sectionin && markup.sectionin == sectionin){
-								console.log('markups in s.'+markup.start+'-'+markup.type);
-								if(markup.start > event_at){
-
-									$scope.ui.selected_objects.push(markup); 
-								}
-
-
-							}
-							else{
-                 					console.log('markups not in s.'+markup.start+'-'+markup.type)
-							}
-
-
-
-
-                                
-
-
-
-
-								//
-								//console.log(markup.sectionin)
-
-						}
-						
-/*
-						if( $scope.ui.selected_range.start >= m.start){
-							//
-						
-							// push.
-						//	console.log(c.selecting );
-						}
-						else{
-						m.selected = false
-							//c.selected = !c.selected
-						}
-						*/
-						//m.selected = true
-						
-							/*
-
-						if(c.end<= end_range || c.start == start_range  || c.start <= start_range ){
-							console.log('container:'+c.type+' ('+c.start+' -- '+c.end+')');
-							c.selected= true;
-
-
-
-
-													for (var i = c.start; i <= c.end; i++) {
-													//	console.log(i)
-													var _classes = $scope.letters[c.sectionin][i]['classes'];
-
-												
-												if(_.contains(_classes, 'selected')  ){
-													 $scope.letters[c.sectionin][i]['classes'] = _.without( _classes,'selected')
-
-												}
-												else{
-													$scope.letters[c.sectionin][i]['classes'].push('selected')
-
-												}
-												console.log(_classes)
-
-											}
-
-						
-
-						}
-						*/
-
-						// console.log(c.objects)
-
-
-
-
-
-
-
-
-
-
-		});
-		
-
-		var selected_objects = _.uniq($scope.ui.selected_objects);
-		_.each(selected_objects , function(markup, i){
-				//console.log(markup.sectionin)
-				
-				markup.inrange = true;
-				//if(!markup.sectionin && markup.sectionin !==0){
-				//	console.log("not in")
-				//	console.log(markup)
-				//}
-				//else{
-					//console.log("in")
-					//console.log(markup)
-					$scope.toggle_fragment_ranges('by_range','inrange', markup, true, false)
-
-				//}
-				
-		});
-		_.each($scope.containers , function(c, ci){
-			$scope.containers[ci].selecting = Math.random()
-		});
-		
-
-
-
-
-}
+$scope.over= function(l, event){}
 
 		
 
@@ -867,7 +663,31 @@ $scope.over= function(l, event){
     }	
 
 
+    // transform ranges to string
+    // limited to 70 chars
 
+	$scope.textrange =  function(){
+   
+		var start 				= $scope.ui.selected_range.start
+		var end 				=  $scope.ui.selected_range.end
+        var content_string  	= $scope.doc.content
+        
+        var text_range 			= '"';
+
+        if(end-start > 70){ 
+          // a.b.c ... x.y.z
+          text_range 			= content_string[start]+content_string[start+1]+content_string[start+2]+content_string[start+3]+' ..('+ (end-start) +' letters)..'+content_string[end-3]+content_string[end-2]+content_string[end-1]+content_string[end]
+        }
+        else{
+            for (var i = start; i <= end; i++) {
+            	text_range 		+= content_string[i];
+          	}
+         }
+
+         text_range				 +='"'
+
+         return text_range;
+  	}
 
 	$scope.toggle_fragment_ranges = function (kind,classname, markup, value, trigger){
 
@@ -1168,7 +988,7 @@ angular.module('musicBox.controller', []).controller('FragmentCtrl', function($s
 
     $scope.$watch('markup.selected', function(newValue, oldValue) {
           // only new value check
-          if(oldValue !== newValue ){
+          if(oldValue !==newValue ){
             //console.log(newValue)
             //console.log(oldValue)
             $scope.toggle_fragment_ranges('single_markup', 'selected', $scope.markup, newValue, true)
