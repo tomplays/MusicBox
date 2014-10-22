@@ -248,7 +248,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
               'show_user': false,
               'subtype': {
                 'free_input' : true,
-                'available' : ['', 'date', 'info']
+                'available' : ['hidden', 'date', 'info']
              },   
               'position_available': ['left', 'right', 'under', 'center','global'],
             });
@@ -445,18 +445,18 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
         var arr = new Array(
           {name:'wide', order:0, ID:0},
           {name:'slidewide', order:1, ID:1},
-          {name:'center', order:2, include_title:true,  ID:2},
-          {name:'left', order:7, ID:3},  // "left" layout is after inline (css-technique : margin-left:-50%)
+          {name:'center', order:2, include_title:true,  ID:2, include_even_empty:true},
+          {name:'left', order:7, ID:3, include_even_empty:true},  // "left" layout is after inline (css-technique : margin-left:-50%)
           {name:'inline_into',  order:3, ID:6},
-          {name:'inline', order:4, include_objects:false, ID:5}, 
+          {name:'inline', order:4, include_objects:false, ID:5, include_even_empty:true}, 
           {name:'inline-implicit', order:6, ID:6},
         //  {name:'inline_into_after', order:6, ID:7},
           
-          {name:'right', order:8, ID:8},
+          {name:'right', order:8, ID:8, include_even_empty:true},
          
           {name:'under', order:9, ID:9},
          
-          {name:'global', order:10, ID:10},
+          {name:'global', include_objects:false, order:10, ID:10, include_even_empty:true},
           {name:'background', order:11, include_objects:false, ID:11} 
 
           );

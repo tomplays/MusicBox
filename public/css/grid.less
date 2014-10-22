@@ -320,6 +320,7 @@ a.btn_ok{
 section{
   width:100%;
   float:left;
+  word-wrap: break-word;
   
   padding-bottom:10px;
   &.pad{padding:2%}
@@ -370,7 +371,7 @@ section{
             width: 40%;
           }
       } 
-   
+    
   
       .layout_name_inline{
          left: @left-margin;
@@ -379,7 +380,6 @@ section{
           position: relative;
           width: @inline-width;
       }
-
   }
 
   &.focus_side_left{
@@ -431,8 +431,10 @@ section{
     
   }
 
-
-
+    /*blue effect on selection*/
+    &.selected_true .layout_name_inline{
+       background: none repeat scroll 0 0 rgba(41, 128, 185, 0.1);
+    }
 
 
 }
@@ -472,15 +474,16 @@ section{
 }
 
 .layout_name_center {
- 
-
-     margin: 0 2%;
+    margin: 0 2%;
     padding: 0 @left-margin;
     text-align: center;
     width:@inline-width;
 
 }
 
+.layout_name_global .inside{
+  border-top:@light-border;
+}
 
 .layout_name_under, .layout_name_global{
   
@@ -1006,10 +1009,10 @@ div.markup_displayer_media .icon_col {
               i.fa{
                    border: 2px solid rgba(0, 0, 0, 0);
                     border-radius: 4px;
-                    font-size: 1.3em;
+                    font-size: 1em;
                     line-height: 1;
                     min-width: 15px;
-                    padding: 0 2px;
+                    padding: 0 1px;
                     text-align: center;
                     vertical-align: middle;
                    &.selected{
@@ -1018,14 +1021,14 @@ div.markup_displayer_media .icon_col {
                    }
 
               }
+              /*special case for markups */
               i.fa.fa-markup{
- background:none repeat scroll 0 0 rgb(52, 152, 219);
-  color:#fff;
-  &:before{
-   
-    
-}
-}
+               background:none repeat scroll 0 0 rgb(52, 152, 219);
+                color:#fff;
+                &:before{  
+                 content: ""
+                }
+              }
               span{
                 display:none;
                 color:#ccc;
@@ -1753,7 +1756,14 @@ footer{
    font-size: .8em;
 
 
-
+    &.two-cols{
+     .theletters{
+       -moz-column-count: 1;
+       -moz-column-gap: 0px;
+       -webkit-column-count: 1;
+       -webkit-column-gap: 0px;        
+     }
+     }
 
     div.branding{
         .border-radius(1px);    

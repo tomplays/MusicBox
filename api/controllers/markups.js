@@ -82,26 +82,40 @@ exports.markup_edit = function(req, res) {
 						m.status 	= m_body.status
 						m.depth     = m_body.depth
 						
+								console.log('C0')
+
+
+
 						if(m_body.doc_id){
 							console.log('DOC sub _id: '+m_body.doc_id)
-							console.log(m)
+						
 							var memo_doc = m.doc_id;
 							
-							if(m.doc_id && m.doc_id._id){
+								console.log('CA')
+
+							if(m.doc_id !=='' && m.doc_id && m.doc_id._id){
 								m.doc_id._id = m_body.doc_id;
+
+								console.log('CB')
 							}
 							else{
-								if( m_body.doc_id){
+								if( m_body.doc_id !== ''){
 										m.doc_id = m_body.doc_id;
+
+									console.log('CC')
 								}
 								else{
-
+									m.doc_id = '';
 								}
 								
 							}
 							
 						
 
+						}
+						else{
+							m.doc_id = null;
+								console.log(' doc_id set to null')
 						}
 
 						 // arrays updated  

@@ -22,7 +22,7 @@ Welcome here !
 */
 
 // TODO
-// doc_options
+// 
 // "virtual" collections cf $scope.virtualize
 
 
@@ -48,8 +48,6 @@ var doc;
  */
 
 var app = angular.module('musicBox', []);
-
-
 musicBox.controller('DocumentCtrl', DocumentCtrl);
 
 
@@ -82,15 +80,6 @@ function DocumentCtrl($scope, $http , $sce, $location, $routeParams, renderfacto
 			doc.load();
 			
 		}
-
-
-// util flatten array to string
-var flatten= function (n) {
-		//console.log(n);
-		var out = '';
-			_.each(n, function(c, i){out +=  n[i]+' ';});
-		return out;
-}	
 
 
 
@@ -286,6 +275,7 @@ if(newValue !==undefined  && oldValue !==undefined && (newValue !== oldValue) )
 	}
 
 	// re set a markup to "safe" place {O,1,comment,left}
+	// doesnt change else values.
 	$scope.reset_markup = function(markup){
 		markup.start = 0;
 		markup.end= 1;
@@ -311,7 +301,6 @@ if(newValue !==undefined  && oldValue !==undefined && (newValue !== oldValue) )
 			return;
 
 	}
-$scope.over= function(l, event){}
 
 		
 
@@ -641,6 +630,22 @@ $scope.over= function(l, event){}
 
 	// icon click or section select
 	$scope.toggle_select_markup = function (markup, event_name){
+			
+				if(markup.isolated == true){
+					markup.editing = !markup.editing
+					return;
+				}
+			
+
+			if(markup.type == 'container'){
+						_.each($scope.containers, function(c, i){
+							if(c !== markup){
+								// toggle the others
+								c.selected = false;
+							}
+							
+						});
+			}
 			
 			if(event_name == 'dblclick'){
 				markup.editing = !markup.editing
@@ -991,7 +996,10 @@ angular.module('musicBox.controller', []).controller('FragmentCtrl', function($s
           if(oldValue !==newValue ){
             //console.log(newValue)
             //console.log(oldValue)
-            $scope.toggle_fragment_ranges('single_markup', 'selected', $scope.markup, newValue, true)
+           
+        		$scope.toggle_fragment_ranges('single_markup', 'selected', $scope.markup, newValue, true)
+
+           
             
 
           }

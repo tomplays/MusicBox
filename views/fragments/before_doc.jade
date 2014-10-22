@@ -82,7 +82,7 @@ div.editor_zone.doc_centered(ng-if="ui.renderAvailable_active == 'editor'" )
 				p start {{mk.start}} +/- : {{mk.offset_start}} end {{mk.end}} +/- : {{mk.offset_end}} {{mk.type}}
 
 
-			div(ng-repeat="isolated in ui.isolated_markups")
+			// div(ng-repeat="isolated in ui.isolated_markups")
 				p isolated markup @:  {{isolated.start}} {{isolated.end}} {{isolated.type}} 
 				a(ng-click="reset_markup(isolated)") reset (as start 0 end 1 type -comment)
 

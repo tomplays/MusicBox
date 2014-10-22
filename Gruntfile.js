@@ -90,8 +90,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jade');
   grunt.loadNpmTasks('grunt-forever');
   //grunt.registerTask('dev', ['forever']); // , 'connect:server' // 'forever', 
-    grunt.registerTask('less', ['less']); // , 'connect:server' // 'forever', 
-
+  grunt.registerTask('lesscss', ['less']); // , 'connect:server' // 'forever', 
   grunt.registerTask('stop', ['forever:server1:stop']); // , 'connect:server' // 'forever', 
   grunt.registerTask('default', ['forever:server1:restart','jade','watch', 'less','jasmine']); // , 'connect:server' // 'forever', 
 };

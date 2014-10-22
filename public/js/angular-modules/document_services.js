@@ -128,10 +128,10 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
 
         $rootScope.objects_sections = [];
         $rootScope.objects_sections['global_all'] = [];
-        $rootScope.objects_sections['global_by_type'] = [];
-        _.each($rootScope.available_sections_objects, function(o, obj_index){
-          $rootScope.objects_sections['global_by_type'][o] =[];
-        });
+       // $rootScope.objects_sections['global_by_type'] = [];
+       // _.each($rootScope.available_sections_objects, function(o, obj_index){
+         // $rootScope.objects_sections['global_by_type'][o] =[];
+        //});
         // emit event
 
         $rootScope.$emit('docEvent', {action: 'containers_ready' });
@@ -225,6 +225,11 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
                 $rootScope.containers[index]['objects_count']['by_positions'][op.name] = new Object({'count':0, 'has_object':false})
                 $rootScope.containers[index]['objects'][$rootScope.available_sections_objects[obj_index]][op.name] =[];
               });
+
+              // set to "1" for title include.
+              $rootScope.containers[0]['objects_count']['by_positions']['center'].count = 1;
+
+
           });
 
           //
@@ -234,7 +239,7 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
             markup.offset_start = 0;
             markup.offset_end = 0;
             //markup.sectionin = false;
-            markup.isolated = true;
+         
 
             var i_array = 0;  
               //Only if textdata is in sections ranges
@@ -281,7 +286,7 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
 
               }
 
-              if(markup.type == 'media' || markup.type == 'child'){
+              if(markup.type == 'media' || markup.subtype == 'simple_page' ||  markup.subtype == 'doc_content_block' ){
                      $rootScope.containers[index].section_classes += 'has_image ';
                      if(markup.position){
                         $rootScope.containers[index].section_classes += ' focus_side_'+markup.position +' ';
@@ -315,7 +320,7 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
                 //console.log('children call ...')
               }
           
-              if(markup.type=='markup' || markup.type == 'hyperlink'  || markup.type=='comment' || markup.type=='note' || markup.type=='semantic'  ){ // or pos == inlined
+              if(markup.type=='markup' || markup.type == 'hyperlink'  || markup.type=='comment' || markup.type=='note' || markup.type=='semantic' || markup.subtype=='share_excerpt'  ){ // or pos == inlined
 
                   var j_arr=0;
                   var into_for = 0;
@@ -417,17 +422,18 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
 
                  if(markup.position == 'global'){
                       $rootScope.objects_sections['global_all'].push(markup)
-                      $rootScope.objects_sections['global_by_type'][markup.type].push(markup)
+                   //   $rootScope.objects_sections['global_by_type'][markup.type].push(markup)
 
                  }
-                 else{
+                 $rootScope.containers[index].objects[markup.type][markup.position].push(markup) 
 
-                    $rootScope.containers[index].objects[markup.type][markup.position].push(markup) 
+                 
+              //  if(markup.type !=='container'){
+                    $rootScope.containers[index].objects_count['by_positions'][markup.position].count++;
+                    $rootScope.containers[index].objects_count['by_positions'][markup.position].has_object  = true;
+               //  }
 
-                 }
-
-                $rootScope.containers[index].objects_count['by_positions'][markup.position].count++;
-                $rootScope.containers[index].objects_count['by_positions'][markup.position].has_object  = true;
+               
             
                 $rootScope.containers[index].objects_count['all'].count++;
                 $rootScope.containers[index].objects_count['all'].has_object  = true;
@@ -490,16 +496,18 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
               } 
         } 
 
-        // reloop to find isolate markups
+          // reloop to find isolate markups
 
           $rootScope.ui.isolated_markups = []
           _.each($rootScope.doc.markups, function(markup){
-            if(markup.isolated == true && markup.type !=="container"){
-                console.log('isolate markup: '+markup.start+' - '+markup.type)
-               // console.log(markup)
-                $rootScope.ui.isolated_markups.push(markup)
-            }
 
+           if(!markup.isolated ==false || markup.start > $rootScope.doc.content.length ){
+             console.log('markup.isolated' )
+             markup.isolated =true;
+             $rootScope.ui.isolated_markups.push(markup)
+           }
+          
+            
           })
 
 
@@ -514,6 +522,18 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
       },
 
 
+    
+      
+
+      // util flatten array to string
+    
+      flatten_classes: function (n) {
+      //console.log(n);
+      var out = '';
+      _.each(n, function(c, i){out +=  n[i]+' ';});
+        return out;
+      }, 
+
       /**
       * fill arrays of letters for each section  {@link DocumentCtrl#distribute_markups} 
       * @param {Object} section - section object
@@ -525,14 +545,7 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
       * @link DocumentCtrl#distribute_markups 
       * @todo remove section count param
       */
-  // util flatten array to string
-    
-     flatten_classes: function (n) {
-    //console.log(n);
-    var out = '';
-      _.each(n, function(c, i){out +=  n[i]+' ';});
-    return out;
-}, 
+
       fill_chars : function (section, section_count){
         var temp_letters = [];
         var i;
@@ -606,7 +619,7 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
 
 
       /**
-      * sub loop _d (not really musicbox, rather objects options (doc_options, users_options, etc..))
+      * sub-function to set objects options (doc_options, users_options, etc..))
       */
 
       apply_object_options : function(object, options){
@@ -647,7 +660,6 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
          else if(object == 'room')  {
           $rootScope.room_options = [];
           $rootScope.room_options = options_array
-          //console.log($rootScope.room_options)
          }
          else if(object =='markup_user_options'){
             //  console.log(options_array)
@@ -828,7 +840,7 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
           })
       },
       markup_save: function (markup){
-          //var data = new Object({'start': markup.start})
+         
            console.log(markup)
            var temp = markup;
       
@@ -840,26 +852,17 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
             'status':markup.status,
             'type':markup.type,
             'subtype':markup.subtype,
-            'position':markup.position,
-            'doc_id': markup.doc_id_id
+            'position':markup.position
           });
-/*
-           if(markup.type =='container'){
-                markup.letters =[];
-                markup.objects =[];
-                markup.objects_count =[];
-           }
-           else{
-               if(markup.doc_id){
-                  temp.child_options = ''
-                  temp.doc_id = markup.doc_id._id;
-               }
-           }
-           */
+
+          if(markup.doc_id_id){
+            save.doc_id= markup.doc_id_id
+          }
+
+          // can be null.
           save.secret = $rootScope.ui.secret;
-          console.log(save)
-          var data = serialize(save)
-          $http.post(api_url+'/doc/'+$rootScope.doc.slug+'/markup/'+markup._id+'/edit', data ).success(function(m) {
+
+          $http.post(api_url+'/doc/'+$rootScope.doc.slug+'/markup/'+markup._id+'/edit',  serialize(save) ).success(function(m) {
             console.log(m)
             if(m.err_code){
               alert(m.message)
