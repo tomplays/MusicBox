@@ -38,8 +38,8 @@ div.inside_child(style="background:{{markup.child_options.block_color}}")
 
 			a(href="https://www.facebook.com/sharer/sharer.php?u={{doc.encoded_url}}")
 				i.fa.fa-facebook-square
-		p 
-			em {{markup.explicit_string}}
+			p 
+				em {{markup.explicit_string}}
 
 	span.icon_col
 		i(class="fa fa-{{markup.type}} fa-{{markup.subtype}} editing_{{markup.editing}} selected_{{markup.selected}}",  ng-click="toggle_select_markup(markup)", ng-dblclick="toggle_select_markup(markup, 'dblclick')"  ) 

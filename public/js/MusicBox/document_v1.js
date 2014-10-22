@@ -882,7 +882,7 @@ if(newValue !==undefined  && oldValue !==undefined && (newValue !== oldValue) )
 			}
 			if(args.action == 'dispatched_objects'){
 				$scope.ui.loaded = 'loaded'
-
+              
 
 			}
 

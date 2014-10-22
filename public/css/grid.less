@@ -1009,7 +1009,7 @@ div.markup_displayer_media .icon_col {
               i.fa{
                    border: 2px solid rgba(0, 0, 0, 0);
                     border-radius: 4px;
-                    font-size: 1em;
+                   font-size: 0.9em;
                     line-height: 1;
                     min-width: 15px;
                     padding: 0 1px;
@@ -1243,9 +1243,11 @@ background-image: url("/img/test-a.png");
           font-size: 4em;
     }
     p {
-     float: left;
-    
-      width: 100%
+      float: left;
+      font-size: 0.7em;
+      line-height: 1em;
+      margin-bottom: 3%;
+      width: 100%;
     }
     em{
 
@@ -1564,6 +1566,32 @@ background-image: url("/img/test-a.png");
      max-width: 98%;
   } 
 }
+.flash_message{
+  position:fixed;
+  z-index:999999;
+  top:0px;
+  padding:2%;
+   background:transparent;
+  text-align:center;
+  width:100%;
+  height:auto;
+  float:left;
+  
+  &.ok{
+     color:#fff;
+     background:  rgba(39, 174, 96, 0.6);
+     font-size: 1.3em;
+     font-weight:bold;
+  }
+  &.loading_doc{
+   
+   
+    height: 90%;
+  
+  }
+}
+
+
 
 .section_debug{
     li{
@@ -1593,7 +1621,7 @@ background-image: url("/img/test-a.png");
 
 /* ______________________________________ */
 /*                              ♫         */
-/*              RESPONSIVE                */
+/*                            */
 /* ______♫ ______________________________ */
 
 
@@ -1700,8 +1728,6 @@ body.render_active_doc_options{
 .delete_document{
   color:#c0392b
 }
-
-
 
 footer{
     border-top: @light-border;

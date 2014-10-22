@@ -233,15 +233,30 @@ exports.doc_sync= function(req, res) {
 
 			// save content
 			doc.content = req.body.doc_content;
+
+			   var out 			= {}
+               if(req.user){
+					 out.userin 	= req.user.toObject()
+				}
+				out.is_owner 		= exports.test_owner_or_key(doc,req)
+
+
 			doc.save(function(err,docsaved) {
 				if (err) {
 					res.send(err)
 				} 
 				else {
 				  	console.log(chalk.green('doc saved') );
-					var out = new Object();
-					out = docsaved;
+					
+
+						out.doc 			= doc.toObject()
+						out.doc.secret 		= 'api_secret'
+				
 					//console.log(out)
+					
+
+
+
 					res.json(out)
 				}
 			});
@@ -475,7 +490,7 @@ exports.doc_delete  = function(req, res) {
 
 exports.doc_edit  = function(req, res) {
 	var query = Document.findOne({ '_id':req.params.doc_id });
-	query.populate('user', '-email -hashed_password -salt').populate('room').exec(function (err, doc) {
+	query.populate('user','-email -hashed_password -salt').populate( {path:'markups.user_id', select:'-salt -email -hashed_password', model:'User'}).populate({path:'markups.doc_id', select:'-markups -secret', model:'Document'}).populate('markups.doc_id.user').populate('room', {secret:0}).exec(function (err, doc) {
 		if (err){
 			res.json(err)
 		} 
@@ -570,10 +585,13 @@ exports.doc_delete_option  = function(req, res) {
 
 exports.doc_edit_option  = function(req, res) {
 	var query = Document.findOne({ 'slug':req.params.slug });
-	query.populate('user').populate('room').exec(function (err, doc) {
+	query.populate('user','-email -hashed_password -salt').populate( {path:'markups.user_id', select:'-salt -email -hashed_password', model:'User'}).populate({path:'markups.doc_id', select:'-markups -secret', model:'Document'}).populate('markups.doc_id.user').populate('room', {secret:0}).exec(function (err, doc) {
+
+
 	if (err){
 		res.json(err)
 	} else{
+		    var out 			= {}
 
 			var field = req.body.field
 			var value = req.body.value
@@ -591,13 +609,34 @@ exports.doc_edit_option  = function(req, res) {
 			 })
 			 doc.doc_options = new Array()
 			 doc.doc_options = doc_options_new
-			 doc.save(function(err,doc) {
+			
+				if(req.user){
+					 out.userin 	= req.user.toObject()
+				}
+
+
+				out.is_owner 		= exports.test_owner_or_key(doc,req)
+
+				if(out.is_owner == true){
+						 doc.save(function(err,doc) {
 					if (err) {
 						res.send(err)
 					} else {
-						res.json(doc)
+							console.log(out)
+						out.doc 			= doc.toObject()
+						out.doc.secret 		= 'api_secret'
+						res.json(out)
+						
 					}
-			});		
+			     });		
+				}
+
+				else{
+						res.json('err')
+				}
+
+
+			   
 	}
 	})
 }

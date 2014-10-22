@@ -11,13 +11,19 @@
 
 
 
-musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $routeParams, socket, renderfactory, $locale) {
+musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $routeParams, socket, renderfactory, $locale, $timeout) {
  return function (inf) {
     var self = {
 
-     
+ 
+                     
+                     
+
 
       load: function () {
+
+      // this.flash_message('loading..', 'loading_doc', '')
+
         var docid = 'homepage';
         if($routeParams.docid){
             docid = $routeParams.docid
@@ -34,6 +40,9 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
               // enough for load.
               // init-set 
               self.init(d);
+
+             
+
          });
         
       },
@@ -514,8 +523,11 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
 
   
         // console.log($rootScope.letters)
-        $rootScope.$emit('docEvent', {action: 'dispatched_objects' });
+       // $rootScope.$emit('docEvent', {action: 'dispatched_objects' });
        // console.log( $rootScope.objects_sections['global_by_type'])
+
+
+      //  doc.flash_message('','', '')
 
         //console.log($rootScope.containers)
 
@@ -634,7 +646,7 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
             options_array[op_name]= [];
             options_array[op_name]['value'] = op_value;
 
-            if(op_type == 'google_typo' && object == 'document'){
+            if( op_value && op_type == 'google_typo' && object == 'document'){
                WebFont.load({
                   google: {
                    families: [op_value]
@@ -673,7 +685,17 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
   
 
       },
+      flash_message: function (msg,classname ,timeout) {
+       $rootScope.flash_message.text = msg;
+       $rootScope.flash_message.classname = classname;
+       
+       if(timeout){
+        $timeout(function(){
+          $rootScope.flash_message.text =  '';
+       }, timeout);
+      }
 
+      },
       text_range: function (start, end) {
        
 
@@ -723,9 +745,12 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
               
               console.log(doc)
               // re-set doc "softest" way (#no date bug)
-              $rootScope.doc.content = doc.content;
-              $rootScope.doc.markups = doc.markups;
-              $rootScope.$emit('docEvent', {action: 'doc_ready', type: '-', collection_type: 'doc', collection:doc });
+              
+            //  $rootScope.doc.content = doc.content;
+            //  $rootScope.doc.markups = doc.markups;
+              self.init(doc)
+              self.flash_message('content saved', 'ok' , 2000)
+              //$rootScope.$emit('docEvent', {action: 'doc_ready', type: '-', collection_type: 'doc', collection:doc });
         });  
       },
 
@@ -763,6 +788,7 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
               else{
                   console.log('emit?')
               }
+               self.flash_message('document saved', 'ok' , 4000)
               self.init(doc)
              });  
         },
@@ -777,6 +803,7 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
             // # todo reset doc event/ cb
                      // hard redirect
                      console.log(doc)
+                     self.flash_message('option saved', 'ok' , 4000)
                      self.init(doc)
            
            });  

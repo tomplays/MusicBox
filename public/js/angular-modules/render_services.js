@@ -106,6 +106,8 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
            $rootScope.ui.debug = true;
         }
 
+        $rootScope.flash_message = {'text':''};
+
 
         if($routeParams.docid){
               $rootScope.ui.is_home = 'false'
