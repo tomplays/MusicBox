@@ -174,5 +174,8 @@ var DocumentSchema = new Schema({
 DocumentSchema.path('title').validate(function(title) {
     return title.length;
 }, 'Title cannot be blank');
+
+
+
 mongoose.model('Markup',MarkupSchema);
 mongoose.model('Document', DocumentSchema);

@@ -348,7 +348,7 @@ exports.doc_create = function(req,res){
 	 new_doc.markups = new Array()
 	 new_doc.doc_options = new Array()
 
-	 var text_size = _.size(raw_content);
+	 var text_size = _.size(raw_content)-1;
 
 	 var markup_section_base  = new Object( {'user_id':req.user._id, 'username':req.user.username, 'start':0, 'end':text_size,  'type': 'container', 'subtype':'section', 'position':'inline'} )
 	 new_doc.markups.push(markup_section_base)

@@ -362,7 +362,8 @@ section{
       .layout_name_left img, 
        .layout_name_right img, 
       .layout_name_center img, 
-      .layout_name_under img {
+      .layout_name_under img,
+        .layout_name_global img {
           max-width: 100%;
           width:100%;
 
@@ -821,8 +822,8 @@ body.render_active_editor .markup_displayer_generic.markup_displayer_subtype_not
 
 
 .markup_displayer.is_editing_true{
-  // background:#ecf0f1;
-   padding-bottom:10px;
+ 
+   
 }
 
 .markup_displayer {
@@ -894,12 +895,16 @@ body.render_active_editor .markup_displayer_generic.markup_displayer_subtype_not
 
 .color_avatar.mini {display:none;}
 
+div.markup_displayer_subtype_img {
+  
+   position: relative;
+}
 
 
-div.markup_displayer_media .icon_col {
-   float: right;
-   width:auto;
-   margin-right: 2%;
+div.markup_displayer_subtype_img .icon_col {
+   bottom: 2%;
+   position: absolute;
+   right: 2%;
 }
 
 .markup_displayer_img .icon_col { 

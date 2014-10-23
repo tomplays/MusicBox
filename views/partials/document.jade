@@ -1,6 +1,8 @@
 
 // main render-view file
+
 // inludes partial
+// flash_message
 // * logo / title / editors ..
 //
 // loop each section
@@ -9,6 +11,7 @@
 
 div.flash_message(ng-if="flash_message.text !==''", class="{{flash_message.classname}}")
 	span {{flash_message.text}}
+
 div(ng-include="fragments['branding'][0]['url']")
 div(ng-include="fragments['before_doc'][0].url" )
 div(ng-if="ui.renderAvailable_active == 'doc_options'", ng-include="fragments['doc_options'][0].url")
@@ -46,13 +49,12 @@ div(ng-hide="ui.renderAvailable_active == 'doc_options'" , class="sections_conta
 					// *ng-class="l.classes"
 					div.theletters
 						// span.lt(class="{{l.classes_flat}}", ng-bind-html="l.char", lt="l" , ng-repeat="l in section.letters")
-						span.lt(ng-class="l.classes", class="in_range_{{l.inrange}}", ng-bind-html="l.char", lt="l" , ng-repeat="l in section.letters")
+						span.lt(ng-class="l.classes", class="in_range_{{l.inrange}}", ng-bind-html="l.char", lt="l" , ng-repeat="l in section.letters track by $index")
 
 				div(ng-if="(layout.name == 'global') && ($parent.$parent.$last) && objects_sections['global_all'].length > 0")
 							div.inside()
 								h4 global
-								div(class="markup_ markup_type_{{markup.type}}", ng-repeat="markup in objects_sections['global_all']" , ng-include="fragments['markup'][0].url")
-				
+								div(class="markup_ markup_type_{{markup.type}}", ng-repeat="markup in objects_sections['global_all']" , ng-include="fragments['markup'][0].url")		
 		
 				div.isolated(ng-if="layout.name == 'global' && $parent.$parent.$last &&  ui.isolated_markups.length > 0" )
 					h4 isolated

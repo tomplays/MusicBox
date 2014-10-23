@@ -1,48 +1,4 @@
 
-// todo doc      
-
-// SOCKET part 
-musicBox.factory('socket', function($rootScope, $http, $location)  {
-  
-  if(SOCKET_URL !==""){
-    var socket = io.connect(SOCKET_URL);
-   // console.log(socket)
-    return {
-
-      on: function (eventName, callback) {
-        socket.on(eventName, function () {
-          var args = arguments;
-          $rootScope.$apply(function () {
-            
-            callback.apply(socket, args);
-          });
-        });
-      },
-      emit: function (eventName, data, callback) {
-        socket.emit(eventName, data, function () {
-          var args = arguments;
-          $rootScope.$apply(function () {
-            if (callback) {
-              //alert('on')
-              callback.apply(socket, args);
-            }
-          });
-        })
-      }
-    };
-
-  }
-  else {
-    var socket = '';
-    return {
-      on:  function () {},
-      emit:  function () {}
-
-    }
-    
-  };
-});
-
 
 
 musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeParams, $locale) {
@@ -424,7 +380,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
                 'available' : ['hyperlink'],
 
              },   
-             'position_available': ['right', 'left'],
+             'position_available': ['left', 'right', 'under', 'global'],
 
             });
 
@@ -453,11 +409,8 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
           {name:'inline', order:4, include_objects:false, ID:5, include_even_empty:true}, 
           {name:'inline-implicit', order:6, ID:6},
         //  {name:'inline_into_after', order:6, ID:7},
-          
           {name:'right', order:8, ID:8, include_even_empty:true},
-         
           {name:'under', order:9, ID:9},
-         
           {name:'global', include_objects:false, order:10, ID:10, include_even_empty:true},
           {name:'background', order:11, include_objects:false, ID:11} 
 

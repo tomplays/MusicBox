@@ -842,6 +842,16 @@ if(newValue !==undefined  && oldValue !==undefined && (newValue !== oldValue) )
 	* Get broadcasted events
 	* @function DocumentCtrl#events
 	*/
+	var tttt = 0
+    $scope.$watch('containers', function(newValue, oldValue) {
+         	tttt++;
+               //if(oldValue){
+ 					console.log('////////'+tttt)
+              // }
+    });
+
+
+
 
 	$scope.$on('doc', function(event, args) {
 		if(args.action){
@@ -878,7 +888,7 @@ if(newValue !==undefined  && oldValue !==undefined && (newValue !== oldValue) )
 			}
 			
 			if(args.action == 'containers_ready'){
-				doc.distribute_markups()
+				// old doc.distribute_markups()
 			}
 			if(args.action == 'dispatched_objects'){
 				$scope.ui.loaded = 'loaded'
