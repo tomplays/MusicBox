@@ -5,7 +5,6 @@ MusicBox
   
   * soon.
 
-
 ##  TECHNICAL STACK
 
 
@@ -19,18 +18,17 @@ MusicBox
   - [MomentJs](http://momentjs.com/)
   - (more : see [bower](https://github.com/tomplays/MusicBox/blob/master/public/bower.json))
 - CSS : 
-	- [font-awesome](http://fortawesome.github.io/Font-Awesome/) (icons),
+	- [font-awesome](http://fortawesome.github.io/Font-Awesome/) (icons)
 	- less compilation
 - Color palette : [flatUi](http://flatuicolors.com/)
 - Nodes modules 
 	- [PasseportJs](http://passportjs.org/)
     - [nconf](https://github.com/flatiron/nconf)
     - (more see [package.json](https://github.com/tomplays/MusicBox/blob/master/package.json))
-
 - Misc/Tools :
 	- npm,
-    - Travis, 
-    - Bower,
+    - Travis
+    - Bower
     - Grunt
 
 ## AUTHOR
@@ -47,7 +45,7 @@ MIT License
 
 See [LICENSE](https://github.com/tomplays/MusicBox/blob/master/LICENSE.md)
 
-## DISCLAIMER
+### DISCLAIMER
 
 This software doesn't play music, sorry.
 /-)
