@@ -17,7 +17,7 @@ MusicBox
   - [AngularJs](https://angularjs.org/) v.1.3
   - [UnderscoreJs](http://underscorejs.org/)
   - [MomentJs](http://momentjs.com/)
-  - (more : see bower_components)
+  - (more : see [bower](https://github.com/tomplays/MusicBox/blob/master/public/bower.json))
 - CSS : 
 	- [font-awesome](http://fortawesome.github.io/Font-Awesome/) (icons),
 	- less compilation
@@ -25,7 +25,7 @@ MusicBox
 - Nodes modules 
 	- [PasseportJs](http://passportjs.org/)
     - [nconf](https://github.com/flatiron/nconf)
-    - (more see package.json)
+    - (more see [package.json](https://github.com/tomplays/MusicBox/blob/master/package.json))
 
 - Misc/Tools :
 	- npm,
