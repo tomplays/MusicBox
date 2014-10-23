@@ -4,7 +4,10 @@
 //  * api for delete and create
 
 div.doc_editor()
+	
 	h4 Document options
+
+	
 
 	.edit_field_left
 		.edit_field.excerpt_field
@@ -47,3 +50,6 @@ div.doc_editor()
 			// i.fa.fa-remove(ng-click="deleteDm(opt.option_name)")  
 
 		// i.fa.fa-plus(ng-click='newDm()') new option
+
+	p(ng-if="ui.renderAvailable_active !=='read'")
+						a(ng-click="toggle_render('read')") &laquo; back to document

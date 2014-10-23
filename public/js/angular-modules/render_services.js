@@ -180,7 +180,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
               'show_user': false, 
               'subtype': {
                 'free_input' : false,
-                'available' : ['translation', 'date']
+                'available' : ['translation', 'date', 'hidden', 'place', 'somebody','info', 'copyright', 'mood']
              },   
               'position_available': ['left', 'right', 'under', 'global'],
             });
@@ -206,7 +206,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
               'show_user': false,
               'subtype': {
                 'free_input' : true,
-                'available' : ['hidden', 'date', 'info']
+                'available' : ['-']
              },   
               'position_available': ['left', 'right', 'under', 'center','global'],
             });

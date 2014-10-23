@@ -444,8 +444,8 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
 
 
 
-                      if( markup.type=='semantic'){
-                          temp_letters[delta]['classes'].push(markup.type);
+                      if(temp_letters[delta] && markup.type=='semantic'){
+                        temp_letters[delta]['classes'].push(markup.type);
                         
                       }
                       //$rootScope.letters[section_count][delta]['objects'].push(a);
@@ -903,7 +903,7 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
           $http.post(api_url+'/doc/'+$rootScope.doc.slug+'/markup/'+markup._id+'/edit',  serialize(save) ).success(function(m) {
             console.log(m)
             if(m.err_code){
-              alert(m.message)
+               self.flash_message(m.err_code, 'bad' , 3000)
             }
             else{
                 doc.init(m, true);

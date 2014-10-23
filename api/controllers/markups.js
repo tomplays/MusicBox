@@ -39,7 +39,18 @@ exports.markup_edit = function(req, res) {
 
 	var m_body = req.body; 
 	//console.log(req.body)
-	var req_user_id = req.user.toObject()._id;
+
+	if(req.user){
+		var req_user_id = req.user.toObject()._id;
+
+
+	}
+	else{
+		var out = {'err_code':'not logged in' }
+		res.json(out)
+		return;
+	}
+	
 	// console.log('req_user_id:::'+req_user_id)
 	var query = Document.findOne({ 'slug':req.params.slug });
 	query.populate('user','-email -hashed_password -salt').populate( {path:'markups.user_id', select:'-salt', model:'User'}).populate({path:'markups.doc_id', select:'-markups -secret', model:'Document'}).populate('markups.doc_id.user').populate('room').exec(function (err, doc) {

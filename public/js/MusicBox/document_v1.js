@@ -888,7 +888,7 @@ if(newValue !==undefined  && oldValue !==undefined && (newValue !== oldValue) )
 			}
 			
 			if(args.action == 'containers_ready'){
-				// old doc.distribute_markups()
+				// old 
 			}
 			if(args.action == 'dispatched_objects'){
 				$scope.ui.loaded = 'loaded'
