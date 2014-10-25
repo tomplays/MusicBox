@@ -1,50 +1,49 @@
 
 
-
 musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeParams, $locale) {
     return function (inf) {
      var self = {
        init: function () {
         // inject locale service. defined in public/js/angualr-modules/i18n/angular_lang-lang.js
-        $rootScope.i18n = $locale;
+        $rootScope.i18n                       = $locale;
         //$rootScope.$emit('renderEvent', { action:'render_ready' });
-        self.config= [];
-        self.state= [];
+        self.config                           = [];
+        self.state                            = [];
         //$rootScope.r = 7;
-        self.config.hasbranding = true;
-        self.state.logs = 'closed';
+        self.config.hasbranding               = true;
+        self.state.logs                       = 'closed';
+
         // api/misc
-        $rootScope.globals = GLOBALS;
+        $rootScope.globals                    = GLOBALS;
         $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
 
         
-         $rootScope.objSchema           =   self.objSchema(); 
-
+        $rootScope.objSchema                  =   self.objSchema(); 
         $rootScope.available_sections_objects =   self.objAvailable(); 
-
         // console.log($rootScope.available_sections_objectsd )
+        $rootScope.available_layouts          =   self.posAvailable();
+        $rootScope.item_position              = '';
 
-        $rootScope.available_layouts                 =   self.posAvailable();
-        $rootScope.item_position  = '';
 
-
-        $rootScope.fragments                         =   self.fragmentsAvailable();
-        // $rootScope.classesofsections              =   self.classesAvailable();
+        $rootScope.fragments                  =   self.fragmentsAvailable();
+        // $rootScope.classesofsections       =   self.classesAvailable();
 
         // ui set up.
         // this var never change as long a doc is loaded... (no reset at rebuild)
 
-        $rootScope.ui = new Object();
-        $rootScope.ui.selected_range  = new Object({start:'', end:'', 'textrange':''});
-        $rootScope.ui.selected_section_index = null;
-        $rootScope.ui.selected_objects =[];
+        $rootScope.ui                         = new Object();
+        $rootScope.ui.selected_range          = new Object({start:'', end:'', 'textrange':''});
+        $rootScope.ui.selected_section_index  = null;
+        $rootScope.ui.selected_objects        = [];
 
-        $rootScope.ui.renderAvailable = self.renderAvailable()
+        $rootScope.ui.renderAvailable         = self.renderAvailable()
 
         // used in section editing
-        $rootScope.ui.sync_sections  = true;
+        $rootScope.ui.sync_sections           = true;
         
-        $rootScope.ui.focus_side = ''
+        $rootScope.ui.focus_side              = ''
+        
+        // ?mode=
         if($routeParams.mode){
           $rootScope.ui.renderAvailable_active =  $routeParams.mode
         }
@@ -53,17 +52,17 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
         }
       
         $rootScope.ui.secret = false;
+        
+        // ?secret=
         if($routeParams.secret){
-               $rootScope.ui.secret =  $routeParams.secret
+               $rootScope.ui.secret            =  $routeParams.secret
                console.log('using secret')
         }
 
+        // &debug
         if($routeParams.debug){
-           $rootScope.ui.debug = true;
+           $rootScope.ui.debug                 = true;
         }
-
-        $rootScope.flash_message = {'text':''};
-
 
         if($routeParams.docid){
               $rootScope.ui.is_home = 'false'
@@ -88,6 +87,13 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
         $rootScope.inserttext[0] =''
 
         $rootScope.ui.lastover = {};
+
+
+        // the object to push init
+        $rootScope.push = {};
+
+        // init flash message object
+        $rootScope.flash_message = {'text':''};
 
           console.log('render service on init_first')
           //console.log(self)

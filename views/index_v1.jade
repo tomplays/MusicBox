@@ -24,18 +24,19 @@ html(class="is_home_{{ui.is_home}} is_single_{{ui.is_single}} doc_id_{{doc._id}}
 		
 		script(type="text/javascript").
 			var musicBox
-			var SOCKET_URL = ''
+			var SOCKET_URL = '#{socket_url}'
 			var root_url = '#{root_url}'
 			var api_url = '#{api_url}'
 			var USERIN = new Object({'username':'#{user_in.username}', 'image_url': '#{user_in.image_url}', '_id': '#{user_in._id}'} );
 
-		if (socket_url !== '')
-				// script(src="#{socket_url}/socket.io/socket.io.js")
+		
 		
 		// angularJS / 
 		
 
 		script(type='text/javascript',  src="/bower_components/angular/angular.min.js")
+		script(type='text/javascript',  src="/js/lib/serialize.min.js")
+
 	
 		
 		//i18n dynamic load
@@ -48,6 +49,8 @@ html(class="is_home_{{ui.is_home}} is_single_{{ui.is_single}} doc_id_{{doc._id}}
 			script(type='text/javascript', src='/bower_components/angular-route/angular-route.min.js')
 			script(type='text/javascript', src='/bower_components/angular-resource/angular-resource.min.js')
 			
+
+
 			// sub if (hard version of file minified or kept locally)
 			script(type='text/javascript', src='/js/angular-modules/filters.js')
 			script(type='text/javascript', src='/js/angular-modules/directives.js')
@@ -81,6 +84,9 @@ html(class="is_home_{{ui.is_home}} is_single_{{ui.is_single}} doc_id_{{doc._id}}
 			
 			// Angular top level 'app' routing 
 			script(type='text/javascript', src='/js/app.js')
+
+			if(socket_url !== '')
+				script(src="#{socket_url}/socket.io/socket.io.js")
 		
 
 		// same in dev and prod env 
@@ -98,3 +104,5 @@ html(class="is_home_{{ui.is_home}} is_single_{{ui.is_single}} doc_id_{{doc._id}}
 
 	body(class="render_active_{{ui.renderAvailable_active}} text_typography_{{doc_options.text_typography.fixed}} headings_typography_{{doc_options.headings_typography.fixed}}")
 		div(ng-view , autoscroll="true")
+
+

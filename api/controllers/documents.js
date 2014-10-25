@@ -24,6 +24,7 @@ var mongoose = require('mongoose'),
 Document = mongoose.model('Document'),
 Markup  = mongoose.model('Markup');
 var nconf = require('nconf');
+
 nconf.argv().env().file({file:'config.json'});
 
 var chalk = require('chalk');
@@ -336,6 +337,15 @@ exports.doc_create = function(req,res){
 	// to filter a better way
 	var raw_title        =     req.body.raw_title;
 	var raw_content      =     req.body.raw_content;
+
+	
+	if(req.body.published){
+		var published      = req.body.published
+	}
+	else{
+		var published      = 'draft'
+	}
+
  	var filtered_title   =     raw_title;
 	var filtered_content =     raw_content;
 	var slug             =     S(raw_title).slugify().s 
@@ -343,7 +353,7 @@ exports.doc_create = function(req,res){
 	
 
 	//var ar = new Object({'title':'bloue'+Math.random()})
-	var new_doc = new Object({'title':filtered_title, 'slug': slug, 'content': filtered_content})
+	var new_doc = new Object({'title':filtered_title, 'slug': slug, 'content': filtered_content, 'published ':published })
 
 	 new_doc.markups = new Array()
 	 new_doc.doc_options = new Array()

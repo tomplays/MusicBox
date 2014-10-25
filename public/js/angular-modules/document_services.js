@@ -20,8 +20,11 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
       /**
       * call/load a doc by its slug from api
       * @function DocumentCtrl#load
+      * @params next, routes
+      * @return can redirect
+      * @return callback (init) or nothing
       */
-      load: function () {
+      load: function (next) {
 
         // this.flash_message('loading..', 'loading_doc', '')
         
@@ -43,7 +46,10 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
               }
               // enough for load.
               // init-set 
-              self.init(d,true);
+              if(next){
+                self.init(d,true);
+              }
+              
          });
         
       },
@@ -213,7 +219,7 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
             var temp_container = {
                 'selecting':-1, 
             };
-            console.log( temp_container )
+            //console.log( temp_container )
 
 
             container.selecting = -1;
@@ -695,6 +701,7 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
 
       },
       flash_message: function (msg,classname ,timeout) {
+          $rootScope.flash_message = {}
        $rootScope.flash_message.text = msg;
        $rootScope.flash_message.classname = classname;
        
@@ -702,36 +709,60 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
         $timeout(function(){
           $rootScope.flash_message.text =  '';
        }, timeout);
-      }
+       }
+      return ;
 
       },
       text_range: function (start, end) {
        
 
-
+        return;
       },
       init_new: function () {
         $rootScope.i18n                    =   $locale;         
         $rootScope.newdoc                  =   new Object();
         $rootScope.newdoc.raw_content      =   $rootScope.i18n.CUSTOM.DOCUMENT.default_content
         $rootScope.newdoc.raw_title        =   $rootScope.i18n.CUSTOM.DOCUMENT.default_title
-        $rootScope.newdoc.created_link     =   '';
+        
+        $rootScope.newdoc.published        =   'draft';
+
       },
 
       newdoc: function(){
           ///api/v1/doc/create
+          
           var data = new Object();
          
           data =  $rootScope.newdoc;
+
     
           $http.post(api_url+'/doc/create', serialize(data) ).
-          success(function(doc) {
-              // hard redirect
-              console.log(doc)
-              //console.log(doc)
-              $rootScope.newdoc.created_link = doc.slug;
-              $rootScope.newdoc.created_link_title = doc.title;
-           });  
+          success(function(cb) {
+            if(cb && !cb.err){
+                
+               self.flash_message('doc ready !', 'ok' , 2000)
+                $rootScope.newdoc.created_link = cb.slug;
+                $rootScope.newdoc.created_link_title = cb.title;
+                $rootScope.newdoc.created_secret = cb.secret;
+            
+            }
+            else{
+              
+                if(cb.code == 11000 ){
+                   self.flash_message('this sweet title is already taken, choose another please', 'bad' , 2000)
+                }
+                else{
+                    self.flash_message('error :'+cb.name, 'bad' , 2000)
+                }
+              
+               
+            
+            }
+        
+             
+           }).error(function(err) {
+             
+           }); 
       },
 
       docsync: function(){
@@ -852,6 +883,9 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
                console.log(d)
                
                 doc.init(d, true);
+
+                      socket.emit('news', {doc_id: $rootScope.doc.slug, action: 'push_markup' , type: 'push', object:d.inserted });
+
 
               //$rootScope.$emit('docEvent', {action: 'doc_ready', type: 'push', collection_type: 'markup', collection:d.inserted[0] });
            });

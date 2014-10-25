@@ -20,16 +20,14 @@ musicBox.run(function($rootScope, $http, $route) {
     if(cur && prev && cur !== prev){
       console.log(prev.originalPath)
       console.log(cur.originalPath)
-       // $rootScope.$emit('docEvent', {action: 'reload' });
-      ///////if(prev.originalPath == '')
-      //
-      // > from '/docs/:mode' to '/doc/:docid'
-      //console.log('route.change')
+      // $rootScope.$emit('docEvent', {action: 'reload' });
+      // if(prev.originalPath == '')
+      // from '/docs/:mode' to '/doc/:docid'
+      // console.log('route.change')
+       
        console.log($route)
-       $rootScope.doc = '';
-       $rootScope.ui = '';
-
-
+       $rootScope.doc       = '';
+       $rootScope.ui        = '';
   }
   });
 
@@ -61,18 +59,21 @@ musicBox.run(function($rootScope, $http, $route) {
 
 
 
+
  // SOCKET part 
 musicBox.factory('socket', function($rootScope, $http, $location)  {
   
   if(SOCKET_URL !==""){
-    var socket = io.connect(SOCKET_URL);
-   // console.log(socket)
+       var socket = io.connect(SOCKET_URL);
+  
     return {
-
+      start: function(){
+       //console.log(socket)
+      },
       on: function (eventName, callback) {
         socket.on(eventName, function () {
           var args = arguments;
-          $rootScope.$apply(function () {
+         $rootScope.$apply(function () {
             
             callback.apply(socket, args);
           });
