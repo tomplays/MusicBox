@@ -1,33 +1,48 @@
 'use strict';
+
 /*
- ____________________
-|*      * *    * *  *|
-|*      M *    M    M|
-|       * u    *    *|
-|      s  *       s *|
-|         *    i     |
-|   c   * c    *    *|
-| B   *   *         *|
-| *    o  o         *|
-|     *   x         *| 
-|*||||*||||||||||||*||
-|||||||||v.1||||||||||  
-||o                o||      
-||  Boite à musique ||______|
-||o  ~ MusicBox    o||______| 
-||||||||||||||||||||||  
 
+AngularJs controllers 
+	
+	Controllers are used to communicate between user interactions in views (load, clicks, changes) 
+	and the document services (factory) located in ./angular-modules/document_services.js
+	
+	Main : 
 
-Welcome here ! 
+	- DocumentCtrl :
+	  
+	  * document to service communication,
+	  * document editing
+	  * markup handlers (push, delete, ...) 
+	  * document/ranges / events listeners, 
+	  * global document UI
+
+	 	- sub-controller :
+			
+			- FragmentCtrl 
+				* markup-object level controller
+
+	Other controllers : 
+
+	- DocumentNewCtrl
+		* new document 
+    - DocumentsListCtrl
+    	* list
+    - DocumentCtrlJasmine
+    	* jasmine (tests)
+    - SectionCtrl
+    	* not used
+    - SocketsListCtrl
+    	* sockets debugger view
+
 */
 
-// TODO
-// 
-// "virtual" collections cf $scope.virtualize
+/**
+*
+* 	GLOBAL MISC VARS
+*
+*/
 
-
-
-// ** GLOBAL MISC VARS
 var inheriting = {};
 var GLOBALS;
 var render;
@@ -93,53 +108,57 @@ function DocumentCtrl($scope, $http , $sce, $location, $routeParams, renderfacto
 	$scope.edit_doc = function(field){
 		if(field == 'content'){
 			//alert('content change without api offset!')
-		}	
+		}
+		// return if not logged
 		if($scope.userin.username ==''){
 			return false;
 		}
 		if($scope.ui['editing_'+field] === true){
-			$scope.ui['editing_'+field] = false;
 			doc.save_doc(field)
 		}
-		else{
-			$scope.ui['editing_'+field]= true;
-		}
+		
+		$scope.ui['editing_'+field]= !$scope.ui['editing_'+field];
+		
 	}
 
 	$scope.doc_sync = function(){
 		doc.docsync();
 	}
 
-
+	// when user doubleclick an option (edit in place)
+	// used for footer option and before/after title
+	// since functions are commented in views, not used and commented here too.
+	/*
 	$scope.edit_doc_option = function(field){
-		if($scope.userin.username ==''){
-			return false;
-		}
 		if($scope.ui['editing_'+field] === true){
-				$scope.ui['editing_'+field] = false;
-				doc.save_doc_option(field)
-				//alert($scope.doc_options[field].value)
-			}
-			else{
-				$scope.ui['editing_'+field]= true;
-			}
+			doc.save_doc_option(field)
+		}
+		$scope.ui['editing_'+field] = !$scope.ui['editing_'+field]	
+	}
+	*/
+	
 
-				
-	}
-	// todo rename
-	$scope.newDm = function (){
-		doc.create_doc_option();
-	}
-	// todo rename
-	$scope.deleteDm = function (opt_name){	
-		doc.delete_doc_option(opt_name);
-	}
-
-	// save to api 
-	// todo rename
-	$scope.saveDm = function (opt_name){
+	/*
+	* "save doc options" click event. 
+	* @use_service True
+	* @params 
+	*/
+	$scope.doc_options_save = function (opt_name){
 		doc.save_doc_option(opt_name);
 	}
+
+	// no api !
+	/*
+	$scope.doc_options_new = function (){
+		doc.create_doc_option();
+	}
+	*/
+	// no api !
+	/*
+	$scope.doc_options_delete = function (opt_name){	
+		doc.delete_doc_option(opt_name);
+	}
+	*/
 
 
 	/**
@@ -260,7 +279,7 @@ function DocumentCtrl($scope, $http , $sce, $location, $routeParams, renderfacto
 			//alert('can hold objects!')
 			//return;
 			if($scope.sectionstocount == 1){
-			 	alert('can\'t delete last section')
+			 	doc.flash_message('can\'t delete last section', 'bad' , 3000)
 			 	return
 			}
 			doc.markup_delete(markup)
@@ -286,8 +305,9 @@ function DocumentCtrl($scope, $http , $sce, $location, $routeParams, renderfacto
 		doc.markup_save(markup)
 	}
 	
-	// open tools for markup or section 
+	// open "sub-tools" tabs editor for markup or section 
 	$scope.object_tools = function (object){
+
 		if(object.object_tools && object.object_tools === true){
 			return object.object_tools = false;
 		}
@@ -789,10 +809,13 @@ angular.module('musicBox.controller', []).controller('FragmentCtrl', function($s
 
 }); // end controller
 
+
+
+
 var newdoc_service;
 function DocumentNewCtrl($scope, $compile, $http , $sce, $location, $routeParams, renderfactory,socket,docfactory, $timeout) {
 
-	$scope.init_new_doc();
+
 	$scope.init_new_doc = function (){
 		console.log('DocumentNewCtrl')
 		$http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded"
@@ -811,8 +834,9 @@ function DocumentNewCtrl($scope, $compile, $http , $sce, $location, $routeParams
 		$scope.serialization = new Serialize(elem)
 		console.log($scope.serialization)
 		thiselem.remove()
-		// newdoc_service.newdoc();
+		newdoc_service.newdoc();
 	}
+		$scope.init_new_doc();
 	
 } // end controller
 //DocumentNewCtrl.$inject = ['$scope', '$http' ,'docfactory', '$timeout'];

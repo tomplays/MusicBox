@@ -1,9 +1,7 @@
 doctype html
 html(class="is_home_{{ui.is_home}} is_single_{{ui.is_single}} doc_id_{{doc._id}} doc_slug_{{doc.slug}}", data-ng-app="musicBox", xmlns="http://www.w3.org/1999/xhtml")
 	head
-
-		title #{doc_title} #{site_title} #{site_description} 
-		
+		title #{doc_title} #{site_title} #{site_description} 	
 		meta(charset="utf-8")
 		meta(http-equiv="X-UA-Compatible", content="IE=edge,chrome=1")
 		meta(name='viewport', content='width=device-width, initial-scale=1.0')
@@ -102,6 +100,11 @@ html(class="is_home_{{ui.is_home}} is_single_{{ui.is_single}} doc_id_{{doc._id}}
 
 			script(type='text/javascript',  src='/js/min/MusicBox.min-debug.js')
 
+		//
+			♪     ♪
+				♪     ♪
+			Boite à musique
+				~MusicBox
 	body(class="render_active_{{ui.renderAvailable_active}} text_typography_{{doc_options.text_typography.fixed}} headings_typography_{{doc_options.headings_typography.fixed}}")
 		div(ng-view , autoscroll="true")
 

@@ -833,6 +833,10 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
              });  
         },
         save_doc_option: function (field) {
+
+          if($rootScope.userin.username ==''){
+             return false
+          }
           var data = new Object()
           data.field = field;
           //data.value =  $rootScope.doc[field]

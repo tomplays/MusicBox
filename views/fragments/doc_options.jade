@@ -46,10 +46,10 @@ div.doc_editor()
 		div.doc_options_item(ng-repeat="opt in doc.doc_options")
 			label {{opt.option_name}}
 			input(name="doc_options[opt.option_name]", type="text", ng-model="doc_options[opt.option_name].value")
-			i.fa.fa-save(ng-click="saveDm(opt.option_name)")
-			// i.fa.fa-remove(ng-click="deleteDm(opt.option_name)")  
+			i.fa.fa-save(ng-click="doc_options_save(opt.option_name)")
+			// i.fa.fa-remove(ng-click=".doc_options_delete(opt.option_name)")  
 
-		// i.fa.fa-plus(ng-click='newDm()') new option
+		// i.fa.fa-plus(ng-click='doc_options_new()') new option
 
 	p(ng-if="ui.renderAvailable_active !=='read'")
 						a(ng-click="toggle_render('read')") &laquo; back to document
