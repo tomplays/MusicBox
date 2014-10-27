@@ -346,7 +346,11 @@ function DocumentCtrl($scope, $http , $sce, $location, $routeParams, renderfacto
 			$scope.ui.focus_side = 'side_left'
 		}
 		$scope.ui.menus.push_comment.open = cur;
+		$scope.containers[container_index.sectionin].modeletters = 'single'
+
 		return;
+
+
 	}
 
 	
@@ -448,6 +452,8 @@ function DocumentCtrl($scope, $http , $sce, $location, $routeParams, renderfacto
 
 	// icon click or section select
 	$scope.toggle_select_markup = function (markup, event_name){
+		$scope.containers[markup.sectionin].modeletters = 'single'
+
 		if(markup.isolated == true){
 			markup.editing = !markup.editing
 			return;

@@ -1,21 +1,19 @@
-// todo doc   
+
+/* 
+main "service / angular factory"
+
+handle POST/GET calls to api (rest) for document, doc_options, markups .. crud / backend methods
+can be called from contollers (init on load, save / edits from UI )
+can emit events, flash_messages and websockets.
+can redirect window
 
 
-// main "service / angular factory"
-// handle POST/GET calls to api (rest) for document, doc_options, markups .. backend methods
-
-// mainly called from contollers (on load, save / edits from UI )
-// can emit events
-
-// "MusicBox" algorythm (sorting, distribution, letters system)
-
-
+ Contains "MusicBox algorythm" (sorting, distribution, letters system)
+*/
 var temp_scope;
 musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $routeParams, socket, renderfactory, $locale, $timeout) {
  return function (inf) {
     var self = {
-
-      
      
       /**
       * call/load a doc by its slug from api
@@ -30,13 +28,10 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
         
         // default route
         var docid = 'homepage';
-
         // using it's route (defined in app.js routers)
         if($routeParams.docid){
           docid = $routeParams.docid
         }
-
-
         $http.get(api_url+'/doc/'+docid).success(function(d) {
               // redirects if doc is null
               if(!d.doc && docid !=='homepage'){
@@ -49,9 +44,7 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
               if(next){
                 self.init(d,true);
               }
-              
          });
-        
       },
       
       /**
@@ -106,15 +99,12 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
                 // test
                 // $rootScope.selectingd = 'init';        
                
-       
-
                 $rootScope = temp_scope;
                 if(next == true){
                    self.init_containers()
                 }
                
                 return
-
                 // equivalent : 
                 //$rootScope.$emit('docEvent', {action: 'doc_ready', type: 'load', collection_type: 'doc', collection:doc});
       },
@@ -124,11 +114,7 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
       * @function DocumentCtrl#init_containers
       */
 
-
       init_containers: function () {
-
-
-      
         $rootScope.sectionstocount = 0;
         $rootScope.doc.markups  = _.sortBy($rootScope.doc.markups,function (num) {
           return num.start;
@@ -202,6 +188,8 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
       */
 
       distribute_markups : function () {
+               
+
         //  
         // START Looping each SECTION
         // 
@@ -218,12 +206,14 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
 
             var temp_container = {
                 'selecting':-1, 
+                'modeletters': 'block'
             };
             //console.log( temp_container )
 
 
             container.selecting = -1;
-    
+                container.modeletters = 'block'
+
             // reach letter max test
             if(container.end > $rootScope.max_reached_letter){
               $rootScope.max_reached_letter = container.end
@@ -594,6 +584,7 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
       */
 
       fill_chars : function (section, section_count){
+     
         var temp_letters = [];
         var i;
         var i_array     =   0;
@@ -714,8 +705,6 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
 
       },
       text_range: function (start, end) {
-       
-
         return;
       },
       init_new: function () {
@@ -723,48 +712,31 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
         $rootScope.newdoc                  =   new Object();
         $rootScope.newdoc.raw_content      =   $rootScope.i18n.CUSTOM.DOCUMENT.default_content
         $rootScope.newdoc.raw_title        =   $rootScope.i18n.CUSTOM.DOCUMENT.default_title
-        
         $rootScope.newdoc.published        =   'draft';
-
       },
-
       newdoc: function(){
-          ///api/v1/doc/create
-          
+          ///api/v1/doc/create  
           var data = new Object();
-         
           data =  $rootScope.newdoc;
-
-    
           $http.post(api_url+'/doc/create', serialize(data) ).
           success(function(cb) {
             if(cb && !cb.err){
-                
                self.flash_message('doc ready !', 'ok' , 2000)
                 $rootScope.newdoc.created_link = cb.slug;
                 $rootScope.newdoc.created_link_title = cb.title;
                 $rootScope.newdoc.created_secret = cb.secret;
-            
             }
             else{
-              
                 if(cb.code == 11000 ){
                    self.flash_message('this sweet title is already taken, choose another please', 'bad' , 2000)
                 }
                 else{
                     self.flash_message('error :'+cb.name, 'bad' , 2000)
                 }
-              
-               
-            
             }
-        
-             
            }).error(function(err) {
-             
            }); 
       },
-
       docsync: function(){
         ///api/v1/doc/create
         var data = new Object();
@@ -828,7 +800,7 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
               else{
                   console.log('emit?')
               }
-               self.flash_message('document saved', 'ok' , 2000)
+              self.flash_message('document saved', 'ok' , 2000)
               self.init(doc,true)
              });  
         },
@@ -848,7 +820,6 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
                      // hard redirect
                      console.log(doc)
                      self.flash_message('option saved', 'ok' , 3000)
-
                      // reinit, no need to redraw containers
                      self.init(doc,false)
            
@@ -887,8 +858,8 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
                console.log(d)
                
                 doc.init(d, true);
-
-                      socket.emit('news', {doc_id: $rootScope.doc.slug, action: 'push_markup' , type: 'push', object:d.inserted });
+                self.flash_message('ok!', 'ok' , 3000)
+                socket.emit('news', {doc_id: $rootScope.doc.slug, action: 'push_markup' , type: 'push', object:d.inserted });
 
 
               //$rootScope.$emit('docEvent', {action: 'doc_ready', type: 'push', collection_type: 'markup', collection:d.inserted[0] });
@@ -940,25 +911,31 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
 
           $http.post(api_url+'/doc/'+$rootScope.doc.slug+'/markup/'+markup._id+'/edit',  serialize(save) ).success(function(m) {
             console.log(m)
-            if(m.err_code){
-               self.flash_message(m.err_code, 'bad' , 3000)
+            if(m.err_code || m.err){
+               self.flash_message(m.err.err_code, 'bad' , 3000)
             }
             else{
                 doc.init(m, true);
-                $rootScope.$emit('docEvent', {action: 'doc_ready', type: 'edit', collection_type: 'markup', collection:m.edited });
+                self.flash_message('markup saved', 'ok' , 2000)
+                // + socket.
 
             }
           })
       },
 
       markup_delete: function (markup){
-        $http.get(api_url+'/doc/'+$rootScope.doc.slug+'/markup/delete/'+markup._id).success(function(d) {
-        console.log(d)
-        doc.init(d, true)
-        //$scope.$emit('docEvent', {action: 'doc_ready', type: 'delete', collection_type: 'markup', collection:m.deleted[0] });
-        //$scope.$emit('docEvent', {action: 'doc_ready' });
+        $http.post(api_url+'/doc/'+$rootScope.doc.slug+'/markup/delete/'+markup._id).success(function(m) {
+          console.log(m)
+           if(m.err_code || m.err){
+               self.flash_message(m.err.err_code, 'bad' , 3000)
+            }
+            else{
+                doc.init(m, true);
+                self.flash_message('markup saved', 'ok' , 2000)
+                // + socket.
+            }
+          // + socket.
       });
-
      },
      virtualize : function(){
 
@@ -970,9 +947,7 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
             *  A. auto : use h1>h6
             *  B  implicit : subtype using corresponding ranges of text (implicit)
             *  C  explicit : subtype collection . > using markup metavalue (explicit)
-
-            */ 
-
+            */
             _.each($rootScope.virtuals, function(virtual, vi){
              console.log('> virtualize '+virtual.slug)
               if(!virtual.visible){
@@ -1011,71 +986,13 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
                   $scope.text_summary += '<p>'+t.metadata+'</p>';
                 } 
                 */  
-
               });
               $rootScope.virtuals[vi] = virtual
           }); // each   virtuals
         console.log($rootScope.virtuals)
      } // virtual function end
-
 // closing factory 
    };
   return self
   }
 });
-
-
-
-
-
-
-
-
-/*
-
-
-misc/ tests
-
-
-       var data = {
-
-
-  labels: ['Week1', 'Week2', 'Week3', 'Week4', 'Week5', 'Week6'],
-  series: [
-    data_serie
-  ]
-};
-
-// We are setting a few options for our chart and override the defaults
-var options = {
-  // Don't draw the line chart points
-  showPoint: false,
-  // Disable line smoothing
-  lineSmooth: false,
-  // X-Axis specific configuration
-  axisX: {
-    // We can disable the grid for this axis
-    showGrid: false,
-    // and also don't show the label
-    showLabel: false
-  },
-  // Y-Axis specific configuration
-  axisY: {
-    // Lets offset the chart a bit from the labels
-    offset: 40,
-    // The label interpolation function enables you to modify the values
-    // used for the labels on each axis. Here we are converting the
-    // values into million pound.
-    labelInterpolationFnc: function(value) {
-      return '$' + value + 'm';
-    }
-  }
-};
-
-          Chartist.Line('.ct-chart', data, options);
-
-
-
-*/
-
-

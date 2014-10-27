@@ -33,10 +33,14 @@ exports.requiresLogin_or_secret = function(req, res, next) {
 
     // if both are null == no acces.
     if (!req.isAuthenticated() &&  !req.body.secret) {
-        return res.send(401, 'User need login and/or secret key');
+        return res.json('User need login and/or secret key');
+        return;
+    }
+    else{
+         next();
     }
 
-    next();
+   
 };
 
 
@@ -47,7 +51,7 @@ exports.requiresLogin_or_secret = function(req, res, next) {
 exports.user = {
     hasAuthorization: function(req, res, next) {
         if (req.profile.id != req.user.id) {
-            return res.send(401, 'User is not authorized');
+             return res.json('User need login and/or secret key');
         }
         next();
     }
@@ -59,7 +63,7 @@ exports.user = {
 exports.document = {
     hasAuthorization: function(req, res, next) {
         if (req.document.user.id != req.user.id) {
-            return res.send(401, 'User is not authorized');
+            return res.json('User need login and/or secret key');
         }
         next();
     }
