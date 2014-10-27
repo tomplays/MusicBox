@@ -50,8 +50,9 @@ div(ng-hide="ui.renderAvailable_active == 'doc_options'" , class="sections_conta
 					div.theletters(ng-if="section.modeletters=='single'")
 						// span.lt(class="{{l.classes_flat}}", ng-bind-html="l.char", lt="l" , ng-repeat="l in section.letters")
 						span.lt(ng-class="l.classes", class="in_range_{{l.inrange}}", ng-bind-html="l.char", lt="l" , ng-repeat="l in section.letters track by $index")
-					div(fluidtext, section="section" , ng-if="section.modeletters !=='single'")
-					
+					// div.fluidtext(fluidtext, section="section" , ng-if="section.modeletters !=='single'")
+					div.fluidtext(fluidtexte, section="section" , ng-bind-html="section.fulltext_block",  ng-if="section.modeletters !=='single'") 
+
 				div(ng-if="(layout.name == 'global') && ($parent.$parent.$last) && objects_sections['global_all'].length > 0")
 							div.inside()
 								h4 global

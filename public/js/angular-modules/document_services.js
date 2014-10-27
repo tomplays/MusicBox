@@ -196,6 +196,9 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
 
         //console.log(containers)
         $rootScope.letters = [];
+        
+
+
         var temp_letters = [];
          //var data_serie = new Array()
 
@@ -204,15 +207,12 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
         _.each($rootScope.containers, function(container, index){
 
 
-            var temp_container = {
-                'selecting':-1, 
-                'modeletters': 'block'
-            };
+           
             //console.log( temp_container )
 
 
             container.selecting = -1;
-                container.modeletters = 'block'
+            container.modeletters = 'block'
 
             // reach letter max test
             if(container.end > $rootScope.max_reached_letter){
@@ -263,7 +263,7 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
               });
 
               // set to "1" for title include.
-              $rootScope.containers[0]['objects_count']['by_positions']['center'].count = 1;
+              // $rootScope.containers[0]['objects_count']['by_positions']['center'].count = 1;
 
 
           });
@@ -276,6 +276,8 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
           // START Looping each TEXTDATAS
           //
           _.each($rootScope.doc.markups, function(markup){
+            
+
             markup.offset_start = 0;
             markup.offset_end = 0;
             //markup.sectionin = false;
@@ -295,19 +297,24 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
               markup.editing  = '';
               markup.inrange  = true;
               markup.uptodate = '';
+            
+              // special cases for child documents (refs as doc_id in markup record)
+              markup.doc_id_id = '';
 
-              // user by_me test
+              markup.user_options =  self.apply_object_options('markup_user_options',markup.user_id.user_options)
+
+              // user "by_me" ownership test
               markup.by_me = 'false'
               if( markup.user_id._id && $rootScope.userin._id  && ($rootScope.userin._id == markup.user_id._id ) )  {
                    markup.by_me = 'true';
               }
 
-               markup.user_options =  self.apply_object_options('markup_user_options',markup.user_id.user_options)
 
+              // using "memory" of ui.
               _.each($rootScope.ui.selected_objects, function(obj){
                 //console.log('keep opn'+obj._id)
                 if(markup._id == obj._id){
-                 // markup.selected = true;
+                     markup.selected = true;
                   // should select ranges too..
                 }
               })
@@ -319,11 +326,12 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
               })
         
 
-              if(markup.type=='container_class' ){ // or pos == inlined
-                //console.log(markup)
-                //$rootScope.containers[index]['classes'].push(markup.metadata)
-                   $rootScope.containers[index].section_classes += markup.metadata+' ';
 
+              // depending cases of types and subtypes : 
+              
+
+              if(markup.type=='container_class' ){ // or pos == inlined
+                   $rootScope.containers[index].section_classes += markup.metadata+' ';
               }
 
               if(markup.type == 'media' || markup.subtype == 'simple_page' ||  markup.subtype == 'doc_content_block' ){
@@ -338,15 +346,11 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
 
               }
 
-              // special cases for chil documents (refs as doc_id in markup record)
-              markup.doc_id_id = '';
+           
               if(markup.type =='child'){ 
                 // to keep doc_id._id (just id as string) in model and not pass to post object later..
                 if(markup.doc_id){ 
                    markup.doc_id_id = markup.doc_id._id;
-                    // markup.doc_id_id.uuser = markup.doc_id.user;
-                    // console.log( markup.doc_id)
-
                    if(markup.doc_id.doc_options){
                      // m.markup.child_options = [];
                      var  options_array =  [];
@@ -359,16 +363,27 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
                 }
                 //console.log('children call ...')
               }
-          
+              
+
+              // need to loop letters of range
               if(markup.type=='markup' || markup.type == 'hyperlink'  || markup.type=='comment' || markup.type=='note' || markup.type=='semantic' || markup.subtype=='share_excerpt'  ){ // or pos == inlined
 
                   var j_arr=0;
                   var into_for = 0;
                   //console.log('section end:'+section.end)
                   //console.log('fc:'+ parseInt(section.end) - parseInt(section.start) );
+                  
+
                   var size_object = parseInt(markup.end) - parseInt(markup.start) -1;
+                  
+
                   markup.explicit_string  =   '';
                   for (var pos= markup.start; pos<=markup.end; pos++){ 
+
+
+
+
+
                     
                     // push class to each letter..
                     var delta = parseInt(markup.start) - parseInt(container.start) + j_arr;
@@ -381,10 +396,14 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
 
                           if(pos == markup.start ){
                              temp_letters[delta]['classes'].push('fi')
+                            temp_letters[delta].classes_flat += 'fi'+' '
+
                             
                           }
                           if( size_object ==  j_arr){
                             temp_letters[delta+1]['classes'].push('nd')
+                            temp_letters[delta+1].classes_flat += 'nd'+' '
+
 
                           }
                           if(j_arr == 0){
@@ -403,11 +422,15 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
                     if(markup.editing === true ){
                      // $rootScope.letters[index][delta]['classes'].push('editing')
                       temp_letters[delta]['classes'].push('editing')
+                      temp_letters[delta].classes_flat += 'editing'+' '
+
 
                       /* L+ */
                     }
                     if(markup.selected === true){
-                     // temp_letters[delta]['classes'].push('selected')
+                      temp_letters[delta]['classes'].push('selected')
+                      temp_letters[delta].classes_flat += 'selected'+' '
+
                        /* L+ */
                     }
 
@@ -424,142 +447,144 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
                           // if twice, adds "_" to subtype-class
                           if(_.contains(temp_letters[delta]['classes'], markup.subtype) ) {
                                   temp_letters[delta]['classes'].push('_'+markup.subtype);
+                                  temp_letters[delta].classes_flat += '_'+markup.subtype+' '
+
                           } 
                           else{
                                 temp_letters[delta]['classes'].push(markup.subtype);
+                                 temp_letters[delta].classes_flat += markup.subtype+' '
                           }
                       }
 
                       if(temp_letters[delta] && markup.depth){
                            temp_letters[delta]['classes'].push('depth_'+markup.depth);
+                           temp_letters[delta].classes_flat += 'depth_'+markup.depth+' '
+
                       }
 
                       if(temp_letters[delta] && markup.status){
                            temp_letters[delta]['classes'].push('status_'+markup.status);
+                           temp_letters[delta].classes_flat += 'status_'+markup.status+' '
                       }
 
 
 
                       if(temp_letters[delta] && markup.type=='semantic'){
-                        temp_letters[delta]['classes'].push(markup.type);
+
+                          temp_letters[delta]['classes'].push(markup.type);
+                          temp_letters[delta].classes_flat += markup.type
                         
                       }
                       //$rootScope.letters[section_count][delta]['objects'].push(a);
                           //      $rootScope.letters[section_count][delta]['classes'].push('c-'+a.id);
 
                     //}
+
                     if(markup.type == 'hyperlink' && markup.metadata){
-                      temp_letters[delta]['href'] = markup.metadata
+                      temp_letters[delta]['href'] = markup.metadata;
                     }
+
+
                     i_array++;
                     j_arr++
                   }
                   //$rootScope.containers[index].objects[markup.type]['inline'].push(markup); 
                   //console.log($rootScope.objects_sections[index][td.type])
-            }
-
-           if(markup.type !== "" && markup.position){
-
-                 if(markup.position == 'global'){
-                      $rootScope.objects_sections['global_all'].push(markup)
-                   //   $rootScope.objects_sections['global_by_type'][markup.type].push(markup)
-
-                 }
-                 $rootScope.containers[index].objects[markup.type][markup.position].push(markup) 
-
-                 
-              //  if(markup.type !=='container'){
-                    $rootScope.containers[index].objects_count['by_positions'][markup.position].count++;
-                    $rootScope.containers[index].objects_count['by_positions'][markup.position].has_object  = true;
-               //  }
-
-               
             
-                $rootScope.containers[index].objects_count['all'].count++;
-                $rootScope.containers[index].objects_count['all'].has_object  = true;
+            } // if textrange_loop end.
 
-            }
+
+
+
+            if(markup.type !== "" && markup.position){ // > can add it
+             
+              if(markup.position == 'global'){
+              $rootScope.objects_sections['global_all'].push(markup)
+                // $rootScope.objects_sections['global_by_type'][markup.type].push(markup)
+              }
+              $rootScope.containers[index].objects[markup.type][markup.position].push(markup) 
+              // if(markup.type !=='container'){
+              $rootScope.containers[index].objects_count['by_positions'][markup.position].count++;
+              $rootScope.containers[index].objects_count['by_positions'][markup.position].has_object  = true;
+              //}
+
+              $rootScope.containers[index].objects_count['all'].count++;
+              $rootScope.containers[index].objects_count['all'].has_object  = true;
+
+              }
               //console.log($rootScope.containers[index]['objects'][markup.type][markup.position])
               //console.log('pushed'+markup.position)
             }
-          })
-          //$rootScope.containers[index].objects = $rootScope.objects_sections[index]    
-         // $rootScope.containers[index].letters = $rootScope.letters[index]
-        
 
-         // set letters to their the container
 
+          }); // each markups end.
+
+
+          $rootScope.containers[index].letters = temp_letters;
+
+
+          var lt_out ='';
           _.each(temp_letters, function(lc, w){
-              _.each(lc.classes, function(c, i){ 
-                temp_letters[w]['classes_flat'] +=  c +' ';
-              });
-          })
+            
 
-          
+                if(lc.classes_flat == ""){
+                   //console.log('no class @'+lc.order)
+                   lt_out += lc.char
+                }
+                else{
+                   lt_out += '<span class="lt '+lc['classes_flat']+'" >'+lc.char+'</span>'
+                }
 
-
-
-         $rootScope.containers[index].letters = temp_letters;
-         
-
-      //   $rootScope.containers[index] = temp_container;
-      //   var temp_container = $rootScope.containers[index]
-       //  console.log( temp_container )
+           });
+           $rootScope.containers[index].fulltext_block = lt_out;
 
 
 
+        
+       
+          //   $rootScope.containers[index] = temp_container;
+          //   var temp_container = $rootScope.containers[index]
+          //   console.log( temp_container )
+          //   console.log($rootScope.containers[index])
+          //   console.log($rootScope.containers[index])
 
-        //console.log($rootScope.containers[index])
 
-         //  console.log($rootScope.containers[index])
         }); // end of containers loop
 
-          // if need special class to add only once.
-          //_.each($rootScope.containers[index].letters, function(lc, wb){
-           //  lc['classes_flat'] += 'lt-def '
-          //});
 
-/*
-
-           _.each($rootScope.containers, function(container, index){
-                      $rootScope.containers[index].compiled = '';
-                      
-
-                       _.each($rootScope.containers[index].letters, function(l, l_index){
-                          $rootScope.containers[index].compiled += "<my-customer></my-customer>";
-                       });
-                     
-
-           }); // end of containers loop        
-
+        // if need special class to add only once.
+        //_.each($rootScope.containers[index].letters, function(lc, wb){
+        //  lc['classes_flat'] += 'lt-def '
+        //});
+        /*
+        _.each($rootScope.containers, function(container, index){
+            $rootScope.containers[index].compiled = '';
+              _.each($rootScope.containers[index].letters, function(l, l_index){
+                  $rootScope.containers[index].compiled += "<my-customer></my-customer>";
+            });
+        }); // end of containers loop        
         */
 
+
         if($rootScope.max_reached_letter !==  $rootScope.doc.content.length){
-              console.log('unreached letter found :'+ $rootScope.max_reached_letter +'--'+$rootScope.doc.content.length)
-              //max_reached_letter.end = container.end
-
-              if(_.last($rootScope.containers) && $rootScope.max_reached_letter  <  $rootScope.doc.content.length){
-
-                  console.log('should patch last section from :'+ _.last($rootScope.containers).end+ ' to'+$rootScope.doc.content.length)
-              } 
+          console.log('unreached letter found :'+ $rootScope.max_reached_letter +'--'+$rootScope.doc.content.length)
+          //max_reached_letter.end = container.end
+          if(_.last($rootScope.containers) && $rootScope.max_reached_letter  <  $rootScope.doc.content.length){
+              console.log('should patch last section from :'+ _.last($rootScope.containers).end+ ' to'+$rootScope.doc.content.length)
+          }
         } 
 
-          // reloop to find isolate markups
-
-          $rootScope.ui.isolated_markups = []
-          _.each($rootScope.doc.markups, function(markup){
-
-           if(!markup.isolated ==false || markup.start > $rootScope.doc.content.length ){
-             console.log('markup.isolated' )
-             markup.isolated =true;
-             $rootScope.ui.isolated_markups.push(markup)
-           }
-          
-            
-          })
-
+        // reloop to find isolate markups
+        $rootScope.ui.isolated_markups = []
+        _.each($rootScope.doc.markups, function(markup){
+          if(!markup.isolated ==false || markup.start > $rootScope.doc.content.length ){
+            console.log('markup.isolated' )
+            markup.isolated =true;
+            $rootScope.ui.isolated_markups.push(markup)
+          }
+        })
+      
       },
-
 
 
       // util flatten array to string
@@ -615,11 +640,14 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
               // maybe better to unset ? 
                 ch = '?';
                 letter_arr.classes.push('no-lt')
+                letter_arr.classes_flat += 'no-lt '
             }
-          fulltext += ch;
-          letter_arr['char'] = ch;
+            fulltext += ch;
+            letter_arr['char'] = ch;
 
-          //letter_arr['fi_nd'] = new Object({'fi': false, 'nd':false/*, 'md':false*/});
+
+          // old. #mongotaste
+        //letter_arr['fi_nd'] = new Object({'fi': false, 'nd':false/*, 'md':false*/});
         //  letter_arr.fi_nd = new Object({'fi': false, 'nd':false/*, 'md':false*/});
         
           
@@ -629,16 +657,16 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
           */
 
          
-          //letter_arr.action = '';
-        //  letter_arr.rindex = i_array;
-        //  letter_arr.lindex= i;
-          //unsued a heavy  letter_arr.objects = [];
+            //letter_arr.action = '';
+            //  letter_arr.rindex = i_array;
+            //  letter_arr.lindex= i;
+            //unsued a heavy  letter_arr.objects = [];
           letter_arr.sectionin = section_count;
-          //letter_arr.mode= 'display';
-          //letter_arr.state = new Object({ 'statemode' : 'loading','select' : false,'clicked' : false,'inrange' : false , 'flat': {}  });
-          //letter_arr.sel = false;
+                  //letter_arr.mode= 'display';
+                  //letter_arr.state = new Object({ 'statemode' : 'loading','select' : false,'clicked' : false,'inrange' : false , 'flat': {}  });
+                  //letter_arr.sel = false;
+    
           temp_letters[i_array]  = letter_arr;
-          
           i_array++;
         }
          
