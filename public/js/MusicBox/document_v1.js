@@ -183,7 +183,7 @@ function DocumentCtrl($scope, $http , $sce, $location, $routeParams, renderfacto
 		// force autoset / force-correct
 		if($scope.push.type == "markup" || $scope.push.type == "container" || $scope.push.type == "container_class" ){ $scope.push.position = 'inline'}
 		// object is clean
-		doc.push_markup($scope.push)	 // call document service
+		doc.markup_push($scope.push)	 // call document service
 	}
  	
 
@@ -217,6 +217,7 @@ function DocumentCtrl($scope, $http , $sce, $location, $routeParams, renderfacto
 		}	
 		// should use
 		$scope.push.position = 'left';
+
 		$scope.push_markup();
 		// close form.
 		$scope.ui.menus.push_comment.open  = -1
@@ -322,7 +323,7 @@ function DocumentCtrl($scope, $http , $sce, $location, $routeParams, renderfacto
 			$scope.push.start = $scope.ui.selected_range.start
 			$scope.push.position = 'inline';
 			$scope.push.end = $scope.ui.selected_range.end
-			//	$scope.push_markup();
+			$scope.push_markup();
 	}
 
 	/**

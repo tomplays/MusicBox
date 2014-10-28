@@ -8,20 +8,32 @@ can emit events, flash_messages and websockets.
 can redirect window
 
 
- Contains "MusicBox algorythm" (sorting, distribution, letters system)
+ Contains "MusicBox algorithm" (sorting, distribution, letters system)
 */
+
+
+ /**
+ * Factory / services for document model
+ * 
+ * @class docfactory
+ * @param {Factory} docfactory -  angular custom factory for document 
+ * @inject $rootScope, $http, $location,$sce, $routeParams, socket, renderfactory, $locale, $timeout
+ */
+
 var temp_scope;
+
 musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $routeParams, socket, renderfactory, $locale, $timeout) {
  return function (inf) {
     var self = {
      
       /**
       * call/load a doc by its slug from api
-      * @function DocumentCtrl#load
-      * @params next, routes
-      * @return can redirect
-      * @return callback (init) or nothing
+      * @function docfactory#load
+      * @param {Boolean} next - callback (init) or nothing
+      * @calback can redirect
       */
+
+
       load: function (next) {
 
         // this.flash_message('loading..', 'loading_doc', '')
@@ -51,7 +63,7 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
       * set doc object after an api call (first load or "redraw-callback" )
       * if "next" params, redraw containers, else, only reset doc "base"
 
-      * @function DocumentCtrl#init
+      * @function docfactory#init
       */
       init: function (d, next) {
 
@@ -95,7 +107,7 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
                     encoded_url += '/doc/'+d.doc.slug;
                 }
                 temp_scope.doc.encoded_url = urlencode(encoded_url);
-                
+                temp_scope.doc.text_summary = '';
                 // test
                 // $rootScope.selectingd = 'init';        
                
@@ -109,9 +121,10 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
                 //$rootScope.$emit('docEvent', {action: 'doc_ready', type: 'load', collection_type: 'doc', collection:doc});
       },
 
+
       /**
       * init containers
-      * @function DocumentCtrl#init_containers
+      * @function docfactory#init_containers
       */
 
       init_containers: function () {
@@ -120,13 +133,13 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
           return num.start;
         });
         
-       // $rootScope.virtuals= new Array();
-       // var virtual_summary = new Object({'slug': 'summary', 'header': 'Text summary', 'auto': {'bytype': 'h1-h6'} , 'implicit': {'bytype': 'summary'} } )
-       // $rootScope.virtuals.push(virtual_summary)
+        $rootScope.virtuals= new Array();
+        var virtual_summary = new Object({'slug': 'summary', 'header': 'Text summary', 'auto': {'bytype': 'h1-h6'} , 'implicit': {'bytype': 'summary'} } )
+        $rootScope.virtuals.push(virtual_summary)
         // var virtual_containers = new Object({'slug': 'sections', 'header': 'containers ', 'auto': {'bytype': 'h1-h6'} , 'implicit': {'bytype': 'container'} } )
         // $rootScope.virtuals.push(virtual_containers)
 
-        //self.virtualize()
+        self.virtualize()
 
 
         //console.log($rootScope)
@@ -139,7 +152,7 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
 
         $rootScope.containers = _.filter($rootScope.doc.markups, function(td){ return  td.type == 'container'; });
         
-        var containers = _.filter($rootScope.doc.markups, function(td){ return  td.type == 'container'; });
+        //var containers = _.filter($rootScope.doc.markups, function(td){ return  td.type == 'container'; });
 
 
 
@@ -181,36 +194,24 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
       * * each(textdatas,td)
       * * if in s.ranges 
       *
-      * @return {DocEvent} emit event 'dispatched_objects']
-      * @function DocumentCtrl#distribute_markups
-      * @link DocumentCtrl#fill_chars
-      * @todo -
+      * 
+      * @function docfactory#distribute_markups
+      * @link docfactory#fill_chars
+      * @todo nothing
       */
 
       distribute_markups : function () {
-               
 
+        $rootScope.letters = [];
+        $rootScope.max_reached_letter = 0;
         //  
         // START Looping each SECTION
         // 
 
-        //console.log(containers)
-        $rootScope.letters = [];
-        
-
-
-        var temp_letters = [];
-         //var data_serie = new Array()
-
-
-         $rootScope.max_reached_letter = 0;
         _.each($rootScope.containers, function(container, index){
 
-
+            var  temp_letters;
            
-            //console.log( temp_container )
-
-
             container.selecting = -1;
             container.modeletters = 'block'
 
@@ -227,327 +228,77 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
               }
             }
           
-          //console.log(section)
-         
-         // populate letters as single objects.
-         var  temp_letters  =  self.fill_chars(container,index);
+            // populate letters as single objects.
+            var  temp_letters  =  self.fill_chars(container,index);
        
 
-          // data_serie.push(container.start)
-          //$rootScope.objects_sections[index] = new Array();
-          $rootScope.containers[index]['objects'] = [];
-          $rootScope.containers[index]['objects_count'] = [];
-          $rootScope.containers[index]['objects_count']['by_positions'] = [];
-          $rootScope.containers[index]['objects_count']['all'] = [];
+            // data_serie.push(container.start)
+            //$rootScope.objects_sections[index] = new Array();
+            $rootScope.containers[index]['objects'] = [];
+            $rootScope.containers[index]['objects_count'] = [];
+            $rootScope.containers[index]['objects_count']['by_positions'] = [];
+            $rootScope.containers[index]['objects_count']['all'] = [];
+
+            // section can have css classes and inlined styles (background-image)
+            $rootScope.containers[index].section_classes = '';
+            $rootScope.containers[index].section_styles  = '';
 
 
-
-
-
-          // section can have css classes and inlined styles (background-image)
-          $rootScope.containers[index].section_classes = '';
-          $rootScope.containers[index].section_styles  = '';
-
-
-//          $rootScope.containers[index]['classes'] =[];
-          //$rootScope.objects_sections[index]['global'] = [];
-          _.each($rootScope.available_sections_objects, function(o, obj_index){
-            $rootScope.containers[index]['objects'][$rootScope.available_sections_objects[obj_index]] = [];
+            // $rootScope.containers[index]['classes'] =[];
+            // $rootScope.objects_sections[index]['global'] = [];
+            _.each($rootScope.available_sections_objects, function(o, obj_index){
+              $rootScope.containers[index]['objects'][$rootScope.available_sections_objects[obj_index]] = [];
               // and each subs objects an array of each positions
-               $rootScope.containers[index]['objects_count']['all']= new Object({'count':0, 'has_object':false})
-
-
+              $rootScope.containers[index]['objects_count']['all']= new Object({'count':0, 'has_object':false})
               _.each(render.posAvailable() , function(op){ // op: left, right, ..
                 $rootScope.containers[index]['objects_count']['by_positions'][op.name] = new Object({'count':0, 'has_object':false})
                 $rootScope.containers[index]['objects'][$rootScope.available_sections_objects[obj_index]][op.name] =[];
               });
-
               // set to "1" for title include.
               // $rootScope.containers[0]['objects_count']['by_positions']['center'].count = 1;
+            });
 
 
-          });
+          /**
+          * Loop each doc.markups 
+          * 
+          */
 
 
 
-
-
-          //
-          // START Looping each TEXTDATAS
-          //
           _.each($rootScope.doc.markups, function(markup){
-            
-
-            markup.offset_start = 0;
-            markup.offset_end = 0;
-            //markup.sectionin = false;
-         
-
-            var i_array = 0;  
-              //Only if textdata is in sections ranges
-            if(markup.start >= container.start && markup.end <= container.end){
-
-              // some commons attributes
-              // > todo use states objects
-              markup.sectionin = index;
-              markup.isolated = false;
-              /// keep open test :
-              //console.log('keep open')
-              markup.selected = false;
-              markup.editing  = '';
-              markup.inrange  = true;
-              markup.uptodate = '';
-            
-              // special cases for child documents (refs as doc_id in markup record)
-              markup.doc_id_id = '';
-
-              markup.user_options =  self.apply_object_options('markup_user_options',markup.user_id.user_options)
-
-              // user "by_me" ownership test
-              markup.by_me = 'false'
-              if( markup.user_id._id && $rootScope.userin._id  && ($rootScope.userin._id == markup.user_id._id ) )  {
-                   markup.by_me = 'true';
-              }
-
-
-              // using "memory" of ui.
-              _.each($rootScope.ui.selected_objects, function(obj){
-                //console.log('keep opn'+obj._id)
-                if(markup._id == obj._id){
-                     markup.selected = true;
-                  // should select ranges too..
-                }
-              })
-               _.each($rootScope.ui.editing_objects, function(obj){
-                //console.log('keep opn'+obj._id)
-                if(markup._id == obj._id){
-                  markup.editing = true;
-                }
-              })
-        
-
-
-              // depending cases of types and subtypes : 
-              
-
-              if(markup.type=='container_class' ){ // or pos == inlined
-                   $rootScope.containers[index].section_classes += markup.metadata+' ';
-              }
-
-              if(markup.type == 'media' || markup.subtype == 'simple_page' ||  markup.subtype == 'doc_content_block' ){
-                     $rootScope.containers[index].section_classes += 'has_image ';
-                     if(markup.position){
-                        $rootScope.containers[index].section_classes += ' focus_side_'+markup.position +' ';
-                     }
-
-                     if(markup.position == 'background'){
-                        $rootScope.containers[index].section_styles = 'background-image:url('+markup.metadata+')' ;
-                     }
-
-              }
-
-           
-              if(markup.type =='child'){ 
-                // to keep doc_id._id (just id as string) in model and not pass to post object later..
-                if(markup.doc_id){ 
-                   markup.doc_id_id = markup.doc_id._id;
-                   if(markup.doc_id.doc_options){
-                     // m.markup.child_options = [];
-                     var  options_array =  [];
-                      markup.child_options = [];
-                      _.each(markup.doc_id.doc_options , function(option){
-                        options_array[option.option_name] = option.option_value
-                      });
-                      markup.child_options = options_array
-                    }
-                }
-                //console.log('children call ...')
-              }
-              
-
-              // need to loop letters of range
-              if(markup.type=='markup' || markup.type == 'hyperlink'  || markup.type=='comment' || markup.type=='note' || markup.type=='semantic' || markup.subtype=='share_excerpt'  ){ // or pos == inlined
-
-                  var j_arr=0;
-                  var into_for = 0;
-                  //console.log('section end:'+section.end)
-                  //console.log('fc:'+ parseInt(section.end) - parseInt(section.start) );
-                  
-
-                  var size_object = parseInt(markup.end) - parseInt(markup.start) -1;
-                  
-
-                  markup.explicit_string  =   '';
-                  for (var pos= markup.start; pos<=markup.end; pos++){ 
-
-
-
-
-
-                    
-                    // push class to each letter..
-                    var delta = parseInt(markup.start) - parseInt(container.start) + j_arr;
-                    
-                    if($rootScope.doc.content[delta]){
-                        markup.explicit_string += $rootScope.doc.content[delta];
-                    }
-                    // only to markup with type markup
-                    if( markup.subtype=='h1' ||  markup.subtype=='h2' ||  markup.subtype=='h3' || markup.subtype=='h4' || markup.subtype=='h5' || markup.subtype=='h6' || markup.subtype=='list-item')  {
-
-                          if(pos == markup.start ){
-                             temp_letters[delta]['classes'].push('fi')
-                            temp_letters[delta].classes_flat += 'fi'+' '
-
-                            
-                          }
-                          if( size_object ==  j_arr){
-                            temp_letters[delta+1]['classes'].push('nd')
-                            temp_letters[delta+1].classes_flat += 'nd'+' '
-
-
-                          }
-                          if(j_arr == 0){
-                            //$rootScope.letters[index][delta]['classes'].push('nd')
-                          }
-                          //as object ?  
-                          //$rootScope.letters[index][delta].fi_nd.fi = true; 
-                    }
-
-                    
-           
-
-                    //$rootScope.letters[index][delta]['classes'] = _.without($rootScope.letters[index][delta]['classes'],'selected')
-                    //$rootScope.letters[index][delta]['classes'] = _.without($rootScope.letters[index][delta]['classes'],'editing')
-
-                    if(markup.editing === true ){
-                     // $rootScope.letters[index][delta]['classes'].push('editing')
-                      temp_letters[delta]['classes'].push('editing')
-                      temp_letters[delta].classes_flat += 'editing'+' '
-
-
-                      /* L+ */
-                    }
-                    if(markup.selected === true){
-                      temp_letters[delta]['classes'].push('selected')
-                      temp_letters[delta].classes_flat += 'selected'+' '
-
-                       /* L+ */
-                    }
-
-                    //$rootScope.letters[section_count][delta]['char'] =  j_arr;
-                    //if(ztype && ztype== 'note'){
-                    //  $rootScope.letters[section_count][delta]['classes'].push(a.subtype);
-                    //  $rootScope.letters[section_count][delta]['classes'].push(ztype);
-
-                    //}
-                    //else{
-                      
-                      if(temp_letters[delta] && markup.subtype){
-                          
-                          // if twice, adds "_" to subtype-class
-                          if(_.contains(temp_letters[delta]['classes'], markup.subtype) ) {
-                                  temp_letters[delta]['classes'].push('_'+markup.subtype);
-                                  temp_letters[delta].classes_flat += '_'+markup.subtype+' '
-
-                          } 
-                          else{
-                                temp_letters[delta]['classes'].push(markup.subtype);
-                                 temp_letters[delta].classes_flat += markup.subtype+' '
-                          }
-                      }
-
-                      if(temp_letters[delta] && markup.depth){
-                           temp_letters[delta]['classes'].push('depth_'+markup.depth);
-                           temp_letters[delta].classes_flat += 'depth_'+markup.depth+' '
-
-                      }
-
-                      if(temp_letters[delta] && markup.status){
-                           temp_letters[delta]['classes'].push('status_'+markup.status);
-                           temp_letters[delta].classes_flat += 'status_'+markup.status+' '
-                      }
-
-
-
-                      if(temp_letters[delta] && markup.type=='semantic'){
-
-                          temp_letters[delta]['classes'].push(markup.type);
-                          temp_letters[delta].classes_flat += markup.type
-                        
-                      }
-                      //$rootScope.letters[section_count][delta]['objects'].push(a);
-                          //      $rootScope.letters[section_count][delta]['classes'].push('c-'+a.id);
-
-                    //}
-
-                    if(markup.type == 'hyperlink' && markup.metadata){
-                      temp_letters[delta]['href'] = markup.metadata;
-                    }
-
-
-                    i_array++;
-                    j_arr++
-                  }
-                  //$rootScope.containers[index].objects[markup.type]['inline'].push(markup); 
-                  //console.log($rootScope.objects_sections[index][td.type])
-            
-            } // if textrange_loop end.
-
-
-
-
-            if(markup.type !== "" && markup.position){ // > can add it
-             
-              if(markup.position == 'global'){
-              $rootScope.objects_sections['global_all'].push(markup)
-                // $rootScope.objects_sections['global_by_type'][markup.type].push(markup)
-              }
-              $rootScope.containers[index].objects[markup.type][markup.position].push(markup) 
-              // if(markup.type !=='container'){
-              $rootScope.containers[index].objects_count['by_positions'][markup.position].count++;
-              $rootScope.containers[index].objects_count['by_positions'][markup.position].has_object  = true;
-              //}
-
-              $rootScope.containers[index].objects_count['all'].count++;
-              $rootScope.containers[index].objects_count['all'].has_object  = true;
-
-              }
-              //console.log($rootScope.containers[index]['objects'][markup.type][markup.position])
-              //console.log('pushed'+markup.position)
-            }
-
-
+              // only for markups which ranges match container
+              if(markup.start >= container.start && markup.end <= container.end){
+                self.wrap_markup(markup, container, index, temp_letters);
+              }  
           }); // each markups end.
+
+
 
 
           $rootScope.containers[index].letters = temp_letters;
 
-
+          // final compilation.
           var lt_out ='';
           _.each(temp_letters, function(lc, w){
-            
 
+                // flatten classes
+                
+                lc.classes_flat = self.flatten_classes(lc.classes)
+
+                /// compile string only with char
                 if(lc.classes_flat == ""){
-                   //console.log('no class @'+lc.order)
                    lt_out += lc.char
                 }
                 else{
+                   // wrap each letter in span with its classes.
                    lt_out += '<span class="lt '+lc['classes_flat']+'" >'+lc.char+'</span>'
                 }
 
            });
+
            $rootScope.containers[index].fulltext_block = lt_out;
-
-
-
-        
-       
-          //   $rootScope.containers[index] = temp_container;
-          //   var temp_container = $rootScope.containers[index]
-          //   console.log( temp_container )
-          //   console.log($rootScope.containers[index])
-          //   console.log($rootScope.containers[index])
-
+           //  console.log($rootScope.containers[index])
 
         }); // end of containers loop
 
@@ -579,32 +330,252 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
         _.each($rootScope.doc.markups, function(markup){
           if(!markup.isolated ==false || markup.start > $rootScope.doc.content.length ){
             console.log('markup.isolated' )
-            markup.isolated =true;
+            markup.isolated = true;
             $rootScope.ui.isolated_markups.push(markup)
           }
         })
       
       },
 
+      
+      wrap_markup: function(markup, container, index, temp_letters ){
 
-      // util flatten array to string
-    
-      flatten_classes: function (n) {
-      //console.log(n);
-      var out = '';
-      _.each(n, function(c, i){out +=  n[i]+' ';});
-        return out;
-      }, 
+        markup.offset_start = 0;
+        markup.offset_end = 0;
+ 
+        // some commons attributes
+        // > todo use states objects
+        markup.sectionin = index;
+        markup.isolated = false;
+        /// keep open test :
+        //console.log('keep open')
+        markup.selected = false;
+        markup.editing  = '';
+        markup.inrange  = true;
+        markup.uptodate = '';
+      
+        // special cases for child documents (refs as doc_id in markup record)
+        markup.doc_id_id = '';
+
+        markup.user_options =  self.apply_object_options('markup_user_options',markup.user_id.user_options)
+
+        // user "by_me" ownership test
+        markup.by_me = 'false'
+        if( markup.user_id._id && $rootScope.userin._id  && ($rootScope.userin._id == markup.user_id._id ) )  {
+             markup.by_me = 'true';
+        }
+
+        // using "memory" of ui.
+        _.each($rootScope.ui.selected_objects, function(obj){
+          //console.log('keep opn'+obj._id)
+          if(markup._id == obj._id){
+               markup.selected = true;
+            // should select ranges too..
+          }
+        })
+         _.each($rootScope.ui.editing_objects, function(obj){
+          //console.log('keep opn'+obj._id)
+          if(markup._id == obj._id){
+            markup.editing = true;
+          }
+        })
+  
+
+        // depending cases of types and subtypes : 
+        
+
+        if(markup.type=='container_class' ){ // or pos == inlined
+             $rootScope.containers[index].section_classes += markup.metadata+' ';
+        }
+
+        if(markup.type == 'media' || markup.subtype == 'simple_page' ||  markup.subtype == 'doc_content_block' ){
+               $rootScope.containers[index].section_classes += 'has_image ';
+               if(markup.position){
+                  $rootScope.containers[index].section_classes += ' focus_side_'+markup.position +' ';
+               }
+
+               if(markup.position == 'background'){
+                  $rootScope.containers[index].section_styles = 'background-image:url('+markup.metadata+')' ;
+               }
+
+        }
+
+        if(markup.type =='child'){ 
+          // to keep doc_id._id (just id as string) in model and not pass to post object later..
+          if(markup.doc_id){ 
+             markup.doc_id_id = markup.doc_id._id;
+             if(markup.doc_id.doc_options){
+               // m.markup.child_options = [];
+               var  options_array =  [];
+                markup.child_options = [];
+                _.each(markup.doc_id.doc_options , function(option){
+                  options_array[option.option_name] = option.option_value
+                });
+                markup.child_options = options_array
+              }
+          }
+          //console.log('children call ...')
+        }
+        
+
+        // need to loop letters of range
+        if(markup.type=='markup' || markup.type == 'hyperlink'  || markup.type=='comment' || markup.type=='note' || markup.type=='semantic' || markup.subtype=='share_excerpt'  ){ // or pos == inlined
+            
+
+
+            self.markup_ranges(markup, container, index, temp_letters);
+            //$rootScope.containers[index].objects[markup.type]['inline'].push(markup); 
+            //console.log($rootScope.objects_sections[index][td.type])
+        } // if textrange_loop end.
+
+        /**
+        * add to container objects
+        *
+        */
+
+        // check exist/not null
+        if(markup.type !== "" && markup.position){ // > can add it
+          
+          // adding to the global collection
+          if(markup.position == 'global'){
+            $rootScope.objects_sections['global_all'].push(markup)
+            // $rootScope.objects_sections['global_by_type'][markup.type].push(markup)
+          }
+
+          // add markup to container objects (container::index::type::position) 
+          $rootScope.containers[index].objects[markup.type][markup.position].push(markup) 
+          
+          // if(markup.type !=='container'){
+          $rootScope.containers[index].objects_count['all'].count++;
+          $rootScope.containers[index].objects_count['all'].has_object  = true;
+          $rootScope.containers[index].objects_count['by_positions'][markup.position].count++;
+          $rootScope.containers[index].objects_count['by_positions'][markup.position].has_object  = true;
+          //}
+        }
+        //console.log($rootScope.containers[index]['objects'][markup.type][markup.position])
+        //console.log('pushed'+markup.position)
+        
+        return markup;
+      },
+
 
       /**
-      * fill arrays of letters for each section  {@link DocumentCtrl#distribute_markups} 
+      * wrap a "range of markup"
+      * @param {Object} markup
+      * @param {Object} container
+      * @param {LoopIndex} index
+      * @param {Array} temp_letters
+      * @function docfactory#markup_ranges
+      * @return --
+      * @link docfactory#markup_ranges
+      */
+    
+      markup_ranges : function (markup, container, index, temp_letters){
+
+        var j_arr=0;
+        var i_array = 0;  
+        var into_for = 0;
+        // console.log('section end:'+section.end)
+        // console.log('fc:'+ parseInt(section.end) - parseInt(section.start) );
+        
+        var size_object = parseInt(markup.end) - parseInt(markup.start) -1;
+        markup.explicit_string  =   '';
+        for (var pos= markup.start; pos<=markup.end; pos++){ 
+          // push class to each letter..
+          var delta = parseInt(markup.start) - parseInt(container.start) + j_arr;      
+          if($rootScope.doc.content[delta]){
+              markup.explicit_string += $rootScope.doc.content[delta];
+          }
+
+          // only to markup with "block" 
+          if( markup.subtype=='h1' ||  markup.subtype=='h2' ||  markup.subtype=='h3' || markup.subtype=='h4' || markup.subtype=='h5' || markup.subtype=='h6' || markup.subtype=='list-item'  || markup.subtype=='quote')  {
+                if(pos == markup.start ){
+                   temp_letters[delta]['classes'].push('fi')
+                }
+                if( size_object ==  j_arr){
+                  temp_letters[delta+1]['classes'].push('nd')
+                }
+                if(j_arr == 0){
+                  //$rootScope.letters[index][delta]['classes'].push('nd')
+                }
+               
+          }
+
+
+          //$rootScope.letters[index][delta]['classes'] = _.without($rootScope.letters[index][delta]['classes'],'selected')
+          //$rootScope.letters[index][delta]['classes'] = _.without($rootScope.letters[index][delta]['classes'],'editing')
+          if(markup.editing === true ){
+           // $rootScope.letters[index][delta]['classes'].push('editing')
+            temp_letters[delta]['classes'].push('editing')
+            /* L+ */
+          }
+          if(markup.selected === true){
+            temp_letters[delta]['classes'].push('selected')
+             /* L+ */
+          }
+          //$rootScope.letters[section_count][delta]['char'] =  j_arr;
+          //if(ztype && ztype== 'note'){
+          //  $rootScope.letters[section_count][delta]['classes'].push(a.subtype);
+          //  $rootScope.letters[section_count][delta]['classes'].push(ztype);
+
+          //}
+          //else{
+            
+            if(temp_letters[delta] && markup.subtype){
+                
+                // if twice, adds "_" to subtype-class
+                if(_.contains(temp_letters[delta]['classes'], markup.subtype) ) {
+                        temp_letters[delta]['classes'].push('_'+markup.subtype);
+
+                } 
+                else{
+                      temp_letters[delta]['classes'].push(markup.subtype);
+                }
+            }
+
+            if(temp_letters[delta] && markup.depth){
+                 temp_letters[delta]['classes'].push('depth_'+markup.depth);
+
+            }
+
+            if(temp_letters[delta] && markup.status){
+                 temp_letters[delta]['classes'].push('status_'+markup.status);
+            }
+
+
+
+            if(temp_letters[delta] && markup.type=='semantic'){
+
+                temp_letters[delta]['classes'].push(markup.type);
+              
+            }
+            //$rootScope.letters[section_count][delta]['objects'].push(a);
+                //      $rootScope.letters[section_count][delta]['classes'].push('c-'+a.id);
+
+          //}
+
+          // markup is an hyperlink
+          if(markup.type == 'hyperlink' && markup.metadata){
+            temp_letters[delta]['href'] = markup.metadata;
+          }
+
+
+          i_array++;
+          j_arr++
+        }
+        return markup;
+      },
+
+
+      /**
+      * fill arrays of letters for each section  {@link docfactory#distribute_markups} 
       * @param {Object} section - section object
       * @param {Start-range} section.start  -    section start
       * @param {End-range} section.end    -  section end
       * @param {Number} [section_count] - section index value 
-      * @function DocumentCtrl#fill_chars
+      * @function docfactory#fill_chars
       * @return {Object} letters of a section
-      * @link DocumentCtrl#distribute_markups 
+      * @link docfactory#distribute_markups 
       * @todo remove section count param
       */
 
@@ -685,11 +656,29 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
       },
 
 
-
-
-
       /**
-      * sub-function to set objects options (doc_options, users_options, etc..))
+      * Util transfomring array to string
+      * @param {Array} source array
+      * @function docfactory#flatten_classes
+      * @returns {String} values of array with empty spaces between
+      * @link docfactory#flatten_classes
+      */
+
+      flatten_classes: function (n) {
+      //console.log(n);
+      var out = '';
+      _.each(n, function(c, i){out +=  n[i]+' ';});
+        return out;
+      }, 
+
+      
+      /**
+      * @description Sub-function to set objects options (doc_options, users_options, etc..)
+      * @param {String} object - kind of object to map
+      * @param {Array} options - source array
+      * @return {{Array}}
+      * @function docfactory#apply_object_options
+      * @todo ---
       */
 
       apply_object_options : function(object, options){
@@ -697,11 +686,11 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
         var options_array = [];
         _.each(options , function(option){
            // console.log(option)
-            var op_name = option.option_name;
-            var op_value = option.option_value;
-            var op_type = option.option_type;
+            var op_name   = option.option_name;
+            var op_value  = option.option_value;
+            var op_type   = option.option_type;
 
-            options_array[op_name]= [];
+            options_array[op_name]          = [];
             options_array[op_name]['value'] = op_value;
 
             if( op_value && op_type == 'google_typo' && object == 'document'){
@@ -709,32 +698,78 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
                   google: {
                    families: [op_value]
                   }
-              }); 
+               }); 
                var fixed = options_array[op_name]['value'];
                options_array[op_name]['fixed'] =  fixed.replace(/ /g, '_').replace(/,/g, '').replace(/:/g, '').replace(/400/g, '').replace(/700/g, '') 
             }
-        });
-        
+        });        
         return options_array;
-  
-
       },
+
+
+      /**
+      * @description 
+      * Show a message to user
+      *
+      *  @param {String} msg - message to show
+      *  @param {String} classname - a css class ('ok'/ 'bad' / ..)
+      *  @param {Number/Time} timeout - 
+
+      *  @return -
+      * 
+      * @function docfactory#flash_message
+      * @link docfactory#flash_message
+      * @todo --
+      */
+
       flash_message: function (msg,classname ,timeout) {
-          $rootScope.flash_message = {}
-       $rootScope.flash_message.text = msg;
-       $rootScope.flash_message.classname = classname;
-       
-       if(timeout){
-        $timeout(function(){
-          $rootScope.flash_message.text =  '';
-       }, timeout);
-       }
-      return ;
+
+
+        $rootScope.flash_message = {}
+        $rootScope.flash_message.text = msg;
+        $rootScope.flash_message.classname = classname;
+        
+        // apply timeout if set to true
+        if(timeout){
+            $timeout(function(){
+                $rootScope.flash_message.text =  '';
+            },timeout);
+        }
 
       },
+
+
+      /**
+      * @description 
+      *  
+      *
+      *  --
+      *  @params collection_name (o{})
+      *  @return -
+      * 
+      * @function docfactory#--
+      * @link docfactory#--
+      * @todo ---
+      */
+
       text_range: function (start, end) {
         return;
       },
+
+
+      /**
+      * @description 
+      * Setup a document
+      *
+      *  --
+      *  @params collection_name (o{})
+      *  @return nothing
+      * 
+      * @function docfactory#init_new
+      * @link docfactory#init_new
+      * @todo rename to doc_init_new
+      */
+
       init_new: function () {
         $rootScope.i18n                    =   $locale;         
         $rootScope.newdoc                  =   new Object();
@@ -742,6 +777,21 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
         $rootScope.newdoc.raw_title        =   $rootScope.i18n.CUSTOM.DOCUMENT.default_title
         $rootScope.newdoc.published        =   'draft';
       },
+
+
+      /**
+      * @description 
+      * new document 
+      *
+      *  --
+      *  @params collection_name (o{})
+      *  @return -
+      * 
+      * @function docfactory#--
+      * @link docfactory#--
+      * @todo rename to doc_new
+      */
+
       newdoc: function(){
           ///api/v1/doc/create  
           var data = new Object();
@@ -765,6 +815,21 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
            }).error(function(err) {
            }); 
       },
+
+
+      /**
+      * @description 
+      * Save 'sync' a document by offsets.. 
+      *
+      *  --
+      *  @params collection_name (o{})
+      *  @return -
+      * 
+      * @function docfactory#docsync
+      * @link docfactory#docsync
+      * @todo documentation, rename to doc_sync
+      */
+
       docsync: function(){
         ///api/v1/doc/create
         var data = new Object();
@@ -793,6 +858,20 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
               //$rootScope.$emit('docEvent', {action: 'doc_ready', type: '-', collection_type: 'doc', collection:doc });
         });  
       },
+
+
+      /**
+      * @description 
+      * --  
+      *
+      *  --
+      *  @params collection_name (o{})
+      *  @return -
+      * 
+      * @function docfactory#--
+      * @link docfactory#--
+      * @todo ---
+      */
 
       save_doc: function (field) {
           var data = new Object()
@@ -832,7 +911,20 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
               self.init(doc,true)
              });  
         },
-        save_doc_option: function (field) {
+      /**
+      * @description 
+      * Save a doc_option 
+      *
+      *  --
+      *  @params collection_name (o{})
+      *  @return -
+      * 
+      * @function docfactory#save_doc_option
+      * @link docfactory#save_doc_option
+      * @todo rename to doc_option_save
+      */
+
+      save_doc_option: function (field) {
 
           if($rootScope.userin.username ==''){
              return false
@@ -844,7 +936,7 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
           $rootScope.doc_options[field].value = data.value
           $http.post(api_url+'/doc/'+$rootScope.doc.slug+'/edit_option', serialize(data) ).
           success(function(doc) {
-            // # todo reset doc event/ cb
+                      // # todo reset doc event/ cb
                      // hard redirect
                      console.log(doc)
                      self.flash_message('option saved', 'ok' , 3000)
@@ -852,19 +944,42 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
                      self.init(doc,false)
            
            });  
-        },
+      },
 
-        // # CRUD 
-       delete_doc_option: function (field) {
+      /**
+      * @description 
+      * Delete an option of document 
+      *
+      *  --
+      *  @return -
+      * 
+      * @function docfactory#delete_doc_option
+      * @link docfactory#delete_doc_option
+      * @todo rename doc_option_delete / implement in api!
+      */
+
+      delete_doc_option: function (field) {
         var data = new Object()
          data.option_name = field;
          $http.post(api_url+'/doc/'+$rootScope.doc.slug+'/delete_option', serialize(data) ).
                 success(function(doc) {
                   alert(doc)
          });
-       },
+      },
 
-       // # CRUD 
+      /**
+      * @description 
+      * create a new option to document
+      *
+      *  --
+      *  @params collection_name (o{})
+      *  @return -
+      * 
+      * @function docfactory#create_doc_option
+      * @link docfactory#create_doc_option
+      * @todo rename to   doc_option_create
+      */
+
       create_doc_option: function () {
          // calling service
          $http.post(api_url+'/doc/'+$rootScope.doc.slug+'/create_option' ).
@@ -873,15 +988,25 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
          }); 
       },
 
-      // # CRUD 
-      push_markup : function (markup){
-          console.log($rootScope.userin)
-          // todo : post api
+
+      /**
+      * @description Push a markup
+      * @param {object} markup - markup to push
+      * @return {function} flash_message() - message 
+      * @API : $POST
+      * @function docfactory#push_markup
+      * @link docfactory#push_markup
+      * @todo --
+      */
+
+      markup_push : function (markup){
+          /// console.log($rootScope.userin)
+          //  todo : post api
           var data = new Object(markup);
           data.username = $rootScope.userin.username;
           data.user_id = $rootScope.userin._id;
 
-         // APi call
+         // API POST
           $http.post(api_url+'/doc/'+ $rootScope.doc.slug+'/markup/push', serialize(data) ).success(function(d) {
                console.log(d)
                
@@ -892,7 +1017,22 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
 
               //$rootScope.$emit('docEvent', {action: 'doc_ready', type: 'push', collection_type: 'markup', collection:d.inserted[0] });
            });
-     },
+      },
+
+
+      /**
+      * @description 
+      * depre.  
+      *
+      *  --
+      *  @params collection_name (o{})
+      *  @return -
+      * 
+      * @function docfactory#--
+      * @link docfactory#--
+      * @todo ---
+      */
+
      offset_markups : function (){
           $http.get(api_url+'/doc/'+$rootScope.doc.slug+'/markups/offset/left/0/1/1').success(function(d) {
             console.log(d)
@@ -900,6 +1040,21 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
             $rootScope.$emit('docEvent', {action: 'doc_ready', type: 'offset', collection_type: 'markup', collection:d.markups });
           })
       },
+
+
+      /**
+      * @description 
+      * Offset a markup positions
+      *
+      *  --
+      * @param {object} markup - markup to offset
+      *  @return -
+      * 
+      * @function docfactory#--
+      * @link docfactory#--
+      * @todo rename/check use
+      */
+
       offset_markup: function (markup,start_qty, end_qty){
 
           var data = {}
@@ -914,6 +1069,20 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
             $rootScope.$emit('docEvent', {action: 'doc_ready', type: 'offset', collection_type: 'markup', collection:m.markups });
           })
       },
+
+
+      /**
+      * @description 
+      * Save a markup (attributes)
+      *
+      * @param {object} markup - markup to save
+      * @return {Function} init and/or flash
+      * 
+      * @function docfactory#markup_save
+      * @link docfactory#markup_save
+      * @todo ---
+      */
+
       markup_save: function (markup){
          
            console.log(markup)
@@ -951,9 +1120,23 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
           })
       },
 
+
+      /**
+      * @description 
+      * Delete a markup in API and in view
+      *
+      *  
+      * @param {object} markup - markup to delete 
+      * @return -
+      * @callback error or reset document + flash message
+      * @function docfactory#markup_delete
+      * @link docfactory#markup_delete
+      * @todo i18n 
+      */
+
       markup_delete: function (markup){
         $http.post(api_url+'/doc/'+$rootScope.doc.slug+'/markup/delete/'+markup._id).success(function(m) {
-          console.log(m)
+           // console.log(m)
            if(m.err_code || m.err){
                self.flash_message(m.err.err_code, 'bad' , 3000)
             }
@@ -962,20 +1145,30 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
                 self.flash_message('markup saved', 'ok' , 2000)
                 // + socket.
             }
-          // + socket.
-      });
+            // + socket.
+        });
      },
-     virtualize : function(){
 
-            /**
-            * construct virtual collection  
-            *  use case : summarization
-            *  @params collection_name (header, name , auto{}, implicit{}, explicit{})
-            *  @return text string
-            *  A. auto : use h1>h6
-            *  B  implicit : subtype using corresponding ranges of text (implicit)
-            *  C  explicit : subtype collection . > using markup metavalue (explicit)
-            */
+
+    /**
+    * @description 
+    * construct virtual collection  
+    *
+    *  use case : summarization
+    *  @params collection_name (header, name , auto{}, implicit{}, explicit{})
+    *  @return text string
+    *  A. auto : use h1>h6
+    *  B  implicit : subtype using corresponding ranges of text (implicit)
+    *  C  explicit : subtype collection . > using markup metavalue (explicit)
+    *
+    * 
+    * @function docfactory#virtualize
+    * @link docfactory#virtualize
+    * @todo nothing
+    */
+
+    virtualize : function(){
+
             _.each($rootScope.virtuals, function(virtual, vi){
              console.log('> virtualize '+virtual.slug)
               if(!virtual.visible){
@@ -985,6 +1178,7 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
                  virtual.visible = false
               }
               virtual.string = '<h2 class="'+virtual.slug+'summarize_header">'+virtual.header+'</h2>';
+               $rootScope.doc.text_summary +='<h2 class="'+virtual.slug+'summarize_header">'+virtual.header+'</h2>';
               // setup 'at least one'
               var found_element = false;
                //loop
@@ -997,27 +1191,46 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
                         virtual.string += $rootScope.doc.content[i]; 
                      }
                 }
-                /*
+               
                 // AUTO
                 //// CHECK ORDER !!!!
-                if(t.type == 'markup' && (t.subtype =='h1' || t.subtype =='h2' || t.subtype =='h3' || t.subtype =='h4' || t.subtype =='h5') ){
-                  $scope.text_summary += '<'+t.subtype+'>';
-                  for (var i=t.start;i<=t.end;i++){ 
-                    if(content[i]){
-                      $scope.text_summary += content[i];    
+                if(markup.type == 'markup' && (markup.subtype =='h1' || markup.subtype =='h2' || markup.subtype =='h3' || markup.subtype =='h4' || markup.subtype =='h5') ){
+                  $rootScope.doc.text_summary += '<'+markup.subtype+'>';
+                  
+                  for (var i=markup.start;i<=markup.end;i++){ 
+                    if($rootScope.doc.content[i]){
+                      $rootScope.doc.text_summary +=$rootScope.doc.content[i];    
+                      virtual.string += $rootScope.doc.content[i]; 
                     }
                   }
-                  $scope.text_summary += '</'+t.subtype +'>'
+                  $rootScope.doc.text_summary += '</'+markup.subtype +'>'
                 }
-                EXPLICIT
-                if(t.subtype == 'summary_block'){
-                  $scope.text_summary += '<p>'+t.metadata+'</p>';
+
+
+
+               // EXPLICIT
+                if(markup.subtype == 'summary_block'){
+                   $rootScope.doc.text_summary += '<p>'+markup.metadata+'</p>';
+                   //virtual.string += t.metadata  
                 } 
-                */  
+
+                if(markup.subtype == 'summary'){
+                   for (var i=markup.start;i<=markup.end;i++){ 
+                                    if($rootScope.doc.content[i]){
+                                      $rootScope.doc.text_summary +=$rootScope.doc.content[i];    
+                                      virtual.string += $rootScope.doc.content[i]; 
+                      }
+                   }
+                               
+                } 
+
+
+
+               
               });
               $rootScope.virtuals[vi] = virtual
           }); // each   virtuals
-        console.log($rootScope.virtuals)
+         console.log($rootScope.virtuals)
      } // virtual function end
 // closing factory 
    };

@@ -186,7 +186,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
               'show_user': false, 
               'subtype': {
                 'free_input' : false,
-                'available' : ['translation', 'date', 'hidden', 'place', 'somebody','info', 'copyright', 'mood']
+                'available' : ['summary_block', 'summary','translation', 'date', 'hidden', 'place', 'somebody','info', 'copyright', 'mood']
              },   
               'position_available': ['left', 'right', 'under', 'global'],
             });
@@ -353,7 +353,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
 
               'subtype': {
                 'free_input' : false,
-                'available' : ['h1','h2', 'h3', 'h4', 'h5','h6','em', 'strong', 'code', 'quote', 'super-quote']
+                'available' : ['h1','h2', 'h3', 'h4', 'h5','h6','em', 'strong', 'code', 'quote']
              },   
              'position_available': ['inline'],
 

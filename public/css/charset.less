@@ -93,40 +93,45 @@
   
   &.cite, 
   &.quote{
-    background-color:#DADADA;
-    color:#fff;     
-     &.nd:after  {
+   
+       background: none repeat scroll 0 0 rgba(204, 204, 204, 0.3);
+    font-size: 2em;
+    color: rgba(0, 0, 0, 0.9);
+ &.nd:after  {
+ 
+     clear: both;
+          content: "";
+          display: block;
+          height: 1px;
+          width: 1px;
+      }
+     
+     
+       &.fi{
         clear: both;
-        content: "";
-        display: block;
-        height: 1px;
-        width: 1px;
-    }
-    &.fi{
-      clear: both;
-    }
-    &.fi:before  {
-        clear: none;
-        content: "\2022";
-        display: block;
-        font-size: 21px;
-        height: 0;
-        color:#000;
-        line-height: 45px;
-        margin-left: -10px;
-        margin-top: -4px;
-    }
-    &.fi:after  {
-        clear: none;
-       content: "\0027";
-        display: block;
-        font-size: 21px;
-        height: 0;
-        color:#000;
-        line-height: 45px;
-        margin-left: -10px;
-        margin-top: -4px; 
-    }
+      
+         &:before  {
+     background: none repeat scroll 0 0 rgba(204, 204, 204, 0.3);
+    clear: none;
+    color: rgba(204, 204, 204, 0.9);
+    content: "‟";
+    display: block;
+    font-family: georgia;
+    font-size: 90px;
+    height: 34px;
+    line-height: 0.8;
+   
+    margin-top: 29px;
+    padding-left: 0;
+    width: 100%;
+   
+      }
+
+
+      }
+
+
+   
   }
 
   &.code{
@@ -152,7 +157,6 @@
 
 
 
-
 /*
 .lt.fi, 
 .lt.fi.selected{
@@ -163,8 +167,8 @@
 .lt.nd.selected{
     background:#3498db
 }
-*/
 
+*/
 
 //** transform span to block (line breaks before and after) */
 /* fi : first*/

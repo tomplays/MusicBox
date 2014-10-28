@@ -35,8 +35,9 @@ div.doc_header
 		label Edit "after Title"
 		input(ng-if="ui.editing_doc_notices_after_title",   ng-model="doc_options.doc_notices_after_title.value", name="doc_options.doc_notices_after_title.value")
 		a.btn_ok.float_right(ng-click="edit_doc_option('doc_notices_after_title')") Save
-
-
+			
+	// div(ng-bind-html="doc.text_summary")
+	
 	time(ng-bind-html="doc.formated_date")
 	div.head_left
 		div.post-author-info
