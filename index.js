@@ -174,6 +174,8 @@ io.on('connection', function(socket){
     socket.on('news', function(data){
       require('./api/socket').socketer(socket, data);
     });
+
+    
   });
 // logger.init(app, passport, mongoose);
 //expose app
