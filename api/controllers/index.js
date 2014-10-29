@@ -32,9 +32,8 @@ exports.errors = function(req, res) {
   res.render('error', { title: 'Nothing here', message: message} );
 };
 
-/*
+
 exports.sockets_list = function(req, res) {
          var user_ = new Object({'username': null,  'image_url':null})
          res.render('index_v1', { user_in:user_ } );
 };
-*/

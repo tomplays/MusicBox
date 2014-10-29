@@ -95,7 +95,9 @@ module.exports = function(app, passport, auth) {
     // clone a doc
     app.get('/api/v1/doc/:slug/clone/:clone_slug',  auth.requiresLogin, docs.doc_clone);
 
-    // not used app.get('/sockets/list', index.sockets_list);
+
+     app.get('/sockets/list', index.sockets_list);
+     app.get('/sockets/list/doc/:slug', index.sockets_list);
 
     //
     app.post('/api/v1/userlogin', passport.authenticate('local', {}), users.signin_login);
