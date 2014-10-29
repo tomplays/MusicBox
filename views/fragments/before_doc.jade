@@ -66,7 +66,7 @@ div.fixed_tools()
 
 div.editor_zone.doc_centered(ng-if="ui.renderAvailable_active == 'editor'" )
 	label text content (without html markup)
-	textarea(ng-change="textarea_event('change')", ng-mousedown="textareaevent('down')" , type="text", ng-model="doc.content")
+	textarea(type="text", ng-model="doc.content")
 	
 	div.text_helpers.bg_debug(ng-if="ui.debug")
 			a(ng-click="switch_focus_side('left')") focus side left
@@ -79,7 +79,7 @@ div.editor_zone.doc_centered(ng-if="ui.renderAvailable_active == 'editor'" )
 			p new size : {{ui.selected_range.diff_new_size}}		
 			p diff position {{ui.selected_range.diff_at}}		
 			p diff qty : {{ui.selected_range.diff_qty}}
-			p direction {{ui.selected_range.diff_dir}}
+			p direction : {{ui.selected_range.diff_dir}}
 			p count: {{ui.selected_range.diff_objects_concerned_count}}
 
 			div(ng-repeat="mk in ui.selected_range.markups_to_offset")

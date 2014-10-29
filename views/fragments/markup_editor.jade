@@ -1,3 +1,6 @@
+// editor for markup object.
+// can be in any position of the layout depending markup position
+
 h5 Edit markup
 	form(name="myForm")		
 		.object-tools
@@ -45,10 +48,10 @@ h5 Edit markup
 			label.label_type type
 			ul.typer
 				li(ng-repeat="t in available_sections_objects")
-					span {{t}}
+					span {{objSchema[t].display_name}}
 					i.fa.btn_action(ng-class="{ 'selected' : markup.type == t,}" , class="fa-{{t}}" , ng-click="markup_type(markup, t)") 
 			
-
+				// old selectors
 				// select(ng-model="markup.type", ng-options="t for t in available_sections_objects")
 				// option(value="markup.type")
 				// option(value="t") {{t}}
