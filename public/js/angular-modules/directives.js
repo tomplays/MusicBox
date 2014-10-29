@@ -169,6 +169,20 @@ if(ev == 'mouseup'){
               });
           });
 
+          elem.bind('dblclick', function() {
+             
+              $rootScope.$apply(function(){
+                // console.log(scope.lt)
+                if($rootScope.ui.renderAvailable_active ==  'editor'){
+                  $rootScope.ui.renderAvailable_active =  'read'
+                }
+                else{
+                  $rootScope.ui.renderAvailable_active =  'editor'
+                }
+             
+              });
+          });
+
           elem.bind('mousedown', function(e) {
             //  console.log(e)
             scan(scope, 'mousedown')

@@ -404,7 +404,7 @@ function DocumentCtrl($scope, $http , $sce, $location, $routeParams, renderfacto
 	}
 
 	/* */
-	$scope.textarea_event = function( event){}
+	
 
 	$scope.sync_section_next = function(section, index){
 		console.log(index)
@@ -553,7 +553,7 @@ function DocumentCtrl($scope, $http , $sce, $location, $routeParams, renderfacto
 		//	console.log('TRIGGER ?'+trigger)
 
 		if(trigger){
-			$scope.containers[markup.sectionin].selecting = Math.random()
+		///	$scope.containers[markup.sectionin].selecting = Math.random()
 		}
 		/*
 		if($scope.containers[markup.sectionin].start ){
@@ -582,17 +582,18 @@ function DocumentCtrl($scope, $http , $sce, $location, $routeParams, renderfacto
 	*/
 	
 
-	// usefull debugger to count watched count.
+	// act as a debugger to count watched count.
 	// performances logging.
 
+	/*
 	var tttt = 0;
-    $scope.$watch('containers', function(newValue, oldValue) {
-        tttt++;
-        //if(oldValue){
- 		console.log('////////'+tttt)
-        // }
-    });
-
+	$scope.$watch('containers', function(newValue, oldValue) {
+	   tttt++;
+	   // if(oldValue){
+	   // 	console.log('////////'+tttt)
+	   // }
+	});
+	*/
 
 
     // watch the textarea content.
@@ -712,16 +713,31 @@ function DocumentCtrl($scope, $http , $sce, $location, $routeParams, renderfacto
 * @class SocketsListCtrl
 **/
 function SocketsListCtrl($scope, $http , $location, $routeParams, socket) {
+
+
 		//$scope.docs = DOCS;
 		console.log('SocketsListCtrl')
 		$scope.stack = [];
+		
+     
+		socket.on('connection', function (data) {
+			console.log('data connecion')
+			//socket.join('homepage');
+
+		});
+
+
 		socket.on('newsback', function (data) {
-			//console.log('newsback')
+			console.log('newsback')
 			//console.log(data);
 			$scope.stack.push(data)
-		})
+		});
+		$scope.fake_socket = function (){
+		    //socket.emit('news', {doc_id:'homepage', action: 'fake_action' , type: 'fake' });
+		    //alert("-")
+		}
+
 		$scope.delete_markup = function (markup,doc_id){
-		
 		 $http.get(root_url+'/api/v1/doc/'+doc_id+'/markups/delete/'+markup._id).success(function(m) {
 			//console.log(m)
 			alert('job done')
@@ -790,9 +806,8 @@ angular.module('musicBox.controller', []).controller('FragmentCtrl', function($s
 
     $scope.$watch('markup.selected', function(newValue, oldValue) {
           // only new value check
-          if(oldValue !==newValue ){
-            // console.log(newValue)
-            // console.log(oldValue)
+          if(oldValue !== newValue ){
+          
         	$scope.toggle_fragment_ranges('single_markup', 'selected', $scope.markup, newValue, true)
           }
           else{
@@ -832,6 +847,7 @@ function DocumentNewCtrl($scope, $compile, $http , $sce, $location, $routeParams
 	}
 	
 	$scope.create_doc = function(){
+		/*
 		console.log($scope.newdoc)
 		var thiselem;
 		thiselem = document.createElement('div');
@@ -841,9 +857,11 @@ function DocumentNewCtrl($scope, $compile, $http , $sce, $location, $routeParams
 		$scope.serialization = new Serialize(elem)
 		console.log($scope.serialization)
 		thiselem.remove()
+		*/
 		newdoc_service.newdoc();
 	}
-		$scope.init_new_doc();
+	
+	$scope.init_new_doc();
 	
 } // end controller
 //DocumentNewCtrl.$inject = ['$scope', '$http' ,'docfactory', '$timeout'];
