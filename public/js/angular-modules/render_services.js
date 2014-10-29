@@ -20,7 +20,6 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
         
         $rootScope.objSchema                  =   self.objSchema(); 
         $rootScope.available_sections_objects =   self.objAvailable(); 
-        // console.log($rootScope.available_sections_objectsd )
         $rootScope.available_layouts          =   self.posAvailable();
         $rootScope.item_position              = '';
 
@@ -118,7 +117,10 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
             
             
             arr.comment = new Object({
-              'type':obj_base.type ,
+              'name': 'comment',
+              'display_name': $rootScope.i18n.CUSTOM.OBJECTS.comment,
+              'type':obj_base.type,
+              'map_range': true,
               'only':'',
               'metadata': { 
                 'editor': {
@@ -139,7 +141,10 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
               'position_available': ['left', 'right', 'under', 'global'],
             });
             arr.note = new Object({
+              'name': 'note',
+              'display_name': $rootScope.i18n.CUSTOM.OBJECTS.note,
               'type':obj_base.type ,
+              'map_range': true,
               'only':'',
               'metadata': { 
                 'editor': {
@@ -165,7 +170,10 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
               'position_available': ['left', 'right', 'under', 'center', 'global'],
             });
              arr.semantic= new Object({
-              'type':obj_base.type ,
+              'name': 'semantic',
+              'display_name': $rootScope.i18n.CUSTOM.OBJECTS.semantic,
+              'type':obj_base.type,
+              'map_range': true,
               'only':'',
               'metadata': { 
                 'editor': {
@@ -190,7 +198,10 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
              },   
               'position_available': ['left', 'right', 'under', 'global'],
             });
+
             arr.generic = new Object({
+              'name': 'generic',
+              'display_name': $rootScope.i18n.CUSTOM.OBJECTS.generic,
               'type':obj_base.type ,
               'only':'',
               'metadata': { 
@@ -217,6 +228,8 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
               'position_available': ['left', 'right', 'under', 'center','global'],
             });
            arr.container= new Object({
+            'name': 'container',
+              'display_name': $rootScope.i18n.CUSTOM.OBJECTS.container,
               'type':obj_base.type ,
               'only':'',
               'metadata': { 
@@ -244,6 +257,8 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
             });
 
             arr.container_class = new Object({
+              'name': 'container_class',
+              'display_name': $rootScope.i18n.CUSTOM.OBJECTS.container_class,
               'type':obj_base.type ,
               'only':'',
               'metadata': { 
@@ -273,7 +288,9 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
 
 
             arr.child = new Object({
-              'type':obj_base.type ,
+              'name': 'child',
+              'display_name': $rootScope.i18n.CUSTOM.OBJECTS.child,
+              'type':obj_base.type,
               'only':'',
               'metadata': { 
                 'editor': {
@@ -301,6 +318,8 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
             });
 
             arr.media = new Object({
+              'name': 'media',
+              'display_name': $rootScope.i18n.CUSTOM.OBJECTS.media,
               'type':obj_base.type ,
               'only':'',
               'metadata': { 
@@ -330,7 +349,10 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
 
             
             arr.markup = new Object({
+              'name': 'markup',
+              'display_name': $rootScope.i18n.CUSTOM.OBJECTS.markup,
               'type':obj_base.type ,
+              'map_range': true,
               'only':'',
               'metadata': { 
                 'editor': {
@@ -359,7 +381,10 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
 
             });
             arr.hyperlink = new Object({
+              'name': 'hyperlink',
+              'display_name': $rootScope.i18n.CUSTOM.OBJECTS.hyperlink,
               'type':obj_base.type ,
+              'map_range': true,
               'only':'',
               'metadata': { 
                 'editor': {
@@ -371,7 +396,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
                   'render': {
                    'show' : true
                   }
-              }, 
+              },
               'show_date': false, 
               'icon': { 
                 'before': {

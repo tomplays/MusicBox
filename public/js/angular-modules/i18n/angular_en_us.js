@@ -32,6 +32,19 @@ $provide.value("$locale", {
 		"default_content" :"Your text-content"
 
 	},
+	"OBJECTS" : {
+			"comment": "Comment",
+			"note" :"Note",
+			"semantic":"Semantic",
+			"generic":"Generic",
+			"container":"Container",
+			"container_class":"Container class",
+			"child":"Child object",
+			"media":"Media",
+			"markup":"'Classic' markup",
+			"hyperlink":"Link"
+
+	},
 	"APP" : {
 		"write_invitation" : "Vous avez quelquechose à nous raconter ?",
 		"write_invitation_link" : "En savoir plus &raquo;"
