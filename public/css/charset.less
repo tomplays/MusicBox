@@ -26,6 +26,7 @@
   }
   &.h1 {
     font-size: 44px;
+
   }
   &.h2 {
       font-size: 37px;
@@ -55,6 +56,14 @@
     background: @important-color;
     opacity: 0.75;
   }
+
+
+  &.h1.selected, &.h2.selected , &.h3.selected , &.h4.selected , &.h5.selected, &.h6.selected  {
+    border-top:2px solid rgba(52, 152, 219, 0.5);
+      background:none repeat scroll 0 0 rgba(52, 152, 219, 0.5)
+    }
+
+
 
   &.mark {
       background:@marker;
@@ -154,9 +163,6 @@
  
 }
 
-
-
-
 /*
 .lt.fi, 
 .lt.fi.selected{
@@ -188,17 +194,19 @@
     width: 1px;
 }
 
-.fa-markup{}
+.fa-markup{
+  
+}
 
 .fa-h1:before, .fa-h2:before, .fa-h3:before, .fa-h4:before,.fa-h5:before, .fa-h6:before{
     content: "";   
 }
  .fa-quote:before{
-     content: "quote";   
+     content: "q";   
     }
  .fa-super-quote:before{
      content: "quote+";   
-    }
+}
 
 ul.typer{
     
@@ -270,6 +278,21 @@ ul.typer{
     color: rgba(142, 68, 173, 0.5);
 }
 
+.markup_displayer_markup .mk_val{
+    color: rgba(52, 152, 219,0.8);
+
+
+    &.subtype{
+     &.mk_val_subtype_strong{
+      font-weight:bold;
+     }
+
+    }
+}
+
+
+
+
 .lt.note{
     background: none repeat scroll 0 0 rgba(39, 174, 96, 0.3);
     &.selected {
@@ -322,6 +345,20 @@ ul.typer{
    
 }
 
+
+// refactor i.fa &.fa-sub serie
+i.fa{
+  &.fa-markup {
+    color:#fff;
+    background: none repeat scroll 0 0 rgba(52, 152, 219,0.5);
+    &.selected_true{
+        background: none repeat scroll 0 0 rgba(52, 152, 219,0.8);
+         border:  2px solid  rgba(52, 152, 219,0.8)
+
+
+    }
+  }
+}
 
 
 
