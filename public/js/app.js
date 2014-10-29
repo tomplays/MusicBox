@@ -31,6 +31,11 @@ angular.module('musicBox',  ['musicBox.controller','ngLocale', 'ngResource', 'ng
         templateUrl: '/partials/sockets_list',
         controller: SocketsListCtrl
       }).
+      when('/sockets/list/doc/:slug', {
+        templateUrl: '/partials/sockets_list',
+        controller: SocketsListCtrl
+      }).
+
       when('/docs/:mode', {
         templateUrl: '/partials/documents_list',
         controller: DocumentsListCtrl
