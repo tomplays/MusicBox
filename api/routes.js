@@ -71,9 +71,9 @@ module.exports = function(app, passport, auth) {
     
 
     // doc_options
-    app.post('/api/v1/doc/:slug/edit_option', auth.requiresLogin, docs.doc_edit_option);
-    app.post('/api/v1/doc/:slug/create_option', auth.requiresLogin, docs.doc_create_option);
-    app.post('/api/v1/doc/:slug/delete_option', auth.requiresLogin, docs.doc_delete_option);
+    app.post('/api/v1/doc/:slug/doc_option_edit', auth.requiresLogin_or_secret, docs.doc_option_edit);
+    app.post('/api/v1/doc/:slug/doc_option_new',auth.requiresLogin_or_secret, docs.doc_option_new);
+    app.post('/api/v1/doc/:slug/doc_option_delete', auth.requiresLogin_or_secret, docs.doc_option_delete);
     
     // hard reset
     app.get ('/api/v1/doc/:slug/reset',    auth.requiresLogin,  docs.doc_reset);

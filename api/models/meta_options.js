@@ -23,7 +23,9 @@ var ObjectId = mongoose.Types.ObjectId;
 
 
 var MetaoptionsSchema = new Schema({
-    _id:  {type:ObjectIdSchema, default: function () { return new ObjectId()} },
+    _id:  {
+        type:ObjectIdSchema, 
+        default: function () { return new ObjectId()} },
     created: {
         type: Date,
         default: Date.now

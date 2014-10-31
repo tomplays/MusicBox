@@ -1,7 +1,12 @@
 'use strict';
 
 
-
+/**
+* @description
+* @function 
+* @link 
+* @todo nothing
+*/
 /*
 API functions
 
@@ -22,6 +27,7 @@ var mongoose = require('mongoose'),
  _ = require('underscore'),
  S = require('string'),
 Document = mongoose.model('Document'),
+meta_options = mongoose.model('Metaoptions'),
 Markup  = mongoose.model('Markup');
 var nconf = require('nconf');
 
@@ -32,30 +38,24 @@ var app;
 
 
 
-
-
-exports.index_doc= function(req, res) {
+	/**
+	* @description
+	* @function 
+	* @link 
+	* @todo nothing
+	*/
+ 	exports.index_doc= function(req, res) {
 		var user_ = ''
-		
 		if(req.user){
 			// user_ = new Object({'_id': req.user._id , 'username': req.user.username,  'image_url': req.user.image_url})
 		}
-
 		var doc_req_slug 	  = 'homepage';
 		var doc_slug_discret  =  nconf.get('ROOT_URL')+'/'
-
-		
-
 		if(req.params.slug){
-
-
-			
-
 			doc_req_slug = req.params.slug;
 			doc_slug_discret  +=  '/doc/'+req.params.slug;
 		}
 
-					
 		// miniquery.
 		var query = Document.findOne({ 'slug':doc_req_slug });
 			query.populate('user','-email -hashed_password -salt').populate( {path:'markups.user_id', select:'-salt -email -hashed_password', model:'User'}).populate({path:'markups.doc_id', select:'-markups -secret', model:'Document'}).populate('markups.doc_id.user').populate('room').exec(function (err, doc) {
@@ -63,7 +63,6 @@ exports.index_doc= function(req, res) {
 				res.json(err)
 			} else{
 				if(doc){
-				
 					if(doc.published == 'draft')
 					{
 								var user_can	= exports.test_owner_or_key(doc,req)
@@ -73,95 +72,88 @@ exports.index_doc= function(req, res) {
 										redirect_to += '/doc/'+req.params.slug;
 									}
 									
-									var message = 'This doc is a draft : <a style="text-decoration:underline;" href="/login?redirect_url='+redirect_to+'">login</a> if your are doc owner or grab "secret key" <a style="text-decoration:underline;" href="'+nconf.get('ROOT_URL')+'"> &laquo; Back </a>';
+									 var message = 'This doc is a draft : <a style="text-decoration:underline;" href="/login?redirect_url='+redirect_to+'">login</a> if your are doc owner or grab "secret key" <a style="text-decoration:underline;" href="'+nconf.get('ROOT_URL')+'"> &laquo; Back </a>';
 									 res.render('error', { title: 'no access', message: message} );
-									return;
+									 return;
 								}
 					}
 
-					console.log('public doc rendered')	
-				
 
+					var doc_include_js= [];
+					_.each(doc.doc_options , function (option, i){
+						console.log(option.option_name)
+						if(option.option_name == 'doc_include_js' ){			 	
+							//doc_include_js.push(option.option_value);
+						}
+					});
+					console.log('public doc rendered')	
 					res.render('index_v1', {
 							user_in : user_,
 							doc_title : doc.title,
 							doc_thumbnail : doc.thumbnail,
 							doc_excerpt: doc.excerpt,
-							doc_slug_discret : doc_slug_discret 
+							doc_slug_discret : doc_slug_discret,
+							doc_include_js : doc_include_js
+ 
 					});
-
-
 				} // has doc
-
 				else{
 					res.json(err)
 				}
-
-
-
-
 			}
 		});
-}
+	}
 
 
-/*
+	/**
+	* @description  single document record
+	* @params : slug $get
+	* @function 
+	* @link 
+	* @todo nothing
+	*/
 
- single document record
-
-@params : slug $get
-
-
-*/
-
-
-exports.doc_get = function(req, res) {
-	var query = Document.findOne({ 'slug':req.params.slug })
-	query.populate('user','-email -hashed_password -salt').populate( {path:'markups.user_id', select:'-salt -email -hashed_password', model:'User'}).populate({path:'markups.doc_id', select:'-markups -secret', model:'Document'}).populate('markups.doc_id.user').populate('room', {secret:0}).exec(function (err, doc) {
-		if (err){
-			res.json(err)
-		} 
-		else{
-			if(doc){
-				
-				// test rights
-				if(doc.published =='draft'){
-							var user_can	= exports.test_owner_or_key(doc,req)
-							if(!user_can){
-								var message = 'This doc is a draft, are you the document owner ? are you logged in or using secret key ?';
-								res.json('err', { title: 'no access', message: message})
-								return;
-							}
-				}
-
-
-				var out 			= {}
-				out.doc 			= doc.toObject()
-				if(req.user){
-					 out.userin 	= req.user.toObject()
-				}
-
-
-				out.is_owner 		= exports.test_owner_or_key(doc,req)
-
-				if(out.is_owner == true){
-						
-				}
-
-				else{
-					out.doc.secret 		= 'api_secret'
-				}
-
-				
-				res.json(out)
-			}
+	exports.doc_get = function(req, res) {
+		var query = Document.findOne({ 'slug':req.params.slug })
+		query.populate('user','-email -hashed_password -salt').populate( {path:'markups.user_id', select:'-salt -email -hashed_password', model:'User'}).populate({path:'markups.doc_id', select:'-markups -secret', model:'Document'}).populate('markups.doc_id.user').populate('room', {secret:0}).exec(function (err, doc) {
+			if (err){
+				res.json(err)
+			} 
 			else{
-				res.json('err')
-			}
-		}
+				if(doc){
 
-	})
-}
+
+					
+					// test rights
+					if(doc.published =='draft'){
+								var user_can	= exports.test_owner_or_key(doc,req)
+								if(!user_can){
+									var message = 'This doc is a draft, are you the document owner ? are you logged in or using secret key ?';
+									res.json('err', { title: 'no access', message: message})
+									return;
+								}
+					}
+					var out 			= {}
+					out.doc 			= doc.toObject()
+					console.log(doc.doc_options)
+					if(req.user){
+						 out.userin 	= req.user.toObject()
+					}
+					out.is_owner 		= exports.test_owner_or_key(doc,req)
+					if(out.is_owner == true){
+							
+					}
+					else{
+						out.doc.secret 		= 'api_secret'
+					}
+					res.json(out)
+				}
+				else{
+					res.json('err')
+				}
+			}
+		})
+	}
 
 exports.list = function(req, res) {
 	var query = Document.find({'published': 'draft'}, {'markups':0, 'doc_options':0, 'secret':0});
@@ -248,16 +240,9 @@ exports.doc_sync= function(req, res) {
 				} 
 				else {
 				  	console.log(chalk.green('doc saved') );
-					
-
-						out.doc 			= doc.toObject()
-						out.doc.secret 		= 'api_secret'
-				
+					out.doc 			= doc.toObject()
+					out.doc.secret 		= 'api_secret'
 					//console.log(out)
-					
-
-
-
 					res.json(out)
 				}
 			});
@@ -266,7 +251,6 @@ exports.doc_sync= function(req, res) {
 		}
 	});
 }
-
 
 
 exports.doc_clone = function(req,res){
@@ -338,7 +322,7 @@ exports.doc_create = function(req,res){
 	var raw_title        =     req.body.raw_title;
 	var raw_content      =     req.body.raw_content;
 
-	
+	console.log(req.body)
 	if(req.body.published){
 		var published      = req.body.published
 	}
@@ -360,23 +344,29 @@ exports.doc_create = function(req,res){
 
 	 var text_size = _.size(raw_content)-1;
 
-	 var markup_section_base  = new Object( {'user_id':req.user._id, 'username':req.user.username, 'start':0, 'end':text_size,  'type': 'container', 'subtype':'section', 'position':'inline'} )
+	 var markup_section_base  = new Markup( {'user_id':req.user._id, 'username':req.user.username, 'start':0, 'end':text_size,  'type': 'container', 'subtype':'section', 'position':'inline'} )
 	 new_doc.markups.push(markup_section_base)
 
 
 	 // var markup_class= new Object( {'user_id':req.user._id, 'username':req.user.username, 'start':0, 'end':10,  'type': 'container_class', 'subtype':'css_class', 'metadata': 'bg_black', 'position':'inline'} )
 	 // new_doc.markups.push(markup_class)
 
-	var text_typography  = new Object( {'option_name':'text_typography', 'option_value':'Open Sans',  'option_type': 'google_typo' } )
+	var text_typography  = new meta_options( {'option_name':'text_typography', 'option_value':'Open Sans',  'option_type': 'google_typo' } )
+	
+
+
 	new_doc.doc_options.push(text_typography)
-	var headings_typography  = new Object( {'option_name':'headings_typography', 'option_value':'Open Sans',  'option_type': 'google_typo' } )
+	
+
+
+	var headings_typography  = new meta_options( {'option_name':'headings_typography', 'option_value':'Open Sans',  'option_type': 'google_typo' } )
 	new_doc.doc_options.push(headings_typography)
 
 	
-	var   doc_notices_after_title= new Object( {'option_name':'doc_notices_after_title', 'option_value':'',  'option_type': '' } )
+	var   doc_notices_after_title= new meta_options( {'option_name':'doc_notices_after_title', 'option_value':'',  'option_type': '' } )
 	new_doc.doc_options.push(doc_notices_after_title)
 
-	var   doc_notices_before_title= new Object( {'option_name':'doc_notices_before_title', 'option_value':'',  'option_type': '' } )
+	var   doc_notices_before_title= new meta_options( {'option_name':'doc_notices_before_title', 'option_value':'',  'option_type': '' } )
 	new_doc.doc_options.push(doc_notices_before_title)
 
 
@@ -389,9 +379,9 @@ exports.doc_create = function(req,res){
 	var rand_color = '#000'
 	var rand_color_b = '#fff'
 
-	var   block_color= new Object( {'option_name':'block_color', 'option_value':rand_color,  'option_type': '' } )
+	var   block_color= new meta_options( {'option_name':'block_color', 'option_value':rand_color,  'option_type': '' } )
 	new_doc.doc_options.push(block_color)
-	var   title_color= new Object( {'option_name':'title_color', 'option_value':rand_color_b,  'option_type': '' } )
+	var   title_color= new meta_options( {'option_name':'title_color', 'option_value':rand_color_b,  'option_type': '' } )
 	new_doc.doc_options.push(title_color)
 
 /*
@@ -401,10 +391,10 @@ exports.doc_create = function(req,res){
 	new_doc.doc_options.push(use_authorcard)
 */
 
-	var branding_class  = new Object( {'option_name':'branding_class', 'option_value':'sa bg_transparent',  'option_type': '' } )
+	var branding_class  = new meta_options( {'option_name':'branding_class', 'option_value':'sa bg_transparent',  'option_type': '' } )
 	new_doc.doc_options.push(branding_class)
 
-	var   footer_center_html = new Object( {'option_name':'footer_center_html', 'option_value':"<i class=\'fa fa-file-text-o\'></i> powered by <a href=\'http://github.com/tomplays/MusicBox/\'>MusicBox beta*</a> - 2014 - <a href=\'http://hacktuel.fr\'>@Hacktuel.fr</a>",  'option_type': '' } )
+	var   footer_center_html = new meta_options( {'option_name':'footer_center_html', 'option_value':"<i class=\'fa fa-file-text-o\'></i> powered by <a href=\'http://github.com/tomplays/MusicBox/\'>MusicBox beta*</a> - 2014 - <a href=\'http://hacktuel.fr\'>@Hacktuel.fr</a>",  'option_type': '' } )
 	new_doc.doc_options.push(footer_center_html)
 
 
@@ -567,120 +557,180 @@ exports.doc_edit  = function(req, res) {
 }
 
 
-exports.doc_create_option  = function(req, res) {
+exports.doc_option_new  = function(req, res) {
 	var query = Document.findOne({ 'slug':req.params.slug });
-	query.populate('user').populate('room').exec(function (err, doc) {
+		query.populate('user','-email -hashed_password -salt').populate( {path:'markups.user_id', select:'-salt -email -hashed_password', model:'User'}).populate({path:'markups.doc_id', select:'-markups -secret', model:'Document'}).populate('markups.doc_id.user').populate('room', {secret:0}).exec(function (err, doc) {
+
+
 		if (err){
 			res.json(err)
 		} else{
-			console.log(doc)
-			res.send('(not implemented in api)')
-		}
-	});
-}
+			    var out 			= {}
 
-exports.doc_delete_option  = function(req, res) {
-
-	var query = Document.findOne({ 'slug':req.params.slug });
-	query.populate('user').populate('room').exec(function (err, doc) {
-	if (err){
-		res.json(err)
-	} else{
-			console.log(doc)
-			res.send('not implemented in api '+req.body.option_name)
-	}
-
-});
-}
-
-exports.doc_edit_option  = function(req, res) {
-	var query = Document.findOne({ 'slug':req.params.slug });
-	query.populate('user','-email -hashed_password -salt').populate( {path:'markups.user_id', select:'-salt -email -hashed_password', model:'User'}).populate({path:'markups.doc_id', select:'-markups -secret', model:'Document'}).populate('markups.doc_id.user').populate('room', {secret:0}).exec(function (err, doc) {
-
-
-	if (err){
-		res.json(err)
-	} else{
-		    var out 			= {}
-
-			var field = req.body.field
-			var value = req.body.value
-  			var doc_options_new = new Array()
-			console.log(field +'<->'+ value)
-			 _.each(doc.doc_options , function (option, i){
-			 	if(option.option_name == field ){
- 					option.option_value = value
- 					doc_options_new.push(option)
- 				 	console.log(option)
-			 	}
-			 	else{
-			 		doc_options_new.push(option)
-			 	}
-			 })
-			 doc.doc_options = new Array()
-			 doc.doc_options = doc_options_new
-			
-				if(req.user){
-					 out.userin 	= req.user.toObject()
-				}
-
-
-				out.is_owner 		= exports.test_owner_or_key(doc,req)
-
-				if(out.is_owner == true){
-						 doc.save(function(err,doc) {
-					if (err) {
-						res.send(err)
-					} else {
-							console.log(out)
-						out.doc 			= doc.toObject()
-						out.doc.secret 		= 'api_secret'
-						res.json(out)
-						
+				//var field = req.body.field
+				//var value = req.body.value
+	  				var  new_option = new meta_options( {'option_name':req.body.option_name, 'option_value':'-',  'option_type': '' } )
+					if(req.user){
+						 out.userin 	= req.user.toObject()
 					}
-			     });		
-				}
+					out.is_owner 		= exports.test_owner_or_key(doc,req)
 
-				else{
+					if(out.is_owner == true){
+						 doc.doc_options.push(new_option)
+						 doc.save(function(err,doc) {
+
+						if (err) {
+							res.send(err)
+						} else {
+								console.log(out)
+							out.doc 			= doc.toObject()
+							out.doc.secret 		= 'api_secret'
+							res.json(out)		
+						}
+				     });		
+					}
+					else{
 						res.json('err')
-				}
-
-
-			   
-	}
-	})
-}
-
-
-
-// UTILs
-
- exports.test_owner_or_key = function(doc,req){
-	// doc owner or markup owner
-	if(req.user){
-		if(req.user._id.equals(doc.user._id) ){	
-			console.log('user is owner')
-			return true;	
+					}			   
 		}
-		else{
+		})
+	}
 
-			
-			if( (req.body.secret && doc.secret==req.body.secret) || (req.query.secret && doc.secret==req.query.secret) ){
-				console.log('secret match')
-				return true;
+
+	exports.doc_option_delete  = function(req, res) {
+		var query = Document.findOne({ 'slug':req.params.slug });
+		query.populate('user','-email -hashed_password -salt').populate( {path:'markups.user_id', select:'-salt -email -hashed_password', model:'User'}).populate({path:'markups.doc_id', select:'-markups -secret', model:'Document'}).populate('markups.doc_id.user').populate('room', {secret:0}).exec(function (err, doc) {
+
+
+		if (err){
+			res.json(err)
+		} else{
+			    var out 			= {}
+
+				    var del_option_id = req.body._id;
+	  				var  new_options = new Array()
+	  				var doc_options_deleted = new Array()
+	  				_.each(doc.doc_options , function (option, i){
+				 	if(del_option_id && option._id ==del_option_id ){
+	 					
+	 					doc_options_deleted.push(option)
+	 				 	console.log(option)
+				 	}
+				 	else{
+				 		new_options.push(option)
+				 	}
+					})
+
+
+	  				 
+					if(req.user){
+						 out.userin 	= req.user.toObject()
+					}
+					out.is_owner 		= exports.test_owner_or_key(doc,req)
+
+					if(out.is_owner == true){
+						    doc.doc_options = new Array()
+				    		 doc.doc_options = new_options
+							 doc.save(function(err,doc) {
+
+						if (err) {
+							res.send(err)
+						} else {
+						 console.log(out)
+							out.doc 			= doc.toObject()
+							out.doc.secret 		= 'api_secret'
+							res.json(out)		
+						}
+				     });		
+					}
+					else{
+						res.json('err')
+					}			   
+		}
+		})
+	}
+
+	exports.doc_option_edit  = function(req, res) {
+		var query = Document.findOne({ 'slug':req.params.slug });
+		query.populate('user','-email -hashed_password -salt').populate( {path:'markups.user_id', select:'-salt -email -hashed_password', model:'User'}).populate({path:'markups.doc_id', select:'-markups -secret', model:'Document'}).populate('markups.doc_id.user').populate('room', {secret:0}).exec(function (err, doc) {
+
+
+		if (err){
+			res.json(err)
+		} else{
+			    var out 			= {}
+
+				var _id = req.body._id
+				var value = req.body.value
+	  			var doc_options_new = new Array()
+				
+				 _.each(doc.doc_options , function (option, i){
+				 	if(option._id == _id ){
+	 					option.option_value = value
+	 					doc_options_new.push(option)
+	 				 	console.log(option)
+				 	}
+				 	else{
+				 		doc_options_new.push(option)
+				 	}
+				 })
+				 doc.doc_options = new Array()
+				 doc.doc_options = doc_options_new
+				
+					if(req.user){
+						 out.userin 	= req.user.toObject()
+					}
+
+
+					out.is_owner 		= exports.test_owner_or_key(doc,req)
+
+					if(out.is_owner == true){
+							 doc.save(function(err,doc) {
+						if (err) {
+							res.send(err)
+						} else {
+								console.log(out)
+							out.doc 			= doc.toObject()
+							out.doc.secret 		= 'api_secret'
+							res.json(out)		
+						}
+				     });		
+					}
+					else{
+						res.json('err')
+					}			   
+		}
+		})
+	}
+
+
+
+	// UTILs
+	exports.test_owner_or_key = function(doc,req){
+		// doc owner or markup owner
+		if(req.user){
+			if(req.user._id.equals(doc.user._id) ){	
+				console.log('user is owner')
+				return true;	
 			}
 			else{
-				console.log('and secret dont match(tell no one: '+doc.secret+'   )')
-				var err = new Object({'message':'Need to be either doc owner or use right secret key', 'err_code':'100'})
-				return false
+
+				
+				if( (req.body.secret && doc.secret==req.body.secret) || (req.query.secret && doc.secret==req.query.secret) ){
+					console.log('secret match')
+					return true;
+				}
+				else{
+					console.log('and secret dont match(tell no one: '+doc.secret+'   )')
+					var err = new Object({'message':'Need to be either doc owner or use right secret key', 'err_code':'100'})
+					return false
+				}
 			}
 		}
+		return false;
 	}
-	return false;
-}
 
-
-function getRandomInt(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
+	function getRandomInt(min, max) {
+ 		return Math.floor(Math.random() * (max - min + 1)) + min;
+	}
 
