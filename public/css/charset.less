@@ -364,11 +364,17 @@ i.fa{
 
 
 i.fa.fa-media{
-  background:#000;
-     color:#fff;
-  &:before{
+   background: none repeat scroll 0 0 rgba(0,0,0,0.8);
+   color:#fff;
+    &:before{
      content:"";
    
+  }
+  &.selected_true{
+         background: none repeat scroll 0 0 rgba(0,0,0,0.8);
+         border:  2px solid  rgba(255,255,255,0.8)
+
+
   }
 }
 
@@ -380,16 +386,6 @@ i.fa.fa-container{
   
     }
 }
-i.fa.fa-img{
-   background:none repeat scroll 0 0 rgb(52, 152, 219);
-     color:#fff;
-    &:before{
-     content:"";
-  
-    }
-}
-
-
 
 i.fa.fa-generic{
 background:none repeat scroll 0 0 rgb(52, 152, 219);

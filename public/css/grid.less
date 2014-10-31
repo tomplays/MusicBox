@@ -260,6 +260,10 @@ a.btn_ok{
   background:#2ecc71;
 }
 
+
+
+
+
 .iframe_container{
   width:100%
             height:600px;
@@ -280,13 +284,8 @@ a.btn_ok{
     min-height:450px;
    }
     &.iframe_vimeo-video{
-       min-height:650px;
-        width:90%;
-        margin:0 2%;
+          min-height:650px;
           iframe{
-            width:800px
-            height:600px;
-            float:left;
             background:#000;
           }
    }
@@ -435,6 +434,8 @@ section{
     /*blue effect on selection*/
     &.selected_true .layout_name_inline{
        background: none repeat scroll 0 0 rgba(41, 128, 185, 0.1);
+        padding: 2% 0;
+
     }
 
 
@@ -896,7 +897,7 @@ body.render_active_editor .markup_displayer_generic.markup_displayer_subtype_not
 
 div.markup_displayer_subtype_img {
   
-   position: relative;
+
 }
 
 
@@ -1102,9 +1103,15 @@ background-image: url("/img/test-a.png");
     }
 }
 
-.markup_displayer_subtype_img.is_editing_true img{
-  background:#000
-} 
+
+.markup_displayer_media.is_editing_true {
+  iframe, img{
+    background:#c0392b;
+  }
+}
+
+
+
 
 .markup_displayer_subtype_share_excerpt{
     
@@ -1259,8 +1266,8 @@ background-image: url("/img/test-a.png");
     height: auto;
     padding: 1%;
     position: fixed;
-    right: 0;
-    top: 59px;
+    left: 0;
+    bottom: 80px;
     transition: opacity 0.2s linear 20s;
     width: 18%;
     z-index: 99999;

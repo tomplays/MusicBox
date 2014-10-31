@@ -7,8 +7,6 @@ div.doc_editor()
 	
 	h4 Document options
 
-	
-
 	.edit_field_left
 		.edit_field.excerpt_field
 			label "L'extrait"
@@ -44,12 +42,14 @@ div.doc_editor()
 
 	div.doc_options_table
 		div.doc_options_item(ng-repeat="opt in doc.doc_options")
-			label {{opt.option_name}}
+			label {{opt.option_name}} {{opt._id}}
 			input(name="doc_options[opt.option_name]", type="text", ng-model="doc_options[opt.option_name].value")
-			i.fa.fa-save(ng-click="doc_options_save(opt.option_name)")
-			// i.fa.fa-remove(ng-click=".doc_options_delete(opt.option_name)")  
+			i.fa.fa-save(ng-click="doc_options_save(doc_options[opt.option_name].value, opt._id)")
+			i.fa.fa-remove(ng-click="doc_options_delete(opt._id)")  
 
-		// i.fa.fa-plus(ng-click='doc_options_new()') new option
+		i.fa.fa-plus(ng-click='doc_options_new()') new option
+		input(name="ui.doc_option_new_name", type="text", ng-model="ui.doc_option_new_name")
 
+		
 	p(ng-if="ui.renderAvailable_active !=='read'")
 						a(ng-click="toggle_render('read')") &laquo; back to document

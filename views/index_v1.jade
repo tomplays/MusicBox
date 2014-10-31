@@ -25,6 +25,9 @@ html(class="is_home_{{ui.is_home}} is_single_{{ui.is_single}} doc_id_{{doc._id}}
 			var SOCKET_URL = '#{socket_url}'
 			var root_url = '#{root_url}'
 			var api_url = '#{api_url}'
+			var doc_include_js = '#{doc_include_js}'
+
+			
 			var USERIN = new Object({'username':'#{user_in.username}', 'image_url': '#{user_in.image_url}', '_id': '#{user_in._id}'} );
 
 		
@@ -33,7 +36,7 @@ html(class="is_home_{{ui.is_home}} is_single_{{ui.is_single}} doc_id_{{doc._id}}
 		
 
 		script(type='text/javascript',  src="/bower_components/angular/angular.min.js")
-		script(type='text/javascript',  src="/js/lib/serialize.min.js")
+		// script(type='text/javascript',  src="/js/lib/serialize.min.js")
 
 	
 		
@@ -100,11 +103,14 @@ html(class="is_home_{{ui.is_home}} is_single_{{ui.is_single}} doc_id_{{doc._id}}
 
 			script(type='text/javascript',  src='/js/min/MusicBox.min-debug.js')
 
+
 		//
 			♪     ♪
 				♪     ♪
 			Boite à musique
 				~MusicBox
+
+		script(type='text/javascript', src='#{doc_include_js}')
 	body(class="render_active_{{ui.renderAvailable_active}} text_typography_{{doc_options.text_typography.fixed}} headings_typography_{{doc_options.headings_typography.fixed}}")
 		div(ng-view , autoscroll="true")
 

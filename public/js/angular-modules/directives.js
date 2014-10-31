@@ -14,23 +14,25 @@ angular.module('musicBox.directives', []).directive('fluid',
     function link(scope, elem, attr) {
          
          // uh ?? 
-         console.log(scope.$parent.$parent.$parent.markup.position)
+         console.log(scope.position)
          
-         if(scope.subtype == 'open-street-map'){
+       
+       
+        // https://www.mail-archive.com/angular@googlegroups.com/msg03078.html
+            var wrapper = angular.element(elem.parent());
 
-           elem.children(0)[0].style.width = '800px';
-           elem.children(0)[0].style.height ='800px';
+            var o_w = wrapper.prop('offsetWidth');
+            var o_h = o_w;
 
-         }
-         else{
-            elem.children(0)[0].style.width = '800px'
-            elem.children(0)[0].style.height ='800px'
-         }
+            elem.children(0)[0].style.width = o_w+'px';
+            elem.children(0)[0].style.height= o_h+'px';
+        
     }
     return {
           scope: {
             url   : '@',
             subtype   : '@', 
+            position : '@'
           },
           link:link,
           template: '<iframe  webkitallowfullscreen mozallowfullscreen allowfullscreen scrolling="no" frameborder="no" src="{{url}}"></iframe><p>{{subtype}}</p>'

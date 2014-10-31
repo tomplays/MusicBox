@@ -769,24 +769,26 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
         //console.log(' apply doc_options to object'+object)
         var options_array = [];
         _.each(options , function(option){
-           // console.log(option)
-            var op_name   = option.option_name;
-            var op_value  = option.option_value;
-            var op_type   = option.option_type;
-
+            
+           
+            var op_name = option.option_name;
             options_array[op_name]          = [];
-            options_array[op_name]['value'] = op_value;
 
-            if( op_value && op_type == 'google_typo' && object == 'document'){
+            options_array[op_name]['value'] = option.option_value
+            options_array[op_name]['_id']   = option._id
+            options_array[op_name]['type']  = option.option_type
+
+            if( option.option_value && option.option_type == 'google_typo' && object == 'document'){
                WebFont.load({
                   google: {
-                   families: [op_value]
+                   families: [option.option_value]
                   }
                }); 
                var fixed = options_array[op_name]['value'];
                options_array[op_name]['fixed'] =  fixed.replace(/ /g, '_').replace(/,/g, '').replace(/:/g, '').replace(/400/g, '').replace(/700/g, '') 
             }
-        });        
+        });       
+        console.log(options_array) 
         return options_array;
       },
 
@@ -1002,20 +1004,19 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
       * 
       * @function docfactory#save_doc_option
       * @link docfactory#save_doc_option
-      * @todo rename to doc_option_save
       */
 
-      save_doc_option: function (field) {
+      doc_option_edit: function (value, id) {
 
           if($rootScope.userin.username ==''){
              return false
           }
           var data = new Object()
-          data.field = field;
+          data._id = id;
           //data.value =  $rootScope.doc[field]
-          data.value = $rootScope.doc_options[field].value;
-          $rootScope.doc_options[field].value = data.value
-          $http.post(api_url+'/doc/'+$rootScope.doc.slug+'/edit_option', serialize(data) ).
+          data.value = value;
+         // $rootScope.doc_options[field].value = data.value
+          $http.post(api_url+'/doc/'+$rootScope.doc.slug+'/doc_option_edit', serialize(data) ).
           success(function(doc) {
                       // # todo reset doc event/ cb
                      // hard redirect
@@ -1039,12 +1040,13 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
       * @todo rename doc_option_delete / implement in api!
       */
 
-      delete_doc_option: function (field) {
+      doc_option_delete: function (_id) {
         var data = new Object()
-         data.option_name = field;
-         $http.post(api_url+'/doc/'+$rootScope.doc.slug+'/delete_option', serialize(data) ).
-                success(function(doc) {
-                  alert(doc)
+         data._id= _id;
+         $http.post(api_url+'/doc/'+$rootScope.doc.slug+'/doc_option_delete', serialize(data) ).
+                success(function(d) {
+                 self.flash_message('option deleted', 'ok' , 3000)
+                 doc.init(d, true);
          });
       },
 
@@ -1061,11 +1063,15 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
       * @todo rename to   doc_option_create
       */
 
-      create_doc_option: function () {
+      doc_option_new: function () {
          // calling service
-         $http.post(api_url+'/doc/'+$rootScope.doc.slug+'/create_option' ).
-                success(function(doc) {
-                //alert(doc)
+         var data = new Object()
+         data.option_name = $rootScope.ui.doc_option_new_name;
+         $http.post(api_url+'/doc/'+$rootScope.doc.slug+'/doc_option_new', serialize(data) ).
+                success(function(d) {
+                   self.flash_message('option created', 'ok' , 3000)
+                   doc.init(d, true);
+                        
          }); 
       },
 
@@ -1090,15 +1096,10 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
          // API POST
           $http.post(api_url+'/doc/'+ $rootScope.doc.slug+'/markup/push', serialize(data) ).success(function(d) {
                console.log(d)
-               
                 doc.init(d, true);
                 self.flash_message('ok!', 'ok' , 3000)
-               
-                socket.emit('news', {doc_id: $rootScope.doc.slug, action: 'push_markup' , type: 'push', object:d.inserted });
-
-                //socket.emit('news', {doc_id: $rootScope.doc.slug, action: 'push_markup' , type: 'push', object:d.inserted });
-
-
+                // socket.emit('news', {doc_id: $rootScope.doc.slug, action: 'push_markup' , type: 'push', object:d.inserted });
+                // socket.emit('news', {doc_id: $rootScope.doc.slug, action: 'push_markup' , type: 'push', object:d.inserted });
               //$rootScope.$emit('docEvent', {action: 'doc_ready', type: 'push', collection_type: 'markup', collection:d.inserted[0] });
            });
       },

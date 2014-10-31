@@ -143,22 +143,22 @@ function DocumentCtrl($scope, $http , $sce, $location, $routeParams, renderfacto
 	* @use_service True
 	* @params 
 	*/
-	$scope.doc_options_save = function (opt_name){
-		doc.save_doc_option(opt_name);
+	$scope.doc_options_save = function (value, id){
+		doc.doc_option_edit(value, id);
 	}
 
-	// no api !
-	/*
+	
+	
 	$scope.doc_options_new = function (){
-		doc.create_doc_option();
+		doc.doc_option_new();
 	}
-	*/
-	// no api !
-	/*
-	$scope.doc_options_delete = function (opt_name){	
-		doc.delete_doc_option(opt_name);
+	
+	
+	
+	$scope.doc_options_delete = function (opt_id){	
+		doc.doc_option_delete(opt_id);
 	}
-	*/
+	
 
 
 	/**
@@ -453,7 +453,11 @@ function DocumentCtrl($scope, $http , $sce, $location, $routeParams, renderfacto
 
 	// icon click or section select
 	$scope.toggle_select_markup = function (markup, event_name){
-		$scope.containers[markup.sectionin].modeletters = 'single'
+
+		if(markup.sectionin){
+					$scope.containers[markup.sectionin].modeletters = 'single'
+
+		}
 
 		if(markup.isolated == true){
 			markup.editing = !markup.editing
@@ -466,13 +470,20 @@ function DocumentCtrl($scope, $http , $sce, $location, $routeParams, renderfacto
 					c.selected = false;
 				}
 			});
+
 		}
 		if(event_name == 'dblclick'){
 			markup.editing = !markup.editing
 		}
+		
 		if(event_name == 'click'){
+				
 			markup.selected = !markup.selected
+
+
 		}
+
+
 		// focus'
 		if(markup.position=="left" && markup.editing){
 			$scope.ui.focus_side = 'side_left'
@@ -509,24 +520,37 @@ function DocumentCtrl($scope, $http , $sce, $location, $routeParams, renderfacto
 	$scope.toggle_fragment_ranges = function (kind,classname, markup, value, trigger){
 		console.log('toggle_fragment_ranges'+kind)
 		var source = $scope.doc.markups;
+		
+
 		if(kind=='single_markup'){
-			for (var i = markup.start; i <= markup.end; i++) {
-				var delta =  i  - $scope.containers[markup.sectionin].start;
-				//console.log(delta)
-				if($scope.containers[markup.sectionin].letters[delta]){
-					var _classes = $scope.containers[markup.sectionin].letters[delta]['classes'];
-					//$scope.letters[markup.sectionin][i]['classes'].push("editing")
-					//$scope.letters[markup.sectionin][i]['classes'].push("selected")
-					//console.log($scope.letters[markup.sectionin][i]['classes'])
-					if(_.contains(_classes, classname)  ){
-						$scope.containers[markup.sectionin].letters[delta]['classes'] = _.without( _classes,classname)
-					}
-					else{
-						$scope.containers[markup.sectionin].letters[delta]['classes'].push(classname)
+
+			if(markup.type == 'mediarrr'){
+
+
+			}
+			else{
+				for (var i = markup.start; i <= markup.end; i++) {
+					var delta =  i  - $scope.containers[markup.sectionin].start;
+					//console.log(delta)
+					if($scope.containers[markup.sectionin].letters[delta]){
+						var _classes = $scope.containers[markup.sectionin].letters[delta]['classes'];
+						//$scope.letters[markup.sectionin][i]['classes'].push("editing")
+						//$scope.letters[markup.sectionin][i]['classes'].push("selected")
+						//console.log($scope.letters[markup.sectionin][i]['classes'])
+						if(_.contains(_classes, classname)  ){
+							$scope.containers[markup.sectionin].letters[delta]['classes'] = _.without( _classes,classname)
+						}
+						else{
+							$scope.containers[markup.sectionin].letters[delta]['classes'].push(classname)
+						}
 					}
 				}
+
 			}
+			
 		}
+
+
 		if(kind=='by_range'){
  			//	console.log('apply '+classname+' from '+$scope.ui.selected_range.start+ ' to: '+ $scope.ui.selected_range.end)
 			for (var i = $scope.ui.selected_range.start; i <= $scope.ui.selected_range.end; i++) {
