@@ -1,4 +1,13 @@
 'use strict';
+/**
+* @description API methods for user
+* @function 
+* @link 
+* @todo nothing
+*/
+
+
+
 
 /**
  * Module dependencies.
@@ -10,12 +19,26 @@ var mongoose = require('mongoose'),
     auth = require('../authorization');
 
 
+/**
+* @description List all users (in console only)
+* @function 
+* @link 
+* @todo nothing
+*/
+
 
 exports.list= function(req, res) {
-   
-        res.json('list')
-    
-};
+    User.find({}, function(err, users) {
+        var userMap = {}
+        console.log('total:'+users.length)
+        users.forEach(function(user) {
+            // console.log(user)
+            // userMap[user._id] = user
+            console.log('username: '+user.username +' mail: '+user.email)
+        })
+        res.send('console only infos');  
+    });
+}
 
 exports.login = function(req, res) {
          var user_ = new Object({'username': null,  'image_url':null})
