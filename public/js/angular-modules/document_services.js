@@ -151,11 +151,28 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
         
         $rootScope.virtuals= new Array();
         var virtual_summary = new Object({'slug': 'summary', 'header': 'Text summary', 'auto': {'bytype': 'h1-h6'} , 'implicit': {'bytype': 'summary'} } )
+        var virtual_data_x = new Object({'slug': 'data_x', 'header': 'data serie (x)', 'explicit': {'bysubtype': 'x'} } )
+        var virtual_data_y = new Object({'slug': 'data_y', 'header': 'data serie (y)', 'explicit': {'bysubtype': 'y'} } )
+              var virtual_data = new Object({'slug': 'data', 'header': 'data serie (any)', 'explicit': {'bytype': 'data'} } )
+
+       // var virtual_data_xy = new Object({'slug': 'data_xy', 'header': 'data serie (x+y)', 'explicit': {'bysubtype': 'x'} } )
+       // var virtual_data_xyt = new Object({'slug': 'data_xy', 'header': '', 'explicit': {'bysubtype': 'y'} } )
+
+
         $rootScope.virtuals.push(virtual_summary)
+        $rootScope.virtuals.push(virtual_data_x)
+        $rootScope.virtuals.push(virtual_data_y)
+        $rootScope.virtuals.push(virtual_data)
+
+        // $rootScope.virtuals.push(virtual_data_xy)
+        // $rootScope.virtuals.push(virtual_data_xyt)
+
+
         // var virtual_containers = new Object({'slug': 'sections', 'header': 'containers ', 'auto': {'bytype': 'h1-h6'} , 'implicit': {'bytype': 'container'} } )
         // $rootScope.virtuals.push(virtual_containers)
 
-        // no need yet but works. self.virtualize()
+        // no need yet but works. 
+        self.virtualize()
   
         
         // filter markups > only if markup.type ==  "container"
@@ -487,7 +504,10 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
           }
           //console.log('children call ...')
         }
-        
+        if(markup.type =='data'){
+
+
+        } 
 
         // need to map letters for each range of markup (not all objects)
         if( ($rootScope.objSchema[markup.type].map_range && $rootScope.objSchema[markup.type].map_range==true)  || markup.subtype=='share_excerpt'  ){ // or pos == inlined
@@ -569,7 +589,7 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
           // only to markup with "block" 
 
 
-          if(markup.subtype=='h1' ||  markup.subtype=='h2' ||  markup.subtype=='h3' || markup.subtype=='h4' || markup.subtype=='h5' || markup.subtype=='h6' || markup.subtype=='list-item'  || markup.subtype=='quote')  {
+          if(markup.subtype=='h1' ||  markup.subtype=='h2' ||  markup.subtype=='h3' || markup.subtype=='h4' || markup.subtype=='h5' || markup.subtype=='h6' || markup.subtype=='list-item'  || markup.subtype=='quote' ||  markup.type=='data')  {
                 if(pos == markup.start ){
                    temp_letters[delta]['classes'].push('fi')
                 }
@@ -631,12 +651,13 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
             }
 
 
-
-            if(temp_letters[delta] && markup.type=='semantic'){
+            // in some cases, include 'type' class too (subtype usually used.)
+            if(temp_letters[delta] && (markup.type=='semantic' || markup.type =='data' || markup.type =='genreric') ){
 
                 temp_letters[delta]['classes'].push(markup.type);
               
             }
+           
             //$rootScope.letters[section_count][delta]['objects'].push(a);
                 //      $rootScope.letters[section_count][delta]['classes'].push('c-'+a.id);
 
@@ -1258,54 +1279,66 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
     virtualize : function(){
 
             _.each($rootScope.virtuals, function(virtual, vi){
+
              console.log('> virtualize '+virtual.slug)
-              if(!virtual.visible){
-                virtual.visible = true
-              }
-              else{
-                 virtual.visible = false
-              }
+             console.log(virtual)
+              
               virtual.string = '<h2 class="'+virtual.slug+'summarize_header">'+virtual.header+'</h2>';
-               $rootScope.doc.text_summary +='<h2 class="'+virtual.slug+'summarize_header">'+virtual.header+'</h2>';
+             // $rootScope.doc.text_summary +='<h2 class="'+virtual.slug+'summarize_header">'+virtual.header+'</h2>';
               // setup 'at least one'
               var found_element = false;
                //loop
               _.each($rootScope.doc.markups, function(markup){
 
-                if(virtual.implicit.bytype && markup.type == virtual.implicit.bytype){
-                    found_element = true
+                if(virtual.implicit && virtual.implicit.bytype && markup.type == virtual.implicit.bytype){
+                     found_element = true
                      for (var i=markup.start;i<=markup.end;i++){ 
                         // $scope.text_summary += content[i]; 
                         virtual.string += $rootScope.doc.content[i]; 
                      }
                 }
+
+                if(virtual.explicit && virtual.explicit.bysubtype && markup.subtype == virtual.explicit.bysubtype){
+                      found_element = true
+                      virtual.string += '<p><i class="fa fa-data"></i>'+markup.metadata+'</p>';
+
+                }
+                if(virtual.explicit && virtual.explicit.bytype && markup.type == virtual.explicit.bytype){
+                      found_element = true
+                      virtual.string += '<p><i class="fa fa-data"></i>'+markup.metadata+'</p>';
+
+                }
+
                
                 // AUTO
                 //// CHECK ORDER !!!!
                 if(markup.type == 'markup' && (markup.subtype =='h1' || markup.subtype =='h2' || markup.subtype =='h3' || markup.subtype =='h4' || markup.subtype =='h5') ){
-                  $rootScope.doc.text_summary += '<'+markup.subtype+'>';
-                  
+                  //$rootScope.doc.text_summary += '<'+markup.subtype+'>';
+                   found_element = true
                   for (var i=markup.start;i<=markup.end;i++){ 
                     if($rootScope.doc.content[i]){
-                      $rootScope.doc.text_summary +=$rootScope.doc.content[i];    
+                      //$rootScope.doc.text_summary +=$rootScope.doc.content[i];    
                       virtual.string += $rootScope.doc.content[i]; 
                     }
                   }
-                  $rootScope.doc.text_summary += '</'+markup.subtype +'>'
+                  //$rootScope.doc.text_summary += '</'+markup.subtype +'>'
                 }
 
 
 
                // EXPLICIT
                 if(markup.subtype == 'summary_block'){
+                   found_element = true
                    $rootScope.doc.text_summary += '<p>'+markup.metadata+'</p>';
                    //virtual.string += t.metadata  
                 } 
+              
 
                 if(markup.subtype == 'summary'){
+                   found_element = true
                    for (var i=markup.start;i<=markup.end;i++){ 
                                     if($rootScope.doc.content[i]){
-                                      $rootScope.doc.text_summary +=$rootScope.doc.content[i];    
+                                      //$rootScope.doc.text_summary +=$rootScope.doc.content[i];    
                                       virtual.string += $rootScope.doc.content[i]; 
                       }
                    }
@@ -1316,6 +1349,13 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
 
                
               });
+              if(found_element == true){
+                virtual.visible = true
+              }
+              else{
+                 virtual.visible = false
+              }
+
               $rootScope.virtuals[vi] = virtual
           }); // each   virtuals
          console.log($rootScope.virtuals)

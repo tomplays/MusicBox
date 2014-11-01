@@ -36,9 +36,10 @@ div.doc_header
 		input(ng-if="ui.editing_doc_notices_after_title",   ng-model="doc_options.doc_notices_after_title.value", name="doc_options.doc_notices_after_title.value")
 		a.btn_ok.float_right(ng-click="edit_doc_option('doc_notices_after_title')") Save
 			
-	// div(ng-bind-html="doc.text_summary")
 	
-	time(ng-if="doc_options.display_date.value =='doc_header' || !doc_options.display_date_title.value", ng-bind-html="doc.formated_date")
+
+	
+	time(ng-if="doc_options.display_date.value =='doc_header' || !doc_options.display_date.value", ng-bind-html="doc.formated_date")
 	div.head_left(ng-if="doc_options.display_author.value =='doc_header' || !doc_options.display_author.value ")
 		div.post-author-info
 			p {{i18n.CUSTOM.DOCUMENT.by_author}} 

@@ -99,10 +99,10 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
         
         },
 
-
+      // flat list.
       objAvailable:function (){
-        var arr = new Array('markup','media','hyperlink', 'container','container_class', 'comment','note','child' ,'semantic','generic');
-        return arr 
+        var arr = Object.keys($rootScope.objSchema) 
+        return arr ;
       },
       markupSchema:function (){
         // start end metavalue, .......
@@ -202,7 +202,8 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
             arr.generic = new Object({
               'name': 'generic',
               'display_name': $rootScope.i18n.CUSTOM.OBJECTS.generic,
-              'type':obj_base.type ,
+              'type':obj_base.type,
+              'map_range': true,
               'only':'',
               'metadata': { 
                 'editor': {
@@ -227,6 +228,40 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
              },   
               'position_available': ['left', 'right', 'under', 'center','global'],
             });
+
+
+           arr.data = new Object({
+              'name': 'data',
+              'display_name': 'data',
+              'type':obj_base.type,
+              'map_range': true,
+              'only':'',
+              'metadata': { 
+                'editor': {
+                   'show' : true,
+                    'label':'data value',
+                     'input' : 'textarea'
+                  },
+                  'render': {
+                   'show' : true
+                  }
+              }, 
+              'show_date': false,
+              'icon': { 
+                'before': {
+                   'show' : true
+                  }
+              }, 
+              'show_user': false,
+              'subtype': {
+                'free_input' : true,
+                'available' : ['x', 'y', 'z', 'string', 'name', 'else']
+             },   
+              'position_available': ['left', 'right', 'under', 'center','global'],
+            });
+            
+
+
            arr.container= new Object({
             'name': 'container',
               'display_name': $rootScope.i18n.CUSTOM.OBJECTS.container,

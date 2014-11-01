@@ -453,10 +453,9 @@ function DocumentCtrl($scope, $http , $sce, $location, $routeParams, renderfacto
 
 	// icon click or section select
 	$scope.toggle_select_markup = function (markup, event_name){
-
-		if(markup.sectionin){
-					$scope.containers[markup.sectionin].modeletters = 'single'
-
+		console.log(markup)
+		if(markup.sectionin || markup.sectionin == 0){
+			$scope.containers[markup.sectionin].modeletters = 'single'
 		}
 
 		if(markup.isolated == true){
@@ -535,9 +534,10 @@ function DocumentCtrl($scope, $http , $sce, $location, $routeParams, renderfacto
 					if($scope.containers[markup.sectionin].letters[delta]){
 						var _classes = $scope.containers[markup.sectionin].letters[delta]['classes'];
 						//$scope.letters[markup.sectionin][i]['classes'].push("editing")
-						//$scope.letters[markup.sectionin][i]['classes'].push("selected")
+						
 						//console.log($scope.letters[markup.sectionin][i]['classes'])
 						if(_.contains(_classes, classname)  ){
+							//alert('s')
 							$scope.containers[markup.sectionin].letters[delta]['classes'] = _.without( _classes,classname)
 						}
 						else{

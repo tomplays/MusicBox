@@ -49,7 +49,7 @@ h5 Edit markup
 			ul.typer
 				li(ng-repeat="t in available_sections_objects")
 					span {{objSchema[t].display_name}}
-					i.fa.btn_action(ng-class="{ 'selected' : markup.type == t,}" , class="fa-{{t}}" , ng-click="markup_type(markup, t)") 
+					i.fa.btn_action(ng-class="{ 'selected' : markup.type == t}" , class="fa-{{t}}" , ng-click="markup_type(markup, t)") 
 			
 				// old selectors
 				// select(ng-model="markup.type", ng-options="t for t in available_sections_objects")

@@ -43,13 +43,14 @@ div(ng-hide="ui.renderAvailable_active == 'doc_options'" , class="sections_count
 					div.comment_form(ng-if="ui.menus.push_comment.open == section.sectionin ",  ng-include="fragments['comment_form'][0].url")
 
 				div(ng-if="layout.name == 'inline'")
+					// debug
 					// h1 {{section.modeletters}}
-					// letters !
-					// *ng-class="l.classes"
+					// letters part !!
+					
 					div.theletters(ng-if="section.modeletters=='single'")
 						// span.lt(class="{{l.classes_flat}}", ng-bind-html="l.char", lt="l" , ng-repeat="l in section.letters")
 						span.lt(ng-class="l.classes", class="in_range_{{l.inrange}}", ng-bind-html="l.char", lt="l" , ng-repeat="l in section.letters track by $index")
-					// div.fluidtext(fluidtext, section="section" , ng-if="section.modeletters !=='single'")
+
 					div.fluidtext(fluidtexte, section="section" , ng-bind-html="section.fulltext_block",  ng-if="section.modeletters !=='single'") 
 
 				div(ng-if="(layout.name == 'global') && ($parent.$parent.$last) && objects_sections['global_all'].length > 0")
@@ -60,6 +61,11 @@ div(ng-hide="ui.renderAvailable_active == 'doc_options'" , class="sections_count
 				div.isolated(ng-if="layout.name == 'global' && $parent.$parent.$last &&  ui.isolated_markups.length > 0" )
 					h4 isolated
 					div(ng-repeat="markup in ui.isolated_markups ", ng-include="fragments['markup'][0].url")
+
+				div.virtuals(ng-if="layout.name == 'global' && $parent.$parent.$last  > 0 " )
+					div(ng-repeat="virtual in virtuals")
+						div(ng-if="virtual.visible", ng-bind-html="virtual.string")
+			
 
 
 		// render into the layout loop, only "if last"
