@@ -45,6 +45,10 @@ var app;
 	* @todo nothing
 	*/
  	exports.index_doc= function(req, res) {
+
+
+ 		var debugger_on = 'true' /// fix database for broken meta_options.
+ 		
 		var user_ = ''
 		if(req.user){
 			// user_ = new Object({'_id': req.user._id , 'username': req.user.username,  'image_url': req.user.image_url})
@@ -79,13 +83,46 @@ var app;
 					}
 
 
-					var doc_include_js= [];
+					var doc_include_js=''
+					var doc_include_css= '';
+
+					var new_doc_options = []
 					_.each(doc.doc_options , function (option, i){
-						console.log(option.option_name)
+						//console.log(option)
+
+
+
+						//
+if(debugger_on){
+						var fix_opt  = new meta_options( {'option_name':option.option_name, 'option_value':option.option_value,  'option_type': option.option_type } )
+						new_doc_options.push(fix_opt)
+}
+
+
 						if(option.option_name == 'doc_include_js' ){			 	
-							//doc_include_js.push(option.option_value);
+							doc_include_js += option.option_value;
+						}
+						if(option.option_name == 'doc_include_css' ){			 	
+							doc_include_css += option.option_value;
 						}
 					});
+					
+if(debugger_on){
+						console.log(new_doc_options)
+						doc.doc_options = new_doc_options;
+
+						doc.save(function(err,docsaved) {
+						if (err) {
+							
+						} 
+						else {
+						  	console.log(chalk.green('doc saved') );
+						  }
+						});
+}
+					
+
+
 					console.log('public doc rendered')	
 					res.render('index_v1', {
 							user_in : user_,
@@ -93,7 +130,9 @@ var app;
 							doc_thumbnail : doc.thumbnail,
 							doc_excerpt: doc.excerpt,
 							doc_slug_discret : doc_slug_discret,
-							doc_include_js : doc_include_js
+							doc_include_js : doc_include_js,
+							doc_include_css : doc_include_css
+
  
 					});
 				} // has doc

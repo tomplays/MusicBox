@@ -29,14 +29,14 @@ var mongoose = require('mongoose'),
 
 exports.list= function(req, res) {
     User.find({}, function(err, users) {
-        var userMap = {}
+        //var userMap = {}
         console.log('total:'+users.length)
         users.forEach(function(user) {
             // console.log(user)
             // userMap[user._id] = user
             console.log('username: '+user.username +' mail: '+user.email)
         })
-        res.send('console only infos');  
+        res.send('console only infos')
     });
 }
 

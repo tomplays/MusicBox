@@ -773,7 +773,6 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
            
             var op_name = option.option_name;
             options_array[op_name]          = [];
-
             options_array[op_name]['value'] = option.option_value
             options_array[op_name]['_id']   = option._id
             options_array[op_name]['type']  = option.option_type
@@ -788,7 +787,7 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
                options_array[op_name]['fixed'] =  fixed.replace(/ /g, '_').replace(/,/g, '').replace(/:/g, '').replace(/400/g, '').replace(/700/g, '') 
             }
         });       
-        console.log(options_array) 
+        // console.log(options_array) 
         return options_array;
       },
 

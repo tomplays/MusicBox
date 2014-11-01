@@ -42,7 +42,7 @@ div.doc_editor()
 
 	div.doc_options_table
 		div.doc_options_item(ng-repeat="opt in doc.doc_options")
-			label {{opt.option_name}} {{opt._id}}
+			label {{opt.option_name}} 
 			input(name="doc_options[opt.option_name]", type="text", ng-model="doc_options[opt.option_name].value")
 			i.fa.fa-save(ng-click="doc_options_save(doc_options[opt.option_name].value, opt._id)")
 			i.fa.fa-remove(ng-click="doc_options_delete(opt._id)")  
