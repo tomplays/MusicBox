@@ -22,7 +22,7 @@ div.doc_header
 		input(ng-if="ui.editing_doc_notices_before_title",   ng-model="doc_options.doc_notices_before_title.value", name="doc_options.doc_notices_before_title.value")
 		a.btn_ok.float_right(ng-click="edit_doc_option('doc_notices_before_title')") Save
 
-	h1(ng-bind-html="doc.title+'&nbsp;'", ng-dblclick="edit_doc('title')")
+	h1(ng-if="doc_options.display_doc_title.value =='doc_header' || !doc_options.display_doc_title.value ",   ng-bind-html="doc.title+'&nbsp;'", ng-dblclick="edit_doc('title')")
 	.edit_field(ng-if="ui.editing_title")
 		label Edit "Title"
 		input(ng-model="doc.title")
@@ -38,13 +38,13 @@ div.doc_header
 			
 	// div(ng-bind-html="doc.text_summary")
 	
-	time(ng-bind-html="doc.formated_date")
-	div.head_left
+	time(ng-if="doc_options.display_date.value =='doc_header' || !doc_options.display_date_title.value", ng-bind-html="doc.formated_date")
+	div.head_left(ng-if="doc_options.display_author.value =='doc_header' || !doc_options.display_author.value ")
 		div.post-author-info
 			p {{i18n.CUSTOM.DOCUMENT.by_author}} 
 				span(style="color:{{doc.user.color}};", class="post-author-name", rel="author") {{doc.user.username}} 
 
-	div.sharer
+	div.sharer(ng-if="doc_options.display_sharer.value =='doc_header' || !doc_options.display_sharer.value ")
 		a(class="twitter-share-icon", ng-class="", href="https://twitter.com/intent/tweet?text={{doc.excerpt}} {{doc.encoded_url}}")
 			i.fa.fa-twitter
 		a(href="https://www.facebook.com/sharer/sharer.php?u={{doc.encoded_url}}")

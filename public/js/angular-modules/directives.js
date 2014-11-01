@@ -217,7 +217,9 @@ if(ev == 'mouseup'){
 
       elem.bind('click', function() {
         console.log('modeletters toggled')
+        
         scope.$apply(function(){
+
           scope.section.modeletters = 'single';
         });
       })
@@ -267,8 +269,14 @@ if(ev == 'mouseup'){
     function link(scope, elem, attrs) { 
      
       elem.bind('click', function() {
+        // console.log($rootScope.doc_owner)
+        // console.log($rootScope.user_in)
+
         scope.$apply(function(){
-          scope.section.modeletters = 'single';
+          if($rootScope.doc_owner == true){
+                      scope.section.modeletters = 'single';
+
+          }
         });
       })
 

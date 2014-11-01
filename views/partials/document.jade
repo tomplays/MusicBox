@@ -37,7 +37,7 @@ div(ng-hide="ui.renderAvailable_active == 'doc_options'" , class="sections_count
 
 					div(class="markup_ markup_type_{{markup.type}}" ng-repeat="markup in section.objects[object][layout.name]", ng-include="fragments['markup'][0].url")
 
-				div(ng-if="layout.name == 'left'")
+				div(ng-if="(doc_options.comments_open.value !=='false' || !doc_options.comments_open.value  ) && layout.name == 'left'")
 
 					span.open_comment(ng-click="open_comment_push(section)") +
 					div.comment_form(ng-if="ui.menus.push_comment.open == section.sectionin ",  ng-include="fragments['comment_form'][0].url")

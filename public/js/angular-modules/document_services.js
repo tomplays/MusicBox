@@ -82,7 +82,11 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
               }
 
               temp_scope.doc = d.doc;
+
+            
               temp_scope.doc.formated_date =  moment(d.doc.updated).calendar() +', '+moment(d.doc.updated).fromNow(); 
+              console.log(  $rootScope.i18n.id )
+              // http://stackoverflow.com/questions/17493309/how-do-i-change-the-language-of-moment-js
               //$rootScope.doc.formated_date = d.doc.updated
                // console.log($rootScope.doc.user)
              

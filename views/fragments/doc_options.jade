@@ -47,8 +47,11 @@ div.doc_editor()
 			i.fa.fa-save(ng-click="doc_options_save(doc_options[opt.option_name].value, opt._id)")
 			i.fa.fa-remove(ng-click="doc_options_delete(opt._id)")  
 
-		i.fa.fa-plus(ng-click='doc_options_new()') new option
-		input(name="ui.doc_option_new_name", type="text", ng-model="ui.doc_option_new_name")
+		
+		div.doc_options_item.item_new
+			label new
+			input(name="ui.doc_option_new_name", type="text", ng-model="ui.doc_option_new_name")
+			i.fa.fa-plus(ng-click='doc_options_new()') new option
 
 		
 	p(ng-if="ui.renderAvailable_active !=='read'")
