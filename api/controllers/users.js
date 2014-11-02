@@ -29,6 +29,7 @@ var mongoose = require('mongoose'),
 
 exports.list= function(req, res) {
     User.find({}, function(err, users) {
+
         //var userMap = {}
         console.log('total:'+users.length)
         users.forEach(function(user) {
@@ -36,7 +37,8 @@ exports.list= function(req, res) {
             // userMap[user._id] = user
             console.log('username: '+user.username +' mail: '+user.email)
         })
-        res.send('console only infos')
+        //res.send('console only infos')
+        res.json( users)
     });
 }
 

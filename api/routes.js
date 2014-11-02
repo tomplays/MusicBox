@@ -1,11 +1,14 @@
 'use strict';
 
 
-var index = require('../api/controllers/index');
-var docs = require('../api/controllers/documents');
+
+// require all controllers
+
+var index   = require('../api/controllers/index');
+var docs    = require('../api/controllers/documents');
 var markups = require('../api/controllers/markups');
-var users = require('../api/controllers/users');
-var rooms = require('../api/controllers/rooms');
+var users   = require('../api/controllers/users');
+var rooms   = require('../api/controllers/rooms');
 
 
 
@@ -110,9 +113,7 @@ module.exports = function(app, passport, auth) {
 
     app.get('/room/:slug', rooms.room_view);
 
-
+    // user
     app.get('/api/v1/users', users.list);
-
-
 
 };

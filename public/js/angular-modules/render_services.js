@@ -102,6 +102,8 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
       // flat list.
       objAvailable:function (){
         var arr = Object.keys($rootScope.objSchema) 
+
+
         return arr ;
       },
       markupSchema:function (){
@@ -165,7 +167,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
               'show_user': true, 
               'subtype': {
                 'free_input' : false,
-                'available' : ['freebase', 'about']
+                'available' : ['draft','freebase', 'about']
              },   
               'position_available': ['left', 'right', 'under', 'center', 'global'],
             });
@@ -194,7 +196,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
               'show_user': false, 
               'subtype': {
                 'free_input' : false,
-                'available' : ['summary_block', 'summary','translation', 'date', 'hidden', 'place', 'somebody','info', 'copyright', 'mood']
+                'available' : ['summary_block', 'summary','translation', 'date', 'hidden', 'place', 'somebody','info', 'copyright', 'mood','fact', 'err']
              },   
               'position_available': ['left', 'right', 'under', 'global'],
             });
@@ -453,7 +455,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
 
 
     
-            // console.log(arr)
+            console.log(arr)
             return arr;
         },
 

@@ -9,7 +9,10 @@ crypto = require('crypto'),
 authTypes = ['facebook', 'local'] ,
 meta_options = Schema.MetaoptionsSchema,
 ObjectIdSchema = Schema.ObjectId,
-ObjectId = mongoose.Types.ObjectId;
+ObjectId = mongoose.Types.ObjectId,
+
+roomSchema =  Schema.RoomSchema;
+
 
 /**
  * User Schema
@@ -46,7 +49,8 @@ var UserSchema = new Schema({
     facebook: {},
     twitter: {},
     bufferapp: {},
-    user_options: [meta_options]
+    user_options: [meta_options],
+    rooms: [roomSchema]
 });
 
 /**

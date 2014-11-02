@@ -153,26 +153,21 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
         var virtual_summary = new Object({'slug': 'summary', 'header': 'Text summary', 'auto': {'bytype': 'h1-h6'} , 'implicit': {'bytype': 'summary'} } )
         var virtual_data_x = new Object({'slug': 'data_x', 'header': 'data serie (x)', 'explicit': {'bysubtype': 'x'} } )
         var virtual_data_y = new Object({'slug': 'data_y', 'header': 'data serie (y)', 'explicit': {'bysubtype': 'y'} } )
-              var virtual_data = new Object({'slug': 'data', 'header': 'data serie (any)', 'explicit': {'bytype': 'data'} } )
+        var virtual_data = new Object({'slug': 'data', 'header': 'data serie (any)', 'explicit': {'bytype': 'data'} } )
 
-       // var virtual_data_xy = new Object({'slug': 'data_xy', 'header': 'data serie (x+y)', 'explicit': {'bysubtype': 'x'} } )
-       // var virtual_data_xyt = new Object({'slug': 'data_xy', 'header': '', 'explicit': {'bysubtype': 'y'} } )
-
-
+    
         $rootScope.virtuals.push(virtual_summary)
         $rootScope.virtuals.push(virtual_data_x)
         $rootScope.virtuals.push(virtual_data_y)
         $rootScope.virtuals.push(virtual_data)
 
-        // $rootScope.virtuals.push(virtual_data_xy)
-        // $rootScope.virtuals.push(virtual_data_xyt)
-
+      
 
         // var virtual_containers = new Object({'slug': 'sections', 'header': 'containers ', 'auto': {'bytype': 'h1-h6'} , 'implicit': {'bytype': 'container'} } )
         // $rootScope.virtuals.push(virtual_containers)
 
         // no need yet but works. 
-        self.virtualize()
+        // self.virtualize()
   
         
         // filter markups > only if markup.type ==  "container"
@@ -304,7 +299,7 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
            });
 
            $rootScope.containers[index].fulltext_block = lt_out;
-           //  console.log($rootScope.containers[index])
+          
 
         }); // end of containers loop
 
@@ -483,7 +478,7 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
                }
 
                if(markup.position == 'background'){
-                  $rootScope.containers[index].section_styles = 'background-image:url('+markup.metadata+')' ;
+                  $rootScope.containers[index].section_styles = 'background-image:url('+markup.metadata+'); ' ;
                }
 
         }
@@ -1300,12 +1295,12 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
 
                 if(virtual.explicit && virtual.explicit.bysubtype && markup.subtype == virtual.explicit.bysubtype){
                       found_element = true
-                      virtual.string += '<p><i class="fa fa-data"></i>'+markup.metadata+'</p>';
+                      virtual.string += '<p><i class="fa fa-data"></i> '+markup.metadata+'</p>';
 
                 }
                 if(virtual.explicit && virtual.explicit.bytype && markup.type == virtual.explicit.bytype){
                       found_element = true
-                      virtual.string += '<p><i class="fa fa-data"></i>'+markup.metadata+'</p>';
+                      virtual.string += '<p><i class="fa fa-data"></i> '+markup.subtype +'->'+markup.metadata+'</p>';
 
                 }
 

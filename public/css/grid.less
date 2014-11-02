@@ -307,7 +307,12 @@ a.btn_ok{
 .sections_container{
   width:100%;
   float:left;
+
+  &.sections_count_1 section{
+      height:100vh;
+    }
 }
+
 
 .theletters, fluidtext{
   width:100%;
@@ -393,8 +398,10 @@ section{
     .layout_name_inline{
           left: 30%;
           width: 48%;
-
     }
+  }
+  &.focus_side_background{
+    background-size:100% auto;
   }
 
   &.focus_side_right{
@@ -902,8 +909,7 @@ div.markup_displayer_subtype_img {
 
 
 div.markup_displayer_subtype_img .icon_col {
-   bottom: 2%;
-   position: absolute;
+   bottom: -2%;
    right: 2%;
 }
 
@@ -1515,6 +1521,84 @@ background-image: url("/img/test-a.png");
 /* ______♫ ______________________________ */
 
 
+
+.mini_layout{
+     border: 1px solid;
+    float: left;
+    font-size: 12px;
+    font-weight: normal;
+    padding: 2%;
+    width: 74%;
+    a{
+      cursor:pointer;
+    }
+
+    div{
+     padding: 1%;
+     width: 98%;
+     float: left;
+     &.undef{
+        opacity:.8;
+      }
+      &.selected{
+        background: none repeat scroll 0 0 rgba(39, 174, 96, 0.5);
+        a{
+          color: rgb(255, 255, 255);
+        }
+      }
+    }
+    .wide{
+      text-align: center;
+      border-bottom: 1px solid rgb(0, 0, 0);
+
+    }
+    .center{
+         border-left: 1px solid rgb(0, 0, 0);
+          border-right: 1px solid rgb(0, 0, 0);
+          margin-left: 29%;
+          text-align: center;
+          width: 40%;
+    }
+     .middle{
+       float: left;
+         width: 100%;
+             border-top: 1px solid rgb(0, 0, 0);
+                          border-bottom: 1px solid rgb(0, 0, 0);
+
+
+     }
+     .left{
+    border-right: 1px solid rgb(0, 0, 0);
+    float: left;
+    width: 26%;
+    }
+     .inline{
+         width: 40%;
+             border-right: 1px solid rgb(0, 0, 0);
+  text-align: center;
+                   float: left;
+
+
+    }
+     .right{
+                  float: right;
+
+         width: 26%;
+    }
+     .under{
+      width: 40%;
+        text-align: center;
+      border-left: 1px solid rgb(0, 0, 0);
+          border-right: 1px solid rgb(0, 0, 0);
+ margin-left: 29%;
+    
+    }
+     .global{
+     border-top:2px dotted #000;
+    
+    }
+
+}
 
 
 

@@ -48,7 +48,7 @@ var app;
 
 
  		var debugger_on = 'true' /// fix database for broken meta_options.
- 		
+
 		var user_ = ''
 		if(req.user){
 			// user_ = new Object({'_id': req.user._id , 'username': req.user.username,  'image_url': req.user.image_url})
@@ -125,15 +125,13 @@ if(debugger_on){
 
 					console.log('public doc rendered')	
 					res.render('index_v1', {
-							user_in : user_,
-							doc_title : doc.title,
-							doc_thumbnail : doc.thumbnail,
-							doc_excerpt: doc.excerpt,
-							doc_slug_discret : doc_slug_discret,
-							doc_include_js : doc_include_js,
-							doc_include_css : doc_include_css
-
- 
+						user_in : user_,
+						doc_title : doc.title,
+						doc_thumbnail : doc.thumbnail,
+						doc_excerpt: doc.excerpt,
+						doc_slug_discret : doc_slug_discret,
+						doc_include_js : doc_include_js,
+						doc_include_css : doc_include_css 
 					});
 				} // has doc
 				else{
@@ -162,6 +160,13 @@ if(debugger_on){
 				if(doc){
 
 
+
+					doc.markups.forEach(function(mk) {
+                    console.log(mk.status)
+            // userMap[user._id] = user
+          
+        })
+
 					
 					// test rights
 					if(doc.published =='draft'){
@@ -172,9 +177,10 @@ if(debugger_on){
 									return;
 								}
 					}
+					
+
 					var out 			= {}
 					out.doc 			= doc.toObject()
-					console.log(doc.doc_options)
 					if(req.user){
 						 out.userin 	= req.user.toObject()
 					}

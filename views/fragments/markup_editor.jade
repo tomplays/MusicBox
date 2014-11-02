@@ -74,13 +74,34 @@ h5 Edit markup
 			input(ng-model="markup.doc_id_id" , type="text")
 
 		span.field.positions
-			// div.position_ghost
-			label position
+			
 
-			ul.typer.position
-				li(ng-repeat="t in objSchema[markup.type].position_available")
-					span {{t}}
-					i.fa.btn_action(ng-class="{ 'selected' : markup.position == t,}" , class="fa-{{t}}" , ng-click="markup_position(markup, t)") 
+			label Select position
+			
+			div.mini_layout
+				div.wide(ng-class="{ 'selected' : markup.position == 'wide'}") 
+					a(ng-click="markup_position(markup, 'wide')") wide
+				div.center(ng-class="{ 'selected' : markup.position == 'center'}") 
+					a(ng-click="markup_position(markup, 'center')") center
+				div.middle
+					div.left(ng-class="{ 'selected' : markup.position == 'left'}")
+						a(ng-click="markup_position(markup, 'left')") left
+					div.inline(ng-class="{ 'selected' : markup.position == 'inline'}") 
+						a(ng-click="markup_position(markup, 'inline')") inline
+					div.right(ng-class="{ 'selected' : markup.position == 'right'}") 
+						a(ng-click="markup_position(markup, 'right')") right
+				div.under(ng-class="{ 'selected' : markup.position == 'under'}") 
+					a(ng-click="markup_position(markup, 'under')") under
+				div.global(ng-class="{ 'selected' : markup.position == 'global'}") 
+					a(ng-click="markup_position(markup, 'global')") global
+				div.background(ng-class="{ 'selected' : markup.position == 'background'}") 
+					a(ng-click="markup_position(markup, 'background')") as background
+
+
+			// ul.typer.position
+				// li(ng-repeat="t in objSchema[markup.type].position_available")
+					// span {{t}}
+					// i.fa.btn_action(ng-class="{ 'selected' : markup.position == t}" , class="fa-{{t}}" , ng-click="markup_position(markup, t)") 
 			
 
 			// input(ng-model="markup.position" ,type="text")
