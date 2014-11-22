@@ -64,14 +64,16 @@ or `forever start index.js`
   - Bower
   - Grunt
 
+## Conversation 
+
+https://gitter.im/tomplays/MusicBox
 
 ## Todos and bugs report :
 
 [![Build Status](https://travis-ci.org/tomplays/MusicBox.png?branch=master)](https://travis-ci.org/tomplays/MusicBox)
 
 
-Using (https://github.com/tomplays/MusicBox/issues?state=open) MusicBox/issues?state=open
-
+Using (https://github.com/tomplays/MusicBox/issues?state=open) open issues
 
 ## AUTHOR
 
