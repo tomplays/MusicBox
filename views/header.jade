@@ -1,0 +1,123 @@
+head
+	title #{doc_title} #{site_title} #{site_description} 	
+	meta(charset="utf-8")
+	meta(http-equiv="X-UA-Compatible", content="IE=edge,chrome=1")
+	meta(name='viewport', content='width=device-width, initial-scale=1.0')
+	base(href='/')
+	meta(name="description", content="#{doc_excerpt}")
+	meta(property="fb:app_id" , content="#{fbapp_id}")
+	
+	// https://developers.facebook.com/docs/reference/opengraph/object-type
+	// https://developers.facebook.com/tools/object-browser?app_id=248664598505342
+	meta(property="og:type", content="article")
+	meta(property="og:title", content="#{doc_title}")
+	meta(property="og:image", content="#{doc_thumbnail}")
+	meta(property="og:description", content="#{doc_excerpt}")
+	meta(property="og:site_name", content="#{site_title}")
+	meta(property="og:url", content="#{doc_slug_discret}")
+
+	link(rel='icon', type="image/png", href="/favicon.png")
+	
+	script(type="text/javascript").
+		var musicBox
+		var SOCKET_URL = '#{socket_url}'
+		var root_url = '#{root_url}'
+		var api_url = '#{api_url}'
+		var doc_include_js = '#{doc_include_js}'
+
+		
+		var USERIN = new Object({'username':'#{user_in.username}', 'image_url': '#{user_in.image_url}', '_id': '#{user_in._id}'} );
+
+	
+	
+	// angularJS / 
+	
+
+	script(type='text/javascript',  src="/bower_components/angular/angular.min.js")
+	// script(type='text/javascript',  src="/js/lib/serialize.min.js")
+
+
+	
+	//i18n dynamic load
+	script(type='text/javascript',  src="#{root_url}/#{lang_js_url}")
+	
+
+	if (env == 'dev')
+		
+		script(type='text/javascript', src='/bower_components/angular-sanitize/angular-sanitize.min.js')
+		script(type='text/javascript', src='/bower_components/angular-route/angular-route.min.js')
+		script(type='text/javascript', src='/bower_components/angular-resource/angular-resource.min.js')
+		
+
+
+		// sub if (hard version of file minified or kept locally)
+		script(type='text/javascript', src='/js/angular-modules/filters.js')
+		script(type='text/javascript', src='/js/angular-modules/directives.js')
+
+		// Misc libs/utils
+		script(type='text/javascript', src="/bower_components/jquery/dist/jquery.min.js")
+		script(type='text/javascript', src='/bower_components/underscore/underscore-min.js')
+		
+		// font loader kept local
+		script(type='text/javascript', src='/js/lib/webfont.js')
+
+		// calendar functions lib. (momentjs)
+		script(type='text/javascript', src='/bower_components/momentjs/min/moment-with-langs.min.js')
+		script(type='text/javascript', src='/bower_components/momentjs/lang/fr.js')
+
+		// tests for charts
+		// script(type='text/javascript', src='/bower_components/chartist/libdist/chartist.min.js')
+		// link(rel='stylesheet', href='/bower_components/chartist/libdist/chartist.min.css')
+
+		script(type='text/javascript', src='/js/angular-modules/services.js')
+		script(type='text/javascript', src='/js/angular-modules/render_services.js')
+		script(type='text/javascript', src='/js/angular-modules/document_services.js')
+
+	
+		
+		link(rel='stylesheet', href='/css/min/main.css')
+
+		// Angular controllers
+		script(type='text/javascript', src='/js/MusicBox/document_v1.js')
+
+		script(type='text/javascript', src='/js/MusicBox/userCtrl.js')
+		
+		// Angular top level 'app' routing 
+		script(type='text/javascript', src='/js/app.js')
+
+		if(socket_url !== '')
+			script(src="#{socket_url}/socket.io/socket.io.js")
+	
+
+	// same in dev and prod env 
+	link(rel='stylesheet', href='/bower_components/font-awesome/css/font-awesome.min.css')
+
+	if (env == 'prod')
+		link(rel='stylesheet', href='/css/min/main.css')
+		
+
+		// Calling 9 js files, minified crash for angular, whereas .debug no, why ?
+			
+		// script(type='text/javascript', src='/js/min/MusicBox.min.js')
+
+		script(type='text/javascript',  src='/js/min/MusicBox.min-debug.js')
+
+
+	//
+		♪     ♪
+			♪     ♪
+		Boite à musique
+			~MusicBox
+			
+
+	if (doc_include_js)
+		script(type='text/javascript', src='/js/custom_doc/jquery-1.11.1.min.js')
+		script(type='text/javascript', src='/js/custom_doc/skrollr.min.js')
+		script(type='text/javascript', src='#{doc_include_js}')
+
+	if (doc_include_css)
+		link(rel='stylesheet', href='#{doc_include_css}')
+
+
+
+
