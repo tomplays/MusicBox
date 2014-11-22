@@ -8,10 +8,15 @@ MusicBox
 ## Quick start
 
 ` git clone https://github.com/tomplays/MusicBox.git`
+
 ` cd MusicBox`
+
 ` (sudo) npm install`
+
 ` cd public/ `
+
 ` bower install` (js dependencies)
+
 ` cp config_sample.json config.json`
 
 edit file with 
@@ -19,6 +24,7 @@ edit file with
 `(sudo) nano config.json`  (..)
 
 be sure mongoDB is running.
+
 `sudo mongod`
 
 
@@ -29,7 +35,7 @@ be sure mongoDB is running.
 
 or `node index.js`
 
-or `forever start index.js'
+or `forever start index.js`
 
 
 ##  TECHNICAL STACK
