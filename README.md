@@ -15,7 +15,7 @@ MusicBox
 
 ` cd public/ `
 
-` bower install` (js dependencies)
+` bower install` 
 
 ` cp config_sample.json config.json`
 
