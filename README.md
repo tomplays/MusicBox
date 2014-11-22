@@ -5,6 +5,37 @@ MusicBox
   
   * soon.
 
+## Quick start
+
+` git clone https://github.com/tomplays/MusicBox.git`
+
+` cd MusicBox`
+
+` (sudo) npm install`
+
+` cd public/ `
+
+` bower install` 
+
+` cp config_sample.json config.json`
+
+edit file with 
+
+`(sudo) nano config.json`  (..)
+
+be sure mongoDB is running.
+
+`sudo mongod`
+
+
+## RUN/START 
+
+
+`sudo grunt`
+
+or `node index.js`
+
+or `forever start index.js`
 
 
 ##  TECHNICAL STACK
@@ -33,14 +64,16 @@ MusicBox
   - Bower
   - Grunt
 
+## Conversation 
+
+https://gitter.im/tomplays/MusicBox
 
 ## Todos and bugs report :
 
 [![Build Status](https://travis-ci.org/tomplays/MusicBox.png?branch=master)](https://travis-ci.org/tomplays/MusicBox)
 
 
-Using (https://github.com/tomplays/MusicBox/issues?state=open) MusicBox/issues?state=open
-
+Using (https://github.com/tomplays/MusicBox/issues?state=open) open issues
 
 ## AUTHOR
 
