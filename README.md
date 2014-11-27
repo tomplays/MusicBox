@@ -38,8 +38,11 @@ or `node index.js`
 
 or `forever start index.js`
 
-go to : [http://localhost(:port)/signup](http://localhost(:port)/signup) to create a user account
-and [http://localhost/doc/create](http://localhost/doc/create) to edit your first musicbox document. (use 'homepage' as first title to avoid "null" error message. )
+go to : [http://localhost/init](http://localhost/init) to create a user account
+and first document ('homepage')
+
+> user : bob
+> password : secret
 
 
 ##  TECHNICAL STACK
