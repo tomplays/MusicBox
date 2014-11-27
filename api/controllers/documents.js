@@ -779,3 +779,126 @@ exports.doc_option_new  = function(req, res) {
  		return Math.floor(Math.random() * (max - min + 1)) + min;
 	}
 
+
+
+
+
+ exports.init = function (req, res) {
+
+	var user = new User({'username':'bob', 'email':'sfdfss@sd.fr', 'password':'secret'});
+    var message = null;
+    user.user_options = new Array();
+    
+    var r = getRandomInt(0, 255);
+    var g = getRandomInt(0, 255);
+    var b = getRandomInt(0, 255);
+    var rand_color = 'rgb('+r+', '+g+', '+b+')';
+    var user_option = new Object( {'option_name':'color', 'option_value': rand_color,  'option_type': '' } )
+    user.user_options.push(user_option)
+    user.provider = 'local';
+    user.save(function(err, user) {
+
+
+    	req.logIn(user, function(err) {
+           
+            
+        });
+
+
+
+	var raw_title        =     'homepage';
+	var raw_content      =     'req.body.raw_content';
+
+
+	var published      = 'public'
+	
+
+ 	var filtered_title   =     raw_title;
+	var filtered_content =     raw_content;
+	var slug             =     S(raw_title).slugify().s 
+
+	
+
+	//var ar = new Object({'title':'bloue'+Math.random()})
+	var new_doc = new Object({'title':filtered_title, 'slug': slug, 'content': filtered_content, 'published ':'public' })
+
+	 new_doc.markups = new Array()
+	 new_doc.doc_options = new Array()
+	
+
+	 var text_size = _.size(raw_content)-1;
+
+	 var markup_section_base  = new Markup( {'user_id':user._id, 'username':user.username, 'start':0, 'end':text_size,  'type': 'container', 'subtype':'section', 'position':'inline'} )
+	 new_doc.markups.push(markup_section_base)
+
+
+	
+
+	var text_typography  = new meta_options( {'option_name':'text_typography', 'option_value':'Open Sans',  'option_type': 'google_typo' } )
+	
+
+
+	new_doc.doc_options.push(text_typography)
+	
+
+
+	var headings_typography  = new meta_options( {'option_name':'headings_typography', 'option_value':'Open Sans',  'option_type': 'google_typo' } )
+	new_doc.doc_options.push(headings_typography)
+
+	
+	var   doc_notices_after_title= new meta_options( {'option_name':'doc_notices_after_title', 'option_value':'',  'option_type': '' } )
+	new_doc.doc_options.push(doc_notices_after_title)
+
+	var   doc_notices_before_title= new meta_options( {'option_name':'doc_notices_before_title', 'option_value':'',  'option_type': '' } )
+	new_doc.doc_options.push(doc_notices_before_title)
+
+
+	var r = getRandomInt(0, 255);
+    var g = getRandomInt(0, 255);
+    var b = getRandomInt(0, 255);
+    //var rand_color = 'rgb('+r+', '+g+', '+b+')';
+    //var rand_color_b = 'rgb('+b+', '+r+', '+g+')';
+
+	var rand_color = '#000'
+	var rand_color_b = '#fff'
+
+	var   block_color= new meta_options( {'option_name':'block_color', 'option_value':rand_color,  'option_type': '' } )
+	new_doc.doc_options.push(block_color)
+	var   title_color= new meta_options( {'option_name':'title_color', 'option_value':rand_color_b,  'option_type': '' } )
+	new_doc.doc_options.push(title_color)
+
+/*
+	var  share_fragment = new Object( {'option_name':'share_fragment', 'option_value':'right',  'option_type': '' } )
+	new_doc.doc_options.push(share_fragment)
+	var  use_authorcard = new Object( {'option_name':'use_authorcard', 'option_value':'full_last',  'option_type': 'fragment' } )
+	new_doc.doc_options.push(use_authorcard)
+*/
+
+	var branding_class  = new meta_options( {'option_name':'branding_class', 'option_value':'sa bg_transparent',  'option_type': '' } )
+	new_doc.doc_options.push(branding_class)
+
+	var   footer_center_html = new meta_options( {'option_name':'footer_center_html', 'option_value':"<i class=\'fa fa-file-text-o\'></i> powered by <a href=\'http://github.com/tomplays/MusicBox/\'>MusicBox beta*</a> - 2014 - <a href=\'http://hacktuel.fr\'>@Hacktuel.fr</a>",  'option_type': '' } )
+	new_doc.doc_options.push(footer_center_html)
+
+
+
+	var doc = new Document(new_doc);
+	doc.user = user;
+   	 	doc.username =user.username;
+		
+	//doc.populate('user', 'name username image_url').exec(function(err,doc) {
+		doc.save(function(err,doc) {
+			if (err) {
+	   			res.json(err);
+	        } else {
+				//console.log(doc)
+				// var doc =  Document.findOne({title: filtered_title}).populate('user', '-salt name username image_url').populate('room').exec(function(err, doc) {
+	        	res.json(doc)
+	   			          
+	        }
+	    });
+
+    });
+
+
+}
