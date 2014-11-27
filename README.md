@@ -22,7 +22,7 @@ MusicBox
 
 edit file with 
 
-`(sudo) nano config.json`  (..)
+`(sudo) nano config.json`  (should works without editing..)
 
 be sure mongoDB is running.
 
@@ -38,8 +38,8 @@ or `node index.js`
 
 or `forever start index.js`
 
-go to : http://localhost(:port)/signup to create a user account
-and http://localhost/doc/create to edit your first musicbox document. (use 'homepage' as first title to avoid "null" error message. )
+go to : [http://localhost(:port)/signup](http://localhost(:port)/signup) to create a user account
+and [http://localhost/doc/create](http://localhost/doc/create) to edit your first musicbox document. (use 'homepage' as first title to avoid "null" error message. )
 
 
 ##  TECHNICAL STACK
