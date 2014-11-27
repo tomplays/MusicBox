@@ -115,5 +115,9 @@ module.exports = function(app, passport, auth) {
 
     // user
     app.get('/api/v1/users', users.list);
+     
+  	// first boot
+  	app.get('/init', docs.init );
+
 
 };
