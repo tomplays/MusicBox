@@ -28,6 +28,7 @@ var mongoose = require('mongoose'),
  S = require('string'),
 Document = mongoose.model('Document'),
 meta_options = mongoose.model('Metaoptions'),
+User = mongoose.model('User'),
 Markup  = mongoose.model('Markup');
 var nconf = require('nconf');
 
