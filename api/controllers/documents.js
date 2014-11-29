@@ -216,7 +216,7 @@ exports.listRender = function(req, res) {
 		//console.log(docs)
 		if (err) return handleError(err);
 			docs = JSON.stringify(docs)
-			res.render('index_v1', {
+			res.render('index', {
 				docs: docs
 			});
 	})
