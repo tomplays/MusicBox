@@ -55,7 +55,7 @@ var app;
 			// user_ = new Object({'_id': req.user._id , 'username': req.user.username,  'image_url': req.user.image_url})
 		}
 		var doc_req_slug 	  = 'homepage';
-		var doc_slug_discret  =  nconf.get('ROOT_URL')+'/'
+		var doc_slug_discret  =  nconf.get('ROOT_URL')+':'+nconf.get('PORT')+'/'
 		if(req.params.slug){
 			doc_req_slug = req.params.slug;
 			doc_slug_discret  +=  '/doc/'+req.params.slug;
@@ -72,7 +72,7 @@ var app;
 					{
 								var user_can	= exports.test_owner_or_key(doc,req)
 								if(!user_can){
-									var redirect_to = nconf.get('ROOT_URL')
+									var redirect_to = nconf.get('ROOT_URL')+':'+nconf.get('PORT')
 									if(req.params.slug){
 										redirect_to += '/doc/'+req.params.slug;
 									}
@@ -125,7 +125,7 @@ if(debugger_on){
 
 
 					console.log('public doc rendered')	
-					res.render('index_v1', {
+					res.render('index', {
 						user_in : user_,
 						doc_title : doc.title,
 						doc_thumbnail : doc.thumbnail,
@@ -786,7 +786,7 @@ exports.doc_option_new  = function(req, res) {
 
  exports.init = function (req, res) {
 
-	var user = new User({'username':'bob', 'email':'sfdfss@sd.fr', 'password':'secret'});
+	var user = new User({'username':'bdob', 'email':'sfdfss@sd.fr', 'password':'secret'});
     var message = null;
     user.user_options = new Array();
     
@@ -800,18 +800,14 @@ exports.doc_option_new  = function(req, res) {
     user.save(function(err, user) {
 
 
-    	req.logIn(user, function(err) {
-           
+    	req.logIn(user, function(err) {    
             
         });
 
 
 
-	var raw_title        =     'homepage';
-	var raw_content      =     'req.body.raw_content';
-
-
-	var published      = 'public'
+	var raw_title        =     'homepasdge';
+	var raw_content      =     'hello world';
 	
 
  	var filtered_title   =     raw_title;
@@ -821,7 +817,7 @@ exports.doc_option_new  = function(req, res) {
 	
 
 	//var ar = new Object({'title':'bloue'+Math.random()})
-	var new_doc = new Object({'title':filtered_title, 'slug': slug, 'content': filtered_content, 'published ':'public' })
+	var new_doc = new Object({'title':filtered_title, 'slug': slug, 'content': filtered_content, 'published':'public' })
 
 	 new_doc.markups = new Array()
 	 new_doc.doc_options = new Array()
@@ -885,7 +881,7 @@ exports.doc_option_new  = function(req, res) {
 
 	var doc = new Document(new_doc);
 	doc.user = user;
-   	 	doc.username =user.username;
+   	doc.username =user.username;
 		
 	//doc.populate('user', 'name username image_url').exec(function(err,doc) {
 		doc.save(function(err,doc) {

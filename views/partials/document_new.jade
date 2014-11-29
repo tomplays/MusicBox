@@ -45,8 +45,8 @@ div.main_center.newdoc_form.bordered
 	.full-wide(ng-if="newdoc.created_link") 
 		p
 			span Your new document:
-				a(href="#{root_url}/doc/{{newdoc.created_link}}")  {{newdoc.created_link_title}}
+				a(href="#{root_url}:#{port}/doc/{{newdoc.created_link}}")  {{newdoc.created_link_title}}
 		p
 			span Share it in secret with url :
-				a(href="#{root_url}/doc/{{newdoc.created_link}}/{{newdoc.created_secret}}")  {{newdoc.created_secret}}
+				a(href="#{root_url}:#{port}/doc/{{newdoc.created_link}}/{{newdoc.created_secret}}")  {{newdoc.created_secret}}
 

@@ -26,7 +26,6 @@ function UserProfileCtrl($scope, $http , $location, $routeParams,  $locale) {
 		$scope.documents = [];
 
          $http.get(api_url+'/me/account').success(function(d) {
-
          	$scope.me = d.user;
          	$scope.documents = d.user_documents;
          	console.log(d)
@@ -47,8 +46,7 @@ function UserProfileCtrl($scope, $http , $location, $routeParams,  $locale) {
          });
 
         $scope.delete_document= function(doc){
-          $http.post(api_url+'/doc/'+doc.slug+'/delete').success(function(d) {
-          	console.log(d)
+          $http.post(api_url+':'+PORT+'/doc/'+doc.slug+'/delete').success(function(d) {
           	console.log($scope.documents)
           	//	$scope.documents = _.without($scope.documents,d)
 			$scope.documents  = _.reject($scope.documents , function(doc){ return doc._id  == d._id; });
@@ -66,8 +64,8 @@ function UserCtrl($scope, $http , $location, $routeParams,  $locale) {
 		//console.log(USERIN)
 		$scope.userin = USERIN;
 	}
-	$scope.register_url = root_url+'/signup';
-	$scope.created_user_link   = root_url+'/me/account?welcome';
+	$scope.register_url = root_url+':'+PORT+'/signup';
+	$scope.created_user_link   = root_url+':'+PORT+'/me/account?welcome';
 
 	if($routeParams.redirect_url){
 		$scope.created_user_link 	= $routeParams.redirect_url;
@@ -83,7 +81,7 @@ function UserCtrl($scope, $http , $location, $routeParams,  $locale) {
 	$scope.checklogin = function(){
 		var data = new Object({'username': $scope.username, 'password': $scope.password, 'redirect_url':$routeParams.redirect_url})
 		//console.log($routeParams.redirect_url)
-		$http.post(root_url+'/api/v1/userlogin', serialize(data) ).success(function(e) {
+		$http.post(root_url+':'+PORT+'/api/v1/userlogin', serialize(data) ).success(function(e) {
          	//console.log(e)
          	window.location = e.redirect_url;
          }).error(function(data, status) {});  
@@ -98,7 +96,8 @@ function UserCtrl($scope, $http , $location, $routeParams,  $locale) {
 			data.email 		= $scope.email;
 			// data = serialize(data);
 		 	console.log(data)
- 			$http.post(root_url+'/register', serialize(data) ).success(function(e) {
+ 			$http.post(root_url+':'+PORT+'/register', serialize(data) ).success(function(e) {
+
         	 	window.location = $scope.created_user_link 
         	});  
 		}

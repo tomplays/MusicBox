@@ -44,12 +44,12 @@ exports.list= function(req, res) {
 
 exports.login = function(req, res) {
          var user_ = new Object({'username': null,  'image_url':null})
-         res.render('index_v1', { user_in:user_ } );
+         res.render('index', { user_in:user_ } );
 };
 
 exports.signup = function(req, res) {
   var user_ = new Object({'username': null,  'image_url':null})
-  res.render('index_v1', { user_in:user_ } ); 
+  res.render('index', { user_in:user_ } ); 
 };
 
 exports.signin_login= function(req, res) {
@@ -78,7 +78,7 @@ exports.signin = function(req, res) {};
 exports.account = function(req, res) {
        
         var user_ = new Object({'username': req.user.username})
-        res.render('index_v1', {
+        res.render('index', {
             doc: new Object(),
             user_in : user_,
         });

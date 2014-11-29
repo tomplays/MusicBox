@@ -40,7 +40,7 @@
     "socket.io": "1.2.0",
     "socket.io-client": "1.2.0",
     "string": "^2.1.0",
-    "underscore": "*",
+    "underscore": "^1.7.0",
     "view-helpers": "~0.1.4",
     "locale": "0.0.20",
     "grunt-cli": "^0.1.13",

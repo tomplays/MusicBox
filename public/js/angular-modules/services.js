@@ -62,9 +62,9 @@ musicBox.run(function($rootScope, $http, $route) {
 
  // SOCKET part 
 musicBox.factory('socket', function($rootScope, $http, $location)  {
-  
+  //  app.locals.port=
   if(SOCKET_URL !==""){
-       var socket = io.connect(SOCKET_URL);
+       var socket = io.connect(SOCKET_URL+':'+SOCKET_SERVER_PORT);
   
     return {
       start: function(){

@@ -112,16 +112,19 @@ app.configure(function(){
         app.locals.site_description_long = nconf.get('SITE_DESCRIPTION_LONG');
         app.locals.env = nconf.get('ENV');
         app.locals.root_url= nconf.get('ROOT_URL');
-        app.locals.api_url= nconf.get('API_URL');
         app.locals.fbapp_id = nconf.get('FACEBOOK_ID');
-
-
+        app.locals.port= nconf.get('PORT')
+        app.locals.socket_server_port= nconf.get('SOCKET_SERVER_PORT')
        
+        // contruct STRING
+        app.locals.api_url= nconf.get('ROOT_URL')+':'+nconf.get('PORT')+'/'+nconf.get('API_SUFFIX_URL');
+
+      
         // > if setted to "null" script wont be load in view
         app.locals.socket_url = nconf.get('SOCKET_SERVER_URL')
         // i18n dyn. load
         app.use(function(req, res, next){
-          res.locals.lang_js_url  = 'js/angular-modules/i18n/angular_'+req.locale+'.js';
+          res.locals.lang_js_url  = 'js/angular-modules/i18n/angular_fr-fr.js';
           next();
         });
 
@@ -147,7 +150,7 @@ app.configure('production', function(){
   app.use(express.errorHandler());
 });
 app.use(function(req, res, next) {
-        res.header("Access-Control-Allow-Origin", "*:*");
+        res.header("Access-Control-Allow-Origin", "*:");
         res.header("Access-Control-Allow-Headers", "X-Requested-With");
         res.header("Access-Control-Allow-Headers", "Content-Type");
         res.header("Access-Control-Allow-Methods", "PUT, GET, POST, DELETE, OPTIONS");

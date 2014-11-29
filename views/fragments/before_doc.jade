@@ -21,17 +21,17 @@ div.quick_tools(class="visible_{{ui.menus.quick_tools.open}}")
 						a(ng-click="toggle_render('doc_options')") Document options
 
 					p()  
-						a(href="#{root_url}/doc/{{doc.slug}}?secret={{doc.secret}}") Share secret key
+						a(href="#{root_url}:#{port}/doc/{{doc.slug}}?secret={{doc.secret}}") Share secret key
 					p()  
-						a(href="#{root_url}/doc/aide") besoin d'aide?!
+						a(href="#{root_url}:#{port}/doc/aide") besoin d'aide?!
 
 
 		div.user_not_in(ng-if="userin.username == '' ")
 			div.user_box
-				a(href="/login?redirect_url=#{root_url}/doc/{{doc.slug}}" , ng-if="userin.username == '' ") log in 
+				a(href="/login?redirect_url=#{root_url}:#{port}/doc/{{doc.slug}}" , ng-if="userin.username == '' ") log in 
 				// a(ng-click="external_link(root_url+'/auth/facebook')" , ng-if="userin.username == '' ") log in with facebook
 				p()  
-						a(href="#{root_url}/doc/aide") besoin d'aide?!
+						a(href="#{root_url}:#{port}/doc/aide") besoin d'aide?!
 
 		
 div.fixed_tools()

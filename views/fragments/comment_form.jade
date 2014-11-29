@@ -1,8 +1,8 @@
 div.user_not_in(ng-if="userin.username == '' ")
 	p 
-		a(ng-click="external_link(root_url+'/login')" , ng-if="userin.username == '' ") {{i18n.CUSTOM.COMMENT.needs_logging}}
+		a(ng-click="external_link(root_url+':'+port+'/login')" , ng-if="userin.username == '' ") {{i18n.CUSTOM.COMMENT.needs_logging}}
 	p
-		a.loginOrSignup(ng-click="external_link(root_url+'/login?redirect_url=#{root_url}/doc/'+doc.slug)" , ng-if="userin.username == '' ") {{i18n.CUSTOM.USER.loginOrSignup}}
+		a.loginOrSignup(ng-click="external_link(root_url+'/login?redirect_url=#{root_url}:#{port}/doc/'+doc.slug)" , ng-if="userin.username == '' ") {{i18n.CUSTOM.USER.loginOrSignup}}
 
 div.user_in(ng-if="userin.username")
 
