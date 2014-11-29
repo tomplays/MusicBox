@@ -786,7 +786,7 @@ exports.doc_option_new  = function(req, res) {
 
  exports.init = function (req, res) {
 
-	var user = new User({'username':'bdob', 'email':'sfdfss@sd.fr', 'password':'secret'});
+	var user = new User({'username':'bob', 'email':'sfdfss@sd.fr', 'password':'secret'});
     var message = null;
     user.user_options = new Array();
     
@@ -806,7 +806,7 @@ exports.doc_option_new  = function(req, res) {
 
 
 
-	var raw_title        =     'homepasdge';
+	var raw_title        =     'homepage';
 	var raw_content      =     'hello world';
 	
 
