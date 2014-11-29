@@ -48,7 +48,7 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
               // redirects if doc is null
               if(!d.doc && docid !=='homepage'){
                // api routing should already had redirects..
-               window.location = root_url+'/doc'; // error page 
+               window.location = root_url+':'+PORT+'/doc'; // error page 
                return;
               }
               // enough for load.
@@ -108,7 +108,7 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
                 console.log('is owner or has secret ('+ d.is_owner+')')
                 document.title = d.doc.title
                
-                var encoded_url = root_url;
+                var encoded_url = root_url+':'+PORT;
                 if(d.doc.slug !=='homepage'){
                     encoded_url += '/doc/'+d.doc.slug;
                 }
@@ -999,7 +999,7 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
 
             // hard redirect
             if(field == 'title'){
-              window.location = root_url+'/doc/'+doc.doc.slug;
+              window.location = root_url+':'+PORT+'/doc/'+doc.doc.slug;
             }
             else if(field == 'content'){
               $rootScope.$emit('docEvent', {action: 'doc_ready', type: '-', collection_type: 'doc', collection:doc });
