@@ -1,5 +1,5 @@
 {
-"directory": "public/bower_componenents",
+"directory": "public/bower_components",
 "json": "bower.json",
 "analytics": false,
 "color": true
