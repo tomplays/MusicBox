@@ -14,11 +14,10 @@ MusicBox
 
 ` (sudo) npm install`
 
-` cd public/ `
-
 ` bower install` 
 
-` cp config_sample.json config.json`
+` cp config_default.json config.json`
+
 
 edit file with 
 
@@ -38,7 +37,7 @@ or `node index.js`
 
 or `forever start index.js`
 
-go to : [http://localhost/init](http://localhost/init) to create a user account
+go to : [http://localhost::port/init](http://localhost::port/init) to create a user account
 and first document ('homepage')
 
 > user : bob

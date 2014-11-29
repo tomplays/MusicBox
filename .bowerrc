@@ -1,0 +1,6 @@
+{
+"directory": "public/bower_componenents",
+"json": "bower.json",
+"analytics": false,
+"color": true
+}
