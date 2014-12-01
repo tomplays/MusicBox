@@ -1,15 +1,21 @@
 'use strict';
 
 module.exports = function(grunt) {
-
+	
+	// auto load
+	require("load-grunt-tasks")(grunt);
+	
+	// timer
 	require("time-grunt")(grunt);
 
-	
 	grunt.initConfig({
-		 pkg: grunt.file.readJSON('package.json'),
+
+		pkg: grunt.file.readJSON('package.json'),
+		cfg : grunt.file.readJSON('config.json'),
+
 		less: {				
 			 options: {
-						paths: ["public/css"],
+					  paths: ["public/css"],
 					  compress: true
 				},
 
@@ -33,15 +39,11 @@ module.exports = function(grunt) {
 								keepRunner: true
 						}
 				}
-
 		},
-	 
-
-
 		connect: {
 				options: {
-					port : "8080",
-					hostname : "localhost",
+					port : "<%= cfg.PORT %>",
+					hostname : "<%= cfg.ROOT_URL %>",
 					livereload: "35729"
 				},
 				livereload: {
@@ -51,32 +53,77 @@ module.exports = function(grunt) {
 						}
 				},
 		},
-
-
 		jade: {
 			compile: {
 				options: {
+					 client: false,
+               		 pretty: true,
+					
 					data: {
 						debug: false,
-						root_url: 'http://localhost',
-						lang_js_url : '/hello.js',
-						env: 'prod'
+						root_url: '<%= cfg.ROOT_URL %>',
+						lang_js_url : 'js/angular-modules/i18n/angular_fr-fr.js',
+						env: 'grunt',
+						socket_url : 'undef',
+						socket_server_port : '<%= cfg.PORT %>',
+						api_url : '<%= cfg.ROOT_URL %>',
+						port: '<%= cfg.PORT %>',
+						locale: 'fr-fr',
+						user_in : 	{						
+										username :'grunt'
+									}
 					}
-				},
-			 
 
-			 files: {
-						// no need for files, the config below should work
-					 "tests/partials/*.html" : "views/partials/*.jade",
-				}  
+
+
+				},
+				files: [ {
+					expand: true,
+					src: "**/*.jade",
+					dest: "dist",
+					cwd: "views",
+					ext: '.html'
+				} ]
+
+			 
 			}
 		},
+
 		forever: {
 			server1: {
 				options: {
 					index: 'index.js'
 				}
 			}
+		},
+		// Concat angular templates
+		ngtemplates: {
+			dist: {
+			cwd: "views",
+			src: "**/*.jade",
+			dest: "dist/template.js",
+				options: {
+					module: "MusicBox",
+				//	usemin: "dist/script/scripts.js" // <~~ This came from the <!-- build:js --> block
+				}
+			}
+		},
+		copy: {
+			dist: {
+				files: [{
+					expand: true,
+					dot: true,
+					cwd: 'public',
+					dest: 'dist',
+						src: [
+						"img/**",
+						"css/min",
+						"bower_components/**/*",
+						"js/**",
+						"data.json"
+						]
+				}]
+				},
 		},
 		watch: {
 			js: {
@@ -86,7 +133,7 @@ module.exports = function(grunt) {
 			},
 
 			styles: {
-				 options: { livereload: true },
+				options: { livereload: true },
 				files: ['public/css/*.less'], // less auto-compilation
 				tasks: ['less']
 			},
@@ -96,23 +143,27 @@ module.exports = function(grunt) {
 				tasks: ['jade']
 			},
 			api_folder:{
-				 options: { livereload: true },
+				options: { livereload: true },
 				files: ['api/**/*.js'], // restart server on controllers, routes and models changes
 				tasks: ['forever:server1:restart']
 
 			}
 		}
 	});
-	grunt.loadNpmTasks('grunt-contrib-less');
-	grunt.loadNpmTasks('grunt-contrib-watch');
-	grunt.loadNpmTasks('grunt-contrib-jasmine');
-	grunt.loadNpmTasks('grunt-contrib-connect');
-	grunt.loadNpmTasks('grunt-contrib-jade');
-	grunt.loadNpmTasks('grunt-forever');
 	//grunt.registerTask('dev', ['forever']); // , 'connect:server' // 'forever', 
 	grunt.registerTask('lesscss', ['less']); // , 'connect:server' // 'forever', 
 	grunt.registerTask('stop', ['forever:server1:stop']); // , 'connect:server' // 'forever', 
 	grunt.registerTask('default', [
-				'forever:server1:restart','jade','watch', 'less','jasmine', 'connect:livereload'
+				'forever:server1:restart','watch', 'less','jasmine', 'connect:livereload'
+	]);
+	grunt.registerTask('build', [
+				'forever:server1:restart',
+				'jade',
+				'copy:dist',
+				'watch',
+				 'less',
+				'jasmine', 
+				'ngtemplates',
+				'connect:livereload'
 	]);
 };

@@ -55,7 +55,7 @@ var app;
 			// user_ = new Object({'_id': req.user._id , 'username': req.user.username,  'image_url': req.user.image_url})
 		}
 		var doc_req_slug 	  = 'homepage';
-		var doc_slug_discret  =  nconf.get('ROOT_URL')+':'+nconf.get('PORT')+'/'
+		var doc_slug_discret  =  nconf.get('ROOT_URL')+':'+nconf.get('PORT');
 		if(req.params.slug){
 			doc_req_slug = req.params.slug;
 			doc_slug_discret  +=  '/doc/'+req.params.slug;

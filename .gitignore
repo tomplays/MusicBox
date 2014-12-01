@@ -12,6 +12,7 @@ pids
 logs
 results
 tests
+dist/
 
 .grunt/
 _SpecRunner.html

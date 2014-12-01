@@ -1,0 +1,39 @@
+body{
+
+}
+.tools{
+	margin-bottom:2%;
+}
+
+.tools a{
+
+	border:1px solid #000;
+	margin:1%;
+	border-radius:4px;
+	background:#000;
+	color:#fff;
+	padding:1%;
+}
+
+
+
+.grid{
+	margin:1%;
+	border:1px solid #000;
+}
+section{
+
+	border:1px solid #dadada;
+	margin:1%;
+}
+.grid-layout{
+	border:2px solid #dadada;
+	padding:1%;
+}
+.grid-item{
+	border:2px solid #dadada;
+	padding:1%;
+}
+.grid-layout.global{
+	display:none;
+}

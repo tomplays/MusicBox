@@ -1,5 +1,3 @@
-
-
 musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeParams, $locale) {
     return function (inf) {
      var self = {
@@ -500,25 +498,23 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
         return arr 
       },
       fragmentsAvailable:function (){
-        var arr = [];
-            arr['markup']             = [ {  url: 'fragments/markup'} ];
-
+            var arr = [];
+            arr['markup']                    = [ {  url: 'fragments/markup'} ];
             arr['markup_editor']             = [ {  url: 'fragments/markup_editor.jade'} ];
             arr['section_editor']            = [ {  url: 'fragments/section_editor.jade'} ];
-            
-            arr['markup_push']               = [{  url: 'fragments/markup_push.jade'} ];
-            
+            arr['markup_push']               = [ {  url: 'fragments/markup_push.jade'} ];
             arr['author_card']               = [ {  url: 'fragments/author_card'} ]; 
             arr['branding']                  = [ {  url: 'fragments/branding.jade'} ];
             arr['before_doc']                = [ {  url: 'fragments/before_doc.jade'} ];
-
             arr['doc_title']                 = [ {  url: 'fragments/doc_title.jade'} ];
-            arr['doc_options']               = [{url: 'fragments/doc_options.jade'} ];
-
-            //arr['ad_welcome']              = [ {  url: 'fragments/ad_welcome.jade'} ];
+            arr['doc_options']               = [ {  url: 'fragments/doc_options.jade'} ];
             arr['comment_form']              = [ {  url: 'fragments/comment_form.jade'} ];
-            //arr['doc_real']                = [ {  url: 'fragments/doc_real.jade'} ];
             arr['child_markup']              = [ {  url: 'fragments/child_markup.jade'} ];
+
+            //arr['doc_real']                = [ {  url: 'fragments/doc_real.jade'} ];
+            //arr['ad_welcome']              = [ {  url: 'fragments/ad_welcome.jade'} ];
+
+
         return arr;
       },
       classesAvailable:function (){

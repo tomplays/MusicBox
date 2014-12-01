@@ -1,0 +1,320 @@
+{
+  "doc": {
+    "_id": "54361c364afa12ba65363340",
+    "username": "Tom Wersinger",
+    "user": {
+      "_id": "54361b66d988d35e61ac0adf",
+      "provider": "local",
+      "username": "Tom Wersinger",
+      "__v": 0,
+      "rooms": [],
+      "user_options": [
+        {
+          "option_name": "color",
+          "option_value": "rgb(159, 171, 59)",
+          "option_type": ""
+        }
+      ],
+      "trust": "registered",
+      "is_editor": false,
+      "is_admin": false,
+      "newsletter": false
+    },
+    "title": "homepage",
+    "slug": "homepage",
+    "__v": 2240,
+    "room": {
+      "_id": "543be2b1f270f2b72646bb60",
+      "owner": "54361b66d988d35e61ac0adf",
+      "owner_email": "homeof@gmail.com",
+      "name": "hacktuel",
+      "slug": "hacktuel",
+      "__v": 0,
+      "room_options": [
+        {
+          "option_name": "branding_image_url",
+          "option_value": "logo.jpg",
+          "option_type": "branding"
+        }
+      ],
+      "status": "open",
+      "is_public": true
+    },
+    "clones": [],
+    "childs": [],
+    "editors": [],
+    "lang_versions": [],
+    "lang": "en",
+    "thumbnail": "http://hacktuel.fr/img/logos/loguy/hacktuel.png",
+    "secret": "54361c364afa12ba6536333f",
+    "published": "public",
+    "doc_options": [
+      {
+        "_id": "547afae20e69306e116d8fbd",
+        "created": "2014-11-30T11:09:22.180Z",
+        "updated": "2014-11-30T11:09:22.180Z",
+        "option_name": "text_typography",
+        "option_value": "Open Sans",
+        "option_type": "google_typo",
+        "option_object": ""
+      },
+      {
+        "_id": "547afae20e69306e116d8fbe",
+        "created": "2014-11-30T11:09:22.180Z",
+        "updated": "2014-11-30T11:09:22.180Z",
+        "option_name": "headings_typography",
+        "option_value": "Open Sans",
+        "option_type": "google_typo",
+        "option_object": ""
+      },
+      {
+        "_id": "547afae20e69306e116d8fbf",
+        "created": "2014-11-30T11:09:22.180Z",
+        "updated": "2014-11-30T11:09:22.180Z",
+        "option_name": "doc_notices_after_title",
+        "option_value": "",
+        "option_type": "",
+        "option_object": ""
+      },
+      {
+        "_id": "547afae20e69306e116d8fc0",
+        "created": "2014-11-30T11:09:22.180Z",
+        "updated": "2014-11-30T11:09:22.180Z",
+        "option_name": "doc_notices_before_title",
+        "option_value": "A bientôt",
+        "option_type": "",
+        "option_object": ""
+      },
+      {
+        "_id": "547afae20e69306e116d8fc1",
+        "created": "2014-11-30T11:09:22.180Z",
+        "updated": "2014-11-30T11:09:22.180Z",
+        "option_name": "block_color",
+        "option_value": "#000",
+        "option_type": "",
+        "option_object": ""
+      },
+      {
+        "_id": "547afae20e69306e116d8fc2",
+        "created": "2014-11-30T11:09:22.180Z",
+        "updated": "2014-11-30T11:09:22.180Z",
+        "option_name": "title_color",
+        "option_value": "#fff",
+        "option_type": "",
+        "option_object": ""
+      },
+      {
+        "_id": "547afae20e69306e116d8fc3",
+        "created": "2014-11-30T11:09:22.180Z",
+        "updated": "2014-11-30T11:09:22.180Z",
+        "option_name": "branding_class",
+        "option_value": "sa bg_transparent",
+        "option_type": "",
+        "option_object": ""
+      },
+      {
+        "_id": "547afae20e69306e116d8fc4",
+        "created": "2014-11-30T11:09:22.181Z",
+        "updated": "2014-11-30T11:09:22.181Z",
+        "option_name": "footer_center_html",
+        "option_value": "<a href='http://hacktuel.fr'>2014 - @Hacktuel.fr</a>",
+        "option_type": "",
+        "option_object": ""
+      }
+    ],
+    "markups": [
+      {
+        "user_id": {
+          "_id": "54361b66d988d35e61ac0adf",
+          "provider": "local",
+          "username": "Tom Wersinger",
+          "__v": 0,
+          "rooms": [],
+          "user_options": [
+            {
+              "option_name": "color",
+              "option_value": "rgb(159, 171, 59)",
+              "option_type": ""
+            }
+          ],
+          "trust": "registered",
+          "is_editor": false,
+          "is_admin": false,
+          "newsletter": false
+        },
+        "_id": "54361c364afa12ba65363341",
+        "doc_id": null,
+        "markup_options": [],
+        "depth": 1,
+        "position": "inline",
+        "status": "",
+        "subtype": "section",
+        "type": "container",
+        "metadata": "",
+        "end": 2,
+        "start": 0,
+        "username": "Tom Wersinger",
+        "updated": "2014-10-09T05:25:10.212Z",
+        "created": "2014-10-09T05:25:10.212Z"
+      },
+      {
+        "user_id": {
+          "_id": "5469169d524c56545ea6843a",
+          "provider": "local",
+          "username": "amz3",
+          "__v": 0,
+          "rooms": [],
+          "user_options": [
+            {
+              "option_name": "color",
+              "option_value": "rgb(57, 108, 212)",
+              "option_type": ""
+            }
+          ],
+          "trust": "registered",
+          "is_editor": false,
+          "is_admin": false,
+          "newsletter": false
+        },
+        "_id": "546916b1524c56545ea68448",
+        "markup_options": [],
+        "depth": 1,
+        "position": "left",
+        "status": "pending",
+        "subtype": "comment",
+        "type": "comment",
+        "metadata": "yes it looks like it works",
+        "end": 0,
+        "start": 0,
+        "username": "amz3",
+        "updated": "2014-11-16T21:27:13.125Z",
+        "created": "2014-11-16T21:27:13.125Z"
+      },
+      {
+        "user_id": {
+          "_id": "5469eae2524c56545ea685e6",
+          "provider": "local",
+          "username": "kali",
+          "__v": 0,
+          "rooms": [],
+          "user_options": [
+            {
+              "option_name": "color",
+              "option_value": "rgb(37, 120, 205)",
+              "option_type": ""
+            }
+          ],
+          "trust": "registered",
+          "is_editor": false,
+          "is_admin": false,
+          "newsletter": false
+        },
+        "_id": "5469eb01524c56545ea685f5",
+        "doc_id": null,
+        "markup_options": [],
+        "depth": 1,
+        "position": "left",
+        "status": "pending",
+        "subtype": "comment",
+        "type": "comment",
+        "metadata": "test",
+        "end": 2,
+        "start": 2,
+        "username": "kali",
+        "updated": "2014-11-17T12:33:05.889Z",
+        "created": "2014-11-17T12:33:05.889Z"
+      },
+      {
+        "user_id": {
+          "_id": "54361b66d988d35e61ac0adf",
+          "provider": "local",
+          "username": "Tom Wersinger",
+          "__v": 0,
+          "rooms": [],
+          "user_options": [
+            {
+              "option_name": "color",
+              "option_value": "rgb(159, 171, 59)",
+              "option_type": ""
+            }
+          ],
+          "trust": "registered",
+          "is_editor": false,
+          "is_admin": false,
+          "newsletter": false
+        },
+        "_id": "546c49a7524c56545ea6890f",
+        "doc_id": null,
+        "markup_options": [],
+        "depth": 1,
+        "position": "left",
+        "status": "pending",
+        "subtype": "comment",
+        "type": "comment",
+        "metadata": "mais oui :-)",
+        "end": 1,
+        "start": 1,
+        "username": "Tom Wersinger",
+        "updated": "2014-11-19T07:41:27.539Z",
+        "created": "2014-11-19T07:41:27.539Z"
+      },
+      {
+        "user_id": {
+          "_id": "5476d430f222612629f3b281",
+          "provider": "local",
+          "username": "Victor",
+          "__v": 0,
+          "rooms": [],
+          "user_options": [
+            {
+              "option_name": "color",
+              "option_value": "rgb(50, 215, 204)",
+              "option_type": ""
+            }
+          ],
+          "trust": "registered",
+          "is_editor": false,
+          "is_admin": false,
+          "newsletter": false
+        },
+        "_id": "5476d463f222612629f3b2a6",
+        "markup_options": [],
+        "depth": 1,
+        "position": "left",
+        "status": "pending",
+        "subtype": "comment",
+        "type": "comment",
+        "metadata": "J'ai super hâte moi !",
+        "end": 0,
+        "start": 0,
+        "username": "Victor",
+        "updated": "2014-11-27T07:36:03.402Z",
+        "created": "2014-11-27T07:36:03.402Z"
+      }
+    ],
+    "excerpt": "A bientôt.",
+    "content": "/-)",
+    "updated": "2014-10-09T05:25:10.208Z",
+    "created": "2014-10-09T05:25:10.208Z"
+  },
+  "userin": {
+    "_id": "54361b66d988d35e61ac0adf",
+    "provider": "local",
+    "username": "Tom Wersinger",
+    "email": "homeof@gmail.com",
+    "__v": 0,
+    "rooms": [],
+    "user_options": [
+      {
+        "option_name": "color",
+        "option_value": "rgb(159, 171, 59)",
+        "option_type": ""
+      }
+    ],
+    "trust": "registered",
+    "is_editor": false,
+    "is_admin": false,
+    "newsletter": false
+  },
+  "is_owner": true
+}
