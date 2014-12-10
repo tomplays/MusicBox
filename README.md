@@ -12,7 +12,7 @@ MusicBox
 
 ` cd MusicBox`
 
-` (sudo) npm install`
+` sudo npm install`
 
 ` bower install` 
 
