@@ -67,13 +67,13 @@ var app = angular.module('musicBox', []);
  */
 
 
-function DocumentCtrlRo($scope, $http , $sce, $location, $routeParams, renderfactory,socket,docfactory, $anchorScroll) {
+function DocumentCtrlRo($scope, $http , $sce, $location, $routeParams ,socket,renderfactory, DocumentService, $anchorScroll) {
 	console.log('DocumentCtrlRo')
 }
 
 
 
-function DocumentCtrl($scope, $http , $sce, $location, $routeParams, renderfactory,socket,docfactory, $anchorScroll) {
+function DocumentCtrl($scope, $http , $sce, $location, $routeParams ,socket,renderfactory, DocumentService, $anchorScroll) {
 		
 	
 	/**
@@ -81,14 +81,13 @@ function DocumentCtrl($scope, $http , $sce, $location, $routeParams, renderfacto
     * @function DocumentCtrl#init
 	*/
 	$scope.init = function (){
-
+	
 		console.log('DocumentCtrl')
-		render        	= renderfactory()
-		doc           	= docfactory()
-		$scope.render 	= render.init()
-		
+	//	render        	= Renderfactory()
+		doc           	= new DocumentService();
 		// call doc api with complete init.
-		doc.load(true)
+	
+		doc.Load()
 		return
 	}
 	
