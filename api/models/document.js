@@ -89,6 +89,20 @@ var MarkupSchema = new Schema({
     markup_options: [meta_options]
 });
 
+/*
+MarkupSchema.virtual('metadata')
+  .set(function() {
+    this.padsss= 'password';
+    this.salt = 'this.makeSalt()';
+    this.hashed_password = 'this.encryptPassword(password)';
+  })
+  .get(function() { return this.salt; });
+
+*/
+
+
+
+//MarkupSchema.set('toJSON', { virtuals: true });
 var DocumentSchema = new Schema({
     created: {
         type: Date,

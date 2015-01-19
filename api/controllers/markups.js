@@ -39,7 +39,7 @@ exports.markup_edit = function(req, res) {
 	var exit_user = false;
 	var out ={};
 	var m_body = req.body; 
-	//console.log(req.body)
+	console.log(req.body)
 
 	if(req.user){
 		var req_user_id = req.user.toObject()._id;
@@ -61,11 +61,41 @@ exports.markup_edit = function(req, res) {
 					console.log(req_user_id +' vs: '+ doc.user._id)
 					console.log(m.user_id.toObject()._id)
 					// doc owner or markup owner
+
+
+					console.log(req.body)
 					
 
 					if(req_user_id.equals(doc.user._id)  || req_user_id.equals(m.user_id._id) ){
+						console.log("m.status")
 
-						//	console.log(m)
+
+						// APPROVE / LOGIC HERE
+
+
+
+						console.log(m.status)
+						console.log(m_body.status)
+
+//if()
+//m.status 	= 'moderated'
+m.status 	= m_body.status
+
+
+// case own
+if(req_user_id.equals(m.user_id._id) ){
+
+m.status 	= m_body.status
+
+}
+
+
+if(req_user_id.equals(doc.user._id)){
+
+m.status 	= m_body.status
+
+}
+
 						
 					 	m.start 	= m_body.start
 					 	m.end 		= m_body.end
@@ -73,7 +103,7 @@ exports.markup_edit = function(req, res) {
 					 	m.subtype 	= m_body.subtype
 					 	m.position	= m_body.position
 						m.metadata 	= m_body.metadata
-						m.status 	= m_body.status
+						
 						m.depth     = m_body.depth
 
 						if(m_body.doc_id){
@@ -111,8 +141,7 @@ exports.markup_edit = function(req, res) {
 						 // arrays updated  
 						 edited.push(m)
 						 doc.markups[i] = m
-						
-								console.log('C0')
+						console.log('C0')
 
 					}
 					else{

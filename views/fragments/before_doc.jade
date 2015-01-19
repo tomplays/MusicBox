@@ -1,3 +1,7 @@
+div(ng-if="doc_options['chapters-menu'].value == 'true'", class="chapters")
+	a(href="" title="section {{$index+1}}", ng-click="scrollToAnchor($index+1)", ng-repeat="section in containers")
+		span {{$index+1}} 
+		// {{section.metadata}}
 
 
 i.fa.fa-cog.inactive.quick_tool_opener(class="inside visible_{{ui.menus.quick_tools.open}}", ng-click="expand_tools('quick_tools')" , ng-dblclick="expand_tools('quick_tools')" )

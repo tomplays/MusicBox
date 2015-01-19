@@ -4,7 +4,7 @@
 
 
 
-angular.module('musicBox',  ['musicBox.controller','ngLocale', 'ngResource', 'ngRoute','musicBox.services', 'musicBox.directives', 'ngSanitize']).
+angular.module('musicBox',  ['ui.bootstrap','musicBox.controller','ngLocale', 'ngResource', 'ngRoute','musicBox.services',  'musicBox.directives', 'ngSanitize']).
   config(['$localeProvider','$routeProvider', '$locationProvider','$sceDelegateProvider', '$sceProvider', function($localeProvider,$routeProvider, $locationProvider, $sceDelegateProvider,$sceProvider ) {
     $routeProvider.
  	   when('/', {
@@ -27,10 +27,15 @@ angular.module('musicBox',  ['musicBox.controller','ngLocale', 'ngResource', 'ng
         templateUrl: '/../partials/document',
         controller: DocumentCtrl
       }).
+      when('/readonly/:docid', {
+        templateUrl: '/../partials/document_ro',
+        controller: DocumentCtrlRo
+      }).
        when('/sockets/list', {
         templateUrl: '/partials/sockets_list',
         controller: SocketsListCtrl
       }).
+      
       when('/sockets/list/doc/:slug', {
         templateUrl: '/partials/sockets_list',
         controller: SocketsListCtrl

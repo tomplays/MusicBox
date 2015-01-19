@@ -10,8 +10,6 @@ div.section_displayer( ng-if="section.type=='container' && ui.renderAvailable_ac
 	div.section_editor(ng-if="section.selected == true ")
 		
 		.object-tools
-			i.fa.fa-save.btn_action(ng-click="markup_save(section)")
-			i.fa.fa-remove.btn_action(ng-click="markup_delete(section)")
 			i.fa.fa-sliders.btn_action(ng-click="object_tools(section)")
 		
 		.section_tool_more(ng-if="section.object_tools")
@@ -41,3 +39,7 @@ div.section_displayer( ng-if="section.type=='container' && ui.renderAvailable_ac
 		// input(ng-model="section.status" ,type="text")
 		// label depth
 		// input(ng-model="section.depth" type="text" )
+
+		.object-tools
+			i.fa.fa-save.btn_action(ng-click="markup_save(section)")
+			i.fa.fa-remove.btn_action(ng-click="markup_delete(section)")

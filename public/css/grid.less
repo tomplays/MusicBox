@@ -365,7 +365,7 @@ section{
       .layout_name_wide img, 
       .layout_name_left img, 
        .layout_name_right img, 
-      .layout_name_center img, 
+    /*  .layout_name_center img, */
       .layout_name_under img,
         .layout_name_global img {
           max-width: 100%;
@@ -377,6 +377,11 @@ section{
           }
       } 
     
+
+
+    video{
+       width:100%;
+    }
   
       .layout_name_inline{
          left: @left-margin;
@@ -486,7 +491,7 @@ section{
     margin: 0 2%;
     padding: 0 @left-margin;
     text-align: center;
-    width:@inline-width;
+    width: 98%;;
 
 }
 
@@ -801,6 +806,10 @@ body.render_active_editor .markup_displayer_generic.markup_displayer_subtype_not
 */
 
 
+body.render_active_editor .layout_name_inline{
+  border:1px solid #ccc;
+}
+
 .markup_displayer .data_col{
     float: left;
     margin-left: 4px;
@@ -835,7 +844,7 @@ body.render_active_editor .markup_displayer_generic.markup_displayer_subtype_not
 .markup_displayer {
 
  .object-tools{
-           background: none repeat scroll 0 0 rgba(236, 240, 241, 0.8);
+           background: none repeat scroll 0 0 rgba(255, 255, 255, 0.8);
     border-radius: 4px;
     float: left;
     margin-bottom: 10px;
@@ -1199,8 +1208,33 @@ background-image: url("/img/test-a.png");
 /* ______♫ ______________________________ */
 
 
+/* chapters module */
 
+.chapters{
+    
+    height: 29px;
+    left: 20%;
+    padding-bottom: 9px;
+    padding-top: 9px;
+    position: fixed;
+    text-align: right;
+    top: 0;
+    z-index:999999;
+    width: 60%;
 
+  a span{
+    background: none repeat scroll 0 0 rgb(218, 218, 218);
+    border-radius: 22px;
+    color: rgb(255, 255, 255);
+    margin-right: 1%;
+    padding: 0.5% 1%;
+    text-align: center;
+    &:hover{
+      color:#000;
+    }
+  }
+
+}
 
 .quick_tool_opener {
     background:#292929;

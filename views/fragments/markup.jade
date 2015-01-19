@@ -2,6 +2,7 @@ div(ng-controller="FragmentCtrl", class="markup_box markup_box_depth_{{markup.de
 	
 	// p {{markup.start}} - {{markup.end}} - {{markup.metadata}} - {{markup.type}} - {{markup.subtype}}
 	// p {{markup.selected}}
+	// p {{markup.mutable}}
 	
 
 	div(class="iframe_container iframe_{{markup.subtype}}", fluid, position="{{markup.position}}", subtype="{{markup.subtype}}", url="{{markup.metadata}}",  ng-if="markup.type=='media' && markup.subtype !=='img'")

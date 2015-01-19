@@ -49,9 +49,9 @@ var render;
 var doc;
 
 var app = angular.module('musicBox', []);
+
 // musicBox.controller('DocumentCtrl', DocumentCtrl);
 // musicBox.controller('DocumentNewCtrl', DocumentNewCtrl);
-
 
 //console.log(musicBox)
 
@@ -67,7 +67,13 @@ var app = angular.module('musicBox', []);
  */
 
 
-function DocumentCtrl($scope, $http , $sce, $location, $routeParams, renderfactory,socket,docfactory) {
+function DocumentCtrlRo($scope, $http , $sce, $location, $routeParams, renderfactory,socket,docfactory, $anchorScroll) {
+	console.log('DocumentCtrlRo')
+}
+
+
+
+function DocumentCtrl($scope, $http , $sce, $location, $routeParams, renderfactory,socket,docfactory, $anchorScroll) {
 		
 	
 	/**
@@ -78,7 +84,7 @@ function DocumentCtrl($scope, $http , $sce, $location, $routeParams, renderfacto
 
 		console.log('DocumentCtrl')
 		render        	= renderfactory()
-		doc           	=  docfactory()
+		doc           	= docfactory()
 		$scope.render 	= render.init()
 		
 		// call doc api with complete init.
@@ -269,7 +275,17 @@ function DocumentCtrl($scope, $http , $sce, $location, $routeParams, renderfacto
 		$scope.push.position = position
 		$scope.push_markup();
 	}
-	
+	$scope.markup_moderate = function (markup, status){
+		console.log('approving..')
+		console.log(markup)
+		markup.status =status;
+		//markup.start = (markup.start)+1
+		doc.markup_save(markup)
+
+
+
+
+	}
 	/**
 	* delete a markup on click
 	* @function DocumentCtrl#delete_markup
@@ -306,7 +322,28 @@ function DocumentCtrl($scope, $http , $sce, $location, $routeParams, renderfacto
 		doc.markup_save(markup)
 	}
 	
+	$scope.scrollToAnchor= function(anchorID){
+		// from : https://docs.angularjs.org/api/ng/service/$anchorScroll
+		  var newHash = 'anchor' + anchorID;
+    	  if ($location.hash() !== newHash) {
+        // set the $location.hash to `newHash` and
+        // $anchorScroll will automatically scroll to it
+        $location.hash('anchor' + anchorID);
+      } else {
+        // call $anchorScroll() explicitly,
+        // since $location.hash hasn't changed
+        $anchorScroll();
+      }
+	}      
+
 	// open "sub-tools" tabs editor for markup or section 
+
+	$scope.markup_editor_tabs= function (tab, markup){
+
+		markup.editor_tab  = tab;
+	}
+
+
 	$scope.object_tools = function (object){
 
 		if(object.object_tools && object.object_tools === true){
@@ -443,7 +480,7 @@ function DocumentCtrl($scope, $http , $sce, $location, $routeParams, renderfacto
         		$scope.upload_file_image.basename = m[0].basename
 				$scope.upload_file_image.path = m[0].path
 				$scope.upload_file_image.type = m[0].type
-				$scope.upload_file_image.fullpath = root_url+'/uploads/'+m[0].path+m[0].basename
+				$scope.upload_file_image.fullpath = root_url+':'+PORT+'/uploads/'+m[0].path+m[0].basename
 				//$scope.push.metadata = $scope.upload_file_image.fullpath
 				$scope.markup.metadata        = $scope.upload_file_image.fullpath
 			}).error(function(err){

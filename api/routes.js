@@ -58,6 +58,13 @@ module.exports = function(app, passport, auth) {
 
     // views & partials
   	app.get('/doc/:slug',                   docs.index_doc);
+
+
+    // lite mode
+    app.get('/readonly/:slug',               docs.index_doc);
+
+
+
     app.get('/partials/:name/:param?',      index.partial); // document, lists, etc..
     app.get('/fragments/:name/:param?',     index.fragments); // load sub-blocks 
     app.get('/doc/fragments/:name/:param?', index.fragments); // load sub-blocks ? express/angualar..?
@@ -118,6 +125,9 @@ module.exports = function(app, passport, auth) {
      
   	// first boot
   	app.get('/init', docs.init );
+
+
+
 
 
 };

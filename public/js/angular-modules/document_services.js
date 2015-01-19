@@ -416,7 +416,9 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
       */
 
       wrap_markup: function(markup, container, index, temp_letters ){
+
         if(!$rootScope.objSchema[markup.type]){
+          console.log(markup.type)
           console.log('no schematype for markup!')
           return false;
         }
@@ -796,6 +798,9 @@ musicBox.factory('docfactory', function ($rootScope, $http, $location,$sce, $rou
             options_array[op_name]['value'] = option.option_value
             options_array[op_name]['_id']   = option._id
             options_array[op_name]['type']  = option.option_type
+
+
+           
 
             if( option.option_value && option.option_type == 'google_typo' && object == 'document'){
                WebFont.load({

@@ -23,13 +23,23 @@ $provide.value("$locale", {
 		"label" : "Add a comment",
 		"verb" : "comment",
 		"needs_logging": "Please login first",
-		"logged_in_as" : "Logged in as"
+		"logged_in_as" : "Logged in as",
+		"edit": "Edit comment",
+		"select_action": "Select le comment"
+
+
 
 	},
 	"DOCUMENT" : {
 		"by_author" : "by",
 		"default_title" :"Your Title",
 		"default_content" :"Your text-content"
+
+	},
+	"ACTIONS" : {
+		"save" : "save",
+		"edit" :"edit",
+		"delete" :"delete"
 
 	},
 	"OBJECTS" : {

@@ -9,15 +9,20 @@
 // loop each layout
 // loop each objects 
 
+// div.ghost-border
+	h3 {{ui.lite.state}}
+
 div.flash_message(ng-if="flash_message.text !==''", class="{{flash_message.classname}}")
 	span {{flash_message.text}}
 
 div(ng-include="fragments['branding'][0]['url']")
 div(ng-include="fragments['before_doc'][0].url" )
+// h3 mode du document:{{ui.renderAvailable_active}} 
 div(ng-if="ui.renderAvailable_active == 'doc_options'", ng-include="fragments['doc_options'][0].url")
 
+
 div(ng-hide="ui.renderAvailable_active == 'doc_options'" , class="sections_count_{{sectionstocount}} sections_container")
-	section(ng-repeat='section in containers' ,  style="{{section.section_styles}} background-repeat:no-repeat;", class="focus_ focus_{{ui.focus_side}} {{section.section_classes}} selected_{{section.selected}}")
+	section(id="anchor{{$index+1}}" , ng-repeat='section in containers' ,  style="{{section.section_styles}} background-repeat:no-repeat;", class="focus_ focus_{{ui.focus_side}} {{section.section_classes}} selected_{{section.selected}}")
 		div(ng-if=" section['objects_count']['by_positions'][layout.name].count > 0 || layout.include_even_empty", ng-repeat='layout in available_layouts')
 			
 			div(class="layout_ layout_name_{{layout.name}} has_count_{{section.objects_count.by_positions[layout.name].count}} has_object_{{section.objects_count.by_positions[layout.name].has_object}}")
@@ -34,20 +39,29 @@ div(ng-hide="ui.renderAvailable_active == 'doc_options'" , class="sections_count
 
 					div(class="markup_ markup_type_bg", ng-if="ui.renderAvailable_active == 'editor'" , ng-repeat="markup in section.objects['media']['background']", ng-include="fragments['markup'][0].url")
 
-				div(ng-if="layout.include_objects !==false" , ng-repeat='object in available_sections_objects')
+				div(ng-if="layout.include_objects !==false && layout.name !=='slidewide' " , ng-repeat='object in available_sections_objects')
 
-					div(class="markup_ markup_type_{{markup.type}}" ng-repeat="markup in section.objects[object][layout.name]", ng-include="fragments['markup'][0].url")
+					div( class="markup_ markup_type_{{markup.type}}" ng-repeat="markup in section.objects[object][layout.name]", ng-include="fragments['markup'][0].url")
 
 				div(ng-if="(doc_options.comments_open.value !=='false' || !doc_options.comments_open.value  ) && layout.name == 'left'")
 
-					span.open_comment(ng-click="open_comment_push(section)") +
+					span.open_comment(tooltip-placement="right" tooltip="{{i18n.CUSTOM.COMMENT.label}}" ng-click="open_comment_push(section)") +
 					div.comment_form(ng-if="ui.menus.push_comment.open == section.sectionin ",  ng-include="fragments['comment_form'][0].url")
+
+
+				// div(ng-if="layout.name == 'slidewide'")
+					carousel( interval="1000")
+						slide(ng-repeat="markup in section.objects['media']['slidewide']" active="markup.active" )
+							p
+								img(src="{{markup.metadata}}")
 
 				div(ng-if="layout.name == 'inline'")
 					// debug
 					// h1 {{section.modeletters}}
 					// letters part !!
-					
+					div.inline_tools(ng-if="section.modeletters=='single'")
+						// h4 {{section.start}} - {{section.end}} - {{section.metadata}} - {{section.type}} - {{section.subtype}}
+
 					div.theletters(ng-if="section.modeletters=='single'")
 						// span.lt(class="{{l.classes_flat}}", ng-bind-html="l.char", lt="l" , ng-repeat="l in section.letters")
 						span.lt(ng-class="l.classes", class="in_range_{{l.inrange}}", ng-bind-html="l.char", lt="l" , ng-repeat="l in section.letters track by $index")
@@ -77,4 +91,4 @@ div(ng-hide="ui.renderAvailable_active == 'doc_options'" , class="sections_count
 			// p(ng-bind-html="doc_options.footer_center_html.value +'&nbsp;'", class="editing_{{ui.editing_footer_center_html}}" , ng-dblclick="edit_doc_option('footer_center_html')") {{}} &nbsp;
 			// input(ng-if="ui.editing_footer_center_html",   ng-model="doc_options.footer_center_html.value", name="doc_options.footer_center_html.value")
 
-		
+

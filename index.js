@@ -71,7 +71,13 @@ var app = express();
 
 app.configure(function(){
   app.set('port',nconf.get('PORT') );
-  app.set('views', __dirname + '/views');
+ 
+ 
+ app.set('views', __dirname + '/views');
+ // alter mode app.set('views', __dirname + '/templates');
+ 
+
+
   app.set('view engine', 'jade');
   app.set('view options', {
     layout: true,

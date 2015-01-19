@@ -9,7 +9,16 @@ $provide.value("$locale", {
 		"label" : "Ajouter un commentaire",
 		"verb" : "commenter",
 		"needs_logging": "Vous devez être connecté pour ajouter un commentaire",
-		"logged_in_as" : "Vous êtes connecté en tant que"
+		"logged_in_as" : "Vous êtes connecté en tant que",
+		"edit": "Modifier le commentaire",
+		"select_action": "Selectionner le commentaire"
+
+
+	},
+	"ACTIONS" : {
+		"save" : "sauvegarder",
+		"edit" :"editer",
+		"delete" :"supprimer"
 
 	},
 	"DOCUMENT" : {
