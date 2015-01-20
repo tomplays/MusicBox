@@ -854,6 +854,7 @@ angular.module('musicBox.controller', []).controller('FragmentCtrl', function($s
             $scope.markup.position = newValue;
             	// no toggle $scope.ui.focus_side = ''
               if(autosave){
+              	alert('dq')
               	doc.markup_save($scope.markup)
               }  
             //  alert('s')
@@ -895,14 +896,17 @@ angular.module('musicBox.controller', []).controller('FragmentCtrl', function($s
 
 
 var newdoc_service;
-function DocumentNewCtrl($scope, $compile, $http , $sce, $location, $routeParams, renderfactory,socket,docfactory, $timeout) {
+function DocumentNewCtrl($scope, $compile, $http , $sce, $location, $routeParams, renderfactory,socket,DocumentService, $timeout) {
 
 
 	$scope.init_new_doc = function (){
 		console.log('DocumentNewCtrl')
 		$http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded"
-		newdoc_service =  docfactory()
-		newdoc_service.init_new()
+		
+		newdoc_service =  new DocumentService().init_new()
+		//newdoc_service
+		
+
 		document.title = 'Create a new document'	
 	}
 	
@@ -918,7 +922,7 @@ function DocumentNewCtrl($scope, $compile, $http , $sce, $location, $routeParams
 		console.log($scope.serialization)
 		thiselem.remove()
 		*/
-		newdoc_service.newdoc();
+		newdoc_service =  new DocumentService().newdoc();
 	}
 	
 	$scope.init_new_doc();

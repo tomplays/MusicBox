@@ -207,7 +207,88 @@ angular.module('musicBox.DocumentService', [])
         }.bind(this));
      }
 
-      /**
+     
+
+     /**
+      * @description 
+      * Save a markup (attributes)
+      *
+      * @param {object} markup - markup to save
+      * @return {Function} init and/or flash
+      * 
+      * @function docfactory#markup_save
+      * @link docfactory#markup_save
+      * @todo ---
+      */
+      DocumentService.prototype.markup_save= function (markup) {
+
+        var thos = this;
+       
+      
+        var promise = new Object();
+        var data = new Object({
+            'metadata':markup.metadata,
+            'start':markup.start,
+            'end':markup.end,
+            'depth':markup.depth,
+            'status':markup.status,
+            'type':markup.type,
+            'subtype':markup.subtype
+          });
+          if(markup.doc_id_id){
+            data.doc_id= markup.doc_id_id
+          }
+          // can be null.
+          data.secret = $rootScope.ui.secret;
+
+
+          // check-force data
+          if(markup.type == 'markup' ||markup.type == 'container' ){
+             data.position = 'inline'
+          }
+          else{
+            position = markup.position
+          }
+
+
+
+
+          promise.data = serialize(data);
+         
+          promise.query = DocumentRest.markup_save({id:this.slug, mid:markup._id }, promise.data).$promise;
+           promise.query.then(function (Result) {
+             var edited  = Result.edited[0][0]
+             this.flash_message(edited.type +' saved', 'ok' , 3000)
+
+
+             var tt  = new MusicBoxLoop().init(Result,true); // ShOUld ONLY THE SECTION IN REFRESH..
+              
+
+             }.bind(this));
+            promise.query.catch(function (response) {  
+           console.log(response)   
+           this.flash_message(response.err.err_code, 'bad' , 3000)
+        }.bind(this));
+
+
+
+/*
+          $http.post(api_url+'/doc/'+$rootScope.doc.slug+'/markup/'+markup._id+'/edit',  serialize(data) ).success(function(m) {
+            console.log(m)
+            if(m.err_code || m.err){
+               thos.flash_message(m.err.err_code, 'bad' , 3000)
+            }
+            else{
+               
+                thos.flash_message('markup saved', 'ok' , 2000)
+                markup = temp
+
+            }
+          })
+        */
+
+      }
+       /**
       * @description Push a markup
       * @param {object} markup - markup to push
       * @return {function} flash_message() - message 
@@ -216,9 +297,6 @@ angular.module('musicBox.DocumentService', [])
       * @link docfactory#push_markup
       * @todo --
       */
-
-    
-
       DocumentService.prototype.markup_push = function (markup) {
 
         //$rootScope.push = this.Markup_pre();
@@ -226,6 +304,10 @@ angular.module('musicBox.DocumentService', [])
         var data = new Object(markup);
         data.username = $rootScope.userin.username;
         data.user_id = $rootScope.userin._id;
+
+
+
+
         promise.data = serialize(data);
        
         // this.Markup_pre();
