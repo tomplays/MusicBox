@@ -317,6 +317,8 @@ function DocumentCtrl($scope, $http , $sce, $location, $routeParams ,socket,rend
 
 	// section && markup
 	$scope.markup_save = function (markup){
+
+		alert('hgh')
 		$scope.ui.focus_side = ''
 		doc.markup_save(markup)
 	}
