@@ -1,16 +1,18 @@
 div.user_not_in(ng-if="userin.username == '' ")
 	p 
-		a(ng-click="external_link(root_url+':'+port+'/login')" , ng-if="userin.username == '' ") {{i18n.CUSTOM.COMMENT.needs_logging}}
+		a(ng-click="external_link(root_url+':'+port+'/login')" , ng-if="userin.username == '' ") {{render_config.i18n.CUSTOM.COMMENT.needs_logging}}
 	p
-		a.loginOrSignup(ng-click="external_link(root_url+'/login?redirect_url=#{root_url}:#{port}/doc/'+doc.slug)" , ng-if="userin.username == '' ") {{i18n.CUSTOM.USER.loginOrSignup}}
+		a.loginOrSignup(ng-click="external_link(root_url+'/login?redirect_url=#{root_url}:#{port}/doc/'+doc.slug)" , ng-if="userin.username == '' ") {{render_config.i18n.CUSTOM.USER.loginOrSignup}}
 
 div.user_in(ng-if="userin.username")
 
-	label {{i18n.CUSTOM.COMMENT.label}}
-	textarea(ng-model="push.metadata", type="text", value="{{i18n.CUSTOM.COMMENT.textarea}}") 
+	label {{render_config.i18n.CUSTOM.COMMENT.label}}
+
+	textarea(ng-model="push.metadata", type="text", value="{{render_config.i18n.CUSTOM.COMMENT.textarea}}") 
+	
 	p.logged_in_as 
-		{{i18n.CUSTOM.COMMENT.logged_in_as}} 
+		{{render_config.i18n.CUSTOM.COMMENT.logged_in_as}} 
 		em 
 			a(href="/me/account") {{userin.username}}
 	p
-		a.btn_ok.float_right(ng-click="push_comment(section)") {{i18n.CUSTOM.COMMENT.verb}}
+		a.btn_ok.float_right(ng-click="push_comment(section)") {{render_config.i18n.CUSTOM.COMMENT.verb}}

@@ -33,13 +33,14 @@ angular.module('musicBox.DocumentService', [])
     else{
        this.slug      = slug;
     }
+    this.render = renderfactory().init()
     console.log(this)
 
 
     
   };
   DocumentService.prototype.RenderConfig = function () {
-      renderfactory().init()
+      
   }
 
 
@@ -68,6 +69,7 @@ angular.module('musicBox.DocumentService', [])
                 data.markups.push(a_mk)
         });
         //console.log(serialize(data))
+
         $http.post(api_url+'/doc/'+$rootScope.doc.slug+'/sync', serialize(data) ).
            success(function(doc) {
               // reinit array of offsets markups ! 
@@ -421,15 +423,14 @@ angular.module('musicBox.DocumentService', [])
       */
 
       DocumentService.prototype.markup_delete =  function (markup){
-        
-
+      
         var promise = DocumentRest.markup_delete( {id:this.slug, mid:markup._id }).$promise;
         promise.then(function (Result) {
           var tt  = new MusicBoxLoop().init(Result,true);
           this.flash_message('markup deleted', 'ok' , 2000)
         }.bind(this));
         promise.catch(function (response) {  
-           this.flash_message(response.err.err_code, 'bad' , 3000)
+           this.flash_message(response.err, 'bad' , 3000)
         }.bind(this));
      }
 
@@ -473,7 +474,7 @@ angular.module('musicBox.DocumentService', [])
              data.position = 'inline'
           }
           else{
-            position = markup.position
+            data.position = markup.position
           }
 
 
@@ -530,10 +531,6 @@ angular.module('musicBox.DocumentService', [])
         var data = new Object(markup);
         data.username = $rootScope.userin.username;
         data.user_id = $rootScope.userin._id;
-
-
-
-
         promise.data = serialize(data);
        
         // this.Markup_pre();
@@ -541,7 +538,9 @@ angular.module('musicBox.DocumentService', [])
         promise.query = DocumentRest.markup_push( {Id:this.slug},promise.data).$promise;
         promise.query.then(function (Result) {
              var tt  = new MusicBoxLoop().init(Result,true);
-             this.flash_message('ok', 'ok' , 3000)
+             
+             console.log(Result.inserted[0].type)
+             this.flash_message(Result.inserted[0].type +' inserted', 'ok' , 3000)
                // socket.emit('news', {doc_id: $rootScope.doc.slug, action: 'push_markup' , type: 'push', object:d.inserted });
                // socket.emit('news', {doc_id: $rootScope.doc.slug, action: 'push_markup' , type: 'push', object:d.inserted });
                //$rootScope.$emit('docEvent', {action: 'doc_ready', type: 'push', collection_type: 'markup', collection:d.inserted[0] });

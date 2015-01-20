@@ -7,7 +7,7 @@ div.main_center.login_form.bordered
 		form(name="myForm" , novalidate class="css-form  ")
 			p {{myForm.errors}}
 			h3 
-				{{i18n.CUSTOM.USER.login}}
+				{{render_config.i18n.CUSTOM.USER.login}}
 			label Username
 			input(required  type="text",  ng-model= "username",  name="username")
 			label Password
@@ -15,7 +15,7 @@ div.main_center.login_form.bordered
 			a.btn_ok.float_right(ng-if="myForm.$valid == true" , ng-click="checklogin()") ok
 			//input(type="submit", value="Submit")
 	div.right_part
-		h3 {{i18n.CUSTOM.USER.no_account_yet}}
-		a(href="{{register_url}}") {{i18n.CUSTOM.USER.register}}
+		h3 {{render_config.i18n.CUSTOM.USER.no_account_yet}}
+		a(href="{{register_url}}") {{render_config.i18n.CUSTOM.USER.register}}
 		// ou avec facebook
 

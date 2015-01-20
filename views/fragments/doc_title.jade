@@ -46,7 +46,7 @@ div.doc_header
 	time(ng-if="doc_options.display_date.value =='doc_header' || !doc_options.display_date.value", ng-bind-html="doc.formated_date")
 	div.head_left(ng-if="doc_options.display_author.value =='doc_header' || !doc_options.display_author.value ")
 		div.post-author-info
-			p {{i18n.CUSTOM.DOCUMENT.by_author}} 
+			p {{render_config.i18n.CUSTOM.DOCUMENT.by_author}} 
 				span(style="color:{{doc.user.color}};", class="post-author-name", rel="author") {{doc.user.username}} 
 
 	div.sharer(ng-if="doc_options.display_sharer.value =='doc_header' || !doc_options.display_sharer.value ")

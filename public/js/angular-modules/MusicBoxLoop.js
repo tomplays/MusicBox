@@ -1,23 +1,16 @@
 
-/* 
-main "service / angular factory"
+/*
 
-handle POST/GET calls to api (rest) for document, doc_options, markups .. crud / backend methods
-can be called from contollers (init on load, save / edits from UI )
-can emit events, flash_messages and websockets.
-can redirect window
-
-
- Contains "MusicBox algorithm" (sorting, distribution, letters system)
+  "MusicBox algorithm" (sorting, distribution, letters system)
 */
 
 
  /**
- * Factory / services for document model
+ * Factory / services for MusicBox Render 
  * 
- * @class docfactory
- * @param {Factory} docfactory -  angular custom factory for document 
- * @inject $rootScope, $http, $location,$sce, $routeParams, socket, renderfactory, $locale, $timeout
+ * @class MusicBoxLoop
+ * @param {Factory} MusicBoxLoop -  
+ * @inject $rootScope, $http, $location,$sce, $routeParams, socket, renderfactory, $locale, $timeout, renderfactory
  */
 
 var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','ngLocale', 'ngResource', 'ngRoute','musicBox.services', 'musicBox.directives', 'ngSanitize', 'musicBox.DocumentRest', 'musicBox.MusicBoxLoop'])
@@ -26,7 +19,7 @@ var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','n
     var self = {
      
     
-/**
+      /**
       * set doc object after an api call (first load or "redraw-callback" )
       * if "next" params, redraw containers, else, only reset doc "base"
       * @return 
@@ -52,7 +45,8 @@ var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','n
 
             
               temp_scope.doc.formated_date =  moment(d.doc.updated).calendar() +', '+moment(d.doc.updated).fromNow(); 
-              console.log(  $rootScope.i18n.id )
+              
+              // 
               // http://stackoverflow.com/questions/17493309/how-do-i-change-the-language-of-moment-js
               //$rootScope.doc.formated_date = d.doc.updated
                // console.log($rootScope.doc.user)
@@ -94,14 +88,13 @@ var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','n
                 if(next == true){
                    self.init_containers()
                 }
-               
-
-
-               
-
                 return
                 // equivalent : 
                 // $rootScope.$emit('docEvent', {action: 'doc_ready', type: 'load', collection_type: 'doc', collection:doc});
+      },
+      init_soft: function (d, next) {
+
+
       },
 
 
@@ -110,12 +103,20 @@ var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','n
       * @function docfactory#init_containers
       */
 
-      init_containers: function () {
-        $rootScope.sectionstocount = 0;
+      resort_markups : function () {
         $rootScope.doc.markups  = _.sortBy($rootScope.doc.markups,function (num) {
           return num.start;
         });
+
+      },
+
+      init_containers: function () {
+        $rootScope.sectionstocount = 0;
+
+        self.resort_markups()
         
+
+        /*
         $rootScope.virtuals= new Array();
         var virtual_summary = new Object({'slug': 'summary', 'header': 'Text summary', 'auto': {'bytype': 'h1-h6'} , 'implicit': {'bytype': 'summary'} } )
         var virtual_data_x = new Object({'slug': 'data_x', 'header': 'data serie (x)', 'explicit': {'bysubtype': 'x'} } )
@@ -127,7 +128,7 @@ var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','n
         $rootScope.virtuals.push(virtual_data_x)
         $rootScope.virtuals.push(virtual_data_y)
         $rootScope.virtuals.push(virtual_data)
-
+        */
       
 
         // var virtual_containers = new Object({'slug': 'sections', 'header': 'containers ', 'auto': {'bytype': 'h1-h6'} , 'implicit': {'bytype': 'container'} } )
@@ -738,10 +739,10 @@ var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','n
       */
 
       flatten_classes: function (n) {
-      //console.log(n);
-      var out = '';
-      _.each(n, function(c, i){out +=  n[i]+' ';});
-        return out;
+        //console.log(n);
+        var out = '';
+        _.each(n, function(c, i){out +=  n[i]+' ';});
+          return out;
       }, 
 
 

@@ -1,7 +1,7 @@
 // editor for markup object.
 // can be in any position of the layout depending markup position
 
-h5 Edit {{markup.type}}
+h5 {{render_config.i18n.CUSTOM.ACTIONS.edit}} {{markup.type}}
 	form(name="myForm")		
 		
 		tabset.editor-main-tab
@@ -140,8 +140,8 @@ h5 Edit {{markup.type}}
 		
 	.object-tools
 
-			i.fa.fa-save.btn_action(tooltip-placement="right" tooltip="{{i18n.CUSTOM.ACTIONS.save}}" ng-click="markup_save(markup)")
+			i.fa.fa-save.btn_action(tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.save}}" ng-click="markup_save(markup)")
 
 			i.fa.fa-check-circle.btn_action(tooltip-placement="left" tooltip="moderate" ng-click="markup_moderate (markup, 'approve')") {{markup.status}}
 
-			i.fa.fa-remove.btn_action(tooltip-placement="left" tooltip="{{i18n.CUSTOM.ACTIONS.delete}}" ng-click="markup_delete(markup)")
+			i.fa.fa-remove.btn_action(tooltip-placement="left" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.delete}}" ng-click="markup_delete(markup)")

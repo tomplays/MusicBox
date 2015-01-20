@@ -5,7 +5,7 @@
 
 div.doc_editor()
 	
-	h4 Document options
+	h4 {{render_config.i18n.CUSTOM.DOCUMENT.document_options}}
 
 	.edit_field_left
 		.edit_field.excerpt_field
@@ -54,5 +54,5 @@ div.doc_editor()
 			i.fa.fa-plus(ng-click='doc_options_new()') new option
 
 		
-	p(ng-if="ui.renderAvailable_active !=='read'")
-						a(ng-click="toggle_render('read')") &laquo; back to document
+		p(ng-if="ui.renderAvailable_active !=='read'")
+			span(ng-click="toggle_render('read')") {{render_config.i18n.CUSTOM.ACTIONS.back_to_document}}

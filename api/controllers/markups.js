@@ -290,6 +290,10 @@ return json ( doc, owner, deleted)
 exports.markup_delete = function(req, res) {
 	//console.log(req.params.doc_id_or_title)
 	var deleted= new Array();
+
+	var has_error = false;
+
+
 	var query = Document.findOne({ 'slug':req.params.slug });
 	
     // complete query 
@@ -298,7 +302,25 @@ exports.markup_delete = function(req, res) {
 	  if(err) {
 	  	res.send(err)
 	  }
+	  
+	  
+	  
+	  
 	  else{
+
+		
+
+		if(req.user.id == doc.user._id){
+			console.log('match')
+		}
+		var is_owner 		=  documents.test_owner_or_key(doc,req)	
+
+		
+			//has_error = true;
+			
+				
+		//}
+
 	  	if(req.params.markup_id && req.params.markup_id == 'all'){
 			var deleted = doc.markups
 			doc.markups = []
@@ -322,23 +344,37 @@ exports.markup_delete = function(req, res) {
 	
 		}
 
-		doc.save(function(err,doc) {
-			if (err) {
-			  res.send(err)
-			} 
-	        else {
 
-	        	var out = {}
-	        	out.doc 			= doc.toObject()
-				if(req.user){
-					out.userin 		= req.user.toObject()
+		if(is_owner){
+			console.log('is owner or has key')
+			doc.save(function(err,doc) {
+				if (err) {
+				  res.send(err)
+				} 
+		        else {
+
+		        	var out = {}
+		        	out.doc 			= doc.toObject()
+					if(req.user){
+						out.userin 		= req.user.toObject()
+					}
+					out.is_owner 		=  documents.test_owner_or_key(doc,req)	
+					out.doc.secret 		= 'api_secret'
+					out.deleted         =  new Array(deleted);
+
+					res.json(out)
 				}
-				out.is_owner 		=  documents.test_owner_or_key(doc,req)	
-				out.doc.secret 		= 'api_secret'
-				out.deleted         =  new Array(deleted);
-				res.json(out)
-			}
-		});
+			});
+		}
+		else{
+			console.log('is wonnnner')
+			var out = {}
+			out.err = 'is not auhtorized'
+			res.json(out)
+		}
+		
+		
+		
 
 	  }
 	});

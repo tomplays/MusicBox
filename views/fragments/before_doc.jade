@@ -1,5 +1,5 @@
-div(ng-if="doc_options['chapters-menu'].value == 'true'", class="chapters")
-	a(href="" title="section {{$index+1}}", ng-click="scrollToAnchor($index+1)", ng-repeat="section in containers")
+div(ng-if="doc_options['chapters-menu'].value == 'true' && ui.renderAvailable_active == 'read'", class="chapters")
+	a(href="" title="sroll to section # {{$index+1}}", ng-click="scrollToAnchor($index+1)", ng-repeat="section in containers")
 		span {{$index+1}} 
 		// {{section.metadata}}
 
@@ -10,24 +10,24 @@ div.quick_tools(class="visible_{{ui.menus.quick_tools.open}}")
 	div.inside 
 		div.user_in(ng-if="userin.username !== '' ")
 				div.user_box
-					p {{i18n.CUSTOM.COMMENT.logged_in_as}} 
+					p {{render_config.i18n.CUSTOM.COMMENT.logged_in_as}} 
 						em 
 							a(href="/me/account") {{userin.username}}
 					p
-							
+					p()  
+						a(href="#{root_url}:#{port}/doc/aide") besoin d'aide?!
 				div.action_box(ng-if="doc_owner == true  || ui.secret " )
 					
 					p(ng-if="ui.renderAvailable_active !=='read'")
 						a(ng-click="toggle_render('read')") Reading mode
 					p(ng-if="ui.renderAvailable_active !=='editor'")  
 						a(ng-click="toggle_render('editor')") Editor mode
-					p(ng-if="ui.renderAvailable_active !=='doc_options'")  Edit 
-						a(ng-click="toggle_render('doc_options')") Document options
+					p(ng-if="ui.renderAvailable_active !=='doc_options'")  {{render_config.i18n.CUSTOM.ACTIONS.edit}} 
+						a(ng-click="toggle_render('doc_options')") {{render_config.i18n.CUSTOM.DOCUMENT.document_options}}
 
 					p()  
 						a(href="#{root_url}:#{port}/doc/{{doc.slug}}?secret={{doc.secret}}") Share secret key
-					p()  
-						a(href="#{root_url}:#{port}/doc/aide") besoin d'aide?!
+					
 
 
 		div.user_not_in(ng-if="userin.username == '' ")

@@ -4,8 +4,25 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
     return function (inf) {
      var self = {
        init: function () {
+
+
+         $rootScope.render_config = new Object()
+         $rootScope.render_config.loading = new Object()
+         $rootScope.render_config.loading.inited = true;
+        
+         $rootScope.render_config.i18n =  $locale;
+
+
+
         // inject locale service. defined in public/js/angualr-modules/i18n/angular_lang-lang.js
+        
+
+        // DEPREC. use :  $rootScope.render_config.i18n instead
         $rootScope.i18n                       = $locale;
+        console.log($rootScope.i18n.id)
+       
+
+
         //$rootScope.$emit('renderEvent', { action:'render_ready' });
         self.config                           = [];
         self.state                            = [];
@@ -24,7 +41,8 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
         $rootScope.item_position              = '';
 
 
-        $rootScope.fragments                  =   self.fragmentsAvailable();
+        $rootScope.fragments                 =   self.fragmentsAvailable();
+       
         // $rootScope.classesofsections       =   self.classesAvailable();
 
         // ui set up.
@@ -109,6 +127,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
 
           console.log('render service on init_first')
           //console.log(self)
+          return  $rootScope.render_config
         
         },
 
@@ -134,7 +153,7 @@ objSchema:function (){
             
             arr.comment = new Object({
               'name': 'comment',
-              'display_name': $rootScope.i18n.CUSTOM.OBJECTS.comment,
+              'display_name': $rootScope.render_config.i18n.CUSTOM.OBJECTS.comment,
               'type':obj_base.type,
               'map_range': true,
               'only':'',
@@ -158,7 +177,7 @@ objSchema:function (){
             });
             arr.note = new Object({
               'name': 'note',
-              'display_name': $rootScope.i18n.CUSTOM.OBJECTS.note,
+              'display_name': $rootScope.render_config.i18n.CUSTOM.OBJECTS.note,
               'type':obj_base.type ,
               'map_range': true,
               'only':'',
@@ -187,7 +206,7 @@ objSchema:function (){
             });
              arr.semantic= new Object({
               'name': 'semantic',
-              'display_name': $rootScope.i18n.CUSTOM.OBJECTS.semantic,
+              'display_name': $rootScope.render_config.i18n.CUSTOM.OBJECTS.semantic,
               'type':obj_base.type,
               'map_range': true,
               'only':'',
@@ -217,7 +236,7 @@ objSchema:function (){
 
             arr.generic = new Object({
               'name': 'generic',
-              'display_name': $rootScope.i18n.CUSTOM.OBJECTS.generic,
+              'display_name': $rootScope.render_config.i18n.CUSTOM.OBJECTS.generic,
               'type':obj_base.type,
               'map_range': true,
               'only':'',
@@ -280,7 +299,7 @@ objSchema:function (){
 
            arr.container= new Object({
             'name': 'container',
-              'display_name': $rootScope.i18n.CUSTOM.OBJECTS.container,
+              'display_name': $rootScope.render_config.i18n.CUSTOM.OBJECTS.container,
               'type':obj_base.type ,
               'only':'',
               'metadata': { 
@@ -309,7 +328,7 @@ objSchema:function (){
 
             arr.container_class = new Object({
               'name': 'container_class',
-              'display_name': $rootScope.i18n.CUSTOM.OBJECTS.container_class,
+              'display_name': $rootScope.render_config.i18n.CUSTOM.OBJECTS.container_class,
               'type':obj_base.type ,
               'only':'',
               'metadata': { 
@@ -340,7 +359,7 @@ objSchema:function (){
 
             arr.child = new Object({
               'name': 'child',
-              'display_name': $rootScope.i18n.CUSTOM.OBJECTS.child,
+              'display_name': $rootScope.render_config.i18n.CUSTOM.OBJECTS.child,
               'type':obj_base.type,
               'only':'',
               'metadata': { 
@@ -370,7 +389,7 @@ objSchema:function (){
 
             arr.media = new Object({
               'name': 'media',
-              'display_name': $rootScope.i18n.CUSTOM.OBJECTS.media,
+              'display_name': $rootScope.render_config.i18n.CUSTOM.OBJECTS.media,
               'type':obj_base.type ,
               'only':'',
               'metadata': { 
@@ -401,7 +420,7 @@ objSchema:function (){
             
             arr.markup = new Object({
               'name': 'markup',
-              'display_name': $rootScope.i18n.CUSTOM.OBJECTS.markup,
+              'display_name': $rootScope.render_config.i18n.CUSTOM.OBJECTS.markup,
               'type':obj_base.type ,
               'map_range': true,
               'only':'',
@@ -433,7 +452,7 @@ objSchema:function (){
             });
             arr.hyperlink = new Object({
               'name': 'hyperlink',
-              'display_name': $rootScope.i18n.CUSTOM.OBJECTS.hyperlink,
+              'display_name': $rootScope.render_config.i18n.CUSTOM.OBJECTS.hyperlink,
               'type':obj_base.type ,
               'map_range': true,
               'only':'',
@@ -483,7 +502,7 @@ objSchema:function (){
             
             arr.comment = new Object({
               'name': 'comment',
-              'display_name': $rootScope.i18n.CUSTOM.OBJECTS.comment,
+              'display_name': $rootScope.render_config.i18n.CUSTOM.OBJECTS.comment,
               'type':obj_base.type,
               'map_range': true,
               'only':'',
@@ -528,7 +547,7 @@ objSchema:function (){
             });
             arr.note = new Object({
               'name': 'note',
-              'display_name': $rootScope.i18n.CUSTOM.OBJECTS.note,
+              'display_name': $rootScope.render_config.i18n.CUSTOM.OBJECTS.note,
               'type':obj_base.type ,
               'map_range': true,
               'only':'',
@@ -574,7 +593,7 @@ objSchema:function (){
             });
              arr.semantic= new Object({
               'name': 'semantic',
-              'display_name': $rootScope.i18n.CUSTOM.OBJECTS.semantic,
+              'display_name': $rootScope.render_config.i18n.CUSTOM.OBJECTS.semantic,
               'type':obj_base.type,
               'map_range': true,
               'only':'',
@@ -621,7 +640,7 @@ objSchema:function (){
 
             arr.generic = new Object({
               'name': 'generic',
-              'display_name': $rootScope.i18n.CUSTOM.OBJECTS.generic,
+              'display_name': $rootScope.render_config.i18n.CUSTOM.OBJECTS.generic,
               'type':obj_base.type,
               'map_range': true,
               'only':'',
@@ -718,7 +737,7 @@ objSchema:function (){
 
            arr.container= new Object({
             'name': 'container',
-              'display_name': $rootScope.i18n.CUSTOM.OBJECTS.container,
+              'display_name': $rootScope.render_config.i18n.CUSTOM.OBJECTS.container,
               'type':obj_base.type ,
               'only':'',
               'lite':true,
@@ -764,7 +783,7 @@ objSchema:function (){
 
             arr.container_class = new Object({
               'name': 'container_class',
-              'display_name': $rootScope.i18n.CUSTOM.OBJECTS.container_class,
+              'display_name': $rootScope.render_config.i18n.CUSTOM.OBJECTS.container_class,
               'type':obj_base.type ,
               'only':'',
                'lite':false,
@@ -812,7 +831,7 @@ objSchema:function (){
 
             arr.child = new Object({
               'name': 'child',
-              'display_name': $rootScope.i18n.CUSTOM.OBJECTS.child,
+              'display_name': $rootScope.render_config.i18n.CUSTOM.OBJECTS.child,
               'type':obj_base.type,
               'only':'',
                'lite':false,
@@ -859,7 +878,7 @@ objSchema:function (){
 
             arr.media = new Object({
               'name': 'media',
-              'display_name': $rootScope.i18n.CUSTOM.OBJECTS.media,
+              'display_name': $rootScope.render_config.i18n.CUSTOM.OBJECTS.media,
               'type':obj_base.type ,
               'only':'',
               'lite':true,
@@ -907,7 +926,7 @@ objSchema:function (){
             
             arr.markup = new Object({
               'name': 'markup',
-              'display_name': $rootScope.i18n.CUSTOM.OBJECTS.markup,
+              'display_name': $rootScope.render_config.i18n.CUSTOM.OBJECTS.markup,
               'type':obj_base.type ,
               'map_range': true,
               'only':'',
@@ -968,7 +987,7 @@ objSchema:function (){
 
             arr.hyperlink = new Object({
               'name': 'hyperlink',
-              'display_name': $rootScope.i18n.CUSTOM.OBJECTS.hyperlink,
+              'display_name': $rootScope.render_config.i18n.CUSTOM.OBJECTS.hyperlink,
               'type':obj_base.type ,
               'map_range': true,
               'only':'',
@@ -1078,6 +1097,8 @@ objSchema:function (){
             arr['doc_options']               = [ {  url: 'fragments/doc_options.jade'} ];
             arr['comment_form']              = [ {  url: 'fragments/comment_form.jade'} ];
             arr['child_markup']              = [ {  url: 'fragments/child_markup.jade'} ];
+            arr['dataset']                   = [ {  url: 'fragments/dataset.jade'} ];
+            arr['post_excerpt']                   = [ {  url: 'fragments/post_excerpt.jade'} ];
 
             //arr['doc_real']                = [ {  url: 'fragments/doc_real.jade'} ];
             //arr['ad_welcome']              = [ {  url: 'fragments/ad_welcome.jade'} ];

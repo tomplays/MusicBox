@@ -18,16 +18,19 @@ $provide.value("$locale", {
 	"ACTIONS" : {
 		"save" : "sauvegarder",
 		"edit" :"editer",
-		"delete" :"supprimer"
+		"delete" :"supprimer",
+		"back_to_document" :"Retour au mode de lecture"
+
 
 	},
 	"DOCUMENT" : {
 		"by_author" : "par",
 		"default_title" :"Votre titre",
 		"default_content" :"Votre contenu texte",
-	
+	 	"document_options":"Options du document",
 		"instructions" :"Choisissez un titre",
 		"default_published." :"Choisissez un status"
+
 
 
 

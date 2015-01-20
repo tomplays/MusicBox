@@ -176,7 +176,7 @@ function DocumentCtrl($scope, $http , $sce, $location, $routeParams ,socket,rend
 		
 		// sure to set up
 		if(!$scope.push.start)		{	$scope.push.start 		= 0 }
-		if(!$scope.push.end)		{	$scope.push.end 		= 0 }
+		if(!$scope.push.end)		{	$scope.push.end 		= 1 }
 		if(!$scope.push.position)	{	$scope.push.position 	= 'left'	}
 		if(!$scope.push.type)		{	$scope.push.type 		= 'comment' }
 		if(!$scope.push.subtype)	{	$scope.push.subtype 	= 'comment'	}

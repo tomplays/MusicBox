@@ -19,9 +19,11 @@ div(ng-include="fragments['branding'][0]['url']")
 div(ng-include="fragments['before_doc'][0].url" )
 // h3 mode du document:{{ui.renderAvailable_active}} 
 div(ng-if="ui.renderAvailable_active == 'doc_options'", ng-include="fragments['doc_options'][0].url")
+div(ng-if="ui.renderAvailable_active == 'dataset'", ng-include="fragments['dataset'][0].url")
+div(ng-if="ui.renderAvailable_active == 'card'", ng-include="fragments['post_excerpt'][0].url")
 
 
-div(ng-hide="ui.renderAvailable_active == 'doc_options'" , class="sections_count_{{sectionstocount}} sections_container")
+div(ng-hide="ui.renderAvailable_active == 'doc_options' || ui.renderAvailable_active == 'card' || ui.renderAvailable_active == 'dataset' " , class="sections_count_{{sectionstocount}} sections_container")
 	section(id="anchor{{$index+1}}" , ng-repeat='section in containers' ,  style="{{section.section_styles}} background-repeat:no-repeat;", class="focus_ focus_{{ui.focus_side}} {{section.section_classes}} selected_{{section.selected}}")
 		div(ng-if=" section['objects_count']['by_positions'][layout.name].count > 0 || layout.include_even_empty", ng-repeat='layout in available_layouts')
 			
@@ -45,7 +47,7 @@ div(ng-hide="ui.renderAvailable_active == 'doc_options'" , class="sections_count
 
 				div(ng-if="(doc_options.comments_open.value !=='false' || !doc_options.comments_open.value  ) && layout.name == 'left'")
 
-					span.open_comment(tooltip-placement="right" tooltip="{{i18n.CUSTOM.COMMENT.label}}" ng-click="open_comment_push(section)") +
+					span.open_comment(tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.COMMENT.label}}" ng-click="open_comment_push(section)") +
 					div.comment_form(ng-if="ui.menus.push_comment.open == section.sectionin ",  ng-include="fragments['comment_form'][0].url")
 
 

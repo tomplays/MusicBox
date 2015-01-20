@@ -33,13 +33,18 @@ $provide.value("$locale", {
 	"DOCUMENT" : {
 		"by_author" : "by",
 		"default_title" :"Your Title",
-		"default_content" :"Your text-content"
+		"default_content" :"Your text-content",
+	 	"document_options":"Document options",
+		"instructions" :"Pick a title",
+		"default_published." :"pick publish status"
 
 	},
 	"ACTIONS" : {
 		"save" : "save",
 		"edit" :"edit",
-		"delete" :"delete"
+		"delete" :"delete",
+		"back_to_document" :"back to reading mode"
+
 
 	},
 	"OBJECTS" : {
