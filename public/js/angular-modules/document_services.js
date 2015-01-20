@@ -39,13 +39,103 @@ angular.module('musicBox.DocumentService', [])
     
   };
   DocumentService.prototype.RenderConfig = function () {
-    
       renderfactory().init()
-
-
   }
-  
 
+
+   /**
+      * @description 
+      * Save 'sync' a document by offsets.. 
+      *
+      *  --
+      *  @params collection_name (o{})
+      *  @return -
+      * 
+      * @function docfactory#docsync
+      * @link docfactory#docsync
+      * @todo documentation, rename to doc_sync
+      */
+  DocumentService.prototype.docsync = function(){
+        ///api/v1/doc/create
+        var data = new Object();
+        var thos = this;
+        //console.log($rootScope.ui.selected_range.markups_to_offset)
+        data.doc_content = $rootScope.doc.content;
+        data.markups = []
+        // prepare / clean 
+        _.each($rootScope.ui.selected_range.markups_to_offset, function(mk){
+                var a_mk = new Object({'id':mk._id, 'offset_start':mk.offset_start, 'offset_end':mk.offset_end})
+                data.markups.push(a_mk)
+        });
+        //console.log(serialize(data))
+        $http.post(api_url+'/doc/'+$rootScope.doc.slug+'/sync', serialize(data) ).
+           success(function(doc) {
+              // reinit array of offsets markups ! 
+              $rootScope.ui.selected_range.markups_to_offset = []
+              
+              console.log(doc)
+              // re-set doc "softest" way (#no date bug)
+              //  $rootScope.doc.content = doc.content;
+              //  $rootScope.doc.markups = doc.markups;
+              
+
+            thos.flash_message('document synched', 'ok' , 2000)
+            var tt  = new MusicBoxLoop().init(doc,true);
+              //$rootScope.$emit('docEvent', {action: 'doc_ready', type: '-', collection_type: 'doc', collection:doc });
+        });  
+      },
+
+      /**
+      * @description 
+      * save a document value-field.
+      *
+      *  --
+      *  @params collection_name (o{})
+      *  @return -
+      * 
+      * @function docfactory#save_doc
+      * @link docfactory#save_doc
+      * @todo rename to doc_save
+      */
+
+      DocumentService.prototype.save_doc = function (field) {
+        var thos = this;
+        var data = new Object()
+        data.field = field;     
+        
+        if(field == 'room_id'){
+         data.value =  $rootScope.doc.room__id;
+        }
+        else if(field== 'user_id'){
+          data.value =  $rootScope.doc.user._id;
+        }
+        else{
+          data.value =  $rootScope.doc[field]
+        }
+        
+        $http.post(api_url+'/doc/'+$rootScope.doc._id+'/edit', serialize(data) ).
+          success(function(doc) {
+            
+            // was  // re-set.
+            if(field == 'room_id'){
+              $rootScope.doc.room     = doc.doc.room;
+              $rootScope.doc.room__id = doc.doc.room;            
+            }
+
+            // hard redirect
+            if(field == 'title'){
+              window.location = root_url+':'+PORT+'/doc/'+doc.doc.slug;
+            }
+            else if(field == 'content'){
+              $rootScope.$emit('docEvent', {action: 'doc_ready', type: '-', collection_type: 'doc', collection:doc });
+            }
+            else{
+              console.log('emit?')
+            }
+            thos.flash_message('document saved', 'ok' , 2000)
+            var tt  = new MusicBoxLoop().init(doc,true);
+           });  
+     }
   /**
       * @description 
       * Setup a document
@@ -67,6 +157,142 @@ angular.module('musicBox.DocumentService', [])
         $rootScope.newdoc.published        =   'draft';
   };
 
+ /**
+      * @description 
+      * depre.  
+      *
+      *  --
+      *  @params collection_name (o{})
+      *  @return -
+      * 
+      * @function docfactory#--
+      * @link docfactory#--
+      * @todo ---
+      */
+
+     DocumentService.prototype.offset_markups = function (){
+          $http.get(api_url+'/doc/'+$rootScope.doc.slug+'/markups/offset/left/0/1/1').success(function(d) {
+            console.log(d)
+            //doc.init(d,true);
+            //$rootScope.$emit('docEvent', {action: 'doc_ready', type: 'offset', collection_type: 'markup', collection:d.markups });
+          })
+      }
+
+
+      /**
+      * @description 
+      * Offset a markup positions
+      *
+      *  --
+      * @param {object} markup - markup to offset
+      *  @return -
+      * 
+      * @function docfactory#--
+      * @link docfactory#--
+      * @todo rename/check use
+      */
+
+      DocumentService.prototype.offset_markup =  function (markup,start_qty, end_qty){
+
+          var data = {}
+          data.markup_id  = markup._id;
+          data.start_qty  = start_qty
+          data.end_qty    = end_qty
+        
+
+          $http.post(api_url+'/doc/'+$rootScope.doc.slug+'/markup/'+markup._id+'/offset', serialize(data) ).success(function(m) {
+            console.log(m)
+            $rootScope.doc = m;
+            $rootScope.$emit('docEvent', {action: 'doc_ready', type: 'offset', collection_type: 'markup', collection:m.markups });
+          })
+      }
+  /**
+      * @description 
+      * Save a doc_option 
+      *
+      *  --
+      *  @params collection_name (o{})
+      *  @return -
+      * 
+      * @function docfactory#save_doc_option
+      * @link docfactory#save_doc_option
+      */
+
+      DocumentService.prototype.doc_option_edit =  function (value, id) {
+          var thos = this;
+          if($rootScope.userin.username ==''){
+             return false
+          }
+
+          var data = new Object()
+          data._id = id;
+          //data.value =  $rootScope.doc[field]
+          data.value = value;
+         // $rootScope.doc_options[field].value = data.value
+          $http.post(api_url+'/doc/'+$rootScope.doc.slug+'/doc_option_edit', serialize(data) ).
+          success(function(doc) {
+                      // # todo reset doc event/ cb
+                     // hard redirect
+                     console.log(doc)
+                     thos.flash_message('option saved (->'+data.value+')', 'ok' , 3000)
+                     // reinit, no need to redraw containers
+                    var tt  = new MusicBoxLoop().init(doc,false);
+
+           
+           });  
+      }
+
+      /**
+      * @description 
+      * Delete an option of document 
+      *
+      *  --
+      *  @return -
+      * 
+      * @function docfactory#delete_doc_option
+      * @link docfactory#delete_doc_option
+      * @todo rename doc_option_delete / implement in api!
+      */
+
+      DocumentService.prototype.doc_option_delete = function (_id) {
+         var thos = this;
+        var data = new Object()
+         data._id= _id;
+         $http.post(api_url+'/doc/'+$rootScope.doc.slug+'/doc_option_delete', serialize(data) ).
+                success(function(doc) {
+                 thos.flash_message('document option deleted', 'ok' , 3000)
+                 var tt  = new MusicBoxLoop().init(doc,false);
+
+         });
+      }
+
+      /**
+      * @description 
+      * create a new option to document
+      *
+      *  --
+      *  @params collection_name (o{})
+      *  @return -
+      * 
+      * @function docfactory#create_doc_option
+      * @link docfactory#create_doc_option
+      * @todo rename to   doc_option_create
+      */
+
+      DocumentService.prototype.doc_option_new = function () {
+         // calling service
+        var thos = this;
+         var data = new Object()
+         data.option_name = $rootScope.ui.doc_option_new_name;
+         $http.post(api_url+'/doc/'+$rootScope.doc.slug+'/doc_option_new', serialize(data) ).
+                success(function(doc) {
+                  thos.flash_message('document option created', 'ok' , 3000)
+                
+                   var tt  = new MusicBoxLoop().init(doc,false);
+                  
+                        
+         }); 
+      }
       /**
       * @description 
       * new document 
