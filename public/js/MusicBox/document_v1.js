@@ -48,7 +48,7 @@ var GLOBALS;
 var render;
 var doc;
 
-var app = angular.module('musicBox', []);
+angular.module('musicBox', []);
 
 // musicBox.controller('DocumentCtrl', DocumentCtrl);
 // musicBox.controller('DocumentNewCtrl', DocumentNewCtrl);
@@ -83,10 +83,9 @@ function DocumentCtrl($scope, $http , $sce, $location, $routeParams ,socket,rend
 	$scope.init = function (){
 	
 		console.log('DocumentCtrl')
-	//	render        	= Renderfactory()
+		//	render        	= Renderfactory()
 		doc           	= new DocumentService();
 		// call doc api with complete init.
-	
 		doc.Load()
 		return
 	}

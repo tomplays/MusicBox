@@ -26,9 +26,10 @@ angular.module('musicBox.DocumentService', [])
 
   
   var DocumentService = function(slug) {
+    this.api_method = DocumentRest;
+
     if(!slug){
       this.slug      = this.SlugFromUrl();
-      
     }
     else{
        this.slug      = slug;
@@ -36,8 +37,6 @@ angular.module('musicBox.DocumentService', [])
     this.render = renderfactory().init()
     console.log(this)
 
-
-    
   };
   DocumentService.prototype.RenderConfig = function () {
       
@@ -68,23 +67,22 @@ angular.module('musicBox.DocumentService', [])
                 var a_mk = new Object({'id':mk._id, 'offset_start':mk.offset_start, 'offset_end':mk.offset_end})
                 data.markups.push(a_mk)
         });
-        //console.log(serialize(data))
-
-        $http.post(api_url+'/doc/'+$rootScope.doc.slug+'/sync', serialize(data) ).
-           success(function(doc) {
-              // reinit array of offsets markups ! 
+      
+        var promise = this.api_method.doc_sync({id:this.slug},serialize(data)).$promise;
+        promise.then(function (Result) {
+              // console.log(Result)
               $rootScope.ui.selected_range.markups_to_offset = []
-              
-              console.log(doc)
-              // re-set doc "softest" way (#no date bug)
-              //  $rootScope.doc.content = doc.content;
-              //  $rootScope.doc.markups = doc.markups;
-              
+              new MusicBoxLoop().init(Result,true);
+              thos.flash_message('doc sync', 'ok' , 2000)
+        }.bind(this));
+        promise.catch(function (response) { 
+                console.log(response)
+                thos.flash_message('doc sync error', 'bad' , 2000)
 
-            thos.flash_message('document synched', 'ok' , 2000)
-            var tt  = new MusicBoxLoop().init(doc,true);
-              //$rootScope.$emit('docEvent', {action: 'doc_ready', type: '-', collection_type: 'doc', collection:doc });
-        });  
+           //this.flash_message(response.err, 'bad' , 3000)
+        }.bind(this));
+
+
       },
 
       /**
@@ -108,35 +106,43 @@ angular.module('musicBox.DocumentService', [])
         if(field == 'room_id'){
          data.value =  $rootScope.doc.room__id;
         }
-        else if(field== 'user_id'){
+        else if(field == 'user_id'){
           data.value =  $rootScope.doc.user._id;
         }
         else{
           data.value =  $rootScope.doc[field]
         }
-        
-        $http.post(api_url+'/doc/'+$rootScope.doc._id+'/edit', serialize(data) ).
-          success(function(doc) {
-            
-            // was  // re-set.
+
+
+        var promise = this.api_method.doc_save({id:$rootScope.doc._id},serialize(data)).$promise;
+        promise.then(function (Result) {
+
             if(field == 'room_id'){
-              $rootScope.doc.room     = doc.doc.room;
-              $rootScope.doc.room__id = doc.doc.room;            
+              $rootScope.doc.room     = Result.doc.room;
+              $rootScope.doc.room__id = Result.doc.room; 
+              var tt  = new MusicBoxLoop().init(Result,true);           
             }
 
             // hard redirect
             if(field == 'title'){
-              window.location = root_url+':'+PORT+'/doc/'+doc.doc.slug;
+              window.location = root_url+':'+PORT+'/doc/'+Result.doc.slug;
             }
             else if(field == 'content'){
-              $rootScope.$emit('docEvent', {action: 'doc_ready', type: '-', collection_type: 'doc', collection:doc });
+              $rootScope.$emit('docEvent', {action: 'doc_ready', type: '-', collection_type: 'doc', collection:Result });
+              var tt  = new MusicBoxLoop().init(Result,true);
             }
             else{
               console.log('emit?')
+              var tt  = new MusicBoxLoop().init(Result,true);
             }
-            thos.flash_message('document saved', 'ok' , 2000)
-            var tt  = new MusicBoxLoop().init(doc,true);
-           });  
+           
+        }.bind(this));
+        promise.catch(function (response) { 
+            thos.flash_message('document edit error', 'bad' , 2000)    
+        }.bind(this));
+
+      
+     
      }
   /**
       * @description 
@@ -159,55 +165,7 @@ angular.module('musicBox.DocumentService', [])
         $rootScope.newdoc.published        =   'draft';
   };
 
- /**
-      * @description 
-      * depre.  
-      *
-      *  --
-      *  @params collection_name (o{})
-      *  @return -
-      * 
-      * @function docfactory#--
-      * @link docfactory#--
-      * @todo ---
-      */
 
-     DocumentService.prototype.offset_markups = function (){
-          $http.get(api_url+'/doc/'+$rootScope.doc.slug+'/markups/offset/left/0/1/1').success(function(d) {
-            console.log(d)
-            //doc.init(d,true);
-            //$rootScope.$emit('docEvent', {action: 'doc_ready', type: 'offset', collection_type: 'markup', collection:d.markups });
-          })
-      }
-
-
-      /**
-      * @description 
-      * Offset a markup positions
-      *
-      *  --
-      * @param {object} markup - markup to offset
-      *  @return -
-      * 
-      * @function docfactory#--
-      * @link docfactory#--
-      * @todo rename/check use
-      */
-
-      DocumentService.prototype.offset_markup =  function (markup,start_qty, end_qty){
-
-          var data = {}
-          data.markup_id  = markup._id;
-          data.start_qty  = start_qty
-          data.end_qty    = end_qty
-        
-
-          $http.post(api_url+'/doc/'+$rootScope.doc.slug+'/markup/'+markup._id+'/offset', serialize(data) ).success(function(m) {
-            console.log(m)
-            $rootScope.doc = m;
-            $rootScope.$emit('docEvent', {action: 'doc_ready', type: 'offset', collection_type: 'markup', collection:m.markups });
-          })
-      }
   /**
       * @description 
       * Save a doc_option 
@@ -221,27 +179,24 @@ angular.module('musicBox.DocumentService', [])
       */
 
       DocumentService.prototype.doc_option_edit =  function (value, id) {
-          var thos = this;
-          if($rootScope.userin.username ==''){
-             return false
-          }
+        var thos = this;
+        if($rootScope.userin.username ==''){
+           return false
+        }
+        var data = new Object({'_id':id,'value':value})
+      
+        var promise = this.api_method.doc_option_edit({id:this.slug},serialize(data)).$promise;
+        promise.then(function (Result) {
+              thos.flash_message('option saved (->'+data.value+')', 'ok' , 3000)
+              // reinit, no need to redraw containers
+              var tt  = new MusicBoxLoop().init(Result,false); 
+        }.bind(this));
+        promise.catch(function (response) { 
+          thos.flash_message('error', 'bad' , 3000)
+        }.bind(this));
 
-          var data = new Object()
-          data._id = id;
-          //data.value =  $rootScope.doc[field]
-          data.value = value;
-         // $rootScope.doc_options[field].value = data.value
-          $http.post(api_url+'/doc/'+$rootScope.doc.slug+'/doc_option_edit', serialize(data) ).
-          success(function(doc) {
-                      // # todo reset doc event/ cb
-                     // hard redirect
-                     console.log(doc)
-                     thos.flash_message('option saved (->'+data.value+')', 'ok' , 3000)
-                     // reinit, no need to redraw containers
-                    var tt  = new MusicBoxLoop().init(doc,false);
-
+ 
            
-           });  
       }
 
       /**
@@ -257,15 +212,19 @@ angular.module('musicBox.DocumentService', [])
       */
 
       DocumentService.prototype.doc_option_delete = function (_id) {
-         var thos = this;
-        var data = new Object()
-         data._id= _id;
-         $http.post(api_url+'/doc/'+$rootScope.doc.slug+'/doc_option_delete', serialize(data) ).
-                success(function(doc) {
-                 thos.flash_message('document option deleted', 'ok' , 3000)
-                 var tt  = new MusicBoxLoop().init(doc,false);
+        var thos = this;
+        var data = new Object({'_id':_id})
+   
+        var promise = this.api_method.doc_option_delete({id:this.slug},serialize(data)).$promise;
+        promise.then(function (Result) {
+              thos.flash_message('option deleted', 'ok' , 3000)
+              // reinit, no need to redraw containers
+              var tt  = new MusicBoxLoop().init(Result,false); 
+        }.bind(this));
+        promise.catch(function (response) { 
+          thos.flash_message('error', 'bad' , 3000)
+        }.bind(this));
 
-         });
       }
 
       /**
@@ -284,16 +243,18 @@ angular.module('musicBox.DocumentService', [])
       DocumentService.prototype.doc_option_new = function () {
          // calling service
         var thos = this;
-         var data = new Object()
-         data.option_name = $rootScope.ui.doc_option_new_name;
-         $http.post(api_url+'/doc/'+$rootScope.doc.slug+'/doc_option_new', serialize(data) ).
-                success(function(doc) {
-                  thos.flash_message('document option created', 'ok' , 3000)
-                
-                   var tt  = new MusicBoxLoop().init(doc,false);
-                  
-                        
-         }); 
+        var data = new Object({'option_name':$rootScope.ui.doc_option_new_name })
+    
+        var promise = this.api_method.doc_option_new({id:this.slug},serialize(data)).$promise;
+        promise.then(function (Result) {
+              thos.flash_message('document option created','ok', 3000)
+              var tt  = new MusicBoxLoop().init(Result,false);
+
+        }.bind(this));
+        promise.catch(function (response) { 
+          thos.flash_message('error', 'bad' , 3000)
+        }.bind(this));
+
       }
       /**
       * @description 
@@ -309,27 +270,21 @@ angular.module('musicBox.DocumentService', [])
       */
 
       DocumentService.prototype.newdoc = function(){
-          ///api/v1/doc/create  
-          var data = new Object();
-          data =  $rootScope.newdoc;
-          $http.post(api_url+'/doc/create', serialize(data) ).
-          success(function(cb) {
-            if(cb && !cb.err){
-                //self.flash_message('doc ready !', 'ok' , 2000)
-                $rootScope.newdoc.created_link = cb.slug;
-                $rootScope.newdoc.created_link_title = cb.title;
-                $rootScope.newdoc.created_secret = cb.secret;
-            }
-            else{
-                if(cb.code == 11000 ){
-                 //  self.flash_message('this sweet title is already taken, choose another please', 'bad' , 2000)
-                }
-                else{
-                 //   self.flash_message('error :'+cb.name, 'bad' , 2000)
-                }
-            }
-           }).error(function(err) {
-           }); 
+          
+        var data =  $rootScope.newdoc;
+        var promise = this.api_method.doc_new({},serialize(data)).$promise;
+        promise.then(function (Result) {
+                $rootScope.newdoc.created_link = Result.slug;
+                $rootScope.newdoc.created_link_title = Result.title;
+                $rootScope.newdoc.created_secret = Result.secret;
+        }.bind(this));
+        promise.catch(function (response) { 
+         
+        }.bind(this));
+
+
+
+
       };
 
 
@@ -343,7 +298,6 @@ angular.module('musicBox.DocumentService', [])
         }
         return docid;
   }
-
 
   DocumentService.prototype.Load = function () {
       
@@ -450,8 +404,6 @@ angular.module('musicBox.DocumentService', [])
       DocumentService.prototype.markup_save= function (markup) {
 
         var thos = this;
-       
-      
         var promise = new Object();
         var data = new Object({
             'metadata':markup.metadata,
@@ -463,11 +415,10 @@ angular.module('musicBox.DocumentService', [])
             'subtype':markup.subtype
           });
           if(markup.doc_id_id){
-            data.doc_id= markup.doc_id_id
+            data.doc_id = markup.doc_id_id
           }
           // can be null.
           data.secret = $rootScope.ui.secret;
-
 
           // check-force data
           if(markup.type == 'markup' ||markup.type == 'container' ){
@@ -477,42 +428,17 @@ angular.module('musicBox.DocumentService', [])
             data.position = markup.position
           }
 
-
-
-
-          promise.data = serialize(data);
-         
-          promise.query = DocumentRest.markup_save({id:this.slug, mid:markup._id }, promise.data).$promise;
-           promise.query.then(function (Result) {
-             var edited  = Result.edited[0][0]
-             this.flash_message(edited.type +' saved', 'ok' , 3000)
-
-
-             var tt  = new MusicBoxLoop().init(Result,true); // ShOUld ONLY THE SECTION IN REFRESH..
-              
-
-             }.bind(this));
-            promise.query.catch(function (response) {  
-           console.log(response)   
-           this.flash_message(response.err.err_code, 'bad' , 3000)
-        }.bind(this));
-
-
-
-/*
-          $http.post(api_url+'/doc/'+$rootScope.doc.slug+'/markup/'+markup._id+'/edit',  serialize(data) ).success(function(m) {
-            console.log(m)
-            if(m.err_code || m.err){
-               thos.flash_message(m.err.err_code, 'bad' , 3000)
-            }
-            else{
-               
-                thos.flash_message('markup saved', 'ok' , 2000)
-                markup = temp
-
-            }
-          })
-        */
+        
+          promise.query = DocumentRest.markup_save({id:this.slug, mid:markup._id }, serialize(data) ).$promise;
+          promise.query.then(function (Result) {
+            var edited  = Result.edited[0][0]
+            this.flash_message(edited.type +' saved', 'ok' , 3000)
+            var tt  = new MusicBoxLoop().init(Result,true); // ShOUld ONLY THE SECTION IN REFRESH..
+          }.bind(this));
+          promise.query.catch(function (response) {  
+            console.log(response)   
+            this.flash_message(response.err.err_code, 'bad' , 3000)
+          }.bind(this));
 
       }
        /**
@@ -551,8 +477,58 @@ angular.module('musicBox.DocumentService', [])
         }.bind(this));
 
       };
-  
 
+
+       /**
+      * @description 
+      * depre.  
+      *
+      *  --
+      *  @params collection_name (o{})
+      *  @return -
+      * 
+      * @function docfactory#--
+      * @link docfactory#--
+      * @todo ---
+      */
+
+     DocumentService.prototype.offset_markups = function (){
+          $http.get(api_url+'/doc/'+$rootScope.doc.slug+'/markups/offset/left/0/1/1').success(function(d) {
+            console.log(d)
+            //doc.init(d,true);
+            //$rootScope.$emit('docEvent', {action: 'doc_ready', type: 'offset', collection_type: 'markup', collection:d.markups });
+          })
+      }
+
+
+      /**
+      * @description 
+      * Offset a markup positions
+      *
+      *  --
+      * @param {object} markup - markup to offset
+      *  @return -
+      * 
+      * @function docfactory#--
+      * @link docfactory#--
+      * @todo rename/check use
+      */
+
+      DocumentService.prototype.offset_markup =  function (markup,start_qty, end_qty){
+
+          var data = {}
+          data.markup_id  = markup._id;
+          data.start_qty  = start_qty
+          data.end_qty    = end_qty
+        
+
+          $http.post(api_url+'/doc/'+$rootScope.doc.slug+'/markup/'+markup._id+'/offset', serialize(data) ).success(function(m) {
+            console.log(m)
+            $rootScope.doc = m;
+            $rootScope.$emit('docEvent', {action: 'doc_ready', type: 'offset', collection_type: 'markup', collection:m.markups });
+          })
+      }
+  
 
   return DocumentService;
 })
