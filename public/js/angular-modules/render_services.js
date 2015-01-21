@@ -1,18 +1,15 @@
 
 
-musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeParams, $locale) {
+musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $locale) {
     return function (inf) {
      var self = {
        init: function () {
-
 
          $rootScope.render_config = new Object()
          $rootScope.render_config.loading = new Object()
          $rootScope.render_config.loading.inited = true;
         
          $rootScope.render_config.i18n =  $locale;
-
-
 
         // inject locale service. defined in public/js/angualr-modules/i18n/angular_lang-lang.js
         
@@ -84,7 +81,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
         $rootScope.ui.lite                      = new Object();
         if($routeParams.lite){
           
-           $rootScope.ui.lite.state                = 'lite';
+           $rootScope.ui.lite.state             = 'lite';
            $rootScope.ui.lite.helpers           = true;
 
 
@@ -125,7 +122,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
         // init flash message object
         $rootScope.flash_message = {'text':''};
 
-          console.log('render service on init_first')
+        console.log('render service on init_first')
           //console.log(self)
           return  $rootScope.render_config
         
@@ -134,23 +131,17 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $location,$routeP
       // flat list.
       objAvailable:function (){
         var arr = Object.keys($rootScope.objSchema) 
-
-
         return arr ;
       },
       markupSchema:function (){
         // start end metavalue, .......
 
       },
-
-objSchema:function (){
+      objSchema:function (){
 
             var obj_base  = new Object({'type':'block', 'only':'metadata'});
-
-
             var arr = new Array();
-            
-            
+        
             arr.comment = new Object({
               'name': 'comment',
               'display_name': $rootScope.render_config.i18n.CUSTOM.OBJECTS.comment,

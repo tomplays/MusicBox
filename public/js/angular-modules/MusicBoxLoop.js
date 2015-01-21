@@ -14,7 +14,7 @@
  */
 
 var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','ngLocale', 'ngResource', 'ngRoute','musicBox.services', 'musicBox.directives', 'ngSanitize', 'musicBox.DocumentRest', 'musicBox.MusicBoxLoop'])
-.factory('MusicBoxLoop', function ($rootScope, $http, $location,$sce, $routeParams, socket, renderfactory, $locale, $timeout, renderfactory) {
+.factory('MusicBoxLoop', function ($rootScope, $http, $location,$sce, $routeParams, socket, $locale, $timeout) {
  return function (inf) {
     var self = {
      
@@ -403,7 +403,7 @@ var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','n
         /// keep open test :
         //console.log('keep open')
         markup.selected = false;
-        markup.editing  = '';
+        markup.editing  = false;
         markup.inrange  = true;
         markup.uptodate = '';
       

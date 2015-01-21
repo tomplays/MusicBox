@@ -9,26 +9,26 @@
         th type
         th subtype
         th metadata
-        th start
-        th end
+        th start-end
         th position
         th section index
+        th isolated.
         th sel.
         th ed.
         th status.
     tbody
-      tr(ng-repeat="a in doc.markups")
+      tr(ng-repeat="a in doc.markups" class="trtype-{{a.type}}")
         // , ng-if="a.type==filter_dataset_by || filter_dataset_by == 'any'"
         td(ng-controller="FragmentCtrl")
          a.markup-item-subtype( ng-click="toggle_select_markup(a,'click')", class="clipped_{{a.isselected}} markup-hn_{{a.subtype}}" ) + 
          i.icon-remove-sign.remove-markup( ng-click="markup_delete(a)") rm
         td {{a.type}}
         td {{a.subtype}}
-        td  - 
-        td {{a.start}}
-        td {{a.end}}
+        td {{a.metadata}}
+        td {{a.start}} - {{a.end}}
         td {{a.position}}
         td {{a.sectionin}}
+        td {{a.isolated}}
         td 
           span {{a.selected}}
         td
