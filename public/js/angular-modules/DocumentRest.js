@@ -4,7 +4,9 @@ angular.module('musicBox.DocumentRest', [])
 .factory("DocumentRest", function($resource, $rootScope){
 
   var parseResponse = function (data) {
-    return angular.fromJson(data);
+   
+    var data_ = angular.fromJson(data);
+    return data_
   };
 
   return $resource(
@@ -14,7 +16,7 @@ angular.module('musicBox.DocumentRest', [])
       get:{
         method:"GET",
         url: api_url+'/doc/:Id/',
-        transformResponse: parseResponse
+        //transformResponse: parseResponse
         //interceptor: { response: parseResponse }
         //isArray: false
       },
@@ -22,6 +24,7 @@ angular.module('musicBox.DocumentRest', [])
         method:"POST",
         isArray: false,
         url: api_url+'/doc/:Id/markup/push',
+         transformResponse: parseResponse
       },
       markup_delete:{
         method:"POST",

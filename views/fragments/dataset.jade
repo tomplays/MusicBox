@@ -6,6 +6,7 @@
     thead 
       tr
         th Select
+        th Actions
         th type
         th subtype
         th metadata
@@ -16,15 +17,24 @@
         th sel.
         th ed.
         th status.
+        
+        th moderation.
     tbody
       tr(ng-repeat="a in doc.markups" class="trtype-{{a.type}}")
         // , ng-if="a.type==filter_dataset_by || filter_dataset_by == 'any'"
         td(ng-controller="FragmentCtrl")
          a.markup-item-subtype( ng-click="toggle_select_markup(a,'click')", class="clipped_{{a.isselected}} markup-hn_{{a.subtype}}" ) + 
-         i.icon-remove-sign.remove-markup( ng-click="markup_delete(a)") rm
+         
+        td
+         i.fa.fa-save.btn_action(tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.save}}" ng-click="markup_save(a)")
+
+        
+
+         i.fa.fa-remove.btn_action(tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.delete}}" ng-click="markup_delete(a)")
         td {{a.type}}
         td {{a.subtype}}
-        td {{a.metadata}}
+        td 
+         input(ng-model="a.metadata" , type="text")
         td {{a.start}} - {{a.end}}
         td {{a.position}}
         td {{a.sectionin}}
@@ -35,5 +45,15 @@
           span {{a.editing}}
         td
           span {{a.status}}
+        td
+          i.fa.fa-check.btn_action(tooltip-placement="left" tooltip="set as approved" ng-click="markup_moderate(a, 'approved')") 
+          i.fa.fa-close.btn_action(tooltip-placement="left" tooltip="set as pending" ng-click="markup_moderate(a, 'pending')") 
 
 .one.columns
+  a(ng-click="Grabcollection('select')") Grabcollection (test function)
+  div.collection
+   // code
+    {{collection}}
+   ul
+    code(ng-repeat="c in collection") {{c.subtype}}:{{c.metadata}} 
+  a(ng-click="toggle_render('read')") Reading mode

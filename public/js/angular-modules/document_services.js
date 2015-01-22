@@ -38,6 +38,41 @@ angular.module('musicBox.DocumentService', [])
     console.log(this)
 
   };
+  DocumentService.prototype.Load = function () {
+      
+
+    var promise = DocumentRest.get({Id:this.slug},{  }).$promise;
+    promise.then(function (Result) {
+      console.log(Result);
+      $rootScope.doc =  Result.doc;
+      $rootScope.userin = Result.userin;
+
+
+      //this.RenderConfig();
+      //MusicBoxLoop
+
+      //$rootScope.MusicBoxLoop = new Object()
+      //$rootScope.MusicBoxLoop.state = 'ready' 
+      //$rootScope.MusicBoxLoop.doc = Result;
+      new MusicBoxLoop().init(Result,true);
+
+    }.bind(this));
+    promise.catch(function (response) {     
+      console.log(response);
+    }.bind(this));
+
+  };
+  DocumentService.prototype.Config = function () {
+
+
+      
+  }
+  DocumentService.prototype.RestartMusicBoxLoop = function () {
+
+
+      
+  }
+
   DocumentService.prototype.RenderConfig = function () {
       
   }
@@ -72,8 +107,11 @@ angular.module('musicBox.DocumentService', [])
         promise.then(function (Result) {
               // console.log(Result)
               $rootScope.ui.selected_range.markups_to_offset = []
+              
               new MusicBoxLoop().init(Result,true);
               thos.flash_message('doc sync', 'ok' , 2000)
+
+
         }.bind(this));
         promise.catch(function (response) { 
                 console.log(response)
@@ -116,11 +154,11 @@ angular.module('musicBox.DocumentService', [])
 
         var promise = this.api_method.doc_save({id:$rootScope.doc._id},serialize(data)).$promise;
         promise.then(function (Result) {
-
+            var restart = false
             if(field == 'room_id'){
               $rootScope.doc.room     = Result.doc.room;
               $rootScope.doc.room__id = Result.doc.room; 
-              var tt  = new MusicBoxLoop().init(Result,true);           
+              restart = true
             }
 
             // hard redirect
@@ -129,12 +167,16 @@ angular.module('musicBox.DocumentService', [])
             }
             else if(field == 'content'){
               $rootScope.$emit('docEvent', {action: 'doc_ready', type: '-', collection_type: 'doc', collection:Result });
-              var tt  = new MusicBoxLoop().init(Result,true);
+               restart = true
             }
             else{
               console.log('emit?')
+            }
+
+            if( restart == true){
               var tt  = new MusicBoxLoop().init(Result,true);
             }
+
            
         }.bind(this));
         promise.catch(function (response) { 
@@ -299,23 +341,7 @@ angular.module('musicBox.DocumentService', [])
         return docid;
   }
 
-  DocumentService.prototype.Load = function () {
-      
-
-    var promise = DocumentRest.get({Id:this.slug},{  }).$promise;
-    promise.then(function (Result) {
-      console.log(Result);
-      $rootScope.doc =  Result.doc;
-      $rootScope.userin = Result.userin;
-      this.RenderConfig();
-      var tt  = new MusicBoxLoop().init(Result,true);
-
-    }.bind(this));
-    promise.catch(function (response) {     
-      console.log(response);
-    }.bind(this));
-
-  };
+ 
 
 
 
@@ -463,10 +489,11 @@ angular.module('musicBox.DocumentService', [])
 
         promise.query = DocumentRest.markup_push( {Id:this.slug},promise.data).$promise;
         promise.query.then(function (Result) {
-             var tt  = new MusicBoxLoop().init(Result,true);
+            this.flash_message(Result.inserted[0].type +' inserted', 'ok' , 3000)
+             new MusicBoxLoop().init(Result,true);
              
-             console.log(Result.inserted[0].type)
-             this.flash_message(Result.inserted[0].type +' inserted', 'ok' , 3000)
+             //console.log(Result.inserted[0].type)
+            
                // socket.emit('news', {doc_id: $rootScope.doc.slug, action: 'push_markup' , type: 'push', object:d.inserted });
                // socket.emit('news', {doc_id: $rootScope.doc.slug, action: 'push_markup' , type: 'push', object:d.inserted });
                //$rootScope.$emit('docEvent', {action: 'doc_ready', type: 'push', collection_type: 'markup', collection:d.inserted[0] });

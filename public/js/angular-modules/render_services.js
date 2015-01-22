@@ -5,6 +5,8 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
      var self = {
        init: function () {
 
+       
+
          $rootScope.render_config = new Object()
          $rootScope.render_config.loading = new Object()
          $rootScope.render_config.loading.inited = true;
@@ -17,7 +19,8 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
         // DEPREC. use :  $rootScope.render_config.i18n instead
         $rootScope.i18n                       = $locale;
         console.log($rootScope.i18n.id)
-       
+        $rootScope.objSchemas                  =   self.objSchemas(); 
+
 
 
         //$rootScope.$emit('renderEvent', { action:'render_ready' });
@@ -137,7 +140,468 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
         // start end metavalue, .......
 
       },
+      objSchemas:function (){
+        var definitions = new Array();
+        definitions.media = new Object({
+              'name': 'media',
+              'display_name': $rootScope.render_config.i18n.CUSTOM.OBJECTS.media,
+              'map_range': true,
+              'positions': {
+                  "forced": "",
+                  "available": ['left', 'right', 'under', 'global']},
+              'modes': {
+                'editor': {                   
+                  'enabled': true,
+                  'fields' : {
+                                  'ranges': { 
+                                      'display' : true,
+                                      'label':'link url',
+                                      'input' : 'range'
+                                  },
+                                  'type': { 
+                                      'display' : true,
+                                      'label':'type',
+                                      'input' : 'select'
+                                  },
+                                  'position':{ 
+                                      'display' : true,
+                                      'label':'position',
+                                      'input' : 'select'
+                                  },
+                                  'subtype': {
+                                    'display' : true,
+                                    'label':'subtye',
+                                    'input' : 'select',
+                                    'free_input' : false,
+                                    'show_editor': 'hidden',
+                                    'available' : ['hyperlink'],
+                                    'forced' : 'hyperlink'
+                                  },
+                                    'metadata': {
+                                    'display' : true,
+                                    'label':'subtye',
+                                    'input' : 'select',
+                                    'free_input' : false,
+                                    'show_editor': 'hidden',
+                                    'available' : ['hyperlink'],
+                                    'forced' : 'hyperlink'
+                                  },
+                                  'file_upload': {
+                                    'display' : true,
+                                    'label':'subtye',
+                                    'input' : 'select',
+                                    'free_input' : false,
+                                    'show_editor': 'hidden',
+                                    'available' : ['hyperlink'],
+                                    'forced' : 'hyperlink'
+                                  }
+
+                          },
+                              
+                  },
+                  'read': {
+                          'enabled': true,
+                          'display' : {
+                                
+                              
+                                 'metadata': {
+                                      'displayed':''
+                                 }
+
+                          },
+                        'icon': { 
+                            'before': {
+                                'show' : true,
+                                'class' : 'media'
+                              }
+                          },           
+                  },
+            },
+          })
+          definitions.markup = new Object({
+              'name': 'media',
+              'display_name': $rootScope.render_config.i18n.CUSTOM.OBJECTS.markup,
+              'map_range': true,
+              'positions': {
+                  "forced": "",
+                  "available": ['left', 'right', 'under', 'global']},
+              'modes': {
+                'editor': {                   
+                  'enabled': true,
+                  'fields' : {
+                                  'ranges': { 
+                                      'display' : false,
+                                      'label':'link url',
+                                      'input' : 'range'
+                                  },
+                                  'type': { 
+                                      'display' : true,
+                                      'label':'type',
+                                      'input' : 'select'
+                                  },
+                                  'position':{ 
+                                      'display' : true,
+                                      'label':'position',
+                                      'input' : 'select'
+                                  },
+                                  'subtype': {
+                                    'display' : true,
+                                    'label':'subtye',
+                                    'input' : 'select',
+                                    'free_input' : false,
+                                    'show_editor': 'hidden',
+                                    'available' : ['hyperlink'],
+                                    'forced' : 'hyperlink'
+                                  },
+                                    'metadata': {
+                                    'display' : true,
+                                    'label':'subtye',
+                                    'input' : 'select',
+                                    'free_input' : false,
+                                    'show_editor': 'hidden',
+                                    'available' : ['hyperlink'],
+                                    'forced' : 'hyperlink'
+                                  }
+
+                          },
+                              
+                  },
+                  'read': {
+                          'enabled': true,
+                          'display' : {
+                              
+                                 'metadata': {
+                                      'displayed':'subtype'
+                                 }
+
+                          },
+                        'icon': { 
+                            'before': {
+                                'show' : true,
+                                'class' : 'media'
+                              }
+                          },           
+                  },
+            },
+          })
+ definitions.comment = new Object({
+              'name': 'comment',
+              'display_name': $rootScope.render_config.i18n.CUSTOM.OBJECTS.comment,
+              'map_range': true,
+              'positions': {
+                  "forced": "left",
+                  "available": ['wide','left', 'right', 'under', 'global']},
+              'modes': {
+                'editor': {                   
+                  'enabled': true,
+                        'display' : {
+                            'date': false, 
+                            'user': false,
+                        },
+                          'fields' : {
+                                  'ranges': { 
+                                      'display' : true,
+                                      'label':'link url',
+                                    'input' : 'range'
+                                  },
+                                  'type': { 
+                                      'display' : true,
+                                      'label':'type',
+                                    'input' : 'select'
+                                  },
+                                
+                                  'position':{ 
+                                      'display' : true,
+                                      'label':'position',
+                                    'input' : 'select'
+                                  },
+                                  'subtype': {
+                                    'display' : true,
+                                    'label':'subtye',
+                                    'input' : 'select',
+                                    'free_input' : false,
+                                    'show_editor': 'hidden',
+                                    'available' : ['hyperlink'],
+                                    'forced' : 'hyperlink'
+                                  },
+                                  'metadata': {
+                                    'display' : true,
+                                    'label':'subtye',
+                                    'input' : 'select',
+                                    'free_input' : false,
+                                    'show_editor': 'hidden',
+                                    'available' : ['hyperlink'],
+                                    'forced' : 'hyperlink'
+                                  }
+
+                          },
+                              
+                  },
+                  'read': {
+                          'enabled': true,
+                          'display' : {
+                                 'date': true, 
+                                 'user': true,
+                                 'metadata': {
+                                      'displayed':'metadata'
+                                 }
+
+                          },
+                        'icon': { 
+                            'before': {
+                                'show' : true,
+                                'class' : 'comment'
+                              }
+                          },           
+                  },
+            },
+          })
+
+/*
+        definitions.note = new Object({
+              'name': 'note',
+              'display_name': $rootScope.render_config.i18n.CUSTOM.OBJECTS.comment,
+              'map_range': true,
+              'positions': {
+                  "forced": "left",
+                  "available": ['wide','left', 'right', 'under', 'global']},
+              'modes': {
+                'editor': {                   
+                  'enabled': true,
+                        'display' : {
+                            'date': false, 
+                            'user': false,
+                        },
+                          'fields' : {
+                                  'ranges': { 
+                                      'display' : true,
+                                      'label':'link url',
+                                    'input' : 'range'
+                                  },
+                                  'type': { 
+                                      'display' : true,
+                                      'label':'type',
+                                    'input' : 'select'
+                                  },
+                                
+                                  'position':{ 
+                                      'display' : true,
+                                      'label':'position',
+                                    'input' : 'select'
+                                  },
+                                  'subtype': {
+                                    'display' : true,
+                                    'label':'subtye',
+                                    'input' : 'select',
+                                    'free_input' : false,
+                                    'show_editor': 'hidden',
+                                    'available' : ['hyperlink'],
+                                    'forced' : 'hyperlink'
+                                  },
+                                  'metadata': {
+                                    'display' : true,
+                                    'label':'subtye',
+                                    'input' : 'select',
+                                    'free_input' : false,
+                                    'show_editor': 'hidden',
+                                    'available' : ['hyperlink'],
+                                    'forced' : 'hyperlink'
+                                  }
+
+                          },
+                              
+                  },
+                  'read': {
+                          'enabled': true,
+                          'display' : {
+                                 'date': true, 
+                                 'user': true,
+                                 'metadata': {
+                                      'displayed':'metadata'
+                                 }
+
+                          },
+                        'icon': { 
+                            'before': {
+                                'show' : true,
+                                'class' : 'note'
+                              }
+                          },           
+                  },
+            },
+          })
+*/
+          definitions.data = new Object({
+              'name': 'data',
+              'display_name': $rootScope.render_config.i18n.CUSTOM.OBJECTS.comment,
+              'map_range': true,
+              'positions': {
+                  "forced": "left",
+                  "available": ['right', 'global']},
+              'modes': {
+                'editor': {                   
+                  'enabled': true,
+                        'display' : {
+                            'date': false, 
+                            'user': false,
+                        },
+                          'fields' : {
+                                  'ranges': { 
+                                      'display' : true,
+                                      'label':'link url',
+                                    'input' : 'range'
+                                  },
+                                  'type': { 
+                                      'display' : true,
+                                      'label':'type',
+                                     'input' : 'select'
+                                  },
+                                
+                                  'position':{ 
+                                      'display' : true,
+                                      'label':'position',
+                                    'input' : 'select'
+                                  },
+                                  'subtype': {
+                                    'display' : true,
+                                    'label':'subtye',
+                                    'input' : 'select',
+                                    'free_input' : false,
+                                    'show_editor': 'hidden',
+                                    'available' : ['hyperlink'],
+                                    'forced' : 'hyperlink'
+                                  },
+                                  'metadata': {
+                                    'display' : true,
+                                    'label':'subtye',
+                                    'input' : 'select',
+                                    'free_input' : false,
+                                    'show_editor': 'hidden',
+                                    'available' : ['hyperlink'],
+                                    'forced' : 'hyperlink'
+                                  }
+
+                          },
+                              
+                  },
+                  'read': {
+                          'enabled': true,
+                          'display' : {
+                                 'date': false, 
+                                 'user': false,
+                                 'metadata': {
+                                      'displayed':'metadata'
+                                 }
+
+                          },
+                        'icon': { 
+                            'before': {
+                                'show' : true,
+                                'class' : 'comment'
+                              }
+                          },           
+                  },
+            },
+          })
+          definitions.hyperlink = new Object({
+              'name': 'data',
+              'display_name': $rootScope.render_config.i18n.CUSTOM.OBJECTS.hyperlink,
+              'map_range': true,
+              'positions': {
+                  "forced": "left",
+                  "available": ['right', 'global']},
+              'modes': {
+                'editor': {                   
+                  'enabled': true,
+                        'display' : {
+                            'date': false, 
+                            'user': false,
+                        },
+                          'fields' : {
+                                  'ranges': { 
+                                      'display' : true,
+                                      'label':'link url',
+                                    'input' : 'range'
+                                  },
+                                  'type': { 
+                                      'display' : true,
+                                      'label':'type',
+                                     'input' : 'select'
+                                  },
+                                
+                                  'position':{ 
+                                      'display' : true,
+                                      'label':'position',
+                                    'input' : 'select'
+                                  },
+                                  'subtype': {
+                                    'display' : true,
+                                    'label':'subtye',
+                                    'input' : 'select',
+                                    'free_input' : false,
+                                    'show_editor': 'hidden',
+                                    'available' : ['hyperlink'],
+                                    'forced' : 'hyperlink'
+                                  },
+                                  'metadata': {
+                                    'display' : true,
+                                    'label':'subtye',
+                                    'input' : 'select',
+                                    'free_input' : false,
+                                    'show_editor': 'hidden',
+                                    'available' : ['hyperlink'],
+                                    'forced' : 'hyperlink'
+                                  }
+
+                          },
+                              
+                  },
+                  'read': {
+                          'enabled': true,
+                          'display' : {
+                                 'date': false, 
+                                 'user': false,
+                                 'metadata': {
+                                      'displayed':'metadata'
+                                 }
+
+                          },
+                        'icon': { 
+                            'before': {
+                                'show' : true,
+                                'class' : 'comment'
+                              }
+                          },           
+                  },
+            },
+          })
+
+          return definitions;
+
+       },
+
       objSchema:function (){
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
             var obj_base  = new Object({'type':'block', 'only':'metadata'});
             var arr = new Array();
@@ -419,7 +883,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
                 'editor': {
                     'show' : false,
                      'label':'link url',
-                    'input' : 'input'
+                     'input' : 'input'
                   }
                   ,
                   'render': {
@@ -483,561 +947,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
             return arr;
         },
 
-      objSchemavjsld:function (){
-
-            var obj_base  = new Object({'type':'block', 'only':'metadata'});
-
-
-            var arr = new Array();
-            
-            
-            arr.comment = new Object({
-              'name': 'comment',
-              'display_name': $rootScope.render_config.i18n.CUSTOM.OBJECTS.comment,
-              'type':obj_base.type,
-              'map_range': true,
-              'only':'',
-              'lite':true,
-              'editor': {
-                   'show' : {
-                        'full':true,
-                        'lite' : true
-
-                   },
-                  'input' : 'textarea',
-                    
-              },
-              'render': {
-                  'show' : {
-                        'full':true,
-                        'lite' : true
-
-                   },
-              },
-
-
-              'metadata': { 
-                'editor': {
-                    'show' : true,
-                    'label':'comment text',
-                    'input' : 'textarea',
-                    'lite' : false
-                  },
-                'render': {
-                   'show' : true,
-                   'lite' : false
-                  }
-              }, 
-              'show_date': true, 
-              'show_user': true, 
-              'subtype': {
-                'free_input' : false,
-                'available' : ['comment', 'response']
-             },   
-              'position_available': ['left', 'right', 'under', 'global'],
-            });
-            arr.note = new Object({
-              'name': 'note',
-              'display_name': $rootScope.render_config.i18n.CUSTOM.OBJECTS.note,
-              'type':obj_base.type ,
-              'map_range': true,
-              'only':'',
-               'lite':false,
-               'editor': {
-                   'show' : {
-                        'full':true,
-                        'lite' : false
-
-                   },
-                  'input' : 'textarea',
-                    
-              },
-              'render': {
-                  'show' : {
-                        'full':true,
-                        'lite' : false
-
-                   },
-              },
-              'metadata': { 
-                'editor': {
-                   'show' : true,
-                    'label':'note text',
-                     'input' : 'textarea'
-                  },
-                  'render': {
-                   'show' : true
-                  }
-              }, 
-              'show_date': true,
-              'icon': { 
-                'before': {
-                   'show' : true
-                  }
-              }, 
-              'show_user': true, 
-              'subtype': {
-                'free_input' : false,
-                'available' : ['draft','freebase', 'about']
-             },   
-              'position_available': ['left', 'right', 'under', 'center', 'global'],
-            });
-             arr.semantic= new Object({
-              'name': 'semantic',
-              'display_name': $rootScope.render_config.i18n.CUSTOM.OBJECTS.semantic,
-              'type':obj_base.type,
-              'map_range': true,
-              'only':'',
-               'lite':false,
-                  'editor': {
-                   'show' : {
-                        'full':true,
-                        'lite' : false
-
-                   },
-                  'input' : 'textarea',
-                    
-              },
-              'render': {
-                  'show' : {
-                        'full':true,
-                        'lite' : false
-
-                   },
-              },
-              'metadata': { 
-                'editor': {
-                   'show' : true,
-                    'label':'semantic data',
-                     'input' : 'textarea'
-                  },
-                  'render': {
-                   'show' : true
-                  }
-              }, 
-              'show_date': false,
-              'icon': { 
-                'before': {
-                   'show' : true
-                  }
-              }, 
-              'show_user': false, 
-              'subtype': {
-                'free_input' : false,
-                'available' : ['summary_block', 'summary','translation', 'date', 'hidden', 'place', 'somebody','info', 'copyright', 'mood','fact', 'err']
-             },   
-              'position_available': ['left', 'right', 'under', 'global'],
-            });
-
-            arr.generic = new Object({
-              'name': 'generic',
-              'display_name': $rootScope.render_config.i18n.CUSTOM.OBJECTS.generic,
-              'type':obj_base.type,
-              'map_range': true,
-              'only':'',
-               'lite':false,
-                  'editor': {
-                   'show' : {
-                        'full':true,
-                        'lite' : false
-
-                   },
-                  'input' : 'textarea',
-                    
-              },
-              'render': {
-                  'show' : {
-                        'full':true,
-                        'lite' : false
-
-                   },
-              },
-              'metadata': { 
-                'editor': {
-                   'show' : true,
-                    'label':'text',
-                     'input' : 'textarea'
-                  },
-                  'render': {
-                   'show' : true
-                  }
-              }, 
-              'show_date': false,
-              'icon': { 
-                'before': {
-                   'show' : true
-                  }
-              }, 
-              'show_user': false,
-              'subtype': {
-                'free_input' : true,
-                'available' : ['-']
-             },   
-              'position_available': ['left', 'right', 'under', 'center','global'],
-            });
-
-
-           arr.data = new Object({
-              'name': 'data',
-              'display_name': 'data',
-              'type':obj_base.type,
-              'map_range': true,
-              'only':'',
-                 'editor': {
-                   'show' : {
-                        'full':true,
-                        'lite' : false
-
-                   },
-                  'input' : 'textarea',
-                    
-              },
-              'render': {
-                  'show' : {
-                        'full':true,
-                        'lite' : false
-
-                   },
-              },
-               'lite':false,
-              'metadata': { 
-                'editor': {
-                   'show' : true,
-                    'label':'data value',
-                     'input' : 'textarea'
-                  },
-                  'render': {
-                   'show' : true
-                  }
-              }, 
-              'show_date': false,
-              'icon': { 
-                'before': {
-                   'show' : true
-                  }
-              }, 
-              'show_user': false,
-              'subtype': {
-                'free_input' : true,
-                'available' : ['x', 'y', 'z', 'string', 'name', 'else']
-             },   
-              'position_available': ['left', 'right', 'under', 'center','global'],
-            });
-            
-
-
-           arr.container= new Object({
-            'name': 'container',
-              'display_name': $rootScope.render_config.i18n.CUSTOM.OBJECTS.container,
-              'type':obj_base.type ,
-              'only':'',
-              'lite':true,
-                 'editor': {
-                   'show' : {
-                        'full':true,
-                        'lite' : false
-
-                   },
-                  'input' : 'section-ranger',
-                    
-              },
-              'render': {
-                  'show' : {
-                        'full':true,
-                        'lite' : false
-
-                   },
-              },
-              'metadata': { 
-                'editor': {
-                   'show' : false,
-                    'label':'-',
-                     'input' : '-'
-                  },
-                  'render': {
-                   'show' : true
-                  }
-              }, 
-              'show_date': false,
-              'icon': { 
-                'before': {
-                   'show' : true
-                  }
-              }, 
-              'show_user': false,
-              'subtype': {
-                'free_input' : false,
-                'available' : ['section']
-             },   
-              'position_available': ['inline'],
-            });
-
-            arr.container_class = new Object({
-              'name': 'container_class',
-              'display_name': $rootScope.render_config.i18n.CUSTOM.OBJECTS.container_class,
-              'type':obj_base.type ,
-              'only':'',
-               'lite':false,
-                  'editor': {
-                   'show' : {
-                        'full':true,
-                        'lite' : false
-
-                   },
-                  'input' : 'textarea',
-                    
-              },
-              'render': {
-                  'show' : {
-                        'full':true,
-                        'lite' : false
-
-                   },
-              },
-              'metadata': { 
-                'editor': {
-                   'show' : true,
-                    'label':'css class(es)',
-                     'input' : 'input'
-                  },
-                  'render': {
-                   'show' : true
-                  }
-              }, 
-              'show_date': false,
-              'icon': { 
-                'before': {
-                   'show' : true
-                  }
-              }, 
-              'show_user': false,
-              'subtype': {
-                'free_input' : false,
-                'available' : ['css']
-             },   
-              'position_available': ['inline'],
-            });
-
-
-
-            arr.child = new Object({
-              'name': 'child',
-              'display_name': $rootScope.render_config.i18n.CUSTOM.OBJECTS.child,
-              'type':obj_base.type,
-              'only':'',
-               'lite':false,
-                  'editor': {
-                   'show' : {
-                        'full':true,
-                        'lite' : false
-
-                   },
-                  'input' : 'textarea',
-                    
-              },
-              'render': {
-                  'show' : {
-                        'full':true,
-                        'lite' : false
-
-                   },
-              },
-              'metadata': { 
-                'editor': {
-                   'show' : true,
-                    'label':'block text',
-                     'input' : 'input'
-                  }
-                  ,
-                  'render': {
-                   'show' : false
-                  }
-              }, 
-              'show_date': false,
-              'icon': { 
-                'before': {
-                   'show' : true
-                  }
-              }, 
-              'show_user': false, 
-              'subtype': {
-                'free_input' : false,
-                'available' : ['doc_content_block','simple_page','share_excerpt']
-             },   
-              'position_available': ['left', 'right', 'under', 'global'],
-            });
-
-            arr.media = new Object({
-              'name': 'media',
-              'display_name': $rootScope.render_config.i18n.CUSTOM.OBJECTS.media,
-              'type':obj_base.type ,
-              'only':'',
-              'lite':true,
-                 'editor': {
-                   'show' : {
-                        'full':true,
-                        'lite' : true
-
-                   },
-                  'input' : 'media',
-                    
-              },
-              'render': {
-                  'show' : {
-                        'full':true,
-                        'lite' : true
-
-                   },
-              },
-              'metadata': { 
-                'editor': {
-                    'show' : true,
-                    'label':'media url',
-                    'input' : 'input'
-                  }
-                  ,
-                  'render': {
-                   'show' :false
-                  }
-              }, 
-              'show_date': false,
-              'icon': { 
-                'before': {
-                   'show' : true
-                  }
-              }, 
-              'show_user': false, 
-              'subtype': {
-                'free_input' :false,
-                'available' : ['img','html5video', 'soundcloud-track', 'vimeo-video', 'youtube-video', 'open-street-map', 'google-map']
-             },   
-              'position_available': ['wide','center','left', 'right', 'under', 'global', 'background', 'slidewide'],
-            });
-
-            
-            arr.markup = new Object({
-              'name': 'markup',
-              'display_name': $rootScope.render_config.i18n.CUSTOM.OBJECTS.markup,
-              'type':obj_base.type ,
-              'map_range': true,
-              'only':'',
-              'lite':true,
-
-              'editor': {
-                'show' : {
-                        'full':true,
-                        'lite' : true
-
-                   },
-                  'input' : 'textarea',
-                    
-              },
-              'render': {
-                  'show' : {
-                        'full':true,
-                        'lite' : true
-
-                   },
-              },
-
-
-              'metadata': { 
-                'editor': {
-                    'show' : false,
-                     'label':'link url',
-                    'input' : 'input'
-                  }
-                  ,
-                  'render': {
-                   'show' : false
-                  }
-              }, 
-              'show_date': false, 
-              'icon': { 
-                'before': {
-                   'show' : true
-                  }
-              }, 
-              'show_user': false, 
-
-              'subtype': {
-                'free_input' : false,
-                'available' : ['h1' ,'h2', 'h3', 'h4', 'h5','h6','em', 'strong', 'code', 'quote'],
-             },   
-             'position_available': ['inline'],
-
-            });
-
-
-            arr.markup.subtype.available.h1 = new Object({'foo':'bar'})
-
-
-
-
-
-
-            arr.hyperlink = new Object({
-              'name': 'hyperlink',
-              'display_name': $rootScope.render_config.i18n.CUSTOM.OBJECTS.hyperlink,
-              'type':obj_base.type ,
-              'map_range': true,
-              'only':'',
-               'lite':true,
-                  'editor': {
-                   'show' : {
-                        'full':true,
-                        'lite' : true
-
-                   },
-                  'input' : 'textarea',
-                    
-              },
-              'render': {
-                  'show' : {
-                        'full':true,
-                        'lite' : true
-
-                   },
-              },
-              'metadata': { 
-                'editor': {
-                    'show' : true,
-                    'label':'link url',
-                    'input' : 'input'
-                  }
-                  ,
-                  'render': {
-                   'show' : true
-                  }
-              },
-              'show_date': false, 
-              'icon': { 
-                'before': {
-                   'show' : true
-                  }
-              }, 
-              'show_user': false, 
-
-              'subtype': {
-                'free_input' : false,
-                'show_editor': 'hidden',
-                'available' : ['hyperlink'],
-
-             },   
-             'position_available': ['left', 'right', 'under', 'global'],
-
-            });
-
-
-
-    
-            console.log(arr)
-            return arr;
-        },
-
-
-
-
+     
 
       
       posAvailable:function (){

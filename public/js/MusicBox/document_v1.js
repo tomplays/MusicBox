@@ -73,18 +73,22 @@ function DocumentCtrlRo($scope, $http , $sce, $location, $routeParams ,socket,re
 
 
 
-function DocumentCtrl($scope, $http , $sce, $location, $routeParams ,socket,renderfactory, DocumentService, $anchorScroll) {
+function DocumentCtrl($scope, $http , $sce, $location, $routeParams ,socket,renderfactory, DocumentService, $anchorScroll, MusicBoxLoop) {
 		
 	
 	/**
 	* initialization for document and render factory (services)
     * @function DocumentCtrl#init
 	*/
+
+
 	$scope.init = function (){
-	
+
 		console.log('DocumentCtrl')
 		//	render        	= Renderfactory()
 		doc           	= new DocumentService();
+
+
 		// call doc api with complete init.
 		doc.Load()
 		return
@@ -180,7 +184,7 @@ function DocumentCtrl($scope, $http , $sce, $location, $routeParams ,socket,rend
 		if(!$scope.push.type)		{	$scope.push.type 		= 'comment' }
 		if(!$scope.push.subtype)	{	$scope.push.subtype 	= 'comment'	}
 		if(!$scope.push.metadata)	{	$scope.push.metadata	= '-' 		}
-		if(!$scope.push.status)		{	$scope.push.status		= 'pending' }
+		if(!$scope.push.status)		{	$scope.push.status		= 'approved' }
 		if(!$scope.push.depth)		{	$scope.push.depth 		= 1 }
 		if(!$scope.push.doc_id_id)	{	$scope.push.doc_id_id 	= 'null'	}
 		
@@ -316,8 +320,6 @@ function DocumentCtrl($scope, $http , $sce, $location, $routeParams ,socket,rend
 
 	// section && markup
 	$scope.markup_save = function (markup){
-
-		alert('hgh')
 		$scope.ui.focus_side = ''
 		doc.markup_save(markup)
 	}
@@ -403,6 +405,7 @@ function DocumentCtrl($scope, $http , $sce, $location, $routeParams ,socket,rend
 
 
 	$scope.toggle_render = function(r){
+		console.log('toggled_render from '+$scope.ui.renderAvailable_active+' to '+r)
 		$scope.ui.menus['quick_tools'].open = "no"
 		$scope.ui.renderAvailable_active = r
 	}
@@ -461,36 +464,25 @@ function DocumentCtrl($scope, $http , $sce, $location, $routeParams ,socket,rend
 		//alert('d')
 	}
 	
-	$scope.upload_file_image = new Object({'uploaded': false});
-	$scope.preuploadFile = function(files){
-		$scope.upload_file_image.file = files[0];
-		return;
-	}
-	$scope.uploadFile = function(){	
-		var fd = new FormData();
-		fd.append("image", $scope.upload_file_image.file);
-		$http.post(api_url+'/media/upload', fd, 
-			{ 
-				withCredentials: true,
-        		headers: {'Content-Type': undefined },
-        		transformRequest: angular.identity 
-        	}
-        	).success(function(m) {
-				$scope.upload_file_image.uploaded = true;
-        		$scope.upload_file_image.basename = m[0].basename
-				$scope.upload_file_image.path = m[0].path
-				$scope.upload_file_image.type = m[0].type
-				$scope.upload_file_image.fullpath = root_url+':'+PORT+'/uploads/'+m[0].path+m[0].basename
-				//$scope.push.metadata = $scope.upload_file_image.fullpath
-				$scope.markup.metadata        = $scope.upload_file_image.fullpath
-			}).error(function(err){
-				console.log(err)
+	
+	$scope.Grabcollection = function (by){
+		$scope.collection = []
+		_.each($scope.doc.markups, function(m, i){
+
+			if(m.selected == true){
+				$scope.collection.push(m)
+			}
+			
+
 		})
+
 	}
 
 	// icon click or section select
 	$scope.toggle_select_markup = function (markup, event_name){
-		console.log(markup)
+		//console.log(markup)
+		
+		
 		if(markup.sectionin || markup.sectionin == 0){
 			$scope.containers[markup.sectionin].modeletters = 'single'
 		}
@@ -508,8 +500,16 @@ function DocumentCtrl($scope, $http , $sce, $location, $routeParams ,socket,rend
 			});
 
 		}
+		// event 
 		if(event_name == 'dblclick'){
-			markup.editing = !markup.editing
+
+			if($scope.doc_owner || markup.by_me === true){
+				markup.editing = !markup.editing
+			}
+			if(markup.by_me === false){
+				// alert('not by me')
+			}
+
 		}
 		
 		if(event_name == 'click'){
@@ -634,6 +634,8 @@ function DocumentCtrl($scope, $http , $sce, $location, $routeParams ,socket,rend
 		}
 		return;
 	}
+
+
 		
 	/**
 	*  WATCHERS
@@ -655,6 +657,17 @@ function DocumentCtrl($scope, $http , $sce, $location, $routeParams ,socket,rend
 	   // }
 	});
 	*/
+	$scope.$watch('MusicBoxLoop.state', function(newValue, oldValue) {
+	 
+	  	if(newValue && newValue !== oldValue){
+			console.log('mb')
+
+			if($scope.MusicBoxLoop.state == 'ready'){
+				 new MusicBoxLoop().init($scope.MusicBoxLoop.doc,true); 
+			}
+	 	}
+	});
+	
 
 
     // watch the textarea content.
@@ -829,7 +842,59 @@ function SectionCtrl($scope, $http , $sce, $location, $routeParams, renderfactor
 // seems this syntax works.
 // it's a documentCtrl sub-controller
 
-angular.module('musicBox.controller', []).controller('FragmentCtrl', function($scope) {
+angular.module('musicBox.controller', []).controller('FragmentCtrl', function($scope, $http) {
+
+	// used for editing a markup posittion ui.
+
+	$scope.mini_layout_class= function (markup,mkpos ){
+		var output = ''
+		//console.log($scope.objSchemas[markup.type].positions.available)
+		if($scope.objSchemas[markup.type] && _.contains($scope.objSchemas[markup.type].positions.available, markup.position) ){
+			output += ' selectable'
+		}
+		else{
+			output += ' unselectable'
+		}
+		if(markup.position == mkpos ){
+			output += ' selected'
+		}
+		return output
+
+
+		
+	}
+	//console.log($scope.markup);
+	
+	$scope.upload_file_image = new Object({'uploaded': false});
+	$scope.preuploadFile = function(files){
+		$scope.upload_file_image.file = files[0];
+		return;
+	}
+
+	$scope.uploadFile = function(){	
+			var fd = new FormData();
+			fd.append("image", $scope.upload_file_image.file);
+			$http.post(api_url+'/media/upload', fd, 
+				{ 
+					withCredentials: true,
+	        		headers: {'Content-Type': undefined },
+	        		transformRequest: angular.identity 
+	        	}
+	        	).success(function(m) {
+					$scope.upload_file_image.uploaded = true;
+	        		$scope.upload_file_image.basename = m[0].basename
+					$scope.upload_file_image.path = m[0].path
+					$scope.upload_file_image.type = m[0].type
+					$scope.upload_file_image.fullpath = root_url+':'+PORT+'/uploads/'+m[0].path+m[0].basename
+					//$scope.push.metadata = $scope.upload_file_image.fullpath
+					$scope.markup.metadata        = $scope.upload_file_image.fullpath
+					// could autosave : doc.markup_save($scope.markup)
+
+					
+				}).error(function(err){
+					console.log(err)
+			})
+		}
 
   	//console.log($scope.section)
     /*
@@ -855,7 +920,7 @@ angular.module('musicBox.controller', []).controller('FragmentCtrl', function($s
             $scope.markup.position = newValue;
             	// no toggle $scope.ui.focus_side = ''
               if(autosave){
-              	alert('dq')
+              	
               	doc.markup_save($scope.markup)
               }  
             //  alert('s')

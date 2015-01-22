@@ -48,7 +48,7 @@ module.exports = function(grunt) {
 				},
 				livereload: {
 						options: {
-							open: "true",
+							open: true,
 							base: ["views", "public"]
 						}
 				},
@@ -154,7 +154,7 @@ module.exports = function(grunt) {
 	grunt.registerTask('lesscss', ['less']); // , 'connect:server' // 'forever', 
 	grunt.registerTask('stop', ['forever:server1:stop']); // , 'connect:server' // 'forever', 
 	grunt.registerTask('default', [
-				'forever:server1:restart','watch', 'less','jasmine', 'connect:livereload'
+				'forever:server1:restart','watch', 'less', 'connect:livereload'
 	]);
 	grunt.registerTask('build', [
 				'forever:server1:restart',

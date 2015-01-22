@@ -163,10 +163,10 @@ if(debugger_on){
 
 
 					doc.markups.forEach(function(mk) {
-                    console.log(mk.status)
-            // userMap[user._id] = user
+                   	 console.log(mk.status)
+            			// userMap[user._id] = user
           
-        })
+        			})
 
 					
 					// test rights

@@ -230,16 +230,43 @@ return json ( doc, owner, inserted)
 
 */
 exports.markup_create = function(req, res) {
+	
+//bug ?
+	var req_user_id = req.user._id;
+	console.log(req_user_id)
+
 	var query = Document.findOne({ 'slug':req.params.slug });
 	// console.log(req.body)
 	// console.log(req.body.username)
-	query.populate('user','-email -hashed_password -salt').populate( {path:'markups.user_id', select:'-salt', model:'User'}).populate({path:'markups.doc_id', select:'-markups -secret', model:'Document'}).populate('markups.doc_id.user').populate('room').exec(function (err, doc) {
+	//query.populate('user','-email -hashed_password -salt').populate( {path:'markups.user_id', select:'-salt', model:'User'}).populate({path:'markups.doc_id', select:'-markups -secret', model:'Document'}).populate('markups.doc_id.user').populate('room').exec(function (err, doc) {
+	query.populate('user','-email -hashed_password -salt').populate( {path:'markups.user_id', select:'-salt -email -hashed_password', model:'User'}).populate({path:'markups.doc_id', select:'-markups -secret', model:'Document'}).populate('markups.doc_id.user').populate('room', {secret:0}).exec(function (err, doc) {
+
 	if (err) {
 		res.json(err)
 	}
 	else{
-		var markup  = new Object( {'user_id': req.body.user_id , 'username': req.body.username, 'position': req.body.position, 'start':req.body.start, 'end':req.body.end, 'subtype': req.body.subtype, 'type': req.body.type, 'status': req.body.status, 'metadata': req.body.metadata, 'depth': req.body.depth} )
-		//console.log(doc.markups)
+		// set as pending if not doc_owner 
+		var markup_status 	= 'pending'
+		//console.log('req_user_id')
+		//console.log(req_user_id)
+		//console.log('doc.user._id')
+		//console.log(doc.user._id)
+		if(req_user_id == doc.user._id){
+
+				markup_status 	= 'approved';
+				if(req.body.status){
+					//markup_status 	= req.body.status
+				}
+		}
+
+
+/////// bug !!! 
+
+		var markup  = new Markup( {'user_id': {'_id':req_user_id }, 'position': req.body.position, 'start':req.body.start, 'end':req.body.end, 'subtype': req.body.subtype, 'type': req.body.type, 'status': markup_status, 'metadata': req.body.metadata, 'depth': req.body.depth} )
+		
+
+
+		//markup = markup.toObject();
 		doc.markups.push(markup)
 		//console.log('doc.markups after')
 		//console.log(doc.markups)

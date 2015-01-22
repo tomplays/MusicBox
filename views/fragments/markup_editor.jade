@@ -2,9 +2,26 @@
 // can be in any position of the layout depending markup position
 
 h5 {{render_config.i18n.CUSTOM.ACTIONS.edit}} {{markup.type}}
+p {{objSchemas[markup.type].modes.editor}}
+p {{markup.explicit_string}}
+
 	form(name="myForm")		
 		
 		tabset.editor-main-tab
+
+			tab(heading="content")
+				span.field.mt_input(class="mt_input_type_{{markup.type}} mt_input_subtype_{{markup.subtype}}", ng-if="objSchema[markup.type].metadata.editor.show") 
+					label {{objSchema[markup.type].metadata.editor.label}}
+					
+					// input or textarea
+					input(ng-if="objSchema[markup.type].metadata.editor.input =='input'", ng-model="markup.metadata", type="text")
+					textarea(ng-if="objSchema[markup.type].metadata.editor.input =='textarea'", ng-model="markup.metadata")
+				
+				span.field.uploader(ng-if="markup.type == 'media' ")
+					input(onchange="angular.element(this).scope().preuploadFile(this.files)", type="file")
+					a(ng-click="uploadFile()" ) send
+					img(ng-if="upload_file_image.uploaded == true", ng-src="{{upload_file_image.fullpath}}")
+
 
 			tab(heading="Type") 
 				
@@ -13,7 +30,7 @@ h5 {{render_config.i18n.CUSTOM.ACTIONS.edit}} {{markup.type}}
 					label.label_type Set type
 					ul.typer
 						li(ng-repeat="t in available_sections_objects")
-							span {{objSchema[t].display_name}}
+							span {{objSchemas[t].display_name}}
 							i.fa.btn_action(ng-class="{ 'selected' : markup.type == t}" , class="fa-{{t}}" , ng-click="markup_type(markup, t)") 
 					
 						// old selectors
@@ -23,7 +40,7 @@ h5 {{render_config.i18n.CUSTOM.ACTIONS.edit}} {{markup.type}}
 				
 				span.field.typer.sub
 					label Set sub-type
-					// input(ng-model="markup.subtype" , type="text")
+					input(ng-model="markup.subtype" , type="text")
 					ul.typer.sub
 						li(ng-repeat="t in objSchema[markup.type].subtype.available")
 							span {{t}}
@@ -39,8 +56,9 @@ h5 {{render_config.i18n.CUSTOM.ACTIONS.edit}} {{markup.type}}
 					label Select position
 					
 					div.mini_layout
-						div.wide(ng-class="{ 'selected' : markup.position == 'wide'}") 
+						div.wide(ng-class="mini_layout_class(markup, 'wide')") 
 							a(ng-click="markup_position(markup, 'wide')") wide
+
 						div.center(ng-class="{ 'selected' : markup.position == 'center'}") 
 							a(ng-click="markup_position(markup, 'center')") center
 						div.middle
@@ -67,7 +85,8 @@ h5 {{render_config.i18n.CUSTOM.ACTIONS.edit}} {{markup.type}}
 					// input(ng-model="markup.position" ,type="text")
 					// select(ng-options="pos for pos in objSchema[markup.type].position_available" , ng-model="markup.position", name="markup.position")
 
-			tab(heading="ranges") 
+			tab(heading="ranges" ng-if="objSchemas[markup.type].modes.editor.fields.ranges.display" ) 
+					
 					label set start-end ranges
 					span.field.ranges
 						span.ranges_inputs
@@ -80,20 +99,7 @@ h5 {{render_config.i18n.CUSTOM.ACTIONS.edit}} {{markup.type}}
 								input(required  type="number" , ng-model="markup.end" )
 						span.ranges_tools
 							i.fa.fa-text-width.match_selection(title="re-match ranges from active selection", ng-click="match_selection(markup)" ) 
-			tab(heading="content")
-				span.field.mt_input(class="mt_input_type_{{markup.type}} mt_input_subtype_{{markup.subtype}}", ng-if="objSchema[markup.type].metadata.editor.show") 
-					label {{objSchema[markup.type].metadata.editor.label}}
-					
-					// input or textarea
-					input(ng-if="objSchema[markup.type].metadata.editor.input =='input'", ng-model="markup.metadata", type="text")
-					textarea(ng-if="objSchema[markup.type].metadata.editor.input =='textarea'", ng-model="markup.metadata")
-				
-				span.field.uploader(ng-if="markup.type == 'media' ")
-					input(onchange="angular.element(this).scope().preuploadFile(this.files)", type="file")
-					a(ng-click="uploadFile()" ) send
-					img(ng-if="upload_file_image.uploaded == true", ng-src="{{upload_file_image.fullpath}}")
-
-
+			
 
 		.section_tool_more(ng-if="markup.object_tools")
 			div(ng-if="markup.subtype=='img'")
@@ -122,9 +128,12 @@ h5 {{render_config.i18n.CUSTOM.ACTIONS.edit}} {{markup.type}}
 				p
 					a(ng-click="offset_markup(markup, -1, 0)") offset start-1
 
-			span.field.smallinput(ng-if="true")
+			span.field.smallinput(ng-if="doc_owner == true")
 				label status
 				input( ng-model="markup.status" ,type="text")
+
+
+
 			span.field.smallinput(ng-if="true")
 				label  depth
 				input( ng-model="markup.depth" type="text" )
@@ -139,9 +148,9 @@ h5 {{render_config.i18n.CUSTOM.ACTIONS.edit}} {{markup.type}}
 		
 		
 	.object-tools
-
+			i.fa.fa-sliders.btn_action(ng-click="object_tools(markup)")
 			i.fa.fa-save.btn_action(tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.save}}" ng-click="markup_save(markup)")
 
-			i.fa.fa-check-circle.btn_action(tooltip-placement="left" tooltip="moderate" ng-click="markup_moderate (markup, 'approve')") {{markup.status}}
+			i.fa.fa-check-circle.btn_action(tooltip-placement="left" tooltip="moderate" ng-click="markup_moderate (markup, 'approved')") {{markup.status}}
 
 			i.fa.fa-remove.btn_action(tooltip-placement="left" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.delete}}" ng-click="markup_delete(markup)")

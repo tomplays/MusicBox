@@ -27,45 +27,65 @@ var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','n
       * *ready for loops
       * @function docfactory#init
       */
+      config: function () {
+
+
+      },
+      getstate: function () {
+
+
+      },
+      setstate: function (s) {
+          this.state = s;
+          // $rootScope.MusicBoxLoop.state = s 
+          return this.state
+
+      },
+
       init: function (d, next) {
 
-             var temp_scope = $rootScope;
+            this.setstate('init')
+
+
+            
              //$rootScope;
 
              if(d.userin){
                 // not an absulte condition, api will always check rights
-                temp_scope.userin = d.userin;
+                $rootScope.userin = d.userin;
 
               }
               else{
-                temp_scope.userin = new Object({'username':''});
+                $rootScope.userin = new Object({'username':''});
               }
 
-              temp_scope.doc = d.doc;
-
+              $rootScope.doc = d.doc;
+               $rootScope.markups = d.doc.markuos;
+              console.log('d push')
+              console.log(d)
             
-              temp_scope.doc.formated_date =  moment(d.doc.updated).calendar() +', '+moment(d.doc.updated).fromNow(); 
+              $rootScope.doc.formated_date =  moment(d.doc.updated).calendar() +', '+moment(d.doc.updated).fromNow(); 
               
               // 
               // http://stackoverflow.com/questions/17493309/how-do-i-change-the-language-of-moment-js
               //$rootScope.doc.formated_date = d.doc.updated
                // console.log($rootScope.doc.user)
              
-              temp_scope.doc_options =   self.apply_object_options('document', d.doc.doc_options)
-              temp_scope.author_options =    self.apply_object_options('author',   d.doc.user.user_options)
+              $rootScope.doc_options =   self.apply_object_options('document', d.doc.doc_options)
+              $rootScope.author_options =    self.apply_object_options('author',   d.doc.user.user_options)
                
 
               if(d.doc.room){
-                  temp_scope.doc.room__id = d.doc.room._id;
-                 // temp_scope.room_options =  self.apply_object_options('room', d.doc.room.room_options)
+                  $rootScope.doc.room__id = d.doc.room._id;
+                 // $rootScope.room_options =  self.apply_object_options('room', d.doc.room.room_options)
                }
                else{
-                   temp_scope.doc.room__id = '';
-                   temp_scope.doc.room = new Object({'_id':'-'});
+                   $rootScope.doc.room__id = '';
+                   $rootScope.doc.room = new Object({'_id':'-'});
                }
                //console.log(d.markups_type)
 
-                temp_scope.doc_owner = d.is_owner;
+                $rootScope.doc_owner = d.is_owner;
                 console.log('is owner or has secret ('+ d.is_owner+')')
                 document.title = d.doc.title
                
@@ -73,18 +93,17 @@ var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','n
                 if(d.doc.slug !=='homepage'){
                     encoded_url += '/doc/'+d.doc.slug;
                 }
-                temp_scope.doc.encoded_url = urlencode(encoded_url);
-                temp_scope.doc.text_summary = '';
+                $rootScope.doc.encoded_url = urlencode(encoded_url);
+                $rootScope.doc.text_summary = '';
                 
                 // letters and 
-                temp_scope.letters = [];
+                $rootScope.letters = [];
                 // "warnings" variable
              
-                temp_scope.max_reached_letter = 0;
+                $rootScope.max_reached_letter = 0;
                 // test
                 // $rootScope.selectingd = 'init';        
                
-                $rootScope = temp_scope;
                 if(next == true){
                    self.init_containers()
                 }
@@ -96,6 +115,7 @@ var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','n
 
 
       },
+
 
 
       /**
@@ -181,6 +201,8 @@ var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','n
 
         _.each($rootScope.containers, function(container, index){
 
+
+          // init "single" container
           self.init_container(container, index);
 
           /**
@@ -195,7 +217,11 @@ var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','n
               
               // only for markups which ranges match container
               if(markup.start >= container.start && markup.end <= container.end){
+               // console.log('wrap')
+               // console.log(markup)
                 self.wrap_markup(markup, container, index, temp_letters);
+               //   console.log('wraped')
+               // console.log(markup)
               } // if in-range
 
           }); // each markups end.
@@ -321,6 +347,12 @@ var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','n
             // var temp_letters;
             
             container.selecting = -1;
+
+            container.sectionin = index;
+            container.isolated = false;
+        
+            container.selected = false;
+            container.editing  = false;
             // letters mode (html "block" or single)
 
             container.modeletters = 'block'
@@ -385,13 +417,12 @@ var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','n
 
       wrap_markup: function(markup, container, index, temp_letters ){
 
-        if(!$rootScope.objSchema[markup.type]){
-          console.log(markup.type)
-          console.log('no schematype for markup!')
-          return false;
+        if(!$rootScope.objSchemas[markup.type]){
+          console.log('no schematype for markup! :'+markup.type)
+          // return false;
         }
 
-        //   console.log($rootScope.objSchema[markup.type].display_name)
+         console.log('wraping')
        
         markup.offset_start = 0;
         markup.offset_end = 0;
@@ -413,9 +444,23 @@ var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','n
         markup.user_options =  self.apply_object_options('markup_user_options',markup.user_id.user_options)
 
         // user "by_me" ownership test
-        markup.by_me = 'false'
+        markup.by_me = false
+         console.log(markup.user_id)
+         console.log($rootScope.userin)
         if( markup.user_id._id && $rootScope.userin._id  && ($rootScope.userin._id == markup.user_id._id ) )  {
-             markup.by_me = 'true';
+           
+           
+             markup.by_me = true;
+        }
+
+        markup.can_approve = false
+        if( $rootScope.doc_owner )  {
+             markup.can_approve = true;
+        }
+
+        markup.visible = false;
+        if(markup.status == 'approved' ||  markup.by_me ==true || markup.can_approve == true){
+          markup.visible = true;
         }
 
         // using "memory" of ui.

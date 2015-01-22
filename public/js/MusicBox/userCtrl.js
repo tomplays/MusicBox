@@ -19,8 +19,10 @@ var render;
 **/
 
 function UserProfileCtrl($scope, $http , $location, $routeParams,  $locale) {
-
-		$scope.i18n = $locale;
+		   $scope.render_config = new Object()
+        
+         $scope.render_config.i18n =  $locale;
+		
  		$scope.globals = GLOBALS;
         $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
 		$scope.documents = [];

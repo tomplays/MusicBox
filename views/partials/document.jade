@@ -41,9 +41,9 @@ div(ng-hide="ui.renderAvailable_active == 'doc_options' || ui.renderAvailable_ac
 
 					div(class="markup_ markup_type_bg", ng-if="ui.renderAvailable_active == 'editor'" , ng-repeat="markup in section.objects['media']['background']", ng-include="fragments['markup'][0].url")
 
-				div(ng-if="layout.include_objects !==false && layout.name !=='slidewide' " , ng-repeat='object in available_sections_objects')
+				div(ng-if="object.visible !==false && layout.include_objects !==false && layout.name !=='slidewide' " , ng-repeat='object in available_sections_objects')
 
-					div( class="markup_ markup_type_{{markup.type}}" ng-repeat="markup in section.objects[object][layout.name]", ng-include="fragments['markup'][0].url")
+					div(ng-if="markup.visible" class="markup_ markup_type_{{markup.type}}" ng-repeat="markup in section.objects[object][layout.name]", ng-include="fragments['markup'][0].url")
 
 				div(ng-if="(doc_options.comments_open.value !=='false' || !doc_options.comments_open.value  ) && layout.name == 'left'")
 
@@ -62,6 +62,26 @@ div(ng-hide="ui.renderAvailable_active == 'doc_options' || ui.renderAvailable_ac
 					// h1 {{section.modeletters}}
 					// letters part !!
 					div.inline_tools(ng-if="section.modeletters=='single'")
+
+
+
+						span.pusher_items(ng-if="ui.renderAvailable_active == 'editor' && ui.selected_range.start !==null && ui.selected_range.end !==null " )
+							span.pusher_item_pusher_h1
+								a.btn_pusher.btn_h1(ng-click="push_generic_from_ranges('markup', 'h1','inline')") titre 1
+								
+							span
+								a(ng-click="push_generic_from_ranges('markup', 'em','inline')") em
+							span
+								a(ng-click="push_generic_from_ranges('markup', 'code','inline')") code 
+							span
+								a(ng-click="push_generic_from_ranges('markup', 'list-item ','inline')") list-item
+							span
+								a(ng-click="wrapin_section()") wrap in section
+
+							span
+								a(ng-click="push_section()") new section
+
+
 						// h4 {{section.start}} - {{section.end}} - {{section.metadata}} - {{section.type}} - {{section.subtype}}
 
 					div.theletters(ng-if="section.modeletters=='single'")
