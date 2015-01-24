@@ -19,7 +19,10 @@ $provide.value("$locale", {
 		"save" : "sauvegarder",
 		"edit" :"editer",
 		"delete" :"supprimer",
-		"back_to_document" :"Retour au mode de lecture"
+		"select" : "sélectionner",
+		"select_edit" : "sélectionner / éditer",
+		"back_to_document" :"Retour au mode de lecture",
+		"more_options" : "Plus d'options"
 
 
 	},
@@ -49,6 +52,18 @@ $provide.value("$locale", {
 			"hyperlink":"Lien"
 
 	},
+	"POSITIONS" : {
+		"wide" : "pleine largeur",
+		"left" : "à gauche",
+		"right" : "à droite",
+		"center" : "centré",
+		"under" : "en dessous",
+		"background" : "en fond",
+		"global" : "global",
+		"slidewide" :"slidewide"
+	},
+
+
 	"APP" : {
 		"write_invitation" : "Vous avez quelquechose à nous raconter ?",
 		"write_invitation_link" : "En savoir plus &raquo;"
