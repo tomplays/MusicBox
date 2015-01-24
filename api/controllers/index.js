@@ -63,7 +63,7 @@ nconf.argv().env().file({file:'config.json'});
   */
 
   exports.errors = function(req, res) {
-    var message = '<a style="text-decoration:underline;" href="'+nconf.get('ROOT_URL')+'"> &laquo; Back </a>';
+    var message = '<a style="text-decoration:underline;" href="'+nconf.get('ROOT_URL')+':'+nconf.get('PORT')+'"> &laquo; Back </a>';
     res.render('error', { title: 'Nothing here', message: message} );
   };
 
