@@ -260,14 +260,16 @@ exports.markup_create = function(req, res) {
 		}
 
 
-/////// bug !!! 
+/////// bug !!!
 
-		var markup  = new Markup( {'user_id': {'_id':req_user_id }, 'position': req.body.position, 'start':req.body.start, 'end':req.body.end, 'subtype': req.body.subtype, 'type': req.body.type, 'status': markup_status, 'metadata': req.body.metadata, 'depth': req.body.depth} )
-		
 
+		var markup = new Object( { 'user_id': req_user_id, 'position': req.body.position, 'start':req.body.start, 'end':req.body.end, 'subtype': req.body.subtype, 'type': req.body.type, 'status': markup_status, 'metadata': req.body.metadata, 'depth': req.body.depth} )
+		markup.isNew; // true
 
 		//markup = markup.toObject();
 		doc.markups.push(markup)
+		
+		doc.markModified('markups');
 		//console.log('doc.markups after')
 		//console.log(doc.markups)
 		var inserted = _.last(doc.markups);
@@ -278,16 +280,43 @@ exports.markup_create = function(req, res) {
 			} else {
 				
 
-				var out = {}
-	        	out.doc 			=  doc.toObject()
-				if(req.user){
-					out.userin 		= req.user.toObject()
-				}
-				out.is_owner 		=  documents.test_owner_or_key(doc,req)	
-				out.doc.secret 		= 'api_secret';
-				out.inserted = new Array(inserted);
-				res.json(out);
+
+							///
+
+							var query = Document.findOne({ 'slug':req.params.slug });
+								// console.log(req.body)
+								// console.log(req.body.username)
+								//query.populate('user','-email -hashed_password -salt').populate( {path:'markups.user_id', select:'-salt', model:'User'}).populate({path:'markups.doc_id', select:'-markups -secret', model:'Document'}).populate('markups.doc_id.user').populate('room').exec(function (err, doc) {
+								query.populate('user','-email -hashed_password -salt').populate( {path:'markups.user_id', select:'-salt -email -hashed_password', model:'User'}).populate({path:'markups.doc_id', select:'-markups -secret', model:'Document'}).populate('markups.doc_id.user').populate('room', {secret:0}).exec(function (err, doc) {
+
+								if (err) {
+									res.json(err)
+								}
+								else{
+
+											var out = {}
+								        	out.doc 			=  doc.toObject()
+											if(req.user){
+												out.userin 		= req.user.toObject()
+											}
+											out.is_owner 		=  documents.test_owner_or_key(doc,req)	
+											out.doc.secret 		= 'api_secret';
+											out.inserted = new Array(inserted);
+											res.json(out);
+
+
+								}
+
+							});
+
 			}
+
+
+
+
+
+
+
 		});
 	  }
 	});
