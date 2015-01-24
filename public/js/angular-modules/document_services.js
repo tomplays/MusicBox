@@ -156,9 +156,16 @@ angular.module('musicBox.DocumentService', [])
         promise.then(function (Result) {
             var restart = false
             if(field == 'room_id'){
-              $rootScope.doc.room     = Result.doc.room;
-              $rootScope.doc.room__id = Result.doc.room; 
-              restart = true
+                          if(field == 'room_id' && data.value !==''){
+
+                          }
+                          else{
+                            $rootScope.doc.room     = Result.doc.room;
+                            $rootScope.doc.room__id = Result.doc.room; 
+                            restart = true
+                          }
+
+             
             }
 
             // hard redirect
@@ -166,8 +173,15 @@ angular.module('musicBox.DocumentService', [])
               window.location = root_url+':'+PORT+'/doc/'+Result.doc.slug;
             }
             else if(field == 'content'){
-              $rootScope.$emit('docEvent', {action: 'doc_ready', type: '-', collection_type: 'doc', collection:Result });
+               $rootScope.$emit('docEvent', {action: 'doc_ready', type: '-', collection_type: 'doc', collection:Result });
                restart = true
+            }
+             else if(field == 'published'){
+               $rootScope.$emit('docEvent', {action: 'doc_ready', type: '-', collection_type: 'doc', collection:Result });
+               //restart = true
+            
+                  thos.flash_message('document set to '+Result.doc.published, 'ok' , 2000)    
+
             }
             else{
               console.log('emit?')

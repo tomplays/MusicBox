@@ -38,7 +38,7 @@ div.quick_tools(class="visible_{{ui.menus.quick_tools.open}}")
 						a(href="#{root_url}:#{port}/doc/aide") besoin d'aide?!
 
 		
-div.fixed_tools()
+div.fixed_tools(ng-if="ui.renderAvailable_active == 'editor'")
 	
 	.inside
 		div(ng-if="ui.selected_range.end && ui.selected_range.start || ui.selected_range.start ===0" )

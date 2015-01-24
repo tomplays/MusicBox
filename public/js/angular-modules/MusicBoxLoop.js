@@ -520,7 +520,7 @@ var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','n
         } 
 
         // need to map letters for each range of markup (not all objects)
-        if( ($rootScope.objSchema[markup.type].map_range && $rootScope.objSchema[markup.type].map_range==true)  || markup.subtype=='share_excerpt'  ){ // or pos == inlined
+        if( ($rootScope.objSchema[markup.type].map_range && $rootScope.objSchema[markup.type].map_range==true && markup.visible == true)  || (markup.subtype=='share_excerpt' && markup.visible == true)  ){ // or pos == inlined
             
             self.markup_ranges(markup, container, index, temp_letters);
             //$rootScope.containers[index].objects[markup.type]['inline'].push(markup); 
@@ -598,7 +598,16 @@ var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','n
 
           // only to markup with "block" 
 
+          if(markup.visible === true)  {
 
+            //temp_letters[delta]['classes'].push('is_visible')
+          }
+        if(markup.visible ==false)  {
+            //temp_letters[delta]['classes'].push('is_not_visible')
+
+ 
+
+          }
           if(markup.subtype=='h1' ||  markup.subtype=='h2' ||  markup.subtype=='h3' || markup.subtype=='h4' || markup.subtype=='h5' || markup.subtype=='h6' || markup.subtype=='list-item'  || markup.subtype=='quote' ||  markup.type=='data')  {
                 if(pos == markup.start ){
                    temp_letters[delta]['classes'].push('fi')

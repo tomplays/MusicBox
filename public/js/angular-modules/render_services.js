@@ -357,6 +357,9 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
             },
           })
 
+ definitions.note =  definitions.comment;
+
+
 /*
         definitions.note = new Object({
               'name': 'note',
