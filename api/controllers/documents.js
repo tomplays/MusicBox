@@ -202,12 +202,36 @@ if(debugger_on){
 	}
 
 exports.list = function(req, res) {
-	var query = Document.find({'published': 'draft'}, {'markups':0, 'doc_options':0, 'secret':0});
+
+	//var status_only = new Object({'published': 'draft'})
+	var status_only = new Object();
+
+
+	var query = Document.find( {}, {'markups':0, 'doc_options':0, 'secret':0});
+	
+
+
 	query.populate('user', '-email -hashed_password -salt -user_options').populate('room').exec(function (err, docs) {
 
+	if (err){
+		return handleError(err);
+	} 
+	else{
 
-	if (err) return handleError(err);
-		res.json(docs)
+		var out = {}
+		out.docs_count = docs.length
+		out.docs = []
+		_.each(docs, function(doc, i){
+			out.docs.push(doc)
+
+
+		});
+
+		res.json(out)
+	}
+
+
+		
 	})
 };
 exports.listRender = function(req, res) {
@@ -390,7 +414,7 @@ exports.doc_create = function(req,res){
 
 	 var text_size = _.size(raw_content)-1;
 
-	 var markup_section_base  = new Markup( {'user_id':req.user._id, 'username':req.user.username, 'start':0, 'end':text_size,  'type': 'container', 'subtype':'section', 'position':'inline'} )
+	 var markup_section_base  = new Markup( {'user_id':req.user._id, 'username':req.user.username, 'start':0, 'end':text_size,  'type': 'container', 'subtype':'section', 'position':'inline', 'status':'approved'} )
 	 new_doc.markups.push(markup_section_base)
 
 

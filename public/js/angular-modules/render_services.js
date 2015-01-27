@@ -148,7 +148,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
               'map_range': true,
               'positions': {
                   "forced": "",
-                  "available": ['left', 'right', 'under', 'global']},
+                  "available": ['wide','center','left', 'right', 'under','slidewide', 'global']},
               'modes': {
                 'editor': {                   
                   'enabled': true,
@@ -224,7 +224,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
               'map_range': true,
               'positions': {
                   "forced": "",
-                  "available": ['left', 'right', 'under', 'global']},
+                  "available": ['inline']},
               'modes': {
                 'editor': {                   
                   'enabled': true,
@@ -1002,7 +1002,9 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
             arr['comment_form']              = [ {  url: 'fragments/comment_form.jade'} ];
             arr['child_markup']              = [ {  url: 'fragments/child_markup.jade'} ];
             arr['dataset']                   = [ {  url: 'fragments/dataset.jade'} ];
-            arr['post_excerpt']                   = [ {  url: 'fragments/post_excerpt.jade'} ];
+            arr['post_excerpt']              = [ {  url: 'fragments/post_excerpt.jade'} ];
+            arr['document_footer']           = [ {  url: 'fragments/document_footer.jade'} ];
+
 
             //arr['doc_real']                = [ {  url: 'fragments/doc_real.jade'} ];
             //arr['ad_welcome']              = [ {  url: 'fragments/ad_welcome.jade'} ];

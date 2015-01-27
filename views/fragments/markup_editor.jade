@@ -10,7 +10,9 @@ form(name="myForm")
 	
 	tabset.editor-main-tab
 
-		tab(heading="content")
+		tab(heading="content" ng-if="markup.type !=='markup' ")
+
+
 			span.field.mt_input(class="mt_input_type_{{markup.type}} mt_input_subtype_{{markup.subtype}}", ng-if="objSchema[markup.type].metadata.editor.show") 
 				label {{objSchema[markup.type].metadata.editor.label}}
 				
@@ -50,7 +52,7 @@ form(name="myForm")
 				// select(ng-options="sub for sub in objSchema[markup.type].subtype.available" , ng-model="markup.subtype", name="markup.subtype")
 
 
-		tab(heading="Position") 
+		tab(heading="Position" ng-if="markup.type !=='markup'") 
 			
 			span.field.positions
 				

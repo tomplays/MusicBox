@@ -51,10 +51,10 @@ div(ng-hide="ui.renderAvailable_active == 'doc_options' || ui.renderAvailable_ac
 					div.comment_form(ng-if="ui.menus.push_comment.open == section.sectionin ",  ng-include="fragments['comment_form'][0].url")
 
 
-				// div(ng-if="layout.name == 'slidewide'")
+				div(ng-if="layout.name == 'slidewide'")
 					carousel( interval="1000")
 						slide(ng-repeat="markup in section.objects['media']['slidewide']" active="markup.active" )
-							p
+							p 
 								img(src="{{markup.metadata}}")
 
 				div(ng-if="layout.name == 'inline'")
@@ -107,10 +107,5 @@ div(ng-hide="ui.renderAvailable_active == 'doc_options' || ui.renderAvailable_ac
 
 		// render into the layout loop, only "if last"
 		// made to apply last section styles to footer
-		footer(ng-if="$last")
-			p(ng-bind-html="doc_options.footer_center_html.value")
-			// input(ng-if="ui.editing_footer_center_html",   ng-model="doc_options.footer_center_html.value", name="doc_options.footer_center_html.value")
-			// p(ng-bind-html="doc_options.footer_center_html.value +'&nbsp;'", class="editing_{{ui.editing_footer_center_html}}" , ng-dblclick="edit_doc_option('footer_center_html')") {{}} &nbsp;
-			// input(ng-if="ui.editing_footer_center_html",   ng-model="doc_options.footer_center_html.value", name="doc_options.footer_center_html.value")
-
+		footer(ng-if="$last", ng-include="fragments['document_footer'][0].url")
 
