@@ -274,7 +274,7 @@ if(ev == 'mouseup'){
 
         scope.$apply(function(){
           if($rootScope.doc_owner == true){
-            alert('ee')
+           
                       scope.section.modeletters = 'single';
 
           }

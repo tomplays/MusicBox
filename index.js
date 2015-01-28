@@ -20,7 +20,7 @@ flash = require('connect-flash'),
 helpers = require('view-helpers');
 
 var locale = require("locale")
-  , supported = ["fr-fr", "en_us"]
+  , supported = ["fr-fr", "en-us"]
 
 
 nconf.argv().env().file({file:'config.json'});
@@ -129,9 +129,11 @@ app.configure(function(){
         // > if setted to "null" script wont be load in view
         app.locals.socket_url = nconf.get('SOCKET_SERVER_URL')
         // i18n dyn. load
+        
         app.use(function(req, res, next){
-          res.locals.lang_js_url  = 'js/angular-modules/i18n/angular_fr-fr.js';
-          next();
+         res.locals.lang_js_url = '/js/angular-modules/i18n/angular_'+req.locale+'.js';
+
+         next();
         });
 
         //use passport session

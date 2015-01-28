@@ -32,11 +32,21 @@ $provide.value("$locale", {
 	},
 	"DOCUMENT" : {
 		"by_author" : "by",
+		"my_documents" : "My documents",
 		"default_title" :"Your Title",
 		"default_content" :"Your text-content",
 	 	"document_options":"Document options",
 		"instructions" :"Pick a title",
-		"default_published." :"pick publish status"
+		"default_published." :"pick publish status",
+		"create_new" :"Create new Document"
+
+
+	},
+	"DOCUMENT_FIELDS" : {
+		"title" : "title",
+		"published" : "published",
+		"room" : "room",
+		"updated" : "updated"
 
 	},
 	"ACTIONS" : {
@@ -98,6 +108,12 @@ $provide.value("$locale", {
 		"pick_password" : "Password",
 		"pick_username" : "Username (public)",
 		"pick_email" : "Your email",
+		"logout" : "Logout",
+		"myprofile": "My profile",
+		"hidden_from_public": "(not visible) "
+
+
+
 
 
 

@@ -19,10 +19,11 @@ var render;
 **/
 
 function UserProfileCtrl($scope, $http , $location, $routeParams,  $locale) {
-		   $scope.render_config = new Object()
+		 $scope.render_config = new Object({'i18n':  $locale})
         
-         $scope.render_config.i18n =  $locale;
-		
+       
+		$scope.i18n                       = $locale;
+
  		$scope.globals = GLOBALS;
         $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
 		$scope.documents = [];
@@ -72,8 +73,13 @@ function UserCtrl($scope, $http , $location, $routeParams,  $locale) {
 	if($routeParams.redirect_url){
 		$scope.created_user_link 	= $routeParams.redirect_url;
 		$scope.register_url 		+= '?redirect_url='+$routeParams.redirect_url
+
 	}
-    $scope.i18n = $locale;
+
+	$scope.render_config = new Object({'i18n':  $locale})
+
+
+
  	$scope.globals = GLOBALS;
     $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
 	$scope.errors= '';

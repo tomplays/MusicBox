@@ -582,27 +582,24 @@ exports.doc_edit  = function(req, res) {
 
 			//if(field == 'content' || field == 'excerpt' || field == 'thumbnail' ){}
 
-			else if(field == 'room_id'){
-				console.log(chalk.green('a / b') );
-				console.log(doc.room)
-/*
-				if(doc.room && doc.room._id){
-					doc.room._id = value;
+			if(field == 'room_id'){
+
+				if(value !==''){
+					//doc.room._id = value;
+					doc.room = value
+					
 				}
 				else{
-					**/
-					doc.room = value
-				/*}*/
+					doc.room =undefined;
+				}	
 				
-				console.log(doc)
 			}
-			else if(field == 'user_id'){
+			if(field == 'user_id'){
 				doc.user = value;
 			}
 
-			else{
-
-	  			doc[field] = value;	
+			if(field !== 'user_id' && field !== 'room_id' && field !== 'title'){
+				doc[field] = value;	
 			}
                var out 			= {}
                if(req.user){

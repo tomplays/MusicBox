@@ -142,7 +142,10 @@ angular.module('musicBox.DocumentService', [])
         data.field = field;     
         
         if(field == 'room_id'){
-         data.value =  $rootScope.doc.room__id;
+          
+
+            data.value =  $rootScope.doc.room__id
+        
         }
         else if(field == 'user_id'){
           data.value =  $rootScope.doc.user._id;
@@ -164,6 +167,7 @@ angular.module('musicBox.DocumentService', [])
                             $rootScope.doc.room__id = Result.doc.room; 
                             restart = true
                           }
+                 thos.flash_message('document set to room', 'ok' , 2000)    
 
              
             }

@@ -28,11 +28,13 @@ $provide.value("$locale", {
 	},
 	"DOCUMENT" : {
 		"by_author" : "par",
+		"my_documents" : "My documents",
 		"default_title" :"Votre titre",
 		"default_content" :"Votre contenu texte",
 	 	"document_options":"Options du document",
 		"instructions" :"Choisissez un titre",
-		"default_published." :"Choisissez un status"
+		"default_published." :"Choisissez un status",
+		"create_new" :"Creer nouveau Document"
 
 
 
@@ -77,6 +79,11 @@ $provide.value("$locale", {
 		"pick_password" : "Mot de passe",
 		"pick_username" : "Votre nom d'utilisateur (public)",
 		"pick_email" : "Votre email",
+		"logout" : "Se deconnecter",
+		"myprofile": "Mon profil",
+				"hidden_from_public": "(non partagée)"
+
+
 
 
 

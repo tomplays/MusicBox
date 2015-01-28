@@ -189,7 +189,9 @@ function DocumentCtrl($scope, $http , $sce, $location, $routeParams ,socket,rend
 		if(!$scope.push.doc_id_id)	{	$scope.push.doc_id_id 	= 'null'	}
 		
 		// force autoset / force-correct
-		if($scope.push.type == "markup" || $scope.push.type == "container" || $scope.push.type == "container_class" ){ $scope.push.position = 'inline'}
+		if($scope.push.type == "markup" || $scope.push.type == "container" || $scope.push.type == "container_class" ){ 
+			$scope.push.position = 'inline'
+		}
 		// object is clean
 		doc.markup_push($scope.push)	 // call document service
 	}
