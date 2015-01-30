@@ -10,7 +10,9 @@ form(name="myForm")
 	
 	tabset.editor-main-tab
 
-		tab(heading="content" ng-if="markup.type !=='markup' ")
+		
+
+		tab(heading="{{objSchemas[markup.type].modes.editor.tabs.metadata}}" ng-if="objSchemas[markup.type].modes.editor.tabs.metadata !=='' ")
 
 
 			span.field.mt_input(class="mt_input_type_{{markup.type}} mt_input_subtype_{{markup.subtype}}", ng-if="objSchema[markup.type].metadata.editor.show") 
@@ -23,14 +25,14 @@ form(name="myForm")
 			span.field.uploader(ng-if="markup.type == 'media' ")
 				input(onchange="angular.element(this).scope().preuploadFile(this.files)", type="file")
 				a(ng-click="uploadFile()" ) send
-				img(ng-if="upload_file_image.uploaded == true", ng-src="{{upload_file_image.fullpath}}")
+				// img(ng-if="upload_file_image.uploaded == true", ng-src="{{upload_file_image.fullpath}}")
 
 
-		tab(heading="Type") 
+		tab(heading="{{objSchemas[markup.type].modes.editor.tabs.type}}") 
 			
 					
 			span.field.typer
-				label.label_type Set type
+				label.label_type {{render_config.i18n.CUSTOM.ACTIONS.select}} type
 				ul.typer
 					li(ng-repeat="t in available_sections_objects")
 						span {{objSchemas[t].display_name}}
@@ -42,14 +44,15 @@ form(name="myForm")
 					// option(value="t") {{t}}
 			
 			span.field.typer.sub
-				div(ng-if="objSchema[markup.type].subtype.free_input")
+				label.label_type {{render_config.i18n.CUSTOM.ACTIONS.select}}  subtype
+				div(ng-if="objSchemas[markup.type].subtype.free_input")
 					label Set sub-type
 					input(ng-model="markup.subtype" , type="text")
 				ul.typer.sub
-					li(ng-repeat="t in objSchema[markup.type].subtype.available")
+					li(ng-repeat="t in objSchemas[markup.type].modes.editor.fields.subtype.available")
 						span {{t}}
 						i.fa.btn_action(ng-class="{ 'selected' : markup.subtype == t,}" , class="fa-{{t}}" , ng-click="markup_subtype(markup, t)") 
-				// select(ng-options="sub for sub in objSchema[markup.type].subtype.available" , ng-model="markup.subtype", name="markup.subtype")
+				// select(ng-options="sub for sub in objSchemas[markup.type].subtype.available" , ng-model="markup.subtype", name="markup.subtype")
 
 
 		tab(heading="Position" ng-if="markup.type !=='markup'") 

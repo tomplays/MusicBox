@@ -49,7 +49,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
         // this var never change as long a doc is loaded... (no reset at rebuild)
 
         $rootScope.ui                         = new Object();
-        $rootScope.ui.selected_range          = new Object({start:'', end:'', 'textrange':''});
+        $rootScope.ui.selected_range          = new Object({wait_ev : false, set: false, start:'', end:'', 'textrange':''});
         $rootScope.ui.selected_section_index  = null;
         $rootScope.ui.selected_objects        = [];
 
@@ -133,7 +133,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
 
       // flat list.
       objAvailable:function (){
-        var arr = Object.keys($rootScope.objSchema) 
+        var arr = Object.keys($rootScope.objSchemas) 
         return arr ;
       },
       markupSchema:function (){
@@ -152,6 +152,11 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
               'modes': {
                 'editor': {                   
                   'enabled': true,
+                  'tabs': {
+                            'metadata': 'url/src',
+                            'type': 'type'
+
+                        },
                   'fields' : {
                                   'ranges': { 
                                       'display' : true,
@@ -174,8 +179,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
                                     'input' : 'select',
                                     'free_input' : false,
                                     'show_editor': 'hidden',
-                                    'available' : ['hyperlink'],
-                                    'forced' : 'hyperlink'
+                                    'available' : ['img', 'soundcloud-track', 'vimeo-video', 'youtube-video', 'open-street-map', 'google-map'],
                                   },
                                     'metadata': {
                                     'display' : true,
@@ -228,6 +232,12 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
               'modes': {
                 'editor': {                   
                   'enabled': true,
+
+                  'tabs': {
+                            'metadata': '',
+                            'type': 'type'
+
+                        },
                   'fields' : {
                                   'ranges': { 
                                       'display' : false,
@@ -250,8 +260,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
                                     'input' : 'select',
                                     'free_input' : false,
                                     'show_editor': 'hidden',
-                                    'available' : ['hyperlink'],
-                                    'forced' : 'hyperlink'
+                                    'available' : ['h1','h2', 'h3', 'h4', 'h5','h6','em', 'strong', 'code', 'quote'],
                                   },
                                     'metadata': {
                                     'display' : true,
@@ -297,6 +306,11 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
                         'display' : {
                             'date': false, 
                             'user': false,
+                        },
+                        'tabs': {
+                            'metadata': 'comment text',
+                            'type': 'type'
+
                         },
                           'fields' : {
                                   'ranges': { 
@@ -358,6 +372,9 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
           })
 
  definitions.note =  definitions.comment;
+ definitions.container =  definitions.comment;
+ definitions.generic =  definitions.comment;
+ definitions.child =  definitions.comment;
 
 
 /*
@@ -448,6 +465,12 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
                             'date': false, 
                             'user': false,
                         },
+                        'tabs': {
+                            'metadata': 'value',
+                            'type': 'type'
+
+                        },
+
                           'fields' : {
                                   'ranges': { 
                                       'display' : true,
@@ -471,8 +494,8 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
                                     'input' : 'select',
                                     'free_input' : false,
                                     'show_editor': 'hidden',
-                                    'available' : ['hyperlink'],
-                                    'forced' : 'hyperlink'
+                                    'available' : ['x', 'y', 'z', 'string','int'],
+                                    
                                   },
                                   'metadata': {
                                     'display' : true,
@@ -512,7 +535,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
               'map_range': true,
               'positions': {
                   "forced": "left",
-                  "available": ['right', 'global']},
+                  "available": ['left', 'right', 'global']},
               'modes': {
                 'editor': {                   
                   'enabled': true,
@@ -520,6 +543,12 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
                             'date': false, 
                             'user': false,
                         },
+
+                        'tabs': {
+                            'metadata': 'url',
+                            'type': 'type'
+                          },
+
                           'fields' : {
                                   'ranges': { 
                                       'display' : true,
@@ -543,7 +572,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
                                     'input' : 'select',
                                     'free_input' : false,
                                     'show_editor': 'hidden',
-                                    'available' : ['hyperlink'],
+                                    'available' : ['hyperlink', 'anchor'],
                                     'forced' : 'hyperlink'
                                   },
                                   'metadata': {
