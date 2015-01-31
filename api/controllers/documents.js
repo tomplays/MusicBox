@@ -807,7 +807,7 @@ exports.doc_option_new  = function(req, res) {
 
  exports.init = function (req, res) {
 
-	var user = new User({'username':'bob', 'email':'sfdfss@sd.fr', 'password':'secret'});
+	var user = new User({'username':'bqsob', 'email':'sfqsqsdfss@sd.fr', 'password':'secret'});
     var message = null;
     user.user_options = new Array();
     

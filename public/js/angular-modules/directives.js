@@ -94,7 +94,7 @@ function selection_running(scope){
                   //scope.section.modeletters = 'block';
                 }
                 else{
-                  $rootScope.ui.renderAvailable_active =  'editor'
+              //  $rootScope.ui.renderAvailable_active =  'editor'
                 }
              
               sets()
@@ -143,6 +143,7 @@ function selection_running(scope){
               //$rootScope.ui.selected_range.start = 0
               $rootScope.ui.selected_range.wait_ev = true;
               scope.section.modeletters = 'single';
+              $rootScope.ui.selected_section_index =999
            // }
         });
 

@@ -1,39 +1,48 @@
-
-// 1 . BTN
-	// help
-	// USER LOGGED
-	// USER NOT LOGGED
-	//
-	// 
-// 2 . DIVs
+// BTN's
+	// HELP 
+	// USER logged
+	// USER not logged
+	// DOCUMENT options
+	// DOC published
 
 // HELP MENU BTN
-i.fa.fa-question.inactive.quick_tool_opener.menuicon.menuicon-help(tooltip="View help" tooltip-placement="left" class="inside visible_{{ui.menus.quick_tools.open}}", ng-click="expand_tools('quick_tools_help')" , ng-dblclick="expand_tools('quick_tools_help')" )
-
-a.quick_tool_opener.menuicon.menuicon-user(tooltip="go to your profile" tooltip-placement="left" href="/me/account" ng-if="userin.username !== '' ") 
-	i.fa.fa-user( ) &nbsp; {{userin.username}}
-
-a.quick_tool_opener.menuicon.menuicon-sign-in(tooltip="Login / Register" tooltip-placement="left"  href="/login?redirect_url=#{root_url}:#{port}/doc/{{doc.slug}}" ng-if="userin.username == '' ") 
-	i.fa.fa-sign-in()
-
-
-a.quick_tool_opener.menuicon.menuicon-document(tooltip="document options" tooltip-placement="left" ng-if="doc_owner == true  || ui.secret " ng-click="toggle_render('doc_options')") 
-	i.fa.fa-cog.inactive(class="inside visible_{{ui.menus.quick_tools_document.open}}", ng-click="expand_tools('quick_tools_document')" , ng-dblclick="expand_tools('quick_tools_document')"  ) 
-//{{render_config.i18n.CUSTOM.DOCUMENT.document_options}}
-
-
-i.fa.fa-key.inactive.quick_tool_opener.menuicon.menuicon-published(tooltip="Set document status" tooltip-placement="left" class="inside visible_{{ui.menus.quick_tools_published.open}}", ng-click="expand_tools('quick_tools_published')" , ng-dblclick="expand_tools('quick_tools_published')" ng-if="doc_owner == true  || ui.secret " )
+i.fa.fa-question.inactive.quick_tool_opener.menuicon.menuicon-help(tooltip="View help" tooltip-placement="left" class="inside visible_{{ui.menus.quick_tools.open}}", ng-click="expand_tools('quick_tools_help')", ng-dblclick="expand_tools('quick_tools_help')" )
 
 div.quick_tools.qt-help(class="visible_{{ui.menus.quick_tools_help.open}}")
 	p.back_read(ng-click="toggle_render('read')") &laquo; {{render_config.i18n.CUSTOM.ACTIONS.back_to_document}}
 	h1 help
 	h3 Document editing 
-	p blou
+	// p blou
 	h3 Document options
-	p blou
+	//p blou
 	h3 Faq
 	ul
-		li blou
+		// li blou
+
+// GO PROFILE Link
+a.quick_tool_opener.menuicon.menuicon-user(tooltip="go to your profile" tooltip-placement="left" href="/me/account" ng-if="userin.username !== '' ") 
+	i.fa.fa-user( ) &nbsp; {{userin.username}}
+
+// GO LOGIN link
+a.quick_tool_opener.menuicon.menuicon-sign-in(tooltip="Login / Register" tooltip-placement="left"  href="/login?redirect_url=#{root_url}:#{port}/doc/{{doc.slug}}" ng-if="userin.username == '' ") 
+	i.fa.fa-sign-in()
+
+
+
+
+// DOC OPTIONS > toggle mode
+a.quick_tool_opener.menuicon.menuicon-document(tooltip="{{render_config.i18n.CUSTOM.DOCUMENT.document_options}}" tooltip-placement="left" ng-if="doc_owner == true  || ui.secret " ng-click="toggle_render('doc_options')") 
+	i.fa.fa-cog.inactive() 
+
+
+// edit > toggle mode
+a.quick_tool_opener.menuicon.menuicon-editor(tooltip="edit" tooltip-placement="left" ng-if="doc_owner == true  || ui.secret " ng-click="toggle_render('editor')") 
+	i.fa.fa-pencil()
+
+
+// DOC PUBLISHED > toggle mode / conditionnal owner
+i.fa.fa-key.inactive.quick_tool_opener.menuicon.menuicon-published(tooltip="Set document status" tooltip-placement="left" class="inside visible_{{ui.menus.quick_tools_published.open}}", ng-click="expand_tools('quick_tools_published')" , ng-dblclick="expand_tools('quick_tools_published')" ng-if="doc_owner == true  || ui.secret " )
+
 
 div.quick_tools.qt-published(class="visible_{{ui.menus.quick_tools_published.open}}")
 	p.back_read(ng-click="toggle_render('read')") &laquo; {{render_config.i18n.CUSTOM.ACTIONS.back_to_document}}

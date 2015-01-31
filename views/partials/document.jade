@@ -16,6 +16,11 @@ div.flash_message(ng-if="flash_message.text !==''", class="{{flash_message.class
 	span {{flash_message.text}}
 
 div(ng-include="fragments['branding'][0]['url']")
+div.top_menus(ng-include="fragments['top_menus'][0]['url']")
+// div.fixed_tools(ng-include="fragments['fixed_tools'][0]['url']" ng-if="ui.renderAvailable_active == 'editor'")
+
+
+
 div(ng-include="fragments['before_doc'][0].url" )
 // h3 mode du document:{{ui.renderAvailable_active}} 
 div(ng-if="ui.renderAvailable_active == 'doc_options'", ng-include="fragments['doc_options'][0].url")
@@ -33,7 +38,7 @@ div(ng-hide="ui.renderAvailable_active == 'doc_options' || ui.renderAvailable_ac
 				div(ng-if="(layout.name == 'center') && ($parent.$parent.$first) ", ng-include="fragments['doc_title'][0].url")
 						
 				div(ng-if="layout.name == 'right'")
-					div(ng-include="fragments['section_editor'][0].url" )
+					// div(ng-include="fragments['section_editor'][0].url" )
 										
 					div(class="markup_ container_class_type_inline", ng-if="ui.renderAvailable_active == 'editor'" , ng-repeat="markup in section.objects['container_class']['inline']" ng-include="fragments['markup'][0].url")
 					
@@ -58,36 +63,14 @@ div(ng-hide="ui.renderAvailable_active == 'doc_options' || ui.renderAvailable_ac
 								img(src="{{markup.metadata}}")
 
 				div(ng-if="layout.name == 'inline'")
-					// p {{ui.selected_range}}
-					// debug
-					// h1 {{section.modeletters}}
+
 					// letters part !!
-					div.inline_tools(ng-if="section.modeletters=='single'")
-
-
-
-						span.pusher_items(ng-if="ui.renderAvailable_active == 'editor' && ui.selected_range.start !==null && ui.selected_range.end !==null " )
-							span.pusher_item_pusher_h1
-								a.btn_pusher.btn_h1(ng-click="push_generic_from_ranges('markup', 'h1','inline')") titre 1
-								
-							span
-								a(ng-click="push_generic_from_ranges('markup', 'em','inline')") em
-							span
-								a(ng-click="push_generic_from_ranges('markup', 'code','inline')") code 
-							span
-								a(ng-click="push_generic_from_ranges('markup', 'list-item ','inline')") list-item
-							span
-								a(ng-click="wrapin_section()") wrap in section
-
-							span
-								a(ng-click="push_section()") new section
-
-
-						// h4 {{section.start}} - {{section.end}} - {{section.metadata}} - {{section.type}} - {{section.subtype}}
+					div.inline_tools(ng-include="fragments['inline_tools'][0]['url']" ng-if="ui.renderAvailable_active== 'editor'")
 
 					div.theletters(ng-if="section.modeletters=='single'")
 						// span.lt(class="{{l.classes_flat}}", ng-bind-html="l.char", lt="l" , ng-repeat="l in section.letters")
 						span.lt(ng-class="l.classes", class="in_range_{{l.inrange}}", ng-bind-html="l.char", lt="l" , ng-repeat="l in section.letters track by $index")
+
 
 					div.fluidtext(fluidtexte, section="section" , ng-bind-html="section.fulltext_block",  ng-if="section.modeletters !=='single'") 
 

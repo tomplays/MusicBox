@@ -244,8 +244,8 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
                         },
                   'fields' : {
                                   'ranges': { 
-                                      'display' : false,
-                                      'label':'link url',
+                                      'display' : true,
+                                      'label':'',
                                       'input' : 'range'
                                   },
                                   'type': { 
@@ -1038,7 +1038,8 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
             arr['post_excerpt']              = [ {  url: 'fragments/post_excerpt.jade'} ];
             arr['document_footer']           = [ {  url: 'fragments/document_footer.jade'} ];
             arr['top_menus']                 = [ {  url: 'fragments/top_menus.jade'} ];
-
+            arr['fixed_tools']               = [ {  url: 'fragments/fixed_tools.jade'} ];
+            arr['inline_tools']              = [ {  url: 'fragments/inline_tools.jade'} ];
 
             //arr['doc_real']                = [ {  url: 'fragments/doc_real.jade'} ];
             //arr['ad_welcome']              = [ {  url: 'fragments/ad_welcome.jade'} ];

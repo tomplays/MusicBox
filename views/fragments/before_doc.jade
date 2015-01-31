@@ -2,38 +2,8 @@ div(ng-if="doc_options['chapters-menu'].value == 'true' && ui.renderAvailable_ac
 	a(href="" title="sroll to section # {{$index+1}}", ng-click="scrollToAnchor($index+1)", ng-repeat="section in containers")
 		span {{$index+1}} 
 		// {{section.metadata}}
-div.top_menus(ng-include="fragments['top_menus'][0]['url']")
 
-		
-div.fixed_tools(ng-if="ui.renderAvailable_active == 'editor'")
 	
-	.inside
-		div(ng-if="ui.selected_range.end && ui.selected_range.start || ui.selected_range.start ===0" )
-			span.ranges
-				span.ranges_start_end Selected letters from {{ui.selected_range.start}}  to {{ui.selected_range.end}}
-				span.textrange
-					{{ui.selected_range.textrange}} 
-		
-
-
-
-		// span.pusher_items(ng-if="ui.renderAvailable_active == 'editor' && ui.selected_range.start !==null && ui.selected_range.end !==null " )
-			span.pusher_item_pusher_h1
-				a.btn_pusher.btn_h1(ng-click="push_generic_from_ranges('markup', 'h1','inline')") titre 1
-				
-			span
-				a(ng-click="push_generic_from_ranges('markup', 'em','inline')") em
-			span
-				a(ng-click="push_generic_from_ranges('markup', 'code','inline')") code 
-			span
-				a(ng-click="push_generic_from_ranges('markup', 'list-item ','inline')") list-item
-			span
-				a(ng-click="wrapin_section()") wrap in section
-
-			span
-				a(ng-click="push_section()") new section
-
-
 
 div.editor_zone.doc_centered(ng-if="ui.renderAvailable_active == 'editor'" )
 	label text content (without html markup)
