@@ -392,7 +392,7 @@ exports.doc_create = function(req,res){
 	var raw_title        =     req.body.raw_title;
 	var raw_content      =     req.body.raw_content;
 
-	console.log(req.body)
+	
 	if(req.body.published){
 		var published      = req.body.published
 	}
@@ -407,7 +407,7 @@ exports.doc_create = function(req,res){
 	
 
 	//var ar = new Object({'title':'bloue'+Math.random()})
-	var new_doc = new Object({'title':filtered_title, 'slug': slug, 'content': filtered_content, 'published ':published })
+	var new_doc = new Object({'title':filtered_title, 'slug': slug, 'content': filtered_content, 'published': published })
 
 	 new_doc.markups = new Array()
 	 new_doc.doc_options = new Array()

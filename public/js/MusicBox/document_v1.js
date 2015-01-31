@@ -408,7 +408,11 @@ function DocumentCtrl($scope, $http , $sce, $location, $routeParams ,socket,rend
 
 	$scope.toggle_render = function(r){
 		console.log('toggled_render from '+$scope.ui.renderAvailable_active+' to '+r)
-		$scope.ui.menus['quick_tools'].open = "no"
+		$scope.ui.menus['quick_tools_document'].open = "no"
+				$scope.ui.menus['quick_tools_help'].open = "no"
+
+		$scope.ui.menus['quick_tools_published'].open = "no"
+
 		$scope.ui.renderAvailable_active = r
 	}
 
@@ -455,12 +459,27 @@ function DocumentCtrl($scope, $http , $sce, $location, $routeParams ,socket,rend
 
 	$scope.expand_tools = function(name){
 
+
+        $scope.ui.menus['quick_tools_document'].open = 'no';
+        $scope.ui.menus['quick_tools_help'].open = 'no';
+        $scope.ui.menus['quick_tools_published'].open = 'no';
+
+/*
+		_.each($scope.ui.menus[0], function(m, i){
+console.log(m)
+
+			m[0].open = "no"
+
+
+		})
+*/
+
 		//$scope.ui.menus[name].open = $scope.ui.menus[name].open * -1;
 		if($scope.ui.menus[name].open == 'no'){
 			$scope.ui.menus[name].open = 'yes'
 		}
 		else{
-			$scope.ui.menus[name].open = "no"
+			$scope.ui.menus[name].open = 'no'
 		}
 		//return;
 		//alert('d')

@@ -330,13 +330,33 @@ angular.module('musicBox.DocumentService', [])
       */
 
       DocumentService.prototype.newdoc = function(){
-          
+        var thos = this;
         var data =  $rootScope.newdoc;
+        
         var promise = this.api_method.doc_new({},serialize(data)).$promise;
         promise.then(function (Result) {
-                $rootScope.newdoc.created_link = Result.slug;
-                $rootScope.newdoc.created_link_title = Result.title;
-                $rootScope.newdoc.created_secret = Result.secret;
+
+
+
+                  if(Result.err){
+                          if(Result.code == 11000 ){
+
+                           thos.flash_message('non-unique title', 'bad' , 3000)
+                          }
+                          else{
+                           thos.flash_message('error #'+Result.code, 'bad' , 3000)
+
+                          }
+                   
+                  }else{
+
+
+                                  $rootScope.newdoc.created_link = Result.slug;
+                                  $rootScope.newdoc.created_link_title = Result.title;
+                                  $rootScope.newdoc.created_secret = Result.secret;
+
+                  }
+
         }.bind(this));
         promise.catch(function (response) { 
          

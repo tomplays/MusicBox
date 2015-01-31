@@ -1256,18 +1256,65 @@ div.markup_displayer_subtype_img .icon_col {
 
 }
 
-.quick_tool_opener {
-    background:#292929;
-    border-radius: 6px;
-    font-size: 1.2em;
-    line-height: 1em;
-    opacity: 0.6;
-    padding: 3px 4px;
+
+
+.top_menus{
+    float: right;
+    min-width: 230px;
     position: fixed;
-    right: 2.5%;
-    top: 17px;
+    right: 1%;
+    text-align: left;
+    top: 2%;
+    width: 30%;
+    z-index: 999999;
+
+    &:hover{
+
+    }
+}
+
+
+.quick_tool_opener {
+   
+    background: none repeat scroll 0 0 rgba(41, 41, 41, .8);
+    border-radius: 6px;
+    color: rgb(255, 255, 255);
+    min-height: 25px;
+    min-width: 27px;
+    opacity: 0.6;
+    padding: 4px 0;
+    margin-right: 1%;
+    float:right;
+    text-align: center;
     z-index: 99999;
-    color: #fff;
+    &.fa {
+       font-size: 16px;
+       line-height: 18px;
+    }
+    &.menuicon-user{
+          padding: 3px 17px;  
+         .fa {
+           margin-right:5px;
+         }
+         .fa:hover,a .fa ,a .fa i,  a:hover{
+           color:#fff;
+         }
+    }
+     &.menuicon-sign-in{
+       
+         
+    }
+    &.menuicon-document{
+    padding: 3px 1px;  
+    }
+
+    &.menuicon-help{
+
+    }
+
+     &.menuicon-published{
+
+    }
     
     &.visible_yes{
         opacity: 1;
@@ -1276,8 +1323,23 @@ div.markup_displayer_subtype_img .icon_col {
 }
 
 
+.back_read{float:right;}
+span.floating-edit{
+     float: left;
+    margin-bottom: 1%;
+    width: 100%;
+    span {
+    float: left;
+    line-height: 17px;
+   
+    padding-top: 12px;
+    }
 
-
+    select{
+      float: left;
+      margin-right: 1%;
+    }
+}
 .quick_tools{
     top: -536px;
     position: fixed;
@@ -1288,9 +1350,11 @@ div.markup_displayer_subtype_img .icon_col {
     background: none repeat scroll 0 0 #fff;
     z-index: 99;
     &.visible_yes{
-       background: none repeat scroll 0 0 #ecf0f1;
+       background: none repeat scroll 0 0 rgb(236, 240, 241);
+      left: 0;
        top: 76px;
-       transition: background 1.2s linear 0s, top 0.2s linear 0s;
+      transition: background 1.2s linear 0s, top 0.2s linear 0s;
+     width: 100%;
     }
     a{text-decoration:underline;}
     .inside{
@@ -1388,13 +1452,13 @@ div.markup_displayer_subtype_img .icon_col {
 
 
 .doc_editor{
-    background: none repeat scroll 0 0 rgba(236, 240, 241,0.7);
-    color:#000;
+    background: none repeat scroll 0 0 rgba(236, 240, 241, 0.7);
+    color: rgb(0, 0, 0);
     float: left;
-    margin-bottom: 4%;
-    padding: 90px 2% 2%;
+    margin-bottom: 0;
+    padding: 9% 2%;
     text-align: left;
-    width: 96%;
+    width: 100%;
   
   label{
      width:100%;

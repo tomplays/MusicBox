@@ -43,7 +43,6 @@ exports.createroom = function(req, res){
 	if(req.user){
 		room.owner_email = req.user.email
 		room.owner = req.user
-
    	 	console.log(req.user.email)
 	}
 	else{

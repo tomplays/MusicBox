@@ -2,40 +2,7 @@ div(ng-if="doc_options['chapters-menu'].value == 'true' && ui.renderAvailable_ac
 	a(href="" title="sroll to section # {{$index+1}}", ng-click="scrollToAnchor($index+1)", ng-repeat="section in containers")
 		span {{$index+1}} 
 		// {{section.metadata}}
-
-
-i.fa.fa-cog.inactive.quick_tool_opener(class="inside visible_{{ui.menus.quick_tools.open}}", ng-click="expand_tools('quick_tools')" , ng-dblclick="expand_tools('quick_tools')" )
-
-div.quick_tools(class="visible_{{ui.menus.quick_tools.open}}")
-	div.inside 
-		div.user_in(ng-if="userin.username !== '' ")
-				div.user_box
-					p {{render_config.i18n.CUSTOM.COMMENT.logged_in_as}} 
-						em 
-							a(href="/me/account") {{userin.username}}
-					p
-					p()  
-						a(href="#{root_url}:#{port}/doc/aide") besoin d'aide?!
-				div.action_box(ng-if="doc_owner == true  || ui.secret " )
-					
-					p(ng-if="ui.renderAvailable_active !=='read'")
-						a(ng-click="toggle_render('read')") Reading mode
-					p(ng-if="ui.renderAvailable_active !=='editor'")  
-						a(ng-click="toggle_render('editor')") Editor mode
-					p(ng-if="ui.renderAvailable_active !=='doc_options'")  {{render_config.i18n.CUSTOM.ACTIONS.edit}} 
-						a(ng-click="toggle_render('doc_options')") {{render_config.i18n.CUSTOM.DOCUMENT.document_options}}
-
-					p()  
-						a(href="#{root_url}:#{port}/doc/{{doc.slug}}?secret={{doc.secret}}") Share secret key
-					
-
-
-		div.user_not_in(ng-if="userin.username == '' ")
-			div.user_box
-				a(href="/login?redirect_url=#{root_url}:#{port}/doc/{{doc.slug}}" , ng-if="userin.username == '' ") log in 
-				// a(ng-click="external_link(root_url+'/auth/facebook')" , ng-if="userin.username == '' ") log in with facebook
-				p()  
-						a(href="#{root_url}:#{port}/doc/aide") besoin d'aide?!
+div.top_menus(ng-include="fragments['top_menus'][0]['url']")
 
 		
 div.fixed_tools(ng-if="ui.renderAvailable_active == 'editor'")

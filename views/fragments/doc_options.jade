@@ -6,6 +6,8 @@
 div.doc_editor()
 	
 	h4 {{render_config.i18n.CUSTOM.DOCUMENT.document_options}}
+	p.back_read(ng-if="ui.renderAvailable_active !=='read'")
+			span(ng-click="toggle_render('read')") &laquo; {{render_config.i18n.CUSTOM.ACTIONS.back_to_document}}
 
 	.edit_field_left
 		.edit_field.excerpt_field
@@ -23,13 +25,6 @@ div.doc_editor()
 			input(type="text" ,ng-model="doc.user._id", name="doc.user._id")
 			i.fa.fa-save(ng-click="edit_doc('user_id')")
 
-		.edit_field.published_field
-			label published
-			select(ng-model="doc.published", name="doc.published")
-				option(value="{{doc.published}}") {{doc.published}}
-				option(value="draft") draft
-				option(value="public") public
-			i.fa.fa-save(ng-click="edit_doc('published')")
 
 	.edit_field_right
 		.edit_field.thumbnai_field
@@ -54,5 +49,4 @@ div.doc_editor()
 			i.fa.fa-plus(ng-click='doc_options_new()') new option
 
 		
-		p(ng-if="ui.renderAvailable_active !=='read'")
-			span(ng-click="toggle_render('read')") {{render_config.i18n.CUSTOM.ACTIONS.back_to_document}}
+		

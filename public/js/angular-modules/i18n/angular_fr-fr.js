@@ -34,7 +34,7 @@ $provide.value("$locale", {
 	 	"document_options":"Options du document",
 		"instructions" :"Choisissez un titre",
 		"default_published." :"Choisissez un status",
-		"create_new" :"Creer nouveau Document"
+		"create_new" :"Créer nouveau Document"
 
 
 

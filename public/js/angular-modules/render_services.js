@@ -108,11 +108,15 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
         $rootScope.ui.menus.push_markup.open = -1;
         $rootScope.ui.menus.push_comment = [];
         $rootScope.ui.menus.push_comment.open = -1;
-        // top page menu tools
-        $rootScope.ui.menus['quick_tools'] = [];
-        $rootScope.ui.menus['quick_tools'].open = 'no';
+        
 
-      
+        // top page menu tools
+
+       // $rootScope.ui.menus['quick_tools']            = new Object({'open': 'no'});
+        $rootScope.ui.menus['quick_tools_help']       = new Object({'open': 'no'});
+        $rootScope.ui.menus['quick_tools_published'] = new Object({'open': 'no'});
+        $rootScope.ui.menus['quick_tools_document'] = new Object({'open': 'no'});
+
         $rootScope.inserttext = [];
         $rootScope.inserttext[0] =''
 
@@ -1033,6 +1037,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
             arr['dataset']                   = [ {  url: 'fragments/dataset.jade'} ];
             arr['post_excerpt']              = [ {  url: 'fragments/post_excerpt.jade'} ];
             arr['document_footer']           = [ {  url: 'fragments/document_footer.jade'} ];
+            arr['top_menus']                 = [ {  url: 'fragments/top_menus.jade'} ];
 
 
             //arr['doc_real']                = [ {  url: 'fragments/doc_real.jade'} ];
