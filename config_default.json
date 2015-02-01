@@ -17,5 +17,8 @@
     "FACEBOOK_SECRET":"aqsqsdqsd",
     "HOMEPAGE": "homepage",
     "DEFAULT_ROOM_ID" : "----",
+    "MAIL_API":false,
+    "MAIL_SENDER":"MusicBox - <somebody@mail.fr> ",
+    "MAIL_DEFAULT_RECEIVER":"somebody@mail.fr",
     "ENV": "dev"
 }
