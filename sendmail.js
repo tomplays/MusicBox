@@ -31,7 +31,7 @@ exports.sendmail = function(options){
                 mailOptions.html            = options.text;
                 // send mail with defined transport object
       
-        if()
+       
         transporter.sendMail(mailOptions, function(error, info){
             if(error){
                 console.log(error);
