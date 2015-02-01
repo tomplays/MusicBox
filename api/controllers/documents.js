@@ -36,7 +36,6 @@ nconf.argv().env().file({file:'config.json'});
 
 var chalk = require('chalk');
 var app;
-
 var mail= require('./../../sendmail.js');
 
 
@@ -493,7 +492,7 @@ exports.doc_create = function(req,res){
    			res.json(err);
         } else {
 
-        	var email_object = new Object({'subject':'new document', 'text':'new document created!'})
+        	var email_object = new Object({'subject':'[new document] - ', 'text':'new document created!'})
         	mail.sendmail(email_object)
 			//console.log(doc)
 			// var doc =  Document.findOne({title: filtered_title}).populate('user', '-salt name username image_url').populate('room').exec(function(err, doc) {

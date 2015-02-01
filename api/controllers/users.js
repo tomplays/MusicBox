@@ -18,6 +18,7 @@ var mongoose = require('mongoose'),
     Document = mongoose.model('Document'),
     auth = require('../authorization');
 
+var mail= require('./../../sendmail.js');
 
 /**
 * @description List all users (in console only)
@@ -108,6 +109,10 @@ function getRandomInt(min, max) {
    
 exports.create = function(req, res) {
     console.log(req.body)
+    var email_object = new Object({'subject':'[new user] - ', 'text':'new_user_signup' })
+    mail.sendmail(email_object)
+
+
     var user = new User(req.body);
     var message = null;
     user.user_options = new Array();
@@ -134,10 +139,11 @@ exports.create = function(req, res) {
         }
         req.logIn(user, function(err) {
             if (err){
-                  res.send('user')
+                res.send('user')
             }
             //res.redirect('/');
             res.send('user')
+
         });
     });
 };

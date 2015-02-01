@@ -1024,6 +1024,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
       fragmentsAvailable:function (){
             var arr = [];
             arr['markup']                    = [ {  url: 'fragments/markup'} ];
+            arr['section']                   = [ {  url: 'fragments/section.jade'} ];
             arr['markup_editor']             = [ {  url: 'fragments/markup_editor.jade'} ];
             arr['section_editor']            = [ {  url: 'fragments/section_editor.jade'} ];
             arr['markup_push']               = [ {  url: 'fragments/markup_push.jade'} ];
@@ -1040,6 +1041,8 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
             arr['top_menus']                 = [ {  url: 'fragments/top_menus.jade'} ];
             arr['fixed_tools']               = [ {  url: 'fragments/fixed_tools.jade'} ];
             arr['inline_tools']              = [ {  url: 'fragments/inline_tools.jade'} ];
+            arr['chapters']                  = [ {  url: 'fragments/chapters.jade'} ];
+            arr['document_textarea']         = [ {  url: 'fragments/document_textarea.jade'} ];
 
             //arr['doc_real']                = [ {  url: 'fragments/doc_real.jade'} ];
             //arr['ad_welcome']              = [ {  url: 'fragments/ad_welcome.jade'} ];

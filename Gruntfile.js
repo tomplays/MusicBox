@@ -48,7 +48,7 @@ module.exports = function(grunt) {
 				},
 				livereload: {
 						options: {
-							open: true,
+							open: 'true',
 							base: ["views", "public"]
 						}
 				},

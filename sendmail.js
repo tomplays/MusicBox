@@ -24,6 +24,7 @@ exports.sendmail = function(options){
         // DEPENDS FROM API / SERVER CONFIGs
         if(!nconf.get('MAIL_API')){
             console.log('NO MAIL API')
+            console.log(options)
         }
         else{
                 mailOptions.Subject         = options.subject;

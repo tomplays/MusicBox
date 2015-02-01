@@ -32,7 +32,7 @@ $provide.value("$locale", {
 		"default_title" :"Votre titre",
 		"default_content" :"Votre contenu texte",
 	 	"document_options":"Options du document",
-		"instructions" :"Choisissez un titre",
+		"instructions" :"IIII",
 		"default_published." :"Choisissez un status",
 		"create_new" :"Créer nouveau Document"
 

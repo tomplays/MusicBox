@@ -61,8 +61,8 @@ var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','n
 
               $rootScope.doc = d.doc;
                $rootScope.markups = d.doc.markuos;
-              console.log('d push')
-              console.log(d)
+              //console.log('d push')
+              //console.log(d)
             
               $rootScope.doc.formated_date =  moment(d.doc.updated).calendar() +', '+moment(d.doc.updated).fromNow(); 
               
@@ -375,6 +375,9 @@ var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','n
             // data_serie.push(container.start)
             //$rootScope.objects_sections[index] = new Array();
             $rootScope.containers[index]['objects'] = [];
+            $rootScope.containers[index]['objects_'] = [];
+
+
             $rootScope.containers[index]['objects_count'] = [];
             $rootScope.containers[index]['objects_count']['by_positions'] = [];
             $rootScope.containers[index]['objects_count']['all'] = [];
@@ -534,7 +537,28 @@ var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','n
 
         // check exist/not null
         if(markup.type !== "" && markup.position){ // > can add it
-          
+
+
+            if(markup.type !=='container'){
+           /////              $rootScope.containers[index]['objects_'].push(markup)
+           ////            console.log($rootScope.containers[index]['objects_'])
+
+
+            }
+
+
+
+/*
+            console.log( _.groupBy($rootScope.objects_sections['objects_'], function(o){
+
+              return o.position
+            })
+            )
+*/
+
+
+
+
           // adding to the global collection
           if(markup.position == 'global'){
             $rootScope.objects_sections['global_all'].push(markup)

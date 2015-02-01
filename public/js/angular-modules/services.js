@@ -5,6 +5,7 @@
 // event register
 // thx to btford seed  : https://github.com/btford/angular-socket-io-im/
 var musicBox =  angular.module('musicBox.services', []);
+
 musicBox.run(function($rootScope) {
     console.log('cross controllers service listening ..')
     /*

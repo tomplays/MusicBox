@@ -528,7 +528,9 @@ angular.module('musicBox.DocumentService', [])
         promise.query = DocumentRest.markup_push( {Id:this.slug},promise.data).$promise;
         promise.query.then(function (Result) {
             this.flash_message(Result.inserted[0].type +' inserted', 'ok' , 3000)
-             new MusicBoxLoop().init(Result,true);
+             
+
+                new MusicBoxLoop().init(Result,true);
              
              //console.log(Result.inserted[0].type)
             
