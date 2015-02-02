@@ -1287,7 +1287,7 @@ div.markup_displayer_subtype_img .icon_col {
     float:right;
     text-align: center;
     z-index: 99999;
-    &.fa {
+    &.fa,  & .fa {
        font-size: 16px;
        line-height: 18px;
     }
@@ -1315,7 +1315,9 @@ div.markup_displayer_subtype_img .icon_col {
      &.menuicon-published{
 
     }
-    
+
+    &.active,
+    & .fa.visible_yes,  
     &.visible_yes{
         opacity: 1;
         background:#2980b9;

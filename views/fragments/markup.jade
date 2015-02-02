@@ -1,5 +1,4 @@
 div(ng-controller="FragmentCtrl", class="markup_box markup_box_depth_{{markup.depth}} markup_box_status_{{markup.status}}   markup_displayer_ markup_displayer markup_displayer_{{markup.type}} markup_displayer_subtype_{{markup.subtype}}  by_me_{{markup.by_me}} is_editing_{{markup.editing}}")
-	
 	// debug 
 	//span 
 		// p {{markup.start}} - {{markup.end}} - {{markup.metadata}} - {{markup.type}} - {{markup.subtype}}
@@ -12,6 +11,7 @@ div(ng-controller="FragmentCtrl", class="markup_box markup_box_depth_{{markup.de
 		// p {{objSchemas['comment'].modes.read.enabled}}
 		// p {{objSchemas['comment'].modes.read}}
 		// p {{objSchemas[markup.type].modes.read}}
+
 
 	div(class="iframe_container iframe_{{markup.subtype}}", fluid, position="{{markup.position}}", subtype="{{markup.subtype}}", url="{{markup.metadata}}",  ng-if="markup.type=='media' && markup.subtype !=='img'")
 		

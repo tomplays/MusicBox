@@ -263,7 +263,7 @@ exports.markup_create = function(req, res) {
 /////// bug !!!
 
 
-		var markup = new Object( { 'user_id': req_user_id, 'position': req.body.position, 'start':req.body.start, 'end':req.body.end, 'subtype': req.body.subtype, 'type': req.body.type, 'status': markup_status, 'metadata': req.body.metadata, 'depth': req.body.depth} )
+		var markup = new Object( { 'username':req.body.username, 'user_id': req_user_id, 'position': req.body.position, 'start':req.body.start, 'end':req.body.end, 'subtype': req.body.subtype, 'type': req.body.type, 'status': markup_status, 'metadata': req.body.metadata, 'depth': req.body.depth} )
 		markup.isNew; // true
 
 		//markup = markup.toObject();

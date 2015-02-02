@@ -386,10 +386,8 @@ function DocumentCtrl($scope, $http , $sce, $location, $routeParams ,socket,rend
 	$scope.toggle_render = function(r){
 		console.log('toggled_render from '+$scope.ui.renderAvailable_active+' to '+r)
 		$scope.ui.menus['quick_tools_document'].open = "no"
-				$scope.ui.menus['quick_tools_help'].open = "no"
-
+		$scope.ui.menus['quick_tools_help'].open = "no"
 		$scope.ui.menus['quick_tools_published'].open = "no"
-
 		$scope.ui.renderAvailable_active = r
 	}
 
@@ -874,7 +872,7 @@ angular.module('musicBox.controllerz', []).controller('SectionCtrl', function($s
 		// should use
 		$scope.push.position = 'left';
 		// $scope.push.visible = true;
-		$scope.$parent.push_markup();
+		$scope.push_markup();
 
 
 

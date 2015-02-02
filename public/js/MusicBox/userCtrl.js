@@ -18,6 +18,9 @@ var render;
 * @class UserCtrl
 **/
 
+
+// todo : remove old api call
+
 function UserProfileCtrl($scope, $http , $location, $routeParams,  $locale) {
 		 $scope.render_config = new Object({'i18n':  $locale})
         
@@ -49,7 +52,7 @@ function UserProfileCtrl($scope, $http , $location, $routeParams,  $locale) {
          });
 
         $scope.delete_document= function(doc){
-          $http.post(api_url+':'+PORT+'/doc/'+doc.slug+'/delete').success(function(d) {
+          $http.post(api_url+'/doc/'+doc.slug+'/delete').success(function(d) {
           	console.log($scope.documents)
           	//	$scope.documents = _.without($scope.documents,d)
 			$scope.documents  = _.reject($scope.documents , function(doc){ return doc._id  == d._id; });

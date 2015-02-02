@@ -1,4 +1,5 @@
 // email wrapper fonction
+// Called from controllers 
 
 
 var nconf = require('nconf');
@@ -6,7 +7,6 @@ nconf.argv().env().file({file:'config.json'});
 var nodemailer = require('nodemailer');
 var directTransport = require('nodemailer-direct-transport');
 var transporter = nodemailer.createTransport(directTransport());
-
 
 // setup e-mail data (defaults)
 var mailOptions = {
@@ -40,8 +40,6 @@ exports.sendmail = function(options){
                 console.log('Message sent: ' + info.response);
             }
         });
-
-
         console.log('sent mail>')
         console.log(mailOptions)
 
@@ -49,6 +47,6 @@ exports.sendmail = function(options){
         }
        return;
 }
-
+// DIRECT CALL TEST.
 //var o = new Object({'subject':'sdds', 'text': 'sd'})
 //this.sendmail(o)
