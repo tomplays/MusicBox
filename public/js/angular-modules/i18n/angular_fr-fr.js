@@ -62,7 +62,8 @@ $provide.value("$locale", {
 		"under" : "en dessous",
 		"background" : "en fond",
 		"global" : "global",
-		"slidewide" :"slidewide"
+		"slidewide" :"slidewide",
+		"inline" : "inline"
 	},
 
 

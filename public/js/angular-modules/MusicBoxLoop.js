@@ -425,7 +425,7 @@ var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','n
           // return false;
         }
 
-         console.log('wraping')
+         //console.log('wraping')
        
         markup.offset_start = 0;
         markup.offset_end = 0;
@@ -536,6 +536,10 @@ var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','n
         */
 
         // check exist/not null
+
+        if(markup.type =='container'){
+
+        }
         if(markup.type !== "" && markup.position){ // > can add it
 
 
@@ -577,7 +581,7 @@ var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','n
         }
         //console.log($rootScope.containers[index]['objects'][markup.type][markup.position])
         //console.log('pushed'+markup.position)
-        
+        // console.log($rootScope.containers[index].objects['container']['inline'])
         return markup;
       },
 

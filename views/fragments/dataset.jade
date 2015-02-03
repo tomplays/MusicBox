@@ -19,35 +19,35 @@
         th status.
         
         th moderation.
-    tbody
-      tr(ng-repeat="a in doc.markups" class="trtype-{{a.type}}")
-        // , ng-if="a.type==filter_dataset_by || filter_dataset_by == 'any'"
-        td(ng-controller="FragmentCtrl")
-         a.markup-item-subtype( ng-click="toggle_select_markup(a,'click')", class="clipped_{{a.isselected}} markup-hn_{{a.subtype}}" ) + 
+    tbody()
+      tr(ng-controller="MarkupCtrl" ng-repeat="markup in doc.markups" class="trtype-{{markup.type}}")
+        // , ng-if="markup.type==filter_dataset_by || filter_dataset_by == 'any'"
+        td()
+         span.markup-item-subtype(ng-click="toggle_select_markup('click')", class="clipped_{{markup.isselected}} markup-hn_{{markup.subtype}}" ) + 
          
         td
-         i.fa.fa-save.btn_action(tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.save}}" ng-click="markup_save(a)")
+         i.fa.fa-save.btn_action(tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.save}}" ng-click="markup_save(markup)")
 
         
 
-         i.fa.fa-remove.btn_action(tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.delete}}" ng-click="markup_delete(a)")
-        td {{a.type}}
-        td {{a.subtype}}
+         i.fa.fa-remove.btn_action(tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.delete}}" ng-click="markup_delete(markup)")
+        td {{markup.type}}
+        td {{markup.subtype}}
         td 
-         input(ng-model="a.metadata" , type="text")
-        td {{a.start}} - {{a.end}}
-        td {{a.position}}
-        td {{a.sectionin}}
-        td {{a.isolated}}
+         input(ng-model="markup.metadata" , type="text")
+        td {{markup.start}} - {{markup.end}}
+        td {{markup.position}}
+        td {{markup.sectionin}}
+        td {{markup.isolated}}
         td 
-          span {{a.selected}}
+          span {{markup.selected}}
         td
-          span {{a.editing}}
+          span {{markup.editing}}
         td
-          span {{a.status}}
+          span {{markup.status}}
         td
-          i.fa.fa-check.btn_action(tooltip-placement="left" tooltip="set as approved" ng-click="markup_moderate(a, 'approved')") 
-          i.fa.fa-close.btn_action(tooltip-placement="left" tooltip="set as pending" ng-click="markup_moderate(a, 'pending')") 
+          i.fa.fa-check.btn_action(tooltip-placement="left" tooltip="set as approved" ng-click="markup_moderate(markup, 'approved')") 
+          i.fa.fa-close.btn_action(tooltip-placement="left" tooltip="set as pending" ng-click="markup_moderate(markup, 'pending')") 
 
 .one.columns
   a(ng-click="Grabcollection('select')") Grabcollection (test function)

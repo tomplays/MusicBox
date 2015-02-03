@@ -152,7 +152,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
               'map_range': true,
               'positions': {
                   "forced": "",
-                  "available": ['wide','center','left', 'right', 'under','slidewide', 'global']},
+                  "available": ['wide','center','left', 'right', 'under','slidewide', 'global', 'background']},
               'modes': {
                 'editor': {                   
                   'enabled': true,
@@ -374,13 +374,88 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
                   },
             },
           })
-
  definitions.note =  definitions.comment;
- definitions.container =  definitions.comment;
  definitions.generic =  definitions.comment;
  definitions.child =  definitions.comment;
+ definitions.container_class =  definitions.comment;
 
+ definitions.container = new Object({
+              'name': 'container',
+              'display_name': $rootScope.render_config.i18n.CUSTOM.OBJECTS.comment,
+              'map_range': true,
+              'positions': {
+                  "forced": "inline",
+                  "available": ['inline']},
+              'modes': {
+                'editor': {                   
+                  'enabled': true,
+                        'display' : {
+                            'date': false, 
+                            'user': false,
+                        },
+                        'tabs': {
+                            'metadata': '',
+                            'type': 'type'
 
+                        },
+                          'fields' : {
+                                  'ranges': { 
+                                      'display' : true,
+                                      'label':'link url',
+                                    'input' : 'range'
+                                  },
+                                  'type': { 
+                                      'display' : true,
+                                      'label':'type',
+                                    'input' : 'select'
+                                  },
+                                
+                                  'position':{ 
+                                      'display' : false,
+                                      'label':'position',
+                                    'input' : 'select'
+                                  },
+                                  'subtype': {
+                                    'display' : true,
+                                    'label':'subtye',
+                                    'input' : 'select',
+                                    'free_input' : false,
+                                    'show_editor': 'hidden',
+                                    'available' : ['section'],
+                                    'forced' : 'section'
+                                  },
+                                  'metadata': {
+                                    'display' : true,
+                                    'label':'subtye',
+                                    'input' : 'select',
+                                    'free_input' : false,
+                                    'show_editor': 'hidden',
+                                    'available' : ['hyperlink'],
+                                    'forced' : 'hyperlink'
+                                  }
+
+                          },
+                              
+                  },
+                  'read': {
+                          'enabled': true,
+                          'display' : {
+                                 'date': false, 
+                                 'user': false,
+                                 'metadata': {
+                                      'displayed':'metadata'
+                                 }
+
+                          },
+                        'icon': { 
+                            'before': {
+                                'show' : true,
+                                'class' : 'comment'
+                              }
+                          },           
+                  },
+            },
+          })
 /*
         definitions.note = new Object({
               'name': 'note',

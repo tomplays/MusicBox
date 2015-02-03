@@ -4,7 +4,31 @@
 // not very used.. only for video players in v1.
 // some tests for a reafactoring commented
 
-angular.module('musicBox.directives', []).directive('lt',   function($rootScope) {
+angular.module('musicBox.directives', [])
+
+
+.directive('ngKeystroke', function(){
+    return {
+        restrict: 'A',
+        link: function(scope, elem, attrs){
+            elem.bind("keyup", function(){
+              console.log('ft')
+             
+                scope.$digest(); //we manually refresh all the watchers. I don't know why the watcher on {{log}} won't trigger if the event is fired on a "space" key :s but the push is done regardless
+            });
+        }
+    };
+})
+.directive('keyListener', function() {
+    return function(scope, elm, attrs) {
+        elm.bind("keyup", function(event) {
+            console.log('ft')
+            scope.$apply(attrs.keyListener);
+        });
+    };
+})
+
+.directive('lt',   function($rootScope) {
   
 
   function selection_ends(scope){

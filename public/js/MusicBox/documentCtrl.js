@@ -206,7 +206,9 @@ function DocumentCtrl($scope, $http , $sce, $location, $routeParams ,socket,rend
 		$scope.push.start  = (_.last($scope.containers).end)+1
 		$scope.push.end  = (_.last($scope.containers).end)+10
 		$scope.push.type = 'container';
-		$scope.push.subtype = 'container';		
+		$scope.push.subtype = 'section';	
+				$scope.push.position  = 'inline'
+	
 		$scope.push_markup();
 	}
 	
@@ -474,59 +476,7 @@ console.log(m)
 
 	}
 
-	// icon click or section select
-	$scope.toggle_select_markup = function (markup, event_name){
-		//console.log(markup)
-		
-		
-		if(markup.sectionin || markup.sectionin == 0){
-			$scope.containers[markup.sectionin].modeletters = 'single'
-		}
-
-		if(markup.isolated == true){
-			markup.editing = !markup.editing
-			return;
-		}
-		if(markup.type == 'container'){
-			_.each($scope.containers, function(c, i){
-				if(c !== markup){
-					// toggle the others
-					c.selected = false;
-				}
-			});
-
-		}
-		// event 
-		if(event_name == 'dblclick'){
-
-			if($scope.doc_owner || markup.by_me === true){
-				markup.editing = !markup.editing
-			}
-			if(markup.by_me === false){
-				// alert('not by me')
-			}
-
-		}
-		
-		if(event_name == 'click'){
-				
-			markup.selected = !markup.selected
-
-
-		}
-
-
-		// focus'
-		if(markup.position=="left" && markup.editing){
-			$scope.ui.focus_side = 'side_left'
-		}
-		else if(markup.position=="right" && markup.editing){
-			$scope.ui.focus_side = 'side_right'
-		}
-		else{
-			$scope.ui.focus_side = ''
-		}
-    }	
+	
 
     // transform ranges to string
     // limited to 70 chars
@@ -669,7 +619,7 @@ console.log(m)
     // watch the textarea content.
 
 	$scope.$watch('doc.content', function(newValue, oldValue) {
-		//console.log(newValue +'-'+ oldValue)
+		console.log(newValue +'-'+ oldValue)
 		if(newValue !==undefined  && oldValue !==undefined && (newValue !== oldValue) ){
 			var diff = 99999999999999;
 			
@@ -776,6 +726,7 @@ console.log(m)
 	})
 
 
+	
 
 } // end DocumentCtrl
 
@@ -842,9 +793,47 @@ angular.module('musicBox.controllerz', []).controller('SectionCtrl', function($s
 
 
 
+$scope.save_section= function (section){
+		section.fulltext =section.fulltext+'----'
+		$scope.section.fulltext = section.fulltext
+		console.log(section.fulltext)
+		//alert($scope.section.fulltext)
+		$scope.doc.content = $scope.section.fulltext
+		$scope.section.end = $scope.section.end+1;
+	}
 
 
 
+$scope.ssave_section= function (){
+		//alert('sd')
+	}
+
+	/*
+$scope.$watchCollection('containers', function(newValue, oldValue) {
+
+		 	if(oldValue && newValue && newValue !== ''){
+		 		console.log('FT! doc')
+		 	}
+      
+    });	
+
+
+$scope.$watch('section.fulltext', function(newValue, oldValue) {
+
+		 	if(oldValue && newValue && newValue !== ''){
+		 		console.log('FT!')
+		 	}
+      
+    });	
+
+$scope.$watchCollection('section', function(newValue, oldValue) {
+
+		 	if(oldValue && newValue && newValue !== ''){
+		 	 alert('hey hello')
+		 	}
+      
+    });	
+*/
 	// short function to push a comment
 	$scope.push_comment= function (){
 
@@ -886,12 +875,11 @@ angular.module('musicBox.controllerz', []).controller('SectionCtrl', function($s
 	}
 
 
-
+/*
 
 		$scope.hello =''
-		$scope.toggle_hello= function (s){
-			$scope.hello = Math.random(0,999)
-			// $scope.$parent.doc.title = Math.random(0,999)
+		$scope.toggle_select_section= function (s){
+			 $scope.$parent.doc.title = Math.random(0,999)
 
 		}
 
@@ -902,7 +890,7 @@ angular.module('musicBox.controllerz', []).controller('SectionCtrl', function($s
 		 	}
       
     });	
-
+*/
 
 
 	
@@ -912,9 +900,64 @@ angular.module('musicBox.controllerz', []).controller('SectionCtrl', function($s
 
 }); // end controller
 
-angular.module('musicBox.controller', []).controller('FragmentCtrl', function($scope, $http) {
+angular.module('musicBox.controller', []).controller('MarkupCtrl', function($scope, $http) {
 
 	// used for editing a markup posittion ui.
+	// icon click or section select
+	$scope.toggle_select_markup = function (event_name){
+		console.log($scope.markup)
+		
+		
+		if($scope.markup.sectionin || $scope.markup.sectionin == 0){
+			$scope.containers[$scope.markup.sectionin].modeletters = 'single'
+		}
+
+		if($scope.markup.isolated == true){
+			$scope.markup.editing = !$scope.markup.editing
+			return;
+		}
+		if($scope.markup.type == 'container'){
+			_.each($scope.containers, function(c, i){
+				if(c !== $scope.markup){
+					// toggle the others
+					c.selected = false;
+				}
+			});
+
+		}
+		// event 
+		if(event_name == 'dblclick'){
+
+			if($scope.doc_owner || $scope.markup.by_me === true){
+				$scope.markup.editing = !$scope.markup.editing
+			}
+			if($scope.markup.by_me === false){
+				// alert('not by me')
+			}
+		}
+		
+		if(event_name == 'click'){
+			$scope.markup.selected = !$scope.markup.selected
+		}
+
+
+
+		if($scope.markup.editing === true){
+			$scope.markup.selected = true;
+		}
+
+		// focus'
+		if($scope.markup.position=="left" && $scope.markup.editing){
+			$scope.ui.focus_side = 'side_left'
+		}
+		else if( ($scope.markup.position=="right" || $scope.markup.position=="inline") && $scope.markup.editing){
+			$scope.ui.focus_side = 'side_right'
+		}
+		else{
+			$scope.ui.focus_side = ''
+		}
+    }	
+
 
 	$scope.mini_layout_class= function (markup,mkpos ){
 		var output = ''
@@ -983,13 +1026,13 @@ angular.module('musicBox.controller', []).controller('FragmentCtrl', function($s
     
     $scope.$watch('markup.position', function(newValue, oldValue) {
           // only new value check
-          //console.log(newValue)
-         // console.log(oldValue)
+         console.log(newValue)
+          console.log(oldValue)
 
           if(oldValue !==newValue && oldValue && oldValue !=='' &&  newValue && newValue !==''){
             $scope.markup.position = newValue;
             	// no toggle $scope.ui.focus_side = ''
-              if(autosave){
+              if(autosave===false){
               	
               	doc.markup_save($scope.markup)
               }  

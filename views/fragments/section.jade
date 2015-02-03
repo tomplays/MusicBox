@@ -10,13 +10,18 @@ div(ng-controller="SectionCtrl")
 			div(ng-if="(layout.name == 'center') && ($parent.$parent.$first) ", ng-include="fragments['doc_title'][0].url")
 					
 			div(ng-if="layout.name == 'right'")
-				div(ng-include="fragments['section_editor'][0].url" )
-									
-				div(class="markup_ container_class_type_inline", ng-if="ui.renderAvailable_active == 'editor'" , ng-repeat="markup in section.objects['container_class']['inline']" ng-include="fragments['markup'][0].url")
+				// old section div(ng-include="fragments['section_editor'][0].url" )
 				
-				div(class="markup_ markup_type_inline", ng-if="ui.renderAvailable_active == 'editor'" , ng-repeat="markup in section.objects['markup']['inline']", ng-include="fragments['markup'][0].url")
 
-				div(class="markup_ markup_type_bg", ng-if="ui.renderAvailable_active == 'editor'" , ng-repeat="markup in section.objects['media']['background']", ng-include="fragments['markup'][0].url")
+				div.forced.forced-right(ng-if="ui.renderAvailable_active == 'editor'")		
+					div(class="markup_ markup_type_container",  ng-if="ui.renderAvailable_active == 'editor'" , ng-repeat="markup in section.objects['container']['inline']", ng-include="fragments['markup'][0].url")
+
+					div(class="markup_ container_class_type_inline" , ng-repeat="markup in section.objects['container_class']['inline']" ng-include="fragments['markup'][0].url")
+					
+					div(class="markup_ markup_type_inline", ng-if="ui.renderAvailable_active == 'editor'" , ng-repeat="markup in section.objects['markup']['inline']", ng-include="fragments['markup'][0].url")
+
+
+					div(class="markup_ markup_type_bg", ng-if="ui.renderAvailable_active == 'editor'" , ng-repeat="markup in section.objects['media']['background']", ng-include="fragments['markup'][0].url")
 
 			div(ng-if="object.visible !==false && layout.include_objects !==false && layout.name !=='slidewide' " , ng-repeat='object in available_sections_objects')
 
@@ -39,6 +44,10 @@ div(ng-controller="SectionCtrl")
 				p {{hello}}
 				// letters part !!
 				div.inline_tools(ng-include="fragments['inline_tools'][0]['url']" ng-if="ui.renderAvailable_active== 'editor'")
+				// p {{section}}
+				div.fluidtextarea(ng-if="ui.renderAvailable_active == 'editor'")
+					textarea(ng-trim="false"  key-listener="changeFunction()"  ng-model="section.fulltext")
+					a.btn_ok(ng-click="save_section(section)") save
 
 				div.theletters(ng-if="section.modeletters=='single'")
 					// span.lt(class="{{l.classes_flat}}", ng-bind-html="l.char", lt="l" , ng-repeat="l in section.letters")

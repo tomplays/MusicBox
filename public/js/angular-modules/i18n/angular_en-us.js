@@ -78,6 +78,7 @@ $provide.value("$locale", {
 		"left" : "on the left",
 		"right" : "on the right",
 		"center" : "centered",
+		"inline" : "inline",
 		"under" : "under",
 		"global" : "global",
 		"background" : "as background",

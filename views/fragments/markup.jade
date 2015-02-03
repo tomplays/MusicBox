@@ -1,7 +1,7 @@
-div(ng-controller="FragmentCtrl", class="markup_box markup_box_depth_{{markup.depth}} markup_box_status_{{markup.status}}   markup_displayer_ markup_displayer markup_displayer_{{markup.type}} markup_displayer_subtype_{{markup.subtype}}  by_me_{{markup.by_me}} is_editing_{{markup.editing}}")
+div(ng-controller="MarkupCtrl", class="markup_box markup_box_depth_{{markup.depth}} markup_box_status_{{markup.status}}   markup_displayer_ markup_displayer markup_displayer_{{markup.type}} markup_displayer_subtype_{{markup.subtype}}  by_me_{{markup.by_me}} is_editing_{{markup.editing}}")
 	// debug 
-	//span 
-		// p {{markup.start}} - {{markup.end}} - {{markup.metadata}} - {{markup.type}} - {{markup.subtype}}
+	// span 
+		p {{markup.start}} - {{markup.end}} - {{markup.metadata}} - {{markup.type}} - {{markup.subtype}} {{markup.position}}
 		// p {{markup.selected}}
 		p m.by_me: {{markup.by_me}}
 		p m.can_approve  {{markup.can_approve}}
@@ -18,7 +18,7 @@ div(ng-controller="FragmentCtrl", class="markup_box markup_box_depth_{{markup.de
 	img.mk_img(ng-if="markup.subtype=='img'" , data-tdid="{{markup.id}}", ng-src="{{markup.metadata}}")
 
 	span.icon_col.use_depth(ng-hide="markup.type== 'child' ")
-		i(tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.select_edit}}" class="fa fa-{{markup.type}} fa-{{markup.subtype}} editing_{{markup.editing}} selected_{{markup.selected}}",  ng-click="toggle_select_markup(markup,'click')", ng-dblclick="toggle_select_markup(markup, 'dblclick')"  ) 
+		i(tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.select_edit}}" class="fa fa-{{markup.type}} fa-{{markup.subtype}} editing_{{markup.editing}} selected_{{markup.selected}}",  ng-click="toggle_select_markup('click')", ng-dblclick="toggle_select_markup( 'dblclick')"  ) 
 			span(ng-if="markup.type=='generic'") {{markup.subtype[0]}}
 
 	div.data_col
