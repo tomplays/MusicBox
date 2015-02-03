@@ -376,6 +376,8 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
           })
  definitions.note =  definitions.comment;
  definitions.generic =  definitions.comment;
+  definitions.semantic =  definitions.comment;
+
  definitions.child =  definitions.comment;
  definitions.container_class =  definitions.comment;
  definitions.container_class.positions.available.push('inline')
