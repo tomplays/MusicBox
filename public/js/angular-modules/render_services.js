@@ -378,6 +378,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
  definitions.generic =  definitions.comment;
  definitions.child =  definitions.comment;
  definitions.container_class =  definitions.comment;
+ definitions.container_class.positions.available.push('inline')
 
  definitions.container = new Object({
               'name': 'container',
