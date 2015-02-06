@@ -10,13 +10,10 @@ div.main_center.newdoc_form.bordered
 	form(ng-if="!newdoc.created_link") 
 		h3 {{render_config.i18n.CUSTOM.DOCUMENT.create_new}}
 		.left_part
-			p  {{render_config.i18n.CUSTOM.DOCUMENT.instructions}}
+			// p  {{render_config.i18n.CUSTOM.DOCUMENT.instructions}}
 			p
-
-
 			p
 				label {{render_config.i18n.CUSTOM.DOCUMENT.default_title}}
-
 				input(ng-model="newdoc.raw_title", ng-value="newdoc.title") 
 			
 			p
@@ -45,7 +42,7 @@ div.main_center.newdoc_form.bordered
 	.full-wide(ng-if="newdoc.created_link") 
 		p
 			span Your new document:
-				a(href="#{root_url}:#{port}/doc/{{newdoc.created_link}}")  {{newdoc.created_link_title}}
+				a(href="#{root_url}:#{port}/doc/{{newdoc.created_link}}?fresh=true")  {{newdoc.created_link_title}}
 		p
 			span Share it in secret with url :
 				a(href="#{root_url}:#{port}/doc/{{newdoc.created_link}}/{{newdoc.created_secret}}")  {{newdoc.created_secret}}

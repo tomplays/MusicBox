@@ -619,6 +619,7 @@ console.log(m)
     // watch the textarea content.
 
 	$scope.$watch('doc.content', function(newValue, oldValue) {
+
 		console.log(newValue +'-'+ oldValue)
 		if(newValue !==undefined  && oldValue !==undefined && (newValue !== oldValue) ){
 			var diff = 99999999999999;
@@ -688,6 +689,9 @@ console.log(m)
 					}
 					if(touched){
 						console.log(mk.type)
+						//mk.editing = true;
+						//mk.selected = true;
+
 						$scope.ui.selected_range.markups_to_offset.push(mk)
 					}
 				});
@@ -793,13 +797,21 @@ angular.module('musicBox.controllerz', []).controller('SectionCtrl', function($s
 
 
 
-$scope.save_section= function (section){
-		section.fulltext =section.fulltext+'----'
-		$scope.section.fulltext = section.fulltext
-		console.log(section.fulltext)
+$scope.save_section= function (){
+	// Manual save section
+	   			 var string  = '';
+                _.each($scope.containers, function(container){
+                    string  += container.fulltext;
+                })
+                $scope.doc.content = string;
+                $scope.doc_sync()
+
+	//	section.fulltext =section.fulltext+'----'
+	//	$scope.section.fulltext = section.fulltext
+	//	console.log(section.fulltext)
 		//alert($scope.section.fulltext)
-		$scope.doc.content = $scope.section.fulltext
-		$scope.section.end = $scope.section.end+1;
+	//	$scope.doc.content = $scope.section.fulltext
+	//	$scope.section.end = $scope.section.end+1;
 	}
 
 

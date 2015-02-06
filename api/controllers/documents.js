@@ -129,6 +129,7 @@ if(debugger_on){
 					res.render('index', {
 						user_in : user_,
 						doc_title : doc.title,
+						raw_content : doc.content,
 						doc_thumbnail : doc.thumbnail,
 						doc_excerpt: doc.excerpt,
 						doc_slug_discret : doc_slug_discret,

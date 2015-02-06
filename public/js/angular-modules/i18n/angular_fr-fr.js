@@ -28,19 +28,23 @@ $provide.value("$locale", {
 	},
 	"DOCUMENT" : {
 		"by_author" : "par",
-		"my_documents" : "My documents",
+		"my_documents" : "Mes documents",
 		"default_title" :"Votre titre",
 		"default_content" :"Votre contenu texte",
 	 	"document_options":"Options du document",
 		"instructions" :"IIII",
 		"default_published." :"Choisissez un status",
 		"create_new" :"Créer nouveau Document"
+	},
 
-
-
-
+	"DOCUMENT_FIELDS" : {
+		"title" : "titre",
+		"published" : "publié",
+		"room" : "room",
+		"updated" : "Mise à jour"
 
 	},
+
 	"OBJECTS" :{
 			"comment": "Commentaire",
 			"note" :"Note",
@@ -82,11 +86,8 @@ $provide.value("$locale", {
 		"pick_email" : "Votre email",
 		"logout" : "Se deconnecter",
 		"myprofile": "Mon profil",
-				"hidden_from_public": "(non partagée)"
-
-
-
-
+		"hidden_from_public": "(non partagée)",
+		"logged_in_as" : "Vous êtes connecté en tant que"
 
 	},
 

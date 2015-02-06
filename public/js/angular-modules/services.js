@@ -31,7 +31,7 @@ musicBox.run(function($rootScope, $http, $route) {
        $rootScope.ui        = '';
   }
   });
-
+/*
    $rootScope.$on('renderEvent', function(event, args) {
           $rootScope.$broadcast('render', args);
       });  
@@ -56,6 +56,7 @@ musicBox.run(function($rootScope, $http, $route) {
     $rootScope.$on('keyEvent', function(event, args) {
         $rootScope.$broadcast('key', args);
     });
+ */
 });
 
 

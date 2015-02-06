@@ -35,6 +35,11 @@ angular.module('musicBox.DocumentService', [])
        this.slug      = slug;
     }
     this.render = renderfactory().init()
+    if($routeParams.fresh){
+               
+      this.flash_message('hey', 'help' , 300000)
+
+     }
     console.log(this)
 
   };
@@ -418,6 +423,8 @@ angular.module('musicBox.DocumentService', [])
         $rootScope.flash_message = {}
         $rootScope.flash_message.text = msg;
         $rootScope.flash_message.classname = classname;
+        $rootScope.flash_message.closer = true;
+
         // apply timeout if set to true
         if(timeout){
             $timeout(function(){
@@ -505,6 +512,27 @@ angular.module('musicBox.DocumentService', [])
           }.bind(this));
 
       }
+       DocumentService.prototype.doc_delete = function () {
+        var thos = this;
+        var promise = new Object();
+     
+        promise.query = DocumentRest.doc_delete( {id:this.slug}).$promise;
+        promise.query.then(function (Result) {
+            thos.flash_message('deleted', 'ok' , 3000)
+
+            console.log(Result)
+            console.log($rootScope.documents)
+ 
+        }.bind(this));
+        promise.query.catch(function (response) {  
+           console.log(response)   
+           thos.flash_message('error', 'error' , 3000)
+        }.bind(this));
+
+
+       }
+
+
        /**
       * @description Push a markup
       * @param {object} markup - markup to push

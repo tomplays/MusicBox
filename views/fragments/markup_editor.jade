@@ -97,20 +97,6 @@ form(name="myForm")
 				// input(ng-model="markup.position" ,type="text")
 				// select(ng-options="pos for pos in objSchema[markup.type].position_available" , ng-model="markup.position", name="markup.position")
 
-		tab(heading="ranges" ng-if="objSchemas[markup.type].modes.editor.fields.ranges.display" ) 
-				
-				label set start-end ranges
-				span.field.ranges
-					span.ranges_inputs
-						span.field.numberfloat._start
-							label start
-							input(required   type="number" , ng-model="markup.start" )
-
-						span.field.numberfloat.number._end
-							label end
-							input(required  type="number" , ng-model="markup.end" )
-					span.ranges_tools
-						i.fa.fa-text-width.match_selection(title="re-match ranges from active selection", ng-click="match_selection(markup)" ) 
 		
 
 	.section_tool_more(ng-if="markup.object_tools")
@@ -140,11 +126,7 @@ form(name="myForm")
 			p
 				a(ng-click="offset_markup(markup, -1, 0)") offset start-1
 
-		span.field.smallinput(ng-if="doc_owner == true")
-			label status
-			input( ng-model="markup.status" ,type="text")
-
-
+		
 
 		span.field.smallinput(ng-if="true")
 			label  depth
@@ -157,12 +139,32 @@ form(name="myForm")
 		input(ng-model="markup.doc_id_id" , type="text")
 
 	
-	
-	
+.object-tools(ng-if="objSchemas[markup.type].modes.editor.fields.ranges.display")
+	// tab(heading="ranges" ) 			
+	label set start-end ranges
+	span.field.ranges
+		span.ranges_inputs
+			span.field.numberfloat._start
+				label start
+				input(required   type="number" , ng-model="markup.start" )
+
+			span.field.numberfloat.number._end
+				label end
+				input(required  type="number" , ng-model="markup.end" )
+		span.ranges_tools
+			i.fa.fa-text-width.match_selection(title="re-match ranges from active selection", ng-click="match_selection(markup)" ) 
+		
+
 .object-tools
-		i.fa.fa-sliders.btn_action(tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.more_options}}" ng-click="object_tools(markup)")
-		i.fa.fa-save.btn_action(tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.save}}" ng-click="markup_save(markup)")
+	label Moderation / status
+	// input(ng-model="markup.status" , type="text")
+	i.fa.fa-flag.btn_action(style="color:green" ng-click="markup_moderate(markup, 'approved')") approved
+	i.fa.fa-flag.btn_action(style="color:red" ng-click="markup_moderate(markup, 'pending')") pending	
+.object-tools
+	i.fa.fa-sliders.btn_action(tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.more_options}}" ng-click="object_tools(markup)")
+	i.fa.fa-save.btn_action(tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.save}}" ng-click="markup_save(markup)")
 
-		// i.fa.fa-check-circle.btn_action(tooltip-placement="left" tooltip="moderate" ng-click="markup_moderate (markup, 'approved')") {{markup.status}}
+	// i.fa.fa-check-circle.btn_action(tooltip-placement="left" tooltip="moderate" ng-click="markup_moderate (markup, 'approved')") {{markup.status}}
 
-		i.fa.fa-remove.btn_action(tooltip-placement="left" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.delete}}" ng-click="markup_delete(markup)")
+
+	i.fa.fa-remove.btn_action(tooltip-placement="left" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.delete}}" ng-click="markup_delete(markup)")

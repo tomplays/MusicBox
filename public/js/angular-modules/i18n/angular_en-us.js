@@ -111,7 +111,8 @@ $provide.value("$locale", {
 		"pick_email" : "Your email",
 		"logout" : "Logout",
 		"myprofile": "My profile",
-		"hidden_from_public": "(not visible) "
+		"hidden_from_public": "(not visible) ",
+		"logged_in_as" : "Vous êtes connecté en tant que"
 
 
 

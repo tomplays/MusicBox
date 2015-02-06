@@ -18,7 +18,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
 
         // DEPREC. use :  $rootScope.render_config.i18n instead
         $rootScope.i18n                       = $locale;
-        console.log($rootScope.i18n.id)
+        //console.log($rootScope.i18n.id)
         $rootScope.objSchemas                  =   self.objSchemas(); 
 
 
@@ -75,6 +75,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
                $rootScope.ui.secret            =  $routeParams.secret
                console.log('using secret')
         }
+
 
         // &debug
         if($routeParams.debug){
@@ -312,7 +313,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
                             'user': false,
                         },
                         'tabs': {
-                            'metadata': 'comment text',
+                            'metadata': 'text',
                             'type': 'type'
 
                         },
@@ -374,13 +375,19 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
                   },
             },
           })
+
+
  definitions.note =  definitions.comment;
  definitions.generic =  definitions.comment;
-  definitions.semantic =  definitions.comment;
-
+ definitions.semantic =  definitions.comment;
  definitions.child =  definitions.comment;
- definitions.container_class =  definitions.comment;
- definitions.container_class.positions.available.push('inline')
+/*
+var container_class =  definitions.comment;
+container_class.positions.available = new Array('inline')
+container_class.modes.editor.fields.metadata.label = 'css class'
+//definitions.container_class = container_class;
+*/
+
 
  definitions.container = new Object({
               'name': 'container',
@@ -391,7 +398,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
                   "available": ['inline']},
               'modes': {
                 'editor': {                   
-                  'enabled': true,
+                       'enabled': true,
                         'display' : {
                             'date': false, 
                             'user': false,
@@ -401,7 +408,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
                             'type': 'type'
 
                         },
-                          'fields' : {
+                        'fields' : {
                                   'ranges': { 
                                       'display' : true,
                                       'label':'link url',
@@ -429,7 +436,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
                                   },
                                   'metadata': {
                                     'display' : true,
-                                    'label':'subtye',
+                                    'label':'value',
                                     'input' : 'select',
                                     'free_input' : false,
                                     'show_editor': 'hidden',
@@ -459,87 +466,14 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
                   },
             },
           })
-/*
-        definitions.note = new Object({
-              'name': 'note',
-              'display_name': $rootScope.render_config.i18n.CUSTOM.OBJECTS.comment,
-              'map_range': true,
-              'positions': {
-                  "forced": "left",
-                  "available": ['wide','left', 'right', 'under', 'global']},
-              'modes': {
-                'editor': {                   
-                  'enabled': true,
-                        'display' : {
-                            'date': false, 
-                            'user': false,
-                        },
-                          'fields' : {
-                                  'ranges': { 
-                                      'display' : true,
-                                      'label':'link url',
-                                    'input' : 'range'
-                                  },
-                                  'type': { 
-                                      'display' : true,
-                                      'label':'type',
-                                    'input' : 'select'
-                                  },
-                                
-                                  'position':{ 
-                                      'display' : true,
-                                      'label':'position',
-                                    'input' : 'select'
-                                  },
-                                  'subtype': {
-                                    'display' : true,
-                                    'label':'subtye',
-                                    'input' : 'select',
-                                    'free_input' : false,
-                                    'show_editor': 'hidden',
-                                    'available' : ['hyperlink'],
-                                    'forced' : 'hyperlink'
-                                  },
-                                  'metadata': {
-                                    'display' : true,
-                                    'label':'subtye',
-                                    'input' : 'select',
-                                    'free_input' : false,
-                                    'show_editor': 'hidden',
-                                    'available' : ['hyperlink'],
-                                    'forced' : 'hyperlink'
-                                  }
 
-                          },
-                              
-                  },
-                  'read': {
-                          'enabled': true,
-                          'display' : {
-                                 'date': true, 
-                                 'user': true,
-                                 'metadata': {
-                                      'displayed':'metadata'
-                                 }
-
-                          },
-                        'icon': { 
-                            'before': {
-                                'show' : true,
-                                'class' : 'note'
-                              }
-                          },           
-                  },
-            },
-          })
-*/
           definitions.data = new Object({
               'name': 'data',
               'display_name': $rootScope.render_config.i18n.CUSTOM.OBJECTS.comment,
               'map_range': true,
               'positions': {
                   "forced": "left",
-                  "available": ['right', 'global']},
+                  "available": ['under', 'global']},
               'modes': {
                 'editor': {                   
                   'enabled': true,

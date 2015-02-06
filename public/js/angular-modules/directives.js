@@ -7,23 +7,46 @@
 angular.module('musicBox.directives', [])
 
 
-.directive('ngKeystroke', function(){
+.directive('ngKeystroke', function($rootScope){
     return {
         restrict: 'A',
         link: function(scope, elem, attrs){
             elem.bind("keyup", function(){
               console.log('ft')
-             
+
+
+
                 scope.$digest(); //we manually refresh all the watchers. I don't know why the watcher on {{log}} won't trigger if the event is fired on a "space" key :s but the push is done regardless
             });
         }
     };
 })
-.directive('keyListener', function() {
+.directive('keyListener', function($rootScope) {
     return function(scope, elm, attrs) {
+       elm.bind("mousedown", function(event) {
+        console.log(event)
+      });
+        elm.bind("mouseup", function(event) {
+       // console.log(event.target)
+       // alert(event.target.selectionEnd)
+
+
+        //selectionDirection
+  
+  //"forward"
+//selectionEnd
+//selectionStart
+
+      });
         elm.bind("keyup", function(event) {
-            console.log('ft')
-            scope.$apply(attrs.keyListener);
+          console.log(event)
+            console.log(attrs.keyListener)
+
+                console.log($rootScope)
+                console.log($rootScope.containers)
+            
+
+               scope.$apply(attrs.keyListener);
         });
     };
 })

@@ -5,7 +5,7 @@ div(class="branding sc bg_white")
 div.main_center.register_form.bordered
 	h3 {{render_config.i18n.CUSTOM.USER.register}}
 	form(novalidate class="css-form")
-		p {{errors}}
+		p(style="color:red") {{errors}}
 	
 		label {{render_config.i18n.CUSTOM.USER.pick_username}} 
 		input(type="text", ng-model="username")

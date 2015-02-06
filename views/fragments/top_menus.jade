@@ -29,14 +29,56 @@ i.fa.fa-question.quick_tool_opener.menuicon.menuicon-help( ng-class="{'visible_y
 
 div.quick_tools.qt-help(class="visible_{{ui.menus.quick_tools_help.open}}")
 	p.back_read(ng-click="toggle_render('read')") &laquo; {{render_config.i18n.CUSTOM.ACTIONS.back_to_document}}
-	h1 help
-	h3 Document editing 
-	// p blou
-	h3 Document options
-	//p blou
-	h3 Faq
-	ul
-		// li blou
+	
+	div(ng-if="render_config.i18n.id =='fr-fr'") 
+		h1 Guide utilisateur
+		br
+		br
+		h3 Créer un compte et se connecter
+		br
+		ul
+			li Pour se créer un  compte : 
+				a(href="../../signup") ici
+			li et pour se connecter : 
+				a(href="../../login") ici
+		
+		
+
+	div(ng-if="render_config.i18n.id !== 'fr-fr'") 
+
+
+		h1 User guide help
+		h3 Register / login to your account
+		ul
+			li to create an account go 
+				a(href="../../signup") here 
+			li to login go 
+				a(href="../../login") here 
+
+		h3 User Account
+			p once logged go 
+				a(href="../../me/account") here 
+
+
+		h3 Create new document
+		p go 
+				a() here 
+		
+		h3 Edit a document
+
+		h4 edit content
+
+
+		h4 add markup, media, comments and other objects
+		
+
+		h3 Document options
+		h3 Publish document
+		h3 Comment moderation
+
+		h3 Faq
+		ul
+			// li blou
 
 // GO PROFILE Link
 a.quick_tool_opener.menuicon.menuicon-user( href="/me/account" ng-if="userin.username !== '' ") 
@@ -55,8 +97,8 @@ a.quick_tool_opener.menuicon.menuicon-document(tooltip="{{render_config.i18n.CUS
 
 
 // edit > toggle mode
-a.quick_tool_opener.menuicon.menuicon-editor(tooltip="edit" tooltip-placement="left" ng-if="(doc_owner == true  || ui.secret) && ui.renderAvailable_active =='read'" ng-click="toggle_render('editor')" ng-class="{'visible_yes': ui.renderAvailable_active =='editor'}") 
-	i.fa.fa-pencil()
+a.quick_tool_opener.menuicon.menuicon-editor(tooltip="edit" tooltip-placement="left" ng-if="(doc_owner == true  || ui.secret) && ui.renderAvailable_active =='read'" ng-click="toggle_render('editor')") 
+	i.fa.fa-pencil( ng-class="{'visible_yes': ui.renderAvailable_active =='editor'}")
 
 
 // edit > toggle mode

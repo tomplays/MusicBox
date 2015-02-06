@@ -35,7 +35,7 @@ div(ng-if="ui.renderAvailable_active == 'card'", ng-include="fragments['post_exc
 div(ng-hide="ui.renderAvailable_active == 'doc_options' || ui.renderAvailable_active == 'card' || ui.renderAvailable_active == 'dataset' " , class="sections_count_{{sectionstocount}} sections_container")
 	section(id="anchor{{$index+1}}" , ng-repeat='section in containers' ,  style="{{section.section_styles}} background-repeat:no-repeat;", class="focus_ focus_{{ui.focus_side}} {{section.section_classes}} selected_{{section.selected}}")
 		div(ng-if="section['objects_count']['by_positions'][layout.name].count > 0 || layout.include_even_empty", ng-repeat='layout in available_layouts')
-		    div(ng-include="fragments['section'][0].url")
+			div(ng-include="fragments['section'][0].url")
 			
 			div(class="layout_ layout_name_{{layout.name}} has_count_{{section.objects_count.by_positions[layout.name].count}} has_object_{{section.objects_count.by_positions[layout.name].has_object}}")
 				

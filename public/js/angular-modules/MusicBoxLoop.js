@@ -448,8 +448,8 @@ var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','n
 
         // user "by_me" ownership test
         markup.by_me = false
-         console.log(markup.user_id)
-         console.log($rootScope.userin)
+        // console.log(markup.user_id)
+        // console.log($rootScope.userin)
         if( markup.user_id._id && $rootScope.userin._id  && ($rootScope.userin._id == markup.user_id._id ) )  {
            
            

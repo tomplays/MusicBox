@@ -3,21 +3,27 @@ div(class="branding sc bg_transparent")
 		a(href="/#!", title="") 
 			span #{locals.site_title}
 
+div.flash_message(ng-if="flash_message.text !==''", class="{{flash_message.classname}}")
+	span {{flash_message.text}}
+
 div.main_center.user_account.bordered
 	h3 {{render_config.i18n.CUSTOM.USER.myprofile}} 
-		a(ng-click="external_link(root_url+'/signout')") {{render_config.i18n.CUSTOM.USER.logout}} &nbsp;
+	a(style="float:right;" ng-click="external_link(root_url+'/signout')") {{render_config.i18n.CUSTOM.USER.logout}} &nbsp;
 			i.fa.fa-sign-out 
-	
-	span.color_avatar(style="background-color:{{user_options['color'].value}}")
-	p {{me.username}}
+
+	br
+	// br
+	// span.color_avatar(style="background-color:{{user_options['color'].value}}")
+	h5 {{render_config.i18n.CUSTOM.USER.logged_in_as}} 
+		strong {{me.username}}
 
 	// p {{me}}
 	// p {{user_options}}
 	p mail : {{me.email}} {{render_config.i18n.CUSTOM.USER.hidden_from_public}} 
 
-	p 
+	// p 
 		img(ng-src="{{me.image_url}}")
-	p 
+	// p 
 		a(href="/doc/create") {{render_config.i18n.CUSTOM.DOCUMENT.create_new}} 
 	p 		
 		
@@ -30,8 +36,11 @@ div.main_center.user_account.bordered
 	ul(ng-repeat="option in me.user_options")
 		li 
 			// {{option.option_name}} : {{option.option_value}}
-	h3 {{render_config.i18n.CUSTOM.DOCUMENT.my_documents}} :
-
+	br
+	br
+	h3(style="float:left;" ng-bind-html="render_config.i18n.CUSTOM.DOCUMENT.my_documents")
+	a(style="float:right;" href="/doc/create") {{render_config.i18n.CUSTOM.DOCUMENT.create_new}}
+	br 
 	table.user_documents()
 		thead
 			tr
@@ -39,7 +48,7 @@ div.main_center.user_account.bordered
 				th {{render_config.i18n.CUSTOM.DOCUMENT_FIELDS.published}} 
 				th {{render_config.i18n.CUSTOM.DOCUMENT_FIELDS.room}}
 				th {{render_config.i18n.CUSTOM.DOCUMENT_FIELDS.updated}} 
-				th 
+				th options
 		
 		tbody
 			tr(ng-repeat="doc in documents")
@@ -67,4 +76,4 @@ div.main_center.user_account.bordered
 			// span
 				{{doc.published}} • {{doc.slug}} • 
 footer
-	p 2014 - MusicBox
+	// p 2014 - MusicBox

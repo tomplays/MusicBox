@@ -46,8 +46,12 @@ div(ng-controller="SectionCtrl")
 				div.inline_tools(ng-include="fragments['inline_tools'][0]['url']" ng-if="ui.renderAvailable_active== 'editor'")
 				// p {{section}}
 				div.fluidtextarea(ng-if="ui.renderAvailable_active == 'editor'")
+					Edit section text : 
 					textarea(ng-trim="false"  key-listener="changeFunction()"  ng-model="section.fulltext")
 					a.btn_ok(ng-click="save_section(section)") save
+					// a.btn_ok(ng-click="doc_sync()") save
+
+					
 
 				div.theletters(ng-if="section.modeletters=='single'")
 					// span.lt(class="{{l.classes_flat}}", ng-bind-html="l.char", lt="l" , ng-repeat="l in section.letters")

@@ -21,23 +21,20 @@ var render;
 
 // todo : remove old api call
 
-function UserProfileCtrl($scope, $http , $location, $routeParams,  $locale) {
-		 $scope.render_config = new Object({'i18n':  $locale})
-        
-       
-		$scope.i18n                       = $locale;
-
+function UserProfileCtrl($scope, $http , $location, $routeParams,  $locale, DocumentService, UserRest) {
+	    $scope.render_config = new Object({'i18n':  $locale})
  		$scope.globals = GLOBALS;
         $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
 		$scope.documents = [];
 
-         $http.get(api_url+'/me/account').success(function(d) {
-         	$scope.me = d.user;
-         	$scope.documents = d.user_documents;
-         	console.log(d)
+ 		var promise = UserRest.account({},{  }).$promise;
+    	promise.then(function (Result) {
+      		// console.log(Result);
+      		$scope.me = Result.user;
+         	$scope.documents = Result.user_documents;
          	var options_array = [];
-	        _.each(d.user.user_options , function(option){
-	        	console.log(option)
+	        _.each(Result.user.user_options , function(option){
+	        	//console.log(option)
 	           // console.log(option)
 	            var op_name = option.option_name;
 	            var op_value = option.option_value;
@@ -47,16 +44,19 @@ function UserProfileCtrl($scope, $http , $location, $routeParams,  $locale) {
 	        });
           	$scope.user_options = [];
           	$scope.user_options = options_array
-          	console.log($scope.user_options)
-           	//console.log($rootScope.doc_options)
-         });
+	      
+	      	console.log($scope.me)
+      
+
+		 }.bind(this));
+		 promise.catch(function (response) {     
+		      console.log(response);
+		 }.bind(this));
 
         $scope.delete_document= function(doc){
-          $http.post(api_url+'/doc/'+doc.slug+'/delete').success(function(d) {
-          	console.log($scope.documents)
-          	//	$scope.documents = _.without($scope.documents,d)
-			$scope.documents  = _.reject($scope.documents , function(doc){ return doc._id  == d._id; });
-          })
+        	var tdoc           	= new DocumentService(doc.slug);
+        	tdoc.doc_delete();
+        	$scope.documents  = _.reject($scope.documents , function(doch){ return doch._id == doc._id });
         }
 
         $scope.external_link = function (link){

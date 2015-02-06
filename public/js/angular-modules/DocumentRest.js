@@ -1,10 +1,8 @@
-// AJOUTE SUR GIT
 
 angular.module('musicBox.DocumentRest', [])
 .factory("DocumentRest", function($resource, $rootScope){
 
   var parseResponse = function (data) {
-   
     var data_ = angular.fromJson(data);
     return data_
   };
@@ -16,6 +14,14 @@ angular.module('musicBox.DocumentRest', [])
       get:{
         method:"GET",
         url: api_url+'/doc/:Id/',
+        //transformResponse: parseResponse
+        //interceptor: { response: parseResponse }
+        //isArray: false
+      },
+      doc_delete:{
+        method:"POST",
+        url: api_url+'/doc/:Id/delete',
+         params :  {Id:'@id'},
         //transformResponse: parseResponse
         //interceptor: { response: parseResponse }
         //isArray: false
