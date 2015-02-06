@@ -466,7 +466,83 @@ container_class.modes.editor.fields.metadata.label = 'css class'
                   },
             },
           })
+ definitions.container_class = new Object({
+              'name': 'container class',
+              'display_name': $rootScope.render_config.i18n.CUSTOM.OBJECTS.container_class,
+              'map_range': false,
+              'positions': {
+                  "forced": "inline",
+                  "available": ['inline']},
+              'modes': {
+                'editor': {                   
+                  'enabled': true,
+                        'display' : {
+                            'date': false, 
+                            'user': false,
+                        },
+                        'tabs': {
+                            'metadata': 'text',
+                            'type': 'type'
 
+                        },
+                          'fields' : {
+                                  'ranges': { 
+                                      'display' : true,
+                                      'label':'link url',
+                                    'input' : 'range'
+                                  },
+                                  'type': { 
+                                      'display' : true,
+                                      'label':'type',
+                                    'input' : 'select'
+                                  },
+                                
+                                  'position':{ 
+                                    'display' : true,
+                                    'label':'position',
+                                    'input' : 'select'
+                                  },
+                                  'subtype': {
+                                    'display' : true,
+                                    'label':'subtype',
+                                    'input' : 'select',
+                                    'free_input' : false,
+                                    'show_editor': 'hidden',
+                                    'available' : ['css'],
+                                    'forced' : 'hyperlink'
+                                  },
+                                  'metadata': {
+                                    'display' : true,
+                                    'label':'Css class',
+                                    'input' : 'select',
+                                    'free_input' : false,
+                                    'show_editor': 'hidden',
+                                    'available' : [''],
+                                    'forced' : 'hyperlink'
+                                  }
+
+                          },
+                              
+                  },
+                  'read': {
+                          'enabled': true,
+                          'display' : {
+                                 'date': true, 
+                                 'user': true,
+                                 'metadata': {
+                                      'displayed':'metadata'
+                                 }
+
+                          },
+                        'icon': { 
+                            'before': {
+                                'show' : true,
+                                'class' : 'comment'
+                              }
+                          },           
+                  },
+            },
+          })
           definitions.data = new Object({
               'name': 'data',
               'display_name': $rootScope.render_config.i18n.CUSTOM.OBJECTS.comment,

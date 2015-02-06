@@ -37,9 +37,6 @@ div(ng-controller="MarkupCtrl", class="markup_box markup_box_depth_{{markup.dept
 		span.flag(ng-if="markup.status !== 'approved'")
 			i.fa.fa-flag.pending( ng-click="markup.editing = true")
 
-
-			
-
 		span(ng-include="fragments['child_markup'][0].url", ng-if="markup.type == 'child' ")
 		
 	div(ng-include="fragments['markup_editor'][0].url", class="markup_editor markup_editor_{{markup.type}}", ng-if="markup.editing == true ")
