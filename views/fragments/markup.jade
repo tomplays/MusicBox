@@ -35,7 +35,7 @@ div(ng-controller="MarkupCtrl", class="markup_box markup_box_depth_{{markup.dept
 			span.mk_val.mk_username( style="color:{{markup.user_options['color'].value}}", ng-if="objSchemas[markup.type].modes.read.display.user") 
 				{{markup.username}}
 		span.flag(ng-if="markup.status !== 'approved'")
-		i.fa.fa-flag.pending( ng-click="markup.editing = true")
+			i.fa.fa-flag.pending( ng-click="markup.editing = true")
 
 
 			
