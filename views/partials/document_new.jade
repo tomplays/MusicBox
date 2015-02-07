@@ -4,6 +4,11 @@ div(class="branding sc bg_white")
 			span #{locals.site_title}
 div.flash_message(ng-if="flash_message.text !==''", class="{{flash_message.classname}}")
 		span {{flash_message.text}}
+
+// TOP MENUS
+div.top_menus(ng-include="fragments['top_menus'][0]['url']")
+
+
 div.main_center.newdoc_form.bordered
 	
 

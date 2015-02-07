@@ -18,6 +18,9 @@ head
 
 	link(rel='icon', type='image/png', href='favicon.png')
 	
+
+
+	
 	script(type='text/javascript').
 
 		var musicBox
@@ -27,8 +30,19 @@ head
 		var root_url = '#{root_url}'
 		var api_url = '#{api_url}'
 		var doc_include_js = '#{doc_include_js}'
+		
+		var USERIN = new Object({'username':'#{user_in.username}', 'image_url': '#{user_in.image_url}', '_id': '#{user_in._id}'} )
 
-		var USERIN = new Object({'username':'#{user_in.username}', 'image_url': '#{user_in.image_url}', '_id': '#{user_in._id}'} );
+	// room view ? 
+	if(room)
+		script(type='text/javascript').
+			
+			var ROOM = new Object(
+				{'name':'#{room.name}',
+				'room_branding':'#{room.options_.branding_image_url.value}'
+				})
+
+
 	// angularJS
 	
 	script(type='text/javascript',  src='bower_components/angular/angular.min.js')

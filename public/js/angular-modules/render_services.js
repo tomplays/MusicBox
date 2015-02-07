@@ -210,9 +210,9 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
                   },
                   'read': {
                           'enabled': true,
-                          'display' : {
-                                
-                              
+                           'display' : {
+                                 'date': false, 
+                                 'user': false,
                                  'metadata': {
                                       'displayed':''
                                  }
@@ -1068,7 +1068,7 @@ container_class.modes.editor.fields.metadata.label = 'css class'
 
     
             console.log(arr)
-            return arr;
+            //return arr;
         },
 
      
@@ -1131,6 +1131,8 @@ container_class.modes.editor.fields.metadata.label = 'css class'
             arr['inline_tools']              = [ {  url: 'fragments/inline_tools.jade'} ];
             arr['chapters']                  = [ {  url: 'fragments/chapters.jade'} ];
             arr['document_textarea']         = [ {  url: 'fragments/document_textarea.jade'} ];
+            arr['flash_message']             = [ {  url: 'fragments/flash_message.jade'} ];
+
 
             //arr['doc_real']                = [ {  url: 'fragments/doc_real.jade'} ];
             //arr['ad_welcome']              = [ {  url: 'fragments/ad_welcome.jade'} ];

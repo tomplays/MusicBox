@@ -25,13 +25,38 @@ var rooms =  Room.find( {is_public: true}, {secret: 0, owner_email:0}).populate(
 exports.room_view = function(req, res){
 
 
-var user_ = ''
+		var user_ = ''
 		if(req.user){
 			user_ = new Object({'_id': req.user._id , 'username': req.user.username,  'image_url': req.user.image_url})
 		}
-		res.render('index_v1', {
-			user_in : user_
-		});
+
+		var room =  Room.findOne( {'slug': req.params.slug}, {secret: 0, owner_email:0}).populate('owner', '-user_options -hashed_password -email -salt').exec(function(err, room) {
+		   
+				var options_array = []; 
+
+				 _.each(room.room_options , function(option){
+            
+           
+			            var op_name = option.option_name;
+			            options_array[op_name]          = [];
+			            options_array[op_name]['value'] = option.option_value
+			            options_array[op_name]['_id']   = option._id
+			            options_array[op_name]['type']  = option.option_type
+
+
+				});
+				 room.options_ = options_array;
+
+
+				res.render('index', {
+					user_in : user_,
+					room : room
+				});
+
+
+
+		});	
+
 }
 
 exports.createroom = function(req, res){

@@ -1,0 +1,6 @@
+// FLASH Message
+div( class="{{flash_message.classname}}")
+	span.inside
+		span {{flash_message.text}}
+		span.flash_closer(ng-click="flash_message.text = ''" ng-if="flash_message.closer === true")
+			i.fa.fa-times-circle( )

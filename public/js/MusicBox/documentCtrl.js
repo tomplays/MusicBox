@@ -740,7 +740,8 @@ console.log(m)
 **/
 function SocketsListCtrl($scope, $http , $location, $routeParams, socket) {
 
-
+			console.log(ROOM)
+			$scope.room = ROOM;
 		//$scope.docs = DOCS;
 		console.log('SocketsListCtrl')
 		$scope.stack = [];

@@ -31,16 +31,33 @@ div.quick_tools.qt-help(class="visible_{{ui.menus.quick_tools_help.open}}")
 	p.back_read(ng-click="toggle_render('read')") &laquo; {{render_config.i18n.CUSTOM.ACTIONS.back_to_document}}
 	
 	div(ng-if="render_config.i18n.id =='fr-fr'") 
+
 		h1 Guide utilisateur
 		br
 		br
-		h3 Créer un compte et se connecter
-		br
-		ul
-			li Pour se créer un  compte : 
-				a(href="../../signup") ici
-			li et pour se connecter : 
-				a(href="../../login") ici
+		accordion(close-other)
+			
+			accordion-group(heading='Créer un compte et se connecter' )
+				ul
+					li Pour se créer un  compte : 
+						a(href="../../signup") ici
+					li et pour se connecter : 
+						a(href="../../login") ici
+					li Votre profil consultable 
+						a(href="../../me/account") ici
+			accordion-group(heading='Créer un nouveau document' )
+				ul
+					li Pour se créer un  compte : 
+						a(href="../../doc/create") ici
+					
+			accordion-group(heading='Editer un nouveau document' )
+				ul
+					li Pour modifier le contenu :
+					li Pour ajouter des commentaires, images, mise en forme
+
+		
+	
+		
 		
 		
 

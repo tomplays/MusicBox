@@ -3,7 +3,7 @@
 
 h5 {{render_config.i18n.CUSTOM.ACTIONS.edit}} {{markup.type}}
 
-// p {{objSchemas[markup.type].modes.editor}}
+p {{objSchemas[markup.type]}}
 // p {{markup.explicit_string}}
 
 form(name="myForm")		
@@ -88,10 +88,7 @@ form(name="myForm")
 					label(ng-repeat="t in objSchemas[markup.type].positions.available" class="btn btn-primary" ng-model="markup.position" btn-radio="t")
 							
 							{{render_config.i18n.CUSTOM.POSITIONS[t]}}
-				// ul
-					// li(ng-repeat="t in objSchema[markup.type].position_available")
-						// span {{t}}
-						// i.fa.btn_action(ng-class="{ 'selected' : markup.position == t}" , class="fa-{{t}}" , ng-click="markup_position(markup, t)") 
+				
 				
 
 				// input(ng-model="markup.position" ,type="text")

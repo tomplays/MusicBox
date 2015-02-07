@@ -9,18 +9,18 @@
 // loop each layout
 // loop each objects 
 
-// FLASH Message
-div.flash_message(ng-if="flash_message.text !==''", class="{{flash_message.classname}}")
-	span.inside
-		span {{flash_message.text}}
-		span.flash_closer(ng-click="flash_message.text = ''" ng-if="flash_message.closer === true")
-			i.fa.fa-times-circle( )
+
+div(ng-include="fragments['branding'][0]['url']")
 
 // CHAPTERS
 div.chapters(ng-if="doc_options['chapters-menu'].value == 'true' && ui.renderAvailable_active == 'read'" ng-include="fragments['chapters'][0]['url']")
 
 // TOP MENUS
 div.top_menus(ng-include="fragments['top_menus'][0]['url']")
+
+
+// flash_message
+div.flash_message(ng-if="flash_message.text !==''", ng-include="fragments['flash_message'][0]['url']")
 
 
 // div.editor_zone.doc_centered(ng-if="ui.renderAvailable_active == 'editor'" ng-include="fragments['document_textarea'][0].url" )

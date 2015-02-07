@@ -50,8 +50,12 @@ angular.module('musicBox',  ['ui.bootstrap','musicBox.controller','musicBox.cont
         templateUrl: '/partials/user_account',
         controller: UserProfileCtrl
       }).
-       when('/room/:room_slug', {
+       when('/sockets/:room_slug', {
         templateUrl: '/partials/sockets_list',
+        controller: SocketsListCtrl
+      }).
+        when('/room/:room_slug', {
+        templateUrl: '/partials/room/single',
         controller: SocketsListCtrl
       }).
       when('#_=_', {

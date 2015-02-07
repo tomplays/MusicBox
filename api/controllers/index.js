@@ -22,9 +22,18 @@ nconf.argv().env().file({file:'config.json'});
 
   exports.partial = function (req, res) {
     var name = req.params.name;
+    if(req.params.sub){
+      var sub = req.params.sub+'/';
+    }
+    else{
+       var sub = '';
+    }
+    
+
     var extraparam = '';
+
     if(req.params.param){ var extraparam = req.params.param; }
-    res.render('partials/' + name , {
+    res.render('partials/'+sub+name , {
       locals: {
                title: name,
                extraparam: extraparam

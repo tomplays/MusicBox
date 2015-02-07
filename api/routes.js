@@ -65,7 +65,9 @@ module.exports = function(app, passport, auth) {
 
 
 
-    app.get('/partials/:name/:param?',      index.partial); // document, lists, etc..
+    //app.get('/partials/:name/:param?',      index.partial); // document, lists, etc..
+    app.get('/partials/:sub?/:name/:param?', index.partial); // document, lists, etc..
+
     app.get('/fragments/:name/:param?',     index.fragments); // load sub-blocks 
     app.get('/doc/fragments/:name/:param?', index.fragments); // load sub-blocks ? express/angualar..?
 

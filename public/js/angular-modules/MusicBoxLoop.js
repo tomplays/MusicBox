@@ -523,7 +523,7 @@ var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','n
         } 
 
         // need to map letters for each range of markup (not all objects)
-        if( ($rootScope.objSchema[markup.type].map_range && $rootScope.objSchema[markup.type].map_range==true && markup.visible == true)  || (markup.subtype=='share_excerpt' && markup.visible == true)  ){ // or pos == inlined
+        if( ($rootScope.objSchemas[markup.type].map_range && $rootScope.objSchemas[markup.type].map_range==true && markup.visible == true)  || (markup.subtype=='share_excerpt' && markup.visible == true)  ){ // or pos == inlined
             
             self.markup_ranges(markup, container, index, temp_letters);
             //$rootScope.containers[index].objects[markup.type]['inline'].push(markup); 

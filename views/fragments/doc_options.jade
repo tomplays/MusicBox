@@ -15,7 +15,7 @@ div.doc_editor()
 			textarea(ng-model="doc.excerpt")
 			i.fa.fa-save(ng-click="edit_doc('excerpt')")
 									
-		.edit_field.room_field(ng-if="doc.user.username =='tom'")
+		.edit_field.room_field(ng-if="doc.user.username =='Tom Wersinger'")
 			label Published in "room" ID : {{doc.room.slug}}
 			input(type="text" ,ng-model="doc.room__id", name="doc.room__id")
 			i.fa.fa-save(ng-click="edit_doc('room_id')")
