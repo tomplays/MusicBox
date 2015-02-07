@@ -1,0 +1,7 @@
+section(ng-repeat='doc in docs')
+ span {{doc.title}}
+ a(href="/doc/{{doc.title}}") {{doc.title}}
+ p {{doc.content}}
+footer
+ a(href="/") back home
+ 
