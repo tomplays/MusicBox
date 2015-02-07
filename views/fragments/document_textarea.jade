@@ -1,9 +1,3 @@
-div
-	label text content (without html markup)
-	textarea(type="text", ng-model="doc.content")
-	a.btn_ok.float_right(ng-click="doc_sync()") SAVE
-
-
 // div.text_helpers.bg_debug() 
 		// ng-if="ui.debug"
 		a(ng-click="switch_focus_side('left')") focus side left
@@ -32,3 +26,8 @@ div
 			p isolated markup @:  {{isolated.start}} {{isolated.end}} {{isolated.type}} 
 			a(ng-click="reset_markup(isolated)") reset (as start 0 end 1 type -comment)
 
+// old 
+	div
+		label text content (without html markup)
+		textarea(type="text", ng-model="doc.content")
+		a.btn_ok.float_right(ng-click="doc_sync()") SAVE

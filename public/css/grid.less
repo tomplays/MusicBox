@@ -829,7 +829,6 @@ body.render_active_editor{
   /*.layout_,*/
 
    .layout_name_inline{
-      border:1px solid #ccc;
   }
 }
 
@@ -988,7 +987,8 @@ div.markup_displayer_subtype_img .icon_col {
     text-align: left;
     width: 96%;
     h5{
-     margin: 10px 0 0;
+       font-size: 1.2em;
+       margin: 4% 2%;
     }
     form{
         input, textarea{
@@ -1424,18 +1424,7 @@ span.floating-edit{
       float: left;
       width: 100%;
       
-      i.fa{
-           background: none repeat scroll 0 0 rgb(255, 255, 255);
-          color: rgb(0, 0, 0);
-          border: 2px solid rgba(0, 0, 0, 0);
-          border-radius: 4px;
-          font-size: 0.9em;
-          line-height: 1;
-          min-width: 15px;
-          padding: 0 1px;
-          text-align: center;
-          vertical-align: middle;
-        }
+     
 
         .btn{
           background: none repeat scroll 0 0 rgb(255, 255, 255);
@@ -1451,24 +1440,50 @@ span.floating-edit{
           font-weight: normal;
         }
 
-
-
     }
+
+
+
+
     .pusher_markups{
-      float: left;
-      padding: 2% 1%;
        border: 1px solid rgb(204, 204, 204);
+        border-radius: 10px;
+        float: left;
+        margin: 1% 0;
+        padding: 2% 1%;
+        background:rgba(255,255,255,.9);
+
+        i.fa{
+              border: 2px solid rgba(0, 0, 0, 0);
+              border-radius: 4px;
+              font-size: 0.9em;
+              line-height: 1;
+              min-width: 15px;
+              padding: 2px 6px;
+              text-align: center;
+              vertical-align: middle;
+              background: none repeat scroll 0 0 rgb(236, 240, 241);
+
+              &:hover{
+              color: none repeat scroll 0 0 rgb(236, 240, 241);
+              background: #bdc3c7;
+
+              }
+        }
+
     }
      .pusher_section{
-      float: left;
-      padding: 2% 1%;
+      float: right;
+      padding: 2% 0%;
        border: 1px solid rgb(204, 204, 204);
+
     }
  
 .pusher_range{
-      float: left;
-      padding: 2% 1%;
-       border: 1px solid rgb(204, 204, 204);
+    float: right;
+    padding: 2% 0;
+    font-style:italic;
+    color:#2ecc71;
     }
 
 
@@ -1691,19 +1706,15 @@ span.floating-edit{
   }
 
    &.help{
+    bottom:0;
+    top: auto;
      color:#2c3e50;
      background:  rgb(236, 240, 241);
      font-size: 1.1em;
-     padding:2% 18%;
-     top:20%;
-
-    
+     padding:2% 18%; 
   }
   &.loading_doc{
-   
-   
     height: 90%;
-  
   }
   .inside{
   
@@ -1711,6 +1722,7 @@ span.floating-edit{
     width: 100%;
   }
   .flash_closer{
+
       float:right;
       z-index:99999999;
   }
@@ -1861,8 +1873,18 @@ background: none repeat scroll 0 0 rgba(236, 240, 241, 0.8);
     }
     .delete_document{}
 }
-
-
+.btn_big, a.btn_big{
+    float:right;  
+    background: none repeat scroll 0 0 rgb(52, 152, 219);
+    border-radius: 4px;
+    color: rgb(255, 255, 255);
+    float: right;
+    font-size: 1.2em;
+    font-weight: bold;
+    margin: 1% 0;
+    padding: 1%;
+    text-decoration: none;
+}
 
 .color_avatar{
   height:80px;

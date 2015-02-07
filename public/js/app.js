@@ -4,60 +4,52 @@
 
 
 
-angular.module('musicBox',  ['ui.bootstrap','musicBox.controller','musicBox.controllerz', 'ngLocale', 'ngResource', 'ngRoute','musicBox.services',  'musicBox.directives', 'ngSanitize', , 'musicBox.DocumentRest','musicBox.UserRest', 'musicBox.DocumentService','musicBox.MusicBoxLoop']).
+angular.module('musicBox',  ['ui.bootstrap','musicBox.controller','musicBox.controllerz', 'ngLocale', 'ngResource', 'ngRoute','musicBox.services',  'musicBox.directives', 'ngSanitize', , 'musicBox.DocumentRest','musicBox.UserRest', 'musicBox.DocumentService','musicBox.UserService','musicBox.MusicBoxLoop']).
   config(['$localeProvider','$routeProvider', '$locationProvider','$sceDelegateProvider', '$sceProvider', function($localeProvider,$routeProvider, $locationProvider, $sceDelegateProvider,$sceProvider ) {
     $routeProvider.
  	   when('/', {
-        templateUrl: 'partials/document',
+        templateUrl: 'partials/document/single',
         controller: DocumentCtrl
       }).
       when('/doc/create', {
-        templateUrl: '/partials/document_new',
+        templateUrl: '/partials/document/new',
         controller: DocumentNewCtrl
       }).
-       when('/login', {
-         templateUrl: '/partials/login',
-        controller: UserCtrl
-      }).
-       when('/signup', {
-        templateUrl: '/partials/signup',
-        controller: UserCtrl
-      }).
-      when('/doc/:docid', {
-        templateUrl: '/../partials/document',
+       when('/doc/:docid', {
+        templateUrl: '/../partials/document/single',
         controller: DocumentCtrl
       }).
       when('/readonly/:docid', {
-        templateUrl: '/../partials/document_ro',
+        templateUrl: '/../partials/document/document_ro',
         controller: DocumentCtrlRo
       }).
-       when('/sockets/list', {
-        templateUrl: '/partials/sockets_list',
+      when('/docs/:mode', {
+        templateUrl: '/partials/document/list',
+        controller: DocumentsListCtrl
+      }).
+       when('/login', {
+         templateUrl: '/partials/user/login',
+        controller: UserCtrl
+      }).
+       when('/signup', {
+        templateUrl: '/partials/user/signup',
+        controller: UserCtrl
+      }).
+      when('/me/account', {
+        templateUrl: '/partials/user/account',
+        controller: UserProfileCtrl
+      }).
+     
+      when('/sockets/list/doc/:slug', {
+        templateUrl: '/partials/socket/list',
         controller: SocketsListCtrl
       }).
       
-      when('/sockets/list/doc/:slug', {
-        templateUrl: '/partials/sockets_list',
-        controller: SocketsListCtrl
-      }).
-
-      when('/docs/:mode', {
-        templateUrl: '/partials/documents_list',
-        controller: DocumentsListCtrl
-      }).
-     
-      when('/me/account', {
-        templateUrl: '/partials/user_account',
-        controller: UserProfileCtrl
-      }).
-       when('/sockets/:room_slug', {
-        templateUrl: '/partials/sockets_list',
-        controller: SocketsListCtrl
-      }).
-        when('/room/:room_slug', {
+      when('/room/:room_slug', {
         templateUrl: '/partials/room/single',
         controller: SocketsListCtrl
       }).
+
       when('#_=_', {
         redirectTo: '/'
       }).

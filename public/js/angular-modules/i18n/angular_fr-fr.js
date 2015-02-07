@@ -26,6 +26,9 @@ $provide.value("$locale", {
 
 
 	},
+	"HELP" : {
+		"fresh_document" : "Votre document est pret ! Un guide est disponible dans le menu d'aide <i class='fa fa-question'></i>",
+	},
 	"DOCUMENT" : {
 		"by_author" : "par",
 		"my_documents" : "Mes documents",

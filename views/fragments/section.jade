@@ -41,9 +41,9 @@ div(ng-controller="SectionCtrl")
 
 			div(ng-if="layout.name == 'inline'")
 				
-				p {{hello}}
+				
 				// letters part !!
-				div.inline_tools(ng-include="fragments['inline_tools'][0]['url']" ng-if="ui.renderAvailable_active== 'editor'")
+				div.inline_tools(ng-include="fragments['inline_tools'][0]['url']" ng-if="section.editing_text ===true")
 				// p {{section}}
 				div.fluidtextarea(ng-if="ui.renderAvailable_active == 'editor'")
 					Edit section text : 
@@ -59,6 +59,10 @@ div(ng-controller="SectionCtrl")
 
 
 				div.fluidtext(fluidtexte, section="section" , ng-bind-html="section.fulltext_block",  ng-if="section.modeletters !=='single'") 
+
+
+				.pusher_section(ng-if="section.editing_text === true && ($parent.$parent.$parent.$last)")
+					i.fa.fa-plus-square.pusher_item.btn(tooltip="new section" ng-click="push_section()") 
 
 			div(ng-if="(layout.name == 'global') && ($parent.$parent.$last) && objects_sections['global_all'].length > 0")
 						div.inside()

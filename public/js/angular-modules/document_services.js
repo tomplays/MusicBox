@@ -22,7 +22,7 @@ can redirect window
 
 var temp_scope;
 angular.module('musicBox.DocumentService', [])
-.factory("DocumentService", function($rootScope, $http,$sce, $resource,$location, $routeParams ,renderfactory, DocumentRest, MusicBoxLoop, $timeout, $locale) {
+.factory("DocumentService", function($rootScope, $http,$sce, $resource,$location, $routeParams ,renderfactory, DocumentRest, UserService, MusicBoxLoop, $timeout, $locale) {
 
   
   var DocumentService = function(slug) {
@@ -34,13 +34,9 @@ angular.module('musicBox.DocumentService', [])
     else{
        this.slug      = slug;
     }
-    this.render = renderfactory().init()
-    if($routeParams.fresh){
-               
-      this.flash_message('hey', 'help' , 300000)
+    
 
-     }
-    console.log(this)
+  
 
   };
   DocumentService.prototype.Load = function () {
@@ -48,11 +44,13 @@ angular.module('musicBox.DocumentService', [])
 
     var promise = DocumentRest.get({Id:this.slug},{  }).$promise;
     promise.then(function (Result) {
-      console.log(Result);
+
+
+      // console.log(Result);
       $rootScope.doc =  Result.doc;
-      $rootScope.userin = Result.userin;
 
-
+      new UserService().SetFromApi(Result.userin)
+     
       //this.RenderConfig();
       //MusicBoxLoop
 
@@ -79,7 +77,12 @@ angular.module('musicBox.DocumentService', [])
   }
 
   DocumentService.prototype.RenderConfig = function () {
-      
+      this.render = new renderfactory().init()
+      if($routeParams.fresh){
+       $rootScope.ui.menus.quick_tools_help.active= 'yes'        
+        this.flash_message($rootScope.render_config.i18n.CUSTOM.HELP.fresh_document, 'help' , 300000)
+
+     }
   }
 
 
@@ -228,6 +231,7 @@ angular.module('musicBox.DocumentService', [])
         $rootScope.newdoc.raw_content      =   $rootScope.i18n.CUSTOM.DOCUMENT.default_content
         $rootScope.newdoc.raw_title        =   $rootScope.i18n.CUSTOM.DOCUMENT.default_title
         $rootScope.newdoc.published        =   'draft';
+        console.log($rootScope)
   };
 
 
@@ -346,7 +350,7 @@ angular.module('musicBox.DocumentService', [])
                   if(Result.err){
                           if(Result.code == 11000 ){
 
-                           thos.flash_message('non-unique title', 'bad' , 3000)
+                           thos.flash_message('This title is already used please choose another one', 'bad' , 3000)
                           }
                           else{
                            thos.flash_message('error #'+Result.code, 'bad' , 3000)
@@ -472,7 +476,14 @@ angular.module('musicBox.DocumentService', [])
       * @link docfactory#markup_save
       * @todo ---
       */
-      DocumentService.prototype.markup_save= function (markup) {
+      DocumentService.prototype.markup_save= function (markup, field_only, soft) {
+        if(!soft){
+          var soft = false;
+        }
+        if(!field_only){
+          var field_only = false;
+        }
+
 
         var thos = this;
         var promise = new Object();
@@ -492,7 +503,7 @@ angular.module('musicBox.DocumentService', [])
           data.secret = $rootScope.ui.secret;
 
           // check-force data
-          if(markup.type == 'markup' ||markup.type == 'container' ){
+          if(markup.type == 'markup' || markup.type == 'container'  || markup.type == 'container_class' ){
              data.position = 'inline'
           }
           else{
@@ -503,8 +514,22 @@ angular.module('musicBox.DocumentService', [])
           promise.query = DocumentRest.markup_save({id:this.slug, mid:markup._id }, serialize(data) ).$promise;
           promise.query.then(function (Result) {
             var edited  = Result.edited[0][0]
-            this.flash_message(edited.type +' saved', 'ok' , 3000)
-            var tt  = new MusicBoxLoop().init(Result,true); // ShOUld ONLY THE SECTION IN REFRESH..
+           
+            
+            /// test
+            if(soft===true || edited.type == 'markup'){
+              markup = edited;
+              //>> rewrap.
+              this.flash_message('soft markup refresh', 'help' , 3000)
+            }
+
+            else{
+               this.flash_message(edited.type +' saved', 'ok' , 3000)
+               var tt  = new MusicBoxLoop().init(Result,true); // ShOUld ONLY THE SECTION IN REFRESH..
+            }
+          
+
+
           }.bind(this));
           promise.query.catch(function (response) {  
             console.log(response)   

@@ -49,7 +49,7 @@ module.exports = function(app, passport, auth) {
    
     app.get('/',                            docs.index_doc);
 
-    app.get('/doc/create',  auth.requiresLogin, docs.index_doc ); // load sub-blocks ? express/angualar..?
+    app.get('/doc/create',  auth.requiresLogin, docs.doc_create_view ); 
 
 
     // routes errors

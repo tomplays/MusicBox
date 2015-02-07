@@ -50,14 +50,7 @@ var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','n
             
              //$rootScope;
 
-             if(d.userin){
-                // not an absulte condition, api will always check rights
-                $rootScope.userin = d.userin;
-
-              }
-              else{
-                $rootScope.userin = new Object({'username':''});
-              }
+             
 
               $rootScope.doc = d.doc;
                $rootScope.markups = d.doc.markuos;
@@ -351,8 +344,10 @@ var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','n
             container.sectionin = index;
             container.isolated = false;
         
-            container.selected = false;
-            container.editing  = false;
+            container.selected      = false;
+            container.editing       = false;
+            container.editing_text  = false;
+
             // letters mode (html "block" or single)
 
             container.modeletters = 'block'
@@ -811,6 +806,21 @@ var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','n
         return temp_letters;
       },
 
+      remove_lt_classes: function (container) {
+        console.log(container)
+        alert('d')
+
+      },
+
+      set_container_attribute: function (container, attribute, value, switchothers) {
+        if(switchothers === true){
+            _.each($rootScope.containers, function(c){
+               c[attribute] = !value
+            })
+        }
+        container[attribute] = value    
+      },
+      
 
       /**
       * Util transfomring array to string
@@ -819,6 +829,8 @@ var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','n
       * @returns {String} values of array with empty spaces between
       * @link docfactory#flatten_classes
       */
+
+
 
       flatten_classes: function (n) {
         //console.log(n);

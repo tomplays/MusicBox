@@ -90,8 +90,7 @@ function DocumentCtrl($scope, $http , $sce, $location, $routeParams ,socket,rend
 		console.log('DocumentCtrl')
 		//	render        	= Renderfactory()
 		doc           	= new DocumentService();
-
-
+		doc.RenderConfig()
 		// call doc api with complete init.
 		doc.Load()
 		return
@@ -207,7 +206,7 @@ function DocumentCtrl($scope, $http , $sce, $location, $routeParams ,socket,rend
 		$scope.push.end  = (_.last($scope.containers).end)+10
 		$scope.push.type = 'container';
 		$scope.push.subtype = 'section';	
-				$scope.push.position  = 'inline'
+		$scope.push.position  = 'inline'
 	
 		$scope.push_markup();
 	}
@@ -250,7 +249,17 @@ function DocumentCtrl($scope, $http , $sce, $location, $routeParams ,socket,rend
 		doc.markup_save(markup)
 	}
 
-	$scope.push_generic_from_ranges= function (type, subtype,position){
+	$scope.open_pusher_details= function (type){
+
+		console.log(type)
+		//push_generic_from_ranges('media', 'media','left', 'http://img.ffffound.com/static-data/assets/6/aba9eee8a8620e87272efcaedb7b1314d21c0c46_m.jpg')
+	
+	}
+
+	$scope.push_generic_from_ranges= function (type, subtype,position, metadata){
+		if(metadata){
+			$scope.push.metadata = metadata
+		}
 		$scope.push.type = type;
 		$scope.push.subtype = subtype;
 		$scope.push.start= $scope.ui.selected_range.start;
@@ -265,10 +274,9 @@ function DocumentCtrl($scope, $http , $sce, $location, $routeParams ,socket,rend
 		//markup.start = (markup.start)+1
 		doc.markup_save(markup)
 
-
-
-
 	}
+
+
 	/**
 	* delete a markup on click
 	* @function DocumentCtrl#delete_markup
@@ -325,7 +333,7 @@ function DocumentCtrl($scope, $http , $sce, $location, $routeParams ,socket,rend
 
 		markup.editor_tab  = tab;
 	}
-
+	
 
 	$scope.object_tools = function (object){
 
@@ -620,8 +628,9 @@ console.log(m)
 
 	$scope.$watch('doc.content', function(newValue, oldValue) {
 
-		console.log(newValue +'-'+ oldValue)
+		
 		if(newValue !==undefined  && oldValue !==undefined && (newValue !== oldValue) ){
+			console.log(newValue +'-'+ oldValue)
 			var diff = 99999999999999;
 			
 			for (var i = 0; i <= _.size(newValue); i++) {
@@ -1038,11 +1047,14 @@ angular.module('musicBox.controller', []).controller('MarkupCtrl', function($sco
 	var autosave = false;
     
     $scope.$watch('markup.position', function(newValue, oldValue) {
-          // only new value check
-         console.log(newValue)
-          console.log(oldValue)
+        
 
           if(oldValue !==newValue && oldValue && oldValue !=='' &&  newValue && newValue !==''){
+            
+
+  // only new value check
+         console.log(newValue)
+          console.log(oldValue)
             $scope.markup.position = newValue;
             	// no toggle $scope.ui.focus_side = ''
               if(autosave===false){
@@ -1095,10 +1107,13 @@ function DocumentNewCtrl($scope, $compile, $http , $sce, $location, $routeParams
 		console.log('DocumentNewCtrl')
 		$http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded"
 		
-		newdoc_service =  new DocumentService().init_new()
+		newdoc_service =  new DocumentService()
+		newdoc_service.RenderConfig()
+		newdoc_service.init_new()
+
 		//newdoc_service
 		
-
+		$scope.userin= USERIN;
 		document.title = 'Create a new document'	
 	}
 	
@@ -1114,7 +1129,9 @@ function DocumentNewCtrl($scope, $compile, $http , $sce, $location, $routeParams
 		console.log($scope.serialization)
 		thiselem.remove()
 		*/
-		newdoc_service =  new DocumentService().newdoc();
+		var newdoc_service =  new DocumentService()
+		newdoc_service.RenderConfig()
+		newdoc_service.newdoc();
 	}
 	
 	$scope.init_new_doc();

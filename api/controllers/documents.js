@@ -39,6 +39,27 @@ var app;
 var mail= require('./../../sendmail.js');
 
 
+ 	exports.doc_create_view= function(req, res) {
+		
+		if(req.user){
+	 		var user_	= req.user.toObject()
+
+			res.render('index', {
+				user_in : user_,
+				doc_title : '',
+				raw_content : '',
+				doc_thumbnail : '',
+				doc_excerpt: '',
+				doc_slug_discret : '',
+				doc_include_js : '',
+				doc_include_css : '' 
+			});			
+		}
+		else{
+			res.render('error', {});
+
+		}
+ 	}
 
 	/**
 	* @description

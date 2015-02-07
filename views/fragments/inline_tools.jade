@@ -3,12 +3,10 @@ span.pusher
 	.pusher_markups
 		ul.typer.sub
 			li.pusher_item(class="" ng-repeat="t in objSchemas['markup'].modes.editor.fields.subtype.available") 
-				i.fa.btn_action(class="fa-{{t}}" ng-click="push_generic_from_ranges('markup', t,'inline')" ) 
-				
-	.pusher_section()
-		ul
-			// bug li.pusher_item.btn(ng-click="wrapin_section()") wrap in section
-			li.pusher_item.btn(ng-click="push_section()") new section
+				i.fa.btn_action(tooltip="insert markup" class="fa-{{t}}" ng-click="push_generic_from_ranges('markup', t,'inline')" ) 
+			
+			li.pusher_item(class="") 
+				i.fa.btn_action(tooltip="insert markup" class="fa-media" ng-click="open_pusher_details('media')" ) 
 
 	.pusher_range(ng-if="ui.selected_range.end && ui.selected_range.start || ui.selected_range.start ===0" )
 		span.ranges

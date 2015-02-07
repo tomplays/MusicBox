@@ -3,25 +3,32 @@
 
 h5 {{render_config.i18n.CUSTOM.ACTIONS.edit}} {{markup.type}}
 
-p {{objSchemas[markup.type]}}
+// p {{objSchemas[markup.type]}}
 // p {{markup.explicit_string}}
 
 form(name="myForm")		
 	
-	tabset.editor-main-tab
+	tabset.editor-main-tab(justified="true")
+		// vertical="true" type="pills"
 
-		
+		tab(heading="Edit {{objSchemas[markup.type].modes.editor.tabs.metadata}}" ng-if="objSchemas[markup.type].modes.editor.tabs.metadata !=='' ")
 
-		tab(heading="{{objSchemas[markup.type].modes.editor.tabs.metadata}}" ng-if="objSchemas[markup.type].modes.editor.tabs.metadata !=='' ")
+			// h3 {{objSchemas[markup.type].modes.editor.fields.metadata.input}}
 
+			span.field.mt_input(class="mt_input_type_{{markup.type}} mt_input_subtype_{{markup.subtype}}", ng-if="objSchemas[markup.type].modes.editor.fields.metadata.input") 
+				label {{objSchemas[markup.type].modes.editor.fields.metadata.label}}
 
-			span.field.mt_input(class="mt_input_type_{{markup.type}} mt_input_subtype_{{markup.subtype}}", ng-if="objSchema[markup.type].metadata.editor.show") 
-				label {{objSchema[markup.type].metadata.editor.label}}
+				input(ng-if="objSchemas[markup.type].modes.editor.fields.metadata.input =='text'", ng-model="markup.metadata", type="text")
 				
-				// input or textarea
-				input(ng-if="objSchema[markup.type].metadata.editor.input =='input'", ng-model="markup.metadata", type="text")
-				textarea(ng-if="objSchema[markup.type].metadata.editor.input =='textarea'", ng-model="markup.metadata")
+				textarea(ng-if="objSchemas[markup.type].modes.editor.fields.metadata.input =='textarea'" , ng-model="markup.metadata")
+
+				span(ng-if="objSchemas[markup.type].modes.editor.fields.metadata.input =='select'")
+					span(ng-repeat="t in objSchemas[markup.type].modes.editor.fields.metadata.available" ng-click="replace_markup(markup,'metadata', t)" ng-class="{ 'selected' : markup.metadata == t,}" ) {{t}}
+						
 			
+
+
+
 			span.field.uploader(ng-if="markup.type == 'media' ")
 				input(onchange="angular.element(this).scope().preuploadFile(this.files)", type="file")
 				a(ng-click="uploadFile()" ) send
@@ -44,8 +51,8 @@ form(name="myForm")
 					// option(value="t") {{t}}
 			
 			span.field.typer.sub
-				label.label_type {{render_config.i18n.CUSTOM.ACTIONS.select}}  subtype
-				div(ng-if="objSchemas[markup.type].subtype.free_input")
+				label.label_type {{render_config.i18n.CUSTOM.ACTIONS.select}} subtype
+				// div(ng-if="objSchemas[markup.type].subtype.free_input")
 					label Set sub-type
 					input(ng-model="markup.subtype" , type="text")
 				ul.typer.sub
@@ -152,7 +159,7 @@ form(name="myForm")
 			i.fa.fa-text-width.match_selection(title="re-match ranges from active selection", ng-click="match_selection(markup)" ) 
 		
 
-.object-tools
+.object-tools(ng-if="doc_owner")
 	label Moderation / status
 	// input(ng-model="markup.status" , type="text")
 	i.fa.fa-flag.btn_action(style="color:green" ng-click="markup_moderate(markup, 'approved')") approved

@@ -21,26 +21,54 @@ angular.module('musicBox.directives', [])
         }
     };
 })
-.directive('keyListener', function($rootScope) {
+.directive('keyListener', function($rootScope, DocumentService, MusicBoxLoop) {
+
+
+    function active_section_tool(scope){
+
+              var mb_service =  new MusicBoxLoop()
+               //mb_service.remove_lt_classes(m)
+               mb_service.set_container_attribute(scope.$parent.section,'editing_text', true, true)
+
+
+        // = true;
+    }
+
+
     return function(scope, elm, attrs) {
+
+
+
        elm.bind("mousedown", function(event) {
-        console.log(event)
+        active_section_tool(scope)
+       // console.log(event)
       });
         elm.bind("mouseup", function(event) {
-       // console.log(event.target)
-       // alert(event.target.selectionEnd)
+          
+          active_section_tool(scope)
+      
+       $rootScope.ui.selected_range.end = event.target.selectionEnd
+       $rootScope.ui.selected_range.start = event.target.selectionStart
+      
+        
+        scope.$apply();
 
 
-        //selectionDirection
-  
-  //"forward"
-//selectionEnd
-//selectionStart
+
 
       });
         elm.bind("keyup", function(event) {
+          
+        
           console.log(event)
             console.log(attrs.keyListener)
+            if(event.which == 13){
+              //$rootScope.push_section()
+              var m = new Object({'start':0, 'end':2, 'type': 'container', 'subtype':'section', 'position':'inline'})
+              console.log(m)
+            
+              
+            }
 
                 console.log($rootScope)
                 console.log($rootScope.containers)
@@ -51,10 +79,14 @@ angular.module('musicBox.directives', [])
     };
 })
 
-.directive('lt',   function($rootScope) {
+.directive('lt',   function($rootScope, MusicBoxLoop) {
   
 
-  function selection_ends(scope){
+  function selection_ends(scope, MusicBoxLoop){
+     //var mb_service =  new MusicBoxLoop()
+               //mb_service.remove_lt_classes(m)
+       //        mb_service.set_container_attribute(scope.$parent.section,'editing_text', true, true)
+
       $rootScope.ui.selected_range.wait_ev = false  // now ready!
       
       $rootScope.ui.selected_range.end = scope.lt.order // 'end' is last event..
@@ -104,6 +136,7 @@ angular.module('musicBox.directives', [])
 
   }
   function selection_starts(scope){
+      
     
       // as starting new selection, remove all classes.
       _.each(scope.$parent.section.letters, function(lt, w){
@@ -124,6 +157,7 @@ function selection_running(scope){
 }
   function sets(){
     $rootScope.$apply(function(){});
+      
   }  // SCAN /
 
     function link(scope, elem, attrs) { 
@@ -152,7 +186,7 @@ function selection_running(scope){
               sets()
           });
           elem.bind('mouseup', function(e) { // selection ends
-              selection_ends(scope) 
+              selection_ends(scope, MusicBoxLoop) 
               sets()
           });
            elem.bind('mouseover', function(e) {  // while selection is active
@@ -174,7 +208,7 @@ function selection_running(scope){
   })
 
 .directive('fluidtexte',   
-  function($rootScope) {
+  function($rootScope, MusicBoxLoop) {
 
 
 

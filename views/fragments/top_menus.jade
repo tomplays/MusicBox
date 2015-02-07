@@ -1,9 +1,9 @@
 // BTN's
-	// HELP 
-	// USER logged
-	// USER not logged
-	// DOCUMENT options
-	// DOC published
+// HELP 
+// USER logged
+// USER not logged
+// DOCUMENT options
+// DOC published
 
 // HELP MENU BTN
 // DOC PUBLISHED > toggle mode / conditionnal owner
@@ -29,6 +29,8 @@ i.fa.fa-question.quick_tool_opener.menuicon.menuicon-help( ng-class="{'visible_y
 
 div.quick_tools.qt-help(class="visible_{{ui.menus.quick_tools_help.open}}")
 	p.back_read(ng-click="toggle_render('read')") &laquo; {{render_config.i18n.CUSTOM.ACTIONS.back_to_document}}
+		i.fa.fa-eye
+
 	
 	div(ng-if="render_config.i18n.id =='fr-fr'") 
 
@@ -37,7 +39,7 @@ div.quick_tools.qt-help(class="visible_{{ui.menus.quick_tools_help.open}}")
 		br
 		accordion(close-other)
 			
-			accordion-group(heading='Créer un compte et se connecter' )
+			accordion-group(heading="Créer un compte et se connecter" ng-if="userin.username == ''" )
 				ul
 					li Pour se créer un  compte : 
 						a(href="../../signup") ici
@@ -47,12 +49,13 @@ div.quick_tools.qt-help(class="visible_{{ui.menus.quick_tools_help.open}}")
 						a(href="../../me/account") ici
 			accordion-group(heading='Créer un nouveau document' )
 				ul
-					li Pour se créer un  compte : 
+					li Pour créer un nouveau document : 
 						a(href="../../doc/create") ici
 					
 			accordion-group(heading='Editer un nouveau document' )
 				ul
-					li Pour modifier le contenu :
+					li Pour modifier le contenu
+						i.fa.fa-edit
 					li Pour ajouter des commentaires, images, mise en forme
 
 		

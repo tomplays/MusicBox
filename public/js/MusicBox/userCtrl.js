@@ -4,6 +4,8 @@
 * AngularJs controllers for "user" view 
 
 	- UserProfileCtrl
+		> get account infos (name, mail,..., and documents)
+
 	- UserCtrl (before logged, handle both login and signup forms)
 	
 */
@@ -21,32 +23,19 @@ var render;
 
 // todo : remove old api call
 
-function UserProfileCtrl($scope, $http , $location, $routeParams,  $locale, DocumentService, UserRest) {
-	    $scope.render_config = new Object({'i18n':  $locale})
+function UserProfileCtrl($scope, $http , $location, $routeParams,  $locale, DocumentService, UserRest, UserService, renderfactory) {
+	  	 new renderfactory().init()
+
  		$scope.globals = GLOBALS;
         $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
-		$scope.documents = [];
-
+		
  		var promise = UserRest.account({},{  }).$promise;
     	promise.then(function (Result) {
-      		// console.log(Result);
-      		$scope.me = Result.user;
-         	$scope.documents = Result.user_documents;
-         	var options_array = [];
-	        _.each(Result.user.user_options , function(option){
-	        	//console.log(option)
-	           // console.log(option)
-	            var op_name = option.option_name;
-	            var op_value = option.option_value;
-	            var op_type = option.option_type;
-	            options_array[op_name]= [];
-	            options_array[op_name]['value'] = op_value;
-	        });
-          	$scope.user_options = [];
-          	$scope.user_options = options_array
-	      
-	      	console.log($scope.me)
-      
+      		
+      		var this_user = new UserService()
+      		this_user.SetFromApi(Result.user)
+      		this_user.MapOptions(Result)
+      		
 
 		 }.bind(this));
 		 promise.catch(function (response) {     
@@ -63,13 +52,18 @@ function UserProfileCtrl($scope, $http , $location, $routeParams,  $locale, Docu
 			window.location = link;
 		}
 }
-function UserCtrl($scope, $http , $location, $routeParams,  $locale) {
+function UserCtrl($scope, $http , $location, $routeParams,  $locale, renderfactory, UserService) {
 	
 	console.log('User Controller')
-	if(USERIN){
-		//console.log(USERIN)
-		$scope.userin = USERIN;
-	}
+
+	// call a render 
+	new renderfactory().init()
+
+	// get user
+	new UserService().SetFromLocale()
+
+	
+	
 	$scope.register_url = root_url+':'+PORT+'/signup';
 	$scope.created_user_link   = root_url+':'+PORT+'/me/account?welcome';
 
@@ -79,7 +73,7 @@ function UserCtrl($scope, $http , $location, $routeParams,  $locale) {
 
 	}
 
-	$scope.render_config = new Object({'i18n':  $locale})
+	//	$scope.render_config = new Object({'i18n':  $locale})
 
 
 
@@ -105,10 +99,8 @@ function UserCtrl($scope, $http , $location, $routeParams,  $locale) {
 			data.username 	= $scope.username;
 			data.password 	= $scope.password;
 			data.email 		= $scope.email;
-			// data = serialize(data);
-		 	console.log(data)
+			
  			$http.post(root_url+':'+PORT+'/register', serialize(data) ).success(function(e) {
-
         	 	window.location = $scope.created_user_link 
         	});  
 		}

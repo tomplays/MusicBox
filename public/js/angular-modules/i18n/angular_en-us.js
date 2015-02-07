@@ -55,9 +55,13 @@ $provide.value("$locale", {
 		"delete" :"delete",
 		"select" : "select",
 		"select_edit" : "select / edit",
-
 		"back_to_document" :"back to reading mode",
 		"more_options" : "more options",
+
+	},
+	"HELP" : {
+		"fresh_document" : "Your document is ready ! A guide is available in the 'help' menu  !",
+		
 
 	},
 	"OBJECTS" : {
