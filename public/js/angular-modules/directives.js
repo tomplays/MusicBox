@@ -47,11 +47,11 @@ angular.module('musicBox.directives', [])
           
           active_section_tool(scope)
       
-       $rootScope.ui.selected_range.end = event.target.selectionEnd
-       $rootScope.ui.selected_range.start = event.target.selectionStart
+           $rootScope.ui.selected_range.end = event.target.selectionEnd
+           $rootScope.ui.selected_range.start = event.target.selectionStart
       
         
-        scope.$apply();
+            scope.$apply();
 
 
 
@@ -59,22 +59,117 @@ angular.module('musicBox.directives', [])
       });
         elm.bind("keyup", function(event) {
           
-        
-          console.log(event)
-            console.log(attrs.keyListener)
-            if(event.which == 13){
-              //$rootScope.push_section()
-              var m = new Object({'start':0, 'end':2, 'type': 'container', 'subtype':'section', 'position':'inline'})
-              console.log(m)
+            var dif_pos = event.target.selectionStart
             
+ $rootScope.ui.selected_range.markups_to_offset= new Array()
+            $rootScope.ui.selected_range.insert= dif_pos;
+_.each($rootScope.doc.markups, function(mk, i){
+          
+          // nothing to to if after range
+          if( dif_pos >  mk.end) {}
+          // means "on" the left of range
+          else{
+            // means between the range
+            if(  dif_pos >=  mk.start) {
+              // offset end only
+              mk.offset_end = mk.offset_end+1
+              mk.touched = true;
+            }
+            // means before both start and end..
+            else{
+              // offset both
+              mk.offset_start = mk.offset_start+1
+              mk.offset_end   = mk.offset_end+1
+              mk.touched = true;
+            }
+          }
+          if(mk.touched){
+           // console.log(mk.type)
+        
+
+            //mk.editing = true;
+            //mk.selected = true;
+            $rootScope.ui.selected_range.markups_to_offset.push(mk)
+
+           // mk.offset_start =0
+           // mk.offset_end =0
+          }
+        });
+
+
+
+
+
+           // console.log(event)
+           // console.log(attrs.keyListener)
+
+           // console.log('length section:'+ (scope.$parent.section.end-scope.$parent.section.start) )
+            
+            var current_length = scope.$parent.section.end-scope.$parent.section.start+1
+           
+
+            console.log(event.target.textLength-1)
+            console.log(scope.$parent.section.end - scope.$parent.section.start)
+
+            if(event.target.textLength !== current_length){
+                var o_end = scope.$parent.section.start + event.target.textLength - 1
+                //console.log(o_end)
+                scope.$parent.section.offset_end = - (scope.$parent.section.end - o_end)
+                console.log(scope.$parent.section.offset_end)
+            }
+          
+
+
+                var objects_in_section = scope.$parent.section.objects
+               // console.log($rootScope.available_sections_objects)
+                //console.log($rootScope.available_layouts)
+                _.each($rootScope.available_sections_objects, function(o_type, i){
+                    _.each($rootScope.available_layouts, function(o_pos, i){
+                        _.each(objects_in_section[o_type][o_pos.name], function(m, i){
+                           //m.offset_start = m.offset_start+1;
+
+                         if(m.type== 'container'){
+
+                              // m.offset_end = m.start+event.target.textLength;
+                              m.touched = true;
+
+                          }
+
+                        })
+                     });
+                 })
+
+             // console.log(event.target.value)
+
+             // scope.$parent.section.fulltext = 'event.target.value'
+            scope.$parent.section.fulltext_block = event.target.value;
+            scope.$parent.section.letters[0].classes.push('h1')
+
+                var string  = '';
+                _.each($rootScope.containers, function(container){
+                    string  += container.fulltext;
+                })
+               $rootScope.doc.content = string;
+               
+
               
+              //scope.$parent.section.offset_start = 0
+              //scope.$parent.section.offset_end   = 0
+
+            
+            var this_sync = new DocumentService()
+                this_sync.flash_message('&nbsp;', 'line' , 400, false)
+               this_sync.docsync()
+
+            if(event.which == 13){
+           
+               
+
             }
 
-                console.log($rootScope)
-                console.log($rootScope.containers)
-            
-
-               scope.$apply(attrs.keyListener);
+            //console.log($rootScope)
+            //console.log($rootScope.containers)
+            scope.$apply(attrs.keyListener);
         });
     };
 })

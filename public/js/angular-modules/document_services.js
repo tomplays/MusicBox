@@ -80,7 +80,7 @@ angular.module('musicBox.DocumentService', [])
       this.render = new renderfactory().init()
       if($routeParams.fresh){
        $rootScope.ui.menus.quick_tools_help.active= 'yes'        
-        this.flash_message($rootScope.render_config.i18n.CUSTOM.HELP.fresh_document, 'help' , 300000)
+        this.flash_message($rootScope.render_config.i18n.CUSTOM.HELP.fresh_document, 'help' , 300000, true)
 
      }
   }
@@ -113,11 +113,31 @@ angular.module('musicBox.DocumentService', [])
       
         var promise = this.api_method.doc_sync({id:this.slug},serialize(data)).$promise;
         promise.then(function (Result) {
-              // console.log(Result)
-              $rootScope.ui.selected_range.markups_to_offset = []
+
+            //  console.log('back sync')
+            // console.log(Result)
+
+             _.each($rootScope.doc.markups, function(m){
+                 
+              m.end = m.end+ m.offset_end
+              m.start = m.start+ m.offset_start
+              m.offset_end=0
+              m.offset_start=0
+
+
+             });
+
+
+             
+
+            //  $rootScope.ui.selected_range.markups_to_offset = []
+
+
               
-              new MusicBoxLoop().init(Result,true);
-              thos.flash_message('doc sync', 'ok' , 2000)
+              //new MusicBoxLoop().init(Result,true);
+              thos.flash_message('&nbsp;', 'line' , 400, false)
+             //  $rootScope.ui.selected_range.markups_to_offset = []
+
 
 
         }.bind(this));
@@ -340,6 +360,16 @@ angular.module('musicBox.DocumentService', [])
 
       DocumentService.prototype.newdoc = function(){
         var thos = this;
+        
+
+        $rootScope.i18n                    =   $locale;         
+        $rootScope.newdoc                  =   new Object();
+        $rootScope.newdoc.raw_content      =   $rootScope.i18n.CUSTOM.DOCUMENT.default_content
+        $rootScope.newdoc.raw_title        =   'draft #'+Math.random();
+        $rootScope.newdoc.published        =   'draft';
+       
+
+
         var data =  $rootScope.newdoc;
         
         var promise = this.api_method.doc_new({},serialize(data)).$promise;
@@ -358,11 +388,12 @@ angular.module('musicBox.DocumentService', [])
                           }
                    
                   }else{
+                   window.location = root_url+':'+PORT+'/doc/'+Result.slug+'?fresh';
 
-
-                                  $rootScope.newdoc.created_link = Result.slug;
-                                  $rootScope.newdoc.created_link_title = Result.title;
-                                  $rootScope.newdoc.created_secret = Result.secret;
+                               //alert(Result.slug)
+                               //   $rootScope.newdoc.created_link = Result.slug;
+                               //   $rootScope.newdoc.created_link_title = Result.title;
+                               //   $rootScope.newdoc.created_secret = Result.secret;
 
                   }
 
@@ -423,11 +454,18 @@ angular.module('musicBox.DocumentService', [])
       * @todo --
       */
 
-      DocumentService.prototype.flash_message = function (msg,classname ,timeout) {
+      DocumentService.prototype.flash_message = function (msg,classname ,timeout, closer) {
         $rootScope.flash_message = {}
         $rootScope.flash_message.text = msg;
         $rootScope.flash_message.classname = classname;
-        $rootScope.flash_message.closer = true;
+
+        if(!closer){
+            $rootScope.flash_message.closer =false;
+        }
+        else{
+            $rootScope.flash_message.closer = closer;
+        }
+        
 
         // apply timeout if set to true
         if(timeout){

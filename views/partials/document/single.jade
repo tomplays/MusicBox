@@ -10,7 +10,12 @@
 // loop each objects 
 
 
-div(ng-include="fragments['branding'][0]['url']")
+div(ng-include="fragments['branding'][0]['url']") 
+
+
+// div(ng-repeat="markup in ui.selected_range.markups_to_offset")
+		pre offset {{markup.type}} {{markup.offset_start}} - {{markup.offset_end}} 
+
 
 // CHAPTERS
 div.chapters(ng-if="doc_options['chapters-menu'].value == 'true' && ui.renderAvailable_active == 'read'" ng-include="fragments['chapters'][0]['url']")

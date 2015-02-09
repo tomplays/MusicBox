@@ -51,6 +51,12 @@ function UserProfileCtrl($scope, $http , $location, $routeParams,  $locale, Docu
         $scope.external_link = function (link){
 			window.location = link;
 		}
+
+		$scope.create_doc = function(){
+		
+			var newdoc_service =  new DocumentService('n')
+			newdoc_service.newdoc();
+	}
 }
 function UserCtrl($scope, $http , $location, $routeParams,  $locale, renderfactory, UserService) {
 	

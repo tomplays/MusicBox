@@ -136,7 +136,79 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
       },
       objSchemas:function (){
         var definitions = new Array();
-        definitions.media = new Object({
+       
+          definitions.markup = new Object({
+              'name': 'markup',
+              'display_name': $rootScope.render_config.i18n.CUSTOM.OBJECTS.markup,
+              'map_range': true,
+              'positions': {
+                  "forced": "",
+                  "available": ['inline']},
+              'modes': {
+                'editor': {                   
+                  'enabled': true,
+
+                  'tabs': {
+                            'metadata': '',
+                            'type': 'type'
+
+                        },
+                  'fields' : {
+                                  'ranges': { 
+                                      'display' : true,
+                                      'label':'',
+                                      'input' : 'range'
+                                  },
+                                  'type': { 
+                                      'display' : true,
+                                      'label':'type',
+                                      'input' : 'select'
+                                  },
+                                  'position':{ 
+                                      'display' : true,
+                                      'label':'position',
+                                      'input' : 'select'
+                                  },
+                                  'subtype': {
+                                    'display' : true,
+                                    'label':'subtye',
+                                    'input' : 'select',
+                                    'free_input' : false,
+                                    'show_editor': 'hidden',
+                                    'available' : ['h1','h2', 'h3', 'h4', 'h5','h6','em', 'strong', 'code', 'quote'],
+                                  },
+                                    'metadata': {
+                                    'display' : true,
+                                    'label':'subtye',
+                                    'input' : 'select',
+                                    'free_input' : false,
+                                    'show_editor': 'hidden',
+                                    'available' : ['hyperlink'],
+                                    'forced' : 'hyperlink'
+                                  }
+
+                          },
+                              
+                  },
+                  'read': {
+                          'enabled': true,
+                          'display' : {
+                              
+                                 'metadata': {
+                                      'displayed':'subtype'
+                                 }
+
+                          },
+                        'icon': { 
+                            'before': {
+                                'show' : true,
+                                'class' : 'media'
+                              }
+                          },           
+                  },
+            },
+          })
+ definitions.media = new Object({
               'name': 'media',
               'display_name': $rootScope.render_config.i18n.CUSTOM.OBJECTS.media,
               'map_range': true,
@@ -204,77 +276,6 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
                                  'user': false,
                                  'metadata': {
                                       'displayed':''
-                                 }
-
-                          },
-                        'icon': { 
-                            'before': {
-                                'show' : true,
-                                'class' : 'media'
-                              }
-                          },           
-                  },
-            },
-          })
-          definitions.markup = new Object({
-              'name': 'markup',
-              'display_name': $rootScope.render_config.i18n.CUSTOM.OBJECTS.markup,
-              'map_range': true,
-              'positions': {
-                  "forced": "",
-                  "available": ['inline']},
-              'modes': {
-                'editor': {                   
-                  'enabled': true,
-
-                  'tabs': {
-                            'metadata': '',
-                            'type': 'type'
-
-                        },
-                  'fields' : {
-                                  'ranges': { 
-                                      'display' : true,
-                                      'label':'',
-                                      'input' : 'range'
-                                  },
-                                  'type': { 
-                                      'display' : true,
-                                      'label':'type',
-                                      'input' : 'select'
-                                  },
-                                  'position':{ 
-                                      'display' : true,
-                                      'label':'position',
-                                      'input' : 'select'
-                                  },
-                                  'subtype': {
-                                    'display' : true,
-                                    'label':'subtye',
-                                    'input' : 'select',
-                                    'free_input' : false,
-                                    'show_editor': 'hidden',
-                                    'available' : ['h1','h2', 'h3', 'h4', 'h5','h6','em', 'strong', 'code', 'quote'],
-                                  },
-                                    'metadata': {
-                                    'display' : true,
-                                    'label':'subtye',
-                                    'input' : 'select',
-                                    'free_input' : false,
-                                    'show_editor': 'hidden',
-                                    'available' : ['hyperlink'],
-                                    'forced' : 'hyperlink'
-                                  }
-
-                          },
-                              
-                  },
-                  'read': {
-                          'enabled': true,
-                          'display' : {
-                              
-                                 'metadata': {
-                                      'displayed':'subtype'
                                  }
 
                           },
@@ -649,7 +650,7 @@ container_class.modes.editor.fields.metadata.label = 'css class'
                                   },
                                   'subtype': {
                                     'display' : true,
-                                    'label':'subtye',
+                                    'label':'kind of link',
                                     'input' : 'select',
                                     'free_input' : false,
                                     'show_editor': 'hidden',
@@ -658,9 +659,9 @@ container_class.modes.editor.fields.metadata.label = 'css class'
                                   },
                                   'metadata': {
                                     'display' : true,
-                                    'label':'subtye',
-                                    'input' : 'select',
-                                    'free_input' : false,
+                                    'label':'url',
+                                    'input' : 'text',
+                                    'free_input' : true,
                                     'show_editor': 'hidden',
                                     'available' : ['hyperlink'],
                                     'forced' : 'hyperlink'
@@ -682,7 +683,7 @@ container_class.modes.editor.fields.metadata.label = 'css class'
                         'icon': { 
                             'before': {
                                 'show' : true,
-                                'class' : 'comment'
+                                'class' : 'link'
                               }
                           },           
                   },

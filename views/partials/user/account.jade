@@ -73,7 +73,9 @@ div.main_center.user_account.bordered
 				
 				
 					i.fa.fa-trash.delete_document(href="", ng-click="delete_document(doc) " )
-	a.btn_big.btn_newdoc(title="{{render_config.i18n.CUSTOM.DOCUMENT.create_new}}" href="/doc/create") {{render_config.i18n.CUSTOM.DOCUMENT.create_new}}
+	// a.btn_big.btn_newdoc(title="{{render_config.i18n.CUSTOM.DOCUMENT.create_new}}" href="/doc/create") {{render_config.i18n.CUSTOM.DOCUMENT.create_new}}
+
+	a.btn_big.btn_newdoc(title="{{render_config.i18n.CUSTOM.DOCUMENT.create_new}}" ng-click="create_doc()" ) {{render_config.i18n.CUSTOM.DOCUMENT.create_new}}
 
 footer
 	// p 2014 - MusicBox

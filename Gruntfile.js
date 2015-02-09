@@ -137,17 +137,20 @@ module.exports = function(grunt) {
 				files: ['public/css/*.less'], // less auto-compilation
 				tasks: ['less']
 			},
+			/*
 			templates: {
 				 options: { livereload: true },
 				files: ['views/partials/*.jade'], // compiling  auto-dedug
 				tasks: ['jade']
 			},
+			*/
 			api_folder:{
 				options: { livereload: true },
 				files: ['api/**/*.js'], // restart server on controllers, routes and models changes
-				tasks: ['forever:server1:restart']
+				// tasks: ['forever:server1:restart']
 
 			}
+			
 		}
 	});
 	//grunt.registerTask('dev', ['forever']); // , 'connect:server' // 'forever', 

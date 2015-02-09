@@ -2,6 +2,8 @@
 // + document options editor
 
 div.doc_header()
+
+
 	// p {{doc_options.include_audio_autoplay.value}}
 
 	// audio(id="video1" controls src="{{doc_options.include_audio_file.value}}" type="audio/mpeg" )
@@ -26,11 +28,18 @@ div.doc_header()
 		input(ng-if="ui.editing_doc_notices_before_title",   ng-model="doc_options.doc_notices_before_title.value", name="doc_options.doc_notices_before_title.value")
 		a.btn_ok.float_right(ng-click="edit_doc_option('doc_notices_before_title')") Save
 
-	h1(ng-if="doc_options.display_doc_title.value =='doc_header' || !doc_options.display_doc_title.value ",   ng-bind-html="doc.title+'&nbsp;'", ng-dblclick="edit_doc('title')")
-	.edit_field(ng-if="ui.editing_title")
-		label Edit "Title"
-		input(ng-model="doc.title")
-		a.btn_ok.float_right(ng-click="edit_doc('title')") Save
+
+	span(ng-if="test_draft(doc.title)")
+		.hint Double click default title to change it ! 
+		h1(ng-bind-html="render_config.i18n.CUSTOM.DOCUMENT.default_title" ng-dblclick="edit_doc('title')")
+	
+	h1(ng-hide="test_draft(doc.title)" ng-if="doc_options.display_doc_title.value =='doc_header' || !doc_options.display_doc_title.value",  ng-bind-html="doc.title+'&nbsp;'", ng-dblclick="edit_doc('title')")
+
+	.edit_field.float-block.w-100(ng-if="ui.editing_title")
+		span.float-block
+			label Edit "Title"
+			input(ng-model="doc.title")
+		a.btn_ok.save_title(ng-click="edit_doc('title')") Save
 
 	h3(ng-bind-html="doc_options.doc_notices_after_title.value")
 
@@ -49,7 +58,7 @@ div.doc_header()
 			p {{render_config.i18n.CUSTOM.DOCUMENT.by_author}} 
 				span(style="color:{{doc.user.color}};", class="post-author-name", rel="author") {{doc.user.username}} 
 
-	div.sharer(ng-if="doc_options.display_sharer.value =='doc_header' || !doc_options.display_sharer.value ")
+	div.sharer(ng-if="doc_options.display_sharer.value =='doc_header' || !doc_options.display_sharer.value")
 		a(class="twitter-share-icon", ng-class="", href="https://twitter.com/intent/tweet?text={{doc.excerpt}} {{doc.encoded_url}}")
 			i.fa.fa-twitter
 		a(href="https://www.facebook.com/sharer/sharer.php?u={{doc.encoded_url}}")

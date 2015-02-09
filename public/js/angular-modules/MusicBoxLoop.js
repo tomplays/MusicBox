@@ -44,6 +44,9 @@ var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','n
 
       init: function (d, next) {
 
+
+            console.log(d)
+
             this.setstate('init')
 
 
@@ -53,7 +56,7 @@ var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','n
              
 
               $rootScope.doc = d.doc;
-               $rootScope.markups = d.doc.markuos;
+              $rootScope.markups = d.doc.markuos;
               //console.log('d push')
               //console.log(d)
             
@@ -435,6 +438,9 @@ var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','n
         markup.editing  = false;
         markup.inrange  = true;
         markup.uptodate = '';
+
+        markup.touched = false;
+
       
         // special cases for child documents (refs as doc_id in markup record)
         markup.doc_id_id = '';
@@ -747,6 +753,7 @@ var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','n
               'classes':[], 
               'classes_flat': '',
               'order':i,
+              'absolute_order':str_start+i,
           
           });
 

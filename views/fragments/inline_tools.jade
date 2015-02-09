@@ -1,15 +1,21 @@
 span.pusher
-
+	
 	.pusher_markups
-		ul.typer.sub
-			li.pusher_item(class="" ng-repeat="t in objSchemas['markup'].modes.editor.fields.subtype.available") 
-				i.fa.btn_action(tooltip="insert markup" class="fa-{{t}}" ng-click="push_generic_from_ranges('markup', t,'inline')" ) 
+		tabset.editor-main-tab()
+			tab(ng-if="object=='markup'" heading='{{object}}' ng-repeat="object in available_sections_objects") 
+
+				ul.typer.sub(ng-if="object=='markup'")
+					
+					li.pusher_item(class="" ng-repeat="t in objSchemas[object].modes.editor.fields.subtype.available") 
+						i.fa.btn_action(tooltip="insert markup" class="fa-{{t}}" ng-click="push_generic_from_ranges('markup', t,'inline')" ) 
 			
-			li.pusher_item(class="") 
+				
+			// li.pusher_item(class="") 
 				i.fa.btn_action(tooltip="insert markup" class="fa-media" ng-click="open_pusher_details('media')" ) 
 
 	.pusher_range(ng-if="ui.selected_range.end && ui.selected_range.start || ui.selected_range.start ===0" )
 		span.ranges
+			p {{ui.selected_range.insert}} 
 			span.ranges_start_end Selected letters from {{ui.selected_range.start}}  to {{ui.selected_range.end}}
 			// span.textrange
 				{{ui.selected_range.textrange}} 

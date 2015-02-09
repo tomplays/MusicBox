@@ -484,7 +484,13 @@ console.log(m)
 
 	}
 
-	
+	$scope.test_draft = function (value){
+		var n = value.search("draft #");
+		if(n==0){
+			return true
+		}
+		return false;
+	}
 
     // transform ranges to string
     // limited to 70 chars
@@ -626,7 +632,7 @@ console.log(m)
 
     // watch the textarea content.
 
-	$scope.$watch('doc.content', function(newValue, oldValue) {
+	$scope.$watch('doc.sd', function(newValue, oldValue) {
 
 		
 		if(newValue !==undefined  && oldValue !==undefined && (newValue !== oldValue) ){
@@ -677,7 +683,7 @@ console.log(m)
 		
 			if($scope.ui.selected_range.diff_dir == 'expanded' || $scope.ui.selected_range.diff_dir =='reduced'){
 				_.each($scope.doc.markups, function(mk, i){
-					var touched = false;
+					
 					// nothing to to if after range
 					if(  diff >  mk.end) {}
 					// means "on" the left of range
@@ -686,21 +692,20 @@ console.log(m)
 						if(  diff >=  mk.start) {
 							// offset end only
 							mk.offset_end = mk.offset_end+$scope.ui.selected_range.diff_qty
-							touched = true;
+							mk.touched = true;
 						}
 						// means before both start and end..
 						else{
 							// offset both
 		 					mk.offset_start = mk.offset_start+$scope.ui.selected_range.diff_qty
 		 					mk.offset_end   = mk.offset_end+$scope.ui.selected_range.diff_qty;
-							touched = true;
+							mk.touched = true;
 						}
 					}
-					if(touched){
+					if(mk.touched){
 						console.log(mk.type)
 						//mk.editing = true;
 						//mk.selected = true;
-
 						$scope.ui.selected_range.markups_to_offset.push(mk)
 					}
 				});
@@ -808,13 +813,18 @@ angular.module('musicBox.controllerz', []).controller('SectionCtrl', function($s
 
 
 $scope.save_section= function (){
+
+
+
 	// Manual save section
-	   			 var string  = '';
-                _.each($scope.containers, function(container){
-                    string  += container.fulltext;
-                })
-                $scope.doc.content = string;
-                $scope.doc_sync()
+	   			// var string  = '';
+                //_.each($scope.containers, function(container){
+                  //  string  += container.fulltext;
+           //     })
+               console.log($scope.section.fulltext)
+               console.log('nothing happening here')
+                //$scope.doc.content = string;
+               // $scope.doc_sync()
 
 	//	section.fulltext =section.fulltext+'----'
 	//	$scope.section.fulltext = section.fulltext
@@ -858,6 +868,9 @@ $scope.$watchCollection('section', function(newValue, oldValue) {
 */
 	// short function to push a comment
 	$scope.push_comment= function (){
+
+
+
 
 
 		// $scope.section.selected = true;
@@ -1102,7 +1115,7 @@ angular.module('musicBox.controller', []).controller('MarkupCtrl', function($sco
 var newdoc_service;
 function DocumentNewCtrl($scope, $compile, $http , $sce, $location, $routeParams, renderfactory,socket,DocumentService, $timeout) {
 
-
+/*
 	$scope.init_new_doc = function (){
 		console.log('DocumentNewCtrl')
 		$http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded"
@@ -1116,9 +1129,11 @@ function DocumentNewCtrl($scope, $compile, $http , $sce, $location, $routeParams
 		$scope.userin= USERIN;
 		document.title = 'Create a new document'	
 	}
-	
+
+*/
+	/*
 	$scope.create_doc = function(){
-		/*
+		
 		console.log($scope.newdoc)
 		var thiselem;
 		thiselem = document.createElement('div');
@@ -1128,13 +1143,14 @@ function DocumentNewCtrl($scope, $compile, $http , $sce, $location, $routeParams
 		$scope.serialization = new Serialize(elem)
 		console.log($scope.serialization)
 		thiselem.remove()
-		*/
+		
 		var newdoc_service =  new DocumentService()
 		newdoc_service.RenderConfig()
 		newdoc_service.newdoc();
 	}
 	
 	$scope.init_new_doc();
+*/
 	
 } // end controller
 //DocumentNewCtrl.$inject = ['$scope', '$http' ,'docfactory', '$timeout'];

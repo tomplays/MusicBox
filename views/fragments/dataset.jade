@@ -32,7 +32,8 @@
 
          i.fa.fa-remove.btn_action(tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.delete}}" ng-click="markup_delete(markup)")
         td {{markup.type}}
-        td {{markup.subtype}}
+        td 
+          input(ng-model="markup.subtype" , type="text")
         td 
          input(ng-model="markup.metadata" , type="text")
         td {{markup.start}} - {{markup.end}}

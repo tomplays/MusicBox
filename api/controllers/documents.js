@@ -69,7 +69,6 @@ var mail= require('./../../sendmail.js');
 	*/
  	exports.index_doc= function(req, res) {
 
-
  		var debugger_on = 'true' /// fix database for broken meta_options.
 
 		var user_ = ''
@@ -302,7 +301,7 @@ exports.doc_sync= function(req, res) {
 						
 						doc.markups[i].start 	=  parseFloat(doc.markups[i].start) + parseFloat(match.offset_start);
 						doc.markups[i].end 		=  parseFloat(doc.markups[i].end)   + parseFloat(match.offset_end);
-						
+						doc.markups[i].touched = true
 						//console.log('doc.markups[i] after')
 						//console.log(doc.markups[i])
 						//match.start = mk.start;
@@ -318,7 +317,7 @@ exports.doc_sync= function(req, res) {
 
 
 			// save content
-			doc.content = req.body.doc_content;
+				doc.content = req.body.doc_content;
 
 			   var out 			= {}
                if(req.user){
