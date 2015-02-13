@@ -1,7 +1,10 @@
-div(ng-controller="MarkupCtrl", class="markup_box markup_box_depth_{{markup.depth}} markup_box_status_{{markup.status}}   markup_displayer_ markup_displayer markup_displayer_{{markup.type}} markup_displayer_subtype_{{markup.subtype}}  by_me_{{markup.by_me}} is_editing_{{markup.editing}}")
-	// em {{markup.offset_start}} - {{markup.offset_end}} -  {{markup.touched}}
+div(ng-controller="MarkupCtrl", class="markup_box markup_box_depth_{{markup.depth}} markup_box_status_{{markup.status}}   markup_displayer_ markup_displayer markup_displayer_{{markup.type}} markup_displayer_subtype_{{markup.subtype}}  by_me_{{markup.by_me}} is_editing_{{markup.editing}}  touched-{{markup.has_offset}} ")
+	
 	// debug 
 	// span 
+		em {{markup.has_offset}} 
+		em {{markup.offset_start}} - {{markup.offset_end}} -  {{markup.touched}}
+		em current: {{markup.start}} - {{markup.end}} 
 		p {{markup.start}} - {{markup.end}} - {{markup.metadata}} - {{markup.type}} - {{markup.subtype}} {{markup.position}}
 		// p {{markup.selected}}
 		p m.by_me: {{markup.by_me}}
@@ -23,7 +26,7 @@ div(ng-controller="MarkupCtrl", class="markup_box markup_box_depth_{{markup.dept
 			span(ng-if="markup.type=='generic'") {{markup.subtype[0]}}
 
 	div.data_col
-		
+		span(class="")
 		span.mk_val.metadata.use_depth(ng-bind-html="markup.metadata",  ng-if="objSchemas[markup.type].modes.read.display.metadata.displayed =='metadata'") 
 
 

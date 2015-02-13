@@ -6,4 +6,6 @@ html(class="is_home_{{ui.is_home}} is_single_{{ui.is_single}} doc_id_{{doc._id}}
 	body(class="render_active_{{ui.renderAvailable_active}} text_typography_{{doc_options.text_typography.fixed}} headings_typography_{{doc_options.headings_typography.fixed}}")
 		div( ng-view, autoscroll="true")
 			div.static_raw
+				// bot and search engine only content 
+				// text served as stored in database (no markup)
 				p #{raw_content}

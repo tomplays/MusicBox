@@ -17,10 +17,7 @@ head
 	meta(property="og:url", content="#{doc_slug_discret}")
 
 	link(rel='icon', type='image/png', href='favicon.png')
-	
-
-
-	
+		
 	script(type='text/javascript').
 
 		var musicBox
@@ -112,24 +109,12 @@ head
 	// same in dev and prod env 
 	link(rel='stylesheet', href='bower_components/font-awesome/css/font-awesome.min.css')
 	
-
 	if (env == 'grunt')
-
 	if (env == 'prod')
 		link(rel='stylesheet', href='css/min/main.css')
-		
-
 		// Calling 9 js files, minified crash for angular, whereas .debug no, why ?
 		// script(type='text/javascript', src='js/min/MusicBox.min.js')
 		script(type='text/javascript',  src='js/min/MusicBox.min-debug.js')
-
-
-	//
-		♪     ♪
-			♪     ♪
-		Boite à musique
-			~MusicBox
-			
 
 	if (doc_include_js)
 		script(type='text/javascript', src='js/custom_doc/jquery-1.11.1.min.js')
@@ -139,4 +124,8 @@ head
 	if (doc_include_css)
 		link(rel='stylesheet', href='#{doc_include_css}')
 
-
+	//
+		♪     ♪
+			♪     ♪
+		Boite à musique
+			~MusicBox

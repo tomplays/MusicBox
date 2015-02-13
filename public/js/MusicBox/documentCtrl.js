@@ -87,9 +87,10 @@ function DocumentCtrl($scope, $http , $sce, $location, $routeParams ,socket,rend
 
 	$scope.init = function (){
 
-		console.log('DocumentCtrl')
+		console.log('DocumentCtrl init')
 		//	render        	= Renderfactory()
 		doc           	= new DocumentService();
+		doc.SetSlug();
 		doc.RenderConfig()
 		// call doc api with complete init.
 		doc.Load()
@@ -485,6 +486,9 @@ console.log(m)
 	}
 
 	$scope.test_draft = function (value){
+		if(!value){
+			return false;
+		}
 		var n = value.search("draft #");
 		if(n==0){
 			return true
@@ -623,7 +627,18 @@ console.log(m)
 			console.log('mb')
 
 			if($scope.MusicBoxLoop.state == 'ready'){
-				 new MusicBoxLoop().init($scope.MusicBoxLoop.doc,true); 
+				alert('rm here')
+				 new MusicBoxLoop().init(true); 
+			}
+	 	}
+	});
+
+	$scope.$watch('doc.published', function(newValue, oldValue) {
+	 
+	  	if(oldValue && newValue && newValue !== oldValue){
+	  		
+			if(newValue == 'public'){
+				/////$scope.ui.menus.quick_tools_published.open='no'
 			}
 	 	}
 	});

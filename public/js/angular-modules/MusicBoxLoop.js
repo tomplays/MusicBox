@@ -41,8 +41,8 @@ var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','n
           return this.state
 
       },
-
-      init: function (d, next) {
+     
+      init: function (d) {
 
 
             console.log(d)
@@ -50,83 +50,76 @@ var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','n
             this.setstate('init')
 
 
-            
+             self.object_arr = self.containers_objectsarray_prepare()
              //$rootScope;
-
-             
-
-              $rootScope.doc = d.doc;
-              $rootScope.markups = d.doc.markuos;
-              //console.log('d push')
-              //console.log(d)
-            
-              $rootScope.doc.formated_date =  moment(d.doc.updated).calendar() +', '+moment(d.doc.updated).fromNow(); 
-              
-              // 
-              // http://stackoverflow.com/questions/17493309/how-do-i-change-the-language-of-moment-js
-              //$rootScope.doc.formated_date = d.doc.updated
-               // console.log($rootScope.doc.user)
-             
-              $rootScope.doc_options =   self.apply_object_options('document', d.doc.doc_options)
-              $rootScope.author_options =    self.apply_object_options('author',   d.doc.user.user_options)
-               
-
-              if(d.doc.room){
-                  $rootScope.doc.room__id = d.doc.room._id;
-                 // $rootScope.room_options =  self.apply_object_options('room', d.doc.room.room_options)
-               }
-               else{
-                   $rootScope.doc.room__id = '';
-                   $rootScope.doc.room = new Object({'_id':'-'});
-               }
-               //console.log(d.markups_type)
-
-                $rootScope.doc_owner = d.is_owner;
-                console.log('is owner or has secret ('+ d.is_owner+')')
-                document.title = d.doc.title
-               
-                var encoded_url = root_url+':'+PORT;
-                if(d.doc.slug !=='homepage'){
-                    encoded_url += '/doc/'+d.doc.slug;
-                }
-                $rootScope.doc.encoded_url = urlencode(encoded_url);
-                $rootScope.doc.text_summary = '';
-                
-                // letters and 
-                $rootScope.letters = [];
+             $rootScope.letters = [];
                 // "warnings" variable
              
-                $rootScope.max_reached_letter = 0;
-                // test
-                // $rootScope.selectingd = 'init';        
-               
-                if(next == true){
+             $rootScope.max_reached_letter = 0;
+             // test
+             // $rootScope.selectingd = 'init';        
+            // if(next == true){
                    self.init_containers()
-                }
-                return
-                // equivalent : 
-                // $rootScope.$emit('docEvent', {action: 'doc_ready', type: 'load', collection_type: 'doc', collection:doc});
+            // }
+             return
+             // equivalent : 
+             // $rootScope.$emit('docEvent', {action: 'doc_ready', type: 'load', collection_type: 'doc', collection:doc});
       },
       init_soft: function (d, next) {
 
 
       },
 
+      containers_objectsarray_prepare: function () {
+           var objectsarray = {};
 
+           objectsarray.section_classes = '';
+           objectsarray.section_styles  = '';
+           //new Array('objects', 'objects_')
+           objectsarray['objects'] = [];
+           objectsarray['objects_'] = [];
+
+
+           objectsarray['objects_count'] = [];
+           objectsarray['objects_count']['by_positions'] = [];
+           objectsarray['objects_count']['all'] = [];
+            // section can have css classes and inlined styles (background-image)
+         
+            // $rootScope.containers[index]['classes'] =[];
+            // $rootScope.objects_sections[index]['global'] = [];
+            _.each($rootScope.available_sections_objects, function(o, obj_index){
+              objectsarray['objects'][$rootScope.available_sections_objects[obj_index]] = [];
+              // and each subs objects an array of each positions
+              objectsarray['objects_count']['all']= new Object({'count':0, 'has_object':false})
+              _.each($rootScope.available_layouts  , function(op){ // op: left, right, ..
+                objectsarray['objects_count']['by_positions'][op.name] = new Object({'count':0, 'has_object':false})
+                objectsarray['objects'][$rootScope.available_sections_objects[obj_index]][op.name] =[];
+              });
+              // set to "1" for title include.
+              // $rootScope.containers[0]['objects_count']['by_positions']['center'].count = 1;
+            });
+            return objectsarray;
+      },
 
       /**
-      * init containerS (as a collection)
-      * @function docfactory#init_containers
+      * > mv to docservice 
+      * 
       */
+
 
       resort_markups : function () {
         $rootScope.doc.markups  = _.sortBy($rootScope.doc.markups,function (num) {
           return num.start;
         });
+        //console.log('grupby')
+       // console.log(_.groupBy($rootScope.doc.markups,'type'))
 
       },
 
       init_containers: function () {
+
+       
+        
         $rootScope.sectionstocount = 0;
 
         self.resort_markups()
@@ -208,7 +201,9 @@ var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','n
 
           // populate letters as single objects.
           var  temp_letters  =  self.fill_chars(container,index);
-       
+
+        
+
           _.each($rootScope.doc.markups, function(markup){
               
               // only for markups which ranges match container
@@ -319,7 +314,7 @@ var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','n
         // reloop to find isolate markups
         $rootScope.ui.isolated_markups = []
         _.each($rootScope.doc.markups, function(markup){
-          if(!markup.isolated ==false || markup.start > $rootScope.doc.content.length ){
+          if(!markup.isolated ==false  ){
             console.log('markup.isolated' )
             markup.isolated = true;
             $rootScope.ui.isolated_markups.push(markup)
@@ -327,6 +322,8 @@ var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','n
         })
       
       },
+
+      
 
       /**
       * init container (as single object)
@@ -339,21 +336,21 @@ var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','n
 
             /* some variable seting for each container */
 
-            // its letters"      
-            // var temp_letters;
             
-            container.selecting = -1;
+            container_ = new Object({
+                'selecting' : -1,
+                'sectionin' : index,
+                'isolated'  : false,
+                'selected'    : false,
+                'editing_text':false,
+                'modeletters' : 'block',
+                'fulltext'    : self.ranges_to_fulltext($rootScope.doc.content, container.start, container.end)
+            })
+            // extend object
+            container = _.extend(container, container_);
 
-            container.sectionin = index;
-            container.isolated = false;
-        
-            container.selected      = false;
-            container.editing       = false;
-            container.editing_text  = false;
-
-            // letters mode (html "block" or single)
-
-            container.modeletters = 'block'
+            // adds default arrays for objects(setup once)
+            container = _.extend(container, self.object_arr );
 
             // reach letter max test
             if(container.end > $rootScope.max_reached_letter){
@@ -367,43 +364,28 @@ var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','n
                 console.log('discontinous section found '+container_prev_end+' /vs/'+container.start)
               }
             }
-          
-          
-
-            // data_serie.push(container.start)
-            //$rootScope.objects_sections[index] = new Array();
-            $rootScope.containers[index]['objects'] = [];
-            $rootScope.containers[index]['objects_'] = [];
-
-
-            $rootScope.containers[index]['objects_count'] = [];
-            $rootScope.containers[index]['objects_count']['by_positions'] = [];
-            $rootScope.containers[index]['objects_count']['all'] = [];
-
-            // section can have css classes and inlined styles (background-image)
-            $rootScope.containers[index].section_classes = '';
-            $rootScope.containers[index].section_styles  = '';
-
-
-            // $rootScope.containers[index]['classes'] =[];
-            // $rootScope.objects_sections[index]['global'] = [];
-            _.each($rootScope.available_sections_objects, function(o, obj_index){
-              $rootScope.containers[index]['objects'][$rootScope.available_sections_objects[obj_index]] = [];
-              // and each subs objects an array of each positions
-              $rootScope.containers[index]['objects_count']['all']= new Object({'count':0, 'has_object':false})
-              _.each($rootScope.available_layouts  , function(op){ // op: left, right, ..
-                $rootScope.containers[index]['objects_count']['by_positions'][op.name] = new Object({'count':0, 'has_object':false})
-                $rootScope.containers[index]['objects'][$rootScope.available_sections_objects[obj_index]][op.name] =[];
-              });
-              // set to "1" for title include.
-              // $rootScope.containers[0]['objects_count']['by_positions']['center'].count = 1;
-            });
-
-
-
-
       },
+      markup_prepare: function(markup){
+        if(!$rootScope.objSchemas[markup.type]){
+          console.log('no schematype for markup! :'+markup.type)
+          // return false;
+        }
 
+        markup_ = new Object({
+            'offset_start'   : 0,
+            'offset_end'     : 0,
+            'has_offset'     : false,
+            'isolated'       : false,
+            'selected'       : false,
+            'editing'        : false,
+            'inrange'        : true,
+            'uptodate'       : '',
+            'touched'        : false,
+            'doc_id_id'      : '', // special cases for child documents (refs as doc_id in markup record)
+        })
+        markup =  _.extend(markup, markup_);
+        return markup
+      },
 
       /**
       * wrap a markup
@@ -416,35 +398,14 @@ var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','n
       * @link docfactory#wrap_markup
       */
 
-      wrap_markup: function(markup, container, index, temp_letters ){
+      wrap_markup: function(markup, container, index, temp_letters){
 
-        if(!$rootScope.objSchemas[markup.type]){
-          console.log('no schematype for markup! :'+markup.type)
-          // return false;
-        }
+        
+        self.markup_prepare(markup)
+
+        markup.sectionin = index;
 
          //console.log('wraping')
-       
-        markup.offset_start = 0;
-        markup.offset_end = 0;
- 
-        // some commons attributes
-        // > todo use states objects
-        markup.sectionin = index;
-        markup.isolated = false;
-        /// keep open test :
-        //console.log('keep open')
-        markup.selected = false;
-        markup.editing  = false;
-        markup.inrange  = true;
-        markup.uptodate = '';
-
-        markup.touched = false;
-
-      
-        // special cases for child documents (refs as doc_id in markup record)
-        markup.doc_id_id = '';
-
         markup.user_options =  self.apply_object_options('markup_user_options',markup.user_id.user_options)
 
         // user "by_me" ownership test
@@ -452,8 +413,6 @@ var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','n
         // console.log(markup.user_id)
         // console.log($rootScope.userin)
         if( markup.user_id._id && $rootScope.userin._id  && ($rootScope.userin._id == markup.user_id._id ) )  {
-           
-           
              markup.by_me = true;
         }
 
@@ -487,17 +446,17 @@ var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','n
         
 
         if(markup.type=='container_class' ){ // or pos == inlined
-             $rootScope.containers[index].section_classes += markup.metadata+' ';
+            container.section_classes += markup.metadata+' ';
         }
 
         if(markup.type == 'media' || markup.subtype == 'simple_page' ||  markup.subtype == 'doc_content_block' ){
                $rootScope.containers[index].section_classes += 'has_image ';
                if(markup.position){
-                  $rootScope.containers[index].section_classes += ' focus_side_'+markup.position +' ';
+                  container.section_classes += ' focus_side_'+markup.position +' ';
                }
 
                if(markup.position == 'background'){
-                  $rootScope.containers[index].section_styles = 'background-image:url('+markup.metadata+'); ' ;
+                  container.section_styles = 'background-image:url('+markup.metadata+'); ' ;
                }
 
         }
@@ -539,45 +498,26 @@ var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','n
         // check exist/not null
 
         if(markup.type =='container'){
+            markup.isolated = false;
 
         }
         if(markup.type !== "" && markup.position){ // > can add it
 
 
-            if(markup.type !=='container'){
-           /////              $rootScope.containers[index]['objects_'].push(markup)
-           ////            console.log($rootScope.containers[index]['objects_'])
-
-
-            }
-
-
-
-/*
-            console.log( _.groupBy($rootScope.objects_sections['objects_'], function(o){
-
-              return o.position
-            })
-            )
-*/
-
-
-
-
+          
           // adding to the global collection
           if(markup.position == 'global'){
             $rootScope.objects_sections['global_all'].push(markup)
             // $rootScope.objects_sections['global_by_type'][markup.type].push(markup)
           }
-
           // add markup to container objects (container::index::type::position) 
-          $rootScope.containers[index].objects[markup.type][markup.position].push(markup) 
+          container.objects[markup.type][markup.position].push(markup) 
           
           // if(markup.type !=='container'){
-          $rootScope.containers[index].objects_count['all'].count++;
-          $rootScope.containers[index].objects_count['all'].has_object  = true;
-          $rootScope.containers[index].objects_count['by_positions'][markup.position].count++;
-          $rootScope.containers[index].objects_count['by_positions'][markup.position].has_object  = true;
+          container.objects_count['all'].count++;
+          container.objects_count['all'].has_object  = true;
+          container.objects_count['by_positions'][markup.position].count++;
+          container.objects_count['by_positions'][markup.position].has_object  = true;
           //}
         }
         //console.log($rootScope.containers[index]['objects'][markup.type][markup.position])
@@ -599,6 +539,8 @@ var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','n
       */
     
       markup_ranges : function (markup, container, index, temp_letters){
+
+        console.log('Markup ranges')
 
         var j_arr=0;
         var i_array = 0;  
@@ -655,6 +597,12 @@ var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','n
                
           }
 
+
+          if(markup.subtype=='h2'){
+            temp_letters[delta].classes_array[markup.subtype] = {'active' : true};
+            // console.log('h2].active on letter'+delta)
+          }
+
           if( temp_letters[delta]){
           //  temp_letters[delta]['classes'].push(markup._id)
           }
@@ -677,17 +625,22 @@ var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','n
           //}
           //else{
             
-            if(temp_letters[delta] && markup.subtype){
+
+
+            if(temp_letters[delta] && markup.subtype && markup.subtype !=='h2'){
                 
                 // if twice, adds "_" to subtype-class
                 if(_.contains(temp_letters[delta]['classes'], markup.subtype) ) {
-                        temp_letters[delta]['classes'].push('_'+markup.subtype);
+                      temp_letters[delta]['classes'].push('_'+markup.subtype);
 
                 } 
                 else{
                       temp_letters[delta]['classes'].push(markup.subtype);
                 }
             }
+
+
+
 
             if(temp_letters[delta] && markup.depth){
                  temp_letters[delta]['classes'].push('depth_'+markup.depth);
@@ -717,10 +670,47 @@ var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','n
           }
 
 
+          ///temp_letters[delta].classes_array
+           var ok= Object.keys(temp_letters[delta].classes_array) 
+           //  console.log(ok)
+
+                    _.each(ok, function(k, i){
+
+                     // console.log(k)
+                      //console.log(letter_arr.classes_array[k])
+                      if(temp_letters[delta].classes_array[k] && temp_letters[delta].classes_array[k].active){
+                        temp_letters[delta]['classes'].push(k)
+
+                      }
+
+                    });
+
+
           i_array++;
           j_arr++
         }
         return markup;
+      },
+      ranges_to_fulltext: function (content, start, end){
+        var fulltext = '';
+        var i_array     =   0;
+       
+        for (var i = start; i <= end; i++) {
+          var ch = '';
+          ch = content[i];
+          if (ch === " ") {
+            ch = ' ';
+          }
+          if (!content[i]) {   
+            ch = '';     
+          }
+          fulltext += ch;
+          i_array++;
+        }
+        if(!fulltext){
+          fulltext = '-';
+         }
+         return  fulltext;
       },
 
 
@@ -748,9 +738,16 @@ var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','n
         // confing could be a option/mode feature
         var content_string  = $rootScope.doc.content
 
+
+        var classes_arr = new Array()
+        // classes_arr.h1 = {}
+        // classes_arr.h2 = {}
+
+
         for (i = str_start; i <= str_end; i++) {
           var letter_arr = new Object({
               'classes':[], 
+              'classes_array': classes_arr, 
               'classes_flat': '',
               'order':i,
               'absolute_order':str_start+i,
@@ -763,53 +760,22 @@ var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','n
           
           if (ch === " ") {
                 ch = ' ';
-
-            }
-            if (!content_string[i]) {
-              // maybe better to unset ? 
-                ch = '?';
+          }
+          if (!content_string[i]) {
+            // maybe better to unset ? 
+            ch = '';
                 letter_arr.classes.push('no-lt')
                 letter_arr.classes_flat += 'no-lt '
             }
-            fulltext += ch;
-            letter_arr['char'] = ch;
-
-
-          // old. #mongotaste
-        //letter_arr['fi_nd'] = new Object({'fi': false, 'nd':false/*, 'md':false*/});
-        //  letter_arr.fi_nd = new Object({'fi': false, 'nd':false/*, 'md':false*/});
-        
-          
-          /** 
-          * @something here
-          * @link DocumentCtrl#fill_chars
-          */
-
          
-            //letter_arr.action = '';
-            //  letter_arr.rindex = i_array;
-            //  letter_arr.lindex= i;
-            //unsued a heavy  letter_arr.objects = [];
+          letter_arr['char'] = ch;
           letter_arr.sectionin = section_count;
-                  //letter_arr.mode= 'display';
-                  //letter_arr.state = new Object({ 'statemode' : 'loading','select' : false,'clicked' : false,'inrange' : false , 'flat': {}  });
-                  //letter_arr.sel = false;
-    
           temp_letters[i_array]  = letter_arr;
           i_array++;
         }
-         
-         if(!fulltext){
+        if(!fulltext){
           fulltext = '-';
          }
-
-        //$rootScope.letters[section_count]= temp_letters;
-        //$rootScope.containers[section_count].letters = temp_letters;
-        //console.log( $rootScope.containers[section_count].letters)
-        $rootScope.containers[section_count].fulltext = fulltext;
-
-
-
         return temp_letters;
       },
 
@@ -903,7 +869,22 @@ var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','n
         return;
       },
 
-
+      markup_push : function (markup) {
+        _.each($rootScope.containers, function(container, c_index){
+            if(markup.start >= container.start && markup.end <= container.end){
+              if(markup.type == 'markup'){
+                for (var pos= markup.start; pos<=markup.end; pos++){ 
+                  container.letters[pos].classes.push(markup.subtype)
+                  container.letters[pos].classes.push('mup')
+                }
+              }
+              console.log(container.objects[markup.type][markup.position])
+              //
+              //this.prepare_markup(markup)
+              //container.objects[markup.type][markup.position].push(markup)
+            }
+        });
+      },
       
     /**
     * @description 

@@ -29,7 +29,7 @@ angular.module('musicBox.directives', [])
               var mb_service =  new MusicBoxLoop()
                //mb_service.remove_lt_classes(m)
                mb_service.set_container_attribute(scope.$parent.section,'editing_text', true, true)
-
+                scope.$parent.section.modeletters = 'single';
 
         // = true;
     }
@@ -58,38 +58,104 @@ angular.module('musicBox.directives', [])
 
       });
         elm.bind("keyup", function(event) {
-          
-            var dif_pos = event.target.selectionStart
+
+          active_section_tool(scope)
+
+          var dif_pos = event.target.selectionStart
+
+          console.log(event.which)
+          if(event.which== 39 || event.which== 37  || event.which== 40 || event.which== 38){
+            console.log(event)
+            $rootScope.ui.selected_range.insert = dif_pos;
             
- $rootScope.ui.selected_range.markups_to_offset= new Array()
-            $rootScope.ui.selected_range.insert= dif_pos;
+            if(scope.$parent.section.letters[event.target.selectionStart-1]){
+              scope.$parent.section.letters[event.target.selectionStart-1].classes.push('mup')
+            }
+            scope.$apply(attrs.keyListener);
+
+            return
+          }
+          if(event.which == 13){
+            var this_sync = new DocumentService()
+            this_sync.SetSlug($rootScope.doc.slug)
+            this_sync.docsync()
+
+            
+            console.log('section add ? ')
+            return
+          }
+
+          
+
+          $rootScope.ui.selected_range.insert= dif_pos;
+
+
 _.each($rootScope.doc.markups, function(mk, i){
+
+
+           
+
+
           
           // nothing to to if after range
-          if( dif_pos >  mk.end) {}
+          if( dif_pos >  mk.end) {
+                if(mk.type== 'container'){
+                  console.log('diff supe ')
+                   mk.offset_end = mk.offset_end+1
+                   mk.has_offset = true;
+                   console.log('mk END:'+mk.offset_end)
+                   var nl = new Object({'char':'*','classes':[]})
+                   scope.$parent.section.letters.push(nl)
+                 
+
+                }
+          
+ 
+
+
+
+          }
+          else if( dif_pos ==  mk.end) {
+                console.log('diff same ')
+          }
+
+
           // means "on" the left of range
           else{
             // means between the range
             if(  dif_pos >=  mk.start) {
               // offset end only
               mk.offset_end = mk.offset_end+1
-              mk.touched = true;
+              mk.has_offset = true;
+                console.log('c1 ')
             }
             // means before both start and end..
             else{
               // offset both
               mk.offset_start = mk.offset_start+1
               mk.offset_end   = mk.offset_end+1
-              mk.touched = true;
+              mk.has_offset = true;
+               console.log('c1 ')
             }
           }
-          if(mk.touched){
-           // console.log(mk.type)
+          if(mk.has_offset){
+          
+
+
+           console.log(mk)
         
 
             //mk.editing = true;
             //mk.selected = true;
+           // var inarry = _.find($rootScope.ui.selected_range.markups_to_offset, function(el){ return el.id == m.id; })
+            
+            // var match = _.find($rootScope.ui.selected_range.markups_to_offset, function(m){ return m._id  == mk._id; });
+           
             $rootScope.ui.selected_range.markups_to_offset.push(mk)
+            
+
+          
+          
 
            // mk.offset_start =0
            // mk.offset_end =0
@@ -98,26 +164,26 @@ _.each($rootScope.doc.markups, function(mk, i){
 
 
 
-
-
-           // console.log(event)
-           // console.log(attrs.keyListener)
-
-           // console.log('length section:'+ (scope.$parent.section.end-scope.$parent.section.start) )
-            
-            var current_length = scope.$parent.section.end-scope.$parent.section.start+1
+ var current_length = scope.$parent.section.end-scope.$parent.section.start+1
            
 
             console.log(event.target.textLength-1)
             console.log(scope.$parent.section.end - scope.$parent.section.start)
 
             if(event.target.textLength !== current_length){
-                var o_end = scope.$parent.section.start + event.target.textLength - 1
+                var o_end = scope.$parent.section.start + (event.target.textLength - 1)
                 //console.log(o_end)
                 scope.$parent.section.offset_end = - (scope.$parent.section.end - o_end)
                 console.log(scope.$parent.section.offset_end)
             }
           
+
+           // console.log(event)
+           // console.log(attrs.keyListener)
+
+           // console.log('length section:'+ (scope.$parent.section.end-scope.$parent.section.start) )
+            
+           /*
 
 
                 var objects_in_section = scope.$parent.section.objects
@@ -138,37 +204,58 @@ _.each($rootScope.doc.markups, function(mk, i){
                         })
                      });
                  })
+*/
 
              // console.log(event.target.value)
 
              // scope.$parent.section.fulltext = 'event.target.value'
-            scope.$parent.section.fulltext_block = event.target.value;
-            scope.$parent.section.letters[0].classes.push('h1')
+            scope.$parent.section.fulltext = event.target.value;
 
+
+            _.each(scope.$parent.section.letters, function(letter,y){
+            //  letter.classes = new Array() // 'mup', 'h1'
+                
+                  letter.classes = new Array();
+                  letter.char = scope.$parent.section.fulltext[y]
+                
+            })
+
+
+/*
+if( scope.$parent.section.letters[event.target.selectionStart-1]){
+              scope.$parent.section.letters[event.target.selectionStart-1].classes.push('mup')
+}
+*/
+           // scope.$parent.section.letters[event.target.selectionEnd].classes.push('h2')
+
+ //console.log(event.target.value)
+   ///                                 console.log('vs')
                 var string  = '';
                 _.each($rootScope.containers, function(container){
                     string  += container.fulltext;
+                     console.log(container.fulltext)
                 })
-               $rootScope.doc.content = string;
-               
 
+
+
+               $rootScope.doc.content = string;
+      
               
               //scope.$parent.section.offset_start = 0
               //scope.$parent.section.offset_end   = 0
 
-            
-            var this_sync = new DocumentService()
-                this_sync.flash_message('&nbsp;', 'line' , 400, false)
-               this_sync.docsync()
 
-            if(event.which == 13){
-           
-               
-
-            }
 
             //console.log($rootScope)
-            //console.log($rootScope.containers)
+           
+
+           console.log($rootScope.containers)
+
+
+            var this_sync = new DocumentService()
+            this_sync.SetSlug($rootScope.doc.slug)
+             this_sync.docsync()
+
             scope.$apply(attrs.keyListener);
         });
     };
@@ -177,8 +264,7 @@ _.each($rootScope.doc.markups, function(mk, i){
 .directive('lt',   function($rootScope, MusicBoxLoop) {
   
 
-  function selection_ends(scope, MusicBoxLoop){
-     //var mb_service =  new MusicBoxLoop()
+  function selection_ends(scope){
                //mb_service.remove_lt_classes(m)
        //        mb_service.set_container_attribute(scope.$parent.section,'editing_text', true, true)
 
@@ -257,8 +343,18 @@ function selection_running(scope){
 
     function link(scope, elem, attrs) { 
 
+
+//         console.log(scope.lt.classes_array)
+           scope.lt.classes_ = new Array('h2') 
+     //= scope.lt.classes
+      // scope.lt.char =  '*';
+
+
+
           elem.bind('click', function() {
+
               if(scope.lt.href){
+
                   window.location=  scope.lt.href; 
               }
           });
@@ -266,7 +362,7 @@ function selection_running(scope){
           elem.bind('dblclick', function(scope) {
                 // console.log(scope.lt)
                 if($rootScope.ui.renderAvailable_active ==  'editor'){
-                  $rootScope.ui.renderAvailable_active =  'read'
+                 // $rootScope.ui.renderAvailable_active =  'read'
                   //scope.section.modeletters = 'block';
                 }
                 else{
@@ -281,7 +377,7 @@ function selection_running(scope){
               sets()
           });
           elem.bind('mouseup', function(e) { // selection ends
-              selection_ends(scope, MusicBoxLoop) 
+              selection_ends(scope) 
               sets()
           });
            elem.bind('mouseover', function(e) {  // while selection is active
@@ -291,11 +387,12 @@ function selection_running(scope){
     }
 
     return {
+      template: '{{lt.char}}',
      // template: '{{l.char}}',
-     transclude :true,
-     // replace :true,
+ //   transclude :true,
+ // replace :true,
       restrict: 'EA',
-      link:link,
+     link:link,
       scope: {
         lt : '='
       } 

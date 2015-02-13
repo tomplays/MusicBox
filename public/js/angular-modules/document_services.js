@@ -25,39 +25,31 @@ angular.module('musicBox.DocumentService', [])
 .factory("DocumentService", function($rootScope, $http,$sce, $resource,$location, $routeParams ,renderfactory, DocumentRest, UserService, MusicBoxLoop, $timeout, $locale) {
 
   
-  var DocumentService = function(slug) {
+  var DocumentService = function() {
     this.api_method = DocumentRest;
 
+  };
+
+  DocumentService.prototype.SetSlug = function (slug) {
     if(!slug){
       this.slug      = this.SlugFromUrl();
     }
     else{
        this.slug      = slug;
     }
-    
-
-  
-
   };
+
   DocumentService.prototype.Load = function () {
       
 
     var promise = DocumentRest.get({Id:this.slug},{  }).$promise;
     promise.then(function (Result) {
 
+      this.populate(Result)
 
       // console.log(Result);
-      $rootScope.doc =  Result.doc;
-
       new UserService().SetFromApi(Result.userin)
-     
-      //this.RenderConfig();
-      //MusicBoxLoop
-
-      //$rootScope.MusicBoxLoop = new Object()
-      //$rootScope.MusicBoxLoop.state = 'ready' 
-      //$rootScope.MusicBoxLoop.doc = Result;
-      new MusicBoxLoop().init(Result,true);
+      new MusicBoxLoop().init(true);
 
     }.bind(this));
     promise.catch(function (response) {     
@@ -65,6 +57,75 @@ angular.module('musicBox.DocumentService', [])
     }.bind(this));
 
   };
+
+
+  DocumentService.prototype.populate = function (d) {
+
+          $rootScope.doc = d.doc;
+          $rootScope.markups = d.doc.markups;
+          $rootScope.doc.formated_date =  moment(d.doc.updated).calendar() +', '+moment(d.doc.updated).fromNow(); 
+          $rootScope.doc_options      =   this.apply_object_options('document', d.doc.doc_options)
+          $rootScope.author_options   =    this.apply_object_options('author',   d.doc.user.user_options)
+               
+
+              if(d.doc.room){
+                  $rootScope.doc.room__id = d.doc.room._id;
+                 // $rootScope.room_options =  self.apply_object_options('room', d.doc.room.room_options)
+               }
+               else{
+                   $rootScope.doc.room__id = '';
+                   $rootScope.doc.room = new Object({'_id':'-'});
+               }
+               //console.log(d.markups_type)
+
+                $rootScope.doc_owner = d.is_owner;
+                console.log('is owner or has secret ('+ d.is_owner+')')
+                document.title = d.doc.title
+               
+                var encoded_url = root_url+':'+PORT;
+                if(d.doc.slug !=='homepage'){
+                    encoded_url += '/doc/'+d.doc.slug;
+                }
+                $rootScope.doc.encoded_url = urlencode(encoded_url);
+                $rootScope.doc.text_summary = '';
+       
+      
+  }
+   /**
+      * @description Sub-function to set objects options (doc_options, users_options, etc..)
+      * @param {String} object - kind of object to map
+      * @param {Array} options - source array
+      * @return {{Array}}
+      * @function docfactory#apply_object_options
+      * @todo ---
+      */
+
+      DocumentService.prototype.apply_object_options = function(object, options){
+        //console.log(' apply doc_options to object'+object)
+        var options_array = [];
+        _.each(options , function(option){
+            
+           
+            var op_name = option.option_name;
+            options_array[op_name]          = [];
+            options_array[op_name]['value'] = option.option_value
+            options_array[op_name]['_id']   = option._id
+            options_array[op_name]['type']  = option.option_type
+            if( option.option_value && option.option_type == 'google_typo' && object == 'document'){
+               WebFont.load({
+                  google: {
+                   families: [option.option_value]
+                  }
+               }); 
+               var fixed = options_array[op_name]['value'];
+               options_array[op_name]['fixed'] =  fixed.replace(/ /g, '_').replace(/,/g, '').replace(/:/g, '').replace(/400/g, '').replace(/700/g, '') 
+            }
+        });       
+        // console.log(options_array) 
+        return options_array;
+      }
+     
+
   DocumentService.prototype.Config = function () {
 
 
@@ -104,41 +165,46 @@ angular.module('musicBox.DocumentService', [])
         var thos = this;
         //console.log($rootScope.ui.selected_range.markups_to_offset)
         data.doc_content = $rootScope.doc.content;
-        data.markups = []
+        data.markups = new Array()
         // prepare / clean 
+
+
         _.each($rootScope.ui.selected_range.markups_to_offset, function(mk){
-                var a_mk = new Object({'id':mk._id, 'offset_start':mk.offset_start, 'offset_end':mk.offset_end})
-                data.markups.push(a_mk)
+
+          if(true){
+             var a_mk = new Object({'id':mk._id, 'offset_start':mk.offset_start, 'offset_end':mk.offset_end, 'action':'offset', 'type':mk.type, 'subtype':mk.subtype })
+             data.markups.push(a_mk)
+          }
+
+          if(!mk.offset_start && mk.offset_start !==0){
+          
+            console.log('bug offset start')
+          }
+          if(!mk.offset_end){
+            console.log('bug offset end')
+          }
+               
         });
       
         var promise = this.api_method.doc_sync({id:this.slug},serialize(data)).$promise;
         promise.then(function (Result) {
 
-            //  console.log('back sync')
+           
             // console.log(Result)
+            thos.flash_message('&nbsp;', 'line' , 100, false)
 
              _.each($rootScope.doc.markups, function(m){
-                 
-              m.end = m.end+ m.offset_end
-              m.start = m.start+ m.offset_start
-              m.offset_end=0
-              m.offset_start=0
-
-
+                  m.end = m.end+m.offset_end
+                  m.start = m.start+m.offset_start
+                  m.offset_end=0
+                  m.offset_start=0
+                  m.has_offset=false
              });
+            
+            $rootScope.ui.selected_range.markups_to_offset = new Array()
 
-
-             
-
-            //  $rootScope.ui.selected_range.markups_to_offset = []
-
-
-              
-              //new MusicBoxLoop().init(Result,true);
-              thos.flash_message('&nbsp;', 'line' , 400, false)
-             //  $rootScope.ui.selected_range.markups_to_offset = []
-
-
+           // new MusicBoxLoop().init(true);
+       
 
         }.bind(this));
         promise.catch(function (response) { 
@@ -170,9 +236,7 @@ angular.module('musicBox.DocumentService', [])
         data.field = field;     
         
         if(field == 'room_id'){
-          
-
-            data.value =  $rootScope.doc.room__id
+          data.value =  $rootScope.doc.room__id
         
         }
         else if(field == 'user_id'){
@@ -187,50 +251,34 @@ angular.module('musicBox.DocumentService', [])
         promise.then(function (Result) {
             var restart = false
             if(field == 'room_id'){
-                          if(field == 'room_id' && data.value !==''){
-
-                          }
+                          if(field == 'room_id' && data.value !==''){}
                           else{
                             $rootScope.doc.room     = Result.doc.room;
                             $rootScope.doc.room__id = Result.doc.room; 
-                            restart = true
                           }
-                 thos.flash_message('document set to room', 'ok' , 2000)    
-
-             
+                          thos.flash_message('document set to room', 'ok' , 2000)    
             }
 
             // hard redirect
-            if(field == 'title'){
+            else if(field == 'title'){
               window.location = root_url+':'+PORT+'/doc/'+Result.doc.slug;
             }
-            else if(field == 'content'){
-               $rootScope.$emit('docEvent', {action: 'doc_ready', type: '-', collection_type: 'doc', collection:Result });
-               restart = true
+  
+            else if(field == 'published'){
+              thos.flash_message('document set to '+Result.doc.published, 'ok' , 2000)    
+
             }
-             else if(field == 'published'){
-               $rootScope.$emit('docEvent', {action: 'doc_ready', type: '-', collection_type: 'doc', collection:Result });
-               //restart = true
-            
-                  thos.flash_message('document set to '+Result.doc.published, 'ok' , 2000)    
+            else if(field == 'excerpt' || field == 'thumbnail'){
+                thos.flash_message('document\' '+field+' set to '+data.value, 'ok' , 2000)  
 
             }
             else{
-              console.log('emit?')
-            }
-
-            if( restart == true){
-              var tt  = new MusicBoxLoop().init(Result,true);
-            }
-
-           
+              thos.flash_message('document set for  '+field, 'help' , 2000)    
+            }   
         }.bind(this));
         promise.catch(function (response) { 
             thos.flash_message('document edit error', 'bad' , 2000)    
         }.bind(this));
-
-      
-     
      }
   /**
       * @description 
@@ -276,9 +324,9 @@ angular.module('musicBox.DocumentService', [])
       
         var promise = this.api_method.doc_option_edit({id:this.slug},serialize(data)).$promise;
         promise.then(function (Result) {
+              thos.populate(Result)
               thos.flash_message('option saved (->'+data.value+')', 'ok' , 3000)
-              // reinit, no need to redraw containers
-              var tt  = new MusicBoxLoop().init(Result,false); 
+             
         }.bind(this));
         promise.catch(function (response) { 
           thos.flash_message('error', 'bad' , 3000)
@@ -306,9 +354,9 @@ angular.module('musicBox.DocumentService', [])
    
         var promise = this.api_method.doc_option_delete({id:this.slug},serialize(data)).$promise;
         promise.then(function (Result) {
+              thos.populate(Result)
               thos.flash_message('option deleted', 'ok' , 3000)
               // reinit, no need to redraw containers
-              var tt  = new MusicBoxLoop().init(Result,false); 
         }.bind(this));
         promise.catch(function (response) { 
           thos.flash_message('error', 'bad' , 3000)
@@ -336,9 +384,8 @@ angular.module('musicBox.DocumentService', [])
     
         var promise = this.api_method.doc_option_new({id:this.slug},serialize(data)).$promise;
         promise.then(function (Result) {
+              thos.populate(Result)
               thos.flash_message('document option created','ok', 3000)
-              var tt  = new MusicBoxLoop().init(Result,false);
-
         }.bind(this));
         promise.catch(function (response) { 
           thos.flash_message('error', 'bad' , 3000)
@@ -606,22 +653,28 @@ angular.module('musicBox.DocumentService', [])
       * @todo --
       */
       DocumentService.prototype.markup_push = function (markup) {
-
         //$rootScope.push = this.Markup_pre();
         var promise = new Object();
         var data = new Object(markup);
         data.username = $rootScope.userin.username;
         data.user_id = $rootScope.userin._id;
         promise.data = serialize(data);
-       
+        var thos = this;
         // this.Markup_pre();
 
         promise.query = DocumentRest.markup_push( {Id:this.slug},promise.data).$promise;
         promise.query.then(function (Result) {
-            this.flash_message(Result.inserted[0].type +' inserted', 'ok' , 3000)
+                thos.flash_message(Result.inserted[0].type +' inserted', 'help' , 100)
              
-
-                new MusicBoxLoop().init(Result,true);
+                //console.log(Result.inserted[0])
+                  thos.populate(Result)
+                  if(markup.type == 'markup'){
+                    new MusicBoxLoop().markup_push(Result.inserted[0]);
+                  }
+                  else{
+                    new MusicBoxLoop().init(true);
+                  }
+                                  ///// 
              
              //console.log(Result.inserted[0].type)
             
@@ -682,8 +735,9 @@ angular.module('musicBox.DocumentService', [])
 
           $http.post(api_url+'/doc/'+$rootScope.doc.slug+'/markup/'+markup._id+'/offset', serialize(data) ).success(function(m) {
             console.log(m)
+              alert('??')
             $rootScope.doc = m;
-            $rootScope.$emit('docEvent', {action: 'doc_ready', type: 'offset', collection_type: 'markup', collection:m.markups });
+            //$rootScope.$emit('docEvent', {action: 'doc_ready', type: 'offset', collection_type: 'markup', collection:m.markups });
           })
       }
   

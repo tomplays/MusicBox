@@ -43,7 +43,8 @@ function UserProfileCtrl($scope, $http , $location, $routeParams,  $locale, Docu
 		 }.bind(this));
 
         $scope.delete_document= function(doc){
-        	var tdoc           	= new DocumentService(doc.slug);
+        	var tdoc           	= new DocumentService();
+        	tdoc.SetSlug(doc.slug)
         	tdoc.doc_delete();
         	$scope.documents  = _.reject($scope.documents , function(doch){ return doch._id == doc._id });
         }

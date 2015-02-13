@@ -43,6 +43,9 @@ div(ng-controller="SectionCtrl")
 				
 				
 				// letters part !!
+				// h3 {{section.modeletters}}
+				// pre {{section.letters}}
+
 				div.inline_tools(ng-include="fragments['inline_tools'][0]['url']" ng-if="section.editing_text ===true")
 				// p {{section}}
 				div.fluidtextarea(ng-if="ui.renderAvailable_active == 'editor'")
@@ -55,7 +58,11 @@ div(ng-controller="SectionCtrl")
 
 				div.theletters(ng-if="section.modeletters=='single'")
 					// span.lt(class="{{l.classes_flat}}", ng-bind-html="l.char", lt="l" , ng-repeat="l in section.letters")
-					span.lt(ng-class="l.classes", class="in_range_{{l.inrange}}", ng-bind-html="l.char", lt="l" , ng-repeat="l in section.letters track by $index")
+					
+
+					// ng-class="l.classes",  
+					// ng-bind-html="l.char",
+					span.lt(ng-class="l.classes",  lt="l" , ng-repeat="l in section.letters track by $index")
 
 
 				div.fluidtext(fluidtexte, section="section" , ng-bind-html="section.fulltext_block",  ng-if="section.modeletters !=='single'") 

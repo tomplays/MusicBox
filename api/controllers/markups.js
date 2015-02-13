@@ -46,7 +46,7 @@ exports.markup_edit = function(req, res) {
 
 		// console.log('req_user_id:::'+req_user_id)
 	var query = Document.findOne({ 'slug':req.params.slug });
-	query.populate('user','-email -hashed_password -salt').populate( {path:'markups.user_id', select:'-salt', model:'User'}).populate({path:'markups.doc_id', select:'-markups -secret', model:'Document'}).populate('markups.doc_id.user').populate('room').exec(function (err, doc) {
+	query.populate('user','-email -hashed_password -salt').populate( {path:'markups.user_id', select:'-salt -hashed_password -email', model:'User'}).populate({path:'markups.doc_id', select:'-markups -secret', model:'Document'}).populate('markups.doc_id.user').populate('room').exec(function (err, doc) {
 
 	if (err){ 
 		return res.json(err)

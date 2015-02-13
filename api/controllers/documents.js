@@ -150,6 +150,7 @@ if(debugger_on){
 						user_in : user_,
 						doc_title : doc.title,
 						raw_content : doc.content,
+
 						doc_thumbnail : doc.thumbnail,
 						doc_excerpt: doc.excerpt,
 						doc_slug_discret : doc_slug_discret,
@@ -272,7 +273,7 @@ exports.doc_sync= function(req, res) {
 	//console.log(req.body.markups)
 	var query = Document.findOne({ 'slug':req.params.slug });
 	// complete query 
-	query.populate('user','-email -hashed_password -salt').populate( {path:'markups.user_id', select:'-salt', model:'User'}).populate({path:'markups.doc_id', select:'-markups -secret', model:'Document'}).populate('markups.doc_id.user').populate('room').exec(function (err, doc) {
+	query.populate('user','-email -hashed_password -salt').populate( {path:'markups.user_id', select:'-salt -email -hashed_password', model:'User'}).populate({path:'markups.doc_id', select:'-markups -secret', model:'Document'}).populate('markups.doc_id.user').populate('room', {secret:0}).exec(function (err, doc) {
 		if (err){
 			res.json(err)
 		} 
@@ -282,11 +283,11 @@ exports.doc_sync= function(req, res) {
 			console.log('#######')
 			//console.log(doc.markups)
 			console.log('#######################')
-			console.log('req.body.markups')
+			console.log(req.body.markups)
 			console.log('#######')
 	
 			_.each(doc.markups, function(doc_mk, i){
-
+doc.markups[i].touched = false
 					//console.log(mk)
 					var match = _.find(req.body.markups, function(m){ return m.id  == doc_mk._id; });
 					if(match){
@@ -305,13 +306,12 @@ exports.doc_sync= function(req, res) {
 						//console.log('doc.markups[i] after')
 						//console.log(doc.markups[i])
 						//match.start = mk.start;
-						//console.log(match)
+						
 					}
 					else{
 
-						console.log(chalk.red('doc_sync should not mismatch >>' ) );
-						console.log(doc_mk)
-
+						//console.log(chalk.red('doc_sync should not mismatch >>' ) );
+						//console.log(doc_mk)
 					}
 			});
 
@@ -331,8 +331,10 @@ exports.doc_sync= function(req, res) {
 					res.send(err)
 				} 
 				else {
-				  	console.log(chalk.green('doc saved') );
+					
+				  	console.log(chalk.green('doc sync') );
 					out.doc 			= doc.toObject()
+					out.doc_title 		= doc.title
 					out.doc.secret 		= 'api_secret'
 					//console.log(out)
 					res.json(out)

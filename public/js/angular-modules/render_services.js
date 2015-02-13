@@ -48,9 +48,18 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
         // this var never change as long a doc is loaded... (no reset at rebuild)
 
         $rootScope.ui                         = new Object();
-        $rootScope.ui.selected_range          = new Object({wait_ev : false, set: false, start:'', end:'', 'textrange':''});
+        $rootScope.ui.selected_range          = new Object({'wait_ev' : false, 'set': false, 'start':'', 'end':'', 'textrange':''});
+        $rootScope.ui.selected_range.markups_to_offset = new Array();
+        $rootScope.ui.selected_range.insert = null;
+
+
         $rootScope.ui.selected_section_index  = null;
+       
+
         $rootScope.ui.selected_objects        = [];
+        $rootScope.ui.selected_objects_filter = null;
+
+              
 
         $rootScope.ui.renderAvailable         = self.renderAvailable()
 
