@@ -17,13 +17,19 @@ span.pusher
 		span.ranges
 			p {{ui.selected_range.insert}} 
 			span.ranges_start_end Selected letters from {{ui.selected_range.start}}  to {{ui.selected_range.end}}
-			// span.textrange
+			span.textrange
 				{{ui.selected_range.textrange}} 
 
 
 // textarea(type="text", ng-model="section.fulltext")
-//h4 {{section.start}} - {{section.end}} - {{section.metadata}} - {{section.type}} - {{section.subtype}}
+// h4 {{section.start}} - {{section.end}} - {{section.metadata}} - {{section.type}} - {{section.subtype}}
 // p {{ui.selected_range}}
 // debug
 // h1 {{ui.selected_section_index}}
-// h2 {{ui.selected_range}}
+h2 insert : {{ui.selected_range.insert}}
+h2 insert_scratch :{{ui.selected_range.insert_scratch}}
+h4 {{push}}
+em {{ui.selected_range}}
+
+h1 a 
+	{{section.hello}}

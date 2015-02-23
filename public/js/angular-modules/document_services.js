@@ -63,7 +63,8 @@ angular.module('musicBox.DocumentService', [])
 
           $rootScope.doc = d.doc;
           $rootScope.markups = d.doc.markups;
-          $rootScope.doc.formated_date =  moment(d.doc.updated).calendar() +', '+moment(d.doc.updated).fromNow(); 
+          //$rootScope.doc.formated_date =  d.doc.updated;
+          $rootScope.doc.formated_date = moment(d.doc.updated).calendar() +', '+moment(d.doc.updated).fromNow(); 
           $rootScope.doc_options      =   this.apply_object_options('document', d.doc.doc_options)
           $rootScope.author_options   =    this.apply_object_options('author',   d.doc.user.user_options)
                
@@ -189,6 +190,10 @@ angular.module('musicBox.DocumentService', [])
         var promise = this.api_method.doc_sync({id:this.slug},serialize(data)).$promise;
         promise.then(function (Result) {
 
+          if($rootScope.ui.debug){
+                       $rootScope.doc.formated_date = Result.doc.updated;
+
+          }
            
             // console.log(Result)
             thos.flash_message('&nbsp;', 'line' , 100, false)
@@ -610,7 +615,9 @@ angular.module('musicBox.DocumentService', [])
 
             else{
                this.flash_message(edited.type +' saved', 'ok' , 3000)
-               var tt  = new MusicBoxLoop().init(Result,true); // ShOUld ONLY THE SECTION IN REFRESH..
+              
+             
+              // var tt  = new MusicBoxLoop().init(Result,true); // ShOUld ONLY THE SECTION IN REFRESH..
             }
           
 

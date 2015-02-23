@@ -203,8 +203,9 @@ function DocumentCtrl($scope, $http , $sce, $location, $routeParams ,socket,rend
  	// short function to push a section
 	$scope.push_section= function (){	
 		// auto set
+
 		$scope.push.start  = (_.last($scope.containers).end)+1
-		$scope.push.end  = (_.last($scope.containers).end)+10
+		$scope.push.end  = (_.last($scope.containers).end)+2
 		$scope.push.type = 'container';
 		$scope.push.subtype = 'section';	
 		$scope.push.position  = 'inline'
@@ -257,17 +258,7 @@ function DocumentCtrl($scope, $http , $sce, $location, $routeParams ,socket,rend
 	
 	}
 
-	$scope.push_generic_from_ranges= function (type, subtype,position, metadata){
-		if(metadata){
-			$scope.push.metadata = metadata
-		}
-		$scope.push.type = type;
-		$scope.push.subtype = subtype;
-		$scope.push.start= $scope.ui.selected_range.start;
-		$scope.push.end = $scope.ui.selected_range.end;
-		$scope.push.position = position
-		$scope.push_markup();
-	}
+	
 	$scope.markup_moderate = function (markup, status){
 		console.log('approving..')
 		console.log(markup)
@@ -364,7 +355,14 @@ function DocumentCtrl($scope, $http , $sce, $location, $routeParams ,socket,rend
 
 	// open close the comment box.
 	$scope.open_comment_push = function (container_index){
-		
+		$scope.push.type= 'comment'
+		$scope.push.subtype= 'comment'
+		$scope.push.position= 'under'
+		$scope.push.start= 3
+		$scope.push.end= 5
+		$scope.push.sectionin = container_index.sectionin
+
+
 	    // this way only one menu can me open.. and persistent
 		var cur = $scope.ui.menus.push_comment.open;
 		if(cur == container_index.sectionin){
@@ -516,8 +514,9 @@ console.log(m)
          text_range				 +='"'
          return text_range;
   	}
-
 	$scope.toggle_fragment_ranges = function (kind,classname, markup, value, trigger){
+}
+	$scope.toggle_fragment_ranges_ol = function (kind,classname, markup, value, trigger){
 		console.log('toggle_fragment_ranges'+kind)
 		var source = $scope.doc.markups;
 		
@@ -822,308 +821,6 @@ function  DocumentCtrlJasmine($scope, $http , $sce, $location, $routeParams, ren
 // it's a documentCtrl sub-controller
 
 //musicBox.controller('musicBox.controller.section', ['SectionCtrl']);
-
-angular.module('musicBox.controllerz', []).controller('SectionCtrl', function($scope, $http) {
-
-
-
-$scope.save_section= function (){
-
-
-
-	// Manual save section
-	   			// var string  = '';
-                //_.each($scope.containers, function(container){
-                  //  string  += container.fulltext;
-           //     })
-               console.log($scope.section.fulltext)
-               console.log('nothing happening here')
-                //$scope.doc.content = string;
-               // $scope.doc_sync()
-
-	//	section.fulltext =section.fulltext+'----'
-	//	$scope.section.fulltext = section.fulltext
-	//	console.log(section.fulltext)
-		//alert($scope.section.fulltext)
-	//	$scope.doc.content = $scope.section.fulltext
-	//	$scope.section.end = $scope.section.end+1;
-	}
-
-
-
-$scope.ssave_section= function (){
-		//alert('sd')
-	}
-
-	/*
-$scope.$watchCollection('containers', function(newValue, oldValue) {
-
-		 	if(oldValue && newValue && newValue !== ''){
-		 		console.log('FT! doc')
-		 	}
-      
-    });	
-
-
-$scope.$watch('section.fulltext', function(newValue, oldValue) {
-
-		 	if(oldValue && newValue && newValue !== ''){
-		 		console.log('FT!')
-		 	}
-      
-    });	
-
-$scope.$watchCollection('section', function(newValue, oldValue) {
-
-		 	if(oldValue && newValue && newValue !== ''){
-		 	 alert('hey hello')
-		 	}
-      
-    });	
-*/
-	// short function to push a comment
-	$scope.push_comment= function (){
-
-
-
-
-
-		// $scope.section.selected = true;
-		console.log($scope.section.objects['comment']['left'])
-
-	//	alert('hey hello')
-		// console.log(section.start +'c++'+section.end)
-		$scope.push.type = 'comment';
-		$scope.push.subtype = 'comment';
-		// use range
-		if($scope.ui.selected_range.start){
-			$scope.push.start = $scope.ui.selected_range.start;
-		}
-		else{
-			$scope.push.start = $scope.section.start;
-		}
-		if($scope.ui.selected_range.end){
-			$scope.push.end = $scope.ui.selected_range.end;
-		}
-		else{
-			$scope.push.end= $scope.section.start+1;
-		}	
-		// should use
-		$scope.push.position = 'left';
-		// $scope.push.visible = true;
-		$scope.push_markup();
-
-
-
-		// $scope.section.objects['comment']['left'].push($scope.push)
-		console.log($scope.section.objects['comment']['left'])
-
-
-		// close form.
-		$scope.ui.menus.push_comment.open  = -1
-		$scope.ui.focus_side = ''
-	}
-
-
-/*
-
-		$scope.hello =''
-		$scope.toggle_select_section= function (s){
-			 $scope.$parent.doc.title = Math.random(0,999)
-
-		}
-
-		 $scope.$watchCollection('hello', function(newValue, oldValue) {
-
-		 	if(oldValue && newValue && newValue !== ''){
-		 		//// alert('hey hello')
-		 	}
-      
-    });	
-*/
-
-
-	
-
-
-	
-
-}); // end controller
-
-angular.module('musicBox.controller', []).controller('MarkupCtrl', function($scope, $http) {
-
-	// used for editing a markup posittion ui.
-	// icon click or section select
-	$scope.toggle_select_markup = function (event_name){
-		console.log($scope.markup)
-		
-		
-		if($scope.markup.sectionin || $scope.markup.sectionin == 0){
-			$scope.containers[$scope.markup.sectionin].modeletters = 'single'
-		}
-
-		if($scope.markup.isolated == true){
-			$scope.markup.editing = !$scope.markup.editing
-			return;
-		}
-		if($scope.markup.type == 'container'){
-			_.each($scope.containers, function(c, i){
-				if(c !== $scope.markup){
-					// toggle the others
-					c.selected = false;
-				}
-			});
-
-		}
-		// event 
-		if(event_name == 'dblclick'){
-
-			if($scope.doc_owner || $scope.markup.by_me === true){
-				$scope.markup.editing = !$scope.markup.editing
-			}
-			if($scope.markup.by_me === false){
-				// alert('not by me')
-			}
-		}
-		
-		if(event_name == 'click'){
-			$scope.markup.selected = !$scope.markup.selected
-		}
-
-
-
-		if($scope.markup.editing === true){
-			$scope.markup.selected = true;
-		}
-
-		// focus'
-		if($scope.markup.position=="left" && $scope.markup.editing){
-			$scope.ui.focus_side = 'side_left'
-		}
-		else if( ($scope.markup.position=="right" || $scope.markup.position=="inline") && $scope.markup.editing){
-			$scope.ui.focus_side = 'side_right'
-		}
-		else{
-			$scope.ui.focus_side = ''
-		}
-    }	
-
-
-	$scope.mini_layout_class= function (markup,mkpos ){
-		var output = ''
-		//console.log($scope.objSchemas[markup.type].positions.available)
-		if($scope.objSchemas[markup.type] && _.contains($scope.objSchemas[markup.type].positions.available, markup.position) ){
-			output += ' selectable'
-		}
-		else{
-			output += ' unselectable'
-		}
-		if(markup.position == mkpos ){
-			output += ' selected'
-		}
-		return output
-
-
-		
-	}
-	//console.log($scope.markup);
-	
-	$scope.upload_file_image = new Object({'uploaded': false});
-	$scope.preuploadFile = function(files){
-		$scope.upload_file_image.file = files[0];
-		return;
-	}
-
-	$scope.uploadFile = function(){	
-			var fd = new FormData();
-			fd.append("image", $scope.upload_file_image.file);
-			$http.post(api_url+'/media/upload', fd, 
-				{ 
-					withCredentials: true,
-	        		headers: {'Content-Type': undefined },
-	        		transformRequest: angular.identity 
-	        	}
-	        	).success(function(m) {
-					$scope.upload_file_image.uploaded = true;
-	        		$scope.upload_file_image.basename = m[0].basename
-					$scope.upload_file_image.path = m[0].path
-					$scope.upload_file_image.type = m[0].type
-					$scope.upload_file_image.fullpath = root_url+':'+PORT+'/uploads/'+m[0].path+m[0].basename
-					//$scope.push.metadata = $scope.upload_file_image.fullpath
-					$scope.markup.metadata        = $scope.upload_file_image.fullpath
-					// could autosave : doc.markup_save($scope.markup)
-
-					
-				}).error(function(err){
-					console.log(err)
-			})
-		}
-
-  	//console.log($scope.section)
-    /*
-    $scope.$watchCollection('[markup.start, markup.end]', function(newValue, oldValue) {
-        //console.log($scope)
-        //console.log(newValue)
-        //console.log(oldValue)
-        // can call parent..
-        //doc.init_containers()
-        if(oldValue !==newValue && oldValue && oldValue !=='' &&  newValue && newValue !==''){
-        }
-    });
-	*/
-
-	var autosave = false;
-    
-    $scope.$watch('markup.position', function(newValue, oldValue) {
-        
-
-          if(oldValue !==newValue && oldValue && oldValue !=='' &&  newValue && newValue !==''){
-            
-
-  // only new value check
-         console.log(newValue)
-          console.log(oldValue)
-            $scope.markup.position = newValue;
-            	// no toggle $scope.ui.focus_side = ''
-              if(autosave===false){
-              	
-              	doc.markup_save($scope.markup)
-              }  
-            //  alert('s')
-          }
-          else{
-            //console.log('watch position untrigger')
-          }
-      
-    });
-
-    $scope.$watch('markup.selected', function(newValue, oldValue) {
-          // only new value check
-          if(oldValue !== newValue ){
-          
-        	$scope.toggle_fragment_ranges('single_markup', 'selected', $scope.markup, newValue, true)
-          }
-          else{
-    		// console.log('watch untrigger')
-          }
-    });
-
-	/*
-	$scope.$watch('markup.inrange', function(newValue, oldValue) {
-          // only new value check
-          if(newValue !==''){
-            //console.log(newValue)
-            //console.log(oldValue)
-            $scope.toggle_fragment_ranges('single_markup', 'selected', $scope.markup, newValue, true)
-          }
-          else{
-            console.log('watch untrigger')
-          }
-    });
-	*/
-
-}); // end controller
-
 
 
 

@@ -239,9 +239,13 @@ a.btn_ok{
 
 
 .hint{
-  color:#2980b9;
+  color:#3498db;
   font-weight:bold;
-  font-size:.7em;
+  &:hover{
+  
+  color:#2980b9;
+  text-decoration:underline;
+  }
 
 }
 
@@ -588,7 +592,22 @@ section{
     margin-bottom: 2%;
       float:left;
       width:100%;
-    h2{
+   
+    h1{
+
+    font-size: 2.5em;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1;
+    margin-bottom: 1%;
+    margin-top: 2%;
+      .hint{
+        margin-left:10px;
+        font-size:15px;
+      }
+
+    }
+     h2{
     
         margin-top: 2%;
        margin-bottom: 1%;
@@ -600,16 +619,6 @@ section{
        margin-bottom: 1%;
 
     }  
-    h1{
-
-    font-size: 2.5em;
-    font-weight: 800;
-    letter-spacing: -1px;
-    line-height: 1;
-    margin-bottom: 1%;
-    margin-top: 2%;
-
-    }
     .head_left{
       width:80%;
       float:left;
@@ -622,7 +631,15 @@ section{
     
     time{
       font-size:.9em;
+        .hint{
+
+        }
     }
+
+    .published-header{
+      font-style:italic;
+    }
+
     .post-author-card {
      font-size:.9em;
     }
@@ -1772,8 +1789,15 @@ background:red;
 }
 
 .section_debug{
+  background: none repeat scroll 0 0 rgba(230, 126, 34, 0.6);
+    float: left;
+    margin-left: 18%;
+    bottom:0;
+    position: fixed;
+    width: 64%;
+
     li{
-       background:#ecf0f1;
+      
       display: block;
       float: left;
       margin-bottom: 2px;
@@ -1817,7 +1841,6 @@ body.render_active_doc_options{
 
 
 .fluidtextarea{
-background: none repeat scroll 0 0 rgba(236, 240, 241, 0.8);
     float: left;
     padding-bottom: 2%;
     padding-top: 2%;
@@ -2128,6 +2151,7 @@ pulse fxxx
     
       .doc_header{
          margin-top:80px;
+
       }
 
       // any focus cancelled.

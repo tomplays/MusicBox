@@ -28,11 +28,20 @@ angular.module('musicBox.directives', [])
 
               var mb_service =  new MusicBoxLoop()
                //mb_service.remove_lt_classes(m)
-               mb_service.set_container_attribute(scope.$parent.section,'editing_text', true, true)
-                scope.$parent.section.modeletters = 'single';
+              mb_service.set_container_attribute(scope.$parent.section,'editing_text', true, true)
+              scope.$parent.section.modeletters = 'single';
 
         // = true;
     }
+
+
+    function concerned_markups(scope, event){
+
+
+
+
+    }
+
 
 
     return function(scope, elm, attrs) {
@@ -58,205 +67,55 @@ angular.module('musicBox.directives', [])
 
       });
         elm.bind("keyup", function(event) {
+            
+
 
           active_section_tool(scope)
+          $rootScope.ui.selected_range.insert_mode= 'atomic'
+          $rootScope.ui.selected_range.insert =         event.target.selectionStart
+          $rootScope.ui.selected_range.insert_scratch = event.target.selectionStart+scope.section.start;
+          $rootScope.ui.selected_range.section_current_length = scope.section.end-scope.section.start+1;
+          $rootScope.ui.selected_range.fulltext_value = event.target.value.replace("\n", "")
+          $rootScope.ui.selected_range.fulltext_length = event.target.textLength
 
-          var dif_pos = event.target.selectionStart
 
-          console.log(event.which)
+          //alert(dif_pos+'--'+dif_pos_scratch)
+          //console.log(event.which)
+          // dif_pos;
+          //$= dif_pos_scratch
+
+
           if(event.which== 39 || event.which== 37  || event.which== 40 || event.which== 38){
-            console.log(event)
-            $rootScope.ui.selected_range.insert = dif_pos;
-            
-            if(scope.$parent.section.letters[event.target.selectionStart-1]){
-              scope.$parent.section.letters[event.target.selectionStart-1].classes.push('mup')
-            }
-            scope.$apply(attrs.keyListener);
+              $rootScope.ui.selected_range.insert_direction= 'cursor';
+              scope.$parent.section.cursor_at = event.target.selectionEnd;
 
-            return
+               scope.$apply(attrs.keyListener);
+             
           }
-          if(event.which == 13){
-            var this_sync = new DocumentService()
-            this_sync.SetSlug($rootScope.doc.slug)
-            this_sync.docsync()
+          if(event.which== 13){
+             $rootScope.ui.selected_range.insert_direction= 'save';
+               scope.$parent.section.cursor_at = event.target.selectionEnd;
 
-            
-            console.log('section add ? ')
-            return
+
           }
-
           
-
-          $rootScope.ui.selected_range.insert= dif_pos;
-
-
-_.each($rootScope.doc.markups, function(mk, i){
-
-
+          if($rootScope.ui.selected_range.section_current_length < $rootScope.ui.selected_range.fulltext_length){
+             // $rootScope.ui.selected_range.insert_direction= 'expanding';
+          }
            
-
-
-          
-          // nothing to to if after range
-          if( dif_pos >  mk.end) {
-                if(mk.type== 'container'){
-                  console.log('diff supe ')
-                   mk.offset_end = mk.offset_end+1
-                   mk.has_offset = true;
-                   console.log('mk END:'+mk.offset_end)
-                   var nl = new Object({'char':'*','classes':[]})
-                   scope.$parent.section.letters.push(nl)
-                 
-
-                }
-          
- 
-
-
-
+          if($rootScope.ui.selected_range.section_current_length > $rootScope.ui.selected_range.fulltext_length){
+            // $rootScope.ui.selected_range.insert_direction= 'reducing';
           }
-          else if( dif_pos ==  mk.end) {
-                console.log('diff same ')
+          if($rootScope.ui.selected_range.section_current_length == $rootScope.ui.selected_range.fulltext_length){
+             //$rootScope.ui.selected_range.insert_direction= 'cursor or-';
           }
 
 
-          // means "on" the left of range
-          else{
-            // means between the range
-            if(  dif_pos >=  mk.start) {
-              // offset end only
-              mk.offset_end = mk.offset_end+1
-              mk.has_offset = true;
-                console.log('c1 ')
-            }
-            // means before both start and end..
-            else{
-              // offset both
-              mk.offset_start = mk.offset_start+1
-              mk.offset_end   = mk.offset_end+1
-              mk.has_offset = true;
-               console.log('c1 ')
-            }
-          }
-          if(mk.has_offset){
-          
-
-
-           console.log(mk)
-        
-
-            //mk.editing = true;
-            //mk.selected = true;
-           // var inarry = _.find($rootScope.ui.selected_range.markups_to_offset, function(el){ return el.id == m.id; })
-            
-            // var match = _.find($rootScope.ui.selected_range.markups_to_offset, function(m){ return m._id  == mk._id; });
-           
-            $rootScope.ui.selected_range.markups_to_offset.push(mk)
-            
-
-          
-          
-
-           // mk.offset_start =0
-           // mk.offset_end =0
-          }
-        });
+          scope.$apply(attrs.keyListener);
+          return
 
 
 
- var current_length = scope.$parent.section.end-scope.$parent.section.start+1
-           
-
-            console.log(event.target.textLength-1)
-            console.log(scope.$parent.section.end - scope.$parent.section.start)
-
-            if(event.target.textLength !== current_length){
-                var o_end = scope.$parent.section.start + (event.target.textLength - 1)
-                //console.log(o_end)
-                scope.$parent.section.offset_end = - (scope.$parent.section.end - o_end)
-                console.log(scope.$parent.section.offset_end)
-            }
-          
-
-           // console.log(event)
-           // console.log(attrs.keyListener)
-
-           // console.log('length section:'+ (scope.$parent.section.end-scope.$parent.section.start) )
-            
-           /*
-
-
-                var objects_in_section = scope.$parent.section.objects
-               // console.log($rootScope.available_sections_objects)
-                //console.log($rootScope.available_layouts)
-                _.each($rootScope.available_sections_objects, function(o_type, i){
-                    _.each($rootScope.available_layouts, function(o_pos, i){
-                        _.each(objects_in_section[o_type][o_pos.name], function(m, i){
-                           //m.offset_start = m.offset_start+1;
-
-                         if(m.type== 'container'){
-
-                              // m.offset_end = m.start+event.target.textLength;
-                              m.touched = true;
-
-                          }
-
-                        })
-                     });
-                 })
-*/
-
-             // console.log(event.target.value)
-
-             // scope.$parent.section.fulltext = 'event.target.value'
-            scope.$parent.section.fulltext = event.target.value;
-
-
-            _.each(scope.$parent.section.letters, function(letter,y){
-            //  letter.classes = new Array() // 'mup', 'h1'
-                
-                  letter.classes = new Array();
-                  letter.char = scope.$parent.section.fulltext[y]
-                
-            })
-
-
-/*
-if( scope.$parent.section.letters[event.target.selectionStart-1]){
-              scope.$parent.section.letters[event.target.selectionStart-1].classes.push('mup')
-}
-*/
-           // scope.$parent.section.letters[event.target.selectionEnd].classes.push('h2')
-
- //console.log(event.target.value)
-   ///                                 console.log('vs')
-                var string  = '';
-                _.each($rootScope.containers, function(container){
-                    string  += container.fulltext;
-                     console.log(container.fulltext)
-                })
-
-
-
-               $rootScope.doc.content = string;
-      
-              
-              //scope.$parent.section.offset_start = 0
-              //scope.$parent.section.offset_end   = 0
-
-
-
-            //console.log($rootScope)
-           
-
-           console.log($rootScope.containers)
-
-
-            var this_sync = new DocumentService()
-            this_sync.SetSlug($rootScope.doc.slug)
-             this_sync.docsync()
-
-            scope.$apply(attrs.keyListener);
         });
     };
 })
@@ -271,6 +130,7 @@ if( scope.$parent.section.letters[event.target.selectionStart-1]){
       $rootScope.ui.selected_range.wait_ev = false  // now ready!
       
       $rootScope.ui.selected_range.end = scope.lt.order // 'end' is last event..
+     // alert($rootScope.ui.selected_range.end)
       $rootScope.ui.selected_range.textrange = '';
 
       // reorder if/sup test here.
@@ -282,7 +142,9 @@ if( scope.$parent.section.letters[event.target.selectionStart-1]){
 
       for (var i =  $rootScope.ui.selected_range.start; i <= $rootScope.ui.selected_range.end; i++) {
          if(scope.$parent.section.letters[i]){
-          scope.$parent.section.letters[i].classes.push('mup')
+          
+
+          scope.$parent.section.letters[i].classes.push('cursor_at')
           $rootScope.ui.selected_range.textrange +=scope.$parent.section.letters[i].char
           }
         }
@@ -321,7 +183,7 @@ if( scope.$parent.section.letters[event.target.selectionStart-1]){
     
       // as starting new selection, remove all classes.
       _.each(scope.$parent.section.letters, function(lt, w){
-          lt.classes = _.without(lt.classes, 'mup')
+          lt.classes = _.without(lt.classes, 'cursor_at')
       });
      // scope.lt.classes.push('mup') // the "mousedowned" one
       $rootScope.ui.selected_range.wait_ev = true  // now waiting mouseup!
@@ -345,7 +207,7 @@ function selection_running(scope){
 
 
 //         console.log(scope.lt.classes_array)
-           scope.lt.classes_ = new Array('h2') 
+        //   scope.lt.classes_ = new Array('h2') 
      //= scope.lt.classes
       // scope.lt.char =  '*';
 

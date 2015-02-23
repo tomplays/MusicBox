@@ -22,7 +22,11 @@ $provide.value("$locale", {
 		"select" : "sélectionner",
 		"select_edit" : "sélectionner / éditer",
 		"back_to_document" :"Retour au mode de lecture",
-		"more_options" : "Plus d'options"
+		"more_options" : "Plus d'options",
+		"add" : "Ajouter",
+		"add_one" : "Ajouter un "
+
+
 
 
 	},

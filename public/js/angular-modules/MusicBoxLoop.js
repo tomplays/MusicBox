@@ -50,7 +50,7 @@ var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','n
             this.setstate('init')
 
 
-             self.object_arr = self.containers_objectsarray_prepare()
+             self.containers_objectsarray_prepare()
              //$rootScope;
              $rootScope.letters = [];
                 // "warnings" variable
@@ -71,34 +71,9 @@ var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','n
       },
 
       containers_objectsarray_prepare: function () {
-           var objectsarray = {};
-
-           objectsarray.section_classes = '';
-           objectsarray.section_styles  = '';
-           //new Array('objects', 'objects_')
-           objectsarray['objects'] = [];
-           objectsarray['objects_'] = [];
-
-
-           objectsarray['objects_count'] = [];
-           objectsarray['objects_count']['by_positions'] = [];
-           objectsarray['objects_count']['all'] = [];
-            // section can have css classes and inlined styles (background-image)
          
-            // $rootScope.containers[index]['classes'] =[];
-            // $rootScope.objects_sections[index]['global'] = [];
-            _.each($rootScope.available_sections_objects, function(o, obj_index){
-              objectsarray['objects'][$rootScope.available_sections_objects[obj_index]] = [];
-              // and each subs objects an array of each positions
-              objectsarray['objects_count']['all']= new Object({'count':0, 'has_object':false})
-              _.each($rootScope.available_layouts  , function(op){ // op: left, right, ..
-                objectsarray['objects_count']['by_positions'][op.name] = new Object({'count':0, 'has_object':false})
-                objectsarray['objects'][$rootScope.available_sections_objects[obj_index]][op.name] =[];
-              });
-              // set to "1" for title include.
-              // $rootScope.containers[0]['objects_count']['by_positions']['center'].count = 1;
-            });
-            return objectsarray;
+             //$rootScope.object_arr = objectsarray;
+           // return objectsarray;
       },
 
       /**
@@ -200,24 +175,28 @@ var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','n
           */
 
           // populate letters as single objects.
-          var  temp_letters  =  self.fill_chars(container,index);
+        //  var  temp_letters  =  self.fill_chars(container,index);
 
         
-
+ var temp_letters = []
           _.each($rootScope.doc.markups, function(markup){
               
               // only for markups which ranges match container
               if(markup.start >= container.start && markup.end <= container.end){
                // console.log('wrap')
                // console.log(markup)
-                self.wrap_markup(markup, container, index, temp_letters);
+             
+              self.wrap_markup(markup, container, index, temp_letters);
                //   console.log('wraped')
                // console.log(markup)
               } // if in-range
 
           }); // each markups end.
 
-         $rootScope.containers[index].letters = temp_letters;
+
+
+
+        // $rootScope.containers[index].letters = temp_letters;
 
           // final compilation.
           var lt_out ='';
@@ -313,7 +292,9 @@ var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','n
 
         // reloop to find isolate markups
         $rootScope.ui.isolated_markups = []
+
         _.each($rootScope.doc.markups, function(markup){
+          
           if(!markup.isolated ==false  ){
             console.log('markup.isolated' )
             markup.isolated = true;
@@ -343,14 +324,47 @@ var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','n
                 'isolated'  : false,
                 'selected'    : false,
                 'editing_text':false,
+                'ready' : 'init',
                 'modeletters' : 'block',
-                'fulltext'    : self.ranges_to_fulltext($rootScope.doc.content, container.start, container.end)
+               // 'fulltext'    : self.ranges_to_fulltext($rootScope.doc.content, container.start, container.end)
             })
+
             // extend object
             container = _.extend(container, container_);
 
             // adds default arrays for objects(setup once)
-            container = _.extend(container, self.object_arr );
+
+          //  var cp = _.clone($rootScope.object_arr);
+
+              var objectsarray = new Object();
+
+           objectsarray.section_classes = '';
+           objectsarray.section_styles  = '';
+           //new Array('objects', 'objects_')
+           objectsarray['objects'] = [];
+           objectsarray['objects_'] = [];
+
+
+           objectsarray['objects_count'] = [];
+           objectsarray['objects_count']['by_positions'] = [];
+           objectsarray['objects_count']['all'] = [];
+            // section can have css classes and inlined styles (background-image)
+         
+            // $rootScope.containers[index]['classes'] =[];
+            // $rootScope.objects_sections[index]['global'] = [];
+            _.each($rootScope.available_sections_objects, function(o, obj_index){
+              objectsarray['objects'][$rootScope.available_sections_objects[obj_index]] = [];
+              // and each subs objects an array of each positions
+              objectsarray['objects_count']['all']= new Object({'count':0, 'has_object':false})
+              _.each($rootScope.available_layouts  , function(op){ // op: left, right, ..
+                objectsarray['objects_count']['by_positions'][op.name] = new Object({'count':0, 'has_object':false})
+                objectsarray['objects'][$rootScope.available_sections_objects[obj_index]][op.name] =[];
+              });
+              // set to "1" for title include.
+              // $rootScope.containers[0]['objects_count']['by_positions']['center'].count = 1;
+            });
+
+            container = _.extend(container, objectsarray );
 
             // reach letter max test
             if(container.end > $rootScope.max_reached_letter){
@@ -381,6 +395,7 @@ var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','n
             'inrange'        : true,
             'uptodate'       : '',
             'touched'        : false,
+            'ready'          : 'init',
             'doc_id_id'      : '', // special cases for child documents (refs as doc_id in markup record)
         })
         markup =  _.extend(markup, markup_);
@@ -415,7 +430,7 @@ var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','n
         if( markup.user_id._id && $rootScope.userin._id  && ($rootScope.userin._id == markup.user_id._id ) )  {
              markup.by_me = true;
         }
-
+    
         markup.can_approve = false
         if( $rootScope.doc_owner )  {
              markup.can_approve = true;
@@ -485,7 +500,7 @@ var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','n
         // need to map letters for each range of markup (not all objects)
         if( ($rootScope.objSchemas[markup.type].map_range && $rootScope.objSchemas[markup.type].map_range==true && markup.visible == true)  || (markup.subtype=='share_excerpt' && markup.visible == true)  ){ // or pos == inlined
             
-            self.markup_ranges(markup, container, index, temp_letters);
+           // self.markup_ranges(markup, container, index, temp_letters);
             //$rootScope.containers[index].objects[markup.type]['inline'].push(markup); 
             //console.log($rootScope.objects_sections[index][td.type])
         } // if textrange_loop end.
@@ -499,6 +514,7 @@ var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','n
 
         if(markup.type =='container'){
             markup.isolated = false;
+          //  markup.ready = 'tssdrue';
 
         }
         if(markup.type !== "" && markup.position){ // > can add it
@@ -511,7 +527,7 @@ var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','n
             // $rootScope.objects_sections['global_by_type'][markup.type].push(markup)
           }
           // add markup to container objects (container::index::type::position) 
-          container.objects[markup.type][markup.position].push(markup) 
+          //container.objects[markup.type][markup.position].push(markup) 
           
           // if(markup.type !=='container'){
           container.objects_count['all'].count++;
@@ -679,11 +695,13 @@ var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','n
                      // console.log(k)
                       //console.log(letter_arr.classes_array[k])
                       if(temp_letters[delta].classes_array[k] && temp_letters[delta].classes_array[k].active){
-                        temp_letters[delta]['classes'].push(k)
+                        //temp_letters[delta]['classes'].push(k)
 
                       }
 
                     });
+
+               
 
 
           i_array++;

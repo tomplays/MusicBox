@@ -5,9 +5,22 @@ div.user_not_in(ng-if="userin.username == '' ")
 		a.loginOrSignup(ng-click="external_link(root_url+'/login?redirect_url=#{root_url}:#{port}/doc/'+doc.slug)" , ng-if="userin.username == '' ") {{render_config.i18n.CUSTOM.USER.loginOrSignup}}
 
 div.user_in(ng-if="userin.username")
+	
 
-	label {{render_config.i18n.CUSTOM.COMMENT.label}}
 
+	span.floating-edit
+		span add a {{push.type}}
+		//span(ng-if="doc.published == 'draft'") a&nbsp; 
+		select(ng-model="push.type", name="push.type")
+			// option(value="{{doc.published}}") {{doc.published}}
+			option(value="note" ) note
+			option(value="semantic") semantic
+		
+
+
+	label {{render_config.i18n.CUSTOM.ACTIONS.add}} {{render_config.i18n.CUSTOM.OBJECTS[push.type]}} 
+
+	// 
 	textarea(ng-model="push.metadata", type="text", value="{{render_config.i18n.CUSTOM.COMMENT.textarea}}") 
 	
 	p.logged_in_as 
@@ -15,4 +28,4 @@ div.user_in(ng-if="userin.username")
 		em 
 			a(href="/me/account") {{userin.username}}
 	p
-		a.btn_ok.float_right(ng-click="push_comment(section)") {{render_config.i18n.CUSTOM.COMMENT.verb}}
+		a.btn_ok.float_right(ng-click="push_object(section)") {{render_config.i18n.CUSTOM.ACTIONS.add}}

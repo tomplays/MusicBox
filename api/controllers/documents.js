@@ -335,6 +335,8 @@ doc.markups[i].touched = false
 				  	console.log(chalk.green('doc sync') );
 					out.doc 			= doc.toObject()
 					out.doc_title 		= doc.title
+					var now = new Date();
+					out.doc.updated     = now.toJSON();
 					out.doc.secret 		= 'api_secret'
 					//console.log(out)
 					res.json(out)

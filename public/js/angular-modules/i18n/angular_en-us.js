@@ -57,6 +57,8 @@ $provide.value("$locale", {
 		"select_edit" : "select / edit",
 		"back_to_document" :"back to reading mode",
 		"more_options" : "more options",
+		"add" : "Add",
+		"add_one" : "Add a "
 
 	},
 	"HELP" : {

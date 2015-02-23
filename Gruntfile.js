@@ -123,8 +123,39 @@ module.exports = function(grunt) {
 						"data.json"
 						]
 				}]
-				},
+			},
 		},
+
+		// Deployment
+		rsync: {
+			options: {
+				//		args: ["--verbose --max-delete=50"],
+				//		include: [],
+				//		exclude: [],
+				//		src : "dist/",
+				//		recursive: true,
+				//		ssh: true
+					},
+			test: {
+				options: {
+				//	dest: "<%= cfg.rsync.dev.dest %>",
+				//	host: "<%= cfg.rsync.dev.host %>",
+				//	dryRun: "<%= cfg.rsync.dev.test %>",
+				//	delete: "<%= cfg.rsync.dev.delete %>",
+				}
+			},
+			prod: {
+				options: {
+				//	src : "dist/",
+				//	dest: "<%= cfg.rsync.prod.dest %>",
+				//	host: "<%= cfg.rsync.prod.host %>",
+				//	dryRun: "<%= cfg.rsync.prod.test %>",
+				//	delete: "<%= cfg.rsync.prod.delete %>",
+				}
+			}
+		},
+
+
 		watch: {
 			js: {
 				options: { livereload: true },
@@ -157,8 +188,9 @@ module.exports = function(grunt) {
 	grunt.registerTask('lesscss', ['less']); // , 'connect:server' // 'forever', 
 	grunt.registerTask('stop', ['forever:server1:stop']); // , 'connect:server' // 'forever', 
 	grunt.registerTask('default', [
-				'forever:server1:restart','watch', 'less', 'connect:livereload'
+				'forever:server1:restart','watch', 'less'
 	]);
+	// 'connect:livereload'
 	grunt.registerTask('build', [
 				'forever:server1:restart',
 				'jade',
@@ -169,4 +201,8 @@ module.exports = function(grunt) {
 				'ngtemplates',
 				'connect:livereload'
 	]);
+
+
+
+	grunt.registerTask("deploy:test", "Deploy on TEST. server", ["rsync:test"]);
 };

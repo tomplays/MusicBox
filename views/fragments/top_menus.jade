@@ -7,22 +7,7 @@
 
 // HELP MENU BTN
 // DOC PUBLISHED > toggle mode / conditionnal owner
-i.fa.fa-key.quick_tool_opener.menuicon.menuicon-published(class="inside" ng-class="{'visible_yes': ui.menus.quick_tools_published.open=='yes'}"  , ng-click="expand_tools('quick_tools_published')" , ng-dblclick="expand_tools('quick_tools_published')" ng-if="doc_owner == true  || ui.secret " )
 
-
-div.quick_tools.qt-published(class="visible_{{ui.menus.quick_tools_published.open}}")
-	p.back_read(ng-click="toggle_render('read')") &laquo; {{render_config.i18n.CUSTOM.ACTIONS.back_to_document}}
-	span.floating-edit
-		span This document is&nbsp; 
-		span(ng-if="doc.published == 'draft'") a&nbsp; 
-		select(ng-model="doc.published", name="doc.published")
-			// option(value="{{doc.published}}") {{doc.published}}
-			option(value="draft" ) draft
-			option(value="public") public
-		span
-			i.fa.fa-save(ng-click="edit_doc('published')")
-	h5(ng-if="doc.published == 'draft'") You can share its secret 
-		a(href="#{root_url}:#{port}/doc/{{doc.slug}}?secret={{doc.secret}}") url : {{doc.secret}}
 
 
 i.fa.fa-question.quick_tool_opener.menuicon.menuicon-help( ng-class="{'visible_yes': ui.menus.quick_tools_help.open=='yes'}"  class="inside", ng-click="expand_tools('quick_tools_help')", ng-dblclick="expand_tools('quick_tools_help')" )
@@ -124,5 +109,21 @@ a.quick_tool_opener.menuicon.menuicon-editor(tooltip="edit" tooltip-placement="l
 // edit > toggle mode
 a.quick_tool_opener.menuicon.menuicon-editor(tooltip="edit" tooltip-placement="left" ng-if="(doc_owner == true  || ui.secret) && ui.renderAvailable_active !=='read'" ng-click="toggle_render('read')" ng-class="{'visible_yes': ui.renderAvailable_active =='read'}") 
 	i.fa.fa-eye()
+
+
+
+div.quick_tools.qt-published(class="visible_{{ui.menus.quick_tools_published.open}}")
+	p.back_read(ng-click="toggle_render('read')") &laquo; {{render_config.i18n.CUSTOM.ACTIONS.back_to_document}}
+	span.floating-edit
+		span This document is&nbsp; 
+		span(ng-if="doc.published == 'draft'") a&nbsp; 
+		select(ng-model="doc.published", name="doc.published")
+			// option(value="{{doc.published}}") {{doc.published}}
+			option(value="draft" ) draft
+			option(value="public") public
+		span
+			i.fa.fa-save(ng-click="edit_doc('published')")
+	h5(ng-if="doc.published == 'draft'") You can share its secret 
+		a(href="#{root_url}:#{port}/doc/{{doc.slug}}?secret={{doc.secret}}") url : {{doc.secret}}
 
 

@@ -1,10 +1,9 @@
 div(ng-controller="MarkupCtrl", class="markup_box markup_box_depth_{{markup.depth}} markup_box_status_{{markup.status}}   markup_displayer_ markup_displayer markup_displayer_{{markup.type}} markup_displayer_subtype_{{markup.subtype}}  by_me_{{markup.by_me}} is_editing_{{markup.editing}}  touched-{{markup.has_offset}} ")
-	
+	em current: {{markup.start}} - {{markup.end}} 
+	//em {{markup.has_offset}} 
+	// em {{markup.offset_start}} - {{markup.offset_end}} -  {{markup.touched}}
 	// debug 
 	// span 
-		em {{markup.has_offset}} 
-		em {{markup.offset_start}} - {{markup.offset_end}} -  {{markup.touched}}
-		em current: {{markup.start}} - {{markup.end}} 
 		p {{markup.start}} - {{markup.end}} - {{markup.metadata}} - {{markup.type}} - {{markup.subtype}} {{markup.position}}
 		// p {{markup.selected}}
 		p m.by_me: {{markup.by_me}}
