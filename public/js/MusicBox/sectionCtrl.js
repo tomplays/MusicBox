@@ -97,7 +97,7 @@ $scope.attribute_objects = function(){
 
 			}
 			if(markup.type == 'media' || markup.subtype == 'simple_page' ||  markup.subtype == 'doc_content_block' ){
-			    $scope.section[$scope.$parent.index].section_classes += 'has_image ';
+			    $scope.section.section_classes += 'has_image ';
 			    if(markup.position){
 			          $scope.section.section_classes += ' focus_side_'+markup.position +' ';
 				}
@@ -119,7 +119,7 @@ $scope.attribute_objects = function(){
 				}
 				
 				// add markup to container objects (container::index::type::position) 
-				$scope.section.objects_[markup.type][markup.position].push(markup) 
+				// $scope.section.objects_[markup.type][markup.position].push(markup) 
 
 				if(markup.type !=='container'){
 					$scope.section.objects_count['all'].count++;
@@ -164,10 +164,10 @@ $scope.init_= function () {
                 'editing_text':false,
                 'ready' : 'init',
                 'modeletters' : 'block',
+                'section_classes':''
                // 'fulltext'    : self.ranges_to_fulltext($rootScope.doc.content, container.start, container.end)
             })
 
-$scope.section = _.extend($scope.section, container_);
 
             // extend object
          
@@ -178,7 +178,6 @@ $scope.section = _.extend($scope.section, container_);
 
               var objectsarray = new Object();
 
-           objectsarray.section_classes = '';
            objectsarray.section_styles  = '';
            //new Array('objects', 'objects_')
           // objectsarray['objects'] = [];
@@ -209,7 +208,8 @@ $scope.section = _.extend($scope.section, container_);
 
 
     	 $scope.section = _.extend($scope.section, objectsarray );
-   		
+   					$scope.section = _.extend($scope.section, container_);
+
             // reach letter max test
             if($scope.section.end > $scope.$parent.max_reached_letter){
               $scope.$parent.max_reached_letter = $scope.section.end
