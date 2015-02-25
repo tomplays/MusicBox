@@ -4,7 +4,8 @@ MusicBox
 
 ## LIVE DEMO
   
-  * soon.
+  * soon 
+
 
 ## Quick start
 
@@ -80,6 +81,12 @@ https://gitter.im/tomplays/MusicBox
 
 
 Using (https://github.com/tomplays/MusicBox/issues?state=open) open issues
+
+## Versions
+  
+  0.1 : "Mongo/Mongotaste" (api features)
+  0.2 : "Niagara" (cascading controllers)
+
 
 ## AUTHOR
 

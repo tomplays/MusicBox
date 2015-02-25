@@ -24,8 +24,9 @@ div(ng-controller="SectionCtrl")
 					div(class="markup_ markup_type_bg", ng-if="ui.renderAvailable_active == 'editor'" , ng-repeat="markup in section.objects['media']['background']", ng-include="fragments['markup'][0].url")
 
 			div(ng-if="object.visible !==false && layout.include_objects !==false && layout.name !=='slidewide' " , ng-repeat='object in available_sections_objects')
-
+				// {{section.objects_[object][layout.name]}}
 				div(ng-if="markup.visible" class="markup_ markup_type_{{markup.type}}" ng-repeat="markup in section.objects_[object][layout.name]", ng-include="fragments['markup'][0].url")
+				
 
 			div(ng-if="(doc_options.comments_open.value !=='false' || !doc_options.comments_open.value  ) && layout.name == 'left'")
 

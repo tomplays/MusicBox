@@ -2,6 +2,53 @@
 angular.module('musicBox.controller', []).controller('MarkupCtrl', function($scope, $http) {
 	
 
+			$scope.init__= function () {
+/*
+					console.log('init mk')
+					console.log($scope.markup)
+			
+						console.log($scope.markup)
+
+					console.log('parent ctrl')
+					console.log($scope.$parent)
+					console.log($scope.section)
+					console.log('mk index'+$scope.$parent.$index)
+					if(!$scope.objSchemas[$scope.markup.type]){
+          			console.log('no schematype for markup! :'+$scope.markup.type)
+         			 // return false;
+       				 }
+*/
+
+
+
+        markup_ = new Object({
+            'offset_start'   : 0,
+            'offset_end'     : 0,
+            'has_offset'     : false,
+            'isolated'       : false,
+            'selected'       : false,
+            'editing'        : false,
+            'inrange'        : true,
+            'uptodate'       : '',
+            'touched'        : false,
+            'ready'          : 'init',
+         //   'sectionin'			:,
+            'doc_id_id'      : '', // special cases for child documents (refs as doc_id in markup record)
+        })
+       $scope.markup=  _.extend($scope.markup, markup_);
+
+
+
+
+       	console.log('$scope.markup after')
+       		console.log($scope.markup)
+			
+			
+
+			}
+			$scope.init__()
+
+
   	//console.log($scope.section)
     /*
     $scope.$watchCollection('[markup.start, markup.end]', function(newValue, oldValue) {
@@ -21,7 +68,7 @@ angular.module('musicBox.controller', []).controller('MarkupCtrl', function($sco
 
 	$scope.handle_change_range = function(oldValue,newValue, sore){
 			console.log(sore+'of markup changes watched')
-			//alert(oldValue+'-->'+newValue)
+			console.log(oldValue+'-->'+newValue)
 
 			//alert($scope.markup.sectionin)
 
@@ -75,13 +122,13 @@ angular.module('musicBox.controller', []).controller('MarkupCtrl', function($sco
 
 
 	$scope.$watch('markup.start', function( oldValue, newValue) {
-        if(newValue && newValue !== oldValue){
+        if(oldValue && newValue && newValue !== oldValue){
           	$scope.handle_change_range(oldValue,newValue,  'start')
 		}	 
    });	
 
    $scope.$watch('markup.end', function(  newValue, oldValue) {
-         if(newValue && newValue !== oldValue){
+         if(oldValue && newValue && newValue !== oldValue){
           	$scope.handle_change_range(oldValue, newValue,  'end')
 		}	 
    });	
@@ -90,9 +137,19 @@ angular.module('musicBox.controller', []).controller('MarkupCtrl', function($sco
 
     $scope.$watch('markup.position', function(oldValue,newValue ) {
         	
-     		if(newValue && oldValue && oldValue !== newValue){
+     if(newValue && oldValue && newValue !== oldValue){
 	  			// only new value check
+	       
+	      
+			//$scope.$parent.distribute_arrays()
+	    //  $scope.$parent.attribute_objects()
+
+	   }
 	          console.log('watch position trigger>')
+		
+
+
+	      //    
 
 	       
 
@@ -101,13 +158,17 @@ angular.module('musicBox.controller', []).controller('MarkupCtrl', function($sco
 	           // $scope.markup.position = newValue;
 	            //no toggle 
 	           // $scope.ui.focus_side = ''
-				if(!$scope.$parent.section.objects_[$scope.markup.type]){
+		
+
+		/*		if(!$scope.$parent.section.objects_[$scope.markup.type]){
 					$scope.$parent.section.objects_[$scope.markup.type] = new Array()
 					if(!$scope.$parent.section.objects_[$scope.markup.type][newValue]){
 						$scope.$parent.section.objects_[$scope.markup.type][newValue] = new Array()
 					}
 				    $scope.$parent.section.objects_[$scope.markup.type][newValue].push($scope.markup)
+
 				}
+		*/
 			///	console.log($scope.markup)
 			//	console.log($scope.$parent.section)
 			//	$scope.$parent.section.objects_[$scope.markup.type][oldValue] = _.reject($scope.$parent.section.objects_[$scope.markup.type][oldValue], function(mk){ return mk._id = $scope.markup._id; });
@@ -118,16 +179,11 @@ angular.module('musicBox.controller', []).controller('MarkupCtrl', function($sco
 			//	$scope.$parent.section.objects_[$scope.markup.type][oldValue] = _.without($scope.$parent.section.objects_[$scope.markup.type][oldValue], $scope.markup)
 	            /// doc.markup_save($scope.markup)
 
-          }
-          else{
-          		//console.log(newValue)
-	         	//console.log(oldValue)
-           		// console.log('watch position untrigger')
-          }
+        
+//}
 
 
-
-          $scope.$parent.section.fulltext = $scope.$parent.section.fulltext+'-'
+         // $scope.$parent.section.fulltext = $scope.$parent.section.fulltext+'-'
           
           
 
@@ -266,7 +322,7 @@ angular.module('musicBox.controller', []).controller('MarkupCtrl', function($sco
 
 }); // end controller
 
-
+/*
   Array.prototype.move = function (old_index, new_index) {
     if (new_index >= this.length) {
         var k = new_index - this.length;
@@ -277,3 +333,4 @@ angular.module('musicBox.controller', []).controller('MarkupCtrl', function($sco
     this.splice(new_index, 0, this.splice(old_index, 1)[0]);
     return this; // for testing purposes
 };
+*/

@@ -62,7 +62,11 @@ angular.module('musicBox.DocumentService', [])
   DocumentService.prototype.populate = function (d) {
 
           $rootScope.doc = d.doc;
-          $rootScope.markups = d.doc.markups;
+         
+          $rootScope.markups  = _.sortBy(d.doc.markups,function (num) {
+             return num.start;
+          });
+
           //$rootScope.doc.formated_date =  d.doc.updated;
           $rootScope.doc.formated_date = moment(d.doc.updated).calendar() +', '+moment(d.doc.updated).fromNow(); 
           $rootScope.doc_options      =   this.apply_object_options('document', d.doc.doc_options)
@@ -676,10 +680,12 @@ angular.module('musicBox.DocumentService', [])
                 //console.log(Result.inserted[0])
                   thos.populate(Result)
                   if(markup.type == 'markup'){
-                    new MusicBoxLoop().markup_push(Result.inserted[0]);
+                    alert('added')
+                  //  new MusicBoxLoop().markup_push(Result.inserted[0]);
                   }
                   else{
-                    new MusicBoxLoop().init(true);
+                     alert('added')
+                   // new MusicBoxLoop().init(true);
                   }
                                   ///// 
              

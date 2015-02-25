@@ -56,8 +56,8 @@ angular.module('musicBox.directives', [])
           
           active_section_tool(scope)
       
-           $rootScope.ui.selected_range.end = event.target.selectionEnd
-           $rootScope.ui.selected_range.start = event.target.selectionStart
+           $rootScope.ui.selected_range.end = event.target.selectionEnd+scope.section.start
+           $rootScope.ui.selected_range.start = event.target.selectionStart+scope.section.start
       
         
             scope.$apply();
@@ -101,13 +101,16 @@ angular.module('musicBox.directives', [])
           
           if($rootScope.ui.selected_range.section_current_length < $rootScope.ui.selected_range.fulltext_length){
              // $rootScope.ui.selected_range.insert_direction= 'expanding';
+
           }
            
           if($rootScope.ui.selected_range.section_current_length > $rootScope.ui.selected_range.fulltext_length){
             // $rootScope.ui.selected_range.insert_direction= 'reducing';
+
           }
           if($rootScope.ui.selected_range.section_current_length == $rootScope.ui.selected_range.fulltext_length){
              //$rootScope.ui.selected_range.insert_direction= 'cursor or-';
+
           }
 
 

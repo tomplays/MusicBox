@@ -1,7 +1,236 @@
 
 angular.module('musicBox.controllerz', []).controller('SectionCtrl', function($scope, $http, DocumentService, DocumentRest,  MusicBoxLoop) {
 
+$scope.distribute_arrays = function(){
 
+	console.log($scope.section.objects_)
+	 
+	 $scope.section.objects_  = _.groupBy($scope.section.objects_, function(item){return item.position;});
+        _.each( $scope.section.objects_, function(value, key, list) {
+       	 list[key] = _.groupBy(value, function(item){return item.type;});
+   	 }); 
+
+
+
+
+}
+$scope.attribute_objects = function(){
+  console.log('attribute_objects')
+    _.each($scope.$parent.markups, function(markup){
+              
+
+        // only for markups which ranges match container
+        if(markup.start >= $scope.section.start && markup.end <= $scope.section.end){
+              
+				markup.sectionin = $scope.$parent.$index
+				console.log('attribute_objects')
+				if(markup.type =='container'){
+					 console.log('attribute_objects self container')
+				}
+              
+               
+		  		markup.user_options =  $scope.apply_object_options('markup_user_options',markup.user_id.user_options)
+
+		      		// user "by_me" ownership test
+		        markup.by_me = false
+		        // console.log(markup.user_id)
+		        // console.log($rootScope.userin)
+		        if( markup.user_id._id && $scope.$parent.userin._id  && ($scope.$parent.userin._id == markup.user_id._id ) )  {
+		             markup.by_me = true;
+		        }
+				markup.can_approve = false
+		        if( $scope.$parent.doc_owner )  {
+		             markup.can_approve = true;
+		        }
+
+		        markup.visible = true;
+		        if(markup.status == 'approved' ||  markup.by_me ==true || markup.can_approve == true){
+		          markup.visible = true;
+		        }
+
+		        // using "memory" of ui.
+		        _.each( $scope.$parent.ui.selected_objects, function(obj){
+		          //console.log('keep opn'+obj._id)
+		          if(markup._id == obj._id){
+		               markup.selected = true;
+		            // should select ranges too..
+		          }
+		        })
+		         _.each( $scope.$parent.ui.editing_objects, function(obj){
+		          //console.log('keep opn'+obj._id)
+		          if(markup._id == obj._id){
+		            markup.editing = true;
+		          }
+		        })
+
+
+				if(markup.type=='container_class' ){ // or pos == inlined
+				   $scope.section.section_classes += markup.metadata+' ';
+				}
+
+		        if(markup.type =='child'){ 
+		          // to keep doc_id._id (just id as string) in model and not pass to post object later..
+		          if(markup.doc_id){ 
+		             markup.doc_id_id = markup.doc_id._id;
+		             if(markup.doc_id.doc_options){
+		               // m.markup.child_options = [];
+		               var  options_array =  [];
+		                markup.child_options = [];
+		                _.each(markup.doc_id.doc_options , function(option){
+		                  options_array[option.option_name] = option.option_value
+		                });
+		                markup.child_options = options_array
+		              }
+		          }
+		          //console.log('children call ...')
+		        }
+		       	/*
+		        if(markup.type =='data'){} 
+       		 	if( ($scope.$parent.objSchemas[markup.type].map_range && $scope.$parent.objSchemas[markup.type].map_range==true && markup.visible == true)  || (markup.subtype=='share_excerpt' && markup.visible == true)  ){
+       		 	} 
+				*/
+      
+
+			if(markup.type =='container'){
+			  //  markup.isolated = false;
+			  //  markup.ready = 'tssdrue';
+
+			}
+			if(markup.type == 'media' || markup.subtype == 'simple_page' ||  markup.subtype == 'doc_content_block' ){
+			    $scope.section[$scope.$parent.index].section_classes += 'has_image ';
+			    if(markup.position){
+			          $scope.section.section_classes += ' focus_side_'+markup.position +' ';
+				}
+
+				if(markup.position == 'background'){
+					$scope.section.section_styles = 'background-image:url('+markup.metadata+'); ' ;
+				}
+			}
+
+			console.log(markup)
+
+	        ///// •¿¿ ///
+	        if(markup.type !== "" && markup.position){ // > can add it
+
+				// adding to the global collection
+				if(markup.position == 'global'){
+					$scope.$parent.objects_sections['global_all'].push(markup)
+					// $rootScope.objects_sections['global_by_type'][markup.type].push(markup)
+				}
+				
+				// add markup to container objects (container::index::type::position) 
+				$scope.section.objects_[markup.type][markup.position].push(markup) 
+
+				if(markup.type !=='container'){
+					$scope.section.objects_count['all'].count++;
+					$scope.section.objects_count['all'].has_object  = true;
+					$scope.section.objects_count['by_positions'][markup.position].count++;
+					$scope.section.objects_count['by_positions'][markup.position].has_object  = true;
+				}
+			}
+
+			//   console.log('wraped')
+			// console.log(markup)
+    	} // if in-range
+
+    }); // each markups end.
+}
+
+
+
+
+
+$scope.init_= function () {
+
+		console.log('init section')
+		console.log($scope.section)
+		console.log('parent ctrl')
+		console.log($scope.$parent)
+		console.log('section index'+$scope.$parent.$index)
+
+
+		
+		$scope.$parent.update_section_count('add')
+        // $rootScope.sections_to_count_notice = ($rootScope.sectionstocount == 0) ? true : false;
+
+
+
+           /* some variable seting for each container */
+            container_ = new Object({
+                'selecting' : -1,
+                'sectionin' : $scope.$parent.$index,
+                'isolated'  : false,
+                'selected'    : false,
+                'editing_text':false,
+                'ready' : 'init',
+                'modeletters' : 'block',
+               // 'fulltext'    : self.ranges_to_fulltext($rootScope.doc.content, container.start, container.end)
+            })
+
+$scope.section = _.extend($scope.section, container_);
+
+            // extend object
+         
+
+            // adds default arrays for objects(setup once)
+
+          //  var cp = _.clone($rootScope.object_arr);
+
+              var objectsarray = new Object();
+
+           objectsarray.section_classes = '';
+           objectsarray.section_styles  = '';
+           //new Array('objects', 'objects_')
+          // objectsarray['objects'] = [];
+           objectsarray['objects_'] = [];
+
+
+           objectsarray['objects_count'] = [];
+           objectsarray['objects_count']['by_positions'] = [];
+           objectsarray['objects_count']['all'] = [];
+            // section can have css classes and inlined styles (background-image)
+         
+            // $rootScope.containers[index]['classes'] =[];
+            // $rootScope.objects_sections[index]['global'] = [];
+            _.each($scope.$parent.available_sections_objects, function(o, obj_index){
+              objectsarray['objects_'][$scope.$parent.available_sections_objects[obj_index]] = [];
+              // and each subs objects an array of each positions
+              objectsarray['objects_count']['all']= new Object({'count':0, 'has_object':false})
+              _.each($scope.$parent.available_layouts  , function(op){ // op: left, right, ..
+                objectsarray['objects_count']['by_positions'][op.name] = new Object({'count':0, 'has_object':false})
+                objectsarray['objects_'][$scope.$parent.available_sections_objects[obj_index]][op.name] =[];
+              });
+              // set to "1" for title include.
+              // $rootScope.containers[0]['objects_count']['by_positions']['center'].count = 1;
+            });
+
+
+
+
+
+    	 $scope.section = _.extend($scope.section, objectsarray );
+   		
+            // reach letter max test
+            if($scope.section.end > $scope.$parent.max_reached_letter){
+              $scope.$parent.max_reached_letter = $scope.section.end
+            } 
+
+            // continous test (prev end match current start)
+           /*
+            if($rootScope.containers[index-1]){
+              var container_prev_end = ($rootScope.containers[index-1].end)+1;
+              if(container_prev_end !== container.start){
+                console.log('discontinous section found '+container_prev_end+' /vs/'+container.start)
+              }
+            }
+*/
+
+
+}
+
+
+$scope.init_()
+$scope.attribute_objects()
 
 
     $scope.to_fulltext = function (){
@@ -44,9 +273,8 @@ angular.module('musicBox.controllerz', []).controller('SectionCtrl', function($s
 		// = 'blou'
 
 		//for
-		$scope.section.fulltext = $scope.to_fulltext();
-		$scope.section.fulltext_block = $scope.section.fulltext;
-		//console.log($scope.section.objects)
+		
+		
 		
 
 
@@ -85,6 +313,8 @@ $scope.$watch('section.cursor_at', function(oldValue, newValue) {
 		 	//if(oldValue !==newValue ){
 		 		if(oldValue && newValue)
 		 			{
+
+
 		 		//		alert(oldValue)
 
 		 			}
@@ -123,10 +353,10 @@ $scope.$watch('section.fulltext', function(oldValue, newValue) {
 
 
 
-			if(newValue ){
+			if(newValue && oldValue){
 		 		
 
-
+			console.log(oldValue.length - newValue.length)
 
 		 	console.log('section fulltext watched with changes:'+newValue+'>'+oldValue)
 		 	
@@ -189,41 +419,27 @@ $scope.$watch('section.fulltext', function(oldValue, newValue) {
 			
 
 			$scope.section.objects_ = new Array()
-			console.log($scope.section.objects)
- 			 _.each($scope.doc.markups, function(markup){
+			console.log($scope.section.objects_)
+ 			 _.each($scope.$parent.markups, function(markup){
          
               // only for markups which ranges match container
 
               			if(!$scope.section.objects_){
               				$scope.section.objects_ = new Array()
+              				
               			}
 
 			            if(markup.position && markup.start >= $scope.section.start && markup.end <=$scope.section.end){
-			            			
-
-									//$scope.section.objects_.push(markup)
+			           
 									//console.log(markup)
 									if(!$scope.section.objects_[markup.type]){
-										$scope.section.objects_[markup.type] = new Array(markup)
-									
-
+									$scope.section.objects_[markup.type] = new Array()
 										if(!$scope.section.objects_[markup.type][markup.position]){
-											$scope.section.objects_[markup.type][markup.position] = new Array(markup)
+												$scope.section.objects_[markup.type][markup.position] = new Array()
 											//$scope.section.objects_[markup.type][markup.position].push()
-
 										}
-										else{
-											//									$scope.section.objects_[markup.type][markup.position].push(markup)
-
-										}
-
 									}
-									else{
-									//	console.log('else')
-									//	console.log($scope.section)
-										//$scope.section.objects_[markup.type][markup.position].push(markup)
-
-									}
+								
 
 
 									//console.log('apply '+markup.type)
@@ -239,6 +455,7 @@ $scope.$watch('section.fulltext', function(oldValue, newValue) {
 									 		}
 
 									 }
+									 $scope.section.objects_[markup.type][markup.position].push(markup)
 			            }
           	});
 
@@ -471,7 +688,8 @@ var markup = {}
 
 
 
-	
+	$scope.section.fulltext = $scope.to_fulltext();
+	$scope.section.fulltext_block = $scope.section.fulltext;
 
 }); // end controller
 
