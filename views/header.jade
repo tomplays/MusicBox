@@ -40,10 +40,25 @@ head
 				})
 
 
-	// angularJS
-	
-	script(type='text/javascript',  src='bower_components/angular/angular.min.js')
+
+	// bower:css
+	link(rel='stylesheet', href='/bower_components/font-awesome/css/font-awesome.css')
+	// endbower 
+
+	// build:js bower_components/mbmin.js 
+	// bower:js
+	script(src='/bower_components/angular/angular.js')
+	script(src='/bower_components/angular-resource/angular-resource.js')
+	script(src='/bower_components/angular-route/angular-route.js')
+	script(src='/bower_components/angular-sanitize/angular-sanitize.js')
+	script(src='/bower_components/underscore/underscore.js')
+	script(src='/bower_components/momentjs/moment.js')
+	script(src='/bower_components/angular-bootstrap/ui-bootstrap-tpls.js')
+	// endbower 
+	// endbuild  
+
 	// script(type='text/javascript',  src='js/lib/serialize.min.js')
+
 	
 	//i18n dynamic load except grunt
 	if (env !== 'grunt' )	
@@ -52,20 +67,17 @@ head
 	if (env == 'dev' )	
 		script(type='text/javascript',  src='#{root_url}:35729/livereload.js')
 
-		script(type='text/javascript', src='bower_components/angular-sanitize/angular-sanitize.min.js')
-		script(type='text/javascript', src='bower_components/angular-route/angular-route.min.js')
-		script(type='text/javascript', src='bower_components/angular-resource/angular-resource.min.js')
+		
 		// sub if (hard version of file minified or kept locally)
-		script(type='text/javascript', src='js/angular-modules/filters.js')
-		script(type='text/javascript', src='js/angular-modules/directives.js')
+		script(type='text/javascript', src='js/MusicBox/filters.js')
+		script(type='text/javascript', src='js/MusicBox/directives.js')
 
 		// Misc libs/utils
-		script(type='text/javascript', src='bower_components/jquery/dist/jquery.min.js')
-		script(type='text/javascript', src='bower_components/underscore/underscore-min.js')
+		// script(type='text/javascript', src='bower_components/jquery/dist/jquery.min.js')
+		// script(type='text/javascript', src='bower_components/underscore/underscore-min.js')
 		
 
-		// script(type='text/javascript', src='bower_components/angular-bootstrap/ui-bootstrap.min.js')
-		script(type='text/javascript', src='bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js')
+		
 		link(href="css/min/bootstrap.min.css",rel="stylesheet")
 
 		
@@ -77,30 +89,31 @@ head
 		script(type='text/javascript', src='bower_components/momentjs/min/moment-with-langs.min.js')
 		script(type='text/javascript', src='bower_components/momentjs/lang/fr.js')
 
-		// tests for charts
-		// script(type='text/javascript', src='bower_components/chartist/libdist/chartist.min.js')
-		// link(rel='stylesheet', href='bower_components/chartist/libdist/chartist.min.css')
+		
+		script(type='text/javascript', src='js/MusicBox/services.js')
+		script(type='text/javascript', src='js/MusicBox/renderServices.js')
 
-		script(type='text/javascript', src='js/angular-modules/services.js')
-		script(type='text/javascript', src='js/angular-modules/render_services.js')
-		script(type='text/javascript', src='js/angular-modules/document_services.js')
-		script(type='text/javascript', src='js/angular-modules/user_services.js')
-
-		script(type='text/javascript', src='js/angular-modules/DocumentRest.js')
-		script(type='text/javascript', src='js/angular-modules/UserRest.js')		
-		script(type='text/javascript', src='js/angular-modules/MusicBoxLoop.js')
+		script(type='text/javascript', src='js/MusicBox/MusicBoxLoop.js')
 
 		
 		link(rel='stylesheet', href='css/min/main.css')
 
 		// Angular controllers
 
-		script(type='text/javascript', src='js/MusicBox/documentCtrl.js')
-		script(type='text/javascript', src='js/MusicBox/markupCtrl.js')
-		script(type='text/javascript', src='js/MusicBox/sectionCtrl.js')
+		script(type='text/javascript', src='js/MusicBox/markup/markupCtrl.js')
+		script(type='text/javascript', src='js/MusicBox/section/sectionCtrl.js')
 
-		script(type='text/javascript', src='js/MusicBox/userCtrl.js')
-		
+
+		// document level
+		script(type='text/javascript', src='js/MusicBox/document/documentServices.js')
+		script(type='text/javascript', src='js/MusicBox/document/documentRest.js')
+		script(type='text/javascript', src='js/MusicBox/document/documentCtrl.js')
+
+		// user 
+		script(type='text/javascript', src='js/MusicBox/user/userServices.js')
+		script(type='text/javascript', src='js/MusicBox/user/userRest.js')		
+		script(type='text/javascript', src='js/MusicBox/user/userCtrl.js')
+
 		// Angular top level 'app' routing 
 		script(type='text/javascript', src='js/app.js')
 
@@ -108,8 +121,6 @@ head
 			script(src='#{socket_url}:#{socket_server_port}/socket.io/socket.io.js')
 	
 
-	// same in dev and prod env 
-	link(rel='stylesheet', href='bower_components/font-awesome/css/font-awesome.min.css')
 	
 	if (env == 'grunt')
 	if (env == 'prod')
@@ -119,9 +130,9 @@ head
 		script(type='text/javascript',  src='js/min/MusicBox.min-debug.js')
 
 	if (doc_include_js)
-		script(type='text/javascript', src='js/custom_doc/jquery-1.11.1.min.js')
-		script(type='text/javascript', src='js/custom_doc/skrollr.min.js')
-		script(type='text/javascript', src='#{doc_include_js}')
+		// script(type='text/javascript', src='js/custom_doc/jquery-1.11.1.min.js')
+		// script(type='text/javascript', src='js/custom_doc/skrollr.min.js')
+		// script(type='text/javascript', src='#{doc_include_js}')
 
 	if (doc_include_css)
 		link(rel='stylesheet', href='#{doc_include_css}')
@@ -130,4 +141,5 @@ head
 		♪     ♪
 			♪     ♪
 		Boite à musique
-			~MusicBox
+			~MusicBox v.02 Niagara
+			Tom Wersinger

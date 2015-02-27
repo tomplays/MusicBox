@@ -1,5 +1,6 @@
 div(ng-controller="SectionCtrl")
 	//h2 {{section.fulltext}}
+
 	//h1(ng-click="toggle_hello()") {{$index}}
 
 	div(ng-if="section['objects_count']['by_positions'][layout.name].count > 0 || layout.include_even_empty", ng-repeat='layout in available_layouts')
@@ -10,27 +11,25 @@ div(ng-controller="SectionCtrl")
 			div(ng-if="(layout.name == 'center') && ($parent.$parent.$first) ", ng-include="fragments['doc_title'][0].url")
 					
 			div(ng-if="layout.name == 'right'")
-				// old section div(ng-include="fragments['section_editor'][0].url" )
 				
-
-				div.forced.forced-right(ng-if="ui.renderAvailable_active == 'editor'")		
-					div(class="markup_ markup_type_container",  ng-if="ui.renderAvailable_active == 'editor'" , ng-repeat="markup in section.objects_['container']['inline']", ng-include="fragments['markup'][0].url")
+				div.forced.forced-right()		
+					div(class="markup_ markup_type_container", ng-repeat="markup in section.objects_['container']['inline']", ng-include="fragments['markup'][0].url")
 
 					div(class="markup_ container_class_type_inline" , ng-repeat="markup in section.objects_['container_class']['inline']" ng-include="fragments['markup'][0].url")
 					
-					div(class="markup_ markup_type_inline", ng-if="ui.renderAvailable_active == 'editor'" , ng-repeat="markup in section.objects_['markup']['inline']", ng-include="fragments['markup'][0].url")
+					div(class="markup_ markup_type_inline", ng-repeat="markup in section.objects_['markup']['inline']", ng-include="fragments['markup'][0].url")
 
 
-					div(class="markup_ markup_type_bg", ng-if="ui.renderAvailable_active == 'editor'" , ng-repeat="markup in section.objects['media']['background']", ng-include="fragments['markup'][0].url")
+					div(class="markup_ markup_type_bg", ng-repeat="markup in section.objects['media']['background']", ng-include="fragments['markup'][0].url")
 
 			div(ng-if="object.visible !==false && layout.include_objects !==false && layout.name !=='slidewide' " , ng-repeat='object in available_sections_objects')
 				// {{section.objects_[object][layout.name]}}
-				div(ng-if="markup.visible" class="markup_ markup_type_{{markup.type}}" ng-repeat="markup in section.objects_[object][layout.name]", ng-include="fragments['markup'][0].url")
+				div(class="markup_ markup_type_{{markup.type}}" ng-repeat="markup in section.objects_[object][layout.name]", ng-include="fragments['markup'][0].url")
 				
 
 			div(ng-if="(doc_options.comments_open.value !=='false' || !doc_options.comments_open.value  ) && layout.name == 'left'")
 
-				span.open_comment(tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.COMMENT.label}}" ng-click="open_comment_push(section)") +
+				span.open_comment(tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.COMMENT.label}}" ng-click="open_pusher()") +
 				div.comment_form(ng-if="ui.menus.push_comment.open == section.sectionin ",  ng-include="fragments['comment_form'][0].url")
 
 
@@ -46,6 +45,9 @@ div(ng-controller="SectionCtrl")
 				// letters part !!
 				// h3 {{section.modeletters}}
 				// pre {{section.letters}}
+				// h2 
+					a(ng-click="sectionmarkups('selected', true)") {{section_markups.visible}}
+
 
 				div.inline_tools(ng-include="fragments['inline_tools'][0]['url']" ng-if="section.editing_text ===true")
 				// p {{section}}
@@ -57,20 +59,22 @@ div(ng-controller="SectionCtrl")
 
 				// em.fulltext-watcher 
 					{{section.fulltext}}	
-				
-				div.theletters(ng-if="section.modeletters=='single'")
-					// span.lt(class="{{l.classes_flat}}", ng-bind-html="l.char", lt="l" , ng-repeat="l in section.letters")
-					
+				// h1(ng-repeat="l in section.letters track by $index") {{l.classes}}
 
+
+
+
+
+				div.theletters(ng-if="section.modeletters=='single'")
 					// ng-class="l.classes",  
 					// ng-bind-html="l.char",
-					span.lt(ng-class="l.classes"  lt="l" , ng-repeat="l in section.letters track by $index")
+					span.lt(ng-class="l.classes"  lt="l" , ng-repeat="l in section.letters track by $index") 
 
 
 				div.fluidtext(fluidtexte, section="section" , ng-bind-html="section.fulltext_block",ng-if="section.modeletters !=='single'") 
 
 
-				.pusher_section(ng-if="section.editing_text === true && ($parent.$parent.$parent.$last)")
+				.pusher_section(ng-if="section.editing_text == true && ($parent.$parent.$parent.$last)")
 					i.fa.fa-plus-square.pusher_item.btn(tooltip="new section" ng-click="push_section()") 
 
 			div(ng-if="(layout.name == 'global') && ($parent.$parent.$last) && objects_sections['global_all'].length > 0")

@@ -8,11 +8,36 @@ module.exports = function(grunt) {
 	// timer
 	require("time-grunt")(grunt);
 
+	
+
+
+
+
+
+
 	grunt.initConfig({
 
 		pkg: grunt.file.readJSON('package.json'),
+		vendor: grunt.file.readJSON(".bowerrc").directory,
 		cfg : grunt.file.readJSON('config.json'),
 
+	useminPrepare: {
+     
+    },
+    concat: {
+      
+       // src: 'public/js/**/*.js',
+       // dest: 'tmp/script.js'
+     
+    },
+		wiredep: {
+			app: {
+				src: ['views/index.html', 'views/index.jade', 'views/header.jade'],
+ 				 ignorePath: '../public',
+		         dependencies: true,
+		        //devDependencies: false, 
+			}
+		},
 		less: {				
 			 options: {
 					  paths: ["public/css"],
@@ -23,7 +48,7 @@ module.exports = function(grunt) {
 						// no need for files, the config below should work
 						expand: true,
 						cwd:    "public/css",
-						src:    "**/*.less",
+						src:    "public/css/*.less",
 						dest:   "public/css/min",
 						ext:    ".css",   
 				},     
@@ -168,6 +193,11 @@ module.exports = function(grunt) {
 				files: ['public/css/*.less'], // less auto-compilation
 				tasks: ['less']
 			},
+			bower: {
+				files: ["bower.json"],
+				tasks: ["wiredep"]
+			},
+
 			/*
 			templates: {
 				 options: { livereload: true },
@@ -188,18 +218,26 @@ module.exports = function(grunt) {
 	grunt.registerTask('lesscss', ['less']); // , 'connect:server' // 'forever', 
 	grunt.registerTask('stop', ['forever:server1:stop']); // , 'connect:server' // 'forever', 
 	grunt.registerTask('default', [
-				'forever:server1:restart','watch', 'less'
+				'forever:server1:restart','watch', 'wiredep'
 	]);
+
+	
+
 	// 'connect:livereload'
 	grunt.registerTask('build', [
 				'forever:server1:restart',
 				'jade',
 				'copy:dist',
 				'watch',
-				 'less',
+				'less',
 				'jasmine', 
 				'ngtemplates',
 				'connect:livereload'
+	]);
+
+	grunt.registerTask('minify', [
+		  
+		 
 	]);
 
 

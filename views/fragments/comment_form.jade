@@ -12,15 +12,20 @@ div.user_in(ng-if="userin.username")
 		span add a {{push.type}}
 		//span(ng-if="doc.published == 'draft'") a&nbsp; 
 		select(ng-model="push.type", name="push.type")
-			// option(value="{{doc.published}}") {{doc.published}}
 			option(value="note" ) note
 			option(value="semantic") semantic
-		
+			option(value="comment" ) comment
+			option(value="media") media
+		select(ng-model="push.position", name="push.position")
+			option(value="left" ) left
+			option(value="right") right
+			option(value="under" ) under
+
 
 
 	label {{render_config.i18n.CUSTOM.ACTIONS.add}} {{render_config.i18n.CUSTOM.OBJECTS[push.type]}} 
 
-	// 
+	p {{push.start}} {{push.end}} // {{$scope.ui}}
 	textarea(ng-model="push.metadata", type="text", value="{{render_config.i18n.CUSTOM.COMMENT.textarea}}") 
 	
 	p.logged_in_as 
@@ -28,4 +33,4 @@ div.user_in(ng-if="userin.username")
 		em 
 			a(href="/me/account") {{userin.username}}
 	p
-		a.btn_ok.float_right(ng-click="push_object(section)") {{render_config.i18n.CUSTOM.ACTIONS.add}}
+		a.btn_ok.float_right(ng-click="push_object()") {{render_config.i18n.CUSTOM.ACTIONS.add}}
