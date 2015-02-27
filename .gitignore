@@ -29,5 +29,5 @@ compressor_JS.sh
 
 README.md
 public/img/
-
+bower_components/
 public/bower_components/
