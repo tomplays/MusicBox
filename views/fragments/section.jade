@@ -28,9 +28,9 @@ div(ng-controller="SectionCtrl")
 				
 
 			div(ng-if="(doc_options.comments_open.value !=='false' || !doc_options.comments_open.value  ) && layout.name == 'left'")
-
+				
 				span.open_comment(tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.COMMENT.label}}" ng-click="open_pusher()") +
-				div.comment_form(ng-if="ui.menus.push_comment.open == section.sectionin ",  ng-include="fragments['comment_form'][0].url")
+				div.comment_form(ng-if="ui.menus.push_comment.open == $parent.$parent.$parent.$index",  ng-include="fragments['comment_form'][0].url")
 
 
 			div(ng-if="layout.name == 'slidewide'")
@@ -75,7 +75,7 @@ div(ng-controller="SectionCtrl")
 
 
 				.pusher_section(ng-if="section.editing_text == true && ($parent.$parent.$parent.$last)")
-					i.fa.fa-plus-square.pusher_item.btn(tooltip="new section" ng-click="push_section()") 
+					i.fa.fa-plus-square.pusher_item.btn(tooltip="new section" ng-click="new_section()") 
 
 			div(ng-if="(layout.name == 'global') && ($parent.$parent.$last) && objects_sections['global_all'].length > 0")
 						div.inside()

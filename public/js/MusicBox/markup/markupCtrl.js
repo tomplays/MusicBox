@@ -1,5 +1,5 @@
 
-angular.module('musicBox.controller', []).controller('MarkupCtrl', function($scope, $http) {
+angular.module('musicBox.controller', []).controller('MarkupCtrl', function($scope, $http, MarkupRest) {
 	
 	
 	$scope.map_letters = function(){
@@ -153,7 +153,7 @@ angular.module('musicBox.controller', []).controller('MarkupCtrl', function($sco
 		$scope.map_letters()
 	}
 
-	$scope.init__()
+	
 
 
 
@@ -241,7 +241,7 @@ angular.module('musicBox.controller', []).controller('MarkupCtrl', function($sco
    });	
 
    $scope.$watch('markup.end', function(  newValue, oldValue) {
-        if($scope.markup.type!=='container' &&  oldValue && newValue && newValue !== oldValue){
+        if($scope.markup && $scope.markup.type!=='container' &&  oldValue && newValue && newValue !== oldValue){
        // $scope.handle_change_range(oldValue, newValue,  'end')
          $scope.map_letters() 	
 		}
@@ -254,7 +254,7 @@ angular.module('musicBox.controller', []).controller('MarkupCtrl', function($sco
 				        if($scope.markup.start >= $scope.$parent.section.start && $scope.markup.end <= $scope.$parent.section.end){
 				                //console.log('watch position trigger>')
 								$scope.markup.sectionin = $scope.$parent.section.sectionin  
-					        	console.log('markup.sectionin'+$scope.markup.sectionin)				
+					        //	console.log('markup.sectionin'+$scope.markup.sectionin)				
 
 					  
 					   }
@@ -386,14 +386,94 @@ angular.module('musicBox.controller', []).controller('MarkupCtrl', function($sco
     }	
 
 
-	$scope.markup_moderate = function (markup, status){
 	
-		console.log('approving..')
-		console.log(markup)
-		$scope.markup.status =status;
-		//markup.start = (markup.start)+1
-		doc.markup_save($scope.markup)
+	// change and save a single markup value-field
+	$scope.change_value = function(field, value, save){
+		markup[field] = value;
+		if(save){
+			$scope.save()
+		}
+		
+	}
 
+/**
+      * @description 
+      * Save a markup (attributes)
+      *
+      * @param {object} markup - markup to save
+      * @return {Function} init and/or flash
+      * 
+      * @function docfactory#markup_save
+      * @link docfactory#markup_save
+      * @todo ---
+      */
+     $scope.save = function () {
+        
+        var thos = this;
+        var promise = new Object();
+        var data = new Object({
+            'metadata':$scope.markup.metadata,
+            'start':$scope.markup.start,
+            'end':$scope.markup.end,
+            'depth':$scope.markup.depth,
+            'status':$scope.markup.status,
+            'type':$scope.markup.type,
+            'subtype':$scope.markup.subtype
+          });
+          if($scope.markup.doc_id_id){
+            data.doc_id = $scope.markup.doc_id_id
+          }
+          // can be null.
+          data.secret = $scope.ui.secret;
+
+          // check-force data
+          if($scope.markup.type == 'markup' || $scope.markup.type == 'container'  || $scope.markup.type == 'container_class' ){
+             data.position = 'inline'
+          }
+          else{
+            data.position = $scope.markup.position
+          }
+
+        
+          promise.query = MarkupRest.markup_save({id:$scope.$parent.doc.slug, mid:$scope.markup._id }, serialize(data) ).$promise;
+          promise.query.then(function (Result) {
+            var edited  = Result.edited[0][0]
+            console.log(edited)
+           
+              $scope.flashmessage(edited.type +' saved', 'ok' , 3000)
+             
+          }.bind(this));
+          promise.query.catch(function (response) {  
+            console.log(response)   
+           $scope.flashmessage(response.err.err_code, 'bad' , 3000)
+          }.bind(this));
+
+      }
+
+
+	/**
+	* delete a markup on click
+	* @function MarkupCtrl#delete_markup
+	*/
+	$scope.delete = function (){
+		
+		if(markup.type=="container" && $scope.sectionstocount == 1){
+			$scope.flashmessage('MusicBox can\'t delete last section', 'bad' , 3000)
+			return
+		}
+		else{
+			var promise = MarkupRest.markup_delete( {id:$scope.$parent.doc.slug, mid:$scope.markup._id }).$promise;
+			promise.then(function (Result) {
+				$scope.flashmessage('Markup deleted', 'ok' , 2000, false)
+				// not enough for letter mapping
+				$scope.markup.visible = false;
+			}.bind(this));
+			promise.catch(function (response) {  
+				$scope.flashmessage(response.err, 'bad' , 3000)
+			}.bind(this));
+		}
+		// toggle
+		$scope.ui.focus_side = ''
 	}
 
 
@@ -427,4 +507,9 @@ angular.module('musicBox.controller', []).controller('MarkupCtrl', function($sco
 					console.log(err)
 			})
 		}
+
+
+$scope.init__()
+
+
 }); // end controller

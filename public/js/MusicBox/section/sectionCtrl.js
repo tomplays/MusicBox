@@ -1,59 +1,33 @@
 
-angular.module('musicBox.controllerz', []).controller('SectionCtrl', function($scope, $http, DocumentService, DocumentRest,  MusicBoxLoop) {
+angular.module('musicBox.controllerz', []).controller('SectionCtrl', function($scope, $http, DocumentService, MarkupRest) {
 
 $scope.distribute_arrays = function(){
-
 	console.log($scope.section.objects_)
-	 
 	 $scope.section.objects_  = _.groupBy($scope.section.objects_, function(item){return item.position;});
         _.each( $scope.section.objects_, function(value, key, list) {
        	 list[key] = _.groupBy(value, function(item){return item.type;});
    	 }); 
-
-
-
-
 }
+
 $scope.distribute_letters_classes = function(){
-console.log('distribute_letters_classes')
+	console.log('distribute_letters_classes')
  	_.each($scope.section.objects_, function(markup){
-        
-			
-	
     });
-
-
 }
 
 $scope.sectionmarkups = function(attr, value){
-	
-		  _.each($scope.$parent.markups, function(m,y){
-                if(m.sectionin == $scope.$parent.$index && m.type !=='container'){
-                	  m[attr] = value;
-                }
-              	else{
-               		 m[attr] = !value;
-               }            
-             })
+	_.each($scope.$parent.markups, function(m,y){
+		if(m.sectionin == $scope.$parent.$index && m.type !=='container'){
+			m[attr] = value;
+		}
+		else{
+			m[attr] = !value;
+		}            
+	})
 }
 
 $scope.sections_objects_arrays = function(){
-
-
-
-
-}
-
-
-
-$scope.attribute_objects = function(){
-  console.log('attribute_objects')
-
-
-
-
-
-    var objectsarray = new Object();
+	var objectsarray = new Object();
 
            objectsarray.section_styles  = '';
            //new Array('objects', 'objects_')
@@ -85,6 +59,18 @@ $scope.attribute_objects = function(){
 
 
     	 		$scope.section = _.extend($scope.section, objectsarray );
+}
+
+
+
+$scope.attribute_objects = function(){
+  console.log('attribute_objects')
+
+
+  			$scope.sections_objects_arrays()
+
+
+    		
 
     _.each($scope.$parent.markups, function(markup){
               
@@ -274,12 +260,11 @@ $scope.$watch('section.cursor_at', function(oldValue, newValue) {
 
 
             $scope.doc.content = string;
-      
-if( $scope.ui.selected_range.insert_direction== 'save'){
-	var this_sync = new DocumentService()
-					 this_sync.SetSlug($scope.doc.slug)
+			if( $scope.ui.selected_range.insert_direction== 'save'){
+					var this_sync = new DocumentService()
+					this_sync.SetSlug($scope.$parent.doc.slug)
 					this_sync.docsync()
-}
+			}
 					
 					//$scope.section.letters[$scope.ui.selected_range.insert].classes.push('h1')
 					
@@ -355,112 +340,110 @@ console.log('markup pushed')
 
 });	
 
-$scope.push_generic_from_ranges= function (type, subtype, position,metadata){
+$scope.push_generic_from_ranges= function (type, subtype,position,metadata){
+		
+
 		if(metadata){
 			$scope.$parent.push.metadata = metadata
 		}
-		$scope.$parent.push.type = type;
-		$scope.$parent.push.subtype = subtype;
-		$scope.$parent.push.start= $scope.ui.selected_range.start;
-		$scope.$parent.push.end = $scope.ui.selected_range.end;
-		$scope.$parent.push.position = position
 
+		$scope.$parent.push.metadata = (metadata) ? metadata : '-'
+		
+		$scope.$parent.push.type = (type) ? type : null;
+		$scope.$parent.push.subtype = subtype;
+		$scope.$parent.push.position = position
 		$scope.$parent.push.sectionin = $scope.$parent.section.sectionin
 
-		$scope.push_markup();
+		$scope.add();
+
 	}
-
-$scope.save_section= function (){
-
-
-
-	// Manual save section
-	   			// var string  = '';
-                //_.each($scope.containers, function(container){
-                  //  string  += container.fulltext;
-           //     })
-               console.log($scope.section.fulltext)
-               console.log('nothing happening here')
-                //$scope.doc.content = string;
-               // $scope.doc_sync()
-
-	//	section.fulltext =section.fulltext+'----'
-	//	$scope.section.fulltext = section.fulltext
-	//	console.log(section.fulltext)
-		//alert($scope.section.fulltext)
-	//	$scope.doc.content = $scope.section.fulltext
-	//	$scope.section.end = $scope.section.end+1;
-	}
-
-
-
-
-
-
 
 	// short function to push a comment
 
 	
-$scope.push_object= function (){
+$scope.add= function (){
+		// sure to set up
 
 
-			
-		console.log($scope.$parent.push)
+		if($scope.$parent.ui.selected_range.start){
+			$scope.$parent.push.start   = $scope.$parent.ui.selected_range.start
+		}
+		else{
+			$scope.$parent.push.start 		= 0
+		}
+	
 
-			
+	if($scope.$parent.ui.selected_range.end){
+		$scope.$parent.push.end   = $scope.$parent.ui.selected_range.end
+	}
+	else{
+		$scope.$parent.push.end   = 1
+
+	}
+
+
+		if(!$scope.$parent.push.position)	{	$scope.$parent.push.position 	= 'left'	}
+		if(!$scope.$parent.push.type)		{	$scope.$parent.push.type 		= 'comment' }
+		if(!$scope.$parent.push.subtype)	{	$scope.$parent.push.subtype 	= 'comment'	}
+		if(!$scope.$parent.push.metadata)	{	$scope.$parent.push.metadata	= '-' 		}
+		if(!$scope.$parent.push.status)		{	$scope.$parent.push.status		= 'approved' }
+		if(!$scope.$parent.push.depth)		{	$scope.$parent.push.depth 		= 1 }
+		if(!$scope.$parent.push.doc_id_id)	{	$scope.$parent.push.doc_id_id 	= 'null'	}
+		
+		// force autoset / force-correct
+		if($scope.$parent.push.type == "markup" || $scope.$parent.push.type == "container" || $scope.$parent.push.type == "container_class" ){ 
+			$scope.$parent.push.position = 'inline'
+		}
+
 		
 
-		var this_sync = new DocumentService()
-		
-
-
-
-
- var promise = new Object();
+	
+        var promise = new Object();
         var data = new Object($scope.$parent.push);
+
+
+
         data.username = $scope.userin.username;
         data.user_id = $scope.userin._id;
         promise.data = serialize(data);
+
+        console.log('ready to push')
+        console.log(promise.data)
         var thos = this;
         // this.Markup_pre();
 
-        promise.query = DocumentRest.markup_push( {Id:$scope.doc.slug},promise.data).$promise;
+        promise.query = MarkupRest.markup_push( {Id:$scope.$parent.doc.slug},promise.data).$promise;
         promise.query.then(function (Result) {
 				if(Result.inserted[0]){
 					var mi = Result.inserted[0]
-					mi['visible'] = true;
+					
+					//console.log(mi)
+            	    $scope.flashmessage(mi.type +' inserted', 'ok' , 1400, false)
+					$scope.close_pusher()
 
-					console.log(mi)
-            	this_sync.flash_message(mi.type +' inserted', 'ok' , 400)
-
+            	    if(!$scope.section.objects_){
+            	    	$scope.section.objects = new Array()	
+            	    }
 					if(!$scope.section.objects_[mi.type] || !$scope.section.objects_[mi.type][mi.position] ){
-						if(!$scope.section.objects_[mi.type] ){
+						if(!$scope.section.objects_[mi.type]){
 								console.log('no old array type')
-								
 								$scope.section.objects_[mi.type] = new Array()						
-							
-							
-
 						}
 						if(!$scope.section.objects_[mi.type][mi.position] ){
 							console.log('no old array type')
 							$scope.section.objects_[mi.type][mi.position] = new Array()
-						
-
-
 						}
-
-						
 					}
-					//else{
-							$scope.section.objects_[mi.type][mi.position].push(mi)
-					//}
-				
+					
+					
+
+					$scope.section.objects_[mi.type][mi.position].push(mi)
 					console.log($scope.section.objects_)
 
-					///this_sync.SetSlug($scope.doc.slug)
-					//this_sync.docsync()
-					// new MusicBoxLoop().init(true);
+					if(mi.type== 'container'){
+						console.log('need to refresh container orders')
+					}
+				
 					
 
 				}
@@ -478,86 +461,50 @@ $scope.push_object= function (){
 
 	}
 
-	$scope.push_commentjhh= function (markup){
+
+
+$scope.save_section= function (){
+}
+
+
+// short function to push a section
+	$scope.new_section= function (){
+		$scope.push.start  = $scope.section.end+1
+		$scope.push.end  = $scope.section.end+10
+		$scope.push.type = 'container';
+		$scope.push.subtype = 'section';	
+		$scope.add();	
+	}
 
 
 
-var markup = {}
+	$scope.close_pusher = function (){
+		$scope.$parent.ui.focus_side 				= ''
+		$scope.$parent.ui.menus.push_comment.open 	= -1
+		$scope.$parent.push.metadata 				= '';
+		$scope.$parent.push.start 					=	null;
+		$scope.$parent.push.end 					=	null;
 
-
-        //$rootScope.push = this.Markup_pre();
-        var promise = new Object();
-        var data = new Object(markup);
-        data.username = $scope.userin.username;
-        data.user_id = $scope.userin._id;
-        promise.data = serialize(data);
-        var thos = this;
-        // this.Markup_pre();
-
-        promise.query = DocumentRest.markup_push( {Id:this.slug},promise.data).$promise;
-        promise.query.then(function (Result) {
-                thos.flash_message(Result.inserted[0].type +' inserted', 'help' , 100)
-             
-                       }.bind(this));
-        promise.query.catch(function (response) {  
-           console.log(response)   
-           this.flash_message('error', 'error' , 3000)
-        }.bind(this));
-
-      };
-
-
+	}
 
 	// open close the pusher box.
 	$scope.open_pusher = function (){
 	
-
-	if(!$scope.push.type){
-		$scope.push.type = 'comment'
-	}
-	if(!$scope.push.subtype){
-		$scope.push.subtype = 'comment'
-	}	
-
-	if(!$scope.push.position){
-		$scope.push.position = 'under'
-	}
-
-	$scope.push.start     	= 0
-	$scope.push.end     	= 1
-	
-
-	if($scope.$parent.ui.selected_range.start){
-			$scope.push.start   = $scope.$parent.ui.selected_range.start
-	}
-	
-
-	if($scope.$parent.ui.selected_range.end){
-			$scope.push.end   = $scope.$parent.ui.selected_range.end
-	}
-	
-
-	
-	    // this way only one menu can me open.. and persistent
-		var cur = $scope.$parent.ui.menus.push_comment.open;
-		if(cur == $scope.section.sectionin){
-			cur = -1	
-			$scope.$parent.ui.focus_side = ''
+		if(!$scope.push.type){
+			$scope.push.type = 'comment'
 		}
-		else{
-			cur = $scope.section.sectionin;
-			$scope.$parent.ui.focus_side = 'side_left'
+		if(!$scope.push.subtype){
+			$scope.push.subtype = 'comment'
+		}	
+		if(!$scope.push.position){
+			$scope.push.position = 'under'
 		}
-		$scope.$parent.ui.menus.push_comment.open = cur;
+		$scope.$parent.ui.focus_side = 'side_left'
+		$scope.$parent.ui.menus.push_comment.open = $scope.$parent.$index
 		$scope.section.modeletters = 'single'
-		console.log($scope.push)
-		return;
 
-
+		return
 	}
-
-
-
 	$scope.init_()
 	
 

@@ -76,7 +76,7 @@ function DocumentCtrlRo($scope, $http , $sce, $location, $routeParams ,socket,re
 
 
 
-function DocumentCtrl($scope, $http , $sce, $location, $routeParams ,socket,renderfactory, DocumentService, $anchorScroll, MusicBoxLoop) {
+function DocumentCtrl($scope, $http , $sce, $location, $routeParams ,socket,renderfactory, DocumentService, $anchorScroll, MusicBoxLoop,  $timeout) {
 		
 	
 	/**
@@ -181,6 +181,43 @@ $scope.letters = [];
 	*
 	*/
 	
+	/**
+      * @description 
+      * Show a message to user
+      *
+      *  @param {String} msg - message to show
+      *  @param {String} classname - a css class ('ok'/ 'bad' / ..)
+      *  @param {Number/Time} timeout - 
+
+      *  @return -
+      * 
+      * @function docfactory#flash_message
+      * @link docfactory#flash_message
+      * @todo --
+      */
+
+      $scope.flashmessage = function (msg,classname ,timeout, closer) {
+        $scope.flash_message = {}
+        $scope.flash_message.text = msg;
+        $scope.flash_message.classname = classname;
+
+        if(!closer){
+            $scope.flash_message.closer =false;
+        }
+        else{
+            $scope.flash_message.closer = closer;
+        }
+        
+
+        // apply timeout if set to true
+        if(timeout){
+            $timeout(function(){
+                $scope.flash_message.text =  '';
+            },timeout);
+        }
+      }
+
+
 
 
 
@@ -241,46 +278,6 @@ $scope.letters = [];
 	
 
 
-	/**
-	*
-	* Markup Level
-	*
-	*/
-
-	$scope.push_markup = function (){
-		
-		// sure to set up
-		if(!$scope.push.start)		{	$scope.push.start 		= 0 }
-		if(!$scope.push.end)		{	$scope.push.end 		= 1 }
-		if(!$scope.push.position)	{	$scope.push.position 	= 'left'	}
-		if(!$scope.push.type)		{	$scope.push.type 		= 'comment' }
-		if(!$scope.push.subtype)	{	$scope.push.subtype 	= 'comment'	}
-		if(!$scope.push.metadata)	{	$scope.push.metadata	= '-' 		}
-		if(!$scope.push.status)		{	$scope.push.status		= 'approved' }
-		if(!$scope.push.depth)		{	$scope.push.depth 		= 1 }
-		if(!$scope.push.doc_id_id)	{	$scope.push.doc_id_id 	= 'null'	}
-		
-		// force autoset / force-correct
-		if($scope.push.type == "markup" || $scope.push.type == "container" || $scope.push.type == "container_class" ){ 
-			$scope.push.position = 'inline'
-		}
-		// object is clean
-		doc.markup_push($scope.push)	 // call document service
-	}
- 	
-
- 	// short function to push a section
-	$scope.push_section= function (){	
-		// auto set
-
-		$scope.push.start  = (_.last($scope.containers).end)+1
-		$scope.push.end  = (_.last($scope.containers).end)+1
-		$scope.push.type = 'container';
-		$scope.push.subtype = 'section';	
-		$scope.push.position  = 'inline'
-	
-		$scope.push_markup();
-	}
 	
 	
 	// reset a markup to a "safe" position and to a safe type {O,1,comment,left}
@@ -328,30 +325,6 @@ $scope.letters = [];
 	}
 
 	
-	
-
-
-	/**
-	* delete a markup on click
-	* @function DocumentCtrl#delete_markup
-	* @param  {Object} markup - markup to delete
-	*/
-	$scope.markup_delete = function (markup){
-		if(markup.type=="container"){
-			//alert('can hold objects!')
-			//return;
-			if($scope.sectionstocount == 1){
-			 	doc.flash_message('can\'t delete last section', 'bad' , 3000)
-			 	return
-			}
-			doc.markup_delete(markup)
-		}
-		else{
-			doc.markup_delete(markup)
-		}
-		// toggle
-		$scope.ui.focus_side = ''
-	}
 
 	$scope.offset_markups = function (){
 		doc.offset_markups()
@@ -677,90 +650,6 @@ console.log(m)
 	 	}
 	});
 	
-
-
-    // watch the textarea content.
-
-	$scope.$watch('doc.sd', function(newValue, oldValue) {
-
-		
-		if(newValue !==undefined  && oldValue !==undefined && (newValue !== oldValue) ){
-			console.log(newValue +'-'+ oldValue)
-			var diff = 99999999999999;
-			
-			for (var i = 0; i <= _.size(newValue); i++) {
-				//console.log( newValue[i] )
-				//console.log( oldValue[i] )
-				//console.log('at index #'+i+'|newletter|'+newValue[i]+' |oldletter|'+oldValue[i])
-				if(newValue[i] !== oldValue[i]){
-					if(i < diff){
-						diff = i;
-					}
-				}
-			}
-
-			//console.log('mini diff at '+diff)
-			//console.log(_.size(oldValue))
-			//console.log(_.size(newValue))
-			$scope.ui.selected_range.diff_old_size  	= _.size(oldValue)
-			$scope.ui.selected_range.diff_new_size  	= _.size(newValue)
-			$scope.ui.selected_range.diff_at  = diff
-			if(_.size(oldValue) > _.size(newValue) ){
-				//console.log('old > new (text is shorter) ')
-				//console.log('diff'+ ( _.size(newValue) - _.size(oldValue)) )
-				$scope.ui.selected_range.diff_qty		=  _.size(newValue) - _.size(oldValue)
-				$scope.ui.selected_range.diff_dir		= 'reduced'
-			} 
-			if(_.size(oldValue) < _.size(newValue) ){
-				//console.log('old < new (text is longer) ')
-				//console.log('diff'+ ( _.size(newValue) - _.size(oldValue)) )
-				$scope.ui.selected_range.diff_qty		= _.size(newValue) - _.size(oldValue)
-				$scope.ui.selected_range.diff_dir		= 'expanded'
-
-			} 
-			if(_.size(oldValue) == _.size(newValue) ){
-				//console.log('same size ')
-				$scope.ui.selected_range.diff_qty					= 0;
-				$scope.ui.selected_range.diff_dir					= 'inplaced';
-			} 
-
-			// each markup concerned by edit (text was edited before or into a markup range)
-			
-			$scope.ui.selected_range.markups_to_offset 				= []
-
-			$scope.ui.selected_range.diff_objects_concerned_count 	= 0;
-		
-			if($scope.ui.selected_range.diff_dir == 'expanded' || $scope.ui.selected_range.diff_dir =='reduced'){
-				_.each($scope.doc.markups, function(mk, i){
-					
-					// nothing to to if after range
-					if(  diff >  mk.end) {}
-					// means "on" the left of range
-					else{
-						// means between the range
-						if(  diff >=  mk.start) {
-							// offset end only
-							mk.offset_end = mk.offset_end+$scope.ui.selected_range.diff_qty
-							mk.touched = true;
-						}
-						// means before both start and end..
-						else{
-							// offset both
-		 					mk.offset_start = mk.offset_start+$scope.ui.selected_range.diff_qty
-		 					mk.offset_end   = mk.offset_end+$scope.ui.selected_range.diff_qty;
-							mk.touched = true;
-						}
-					}
-					if(mk.touched){
-						console.log(mk.type)
-						//mk.editing = true;
-						//mk.selected = true;
-						$scope.ui.selected_range.markups_to_offset.push(mk)
-					}
-				});
-			}
-		}
-	}); // watcher
 
 
 	/**

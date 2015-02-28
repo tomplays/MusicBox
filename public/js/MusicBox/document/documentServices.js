@@ -41,6 +41,7 @@ angular.module('musicBox.DocumentService', [])
 
   DocumentService.prototype.Load = function () {
       
+    this.flash_message('..', 'bad' , 10, false)
 
     var promise = DocumentRest.get({Id:this.slug},{  }).$promise;
     promise.then(function (Result) {
@@ -69,8 +70,8 @@ angular.module('musicBox.DocumentService', [])
 
           //$rootScope.doc.formated_date =  d.doc.updated;
           $rootScope.doc.formated_date = moment(d.doc.updated).calendar() +', '+moment(d.doc.updated).fromNow(); 
-          $rootScope.doc_options      =   this.apply_object_options('document', d.doc.doc_options)
-          $rootScope.author_options   =    this.apply_object_options('author',   d.doc.user.user_options)
+          $rootScope.doc_options      =    this.apply_object_options('document', d.doc.doc_options)
+          $rootScope.author_options   =   this.apply_object_options('author',   d.doc.user.user_options)
                
 
               if(d.doc.room){
@@ -532,99 +533,8 @@ angular.module('musicBox.DocumentService', [])
       };
 
 
-      /**
-      * @description 
-      * Delete a markup in API and in view
-      *
-      *  
-      * @param {object} markup - markup to delete 
-      * @return -
-      * @callback error or reset document + flash message
-      * @function docfactory#markup_delete
-      * @link docfactory#markup_delete
-      * @todo i18n 
-      */
-
-      DocumentService.prototype.markup_delete =  function (markup){
-      
-        var promise = DocumentRest.markup_delete( {id:this.slug, mid:markup._id }).$promise;
-        promise.then(function (Result) {
-          var tt  = new MusicBoxLoop().init(Result,true);
-          this.flash_message('markup deleted', 'ok' , 2000)
-        }.bind(this));
-        promise.catch(function (response) {  
-           this.flash_message(response.err, 'bad' , 3000)
-        }.bind(this));
-     }
-
      
-
-     /**
-      * @description 
-      * Save a markup (attributes)
-      *
-      * @param {object} markup - markup to save
-      * @return {Function} init and/or flash
-      * 
-      * @function docfactory#markup_save
-      * @link docfactory#markup_save
-      * @todo ---
-      */
-      DocumentService.prototype.markup_save= function (markup, field_only, soft) {
-        if(!soft){
-          var soft = false;
-        }
-        if(!field_only){
-          var field_only = false;
-        }
-
-
-        var thos = this;
-        var promise = new Object();
-        var data = new Object({
-            'metadata':markup.metadata,
-            'start':markup.start,
-            'end':markup.end,
-            'depth':markup.depth,
-            'status':markup.status,
-            'type':markup.type,
-            'subtype':markup.subtype
-          });
-          if(markup.doc_id_id){
-            data.doc_id = markup.doc_id_id
-          }
-          // can be null.
-          data.secret = $rootScope.ui.secret;
-
-          // check-force data
-          if(markup.type == 'markup' || markup.type == 'container'  || markup.type == 'container_class' ){
-             data.position = 'inline'
-          }
-          else{
-            data.position = markup.position
-          }
-
-        
-          promise.query = DocumentRest.markup_save({id:this.slug, mid:markup._id }, serialize(data) ).$promise;
-          promise.query.then(function (Result) {
-            var edited  = Result.edited[0][0]
-            console.log(edited)
-           
-            
-           
-               this.flash_message(edited.type +' saved', 'ok' , 3000)
-              
-          
-          
-
-
-          }.bind(this));
-          promise.query.catch(function (response) {  
-            console.log(response)   
-            this.flash_message(response.err.err_code, 'bad' , 3000)
-          }.bind(this));
-
-      }
+     
        DocumentService.prototype.doc_delete = function () {
         var thos = this;
         var promise = new Object();
@@ -646,53 +556,7 @@ angular.module('musicBox.DocumentService', [])
        }
 
 
-       /**
-      * @description Push a markup
-      * @param {object} markup - markup to push
-      * @return {function} flash_message() - message 
-      * @API : $POST
-      * @function docfactory#push_markup
-      * @link docfactory#push_markup
-      * @todo --
-      */
-      DocumentService.prototype.markup_push = function (markup) {
-        //$rootScope.push = this.Markup_pre();
-        var promise = new Object();
-        var data = new Object(markup);
-        data.username = $rootScope.userin.username;
-        data.user_id = $rootScope.userin._id;
-        promise.data = serialize(data);
-        var thos = this;
-        // this.Markup_pre();
-
-        promise.query = DocumentRest.markup_push( {Id:this.slug},promise.data).$promise;
-        promise.query.then(function (Result) {
-                thos.flash_message(Result.inserted[0].type +' inserted', 'help' , 100)
-             
-                //console.log(Result.inserted[0])
-                  thos.populate(Result)
-                  if(markup.type == 'markup'){
-                    alert('added')
-                  //  new MusicBoxLoop().markup_push(Result.inserted[0]);
-                  }
-                  else{
-                     alert('added')
-                   // new MusicBoxLoop().init(true);
-                  }
-                                  ///// 
-             
-             //console.log(Result.inserted[0].type)
-            
-               // socket.emit('news', {doc_id: $rootScope.doc.slug, action: 'push_markup' , type: 'push', object:d.inserted });
-               // socket.emit('news', {doc_id: $rootScope.doc.slug, action: 'push_markup' , type: 'push', object:d.inserted });
-               //$rootScope.$emit('docEvent', {action: 'doc_ready', type: 'push', collection_type: 'markup', collection:d.inserted[0] });
-        }.bind(this));
-        promise.query.catch(function (response) {  
-           console.log(response)   
-           this.flash_message('error', 'error' , 3000)
-        }.bind(this));
-
-      };
+      
 
 
        /**

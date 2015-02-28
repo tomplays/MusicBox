@@ -129,28 +129,30 @@ angular.module('musicBox.directives', [])
 
       $rootScope.ui.selected_range.wait_ev = false  // now ready!
       
-      $rootScope.ui.selected_range.end = scope.lt.order // 'end' is last event..
+      $rootScope.ui.selected_range.end = scope.lt.order+scope.$parent.section.start // 'end' is last event..
      // alert($rootScope.ui.selected_range.end)
       $rootScope.ui.selected_range.textrange = '';
 
       // reorder if/sup test here.
-      if( $rootScope.ui.selected_range.start >  scope.lt.order){
+      if( $rootScope.ui.selected_range.start >  scope.lt.order+scope.$parent.section.start){
         var temp_s = $rootScope.ui.selected_range.start;
-        $rootScope.ui.selected_range.start  = scope.lt.order
+        $rootScope.ui.selected_range.start  = scope.lt.order+scope.$parent.section.start
         $rootScope.ui.selected_range.end = temp_s
       }
 
       for (var i =  $rootScope.ui.selected_range.start; i <= $rootScope.ui.selected_range.end; i++) {
-         if(scope.$parent.section.letters[i]){
-          
+         
+        var delta = i- scope.$parent.section.start
+           if(scope.$parent.section.letters[delta]){
+            
 
-          scope.$parent.section.letters[i].classes.push('cursor_at')
-          $rootScope.ui.selected_range.textrange +=scope.$parent.section.letters[i].char
-          }
+              scope.$parent.section.letters[delta].classes.push('cursor_at')
+              $rootScope.ui.selected_range.textrange +=scope.$parent.section.letters[delta].char
+            }
         }
-        var obj = scope.$parent.section.objects
       
-         _.each($rootScope.doc.markups, function(markup, i){
+      
+         _.each($rootScope.markups, function(markup, i){
          if( 
       //  strict in.
       //  todo add other cases.
@@ -187,8 +189,8 @@ angular.module('musicBox.directives', [])
       });
      // scope.lt.classes.push('mup') // the "mousedowned" one
       $rootScope.ui.selected_range.wait_ev = true  // now waiting mouseup!
-      $rootScope.ui.selected_range.start = scope.lt.order   //'start' is first event..
-      $rootScope.ui.selected_range.end = scope.lt.order;    // as new selection end by default
+      $rootScope.ui.selected_range.start = scope.lt.order+scope.$parent.section.start   //'start' is first event..
+      $rootScope.ui.selected_range.end = scope.lt.order+scope.$parent.section.start;    // as new selection end by default
 
   }
 function selection_running(scope){

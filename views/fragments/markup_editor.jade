@@ -107,11 +107,11 @@ form(name="myForm")
 		div(ng-if="markup.subtype=='img'")
 			
 			p
-				a(ng-click="replace_markup(markup, 'position', 'left')") move to left
+				a(ng-click="change_value('position', 'left', true)") move to left
 			p
-				a(ng-click="replace_markup(markup, 'position', 'right')") move to right
+				a(ng-click="change_value('position', 'right', true)") move to right
 			p
-				a(ng-click="replace_markup(markup, 'position', 'wide')") move to wide
+				a(ng-click="change_value('position', 'wide', true)") move to wide
 
 		div(ng-if="markup.type=='markup'")
 			
@@ -161,14 +161,15 @@ form(name="myForm")
 
 .object-tools(ng-if="doc_owner")
 	label Moderation / status
-	// input(ng-model="markup.status" , type="text")
-	i.fa.fa-flag.btn_action(style="color:green" ng-click="markup_moderate(markup, 'approved')") approved
-	i.fa.fa-flag.btn_action(style="color:red" ng-click="markup_moderate(markup, 'pending')") pending	
+
+	i.fa.fa-flag.btn_action(style="color:green" ng-if="markup.status == 'pending' " ng-click="change_value('status','approved', true)") approved
+	i.fa.fa-flag.btn_action(style="color:red"  ng-if="markup.status == 'approved' " ng-click="change_value('status','pending', true)") pending	
+
+
 .object-tools
 	i.fa.fa-sliders.btn_action(tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.more_options}}" ng-click="object_tools(markup)")
-	i.fa.fa-save.btn_action(tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.save}}" ng-click="markup_save(markup)")
+	i.fa.fa-save.btn_action(tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.save}}" ng-click="save()")
 
-	// i.fa.fa-check-circle.btn_action(tooltip-placement="left" tooltip="moderate" ng-click="markup_moderate (markup, 'approved')") {{markup.status}}
+	
 
-
-	i.fa.fa-remove.btn_action(tooltip-placement="left" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.delete}}" ng-click="markup_delete(markup)")
+	i.fa.fa-remove.btn_action(tooltip-placement="left" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.delete}}" ng-click="delete()")

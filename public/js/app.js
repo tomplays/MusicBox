@@ -4,7 +4,7 @@
 
 
 
-angular.module('musicBox',  ['ui.bootstrap','musicBox.controller','musicBox.controllerz', 'ngLocale', 'ngResource', 'ngRoute','musicBox.services',  'musicBox.directives', 'ngSanitize', , 'musicBox.DocumentRest','musicBox.UserRest', 'musicBox.DocumentService','musicBox.UserService','musicBox.MusicBoxLoop']).
+angular.module('musicBox',  ['ui.bootstrap','musicBox.controller','musicBox.controllerz', 'ngLocale', 'ngResource', 'ngRoute','musicBox.services',  'musicBox.directives', 'ngSanitize', , 'musicBox.DocumentRest','musicBox.UserRest', 'musicBox.MarkupRest','musicBox.DocumentService','musicBox.UserService','musicBox.MusicBoxLoop']).
   config(['$localeProvider','$routeProvider', '$locationProvider','$sceDelegateProvider', '$sceProvider', function($localeProvider,$routeProvider, $locationProvider, $sceDelegateProvider,$sceProvider ) {
     $routeProvider.
  	   when('/', {

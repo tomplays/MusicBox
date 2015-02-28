@@ -26,21 +26,6 @@ angular.module('musicBox.DocumentRest', [])
         //interceptor: { response: parseResponse }
         //isArray: false
       },
-      markup_push:{
-        method:"POST",
-        isArray: false,
-        url: api_url+'/doc/:Id/markup/push',
-         transformResponse: parseResponse
-      },
-      markup_delete:{
-        method:"POST",
-        params :  {Id:'@id', Mid:'@mid'},
-        url: api_url+'/doc/:Id/markup/delete/:Mid',
-      },
-      markup_save:{       
-        method:"POST",
-        url: api_url+'/doc/:id/markup/:mid/edit',
-      },
       doc_save:{     
         method:"POST",
         url: api_url+'/doc/:id/edit',  
