@@ -238,7 +238,7 @@ $scope.$watch('section.cursor_at', function(oldValue, newValue) {
 		 	//if(oldValue !==newValue ){
 		 		if(oldValue && newValue && $scope.section.letters && $scope.section.letters[newValue])
 		 			{
-		 				$scope.flashmessage('section.cursor_at '+newValue, 'help',2000, true )
+		 			///	$scope.flashmessage('section.cursor_at '+newValue, 'help',2000, true )
 
 		 				if($scope.section.letters[newValue].classes){
 		 						$scope.section.letters[newValue].classes.push('cursor_at')
@@ -490,6 +490,10 @@ $scope.save_section= function (){
             container.focused  = ''          
 		  })
 	}
+
+
+	
+
 
 	$scope.close_pusher = function (){
 		 $scope.defocus()

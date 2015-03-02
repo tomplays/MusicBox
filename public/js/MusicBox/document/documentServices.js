@@ -230,12 +230,12 @@ angular.module('musicBox.DocumentService', [])
           }
            
          console.log('SAVED')
-            thos.flash_message('-', 'line' , 400, false)
+            thos.flash_message('-', 'line' , 2400, false)
 
            
             
-            $rootScope.ui.selected_range.markups_to_offset = new Array()
-            $rootScope.ui.offset_queue = new Array()
+            $rootScope.ui.selected_range.markups_to_offset = []
+            $rootScope.ui.offset_queue = []
          
 
         }.bind(this));
@@ -305,7 +305,7 @@ angular.module('musicBox.DocumentService', [])
 
             }
             else{
-              thos.flash_message('document set for  '+field, 'help' , 2000)    
+              thos.flash_message('document set for  '+field, 'ok' , 2000)    
             }   
         }.bind(this));
         promise.catch(function (response) { 

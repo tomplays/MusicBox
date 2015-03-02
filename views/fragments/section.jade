@@ -13,8 +13,9 @@ div(ng-controller="SectionCtrl")
 					
 			div(ng-if="layout.name == 'right'")
 				
-				div.forced.forced-right()		
-					
+				div.forced.forced-right()
+					// sections, container_class, inline_markup, media( if background)
+					div(class="markup_ markup_type_container", ng-repeat="markup in section.objects_['container']['inline']", ng-include="fragments['markup'][0].url")
 
 					div(class="markup_ container_class_type_inline" , ng-repeat="markup in section.objects_['container_class']['inline']" ng-include="fragments['markup'][0].url")
 					
@@ -51,20 +52,14 @@ div(ng-controller="SectionCtrl")
 
 
 				div.inline_tools(ng-include="fragments['inline_tools'][0]['url']" ng-if="section.editing_text ===true")
-				// p {{section}}
-				div.fluidtextarea(ng-if="ui.renderAvailable_active == 'editor'")
+				
+				div.fluidtextarea(ng-if="section.editing_text ===true")
 					Edit section text : 
 					textarea(ng-trim="false"  key-listener="changeFunction()"  ng-model="section.fulltext")
 					// a.btn_ok(ng-click="save_section(section)") save
 					// a.btn_ok(ng-click="doc_sync()") save
 
-				// em.fulltext-watcher 
-					{{section.fulltext}}	
-				// h1(ng-repeat="l in section.letters track by $index") {{l.classes}}
-
-
-
-
+				
 
 				div.theletters(ng-if="section.modeletters=='single'")
 					// ng-class="l.classes",  
@@ -74,8 +69,6 @@ div(ng-controller="SectionCtrl")
 
 				div.fluidtext(fluidtexte, section="section" , ng-bind-html="section.fulltext_block",ng-if="section.modeletters !=='single'") 
 
-				div(class="markup_ markup_type_container", ng-repeat="markup in section.objects_['container']['inline']", ng-include="fragments['markup'][0].url")
-				
 				.pusher_section(ng-if="section.editing_text == true && ($parent.$parent.$parent.$last)")
 					i.fa.fa-plus-square.pusher_item.btn(tooltip="new section" ng-click="new_section()") 
 

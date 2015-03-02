@@ -158,11 +158,8 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
               'modes': {
                 'editor': {                   
                   'enabled': true,
-
                   'tabs': {
-                            'metadata': '',
-                            'type': 'type'
-
+                            'subtype': 'subtype'
                         },
                   'fields' : {
                                   'ranges': { 
@@ -174,15 +171,17 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
                                       'display' : true,
                                       'label':'type',
                                       'input' : 'select'
+
                                   },
                                   'position':{ 
                                       'display' : true,
                                       'label':'position',
-                                      'input' : 'select'
+                                      'input' : 'select',
+                                      'forced' : 'inline'
                                   },
                                   'subtype': {
                                     'display' : true,
-                                    'label':'subtye',
+                                    'label':'subtype',
                                     'input' : 'select',
                                     'free_input' : false,
                                     'show_editor': 'hidden',
@@ -194,8 +193,8 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
                                     'input' : 'select',
                                     'free_input' : false,
                                     'show_editor': 'hidden',
-                                    'available' : ['hyperlink'],
-                                    'forced' : 'hyperlink'
+                                    'available' : [''],
+                                    'forced' : '-'
                                   }
 
                           },
@@ -231,7 +230,9 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
                   'enabled': true,
                   'tabs': {
                             'metadata': 'url/src',
-                            'type': 'type'
+                            'type': 'type',
+                             'subtype': 'subtype',
+                              'position': 'position'
 
                         },
                               'fields' : {
@@ -252,7 +253,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
                                   },
                                   'subtype': {
                                     'display' : true,
-                                    'label':'subtye',
+                                    'label':'subtype',
                                     'input' : 'select',
                                     'free_input' : false,
                                     'show_editor': 'hidden',
@@ -264,17 +265,16 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
                                     'input' : 'text',
                                     'free_input' : false,
                                     'show_editor': 'hidden',
-                                    'available' : ['hyperlink'],
-                                    'forced' : 'hyperlink'
+                              
+                        
                                   },
                                   'file_upload': {
                                     'display' : true,
-                                    'label':'subtye',
+                                    'label':'send',
                                     'input' : 'select',
                                     'free_input' : false,
                                     'show_editor': 'hidden',
-                                    'available' : ['hyperlink'],
-                                    'forced' : 'hyperlink'
+                               
                                   }
 
                           },
@@ -315,9 +315,11 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
                         },
                         'tabs': {
                             'metadata': 'text',
-                            'type': 'type'
-
+                            'type': 'type',
+                            'subtype': 'subtype',
+                              'position': 'position'
                         },
+
                           'fields' : {
                                   'ranges': { 
                                       'display' : true,
@@ -333,25 +335,25 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
                                   'position':{ 
                                       'display' : true,
                                       'label':'position',
-                                    'input' : 'select'
+                                      'input' : 'select'
                                   },
                                   'subtype': {
                                     'display' : true,
-                                    'label':'subtye',
+                                    'label':'subtype',
                                     'input' : 'select',
                                     'free_input' : false,
                                     'show_editor': 'hidden',
-                                    'available' : ['hyperlink'],
-                                    'forced' : 'hyperlink'
+                                    'available' : ['comment'],
+                                    'forced' : 'hcomment'
                                   },
                                   'metadata': {
                                     'display' : true,
                                     'label':'comment text',
                                     'input' : 'textarea',
                                     'free_input' : false,
-                                    'show_editor': 'hidden',
-                                    'available' : [''],
-                                    'forced' : ''
+                                    'show_editor': 'hidden'
+                                  
+                                  
                                   }
 
                           },
@@ -405,30 +407,27 @@ container_class.modes.editor.fields.metadata.label = 'css class'
                             'user': false,
                         },
                         'tabs': {
-                            'metadata': '',
-                            'type': 'type'
+                            //'subtype': 'container subtype'
 
                         },
                         'fields' : {
                                   'ranges': { 
                                       'display' : true,
                                       'label':'link url',
-                                    'input' : 'range'
+                                      'input' : 'range'
                                   },
                                   'type': { 
-                                      'display' : true,
-                                      'label':'type',
-                                    'input' : 'select'
+                                      'display' : false,
+                                      'forced' : 'container'
                                   },
                                 
                                   'position':{ 
                                       'display' : false,
-                                      'label':'position',
-                                    'input' : 'select'
+                                      'forced' : 'inline'
                                   },
                                   'subtype': {
                                     'display' : true,
-                                    'label':'subtye',
+                                    'label':'subtype',
                                     'input' : 'select',
                                     'free_input' : false,
                                     'show_editor': 'hidden',
@@ -436,13 +435,8 @@ container_class.modes.editor.fields.metadata.label = 'css class'
                                     'forced' : 'section'
                                   },
                                   'metadata': {
-                                    'display' : true,
-                                    'label':'value',
-                                    'input' : 'select',
-                                    'free_input' : false,
-                                    'show_editor': 'hidden',
-                                    'available' : ['hyperlink'],
-                                    'forced' : 'hyperlink'
+                                    'display' : false,
+                                    'forced' : ''
                                   }
 
                           },
@@ -483,7 +477,7 @@ container_class.modes.editor.fields.metadata.label = 'css class'
                         },
                         'tabs': {
                             'metadata': 'Classname',
-                            'type': 'type'
+                           
 
                         },
                           'fields' : {
@@ -495,13 +489,14 @@ container_class.modes.editor.fields.metadata.label = 'css class'
                                   'type': { 
                                       'display' : true,
                                       'label':'type',
-                                    'input' : 'select'
+                                      'input' : 'select'
                                   },
                                 
                                   'position':{ 
                                     'display' : true,
                                     'label':'position',
-                                    'input' : 'select'
+                                    'input' : 'select',
+                                      'forced' : 'inline'
                                   },
                                   'subtype': {
                                     'display' : true,
@@ -510,7 +505,7 @@ container_class.modes.editor.fields.metadata.label = 'css class'
                                     'free_input' : false,
                                     'show_editor': 'hidden',
                                     'available' : ['css'],
-                                    'forced' : 'hyperlink'
+                                    'forced' : 'css'
                                   },
                                   'metadata': {
                                     'display' : true,
@@ -518,8 +513,8 @@ container_class.modes.editor.fields.metadata.label = 'css class'
                                     'input' : 'select',
                                     'free_input' : false,
                                     'show_editor': 'hidden',
-                                    'available' : ['bg_black'],
-                                    'forced' : ''
+                                    'available' : ['bg_black', 'bg_dark'],
+                                  
                                   }
 
                           },
@@ -560,7 +555,9 @@ container_class.modes.editor.fields.metadata.label = 'css class'
                         },
                         'tabs': {
                             'metadata': 'value',
-                            'type': 'type'
+                            'type': 'type',
+                            'subtype': 'subtype'
+
 
                         },
 
@@ -579,7 +576,7 @@ container_class.modes.editor.fields.metadata.label = 'css class'
                                   'position':{ 
                                       'display' : true,
                                       'label':'position',
-                                    'input' : 'select'
+                                      'input' : 'select'
                                   },
                                   'subtype': {
                                     'display' : true,
@@ -596,8 +593,8 @@ container_class.modes.editor.fields.metadata.label = 'css class'
                                     'input' : 'select',
                                     'free_input' : false,
                                     'show_editor': 'hidden',
-                                    'available' : ['hyperlink'],
-                                    'forced' : 'hyperlink'
+                                    'available' : ['hyperlink']
+                                
                                   }
 
                           },

@@ -72,7 +72,8 @@ angular.module('musicBox.controller', []).controller('MarkupCtrl', function($sco
             'doc_id_id'      : '', // special cases for child documents (refs as doc_id in markup record)
        		'user_options'	 : $scope.apply_object_options('markup_user_options',$scope.markup.user_id.user_options),
 			'by_me' : ( $scope.markup.user_id._id && $scope.$parent.userin._id  && ($scope.$parent.userin._id == $scope.markup.user_id._id ) ) ? true : false,
-			'can_approve' : ($scope.$parent.doc_owner) ? true : false
+			'can_approve' : ($scope.$parent.doc_owner) ? true : false,
+			'objSchemas' : $scope.objSchemas[$scope.markup.type]
 		        
         })
        	
@@ -90,7 +91,7 @@ angular.module('musicBox.controller', []).controller('MarkupCtrl', function($sco
 
 				
 		       	 $scope.markup.visible = false;
-				 if($scope.markup.status == 'approved' || $scope.markup.by_me ==true || $scope.markup.can_approve == true){
+				 if($scope.markup.deleted !== true && ($scope.markup.status == 'approved' || $scope.markup.by_me ==true || $scope.markup.can_approve == true) ) {
 				    $scope.markup.visible = true;
 				 }
 		       
@@ -260,6 +261,17 @@ angular.module('musicBox.controller', []).controller('MarkupCtrl', function($sco
    });	
      $scope.$watch('markup.type', function(  newValue, oldValue) {
         if(oldValue && newValue && newValue !== oldValue){
+
+
+        	if($scope.objSchemas[newValue]){
+        		$scope.markup.objSchemas = $scope.objSchemas[newValue]
+        	}
+        	else{
+        		console.log('try to save to undef type')
+        	}
+
+
+
        // $scope.handle_change_range(oldValue, newValue,  'end')
        $scope.unmap_letters( oldValue, 'start')
          	$scope.map_letters(newValue, oldValue, 'end') 	
@@ -422,13 +434,49 @@ $scope.markup.editing = !$scope.markup.editing
 		}
     }	
 
+// used for editing a markup posittion ui.
+	// icon click or section select
+	$scope.select_section = function (){
 
+
+
+			if($scope.doc_owner || $scope.markup.by_me === true){
+			}
+			else{
+				return;
+			}
+			_.each($scope.$parent.containers, function(c, i){
+				if(c !== $scope.markup){
+					// toggle the others
+					c.selected = false;
+					c.editing = false;
+					c.editing_text = false;
+				}
+				else{
+					c.selected = !c.selected;
+					c.editing = !c.editing
+					c.editing_text = !c.editing_text
+				}
+			});
+    }	
 	
 	// change and save a single markup value-field
 	$scope.change_value = function(field, value, save){
 		$scope.markup[field] = value;
 		if(save){
-			$scope.save()
+			if(field == 'status'){
+
+				$scope.save($scope.markup.type +' set as '+value)
+			}
+			else if(field == 'position'){
+				$scope.save($scope.markup.type +' moved to '+value)
+			}
+
+			else
+			{
+				$scope.save()
+			}
+			
 		}
 		
 	}
@@ -450,44 +498,36 @@ $scope.markup.editing = !$scope.markup.editing
 
 
       }
-     $scope.save = function () {
+     $scope.save = function (save_msg) {
 
-
-       // var r = new MarkupService($scope.markup)
-       // r.save()
-     // console.log(r.markup)
-      
 
 
         var thos = this;
         var promise = new Object();
         var data = new Object({
-            'metadata':$scope.markup.metadata,
-            'start':$scope.markup.start,
-            'end':$scope.markup.end,
-            'depth':$scope.markup.depth,
-            'status':$scope.markup.status,
-            'type':$scope.markup.type,
-            'subtype':$scope.markup.subtype
-          });
-          if($scope.markup.doc_id_id){
-            data.doc_id = $scope.markup.doc_id_id
-          }
-          // can be null.
-          data.secret = $scope.ui.secret;
+					            'metadata'		: $scope.markup.metadata,
+					            'start'			: $scope.markup.start,
+					            'end'			: $scope.markup.end,
+					            'depth'			: $scope.markup.depth,
+					            'status'		: $scope.markup.status
+					         });
 
-          // check-force data
-          if($scope.markup.type == 'markup' || $scope.markup.type == 'container'  || $scope.markup.type == 'container_class' ){
-             data.position = 'inline'
-          }
-          else{
-            data.position = $scope.markup.position
-          }
+		if($scope.markup.doc_id_id){
+			data.doc_id = $scope.markup.doc_id_id
+		}
+		// can be null.
+		data.secret = $scope.ui.secret;
 
-        
-          
+		// check-forced types_data
 
-          promise.query =  MarkupRest.markup_save({id:$scope.$parent.doc.slug, mid:$scope.markup._id }, serialize(data) ).$promise;
+		
+		data.metadata 	= $scope.markup.objSchemas.modes.editor.fields.metadata.forced ? $scope.markup.objSchemas.modes.editor.fields.metadata.forced : $scope.markup.metadata
+		data.position 	= $scope.markup.objSchemas.modes.editor.fields.position.forced ? $scope.markup.objSchemas.modes.editor.fields.position.forced : $scope.markup.position
+		data.type       = $scope.markup.objSchemas.modes.editor.fields.type.forced ? $scope.markup.objSchemas.modes.editor.fields.type.forced : $scope.markup.type
+		data.subtype = $scope.markup.objSchemas.modes.editor.fields.subtype.forced ? $scope.markup.objSchemas.modes.editor.fields.subtype.forced : $scope.markup.subtype
+
+
+	     promise.query =  MarkupRest.markup_save({id:$scope.$parent.doc.slug, mid:$scope.markup._id }, serialize(data) ).$promise;
           
 
 
@@ -495,7 +535,13 @@ $scope.markup.editing = !$scope.markup.editing
           promise.query.then(function (Result) {
             var edited  = Result.edited[0][0]
             console.log(edited)
-           	$scope.flashmessage(edited.type +' saved', 'help' , 3000)
+            if(save_msg){
+				$scope.flashmessage(save_msg, 'help' , 3000)
+            }
+            else{
+            	$scope.flashmessage(edited.type +' saved', 'help' , 3000)
+            }
+           	
              
           }.bind(this));
           promise.query.catch(function (response) {  
@@ -548,7 +594,7 @@ $scope.markup.editing = !$scope.markup.editing
 	*/
 	$scope.delete = function (){
 		
-		if(markup.type=="container" && $scope.sectionstocount == 1){
+		if($scope.markup.type=="container" && $scope.sectionstocount == 1){
 			$scope.flashmessage('MusicBox can\'t delete last section', 'bad' , 3000)
 			return
 		}
@@ -557,7 +603,12 @@ $scope.markup.editing = !$scope.markup.editing
 			promise.then(function (Result) {
 				$scope.flashmessage('Markup deleted', 'ok' , 2000, false)
 				// not enough for letter mapping
+				
+				// later re_check
+				$scope.markup.deleted = true;
+				// instant apply
 				$scope.markup.visible = false;
+			
 			}.bind(this));
 			promise.catch(function (response) {  
 				$scope.flashmessage(response.err, 'bad' , 3000)

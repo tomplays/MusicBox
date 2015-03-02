@@ -1,6 +1,7 @@
 div(ng-controller="MarkupCtrl", class="markup_box markup_box_depth_{{markup.depth}} markup_box_status_{{markup.status}}   markup_displayer_ markup_displayer markup_displayer_{{markup.type}} markup_displayer_subtype_{{markup.subtype}}  by_me_{{markup.by_me}} is_editing_{{markup.editing}}  touched-{{markup.has_offset}} ")
 	
 	div.mk_inside_visible(ng-if="markup.visible")
+
 		// h4 has_offset :{{markup.has_offset}} 
 
 
@@ -21,7 +22,7 @@ div(ng-controller="MarkupCtrl", class="markup_box markup_box_depth_{{markup.dept
 			p m.visible :{{markup.visible}}
 			// p {{objSchemas['comment'].modes.read.enabled}}
 			// p {{objSchemas['comment'].modes.read}}
-			// p {{objSchemas[markup.type].modes.read}}
+			// p {{markup.objSchemas.modes.read}}
 			p forced : {{markup.forced}}
 
 
@@ -29,26 +30,24 @@ div(ng-controller="MarkupCtrl", class="markup_box markup_box_depth_{{markup.dept
 			
 		img.mk_img(ng-if="markup.subtype=='img'" , data-tdid="{{markup.id}}", ng-src="{{markup.metadata}}")
 
-		span.icon_col.use_depth(ng-hide="markup.type== 'child' ")
+		span.icon_col.use_depth(ng-hide="markup.type== 'child' || markup.type== 'container'")
 			i(tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.select_edit}}" class="fa fa-{{markup.type}} fa-{{markup.subtype}} editing_{{markup.editing}} selected_{{markup.selected}}",  ng-click="toggle_select_markup('click')", ng-dblclick="toggle_select_markup( 'dblclick')"  ) 
 				span(ng-if="markup.type=='generic'") {{markup.subtype[0]}}
 
-		// span(ng-if="markup.type == 'container' ") {{markup.start}}
-			
-				
-
+		span.icon_col.use_depth(ng-if="markup.type== 'container'")
+			i(tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.select_edit}}" class="fa fa-{{markup.type}} fa-{{markup.subtype}} editing_{{markup.editing}} selected_{{markup.selected}}",  ng-click="select_section()"  ) Select section # {{$index+1}}
 
 		div.data_col
 			span(class="")
-			span.mk_val.metadata.use_depth(ng-bind-html="markup.metadata",  ng-if="objSchemas[markup.type].modes.read.display.metadata.displayed =='metadata'") 
+			span.mk_val.metadata.use_depth(ng-bind-html="markup.metadata",  ng-if="markup.objSchemas.modes.read.display.metadata.displayed =='metadata'") 
 
 
-			span.mk_val.subtype.use_depth(class="mk_val_subtype_{{markup.subtype}}", ng-if="objSchemas[markup.type].modes.read.display.metadata.displayed =='subtype'")  {{markup.subtype}} 
+			span.mk_val.subtype.use_depth(class="mk_val_subtype_{{markup.subtype}}", ng-if="markup.objSchemas.modes.read.display.metadata.displayed =='subtype'")  {{markup.subtype}} 
 
 			// date and user fields 
 			span.mk_val.mk_metas.use_depth
-				span.mk_val.created(ng-if="objSchemas[markup.type].modes.read.display.date") {{markup.created | date }} 
-				span.mk_val.mk_username( style="color:{{markup.user_options['color'].value}}", ng-if="objSchemas[markup.type].modes.read.display.user") 
+				span.mk_val.created(ng-if="markup.objSchemas.modes.read.display.date") {{markup.created | date }} 
+				span.mk_val.mk_username( style="color:{{markup.user_options['color'].value}}", ng-if="markup.objSchemas.modes.read.display.user") 
 					{{markup.username}}
 			span.flag(ng-if="markup.status !== 'approved'")
 				i.fa.fa-flag.pending(tooltip="only visible by you and doc owner" ng-click="markup.editing = true")

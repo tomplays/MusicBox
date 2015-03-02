@@ -1,17 +1,27 @@
 span.pusher
 	
 	.pusher_markups
+		{{available_sections_objects}}
 		tabset.editor-main-tab()
-			tab(ng-if="object=='markup'" heading='{{object}}' ng-repeat="object in available_sections_objects") 
+			tab(ng-if="object=='markup' || object=='container_class'" heading='{{object}}' ng-repeat="object in available_sections_objects") 
 
-				ul.typer.sub(ng-if="object=='markup'")
-					
-					li.pusher_item(class="" ng-repeat="t in objSchemas[object].modes.editor.fields.subtype.available") 
-						i.fa.btn_action(tooltip="insert markup" class="fa-{{t}}" ng-click="push_generic_from_ranges('markup', t,'inline')" ) 
-			
+				div(ng-if="object=='markup'")
+					ul.typer.sub
+						li.pusher_item(class="" ng-repeat="t in objSchemas[object].modes.editor.fields.subtype.available") 
+							i.fa.btn_action(tooltip="insert markup" class="fa-{{t}}" ng-click="push_generic_from_ranges('markup', t,'inline')" ) 
 				
+				div(ng-if="object=='container_class'")
+					i.fa.btn_action(tooltip="insert markup" class="fa-{{t}}" ng-click="push_generic_from_ranges('container_class','css','inline', 'bg_dark')" ) text white
+				
+					i.fa.btn_action(tooltip="insert markup" class="fa-{{t}}" ng-click="push_generic_from_ranges('container_class','css','inline', 'bg_black')" ) background black
+				
+
 			// li.pusher_item(class="") 
 				i.fa.btn_action(tooltip="insert markup" class="fa-media" ng-click="open_pusher_details('media')" ) 
+		
+
+
+
 
 	.pusher_range(ng-if="ui.selected_range.end && ui.selected_range.start || ui.selected_range.start ===0" )
 		span.ranges
