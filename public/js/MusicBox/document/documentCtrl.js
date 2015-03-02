@@ -78,6 +78,8 @@ function DocumentCtrlRo($scope, $http , $sce, $location, $routeParams ,socket,re
 
 function DocumentCtrl($scope, $http , $sce, $location, $routeParams ,socket,renderfactory, DocumentService, $anchorScroll, MusicBoxLoop,  $timeout) {
 		
+
+	doc = new DocumentService()
 	
 	/**
 	* initialization for document and render factory (services)
@@ -108,17 +110,86 @@ $scope.letters = [];
 			$scope.markup_total_count--;
 		}
 	}
+	/**
+      * @description 
+      * Show a message to user
+      *
+      *  @param {String} msg - message to show
+      *  @param {String} classname - a css class ('ok'/ 'bad' / ..)
+      *  @param {Number/Time} timeout - 
+
+      *  @return -
+      * 
+      * @function docfactory#flash_message
+      * @link docfactory#flash_message
+      * @todo --
+      */
+
+      $scope.flashmessage = function (msg,classname ,timeout, closer) {
+        $scope.flash_message = {}
+        $scope.flash_message.text = msg;
+        $scope.flash_message.classname = classname;
+
+        if(!closer){
+            $scope.flash_message.closer =false;
+        }
+        else{
+            $scope.flash_message.closer = closer;
+        }
+        
+
+        // apply timeout if set to true
+        if(timeout){
+            $timeout(function(){
+                $scope.flash_message.text =  '';
+            },timeout);
+        }
+      }
+
+$scope.SetSlug = function (slug) {
+    if(!slug){
+        $scope.slug= 'homepage';
+        // using it's route (defined in app.js routers)
+        if($routeParams.docid){
+          $scope.slug = $routeParams.docid
+        }
+    }
+    else{
+       $scope.slug      = slug;
+    }
+    return $scope.slug;
+  };
+
+
+ $scope.RenderConfig = function () {
+      new renderfactory().init()
+      
+
+    if($routeParams.fresh ){
+        $scope.ui.menus.quick_tools_help.active= 'yes'    
+        $scope.flashmessage($scope.render_config.i18n.CUSTOM.HELP.fresh_document, 'help' , 3000, true)
+    }
+
+
+  }
+
+	$scope.load_doc = function (){
+		console.log('load service call')
 	
+		
 
-
+	
+      // console.log(Result);
+		
+		return
+	}
+	
 	$scope.init = function (){
 		console.log('DocumentCtrl init')
-		//	render        	= Renderfactory()
-		doc           	    = new DocumentService();
-		doc.SetSlug();
-		doc.RenderConfig()
-		// call doc api with complete init.
-		doc.Load()
+		$scope.SetSlug()
+		$scope.RenderConfig()
+		doc.Load($scope.slug)
+		
 		return
 	}
 	
@@ -181,41 +252,7 @@ $scope.letters = [];
 	*
 	*/
 	
-	/**
-      * @description 
-      * Show a message to user
-      *
-      *  @param {String} msg - message to show
-      *  @param {String} classname - a css class ('ok'/ 'bad' / ..)
-      *  @param {Number/Time} timeout - 
-
-      *  @return -
-      * 
-      * @function docfactory#flash_message
-      * @link docfactory#flash_message
-      * @todo --
-      */
-
-      $scope.flashmessage = function (msg,classname ,timeout, closer) {
-        $scope.flash_message = {}
-        $scope.flash_message.text = msg;
-        $scope.flash_message.classname = classname;
-
-        if(!closer){
-            $scope.flash_message.closer =false;
-        }
-        else{
-            $scope.flash_message.closer = closer;
-        }
-        
-
-        // apply timeout if set to true
-        if(timeout){
-            $timeout(function(){
-                $scope.flash_message.text =  '';
-            },timeout);
-        }
-      }
+	
 
 
 
@@ -239,6 +276,7 @@ $scope.letters = [];
 	}
 
 	$scope.doc_sync = function(){
+
 		doc.docsync();
 	}
 
@@ -390,13 +428,16 @@ $scope.letters = [];
 
 	
 	
-	// apply active selection ranges to a markup then save it.
-	$scope.match_selection = function (markup){
-		// todo: should check notnull
-		markup.start    = $scope.ui.selected_range.start
-		markup.end 		= $scope.ui.selected_range.end
-		// and save (automatic)	
-		doc.markup_save(markup)
+	$scope.sync_queue = function(){
+		doc.docsync();
+		  _.each($scope.markups, function(m){
+                //  m.end = m.end+m.offset_end
+                //  m.start = m.start+m.offset_start
+                  m.offset_end=0
+                  m.offset_start=0
+                  m.has_offset=false
+             });
+	
 	}
 
 
@@ -635,7 +676,7 @@ console.log(m)
 
 			if($scope.MusicBoxLoop.state == 'ready'){
 				alert('rm here')
-				 new MusicBoxLoop().init(true); 
+				// new MusicBoxLoop().init(true); 
 			}
 	 	}
 	});
@@ -649,6 +690,53 @@ console.log(m)
 			}
 	 	}
 	});
+
+
+
+	$scope.$watch('doc.content', function(newValue, oldValue) {
+		if(oldValue && newValue && newValue !== oldValue){
+			console.log('- Document level')
+			console.log('- content change watched')
+		}
+	});
+	$scope.$watch('doc.title', function(newValue, oldValue) {
+		if(newValue){
+			console.log('- Document level')
+			console.log('- title change watched')
+			document.title = newValue+' *watched '
+		}
+	});
+
+
+	
+
+	$scope.$watch('doc.updated', function( newValue,oldValue) {
+			if(newValue){
+				console.log('- Document level')
+				console.log('- content change watched'+newValue)
+				$scope.doc.formated_date = moment(newValue).calendar() +', '+moment(newValue).fromNow(); 
+			}	
+	});
+
+	$scope.$watch('loaded_markups', function( newValue,oldValue) {
+			console.log('- Document level')
+			console.log('- markpups sorted after markups change watched')
+          	// filter markups > only if markup.type ==  "container"
+			$scope.markups  = _.sortBy( newValue,function (num) {
+	             return num.start;
+	        });
+	        $scope.containers = _.filter(newValue, function(td){ return  td.type == 'container'; });
+
+		
+	}, true);
+/*
+	$scope.$watch('markups', function( newValue,oldValue) {
+			
+			console.log('- Document level')
+			console.log('- containers filtered after markups change watched')
+          	// filter markups > only if markup.type ==  "container"
+	}, true);
+*/
 	
 
 

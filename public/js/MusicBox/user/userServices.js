@@ -1,4 +1,3 @@
-
 angular.module('musicBox.UserService', [])
 .factory("UserService", function($rootScope) {
 

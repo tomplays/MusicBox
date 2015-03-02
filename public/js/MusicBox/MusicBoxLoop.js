@@ -23,7 +23,7 @@ var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','n
      
       init: function (d) {
         
-        
+        alert('old')
 
       //  $rootScope.resort_markups()
         
@@ -89,7 +89,7 @@ var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.controller','n
       */
 
       distribute_markups : function () {
-
+alert('old')
         //  
         // START Looping each container
         // 

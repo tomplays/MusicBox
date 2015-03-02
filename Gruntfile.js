@@ -40,18 +40,18 @@ module.exports = function(grunt) {
 		},
 		less: {				
 			 options: {
-					  paths: ["public/css"],
-					  compress: true
-				},
+ paths: ["public/css"],
+ compress: true
+ },
 
-				src: {
-						// no need for files, the config below should work
-						expand: true,
-						cwd:    "public/css",
-						src:    "public/css/*.less",
-						dest:   "public/css/min",
-						ext:    ".css",   
-				},     
+ src: {
+ // no need for files, the config below should work
+ expand: true,
+ cwd: "public/css",
+ src: "**/*.less",
+ dest: "public/css/min",
+ ext: ".css",
+ }
 		},
 		jasmine: {
 				test: {
@@ -190,7 +190,7 @@ module.exports = function(grunt) {
 
 			styles: {
 				options: { livereload: true },
-				files: ['public/css/*.less'], // less auto-compilation
+				files: ['public/css/**/*.less'], // less auto-compilation
 				tasks: ['less']
 			},
 			bower: {

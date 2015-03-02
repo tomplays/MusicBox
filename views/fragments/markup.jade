@@ -1,8 +1,11 @@
 div(ng-controller="MarkupCtrl", class="markup_box markup_box_depth_{{markup.depth}} markup_box_status_{{markup.status}}   markup_displayer_ markup_displayer markup_displayer_{{markup.type}} markup_displayer_subtype_{{markup.subtype}}  by_me_{{markup.by_me}} is_editing_{{markup.editing}}  touched-{{markup.has_offset}} ")
 	
 	div.mk_inside_visible(ng-if="markup.visible")
+		// h4 has_offset :{{markup.has_offset}} 
 
 
+		// a(ng-click="offset(1,1)") offset me
+		// a(ng-click="match_selection()") match selection
 		
 		// m current: {{markup.start}} - {{markup.end}} 
 		//em {{markup}} 
@@ -29,6 +32,11 @@ div(ng-controller="MarkupCtrl", class="markup_box markup_box_depth_{{markup.dept
 		span.icon_col.use_depth(ng-hide="markup.type== 'child' ")
 			i(tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.select_edit}}" class="fa fa-{{markup.type}} fa-{{markup.subtype}} editing_{{markup.editing}} selected_{{markup.selected}}",  ng-click="toggle_select_markup('click')", ng-dblclick="toggle_select_markup( 'dblclick')"  ) 
 				span(ng-if="markup.type=='generic'") {{markup.subtype[0]}}
+
+		// span(ng-if="markup.type == 'container' ") {{markup.start}}
+			
+				
+
 
 		div.data_col
 			span(class="")

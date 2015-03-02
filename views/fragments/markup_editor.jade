@@ -43,12 +43,9 @@ form(name="myForm")
 				ul.typer
 					li(ng-repeat="t in available_sections_objects")
 						span {{objSchemas[t].display_name}}
-						i.fa.btn_action(ng-class="{ 'selected' : markup.type == t}" , class="fa-{{t}}" , ng-click="markup_type(markup, t)") 
+						i.fa.btn_action(ng-class="{ 'selected' : markup.type == t}" , class="fa-{{t}}" , ng-click="change_value('type',t, true)") 
 				
-					// old selectors
-					// select(ng-model="markup.type", ng-options="t for t in available_sections_objects")
-					// option(value="markup.type")
-					// option(value="t") {{t}}
+					
 			
 			span.field.typer.sub
 				label.label_type {{render_config.i18n.CUSTOM.ACTIONS.select}} subtype
@@ -58,41 +55,20 @@ form(name="myForm")
 				ul.typer.sub
 					li(ng-repeat="t in objSchemas[markup.type].modes.editor.fields.subtype.available")
 						span {{t}}
-						i.fa.btn_action(ng-class="{ 'selected' : markup.subtype == t,}" , class="fa-{{t}}" , ng-click="markup_subtype(markup, t)") 
-				// select(ng-options="sub for sub in objSchemas[markup.type].subtype.available" , ng-model="markup.subtype", name="markup.subtype")
-
-
+						i.fa.btn_action(ng-class="{ 'selected' : markup.subtype == t,}" , class="fa-{{t}}" , ng-click="change_value('subtype', t, true)") 
+				
 		tab(heading="Position" ng-if="markup.type !=='markup'") 
 			
 			span.field.positions
 				
 
 				
-				//div.mini_layout
-					div.wide(ng-class="mini_layout_class(markup, 'wide')") 
-						a(ng-click="markup_position(markup, 'wide')") wide
-
-					div.center(ng-class="{ 'selected' : markup.position == 'center'}") 
-						a(ng-click="markup_position(markup, 'center')") center
-					div.middle
-						div.left(ng-class="{ 'selected' : markup.position == 'left'}")
-							a(ng-click="markup_position(markup, 'left')") left
-						div.inline(ng-class="{ 'selected' : markup.position == 'inline'}") 
-							a(ng-click="markup_position(markup, 'inline')") inline
-						div.right(ng-class="{ 'selected' : markup.position == 'right'}") 
-							a(ng-click="markup_position(markup, 'right')") right
-					div.under(ng-class="{ 'selected' : markup.position == 'under'}") 
-						a(ng-click="markup_position(markup, 'under')") under
-					div.global(ng-class="{ 'selected' : markup.position == 'global'}") 
-						a(ng-click="markup_position(markup, 'global')") global
-					div.background(ng-class="{ 'selected' : markup.position == 'background'}") 
-						a(ng-click="markup_position(markup, 'background')") as background
 				
 
 				label {{render_config.i18n.CUSTOM.ACTIONS.select}} position
 				// h2 {{render_config.i18n.CUSTOM.POSITIONS[markup.position]}}
 				div(class="btn-group typer.position")
-					label(ng-repeat="t in objSchemas[markup.type].positions.available" class="btn btn-primary" ng-model="markup.position" btn-radio="t")
+					label(ng-repeat="t in objSchemas[markup.type].positions.available" class="btn btn-primary" ng-click="change_value('position', t, true)" , ng-model="markup.position" btn-radio="t")
 							
 							{{render_config.i18n.CUSTOM.POSITIONS[t]}}
 				

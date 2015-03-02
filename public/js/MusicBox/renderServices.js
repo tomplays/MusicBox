@@ -51,7 +51,9 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
         $rootScope.ui.selected_range          = new Object({'wait_ev' : false, 'set': false, 'start':'', 'end':'', 'textrange':''});
         $rootScope.ui.selected_range.markups_to_offset = new Array();
         $rootScope.ui.selected_range.insert = null;
+        $rootScope.ui.offset_queue = new Array()
 
+        
 
         $rootScope.ui.selected_section_index  = null;
        

@@ -1,21 +1,30 @@
 
 angular.module('musicBox.controller', []).controller('MarkupCtrl', function($scope, $http, MarkupRest) {
 	
-	
-	$scope.map_letters = function(){
+		$scope.unmap_letters = function(oldValue, sore){
+			_.each($scope.$parent.section.letters, function(l){
+				l.classes = _.without(l.classes, $scope.markup.subtype )
+			})
+		}
+	$scope.map_letters = function( newValue, oldValue){
 		var loop_start = $scope.markup.start 	- $scope.$parent.section.start;
 		var loop_end   = $scope.markup.end 		- $scope.$parent.section.start;
 	
 		for (var mi = loop_start ; mi <= loop_end;mi++) {
+
+
 			if($scope.$parent.section.letters && $scope.$parent.section.letters[mi]){
-		
+				
 				if($scope.markup.type == 'container'){
 
 				}
 				else{
+
+					//console.log('rm classes')
+					//$scope.$parent.section.letters[mi].classes = _.without($scope.$parent.section.letters[mi].classes,$scope.markup.subtype )
 					$scope.$parent.section.letters[mi].classes.push($scope.markup.subtype)
 					///$scope.$parent.section.letters[mi].classes.push('muddp')
-					$scope.$parent.section.letters[mi].classes.push($scope.markup.type)
+					//$scope.$parent.section.letters[mi].classes.push($scope.markup.type)
 
 				}
 				
@@ -188,14 +197,14 @@ angular.module('musicBox.controller', []).controller('MarkupCtrl', function($sco
 
 			_.each($scope.$parent.section.letters, function(l,i){
 
-				//	l.classes= new Array()
+					l.classes= new Array()
 			})
 			//$scope.markup.$parent.letters = new Array()
 			//console.log($scope.markup)
 					//	console.log($scope.markup.$parent)
 			//console.log($scope.$parent.section.letters)
                 _.each($scope.$parent.section.letters, function(l){
-                	//	l.classes = new Array();
+                	l.classes = new Array();
 				})
 
             var st_at = $scope.markup.start-$scope.$parent.section.start
@@ -236,18 +245,34 @@ angular.module('musicBox.controller', []).controller('MarkupCtrl', function($sco
 		
         if(oldValue && newValue && newValue !== oldValue){
       	//$scope.handle_change_range(oldValue,newValue,  'start')
-      	    	$scope.map_letters() 	
+      	       $scope.unmap_letters( oldValue, 'start')
+
+      	    	$scope.map_letters( newValue, oldValue, 'start') 	
 		}	 
    });	
 
    $scope.$watch('markup.end', function(  newValue, oldValue) {
-        if($scope.markup && $scope.markup.type!=='container' &&  oldValue && newValue && newValue !== oldValue){
+        if(oldValue && newValue && newValue !== oldValue){
        // $scope.handle_change_range(oldValue, newValue,  'end')
-         $scope.map_letters() 	
+       $scope.unmap_letters( oldValue, 'start')
+         	$scope.map_letters(newValue, oldValue, 'end') 	
+		}
+   });	
+     $scope.$watch('markup.type', function(  newValue, oldValue) {
+        if(oldValue && newValue && newValue !== oldValue){
+       // $scope.handle_change_range(oldValue, newValue,  'end')
+       $scope.unmap_letters( oldValue, 'start')
+         	$scope.map_letters(newValue, oldValue, 'end') 	
 		}
    });	
   
-
+    $scope.$watch('markup.subtype', function(  newValue, oldValue) {
+        if(oldValue && newValue && newValue !== oldValue){
+       // $scope.handle_change_range(oldValue, newValue,  'end')
+	       $scope.unmap_letters( oldValue, 'start')
+	       $scope.map_letters(newValue, oldValue, 'end') 	
+		}
+   });	
 
     $scope.$watch('markup.position', function( newValue, oldValue ) {
 				        // only for markups which ranges match container
@@ -367,7 +392,14 @@ angular.module('musicBox.controller', []).controller('MarkupCtrl', function($sco
 			}
 		}
 		if(event_name == 'click'){
+			
+
 			$scope.markup.selected = !$scope.markup.selected
+if($scope.markup.type == 'container'){
+$scope.markup.editing = !$scope.markup.editing 
+
+}
+
 		}
 		if($scope.markup.editing === true){
 			$scope.markup.selected = true;
@@ -375,13 +407,18 @@ angular.module('musicBox.controller', []).controller('MarkupCtrl', function($sco
 
 		// focus'
 		if($scope.markup.position=="left" && $scope.markup.editing){
-			$scope.ui.focus_side = 'side_left'
+			$scope.$parent.defocus()
+
+			$scope.$parent.section.focused = 'side_left'
+
 		}
 		else if( ($scope.markup.position=="right" || $scope.markup.position=="inline") && $scope.markup.editing){
-			$scope.ui.focus_side = 'side_right'
+			$scope.$parent.defocus()
+			$scope.$parent.section.focused  = 'side_right'
 		}
 		else{
-			$scope.ui.focus_side = ''
+						$scope.$parent.defocus()
+
 		}
     }	
 
@@ -389,7 +426,7 @@ angular.module('musicBox.controller', []).controller('MarkupCtrl', function($sco
 	
 	// change and save a single markup value-field
 	$scope.change_value = function(field, value, save){
-		markup[field] = value;
+		$scope.markup[field] = value;
 		if(save){
 			$scope.save()
 		}
@@ -407,8 +444,21 @@ angular.module('musicBox.controller', []).controller('MarkupCtrl', function($sco
       * @link docfactory#markup_save
       * @todo ---
       */
+
+
+      $scope.savebk = function () { 
+
+
+      }
      $scope.save = function () {
-        
+
+
+       // var r = new MarkupService($scope.markup)
+       // r.save()
+     // console.log(r.markup)
+      
+
+
         var thos = this;
         var promise = new Object();
         var data = new Object({
@@ -435,12 +485,17 @@ angular.module('musicBox.controller', []).controller('MarkupCtrl', function($sco
           }
 
         
-          promise.query = MarkupRest.markup_save({id:$scope.$parent.doc.slug, mid:$scope.markup._id }, serialize(data) ).$promise;
+          
+
+          promise.query =  MarkupRest.markup_save({id:$scope.$parent.doc.slug, mid:$scope.markup._id }, serialize(data) ).$promise;
+          
+
+
+
           promise.query.then(function (Result) {
             var edited  = Result.edited[0][0]
             console.log(edited)
-           
-              $scope.flashmessage(edited.type +' saved', 'ok' , 3000)
+           	$scope.flashmessage(edited.type +' saved', 'help' , 3000)
              
           }.bind(this));
           promise.query.catch(function (response) {  
@@ -450,6 +505,42 @@ angular.module('musicBox.controller', []).controller('MarkupCtrl', function($sco
 
       }
 
+     $scope.offset= function (s,e){
+
+
+
+
+     		// from array if already present
+     		if(_.contains($scope.ui.offset_queue, $scope.markup)){
+				$scope.ui.offset_queue = _.without($scope.ui.offset_queue,$scope.markup )
+     		}
+
+     		// update s/e
+     		$scope.markup.has_offset = true
+			$scope.markup.offset_start = $scope.markup.offset_start+s
+			$scope.markup.offset_end = $scope.markup.offset_end+e
+
+     		$scope.markup.start = $scope.markup.start+s
+     		$scope.markup.end 	= $scope.markup.end+e
+			
+     		// add to queue
+			$scope.ui.offset_queue.push($scope.markup)
+
+
+		//	
+
+
+
+     }
+
+
+     // apply active selection ranges to a markup then save it.
+	$scope.match_selection = function (markup){
+		// todo: should check notnull / section limits
+		$scope.markup.start     =  $scope.ui.selected_range.start
+		$scope.markup.end 		= $scope.ui.selected_range.end
+		$scope.save()
+	}
 
 	/**
 	* delete a markup on click

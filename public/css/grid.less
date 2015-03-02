@@ -352,7 +352,10 @@ section{
   width:100%;
   float:left;
   word-wrap: break-word;
-  
+  -webkit-transition: width 1s;
+    -moz-transition: width 1s;
+    transition: width 1s;
+
   padding-bottom:10px;
   &.pad{padding:2%}
   &.pad-bottom{padding-bottom:2%}
@@ -388,7 +391,7 @@ section{
    &.has_object_true{}
 
   &.focus_{
-
+     
       .layout_name_wide img, 
       .layout_name_left img, 
        .layout_name_right img, 
@@ -426,16 +429,27 @@ section{
   }
 
   &.focus_side_left{
+ 
 
     .layout_name_left{
          left: -48%;
          width: 30%;
-
+        
+  /*   -webkit-transition: width 1s;
+    -moz-transition:  width 1s;
+    transition:  width 1s;
+    */
           
     }
     .layout_name_inline{
           left: 31%;
           width: 48%;
+       /*   -webkit-transition: width 1s;
+    -moz-transition:  width 1s;
+    transition:  width 1s;
+    */
+
+           
     }
   }
   &.focus_side_background{
@@ -447,6 +461,7 @@ section{
     .layout_name_left{
       left: -48%;
       width: 18%;
+
     }
     .layout_name_right{
          width: 28%;
@@ -458,6 +473,7 @@ section{
 
 
   &.focus_side_right.focus_side_left{
+   
          .layout_name_left{
          left: -40%;
          width: 28%
@@ -478,6 +494,8 @@ section{
 
     /*blue effect on selection*/
     &.selected_true .layout_name_inline{
+   
+
        background: none repeat scroll 0 0 rgba(41, 128, 185, 0.1);
         padding: 2% 0;
 
@@ -695,9 +713,11 @@ section{
     border-radius: 3px;
     float: left;
    
+
     margin-bottom: 15px;
     padding: 5px 2% 7%;
     width: 96%;
+
     label{
 
     }

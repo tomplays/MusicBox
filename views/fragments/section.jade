@@ -4,6 +4,7 @@ div(ng-controller="SectionCtrl")
 	//h1(ng-click="toggle_hello()") {{$index}}
 
 	div(ng-if="section['objects_count']['by_positions'][layout.name].count > 0 || layout.include_even_empty", ng-repeat='layout in available_layouts')
+		// h1{{section['objects_count']['by_positions'][layout.name].count}}
 	
 		div(class="layout_ layout_name_{{layout.name}} has_count_{{section.objects_count.by_positions[layout.name].count}} has_object_{{section.objects_count.by_positions[layout.name].has_object}}")
 			
@@ -13,7 +14,7 @@ div(ng-controller="SectionCtrl")
 			div(ng-if="layout.name == 'right'")
 				
 				div.forced.forced-right()		
-					div(class="markup_ markup_type_container", ng-repeat="markup in section.objects_['container']['inline']", ng-include="fragments['markup'][0].url")
+					
 
 					div(class="markup_ container_class_type_inline" , ng-repeat="markup in section.objects_['container_class']['inline']" ng-include="fragments['markup'][0].url")
 					
@@ -33,7 +34,7 @@ div(ng-controller="SectionCtrl")
 				div.comment_form(ng-if="ui.menus.push_comment.open == $parent.$parent.$parent.$index",  ng-include="fragments['comment_form'][0].url")
 
 
-			div(ng-if="layout.name == 'slidewide'")
+			// div(ng-if="layout.name == 'slidewide'")
 				carousel( interval="1000")
 					slide(ng-repeat="markup in section.objects['media']['slidewide']" active="markup.active" )
 						p 
@@ -41,9 +42,9 @@ div(ng-controller="SectionCtrl")
 
 			div(ng-if="layout.name == 'inline'")
 				
-				
+
 				// letters part !!
-				// h3 {{section.modeletters}}
+				// h3 focuqed : {{section.focused}}
 				// pre {{section.letters}}
 				// h2 
 					a(ng-click="sectionmarkups('selected', true)") {{section_markups.visible}}
@@ -73,7 +74,8 @@ div(ng-controller="SectionCtrl")
 
 				div.fluidtext(fluidtexte, section="section" , ng-bind-html="section.fulltext_block",ng-if="section.modeletters !=='single'") 
 
-
+				div(class="markup_ markup_type_container", ng-repeat="markup in section.objects_['container']['inline']", ng-include="fragments['markup'][0].url")
+				
 				.pusher_section(ng-if="section.editing_text == true && ($parent.$parent.$parent.$last)")
 					i.fa.fa-plus-square.pusher_item.btn(tooltip="new section" ng-click="new_section()") 
 

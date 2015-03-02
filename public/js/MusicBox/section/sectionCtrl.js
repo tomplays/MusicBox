@@ -100,12 +100,7 @@ $scope.attribute_objects = function(){
 
 
 				if(markup.type !=='container'){
-
-
-
-
 					//temp_letters[mr].classes.push(markup.subtype)
-
 					$scope.section.objects_count['all'].count++;
 					$scope.section.objects_count['all'].has_object  = true;
 					$scope.section.objects_count['by_positions'][markup.position].count++;
@@ -153,6 +148,7 @@ $scope.init_= function () {
                 'sectionin' : $scope.$parent.$index,
                 'isolated'  : false,
                 'selected'    : false,
+                'focused'    : '',
                 'editing_text':false,
                 'ready' : 'init',
                 'modeletters' : 'single',
@@ -225,45 +221,54 @@ $scope.$watch('section.cursor_at', function(oldValue, newValue) {
 
 	if(oldValue){
 
-
 	
 			if($scope.section.letters && $scope.section.letters[oldValue]){
 					_.each($scope.section.letters, function(letter,y){
-					    letter.classes = _.without(letter.classes, 'cursor_at')
+						if(letter.classes){
+												    letter.classes = _.without(letter.classes, 'cursor_at')
+
+						}
 					                
 		            })
-					$scope.section.letters[oldValue].classes.push('cursor_at')
+					
 			}
 
 
 
 		 	//if(oldValue !==newValue ){
-		 		if(oldValue && newValue)
+		 		if(oldValue && newValue && $scope.section.letters && $scope.section.letters[newValue])
 		 			{
+		 				$scope.flashmessage('section.cursor_at '+newValue, 'help',2000, true )
 
+		 				if($scope.section.letters[newValue].classes){
+		 						$scope.section.letters[newValue].classes.push('cursor_at')
+console.log('section.cursor_at'+newValue+' was'+oldValue)
+
+		 				}
+		 			
 
 		 		//		alert(oldValue)
 
 		 			}
-		 			console.log($scope.section.letters)
+		 			
 		 		
 
 				// $scope.section.fulltext = $scope.section.fulltext.replace("\n", "")
  				var string  = '';
                 _.each($scope.$parent.containers, function(container){
                     string  += container.fulltext;
-                    
-                     console.log(container.fulltext)
+                    console.log(container.fulltext)
 
                 })
 
 
 
             $scope.doc.content = string;
-			if( $scope.ui.selected_range.insert_direction== 'save'){
-					var this_sync = new DocumentService()
-					this_sync.SetSlug($scope.$parent.doc.slug)
-					this_sync.docsync()
+
+
+			if( $scope.ui.selected_range.insert_direction == 'save'){
+					$scope.sync_queue()
+
 			}
 					
 					//$scope.section.letters[$scope.ui.selected_range.insert].classes.push('h1')
@@ -419,6 +424,7 @@ $scope.add= function (){
 					
 					//console.log(mi)
             	    $scope.flashmessage(mi.type +' inserted', 'ok' , 1400, false)
+					
 					$scope.close_pusher()
 
             	    if(!$scope.section.objects_){
@@ -435,7 +441,9 @@ $scope.add= function (){
 						}
 					}
 					
-					
+					$scope.section['objects_count']['by_positions'][mi.position].count++
+
+
 
 					$scope.section.objects_[mi.type][mi.position].push(mi)
 					console.log($scope.section.objects_)
@@ -476,9 +484,15 @@ $scope.save_section= function (){
 		$scope.add();	
 	}
 
+	$scope.defocus = function (){
 
+		  _.each($scope.$parent.containers, function(container){
+            container.focused  = ''          
+		  })
+	}
 
 	$scope.close_pusher = function (){
+		 $scope.defocus()
 		$scope.$parent.ui.focus_side 				= ''
 		$scope.$parent.ui.menus.push_comment.open 	= -1
 		$scope.$parent.push.metadata 				= '';
@@ -489,6 +503,18 @@ $scope.save_section= function (){
 
 	// open close the pusher box.
 	$scope.open_pusher = function (){
+		
+		$scope.defocus()
+		
+		if($scope.$parent.ui.menus.push_comment.open == $scope.$parent.$index){
+			$scope.$parent.ui.menus.push_comment.open =-1
+		}
+		else{
+			$scope.$parent.ui.menus.push_comment.open = $scope.$parent.$index
+			$scope.section.focused  = 'side_left'
+		}
+		
+
 	
 		if(!$scope.push.type){
 			$scope.push.type = 'comment'
@@ -499,8 +525,8 @@ $scope.save_section= function (){
 		if(!$scope.push.position){
 			$scope.push.position = 'under'
 		}
-		$scope.$parent.ui.focus_side = 'side_left'
-		$scope.$parent.ui.menus.push_comment.open = $scope.$parent.$index
+		
+		
 		$scope.section.modeletters = 'single'
 
 		return
