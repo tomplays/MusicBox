@@ -66,6 +66,7 @@ musicBox.run(function($rootScope, $http, $route) {
 musicBox.factory('socket', function($rootScope, $http, $location)  {
   //  app.locals.port=
   if(SOCKET_URL !==""){
+     console.log('loading sockets')
        var socket = io.connect(SOCKET_URL+':'+SOCKET_SERVER_PORT);
   
     return {
@@ -96,6 +97,7 @@ musicBox.factory('socket', function($rootScope, $http, $location)  {
 
   }
   else {
+     console.log('not loading sockets')
     var socket = '';
     return {
       on:  function () {},

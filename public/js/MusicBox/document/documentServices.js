@@ -19,9 +19,8 @@ can redirect window
  * @param {Factory} docfactory -  angular custom factory for document 
  * @inject $rootScope, $http, $location,$sce, $routeParams, socket, renderfactory, $locale, $timeout
  */
-
 var temp_scope;
-angular.module('musicBox.DocumentService', [])
+angular.module('musicBox.DocumentService',[])
 .factory("DocumentService", function($rootScope, $http,$sce, $resource,$location, $routeParams ,renderfactory, DocumentRest, UserService, $timeout, $locale) {
 
   
@@ -46,13 +45,40 @@ angular.module('musicBox.DocumentService', [])
     promise.then(function (Result) {
           $rootScope.doc = Result.doc
           $rootScope.loaded_markups = Result.doc.markups;
-      //    $rootScope.doc.markups  = Result.doc.markups;
-          this.populate(Result)
+          //    $rootScope.doc.markups  = Result.doc.markups;
+         
+
+          $rootScope.doc_options      =    this.apply_object_options('document', Result.doc.doc_options)
+          $rootScope.author_options   =    this.apply_object_options('author',   Result.doc.user.user_options)
+               
+
+              if(Result.doc.room){
+                  $rootScope.doc.room__id = Result.doc.room._id;
+                 // $rootScope.room_options =  self.apply_object_options('room', d.doc.room.room_options)
+               }
+               else{
+                   $rootScope.doc.room__id = '';
+                   $rootScope.doc.room = new Object({'_id':'-'});
+               }
+             
+                var encoded_url = root_url+':'+PORT;
+                if(Result.doc.slug !=='homepage'){
+                    encoded_url += '/doc/'+Result.doc.slug;
+                }
+                $rootScope.doc.encoded_url = urlencode(encoded_url);
+                $rootScope.doc.text_summary = '';
+
+                $rootScope.sections_to_count_notice = ($rootScope.sectionstocount == 0) ? true : false;
+        
+                $rootScope.objects_sections = [];
+                $rootScope.objects_sections['global_all'] = [];
+
+
           new UserService().SetFromApi(Result.userin)
+          $rootScope.containers = _.filter(Result.doc.markups, function(td){ return  td.type == 'container'; });
           $rootScope.doc_owner = Result.is_owner;
           console.log('is owner or has secret ('+ Result.is_owner+')')
-
-
+       
     
 
 
@@ -77,35 +103,8 @@ angular.module('musicBox.DocumentService', [])
         
           // filter markups > only if markup.type ==  "container"
         
-          $rootScope.doc.formated_date = '';
+         
        
-
-          $rootScope.doc_options      =    this.apply_object_options('document', d.doc_options)
-          $rootScope.author_options   =   this.apply_object_options('author',   d.user.user_options)
-               
-
-              if(d.room){
-                  $rootScope.doc.room__id = d.room._id;
-                 // $rootScope.room_options =  self.apply_object_options('room', d.doc.room.room_options)
-               }
-               else{
-                   $rootScope.doc.room__id = '';
-                   $rootScope.doc.room = new Object({'_id':'-'});
-               }
-             
-                var encoded_url = root_url+':'+PORT;
-                if(d.slug !=='homepage'){
-                    encoded_url += '/doc/'+d.slug;
-                }
-                $rootScope.doc.encoded_url = urlencode(encoded_url);
-                $rootScope.doc.text_summary = '';
-
-                $rootScope.sections_to_count_notice = ($rootScope.sectionstocount == 0) ? true : false;
-        
-                $rootScope.objects_sections = [];
-                $rootScope.objects_sections['global_all'] = [];
-
-
 /*
         if($rootScope.max_reached_letter !==  $rootScope.doc.content.length){
           console.log('unreached letter found :'+ $rootScope.max_reached_letter +'--'+$rootScope.doc.content.length)
@@ -229,7 +228,7 @@ angular.module('musicBox.DocumentService', [])
 
           }
            
-         console.log('SAVED')
+           console.log('SAVED')
             thos.flash_message('-', 'line' , 2400, false)
 
            

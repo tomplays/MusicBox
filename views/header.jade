@@ -15,11 +15,8 @@ head
 	meta(property="og:description", content="#{doc_excerpt}")
 	meta(property="og:site_name", content="#{site_title}")
 	meta(property="og:url", content="#{doc_slug_discret}")
-
 	link(rel='icon', type='image/png', href='favicon.png')
-		
 	script(type='text/javascript').
-
 		var musicBox
 		var SOCKET_URL = '#{socket_url}'
 		var SOCKET_SERVER_PORT = '#{socket_server_port}'
@@ -27,7 +24,6 @@ head
 		var root_url = '#{root_url}'
 		var api_url = '#{api_url}'
 		var doc_include_js = '#{doc_include_js}'
-		
 		var USERIN = new Object({'username':'#{user_in.username}', 'image_url': '#{user_in.image_url}', '_id': '#{user_in._id}'} )
 
 	// room view ? 
@@ -45,7 +41,7 @@ head
 	link(rel='stylesheet', href='/bower_components/font-awesome/css/font-awesome.css')
 	// endbower 
 
-	// build:js bower_components/mbmin.js 
+	// build:js mbmin.js 
 	// bower:js
 	script(src='/bower_components/angular/angular.js')
 	script(src='/bower_components/angular-resource/angular-resource.js')
@@ -102,16 +98,22 @@ head
 
 		script(type='text/javascript', src='js/MusicBox/markup/markupCtrl.js')
 		// script(type='text/javascript', src='js/MusicBox/markup/markupServices.js')
+		script(type='text/javascript', src='js/MusicBox/markup/markupDirectives.js')
+
 
 		script(type='text/javascript', src='js/MusicBox/markup/markupRest.js')
 
 		script(type='text/javascript', src='js/MusicBox/section/sectionCtrl.js')
+		script(type='text/javascript', src='js/MusicBox/section/sectionDirectives.js')
 
 
 		// document level
 		script(type='text/javascript', src='js/MusicBox/document/documentServices.js')
 		script(type='text/javascript', src='js/MusicBox/document/documentRest.js')
 		script(type='text/javascript', src='js/MusicBox/document/documentCtrl.js')
+		// script(type='text/javascript', src='js/MusicBox/document/document.js')
+
+		script(type='text/javascript', src='js/MusicBox/document/documentDirectives.js')
 
 		// user 
 		script(type='text/javascript', src='js/MusicBox/user/userServices.js')
@@ -122,7 +124,7 @@ head
 		script(type='text/javascript', src='js/app.js')
 
 		if(socket_url !== '')
-			script(src='#{socket_url}:#{socket_server_port}/socket.io/socket.io.js')
+			// script(src='#{socket_url}:#{socket_server_port}/socket.io/socket.io.js')
 	
 
 	

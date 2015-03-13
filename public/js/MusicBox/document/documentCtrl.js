@@ -162,7 +162,7 @@ $scope.SetSlug = function (slug) {
 
 
  $scope.RenderConfig = function () {
-      new renderfactory().init()
+    new renderfactory().init()
       
 
     if($routeParams.fresh ){
@@ -173,27 +173,16 @@ $scope.SetSlug = function (slug) {
 
   }
 
-	$scope.load_doc = function (){
-		console.log('load service call')
 	
-		
-
-	
-      // console.log(Result);
-		
-		return
-	}
 	
 	$scope.init = function (){
 		console.log('DocumentCtrl init')
 		$scope.SetSlug()
 		$scope.RenderConfig()
-		doc.Load($scope.slug)
-		
+		doc.Load($scope.slug)	
 		return
 	}
 	
-
 	// like ng-init
 	// "direct" call
 	$scope.init()
@@ -329,31 +318,7 @@ $scope.SetSlug = function (slug) {
 	}
 
 
-	// todo refactor to replace_markup
-	$scope.markup_type = function(markup, t){
-		markup.type = t;
-		return;
-	}
 	
-	// todo refactor to replace_markup
-	$scope.markup_subtype = function(markup, t){
-		console.log(t)
-		markup.subtype = t;
-		return;
-	}
-	
-	// todo refactor to replace_markup
-	$scope.markup_position = function(markup, t){
-		console.log(t)
-		markup.position = t;
-		return;
-	}
-	
-	// change and save a single markup value-field
-	$scope.replace_markup = function(markup, field, value){
-		markup[field] = value;
-		doc.markup_save(markup)
-	}
 
 	$scope.open_pusher_details= function (type){
 
@@ -372,11 +337,7 @@ $scope.SetSlug = function (slug) {
 		doc.offset_markup(markup, start_qty, end_qty)
 	}
 
-	// section && markup
-	$scope.markup_save = function (markup){
-		$scope.ui.focus_side = ''
-		doc.markup_save(markup)
-	}
+	
 	
 	$scope.scrollToAnchor= function(anchorID){
 		// from : https://docs.angularjs.org/api/ng/service/$anchorScroll
@@ -395,18 +356,12 @@ $scope.SetSlug = function (slug) {
 	// open "sub-tools" tabs editor for markup or section 
 
 	$scope.markup_editor_tabs= function (tab, markup){
-
+		alert("old ??")
 		markup.editor_tab  = tab;
 	}
 	
 
-	$scope.object_tools = function (object){
-
-		if(object.object_tools && object.object_tools === true){
-			return object.object_tools = false;
-		}
-		return object.object_tools = true;
-	}
+	
 
 	$scope.wrapin_section = function(){
 			$scope.objects_in_range('containers');
@@ -703,7 +658,7 @@ console.log(m)
 		if(newValue){
 			console.log('- Document level')
 			console.log('- title change watched')
-			document.title = newValue+' *watched '
+			document.title = newValue
 		}
 	});
 
@@ -725,7 +680,6 @@ console.log(m)
 			$scope.markups  = _.sortBy( newValue,function (num) {
 	             return num.start;
 	        });
-	        $scope.containers = _.filter(newValue, function(td){ return  td.type == 'container'; });
 
 		
 	}, true);

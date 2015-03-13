@@ -1,4 +1,3 @@
-
 angular.module('musicBox.DocumentRest', [])
 .factory("DocumentRest", function($resource, $rootScope){
 

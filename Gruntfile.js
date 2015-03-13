@@ -21,15 +21,8 @@ module.exports = function(grunt) {
 		vendor: grunt.file.readJSON(".bowerrc").directory,
 		cfg : grunt.file.readJSON('config.json'),
 
-	useminPrepare: {
-     
-    },
-    concat: {
-      
-       // src: 'public/js/**/*.js',
-       // dest: 'tmp/script.js'
-     
-    },
+	
+   
 		wiredep: {
 			app: {
 				src: ['views/index.html', 'views/index.jade', 'views/header.jade'],
@@ -98,8 +91,7 @@ module.exports = function(grunt) {
 										username :'grunt'
 									}
 					}
-
-
+					
 
 				},
 				files: [ {
@@ -108,12 +100,18 @@ module.exports = function(grunt) {
 					dest: "dist",
 					cwd: "views",
 					ext: '.html'
-				} ]
+				}, {
+							expand: true,
+							src: "public/js/MusicBox/**/*.jade",
+							ext: '.tpl.html'
+						}
+				
+				 ]
 
 			 
 			}
 		},
-
+		
 		forever: {
 			server1: {
 				options: {
@@ -124,15 +122,61 @@ module.exports = function(grunt) {
 		// Concat angular templates
 		ngtemplates: {
 			dist: {
-			cwd: "views",
-			src: "**/*.jade",
-			dest: "dist/template.js",
+		
+			src: "dist/index.html",
+			dest: "dist/mbmin.js",
 				options: {
 					module: "MusicBox",
-				//	usemin: "dist/script/scripts.js" // <~~ This came from the <!-- build:js --> block
+					usemin: "mbmin.js" // <~~ This came from the <!-- build:js --> block
 				}
 			}
 		},
+		uglify: {
+			options: {
+				beautify: false,
+				preserveComments: "some"
+			}
+		},
+		useminPrepare: {
+			html: "dist/index.html",
+				options: {
+					staging: "tmp",
+					flow: {
+						html: {
+							steps: {
+								js: ["concat", "uglifyjs"],
+							//	css: ["cssmin"]
+							},
+							post: {}
+						}
+					}
+				}
+		},
+		usemin: {
+html: "dist/index.html",
+css: ["dist/style/{,*/}*.css"],
+js: ["dist/js/{,*/}*.js"],
+options: {
+assetsDirs: ['dist','dist/image']
+}
+},
+
+// Renames files for browser caching purposes
+filerev: {
+dist: {
+src: [
+"dist/script/{,*/}*.js",
+"dist/style/{,*/}*.css",
+"dist/image/{,*/}*.{ico,png,jpg,jpeg,gif,webp,svg}",
+"dist/font/*"
+]
+}
+},
+
+
+
+
+
 		copy: {
 			dist: {
 				files: [{
@@ -150,6 +194,22 @@ module.exports = function(grunt) {
 				}]
 			},
 		},
+// Generate HTML5 Cache Manifest files
+manifest: {
+options: {
+basePath: "public",
+network: ["*"],
+preferOnline: true,
+verbose: false,
+timestamp: true
+},
+dist: {
+src: [
+"js/MusicBox/**/*.js"
+],
+dest: "public/manifest.appcache"
+}
+},
 
 		// Deployment
 		rsync: {
@@ -180,7 +240,7 @@ module.exports = function(grunt) {
 			}
 		},
 
-
+		
 		watch: {
 			js: {
 				options: { livereload: true },
@@ -198,13 +258,12 @@ module.exports = function(grunt) {
 				tasks: ["wiredep"]
 			},
 
-			/*
+			
 			templates: {
-				 options: { livereload: true },
-				files: ['views/partials/*.jade'], // compiling  auto-dedug
-				tasks: ['jade']
+				files: ['public/js/MusicBox/**/*.jade'], // compiling  auto-dedug
+				tasks: ['jade', 'manifest']
 			},
-			*/
+			
 			api_folder:{
 				options: { livereload: true },
 				files: ['api/**/*.js'], // restart server on controllers, routes and models changes
@@ -216,10 +275,14 @@ module.exports = function(grunt) {
 	});
 	//grunt.registerTask('dev', ['forever']); // , 'connect:server' // 'forever', 
 	grunt.registerTask('lesscss', ['less']); // , 'connect:server' // 'forever', 
+
+
+
 	grunt.registerTask('stop', ['forever:server1:stop']); // , 'connect:server' // 'forever', 
 	grunt.registerTask('default', [
 				'forever:server1:restart','watch', 'wiredep'
 	]);
+
 
 	
 
@@ -235,7 +298,7 @@ module.exports = function(grunt) {
 				'connect:livereload'
 	]);
 
-	grunt.registerTask('minify', [
+	grunt.registerTask('minify', ['useminPrepare', 'ngtemplates','concat','usemin'
 		  
 		 
 	]);

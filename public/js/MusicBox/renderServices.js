@@ -21,8 +21,6 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
         //console.log($rootScope.i18n.id)
         $rootScope.objSchemas                  =   self.objSchemas(); 
 
-
-
         //$rootScope.$emit('renderEvent', { action:'render_ready' });
         self.config                           = [];
         self.state                            = [];
@@ -38,8 +36,6 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
         $rootScope.available_sections_objects =   self.objAvailable(); 
         $rootScope.available_layouts          =   self.posAvailable();
         $rootScope.item_position              = '';
-
-
         $rootScope.fragments                 =   self.fragmentsAvailable();
        
         // $rootScope.classesofsections       =   self.classesAvailable();
@@ -68,31 +64,14 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
         // used in section editing
         $rootScope.ui.sync_sections           = true;
         
-        $rootScope.ui.focus_side              = ''
-        
+      
         // ?mode=
-        if($routeParams.mode){
-          $rootScope.ui.renderAvailable_active =  $routeParams.mode
-        }
-        else{
-          $rootScope.ui.renderAvailable_active =  $rootScope.ui.renderAvailable[0]
-        }
-      
-        $rootScope.ui.secret = false;
-        
-        // ?secret=
-        if($routeParams.secret){
-               $rootScope.ui.secret            =  $routeParams.secret
-               console.log('using secret')
-        }
-
-
-        // &debug
-        if($routeParams.debug){
-           $rootScope.ui.debug                 = true;
-        }
-      
-      
+        $rootScope.ui.renderAvailable_active =  $routeParams.mode ? $routeParams.mode : $rootScope.ui.renderAvailable[0]
+        // ?secret=  
+        $rootScope.ui.secret  =  $routeParams.secret ? $routeParams.secret : false
+        // ? debug
+        $rootScope.ui.debug   = $routeParams.debug ? true : null;
+       
       
 
         if($routeParams.docid){

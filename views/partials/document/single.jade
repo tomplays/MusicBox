@@ -45,7 +45,9 @@ div(ng-if="ui.renderAvailable_active == 'card'", ng-include="fragments['post_exc
 
 div(ng-hide="ui.renderAvailable_active == 'doc_options' || ui.renderAvailable_active == 'card' || ui.renderAvailable_active == 'dataset' " , class="sections_count_{{sectionstocount}} sections_container")
 
-	section(ng-include="fragments['section'][0].url" , id="anchor{{$index+1}}" , ng-repeat='section in containers' ,  style="{{section.section_styles}} background-repeat:no-repeat;", class="focus_ focus_{{section.focused}} {{section.section_classes}} selected_{{section.selected}}")
+	section(id="anchor{{$index+1}}" , ng-repeat='section in containers' ,  style="{{section.section_styles}} background-repeat:no-repeat;", class="focus_ focus_{{section.focused}} {{section.section_classes}} selected_{{section.selected}}")
+		mb-section(ng-controller="SectionCtrl")
+
 
 
 

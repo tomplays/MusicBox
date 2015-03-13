@@ -1,0 +1,71 @@
+
+<div ng-if="section['objects_count']['by_positions'][layout.name].count &gt; 0 || layout.include_even_empty" ng-repeat="layout in available_layouts">
+  <!-- h1{{section['objects_count']['by_positions'][layout.name].count}}-->
+  <div class="layout_ layout_name_{{layout.name}} has_count_{{section.objects_count.by_positions[layout.name].count}} has_object_{{section.objects_count.by_positions[layout.name].has_object}}">
+    <!-- title, author, date, ..-->
+    <doc-title ng-if="(layout.name == 'center') &amp;&amp; ($parent.$parent.$first)">		</doc-title>
+    <div ng-if="layout.name == 'right'">
+      <div class="forced forced-right">
+        <!-- sections, container_class, inline_markup, media( if background)-->
+        <div ng-repeat="markup in section.objects_['container']['inline']" ng-include="fragments['markup'][0].url" class="markup_ markup_type_container"></div>
+        <div ng-repeat="markup in section.objects_['container_class']['inline']" ng-include="fragments['markup'][0].url" class="markup_ container_class_type_inline"></div>
+        <div ng-repeat="markup in section.objects_['markup']['inline']" ng-include="fragments['markup'][0].url" class="markup_ markup_type_inline"></div>
+        <div ng-repeat="markup in section.objects['media']['background']" ng-include="fragments['markup'][0].url" class="markup_ markup_type_bg"></div>
+      </div>
+    </div>
+    <div ng-if="object.visible !==false &amp;&amp; layout.include_objects !==false &amp;&amp; layout.name !=='slidewide' " ng-repeat="object in available_sections_objects">
+      <!-- {{section.objects_[object][layout.name]}}-->
+      <div ng-repeat="markup in section.objects_[object][layout.name]" ng-include="fragments['markup'][0].url" class="markup_ markup_type_{{markup.type}}"></div>
+    </div>
+    <div ng-if="(doc_options.comments_open.value !=='false' || !doc_options.comments_open.value  ) &amp;&amp; layout.name == 'left'"><span tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.COMMENT.label}}" ng-click="open_pusher()" class="open_comment">+</span>
+      <div ng-if="ui.menus.push_comment.open == $parent.$parent.$parent.$index" ng-include="fragments['comment_form'][0].url" class="comment_form"></div>
+    </div>
+    <!-- div(ng-if="layout.name == 'slidewide'")
+    carousel( interval="1000")
+    	slide(ng-repeat="markup in section.objects['media']['slidewide']" active="markup.active" )
+    		p 
+    			img(src="{{markup.metadata}}")
+    
+    -->
+    <div ng-if="layout.name == 'inline'">
+      <!-- h2 
+      a(ng-click="sectionmarkups('selected', true)") {{section_markups.visible}}
+      
+      
+      -->
+      <div ng-include="fragments['inline_tools'][0]['url']" ng-if="section.editing_text ===true" class="inline_tools"></div>
+      <div ng-if="section.editing_text ===true" class="fluidtextarea">
+        <Edit>section text : </Edit>
+        <textarea ng-trim="false" key-listener="changeFunction()" ng-model="section.fulltext"></textarea>
+        <!-- a.btn_ok(ng-click="save_section(section)") save-->
+        <!-- a.btn_ok(ng-click="doc_sync()") save-->
+      </div>
+      <div ng-if="section.modeletters=='single'" class="theletters">
+        <!-- ng-class="l.classes",  -->
+        <!-- ng-bind-html="l.char",--><span ng-class="l.classes" lt="l" ng-repeat="l in section.letters track by $index" class="lt"> </span>
+      </div>
+      <div fluidtexte="fluidtexte" section="section" ng-bind-html="section.fulltext_block" ng-if="section.modeletters !=='single'" class="fluidtext"> </div>
+      <div ng-if="section.editing_text == true &amp;&amp; ($parent.$parent.$parent.$last)" class="pusher_section"><i tooltip="new section" ng-click="new_section()" class="fa fa-plus-square pusher_item btn"> </i></div>
+    </div>
+    <div ng-if="(layout.name == 'global') &amp;&amp; ($parent.$parent.$last) &amp;&amp; objects_sections['global_all'].length &gt; 0">
+      <div class="inside">
+        <h4>global</h4>
+        <div ng-repeat="markup in objects_sections['global_all']" ng-include="fragments['markup'][0].url" class="markup_ markup_type_{{markup.type}}">		</div>
+      </div>
+    </div>
+    <div ng-if="layout.name == 'global' &amp;&amp; $parent.$parent.$last &amp;&amp;  ui.isolated_markups.length &gt; 0" class="isolated">
+      <h4>isolated</h4>
+      <div ng-repeat="markup in ui.isolated_markups " ng-include="fragments['markup'][0].url"></div>
+    </div>
+    <div ng-if="layout.name == 'global' &amp;&amp; $parent.$parent.$last  &gt; 0 " class="virtuals">
+      <div ng-repeat="virtual in virtuals">
+        <div ng-if="virtual.visible" ng-bind-html="virtual.string"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- render into the layout loop, only "if last"-->
+<!-- made to apply last section styles to footer-->
+<footer ng-if="$last">
+  <p ng-bind-html="doc_options.footer_center_html.value"></p>
+</footer>

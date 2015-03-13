@@ -1,6 +1,5 @@
 // the document title, time, author... 
 // + document options editor
-
 div.doc_header()
 
 
@@ -16,9 +15,6 @@ div.doc_header()
 
 		h3(ng-bind-html="ui.selected_range.start")
 		h3(ng-bind-html="ui.selected_range.end")
-
-
-
 	h2(ng-bind-html="doc_options.doc_notices_before_title.value")
 
 	// h2(ng-bind-html="doc_options.doc_notices_before_title.value+'&nbsp;'" , class="editing_{{ui.editing_doc_notices_before_title}}" , ng-dblclick="edit_doc_option('doc_notices_before_title')") 
@@ -49,9 +45,6 @@ div.doc_header()
 		input(ng-if="ui.editing_doc_notices_after_title",   ng-model="doc_options.doc_notices_after_title.value", name="doc_options.doc_notices_after_title.value")
 		a.btn_ok.float_right(ng-click="edit_doc_option('doc_notices_after_title')") Save
 			
-	
-
-	
 	time.head_left(ng-if="doc_options.display_date.value =='doc_header' || !doc_options.display_date.value") {{doc.formated_date}}&nbsp;
 		
 		span.published-header.hint(tooltip="{{doc.published}}" ng-click="expand_tools('quick_tools_published')", ng-if="doc_owner == true  || ui.secret")

@@ -1,5 +1,5 @@
 
-angular.module('musicBox.controllerz', []).controller('SectionCtrl', function($scope, $http, DocumentService, MarkupRest) {
+angular.module('musicBox.section_controller', []).controller('SectionCtrl', function($scope, $http, DocumentService, MarkupRest) {
 
 $scope.distribute_arrays = function(){
 	console.log($scope.section.objects_)

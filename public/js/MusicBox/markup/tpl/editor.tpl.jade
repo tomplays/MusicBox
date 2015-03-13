@@ -1,15 +1,19 @@
-// editor for markup object.
+// editor for markup object
 // can be in any position of the layout depending markup position
 
+
 h5 {{render_config.i18n.CUSTOM.ACTIONS.edit}} {{markup.type}}
+form(name="myForm")
 
-// p {{objSchemas[markup.type]}}
-// p {{markup.explicit_string}}
-
-form(name="myForm")		
-	
+	// tabs
+	// ranges
 	tabset.editor-main-tab(justified="true")
 		// vertical="true" type="pills"
+
+		// metadata
+		// type
+		// subtype
+		// position
 
 		tab(heading="Edit {{markup.objSchemas.modes.editor.tabs.metadata}}" ng-if="markup.objSchemas.modes.editor.tabs.metadata")
 
@@ -36,12 +40,9 @@ form(name="myForm")
 					li(ng-repeat="t in available_sections_objects")
 						span {{objSchemas[t].display_name}}
 						i.fa.btn_action(ng-class="{ 'selected' : markup.type == t}" , class="fa-{{t}}" , ng-click="change_value('type',t, true)") 
-				
 		
 		tab(ng-if="markup.objSchemas.modes.editor.tabs.subtype"    heading="{{markup.objSchemas.modes.editor.tabs.subtype}}") 	
 					
-		
-			
 			span.field.typer.sub
 				label.label_type {{render_config.i18n.CUSTOM.ACTIONS.select}} subtype
 				// div(ng-if="markup.objSchemas.subtype.free_input")
@@ -60,29 +61,13 @@ form(name="myForm")
 				// h2 {{render_config.i18n.CUSTOM.POSITIONS[markup.position]}}
 				div(class="btn-group typer.position")
 					label(ng-repeat="t in markup.objSchemas.positions.available" class="btn btn-primary" ng-click="change_value('position', t, true)" , ng-model="markup.position" btn-radio="t")
-							
 							{{render_config.i18n.CUSTOM.POSITIONS[t]}}
-				
-				
-
-				// input(ng-model="markup.position" ,type="text")
-				// select(ng-options="pos for pos in objSchema[markup.type].position_available" , ng-model="markup.position", name="markup.position")
-
-		
-
-	.section_tool_more(ng-if="markup.object_tools")
-		
-		span.field.smallinput()
-			label  depth
-			input( ng-model="markup.depth" type="text" )
-					
 	
 	.object-tools(ng-if="markup.type =='child' ")					
 		span.field.smallinput()
 			label sub-doc id
 			input(ng-model="markup.doc_id_id" , type="text")
 
-		
 	.object-tools(ng-if="markup.objSchemas.modes.editor.fields.ranges.display")
 		// tab(heading="ranges" ) 			
 		label set start-end ranges
@@ -98,17 +83,22 @@ form(name="myForm")
 			span.ranges_tools
 				i.fa.fa-text-width.match_selection(title="re-match ranges from active selection", ng-click="match_selection(markup)" ) 
 			
-
 	.object-tools(ng-if="doc_owner")
 		label Moderation / status
 
-		i.fa.fa-flag.btn_action(style="color:green" ng-if="markup.status == 'pending' " ng-click="change_value('status','approved', true)") approved
-		i.fa.fa-flag.btn_action(style="color:red"  ng-if="markup.status == 'approved' " ng-click="change_value('status','pending', true)") pending	
+		i.fa.fa-flag.btn_action(style="color:green" ng-if="markup.status == 'pending' " ng-click="change_value('status','approved', true)") set as approved
+		i.fa.fa-flag.btn_action(style="color:red"  ng-if="markup.status == 'approved' " ng-click="change_value('status','pending', true)") set as pending	
+	
+	.object-tools.object-tools_more(ng-if="markup.object_tools")
+			label  depth
+			input( ng-model="markup.depth" type="text" )
+			h6 {{markup.fulltext}}
+			label  reverse text
+			input(ng-model="markup.metadata" type="text" )
 
 	.object-tools
-		i.fa.fa-sliders.btn_action(tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.more_options}}" ng-click="object_tools(markup)")
+		i.fa.fa-sliders.btn_action(tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.more_options}}" ng-click="toggle_attribute('object_tools')")
 		i.fa.fa-save.btn_action(tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.save}}" ng-click="save()")
 
 		
-
 		i.fa.fa-remove.btn_action(tooltip-placement="left" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.delete}}" ng-click="delete()")

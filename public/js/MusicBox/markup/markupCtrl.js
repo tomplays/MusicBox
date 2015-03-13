@@ -67,6 +67,7 @@ angular.module('musicBox.controller', []).controller('MarkupCtrl', function($sco
             'forced'		 : ($scope.markup.type =='container' || $scope.markup.type =='markup' || $scope.markup.type =='container_class' ) ? true : false,
             'touched'        : false,
             'ready'          : 'init',
+            'fulltext'        : $scope.fulltext(),
             'sectionin' 	 :  $scope.$parent.$index,
          //   'sectionin'			:,
             'doc_id_id'      : '', // special cases for child documents (refs as doc_id in markup record)
@@ -81,88 +82,73 @@ angular.module('musicBox.controller', []).controller('MarkupCtrl', function($sco
 		$scope.markup=  _.extend($scope.markup, markup_);
        	
   		
-				console.log('attribute_objects')
-				if($scope.markup.type =='container'){
-					 console.log('attribute_objects self container')
-				}
-              
-          
-
-
-				
-		       	 $scope.markup.visible = false;
-				 if($scope.markup.deleted !== true && ($scope.markup.status == 'approved' || $scope.markup.by_me ==true || $scope.markup.can_approve == true) ) {
-				    $scope.markup.visible = true;
-				 }
+		//console.log('attribute_objects')
+		if($scope.markup.type =='container'){
+			 console.log('attribute_objects self container')
+		}
+              	
+		$scope.markup.visible = false;
+		if($scope.markup.deleted !== true && ($scope.markup.status == 'approved' || $scope.markup.by_me ==true || $scope.markup.can_approve == true) ) {
+			$scope.markup.visible = true;
+		}
 		       
 
 
+		if($scope.markup.type=='container_class' ){ // or pos == inlined
+		   $scope.section.section_classes += $scope.markup.metadata+' ';
+		}
 
-				 /*
-		        // using "memory" of ui.
-		        _.each( $scope.$parent.ui.selected_objects, function(obj){
-		          //console.log('keep opn'+obj._id)
-		          if($scope.markup._id == obj._id){
-		               $scope.markup.selected = true;
-		            // should select ranges too..
-		          }
-		        })
-		         _.each( $scope.$parent.ui.editing_objects, function(obj){
-		          //console.log('keep opn'+obj._id)
-		          if($scope.markup._id == obj._id){
-		            $scope.markup.editing = true;
-		          }
-		        })
-
-				*/
-
-
-				if($scope.markup.type=='container_class' ){ // or pos == inlined
-				   $scope.section.section_classes += $scope.markup.metadata+' ';
-				}
-
-		        if($scope.markup.type =='child'){ 
-		          // to keep doc_id._id (just id as string) in model and not pass to post object later..
-		          if($scope.markup.doc_id){ 
-		             $scope.markup.doc_id_id = $scope.markup.doc_id._id;
-		             if($scope.markup.doc_id.doc_options){
-		               // m.$scope.markup.child_options = [];
-		               var  options_array =  [];
-		                $scope.markup.child_options = [];
-		                _.each($scope.markup.doc_id.doc_options , function(option){
-		                  options_array[option.option_name] = option.option_value
-		                });
-		                $scope.markup.child_options = options_array
-		              }
-		          }
-		          //console.log('children call ...')
-		        }
-		       	/*
-		        if($scope.markup.type =='data'){} 
-       		 	if( ($scope.$parent.objSchemas[$scope.markup.type].map_range && $scope.$parent.objSchemas[$scope.markup.type].map_range==true && $scope.markup.visible == true)  || ($scope.markup.subtype=='share_excerpt' && $scope.markup.visible == true)  ){
-       		 	} 
-				*/
+		if($scope.markup.type =='child'){ 
+			// to keep doc_id._id (just id as string) in model and not pass to post object later..
+			if($scope.markup.doc_id){ 
+			 $scope.markup.doc_id_id = $scope.markup.doc_id._id;
+			 if($scope.markup.doc_id.doc_options){
+				// m.$scope.markup.child_options = [];
+				var  options_array =  [];
+				$scope.markup.child_options = [];
+				_.each($scope.markup.doc_id.doc_options , function(option){
+					options_array[option.option_name] = option.option_value
+				});
+				$scope.markup.child_options = options_array
+			  }
+			}
+			//console.log('children call ...')
+		}
+       	/*
+        if($scope.markup.type =='data'){} 
+		 	if( ($scope.$parent.objSchemas[$scope.markup.type].map_range && $scope.$parent.objSchemas[$scope.markup.type].map_range==true && $scope.markup.visible == true)  || ($scope.markup.subtype=='share_excerpt' && $scope.markup.visible == true)  ){
+		 	} 
+		*/
       
 
 			
-			if($scope.markup.type == 'media' || $scope.markup.subtype == 'simple_page' ||  $scope.markup.subtype == 'doc_content_block' ){
-			    $scope.section.section_classes += 'has_image ';
-			    if($scope.markup.position){
-			          $scope.section.section_classes += ' focus_side_'+$scope.markup.position +' ';
-				}
-
-				if($scope.markup.position == 'background'){
-					$scope.section.section_styles = 'background-image:url('+markup.metadata+'); ' ;
-				}
+		if($scope.markup.type == 'media' || $scope.markup.subtype == 'simple_page' ||  $scope.markup.subtype == 'doc_content_block' ){
+		    $scope.section.section_classes += 'has_image ';
+		    if($scope.markup.position){
+		          $scope.section.section_classes += ' focus_side_'+$scope.markup.position +' ';
 			}
 
-		
-
+			if($scope.markup.position == 'background'){
+				$scope.section.section_styles = 'background-image:url('+markup.metadata+'); ' ;
+			}
+		}
        	console.log(' - init markup end > next > map_letters')
-
 		$scope.map_letters()
 	}
 
+
+	$scope.fulltext = function (){
+
+		var fulltext = '';
+    	var i_array     =   0;
+	   for (var i = $scope.markup.start; i <= $scope.markup.end; i++) {
+         	// console.log(i)
+         	if($scope.$parent.doc.content[i]){
+         		fulltext += $scope.$parent.$parent.doc.content[i];
+         	}
+     	}
+     	return fulltext;
+	}
 	
 
 
@@ -246,19 +232,25 @@ angular.module('musicBox.controller', []).controller('MarkupCtrl', function($sco
 		
         if(oldValue && newValue && newValue !== oldValue){
       	//$scope.handle_change_range(oldValue,newValue,  'start')
+      	       $scope.markup.fulltext = $scope.fulltext()
       	       $scope.unmap_letters( oldValue, 'start')
-
-      	    	$scope.map_letters( newValue, oldValue, 'start') 	
+			   $scope.map_letters( newValue, oldValue, 'start') 	
 		}	 
    });	
 
    $scope.$watch('markup.end', function(  newValue, oldValue) {
         if(oldValue && newValue && newValue !== oldValue){
        // $scope.handle_change_range(oldValue, newValue,  'end')
-       $scope.unmap_letters( oldValue, 'start')
-         	$scope.map_letters(newValue, oldValue, 'end') 	
+       	$scope.markup.fulltext = $scope.fulltext()
+        $scope.unmap_letters( oldValue, 'start')
+        $scope.map_letters(newValue, oldValue, 'end') 	
 		}
    });	
+
+
+
+
+
      $scope.$watch('markup.type', function(  newValue, oldValue) {
         if(oldValue && newValue && newValue !== oldValue){
 
@@ -292,8 +284,6 @@ angular.module('musicBox.controller', []).controller('MarkupCtrl', function($sco
 				                //console.log('watch position trigger>')
 								$scope.markup.sectionin = $scope.$parent.section.sectionin  
 					        //	console.log('markup.sectionin'+$scope.markup.sectionin)				
-
-					  
 					   }
 						if(newValue !== oldValue){
 						  	//$scope.$parent.init_()		
@@ -384,15 +374,7 @@ angular.module('musicBox.controller', []).controller('MarkupCtrl', function($sco
 			$scope.markup.editing = !$scope.markup.editing
 			return;
 		}
-		if($scope.markup.type == 'container'){
-			_.each($scope.$parent.$parent.containers, function(c, i){
-				if(c !== $scope.markup){
-					// toggle the others
-					c.selected = false;
-				}
-			});
-
-		}
+		
 		// event 
 		if(event_name == 'dblclick'){
 
@@ -407,10 +389,7 @@ angular.module('musicBox.controller', []).controller('MarkupCtrl', function($sco
 			
 
 			$scope.markup.selected = !$scope.markup.selected
-if($scope.markup.type == 'container'){
-$scope.markup.editing = !$scope.markup.editing 
 
-}
 
 		}
 		if($scope.markup.editing === true){
@@ -460,15 +439,15 @@ $scope.markup.editing = !$scope.markup.editing
 			});
     }	
 	
-	// change and save a single markup value-field
-	$scope.change_value = function(field, value, save){
-		$scope.markup[field] = value;
+	// change and save a single markup attr-value
+	$scope.change_value = function(attr, value, save){
+		$scope.markup[attr] = value;
 		if(save){
-			if(field == 'status'){
+			if(attr == 'status'){
 
 				$scope.save($scope.markup.type +' set as '+value)
 			}
-			else if(field == 'position'){
+			else if(attr == 'position'){
 				$scope.save($scope.markup.type +' moved to '+value)
 			}
 
@@ -479,6 +458,12 @@ $scope.markup.editing = !$scope.markup.editing
 			
 		}
 		
+	}
+
+	// toggle a single markup attr-value
+
+	$scope.toggle_attribute= function (attr){
+		$scope.markup[attr] = !$scope.markup[attr]
 	}
 
 /**
@@ -494,14 +479,7 @@ $scope.markup.editing = !$scope.markup.editing
       */
 
 
-      $scope.savebk = function () { 
-
-
-      }
      $scope.save = function (save_msg) {
-
-
-
         var thos = this;
         var promise = new Object();
         var data = new Object({
@@ -528,11 +506,7 @@ $scope.markup.editing = !$scope.markup.editing
 
 
 	     promise.query =  MarkupRest.markup_save({id:$scope.$parent.doc.slug, mid:$scope.markup._id }, serialize(data) ).$promise;
-          
-
-
-
-          promise.query.then(function (Result) {
+         promise.query.then(function (Result) {
             var edited  = Result.edited[0][0]
             console.log(edited)
             if(save_msg){
@@ -552,8 +526,6 @@ $scope.markup.editing = !$scope.markup.editing
       }
 
      $scope.offset= function (s,e){
-
-
 
 
      		// from array if already present
@@ -579,12 +551,11 @@ $scope.markup.editing = !$scope.markup.editing
 
      }
 
-
      // apply active selection ranges to a markup then save it.
 	$scope.match_selection = function (markup){
 		// todo: should check notnull / section limits
 		$scope.markup.start     =  $scope.ui.selected_range.start
-		$scope.markup.end 		= $scope.ui.selected_range.end
+		$scope.markup.end 		=  $scope.ui.selected_range.end
 		$scope.save()
 	}
 
@@ -650,8 +621,6 @@ $scope.markup.editing = !$scope.markup.editing
 			})
 		}
 
-
 $scope.init__()
-
 
 }); // end controller
