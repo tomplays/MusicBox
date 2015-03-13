@@ -1,4 +1,4 @@
-angular.module('musicBox.Document.DocumentDirectives', [])
+angular.module('musicBox.DocumentDirectives', [])
 .directive("docTitle", function() {
         return {
           restrict: "E",
