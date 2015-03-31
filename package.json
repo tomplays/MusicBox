@@ -12,7 +12,8 @@
     "grunt-wiredep": "^1.9.0"
   },
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "postinstall": "bower install"
   },
   "engines": {
     "node": "0.10.24",
