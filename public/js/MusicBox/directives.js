@@ -25,8 +25,10 @@ angular.module('musicBox.directives', [])
 
               var mb_service =  new MusicBoxLoop()
                //mb_service.remove_lt_classes(m)
-              mb_service.set_container_attribute(scope.$parent.section,'editing_text', true, true)
+              mb_service.set_container_attribute( scope.$parent.section, 'editing_text' , true, true)
               scope.$parent.section.modeletters = 'single';
+
+              scope.$parent.section.debuggr = 'hello';
 
         // = true;
     }
@@ -251,10 +253,10 @@ function selection_running(scope){
     }
 
     return {
-      template: '{{lt.char}}',
+      template: '{{lt.char}} 00',
      // template: '{{l.char}}',
- //   transclude :true,
- // replace :true,
+      //   transclude :true,
+      // replace :true,
       restrict: 'EA',
      link:link,
       scope: {

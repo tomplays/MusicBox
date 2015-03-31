@@ -37,7 +37,7 @@ div.mk_inside_visible(ng-if="(markup.visible && !markup.forced) || (markup.visib
 
 		span.mk_val.metadata.use_depth(ng-bind-html="markup.metadata",  ng-if="(markup.objSchemas.modes.read.display.metadata.displayed =='metadata') && (markup.editing ==false) ") 
 
-		input(ng-if="markup.editing ==true", ng-model="markup.metadata", type="text" )
+		input(ng-if="markup.editing ==true && markup.type =='markup'" , ng-model="markup.metadata", type="text" )
 
 
 		span.mk_val.subtype.use_depth(class="mk_val_subtype_{{markup.subtype}}", ng-if="markup.objSchemas.modes.read.display.metadata.displayed =='subtype'")  {{markup.subtype}} 
@@ -56,4 +56,6 @@ div.mk_inside_visible(ng-if="(markup.visible && !markup.forced) || (markup.visib
 
 
 		span(ng-include="fragments['child_markup'][0].url", ng-if="markup.type == 'child' ")
+	
+
 	markup-editor(class="markup_editor markup_editor_{{markup.type}}", ng-if="markup.editing == true")

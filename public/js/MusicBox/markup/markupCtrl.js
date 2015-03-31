@@ -1,5 +1,5 @@
 
-angular.module('musicBox.controller', []).controller('MarkupCtrl', function($scope, $http, MarkupRest) {
+angular.module('musicBox.markup_controller', ['musicBox.section_controller']).controller('MarkupCtrl', function($scope, $http, MarkupRest) {
 	
 		$scope.unmap_letters = function(oldValue, sore){
 			_.each($scope.$parent.section.letters, function(l){
@@ -7,6 +7,8 @@ angular.module('musicBox.controller', []).controller('MarkupCtrl', function($sco
 			})
 		}
 	$scope.map_letters = function( newValue, oldValue){
+
+
 		var loop_start = $scope.markup.start 	- $scope.$parent.section.start;
 		var loop_end   = $scope.markup.end 		- $scope.$parent.section.start;
 	
@@ -37,7 +39,12 @@ angular.module('musicBox.controller', []).controller('MarkupCtrl', function($sco
 
 	$scope.init__= function () {
 
-		$scope.$parent.update_markup_section_count('add')
+
+
+		if($scope.markup.type !=='container'){
+			//$scope.$parent.section.update_markup_section_count('add')
+
+		}
 
 		console.log(' - init markup start')
 		/*
@@ -133,7 +140,13 @@ angular.module('musicBox.controller', []).controller('MarkupCtrl', function($sco
 			}
 		}
        	console.log(' - init markup end > next > map_letters')
-		$scope.map_letters()
+
+
+       	if($scope.markup.type !=='container'){
+			$scope.map_letters()
+
+		}
+		
 	}
 
 
@@ -280,6 +293,10 @@ angular.module('musicBox.controller', []).controller('MarkupCtrl', function($sco
 
     $scope.$watch('markup.position', function( newValue, oldValue ) {
 				        // only for markups which ranges match container
+				      
+
+				              if(oldValue && newValue && newValue !== oldValue){
+
 				        if($scope.markup.start >= $scope.$parent.section.start && $scope.markup.end <= $scope.$parent.section.end){
 				                //console.log('watch position trigger>')
 								$scope.markup.sectionin = $scope.$parent.section.sectionin  
@@ -288,7 +305,7 @@ angular.module('musicBox.controller', []).controller('MarkupCtrl', function($sco
 						if(newValue !== oldValue){
 						  	//$scope.$parent.init_()		
 						}
-	        
+	        }
 		
 
 

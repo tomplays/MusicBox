@@ -20,7 +20,7 @@
         
         th moderation.
     tbody()
-      tr(ng-controller="MarkupCtrl" ng-repeat="markup in doc.markups" class="trtype-{{markup.type}}")
+      tr(ng-controller="MarkupCtrl" ng-repeat="markup in markups" class="trtype-{{markup.type}}")
         // , ng-if="markup.type==filter_dataset_by || filter_dataset_by == 'any'"
         td()
          span.markup-item-subtype(ng-click="toggle_select_markup('click')", class="clipped_{{markup.isselected}} markup-hn_{{markup.subtype}}" ) + 

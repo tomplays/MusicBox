@@ -48,7 +48,7 @@ var GLOBALS;
 var render;
 var doc;
 
-angular.module('musicBox', []);
+angular.module('musicBox.document_controller', []);
 
 
 //musicBox.controller('FragmentCtrl');
@@ -677,9 +677,7 @@ console.log(m)
 			console.log('- Document level')
 			console.log('- markpups sorted after markups change watched')
           	// filter markups > only if markup.type ==  "container"
-			$scope.markups  = _.sortBy( newValue,function (num) {
-	             return num.start;
-	        });
+			
 
 		
 	}, true);

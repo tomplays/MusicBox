@@ -13,9 +13,16 @@ MusicBox
 
 ` cd MusicBox`
 
-` sudo npm install`
+be sure mongodb is installed and running
 
-` bower install` 
+(`sudo mongod`)
+
+
+then
+
+`npm i`
+(coffee break)
+
 
 ` cp config_default.json config.json`
 
@@ -24,9 +31,7 @@ edit file with
 
 `(sudo) nano config.json`  (should works without editing..)
 
-be sure mongoDB is running.
 
-`sudo mongod`
 
 
 ## RUN/START 

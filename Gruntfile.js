@@ -207,7 +207,7 @@ dist: {
 src: [
 "js/MusicBox/**/*.js"
 ],
-dest: "public/manifest.appcache"
+dest: "public/OFFmanifest.appcache"
 }
 },
 
@@ -280,7 +280,7 @@ dest: "public/manifest.appcache"
 
 	grunt.registerTask('stop', ['forever:server1:stop']); // , 'connect:server' // 'forever', 
 	grunt.registerTask('default', [
-				'forever:server1:restart','watch', 'wiredep'
+				'forever:server1:restart','watch'
 	]);
 
 
