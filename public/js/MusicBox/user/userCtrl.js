@@ -15,12 +15,9 @@
 var inheriting = {};
 var GLOBALS;
 var render;
-
 /** 
 * @class UserCtrl
 **/
-
-
 // todo : remove old api call
 
 function UserProfileCtrl($scope, $http , $location, $routeParams,  $locale, DocumentService, UserRest, UserService, renderfactory) {

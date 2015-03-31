@@ -57,7 +57,6 @@ $scope.sections_objects_arrays = function(){
 
 
 
-
     	 		$scope.section = _.extend($scope.section, objectsarray );
 }
 

@@ -35,7 +35,9 @@
       -->
       <div ng-include="fragments['inline_tools'][0]['url']" ng-if="section.editing_text ===true" class="inline_tools"></div>
       <div ng-if="section.editing_text ===true" class="fluidtextarea">
-        <Edit>section text : </Edit>
+        <h3>Edit section text : </h3>
+        <h4>{{debuggr}}</h4>
+        <h1>{{section.debuggr}}</h1>
         <textarea ng-trim="false" key-listener="changeFunction()" ng-model="section.fulltext"></textarea>
         <!-- a.btn_ok(ng-click="save_section(section)") save-->
         <!-- a.btn_ok(ng-click="doc_sync()") save-->

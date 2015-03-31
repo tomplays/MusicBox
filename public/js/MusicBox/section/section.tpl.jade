@@ -43,7 +43,11 @@ div(ng-if="section['objects_count']['by_positions'][layout.name].count > 0 || la
 			div.inline_tools(ng-include="fragments['inline_tools'][0]['url']" ng-if="section.editing_text ===true")
 			
 			div.fluidtextarea(ng-if="section.editing_text ===true")
-				Edit section text : 
+				h3 Edit section text : 
+
+				h4 {{debuggr}}
+				h1 {{section.debuggr}}
+
 				textarea(ng-trim="false"  key-listener="changeFunction()"  ng-model="section.fulltext")
 				// a.btn_ok(ng-click="save_section(section)") save
 				// a.btn_ok(ng-click="doc_sync()") save
@@ -53,7 +57,7 @@ div(ng-if="section['objects_count']['by_positions'][layout.name].count > 0 || la
 			div.theletters(ng-if="section.modeletters=='single'")
 				// ng-class="l.classes",  
 				// ng-bind-html="l.char",
-				span.lt(ng-class="l.classes"  lt="l" , ng-repeat="l in section.letters track by $index") 
+				span.lt(ng-class="l.classes"  , lt="l" , ng-repeat="l in section.letters track by $index") 
 
 
 			div.fluidtext(fluidtexte, section="section" , ng-bind-html="section.fulltext_block",ng-if="section.modeletters !=='single'") 

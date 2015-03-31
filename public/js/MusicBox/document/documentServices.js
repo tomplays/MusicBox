@@ -44,7 +44,10 @@ angular.module('musicBox.DocumentService',[])
     var promise = DocumentRest.get({Id:this.slug},{  }).$promise;
     promise.then(function (Result) {
           $rootScope.doc = Result.doc
-          $rootScope.loaded_markups = Result.doc.markups;
+      
+          $rootScope.markups  = _.sortBy( Result.doc.markups,function (num) {
+               return num.start;
+          });
           //    $rootScope.doc.markups  = Result.doc.markups;
          
 
@@ -75,7 +78,7 @@ angular.module('musicBox.DocumentService',[])
 
 
           new UserService().SetFromApi(Result.userin)
-          $rootScope.containers = _.filter(Result.doc.markups, function(td){ return  td.type == 'container'; });
+          $rootScope.containers = _.filter($rootScope.markups, function(td){ return  td.type == 'container'; });
           $rootScope.doc_owner = Result.is_owner;
           console.log('is owner or has secret ('+ Result.is_owner+')')
        
