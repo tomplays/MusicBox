@@ -3,10 +3,9 @@
 // Declare app level module which depends on filters, and services
 
 
-
 angular.module('musicBox',  [
   'ui.bootstrap',
-  'musicBox.controller','musicBox.section_controller',
+  'musicBox.document_controller','musicBox.section_controller', 'musicBox.markup_controller',
    'ngLocale', 'ngResource', 'ngRoute','musicBox.services',
    'musicBox.directives', 'ngSanitize',  
    'musicBox.DocumentRest','musicBox.UserRest', 'musicBox.MarkupRest',
