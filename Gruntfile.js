@@ -21,8 +21,11 @@ module.exports = function(grunt) {
 		vendor: grunt.file.readJSON(".bowerrc").directory,
 		cfg : grunt.file.readJSON('config.json'),
 
-	
-   
+
+		open: {
+     		 path: "<%= cfg.ROOT_URL %>:<%= cfg.PORT %>/init",
+     		 app: "Google Chrome"
+    	},
 		wiredep: {
 			app: {
 				src: ['views/index.html', 'views/index.jade', 'views/header.jade'],
@@ -302,6 +305,12 @@ dest: "public/OFFmanifest.appcache"
 		  
 		 
 	]);
+	grunt.registerTask('initdb', ['open']);
+
+	
+
+
+
 
 
 

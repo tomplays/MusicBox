@@ -118,13 +118,12 @@ $provide.value("$locale", {
 		"logout" : "Logout",
 		"myprofile": "My profile",
 		"hidden_from_public": "(not visible) ",
-		"logged_in_as" : "Vous êtes connecté en tant que"
-
-
-
-
-
-
+		"logged_in_as" : "Vous êtes connecté en tant que",
+		"subscribe_title" :"Subscribe hacktuel newsletter",
+		"subscribe_action" :"fill with your email",
+		"subscribe_fields" :"",
+		"subscribe_option" :"Subscribe hacktuel newsletter",
+		"subscribe_success" :"A mail containing a confim link has been sent to you"
 	},
 
 } ,

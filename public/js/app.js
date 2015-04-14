@@ -47,6 +47,15 @@ angular.module('musicBox',  [
         templateUrl: '/partials/user/account',
         controller: UserProfileCtrl
       }).
+      when('/subscribe', {
+        templateUrl: '/partials/mail/subscribe',
+        controller:UserCtrl
+      }).
+      when('/unsubscribe', {
+        templateUrl: '/partials/mail/subscribe',
+        controller: UserCtrl
+      }).
+      
      
       when('/sockets/list/doc/:slug', {
         templateUrl: '/partials/socket/list',

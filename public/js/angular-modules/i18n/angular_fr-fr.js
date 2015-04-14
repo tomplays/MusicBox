@@ -94,7 +94,12 @@ $provide.value("$locale", {
 		"logout" : "Se deconnecter",
 		"myprofile": "Mon profil",
 		"hidden_from_public": "(non partagée)",
-		"logged_in_as" : "Vous êtes connecté en tant que"
+		"logged_in_as" : "Vous êtes connecté en tant que",
+		"subscribe_title" :"S\'abonner à la newsletter",
+		"subscribe_action" :"s\'abonner",
+		"subscribe_fields" :"indiquer simplement votre adresse mail",
+		"subscribe_option" :"S\'abonner à la newsletter",
+		"subscribe_success" :"Vous allez recevoir un mail contenant un lien de confirmation"
 
 	},
 

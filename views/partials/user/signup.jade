@@ -15,6 +15,9 @@ div.main_center.register_form.bordered
 		
 		label {{render_config.i18n.CUSTOM.USER.pick_password}} 
 		input(type="password", ng-model="password", )
+
+		label {{render_config.i18n.CUSTOM.USER.subscribe_option}} 
+		input(type="checkbox", ng-model="newsletter", )
 		
 		a.btn_ok.float_right(ng-click="checkregister()") {{render_config.i18n.CUSTOM.USER.register}}
 

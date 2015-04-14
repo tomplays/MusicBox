@@ -42,6 +42,7 @@ var UserSchema = new Schema({
          type: String,
          default: 'registered'
     },
+    secret: {type:ObjectIdSchema, default: function () { return new ObjectId()} },
     image_url : String,
     hashed_password: String,
     provider: String,

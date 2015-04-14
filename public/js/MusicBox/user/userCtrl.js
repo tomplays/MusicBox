@@ -85,7 +85,8 @@ function UserCtrl($scope, $http , $location, $routeParams,  $locale, renderfacto
     $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
 	$scope.errors= '';
 	$scope.password  ='';
-	$scope.username = ''
+	$scope.username = '';
+	$scope.complete = false;
 
 	$scope.checklogin = function(){
 		var data = new Object({'username': $scope.username, 'password': $scope.password, 'redirect_url':$routeParams.redirect_url})
@@ -97,19 +98,40 @@ function UserCtrl($scope, $http , $location, $routeParams,  $locale, renderfacto
 	}
 
 	$scope.checkregister = function (){
+		
 		if($scope.password && $scope.username && $scope.password !=="" && $scope.username !=="" ){
 			$scope.errors= ''
 			var data = new Object()
 			data.username 	= $scope.username;
 			data.password 	= $scope.password;
 			data.email 		= $scope.email;
-			
+			data.newsletter	= $scope.newsletter ? $scope.newsletter : false ;
  			$http.post(root_url+':'+PORT+'/register', serialize(data) ).success(function(e) {
-        	 	window.location = $scope.created_user_link 
+        	 	$scope.complete = true;
+        		window.location = $scope.created_user_link 
+
         	});  
 		}
 		else{
 			$scope.errors= 'complete the fields please'
 		}
+	}
+	$scope.subscribe = function (){
+		
+		if($scope.email){
+			$scope.errors= ''
+			var data = new Object()
+			data.email 		= $scope.email;
+			
+ 			$http.post(root_url+':'+PORT+'/api/v1/subscribe', serialize(data) ).success(function(e) {
+        	 	//window.location = $scope.created_user_link 
+        	 	 $scope.complete = true;
+
+        	});  
+		}
+		else{
+			$scope.errors= 'complete the fields please'
+		}
+	
 	}
 }

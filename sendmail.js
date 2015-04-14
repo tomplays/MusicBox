@@ -10,7 +10,6 @@ var transporter = nodemailer.createTransport(directTransport());
 
 // setup e-mail data (defaults)
 var mailOptions = {
-
     from: nconf.get('MAIL_SENDER'), // sender address
     to: nconf.get('MAIL_DEFAULT_RECEIVER'),
     subject: '[-]', // Subject line
@@ -33,15 +32,15 @@ exports.sendmail = function(options){
                 // send mail with defined transport object
       
        
-        transporter.sendMail(mailOptions, function(error, info){
-            if(error){
-                console.log(error);
-            }else{
-                console.log('Message sent: ' + info.response);
-            }
-        });
-        console.log('sent mail>')
-        console.log(mailOptions)
+                transporter.sendMail(mailOptions, function(error, info){
+                    if(error){
+                        console.log(error);
+                    }else{
+                        console.log('Message sent: ' + info.response);
+                    }
+                });
+                console.log('sent mail>')
+                console.log(mailOptions)
 
 
         }

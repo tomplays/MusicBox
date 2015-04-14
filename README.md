@@ -20,7 +20,8 @@ be sure mongodb is installed and running
 
 then
 
-`npm i`
+`npm i` to install NPM modules and bower scripts
+
 (coffee break)
 
 
@@ -29,7 +30,8 @@ then
 
 edit file with 
 
-`(sudo) nano config.json`  (should works without editing..)
+`(sudo) nano config.json` 
+> edit Database name at least
 
 
 

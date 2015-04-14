@@ -39,7 +39,7 @@ exports.list= function(req, res) {
             console.log('username: '+user.username +' mail: '+user.email)
         })
         //res.send('console only infos')
-        res.json( users)
+        res.json(users)
     });
 }
 
@@ -109,6 +109,8 @@ function getRandomInt(min, max) {
    
 exports.create = function(req, res) {
     console.log(req.body)
+    
+
     var email_object = new Object({'subject':'[new user] - ', 'text':'new_user_signup' })
     mail.sendmail(email_object)
 
