@@ -1,0 +1,9 @@
+
+<div ng-hide="ui.renderAvailable_active == 'doc_options' || ui.renderAvailable_active == 'card' || ui.renderAvailable_active == 'dataset' " class="sections_count_{{sectionstocount}} sections_container">
+  <h3>mapping_passes {{}}</h3>
+  <h2>stack ({{ ui.offset_queue.length }})</h2><a ng-click="sync_queue()"> sync queue</a>
+  <div ng-repeat="s in ui.offset_queue"><em>{{s.type}}</em><em>{{s.start}}</em><em>{{s.end}}</em></div>
+  <section ng-controller="SectionCtrl" id="anchor{{$index+1}}" ng-repeat="section in containers  track by $index" style="{{section.section_styles}} background-repeat:no-repeat;" class="focus_ focus_{{section.focused}} {{section.section_classes}} selected_{{section.selected}}">
+    <mb-section></mb-section>
+  </section>
+</div>
