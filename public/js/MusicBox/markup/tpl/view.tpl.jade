@@ -1,12 +1,11 @@
 div.mk_inside_visible(ng-if="(markup.visible && !markup.forced) || (markup.visible && markup.forced && ui.renderAvailable_active== 'editor')")
-
-	// h4 has_offset :{{markup.has_offset}} 
+	
+	// h4 has_offset :{{markup.has_offset}}  {{markup.offset_start}} -  {{markup.offset_end}}
 	// a(ng-click="offset(1,1)") offset me
 	// a(ng-click="match_selection()") match selection
 	
 	// m current: {{markup.start}} - {{markup.end}} 
-	//em {{markup}} 
-	// em {{markup.offset_start}} - {{markup.offset_end}} -  {{markup.touched}}
+	//em {{markup}}
 	// debug 
 	// span 
 		p {{markup.start}} - {{markup.end}} - {{markup.metadata}} - {{markup.type}} - {{markup.subtype}} {{markup.position}}
@@ -26,13 +25,15 @@ div.mk_inside_visible(ng-if="(markup.visible && !markup.forced) || (markup.visib
 		
 	img.mk_img(ng-if="markup.subtype=='img'" , data-tdid="{{markup.id}}", ng-src="{{markup.metadata}}")
 
+
 	span.icon_col.use_depth(ng-hide="markup.type== 'child' || markup.type== 'container'")
 		i(tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.select_edit}}" class="fa fa-{{markup.type}} fa-{{markup.subtype}} editing_{{markup.editing}} selected_{{markup.selected}}",  ng-click="toggle_select_markup('click')", ng-dblclick="toggle_select_markup( 'dblclick')"  ) 
 			span(ng-if="markup.type=='generic'") {{markup.subtype[0]}}
+		span select
+
 
 	span.icon_col.use_depth(ng-if="markup.type== 'container'")
-		i(tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.select_edit}}" class="fa fa-{{markup.type}} fa-{{markup.subtype}} editing_{{markup.editing}} selected_{{markup.selected}}",  ng-click="select_section()"  ) Select section # {{$index+1}}
-
+		i(tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.select_edit}}" class="fa fa-{{markup.type}} fa-{{markup.subtype}} editing_{{markup.editing}} selected_{{markup.selected}}",  ng-click="select_section()"  ) Select section # {{$parent.$index}}
 	div.data_col
 
 		span.mk_val.metadata.use_depth(ng-bind-html="markup.metadata",  ng-if="(markup.objSchemas.modes.read.display.metadata.displayed =='metadata') && (markup.editing ==false) ") 

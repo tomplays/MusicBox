@@ -49,6 +49,5 @@ angular.module('musicBox.MarkupService', [])
   }
 
 
-  
   return MarkupService;
 })

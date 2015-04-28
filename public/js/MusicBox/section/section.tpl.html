@@ -7,7 +7,7 @@
     <div ng-if="layout.name == 'right'">
       <div class="forced forced-right">
         <!-- sections, container_class, inline_markup, media( if background)-->
-        <div ng-repeat="markup in section.objects_['container']['inline']" ng-include="fragments['markup'][0].url" class="markup_ markup_type_container"></div>
+        <div ng-include="fragments['markup'][0].url" ng-repeat="markup in section.objects_['container']['inline'] " class="markup_ markup_type_container"></div>
         <div ng-repeat="markup in section.objects_['container_class']['inline']" ng-include="fragments['markup'][0].url" class="markup_ container_class_type_inline"></div>
         <div ng-repeat="markup in section.objects_['markup']['inline']" ng-include="fragments['markup'][0].url" class="markup_ markup_type_inline"></div>
         <div ng-repeat="markup in section.objects['media']['background']" ng-include="fragments['markup'][0].url" class="markup_ markup_type_bg"></div>
@@ -36,18 +36,13 @@
       <div ng-include="fragments['inline_tools'][0]['url']" ng-if="section.editing_text ===true" class="inline_tools"></div>
       <div ng-if="section.editing_text ===true" class="fluidtextarea">
         <h3>Edit section text : </h3>
-        <h4>{{debuggr}}</h4>
-        <h1>{{section.debuggr}}</h1>
-        <textarea ng-trim="false" key-listener="changeFunction()" ng-model="section.fulltext"></textarea>
+        <textarea required="required" ng-trim="false" text-listener="text-listener" ng-model="section.fulltext"></textarea>
         <!-- a.btn_ok(ng-click="save_section(section)") save-->
         <!-- a.btn_ok(ng-click="doc_sync()") save-->
       </div>
-      <div ng-if="section.modeletters=='single'" class="theletters">
-        <!-- ng-class="l.classes",  -->
-        <!-- ng-bind-html="l.char",--><span ng-class="l.classes" lt="l" ng-repeat="l in section.letters track by $index" class="lt"> </span>
-      </div>
+      <div ng-if="section.modeletters =='single'" class="theletters"><span lt="l" ng-repeat="l in section.letters track by $index"> </span></div>
       <div fluidtexte="fluidtexte" section="section" ng-bind-html="section.fulltext_block" ng-if="section.modeletters !=='single'" class="fluidtext"> </div>
-      <div ng-if="section.editing_text == true &amp;&amp; ($parent.$parent.$parent.$last)" class="pusher_section"><i tooltip="new section" ng-click="new_section()" class="fa fa-plus-square pusher_item btn"> </i></div>
+      <div ng-if="section.editing_text == true &amp;&amp; ($parent.$parent.$parent.$last)" class="pusher_section"><i tooltip="new section" ng-click="new_section()" class="fa fa-plus-square pusher_item btn"></i></div>
     </div>
     <div ng-if="(layout.name == 'global') &amp;&amp; ($parent.$parent.$last) &amp;&amp; objects_sections['global_all'].length &gt; 0">
       <div class="inside">

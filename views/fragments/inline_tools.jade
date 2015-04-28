@@ -25,21 +25,33 @@ span.pusher
 
 	.pusher_range(ng-if="ui.selected_range.end && ui.selected_range.start || ui.selected_range.start ===0" )
 		span.ranges
-			p {{ui.selected_range.insert}} 
+			// p {{ui.selected_range.insert}} 
 			span.ranges_start_end Selected letters from {{ui.selected_range.start}}  to {{ui.selected_range.end}}
-			span.textrange
+			// span.textrange
 				{{ui.selected_range.textrange}} 
+
+		
+		
 
 
 // textarea(type="text", ng-model="section.fulltext")
+
 // h4 {{section.start}} - {{section.end}} - {{section.metadata}} - {{section.type}} - {{section.subtype}}
 // p {{ui.selected_range}}
 // debug
 // h1 {{ui.selected_section_index}}
-//h2 insert : {{ui.selected_range.insert}}
-//h2 insert_scratch :{{ui.selected_range.insert_scratch}}
+// h2 insert : {{ui.selected_range.insert}}
+// h2 insert_scratch :{{ui.selected_range.insert_scratch}}
 // h4 {{push}}
 // em {{ui.selected_range}}
-h1 {{ui.selected_range.start}}
-// h1  
-	{{section.hello}}
+h1 {{ui.selected_range.start}} - {{ui.selected_range.end}}
+// h1 {{ui.current_action}}
+// h5 {{ui.cursor_at}}
+// h4 {{ui.selected_range.start}}
+// h1 {{ui.current_action}}
+
+// em at start : {{section.cursor_at_start}}
+// em at end : {{section.cursor_at_end}}
+// h2 stack ({{ section.debuggr.length }})
+// div(ng-repeat="mess in section.debuggr track by $index")
+				em {{mess}}

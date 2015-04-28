@@ -43,6 +43,7 @@ angular.module('musicBox.DocumentService',[])
 
     var promise = DocumentRest.get({Id:this.slug},{  }).$promise;
     promise.then(function (Result) {
+       if(Result){
           $rootScope.doc = Result.doc
       
           $rootScope.markups  = _.sortBy( Result.doc.markups,function (num) {
@@ -77,12 +78,15 @@ angular.module('musicBox.DocumentService',[])
                 $rootScope.objects_sections['global_all'] = [];
 
 
-          new UserService().SetFromApi(Result.userin)
-          $rootScope.containers = _.filter($rootScope.markups, function(td){ return  td.type == 'container'; });
-          $rootScope.doc_owner = Result.is_owner;
-          console.log('is owner or has secret ('+ Result.is_owner+')')
+            new UserService().SetFromApi(Result.userin)
+            $rootScope.containers = _.filter($rootScope.markups, function(td){ return  td.type == 'container'; });
+            $rootScope.doc_owner = Result.is_owner;
+            console.log('is owner or has secret ('+ Result.is_owner+')')
        
-    
+          }
+          else{
+            console.log('err');
+          }
 
 
     }.bind(this));
@@ -238,6 +242,15 @@ angular.module('musicBox.DocumentService',[])
             
             $rootScope.ui.selected_range.markups_to_offset = []
             $rootScope.ui.offset_queue = []
+
+
+            _.each($rootScope.markups, function(m){
+                //  m.end = m.end+m.offset_end
+                //  m.start = m.start+m.offset_start
+                  m.offset_end=0
+                  m.offset_start=0
+                  m.has_offset=false
+             });
          
 
         }.bind(this));

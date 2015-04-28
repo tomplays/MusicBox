@@ -2,18 +2,14 @@
 angular.module('musicBox.section_controller', []).controller('SectionCtrl', function($scope, $http, DocumentService, MarkupRest) {
 
 $scope.distribute_arrays = function(){
-	console.log($scope.section.objects_)
+	 //console.log($scope.section.objects_)
 	 $scope.section.objects_  = _.groupBy($scope.section.objects_, function(item){return item.position;});
         _.each( $scope.section.objects_, function(value, key, list) {
        	 list[key] = _.groupBy(value, function(item){return item.type;});
    	 }); 
 }
 
-$scope.distribute_letters_classes = function(){
-	console.log('distribute_letters_classes')
- 	_.each($scope.section.objects_, function(markup){
-    });
-}
+
 
 $scope.sectionmarkups = function(attr, value){
 	_.each($scope.$parent.markups, function(m,y){
@@ -27,12 +23,13 @@ $scope.sectionmarkups = function(attr, value){
 }
 
 $scope.sections_objects_arrays = function(){
-	var objectsarray = new Object();
+			var objectsarray = new Object();
 
            objectsarray.section_styles  = '';
            //new Array('objects', 'objects_')
           // objectsarray['objects'] = [];
            objectsarray['objects_'] = [];
+ 		   objectsarray['objects_'].flat = [];
 
 
            objectsarray['objects_count'] = [];
@@ -54,34 +51,147 @@ $scope.sections_objects_arrays = function(){
               // $rootScope.containers[0]['objects_count']['by_positions']['center'].count = 1;
             });
 
+			$scope.section = _.extend($scope.section, objectsarray );
+			console.log(objectsarray)
 
-
-
-    	 		$scope.section = _.extend($scope.section, objectsarray );
 }
 
 
+$scope.map_letters = function(){
+  console.log('map_letters (section)')
+
+
+  	$scope.$parent.mapping_pass()
+	_.each($scope.section.letters, function(l,li){
+		l.inrange=false;
+
+		if( $scope.$parent.ui.selected_range.start && $scope.$parent.ui.selected_range.end && li >= $scope.$parent.ui.selected_range.start && li <= $scope.$parent.ui.selected_range.end) {
+			l.inrange = true;
+		}
+
+		
+
+
+	})
+
+	if( $scope.$parent.ui.selected_range.end == $scope.section.end) {
+			$scope.section.letters[$scope.section.end-1].inrange = true;
+		}
+	if( $scope.$parent.ui.selected_range.start == $scope.section.start) {
+			$scope.section.letters[0].inrange = true;
+	}
+															
+  
+  	_.each(Object.keys($scope.section.objects_), function(o,k){
+  		//console.log($scope.section.objects_[o])
+  		_.each(Object.keys($scope.section.objects_[o]), function(o_,k_){
+				if(_.isArray($scope.section.objects_[o][o_]) ){
+					_.each( $scope.section.objects_[o][o_] , function(markup,k__){
+							
+
+													var loop_start = markup.start 		- $scope.section.start;
+													var loop_end   = markup.end 		- $scope.section.start;
+													for (var mi = loop_start ; mi <= loop_end;mi++) {
+
+
+
+
+														if($scope.section.letters && $scope.section.letters[mi]){
+
+
+															
+
+															
+															
+															if(markup.type == 'container'){
+
+															}
+															if(markup.type == 'hyperlink'){
+																	console.log('markup.type == hyperlink')
+																	console.log(markup)
+																	$scope.section.letters[mi].href = markup.metadata
+															}
+															if(markup.type=='container_class' ){ // or pos == inlined
+													  			$scope.section.section_classes += markup.metadata+' ';
+															}
+
+															if(markup.type !== 'container'){
+																$scope.section.letters[mi].classes.push(markup.subtype)
+															}
+
+																//console.log('rm classes')
+																//$scope.section.letters[mi].classes = _.without($scope.section.letters[mi].classes,markup.subtype )
+																
+																	
+																///$scope.section.letters[mi].classes.push('muddp')
+																//$scope.section.letters[mi].classes.push(markup.type)
+
+															
+															
+															//$scope.section.letters[mr].classes_array[markup.subtype] = true;
+															//$scope.section.letters[mr].char = mr;
+														}
+													}
+
+
+
+					})
+					
+				}
+				else{
+				//	
+				}
+				
+
+
+  		})
+
+
+  	})
+
+    
+
+/*
+
+  console.log('letters debug(section)')
+  console.log($scope.section.letters)
+  		var loop_start = markup.start 	- $scope.section.start;
+		var loop_end   = markup.end 		- $scope.section.start;
+	
+		
+
+		*/
+
+
+}
 
 $scope.attribute_objects = function(){
   console.log('attribute_objects')
 
 
-  			$scope.sections_objects_arrays()
+  	$scope.sections_objects_arrays()
 
 
     		
 
     _.each($scope.$parent.markups, function(markup){
-              
+
+
+    	if( $scope.$parent.ui.selected_range.start && $scope.$parent.ui.selected_range.end && markup.start >= $scope.$parent.ui.selected_range.start && markup.end <= $scope.$parent.ui.selected_range.end) {
+			markup.inrange = true;
+			markup.selected = true;
+		}
+		else{
+			markup.inrange = false;
+			markup.selected = false;
+		}
+           
+
 
         // only for markups which ranges match container
         if(markup.start >= $scope.section.start && markup.end <= $scope.section.end){
 
-
-
-              
-				
-
+        	
 
 	        ///// •¿¿ ///
 	        if(markup.type !== "" && markup.position){ // > can add it
@@ -93,9 +203,8 @@ $scope.attribute_objects = function(){
 				
 				// add markup to container objects (container::index::type::position) 
 				$scope.section.objects_[markup.type][markup.position].push(markup) 
+				$scope.section.objects_.flat.push(markup) 
 
-
-		 		
 
 
 				if(markup.type !=='container'){
@@ -106,12 +215,14 @@ $scope.attribute_objects = function(){
 					$scope.section.objects_count['by_positions'][markup.position].has_object  = true;
 				}
 			}
-
+			
 			//   console.log('wraped')
 			// console.log(markup)
     	} // if in-range
 
     }); // each markups end.
+	$scope.map_letters()
+	// console.log($scope.section.objects_)
 }
 
 $scope.section_markups = new Object({'visible':0});
@@ -128,13 +239,14 @@ $scope.update_markup_section_count = function(direction){
 
 $scope.init_= function () {
 
+/*
 		console.log('init section')
 		console.log($scope.section)
 		console.log('parent ctrl')
 		console.log($scope.$parent)
 		console.log('section index'+$scope.$parent.$index)
 
-
+*/
 		
 		$scope.$parent.update_section_count('add')
         // $rootScope.sections_to_count_notice = ($rootScope.sectionstocount == 0) ? true : false;
@@ -151,7 +263,9 @@ $scope.init_= function () {
                 'editing_text':false,
                 'ready' : 'init',
                 'modeletters' : 'single',
-                'section_classes':''
+                'section_classes':'',
+                'stack': [],
+                'debuggr' : ['init']
                // 'fulltext'    : self.ranges_to_fulltext($rootScope.doc.content, container.start, container.end)
             })
 
@@ -161,9 +275,25 @@ $scope.init_= function () {
        
         for (var i = $scope.section.start; i <= $scope.section.end; i++) {
          	// console.log(i)
-         	if($scope.$parent.doc.content[i]){
-         		fulltext += $scope.$parent.doc.content[i];
+         	var ch = $scope.$parent.doc.content[i]
+         	if(ch){
+
+
+	         	if (ch === " ") {
+	            	fulltext += ' ';
+	         	}
+	         	else
+	         		fulltext += $scope.$parent.doc.content[i];
+	        	}
+         	
+         	else{
+
+           		fulltext +=  '-';     
+        
          	}
+
+
+         	
      	}
      	$scope.section.fulltext = fulltext;
      	$scope.section.fulltext_block = fulltext;
@@ -214,81 +344,19 @@ $scope.to_fulltext = function (){
     }
 
 
-$scope.$watch('section.cursor_at', function(oldValue, newValue) {
-
-
-
-	if(oldValue){
-
-	
-			if($scope.section.letters && $scope.section.letters[oldValue]){
-					_.each($scope.section.letters, function(letter,y){
-						if(letter.classes){
-												    letter.classes = _.without(letter.classes, 'cursor_at')
-
-						}
-					                
-		            })
-					
-			}
-
-
-
-		 	//if(oldValue !==newValue ){
-		 		if(oldValue && newValue && $scope.section.letters && $scope.section.letters[newValue])
-		 			{
-		 			///	$scope.flashmessage('section.cursor_at '+newValue, 'help',2000, true )
-
-		 				if($scope.section.letters[newValue].classes){
-		 						$scope.section.letters[newValue].classes.push('cursor_at')
-console.log('section.cursor_at'+newValue+' was'+oldValue)
-
-		 				}
-		 			
-
-		 		//		alert(oldValue)
-
-		 			}
-		 			
-		 		
-
-				// $scope.section.fulltext = $scope.section.fulltext.replace("\n", "")
- 				var string  = '';
-                _.each($scope.$parent.containers, function(container){
-                    string  += container.fulltext;
-                    console.log(container.fulltext)
-
-                })
-
-
-
-            $scope.doc.content = string;
-
-
-			if( $scope.ui.selected_range.insert_direction == 'save'){
-					$scope.sync_queue()
-
-			}
-					
-					//$scope.section.letters[$scope.ui.selected_range.insert].classes.push('h1')
-					
-		//	}
-
-	}
-})
-
 $scope.$watch('section.fulltext', function(oldValue, newValue) {
 			
 	console.log('section fulltext watched')
+
 	if(newValue && oldValue){
 		console.log(oldValue.length - newValue.length)
-		console.log('section fulltext watched with changes:'+newValue+'>'+oldValue)
+		console.log('section fulltext watched with changes: '+newValue+'>'+oldValue)
 		var temp_letters = new Array();
 		var i;
 		var i_array     =   0;
 		var fulltext    =   '';
 		var str_start   =   0;
-		var str_end     =   _.size($scope.section.fulltext);
+		var str_end     =   _.size(newValue);
 		// confing could be a option/mode feature
 		var content_string  = $scope.$parent.doc.content
 		var classes_arr = new Array()
@@ -300,31 +368,46 @@ $scope.$watch('section.fulltext', function(oldValue, newValue) {
 			  'classes_array': '', 
 			  'classes_flat': '',
 			  'order':i,
-			  'char':$scope.section.fulltext[i],
-			  'absolute_order':str_start+i,
+			  'inrange':false,
+			  'href':'',
+			  'absolute_order':$scope.section.start+i,
 
 			});
 
-			if($scope.ui.selected_range.insert == i){
-				//letter_arr.classes.push('mup')
-				$scope.section.cursor_at = i_array+1;
-			}
-
+			
+	        	if (newValue[i] === " ") {
+	            	letter_arr.char = '&nbsp;'
+	         	}
+	         	else{
+	         		letter_arr.char = newValue[i]
+	         	}
 
 		  	temp_letters[i_array]  = letter_arr;
+
 		  	i_array++;
 		}
-		$scope.section.letters = temp_letters;		
-
-
-		$scope.attribute_objects()	
+		$scope.section.letters = temp_letters;
 		
+		$scope.attribute_objects()
+
+	
 		//console.log($scope.section.objects_)
 		//$scope.section.end = $scope.section.end+1
 		//$scope.section.start = $scope.section.start+1
 		
 	}
 });	
+
+
+
+/*
+$scope.$watch('section.start', function(o, markup) {})
+$scope.$watch('section.end', function(o, markup) {})
+$scope.$watch('section.objects_', function(o, n) {
+	console.log('oBJECT SECTION')
+},true)
+
+*/
 
 $scope.$watch('section.has_offset', function(o, markup) {
 
@@ -343,6 +426,15 @@ console.log('markup pushed')
 		 	} 
 
 });	
+
+
+
+$scope.$watch('ui.selected_range', function(o,b) {
+		  $scope.attribute_objects()
+
+},true);	
+
+
 
 $scope.push_generic_from_ranges= function (type, subtype,position,metadata){
 		
@@ -368,8 +460,8 @@ $scope.push_generic_from_ranges= function (type, subtype,position,metadata){
 $scope.add= function (){
 		// sure to set up
 
-
-		if($scope.$parent.ui.selected_range.start){
+/*
+		if($scope.$parent.ui.selected_range.start && !$scope.$parent.push.start){
 			$scope.$parent.push.start   = $scope.$parent.ui.selected_range.start
 		}
 		else{
@@ -377,13 +469,16 @@ $scope.add= function (){
 		}
 	
 
-	if($scope.$parent.ui.selected_range.end){
+	if($scope.$parent.ui.selected_range.end && !$scope.$parent.push.end){
 		$scope.$parent.push.end   = $scope.$parent.ui.selected_range.end
 	}
 	else{
 		$scope.$parent.push.end   = 1
 
 	}
+	*/
+		if(!$scope.$parent.push.start)	{	$scope.$parent.push.start	= $scope.$parent.ui.selected_range.start	}
+		if(!$scope.$parent.push.end)	{	$scope.$parent.push.end	= $scope.$parent.ui.selected_range.end	}
 
 
 		if(!$scope.$parent.push.position)	{	$scope.$parent.push.position 	= 'left'	}
@@ -470,14 +565,30 @@ $scope.add= function (){
 
 
 
-$scope.save_section= function (){
-}
+$scope.save_section= function (){}
 
 
 // short function to push a section
 	$scope.new_section= function (){
+		$scope.fulltext  = $scope.fulltext+'-'
+		var string  = '';
+                _.each($scope.$parent.containers, function(container){
+                    string  += container.fulltext;
+                    console.log(container.fulltext)
+
+                })
+
+
+
+            $scope.doc.content = string;
+
+
+			
+					$scope.sync_queue()
+
 		$scope.push.start  = $scope.section.end+1
-		$scope.push.end  = $scope.section.end+10
+		$scope.push.end  =   $scope.section.end+1
+		$scope.push.position  =   'inline'
 		$scope.push.type = 'container';
 		$scope.push.subtype = 'section';	
 		$scope.add();	
@@ -537,7 +648,87 @@ $scope.save_section= function (){
 	$scope.init_()
 	
 
-	//$scope.distribute_letters_classes()
+	
 
 }); // end controller
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+$scope.$watch('section.cursor_at', function(oldValue, newValue) {
+
+
+
+	if(oldValue){
+
+	
+			if($scope.section.letters && $scope.section.letters[oldValue]){
+					_.each($scope.section.letters, function(letter,y){
+						if(letter.classes){
+												    letter.classes = _.without(letter.classes, 'cursor_at')
+
+						}
+					                
+		            })
+					
+			}
+
+
+
+		 	//if(oldValue !==newValue ){
+		 		if(oldValue && newValue && $scope.section.letters && $scope.section.letters[newValue])
+		 			{
+		 			///	$scope.flashmessage('section.cursor_at '+newValue, 'help',2000, true )
+
+		 				if($scope.section.letters[newValue].classes){
+		 						$scope.section.letters[newValue].classes.push('cursor_at')
+console.log('section.cursor_at'+newValue+' was'+oldValue)
+
+		 				}
+		 			
+
+		 		//		alert(oldValue)
+
+		 			}
+		 			
+		 		
+
+				// $scope.section.fulltext = $scope.section.fulltext.replace("\n", "")
+ 				var string  = '';
+                _.each($scope.$parent.containers, function(container){
+                    string  += container.fulltext;
+                    console.log(container.fulltext)
+
+                })
+
+
+
+            $scope.doc.content = string;
+
+
+			if( $scope.ui.selected_range.insert_direction == 'save'){
+					$scope.sync_queue()
+
+			}
+					
+					//$scope.section.letters[$scope.ui.selected_range.insert].classes.push('h1')
+					
+		//	}
+
+	}
+})
+*/

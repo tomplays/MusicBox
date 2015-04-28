@@ -88,7 +88,12 @@ function DocumentCtrl($scope, $http , $sce, $location, $routeParams ,socket,rend
 
 	$scope.sectionstocount=0;
 	$scope.markup_total_count = 0;
-	
+
+	$scope.mapping_passes = 0;
+	$scope.mapping_pass = function(){
+		$scope.mapping_passes++
+	}
+  
 $scope.letters = [];
          
              $scope.max_reached_letter = 0;
@@ -384,15 +389,7 @@ $scope.SetSlug = function (slug) {
 	
 	
 	$scope.sync_queue = function(){
-		doc.docsync();
-		  _.each($scope.markups, function(m){
-                //  m.end = m.end+m.offset_end
-                //  m.start = m.start+m.offset_start
-                  m.offset_end=0
-                  m.offset_start=0
-                  m.has_offset=false
-             });
-	
+		  doc.docsync();
 	}
 
 

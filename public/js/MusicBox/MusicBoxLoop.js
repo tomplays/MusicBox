@@ -240,7 +240,7 @@ alert('old')
       set_container_attribute: function (container, attribute, value, switchothers) {
         if(switchothers === true){
             _.each($rootScope.containers, function(c){
-            c[attribute] = !value
+                c[attribute] = !value
             })
         }
         container[attribute] = value    

@@ -44,12 +44,12 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
         // this var never change as long a doc is loaded... (no reset at rebuild)
 
         $rootScope.ui                         = new Object();
-        $rootScope.ui.selected_range          = new Object({'wait_ev' : false, 'set': false, 'start':'', 'end':'', 'textrange':''});
+        $rootScope.ui.selected_range          = new Object({'wait_ev' : false, 'set': false, 'start':null, 'end':null, 'textrange':''});
         $rootScope.ui.selected_range.markups_to_offset = new Array();
         $rootScope.ui.selected_range.insert = null;
         $rootScope.ui.offset_queue = new Array()
 
-        
+        $rootScope.ui.routing = $routeParams
 
         $rootScope.ui.selected_section_index  = null;
        
@@ -323,7 +323,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
                                     'free_input' : false,
                                     'show_editor': 'hidden',
                                     'available' : ['comment'],
-                                    'forced' : 'hcomment'
+                                    'forced' : 'comment'
                                   },
                                   'metadata': {
                                     'display' : true,
@@ -373,7 +373,7 @@ container_class.modes.editor.fields.metadata.label = 'css class'
 
  definitions.container = new Object({
               'name': 'container',
-              'display_name': $rootScope.render_config.i18n.CUSTOM.OBJECTS.comment,
+              'display_name': $rootScope.render_config.i18n.CUSTOM.OBJECTS.container,
               'map_range': true,
               'positions': {
                   "forced": "inline",
@@ -572,7 +572,7 @@ container_class.modes.editor.fields.metadata.label = 'css class'
                                     'input' : 'select',
                                     'free_input' : false,
                                     'show_editor': 'hidden',
-                                    'available' : ['hyperlink']
+                                    'available' : ['']
                                 
                                   }
 
@@ -627,13 +627,13 @@ container_class.modes.editor.fields.metadata.label = 'css class'
                                   'type': { 
                                       'display' : true,
                                       'label':'type',
-                                     'input' : 'select'
+                                      'input' : 'select'
                                   },
                                 
                                   'position':{ 
                                       'display' : true,
                                       'label':'position',
-                                    'input' : 'select'
+                                      'input' : 'select'
                                   },
                                   'subtype': {
                                     'display' : true,
@@ -650,8 +650,7 @@ container_class.modes.editor.fields.metadata.label = 'css class'
                                     'input' : 'text',
                                     'free_input' : true,
                                     'show_editor': 'hidden',
-                                    'available' : ['hyperlink'],
-                                    'forced' : 'hyperlink'
+                                    'available' : ['hyperlink']
                                   }
 
                           },

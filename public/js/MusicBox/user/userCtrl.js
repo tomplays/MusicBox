@@ -126,7 +126,6 @@ function UserCtrl($scope, $http , $location, $routeParams,  $locale, renderfacto
  			$http.post(root_url+':'+PORT+'/api/v1/subscribe', serialize(data) ).success(function(e) {
         	 	//window.location = $scope.created_user_link 
         	 	 $scope.complete = true;
-
         	});  
 		}
 		else{

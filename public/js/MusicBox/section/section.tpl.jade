@@ -1,15 +1,20 @@
-div(ng-if="section['objects_count']['by_positions'][layout.name].count > 0 || layout.include_even_empty", ng-repeat='layout in available_layouts')
+
+div(ng-if="section['objects_count']['by_positions'][layout.name].count > 0 || layout.include_even_empty", ng-repeat="layout in available_layouts")
 	// h1{{section['objects_count']['by_positions'][layout.name].count}}
 	div(class="layout_ layout_name_{{layout.name}} has_count_{{section.objects_count.by_positions[layout.name].count}} has_object_{{section.objects_count.by_positions[layout.name].has_object}}")
 		
+		
+		
+
 		// title, author, date, ..
 		doc-title(ng-if="(layout.name == 'center') && ($parent.$parent.$first)")		
 		div(ng-if="layout.name == 'right'")
 			
-			div.forced.forced-right()
+			div.forced.forced-right
 				// sections, container_class, inline_markup, media( if background)
-				div(class="markup_ markup_type_container", ng-repeat="markup in section.objects_['container']['inline']", ng-include="fragments['markup'][0].url")
-
+				div( ng-include="fragments['markup'][0].url", class="markup_ markup_type_container", ng-repeat="markup in section.objects_['container']['inline'] ")
+					
+				
 				div(class="markup_ container_class_type_inline" , ng-repeat="markup in section.objects_['container_class']['inline']" ng-include="fragments['markup'][0].url")
 				
 				div(class="markup_ markup_type_inline", ng-repeat="markup in section.objects_['markup']['inline']", ng-include="fragments['markup'][0].url")
@@ -45,25 +50,22 @@ div(ng-if="section['objects_count']['by_positions'][layout.name].count > 0 || la
 			div.fluidtextarea(ng-if="section.editing_text ===true")
 				h3 Edit section text : 
 
-				h4 {{debuggr}}
-				h1 {{section.debuggr}}
-
-				textarea(ng-trim="false"  key-listener="changeFunction()"  ng-model="section.fulltext")
+				textarea(required ng-trim="false" , text-listener  , ng-model="section.fulltext")
 				// a.btn_ok(ng-click="save_section(section)") save
 				// a.btn_ok(ng-click="doc_sync()") save
 
 			
-
-			div.theletters(ng-if="section.modeletters=='single'")
-				// ng-class="l.classes",  
-				// ng-bind-html="l.char",
-				span.lt(ng-class="l.classes"  , lt="l" , ng-repeat="l in section.letters track by $index") 
+			
+			div.theletters(ng-if="section.modeletters =='single'")
+				span(lt="l" , ng-repeat="l in section.letters track by $index") 
 
 
 			div.fluidtext(fluidtexte, section="section" , ng-bind-html="section.fulltext_block",ng-if="section.modeletters !=='single'") 
 
 			.pusher_section(ng-if="section.editing_text == true && ($parent.$parent.$parent.$last)")
-				i.fa.fa-plus-square.pusher_item.btn(tooltip="new section" ng-click="new_section()") 
+				i.fa.fa-plus-square.pusher_item.btn(tooltip="new section" ng-click="new_section()")
+
+
 
 		div(ng-if="(layout.name == 'global') && ($parent.$parent.$last) && objects_sections['global_all'].length > 0")
 					div.inside()
