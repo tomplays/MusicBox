@@ -11,11 +11,16 @@ html(xmlns="http://www.w3.org/1999/xhtml")
 			tr
 				td(bgcolor="#000")
 					a(href="#")
-						img(src="http://25.media.tumblr.com/tumblr_loypi35wJt1qko4x4o1_r1_400.gif" alt="" border="0")
+						// img(src="http://25.media.tumblr.com/tumblr_loypi35wJt1qko4x4o1_r1_400.gif" alt="" border="0")
 
-		ul
+		// div
 			each val in sections
-				li= val
+				section(style="border:1px solid #000; margin:10px;")
+				// = val
 				each p in val.objects
 					each op in p
-						li= op.type
+						li
+							span= op.type
+							span= op.subtype
+							span= op.start
+							span= op.end

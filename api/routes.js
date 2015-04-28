@@ -59,6 +59,7 @@ module.exports = function(app, passport, auth) {
 
     // views & partials
   	app.get('/doc/:slug',                   docs.index_doc);
+    app.get('/doc_editor/:slug',             docs.index_doc);
 
 
     // lite mode
@@ -133,17 +134,12 @@ module.exports = function(app, passport, auth) {
 
     // newletter api
     app.get('/subscribe',                   mails.subscribe_view);
-    app.get('/unsubscribe',                 mails.unsubscribe_view);
     app.post('/api/v1/subscribe',           mails.subscribe_post);
-    app.post('/api/v1/unsubscribe',         mails.unsubscribe_post);
-    app.get('/api/v1/subscribe_confirm',    mails.subscribe_confirm );
+    app.get('/api/v1/subscribe_action',     mails.subscribe_action );
 
-    app.get('/api/v1/get_subscribers',    mails.get_subscribers);
-
+    app.get('/api/v1/get_subscribers',  auth.requiresLogin,   mails.get_subscribers);
     app.get('/api/v1/send_mail',                    mails.send_mail_from_html);
     app.get('/api/v1/send_mail_internal/:slug',     mails.send_mail_from_internal_document);
-
-
 
     app.get('/api/v1/send_generate',        mails.generate_mail_to_html);
 

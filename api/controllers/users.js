@@ -114,7 +114,7 @@ exports.create = function(req, res) {
     var email_object = new Object({'subject':'[new user] - ', 'text':'new_user_signup' })
     mail.sendmail(email_object)
 
-
+    
     var user = new User(req.body);
     var message = null;
     user.user_options = new Array();
@@ -126,6 +126,9 @@ exports.create = function(req, res) {
     var user_option = new Object( {'option_name':'color', 'option_value': rand_color,  'option_type': '' } )
     user.user_options.push(user_option)
     user.provider = 'local';
+    console.log('req.body>')
+    console.log(req.body)
+    // TODO ; newletter > req.body.newsletter
     user.save(function(err) {
         if (err) {
             switch (err.code) {

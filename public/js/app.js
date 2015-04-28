@@ -11,7 +11,7 @@ angular.module('musicBox',  [
    'musicBox.DocumentRest','musicBox.UserRest', 'musicBox.MarkupRest',
   'musicBox.UserService','musicBox.MusicBoxLoop', 
   'musicBox.DocumentService', 
-  'musicBox.SectionDirectives','musicBox.DocumentDirectives', 'musicBox.MarkupDirectives'
+  'musicBox.SectionDirectives','musicBox.DocumentDirectives', 'musicBox.MarkupDirectives','musicBox.LetterDirectives'
   ]).
   config(['$localeProvider','$routeProvider', '$locationProvider','$sceDelegateProvider', '$sceProvider', function($localeProvider,$routeProvider, $locationProvider, $sceDelegateProvider,$sceProvider ) {
     $routeProvider.
@@ -23,10 +23,6 @@ angular.module('musicBox',  [
         templateUrl: '/partials/document/new',
         controller: DocumentNewCtrl
       }).
-       when('/doc/:docid', {
-        templateUrl: '/../partials/document/single',
-        controller: DocumentCtrl
-      }).
       when('/readonly/:docid', {
         templateUrl: '/../partials/document/document_ro',
         controller: DocumentCtrlRo
@@ -35,6 +31,7 @@ angular.module('musicBox',  [
         templateUrl: '/partials/document/list',
         controller: DocumentsListCtrl
       }).
+
        when('/login', {
          templateUrl: '/partials/user/login',
         controller: UserCtrl
@@ -51,12 +48,10 @@ angular.module('musicBox',  [
         templateUrl: '/partials/mail/subscribe',
         controller:UserCtrl
       }).
-      when('/unsubscribe', {
-        templateUrl: '/partials/mail/subscribe',
+      when('/api/v1/subscribe_action', {
+        templateUrl: '/partials/mail/confirmation',
         controller: UserCtrl
       }).
-      
-     
       when('/sockets/list/doc/:slug', {
         templateUrl: '/partials/socket/list',
         controller: SocketsListCtrl
@@ -66,7 +61,11 @@ angular.module('musicBox',  [
         templateUrl: '/partials/room/single',
         controller: SocketsListCtrl
       }).
-
+      when('/:docmode/:docid', {
+        // match doc, doc_editor
+        templateUrl: '/../partials/document/single',
+        controller: DocumentCtrl
+      }).
       when('#_=_', {
         redirectTo: '/'
       }).
