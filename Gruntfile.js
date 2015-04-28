@@ -6,21 +6,13 @@ module.exports = function(grunt) {
 	require("load-grunt-tasks")(grunt);
 	
 	// timer
-	require("time-grunt")(grunt);
-
-	
-
-
-
-
-
+	// require("time-grunt")(grunt);
 
 	grunt.initConfig({
 
 		pkg: grunt.file.readJSON('package.json'),
 		vendor: grunt.file.readJSON(".bowerrc").directory,
 		cfg : grunt.file.readJSON('config.json'),
-
 
 		open: {
      		 path: "<%= cfg.ROOT_URL %>:<%= cfg.PORT %>/init",
@@ -35,23 +27,21 @@ module.exports = function(grunt) {
 			}
 		},
 		less: {				
-			 options: {
- paths: ["public/css"],
- compress: true
- },
-
- src: {
- // no need for files, the config below should work
- expand: true,
- cwd: "public/css",
- src: "**/*.less",
- dest: "public/css/min",
- ext: ".css",
- }
+				options: {
+					 paths: ["public/css"],
+					 compress: true
+				},
+				src: {
+					 // no need for files, the config below should work
+						 expand: true,
+						 cwd: "public/css",
+						 src: "**/*.less",
+						 dest: "public/css/min",
+						 ext: ".css",
+				}
 		},
 		jasmine: {
 				test: {
-
 						src: 'public/js/MusicBox/document_v1.js',
 						 options: {
 								specs: 'tests/spec.js',
@@ -77,9 +67,8 @@ module.exports = function(grunt) {
 		jade: {
 			compile: {
 				options: {
-					 client: false,
-               		 pretty: true,
-					
+					 	client: false,
+               		 	pretty: true,
 					data: {
 						debug: false,
 						root_url: '<%= cfg.ROOT_URL %>',
@@ -94,25 +83,23 @@ module.exports = function(grunt) {
 										username :'grunt'
 									}
 					}
-					
-
 				},
-				files: [ {
-					expand: true,
-					src: "**/*.jade",
-					dest: "dist",
-					cwd: "views",
-					ext: '.html'
-				}, {
-							expand: true,
-							src: "public/js/MusicBox/**/*.jade",
-							ext: '.tpl.html'
-						}
+				files: [ 
+					{
+						expand: true,
+						src: "**/*.jade",
+						dest: "dist",
+						cwd: "views",
+						ext: '.html'
+					}, 
+					{
+						expand: true,
+						src: "public/js/MusicBox/**/*.jade",
+						ext: '.tpl.html'
+					}
 				
 				 ]
-
-			 
-			}
+				}
 		},
 		
 		forever: {
@@ -156,25 +143,25 @@ module.exports = function(grunt) {
 				}
 		},
 		usemin: {
-html: "dist/index.html",
-css: ["dist/style/{,*/}*.css"],
-js: ["dist/js/{,*/}*.js"],
-options: {
-assetsDirs: ['dist','dist/image']
-}
-},
+					html: "dist/index.html",
+					css: ["dist/style/{,*/}*.css"],
+					js: ["dist/js/{,*/}*.js"],
+					options: {
+						assetsDirs: ['dist','dist/image']
+					}
+		},
 
-// Renames files for browser caching purposes
-filerev: {
-dist: {
-src: [
-"dist/script/{,*/}*.js",
-"dist/style/{,*/}*.css",
-"dist/image/{,*/}*.{ico,png,jpg,jpeg,gif,webp,svg}",
-"dist/font/*"
-]
-}
-},
+		// Renames files for browser caching purposes
+		filerev: {
+			dist: {
+				src: [
+				"dist/script/{,*/}*.js",
+				"dist/style/{,*/}*.css",
+				"dist/image/{,*/}*.{ico,png,jpg,jpeg,gif,webp,svg}",
+				"dist/font/*"
+				]
+			}
+		},
 
 
 
@@ -197,22 +184,20 @@ src: [
 				}]
 			},
 		},
-// Generate HTML5 Cache Manifest files
-manifest: {
-options: {
-basePath: "public",
-network: ["*"],
-preferOnline: true,
-verbose: false,
-timestamp: true
-},
-dist: {
-src: [
-"js/MusicBox/**/*.js"
-],
-dest: "public/OFFmanifest.appcache"
-}
-},
+		// Generate HTML5 Cache Manifest files
+		manifest: {
+			options: {
+				basePath: "public",
+				network: ["*"],
+				preferOnline: true,
+				verbose: false,
+				timestamp: true
+			},
+			dist: {
+				src: ["js/MusicBox/**/*.js"],
+				dest: "public/OFFmanifest.appcache"
+			}
+		},
 
 		// Deployment
 		rsync: {
@@ -285,10 +270,6 @@ dest: "public/OFFmanifest.appcache"
 	grunt.registerTask('default', [
 				'forever:server1:restart','watch'
 	]);
-
-
-	
-
 	// 'connect:livereload'
 	grunt.registerTask('build', [
 				'forever:server1:restart',
@@ -300,19 +281,9 @@ dest: "public/OFFmanifest.appcache"
 				'ngtemplates',
 				'connect:livereload'
 	]);
+	//grunt.registerTask('newsletter', ['']);
 
-	grunt.registerTask('minify', ['useminPrepare', 'ngtemplates','concat','usemin'
-		  
-		 
-	]);
+	grunt.registerTask('minify', ['useminPrepare', 'ngtemplates','concat','usemin']);
 	grunt.registerTask('initdb', ['open']);
-
-	
-
-
-
-
-
-
 	grunt.registerTask("deploy:test", "Deploy on TEST. server", ["rsync:test"]);
 };
