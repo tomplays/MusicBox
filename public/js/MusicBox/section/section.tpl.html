@@ -40,6 +40,8 @@
         <!-- a.btn_ok(ng-click="save_section(section)") save-->
         <!-- a.btn_ok(ng-click="doc_sync()") save-->
       </div>
+      <!-- h3 {{section.fulltext}}-->
+      <!-- strong {{section.letters.length}}-->
       <div ng-if="section.modeletters =='single'" class="theletters"><span lt="l" ng-repeat="l in section.letters track by $index"> </span></div>
       <div fluidtexte="fluidtexte" section="section" ng-bind-html="section.fulltext_block" ng-if="section.modeletters !=='single'" class="fluidtext"> </div>
       <div ng-if="section.editing_text == true &amp;&amp; ($parent.$parent.$parent.$last)" class="pusher_section"><i tooltip="new section" ng-click="new_section()" class="fa fa-plus-square pusher_item btn"></i></div>

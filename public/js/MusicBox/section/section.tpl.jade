@@ -54,8 +54,8 @@ div(ng-if="section['objects_count']['by_positions'][layout.name].count > 0 || la
 				// a.btn_ok(ng-click="save_section(section)") save
 				// a.btn_ok(ng-click="doc_sync()") save
 
-			
-			
+			// h3 {{section.fulltext}}
+			// strong {{section.letters.length}}
 			div.theletters(ng-if="section.modeletters =='single'")
 				span(lt="l" , ng-repeat="l in section.letters track by $index") 
 

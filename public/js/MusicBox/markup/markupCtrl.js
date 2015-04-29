@@ -224,7 +224,7 @@ angular.module('musicBox.markup_controller', ['musicBox.section_controller']).co
 	$scope.stack_markup = function(){
 		console.log('stack_markup')
 		console.log($scope.markup)
-		$scope.$parent.attribute_objects()
+		// $scope.$parent.attribute_objects()
 		$scope.markup.touched= true;
 		if(!_.contains($scope.$parent.$parent.ui.offset_queue, $scope.markup)){
 			$scope.$parent.$parent.ui.offset_queue.push($scope.markup)
@@ -641,7 +641,7 @@ angular.module('musicBox.markup_controller', ['musicBox.section_controller']).co
 			})
 		}
 
-$scope.init__()
+		$scope.init__()
 
 }); // end controller
 

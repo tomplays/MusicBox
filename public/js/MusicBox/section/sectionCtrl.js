@@ -63,15 +63,19 @@ $scope.map_letters = function(){
 
   	$scope.$parent.mapping_pass()
 	_.each($scope.section.letters, function(l,li){
-		l.inrange=false;
 
-		if( $scope.$parent.ui.selected_range.start && $scope.$parent.ui.selected_range.end && li >= $scope.$parent.ui.selected_range.start && li <= $scope.$parent.ui.selected_range.end) {
+		if($scope.$parent.ui.selected_range.start && $scope.$parent.ui.selected_range.end){
+			var index_absolute_start =   $scope.$parent.ui.selected_range.start -  $scope.section.start
+			var index_absolute_end   =   $scope.$parent.ui.selected_range.end -  $scope.section.start
+
+		}
+		
+		l.inrange=false;
+		if( $scope.$parent.ui.selected_range.start && $scope.$parent.ui.selected_range.end && li >= index_absolute_start && li <= index_absolute_end ) {
 			l.inrange = true;
 		}
 
-		
-
-
+	
 	})
 
 	if( $scope.$parent.ui.selected_range.end == $scope.section.end) {
@@ -269,7 +273,7 @@ $scope.init_= function () {
                // 'fulltext'    : self.ranges_to_fulltext($rootScope.doc.content, container.start, container.end)
             })
 
-
+/*
  		var fulltext = '';
         var i_array     =   0;
        
@@ -295,8 +299,9 @@ $scope.init_= function () {
 
          	
      	}
-     	$scope.section.fulltext = fulltext;
-     	$scope.section.fulltext_block = fulltext;
+     	*/
+     	$scope.section.fulltext = '   ';
+     	//$scope.section.fulltext_block = fulltext;
 
 
             // extend object
@@ -344,13 +349,14 @@ $scope.to_fulltext = function (){
     }
 
 
-$scope.$watch('section.fulltext', function(oldValue, newValue) {
-			
+$scope.$watch('section.fulltext', function(newValue, oldValue) {
 	console.log('section fulltext watched')
 
-	if(newValue && oldValue){
-		console.log(oldValue.length - newValue.length)
-		console.log('section fulltext watched with changes: '+newValue+'>'+oldValue)
+	if(newValue){
+				
+
+		
+		console.log('section fulltext watched with changes: '+oldValue+'>'+newValue)
 		var temp_letters = new Array();
 		var i;
 		var i_array     =   0;
@@ -387,7 +393,7 @@ $scope.$watch('section.fulltext', function(oldValue, newValue) {
 		  	i_array++;
 		}
 		$scope.section.letters = temp_letters;
-		
+			
 		$scope.attribute_objects()
 
 	
@@ -436,18 +442,15 @@ $scope.$watch('ui.selected_range', function(o,b) {
 
 
 
-$scope.push_generic_from_ranges= function (type, subtype,position,metadata){
+$scope.push_generic_from_ranges= function (type, subtype, position,metadata){
 		
 
-		if(metadata){
-			$scope.$parent.push.metadata = metadata
-		}
+		
 
 		$scope.$parent.push.metadata = (metadata) ? metadata : '-'
-		
-		$scope.$parent.push.type = (type) ? type : null;
-		$scope.$parent.push.subtype = subtype;
-		$scope.$parent.push.position = position
+		$scope.$parent.push.type = (type) ? type : 'comment';
+		$scope.$parent.push.subtype = (subtype) ? subtype : 'comment';
+		$scope.$parent.push.position = (position) ? position : 'left';
 		$scope.$parent.push.sectionin = $scope.$parent.section.sectionin
 
 		$scope.add();
@@ -478,7 +481,7 @@ $scope.add= function (){
 	}
 	*/
 		if(!$scope.$parent.push.start)	{	$scope.$parent.push.start	= $scope.$parent.ui.selected_range.start	}
-		if(!$scope.$parent.push.end)	{	$scope.$parent.push.end	= $scope.$parent.ui.selected_range.end	}
+		if(!$scope.$parent.push.end)	{	$scope.$parent.push.end	    = $scope.$parent.ui.selected_range.end	}
 
 
 		if(!$scope.$parent.push.position)	{	$scope.$parent.push.position 	= 'left'	}
@@ -515,6 +518,9 @@ $scope.add= function (){
         promise.query.then(function (Result) {
 				if(Result.inserted[0]){
 					var mi = Result.inserted[0]
+
+
+					$scope.$parent.markups.push(mi)
 					
 					//console.log(mi)
             	    $scope.flashmessage(mi.type +' inserted', 'ok' , 1400, false)
@@ -545,6 +551,9 @@ $scope.add= function (){
 					if(mi.type== 'container'){
 						console.log('need to refresh container orders')
 					}
+
+
+					$scope.attribute_objects()
 				
 					
 

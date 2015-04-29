@@ -24,12 +24,30 @@ angular.module('musicBox.LetterDirectives', [])
 
   function textarea_running(eventname, event, scope){
       // console.log($rootScope)
-
+     /*  var absolute_start;
+       var absolute_end;
       $rootScope.ui.current_action = eventname
-
+      if(event && event.target && event.target.selectionStart){
+         absolute_start = event.target.selectionStart + scope.section.start
+          $rootScope.ui.selected_range.start = absolute_start
+      } 
+      else{
+          absolute_start = 0
+          $rootScope.ui.selected_range.start  =  0
+      }
+      if(event && event.target &&  event.target.selectionEnd){
+        absolute_end = event.target.selectionEnd + scope.section.start
+        $rootScope.ui.selected_range.end  =  absolute_end
+      }
+      else{
+          absolute_end = 0
+          $rootScope.ui.selected_range.end  =  0
+      }
+     */
+ 
       if(eventname == 'mousedown' || eventname == 'mouseup' ){
-        $rootScope.ui.selected_range.start  = event.target.selectionStart
-        $rootScope.ui.selected_range.end    =  event.target.selectionEnd
+        $rootScope.ui.selected_range.start  = event.target.selectionStart + scope.section.start
+        $rootScope.ui.selected_range.end    = event.target.selectionEnd + scope.section.start
       }
       else if(eventname== 'saving'){
                 var string  = '';
@@ -41,24 +59,27 @@ angular.module('musicBox.LetterDirectives', [])
                 textarea_running('yo', 'yo') 
       }
       else if(eventname== 'delete'){
-        $rootScope.ui.selected_range.start = event.target.selectionStart
-        $rootScope.ui.selected_range.end  =  event.target.selectionEnd
+        $rootScope.ui.selected_range.start = absolute_start
+        $rootScope.ui.selected_range.end  =  absolute_end
       }
        else if(eventname== 'mv'){
-          $rootScope.ui.selected_range.start = event.target.selectionStart
-          $rootScope.ui.selected_range.end   =  event.target.selectionStart 
+          $rootScope.ui.selected_range.start =  event.target.selectionStart + scope.section.start
+          $rootScope.ui.selected_range.end   =   event.target.selectionEnd + scope.section.start
        }
       else if(eventname== 'key'){
-        $rootScope.ui.selected_range.start = event.target.selectionStart
-        $rootScope.ui.selected_range.end  =  event.target.selectionStart
+        
+       
+          scope.$parent.section.end++
+
+
         _.each($rootScope.markups, function(markup, i){
           if(markup.type !== 'container'){
                      
-                if(markup.end < event.target.selectionStart ){
+                if(markup.end < event.target.selectionStart+ scope.section.start ){
                     console.log('outmark:#1')   
                 }
                 else{
-                    if(markup.start <= event.target.selectionEnd){
+                    if(markup.start <= event.target.selectionEnd+ scope.section.start){
                       console.log('outmark:#2')
                       markup.end++
                       if(!_.contains($rootScope.ui.offset_queue, markup)){
@@ -66,7 +87,7 @@ angular.module('musicBox.LetterDirectives', [])
                       }
                     }
 
-                    if(markup.start > event.target.selectionEnd){
+                    if(markup.start > event.target.selectionEnd+ scope.section.start){
                       console.log('outmark:#3')
                       markup.end++
                       markup.start++
@@ -78,64 +99,80 @@ angular.module('musicBox.LetterDirectives', [])
                 }                       
           }
         })
-        return;
+         //$rootScope.$apply()
+
+         console.log(scope.section.letters)
+         
+        
       }
       //console.log(event)
       //console.log(event.target.textLength)
+     // 
+       return;
   }
 
   function link(scope, elem, attrs, $rootScope) { 
 
       elem.bind("mousedown", function(event){
-            textarea_running('mousedown', event)
+            textarea_running('mousedown', event, scope)
             // scope.$parent.section.debuggr.push('md')
-            scope.$apply();
-            return
+           scope.$apply();
+              return
       })
 
       elem.bind("mouseup", function(event){
-            textarea_running('mouseup', event)
+            textarea_running('mouseup', event, scope)
             // scope.$parent.section.debuggr.push('up--'+ event.target.selectionStart+'-'+event.target.selectionEnd)
             scope.$apply();
-            return
+              return
       })
       elem.bind("keyup", function(event){
           console.log('ft')
           if(event.which== 13){
-            textarea_running('saving', event)
+            textarea_running('saving', event, scope)
             scope.$parent.sync_queue()
+             scope.$apply();
+              return
+            
           }
           else if(event.which== 16 || event.which== 39 || event.which== 37  || event.which== 40 || event.which== 38){
              textarea_running('mv', event, scope)
+              scope.$apply();
+              return
+              
           }
-           else if(event.which== 8){
+          else if(event.which== 8){
 
-          // alert(event.target.textLength)
-          //  alert(scope.section.end-scope.section.start)
+            // alert(event.target.textLength)
+            //  alert(scope.section.end-scope.section.start)
 
             if(event.target.textLength !==scope.section.end-scope.section.start){
               scope.section.end = event.target.textLength;
             }
-
-
-            textarea_running('delete', event)
+              textarea_running('delete', event, scope)
          //   scope.$parent.section.end = scope.$parent.section.end - 1;
-            scope.$parent.section.debuggr.push('delete'+event.target.selectionEnd)
-        
+              scope.$parent.section.debuggr.push('delete'+event.target.selectionEnd)
+          
+           
           }
 
           else{
-            scope.$parent.section.end++;
-          
-            textarea_running('key', event)
-            //  scope.$parent.remap()
-              //  scope.$parent.section.debuggr.push('hey'+event.which+'--'+ event.target.selectionStart+'-'+event.target.selectionEnd)
-          
+              
+            textarea_running('key', event, scope)
+
+         
+            
+            //  scope.$parent.section.debuggr.push('hey'+event.which+'--'+ event.target.selectionStart+'-'+event.target.selectionEnd)
+            
           }
-         scope.$apply();
-         return
+
+        
           
       });
+  //scope.$apply();
+//$rootScope.$apply()
+            
+              return
     }
 
     return {
@@ -304,3 +341,9 @@ angular.module('musicBox.LetterDirectives', [])
             link: link,
         }
 })
+
+
+
+
+
+

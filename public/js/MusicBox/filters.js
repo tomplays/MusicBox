@@ -7,8 +7,6 @@
 angular.module('musicBox.filters', ['ngSanitize'] ).
 filter('trusted', function() {
     return function(val) {
-        alert('sdd')
-      
     };
 });
 
