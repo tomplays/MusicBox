@@ -133,8 +133,10 @@ $scope.map_letters = function(){
 			var index_absolute_end   =   $scope.$parent.ui.selected_range.end -  $scope.section.start
 
 		}
-		
+		console.log(li+'  KKK')
+
 		l.inrange=false;
+
 		if( ($scope.$parent.ui.selected_range.start || $scope.$parent.ui.selected_range.start ==0 ) && $scope.$parent.ui.selected_range.end && li >= index_absolute_start && li <= index_absolute_end ) {
 			l.inrange = true;
 		}
@@ -167,15 +169,15 @@ $scope.map_letters = function(){
 
 													var loop_start = markup.start 		- $scope.section.start;
 													var loop_end   = markup.end 		- $scope.section.start;
-													for (var mi = loop_start ; mi <= loop_end;mi++) {
+													for (var mi = loop_start ; mi < loop_end;mi++) {
 
 
-
+														
 
 														if($scope.section.letters && $scope.section.letters[mi]){
 
 
-															
+															console.log(mi+'  ----')
 
 															
 															
@@ -197,6 +199,8 @@ $scope.map_letters = function(){
 
 																}else{
 																	$scope.section.letters[mi].classes.push(markup.subtype)
+																	console.log(mi+'  --///:-')
+
 																}
 																
 															}
@@ -235,8 +239,8 @@ $scope.map_letters = function(){
 
 /*
 
-  console.log('letters debug(section)')
-  console.log($scope.section.letters)
+  		console.log('letters debug(section)')
+  		console.log($scope.section.letters)
   		var loop_start = markup.start 	- $scope.section.start;
 		var loop_end   = markup.end 		- $scope.section.start;
 	
@@ -244,95 +248,116 @@ $scope.map_letters = function(){
 
 		*/
 		var out = ''
-		var open = false
-		var opened = false
-		var close = false
-		var closed = false
+		// <>___</>*****<>___</>
 
     		for (var i = 0; i < fulltext_block.length; i++) {
 				
-				
+				console.log(i+'  llll-')
 
+    			var current = next = prev = prev_class = current_class = next_class = prev_range = next_range = false;
     			
 
-
-
-				console.log('prev next i == '+i)
-				if($scope.section.letters[i] && $scope.section.letters[i].classes.length > 0 ){
-					console.log('has class:')
-					  //close = true
-					  open = true
-
-					
+    			/*if($scope.section.letters[i].inrange === true){
+					 _.isArray(current_class) ? current_class.push('inrange') : current_class = new Array('inrange')
 				}
-				else{
-							console.log(' has NOT class ')
-
-					}
-
-
-if($scope.section.letters[i+1] && $scope.section.letters[i+1].classes.length > 0 ){
-						console.log('(next) has class ')
-						// > close to end of <>___</>*****<>___</>
-
-						 close = true
-
-					
-					}
-					else{
-							console.log('(next) has NOT class ')
-
-					}
-					if($scope.section.letters[i-1] && $scope.section.letters[i-1].classes.length > 0 ){
-						console.log('has class (prev):')
-						 open  = false
-
-					
-					}
-					else{
-							console.log('(prev) has NOT class ')
-							// means was open
-
-					}
 
 					if(i==0){
-    				console.log('first letter')
-    					 open = true
-    			}
+								//		 _.isArray(current_class) ? current_class.push('iss') : current_class = new Array('iss')
 
+
+					}
+
+					if(i+1 == $scope.section.letters.length ){
+																 _.isArray(current_class) ? current_class.push('issd') : current_class = new Array('issd')
+
+				///	current_class.push('is_last')
+
+					}
+					*/
+				//console.log('prev next i == '+i)
 				if($scope.section.letters[i] && $scope.section.letters[i].classes.length > 0 ){
-					console.log($scope.section.letters[i].classes)
+					current = true	
+				//	if(_.isArray())
+				//	current_class.push($scope.section.letters[i].classes) : current_class = new Array($scope.section.letters[i].classes)
+current_class = $scope.section.letters[i].classes
+					//current_class.push()
+					console.log(current_class)
+
+
+				}
+				
+
+				if( $scope.section.letters[i+1] && $scope.section.letters[i+1].classes.length > 0 ){
+					 next = true;
+					 next_class = $scope.section.letters[i+1].classes;
+				}
+				
+				if($scope.section.letters[i-1] && $scope.section.letters[i-1].classes.length > 0 ){
+					 prev = true
+					 prev_class = $scope.section.letters[i-1].classes
+				}
+				
+
+
+				// case letter as at least one class
+				if(_.isArray($scope.section.letters[i].classes)){
+					//console.log($scope.section.letters[i].classes)
+					
+
+					// add to array before compare
+					
+
+					// default class
 					var classes_flat  = 'lt '
-					 _.each($scope.section.letters[i].classes, function(c,ci){
+					// flatten 
+					 _.each(current_class, function(c,ci){
 						classes_flat += c+' ';
 					})
-					if($scope.section.letters[i].inrange == true){
-						classes_flat += 'inrange '
-					}
+
+					var inside = fulltext_block[i]
 					if($scope.section.letters[i].href !== ''){
-						out += '<span class="'+classes_flat+'"><a href="'+$scope.section.letters[i].href+'">'+fulltext_block[i]+'</a></span>'
+						inside += '<a href="'+$scope.section.letters[i].href+'">'+fulltext_block[i]+'</a>'
+					}
+
+					if(  _.isEqual(prev_class , current_class) ) {
+						out += inside
+
 					}
 					else{
-						out += '<span class="'+classes_flat+'">'+fulltext_block[i]+'</span>'
+						out += '<span class="'+classes_flat+'">'+inside
 
 					}
+					if(_.isArray(next_class) && _.isEqual(next_class , current_class) ) {
+					
+					}
+					else{
+						out += '</span>'
+
+					}
+
+
+					//out += '<span class="'+classes_flat+'">'+inside+'</span>'
+
+					
 					//console.log($scope.section.letters[i].classes[])
 				}
-				else{
 
-				
-					if(close === true){
-					//	out += '</span>';
-					//	open = false
-					//	opened = true
+				// case letter has no classes
+				else{
+					
+
+					if(_.isArray(prev_class) || i==0 ){
+						// prev was a self closing letter or first letter then open span
+						out +='<span>'
 					}
 					
-					if(open === true){
-					//		out += '<span>';
-					}
 					out += fulltext_block[i]
-				
 					
+					if(_.isArray(next_class) || i+1 == $scope.section.letters.length){
+						// next is a letter or is last letter then close span
+						out +='</span>'
+					}
+			
 				}
 
 			}
