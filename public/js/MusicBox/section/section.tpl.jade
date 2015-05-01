@@ -3,8 +3,7 @@ div(ng-if="section['objects_count']['by_positions'][layout.name].count > 0 || la
 	// h1{{section['objects_count']['by_positions'][layout.name].count}}
 	div(class="layout_ layout_name_{{layout.name}} has_count_{{section.objects_count.by_positions[layout.name].count}} has_object_{{section.objects_count.by_positions[layout.name].has_object}}")
 		
-		
-		
+		mb-dataset(ng-if="ui.renderAvailable_active == 'dataset' && (layout.name == 'center') && ($parent.$parent.$first)")
 
 		// title, author, date, ..
 		doc-title(ng-if="(layout.name == 'center') && ($parent.$parent.$first)")		
@@ -56,11 +55,12 @@ div(ng-if="section['objects_count']['by_positions'][layout.name].count > 0 || la
 
 			// h3 {{section.fulltext}}
 			// strong {{section.letters.length}}
-			div.theletters(ng-if="section.modeletters =='single'")
-				span(lt="l" , ng-repeat="l in section.letters track by $index") 
 
+			div.theletters(ng-if="section.modeletters == 'single'")
+				span(lt="l" , ng-repeat="l in section.letters") 
 
-			div.fluidtext(fluidtexte, section="section" , ng-bind-html="section.fulltext_block",ng-if="section.modeletters !=='single'") 
+			// 
+			div.fluidtext(fluidtexte, section="section" ,  ng-hide="section.modeletters =='single'" , ng-bind-html="section.fulltext_block") 
 
 			.pusher_section(ng-if="section.editing_text == true && ($parent.$parent.$parent.$last)")
 				i.fa.fa-plus-square.pusher_item.btn(tooltip="new section" ng-click="new_section()")

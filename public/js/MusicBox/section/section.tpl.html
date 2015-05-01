@@ -2,6 +2,7 @@
 <div ng-if="section['objects_count']['by_positions'][layout.name].count &gt; 0 || layout.include_even_empty" ng-repeat="layout in available_layouts">
   <!-- h1{{section['objects_count']['by_positions'][layout.name].count}}-->
   <div class="layout_ layout_name_{{layout.name}} has_count_{{section.objects_count.by_positions[layout.name].count}} has_object_{{section.objects_count.by_positions[layout.name].has_object}}">
+    <mb-dataset ng-if="ui.renderAvailable_active == 'dataset' &amp;&amp; (layout.name == 'center') &amp;&amp; ($parent.$parent.$first)"></mb-dataset>
     <!-- title, author, date, ..-->
     <doc-title ng-if="(layout.name == 'center') &amp;&amp; ($parent.$parent.$first)">		</doc-title>
     <div ng-if="layout.name == 'right'">
@@ -42,8 +43,9 @@
       </div>
       <!-- h3 {{section.fulltext}}-->
       <!-- strong {{section.letters.length}}-->
-      <div ng-if="section.modeletters =='single'" class="theletters"><span lt="l" ng-repeat="l in section.letters track by $index"> </span></div>
-      <div fluidtexte="fluidtexte" section="section" ng-bind-html="section.fulltext_block" ng-if="section.modeletters !=='single'" class="fluidtext"> </div>
+      <div ng-if="section.modeletters == 'single'" class="theletters"><span lt="l" ng-repeat="l in section.letters"> </span></div>
+      <!-- -->
+      <div fluidtexte="fluidtexte" section="section" ng-hide="section.modeletters =='single'" ng-bind-html="section.fulltext_block" class="fluidtext"> </div>
       <div ng-if="section.editing_text == true &amp;&amp; ($parent.$parent.$parent.$last)" class="pusher_section"><i tooltip="new section" ng-click="new_section()" class="fa fa-plus-square pusher_item btn"></i></div>
     </div>
     <div ng-if="(layout.name == 'global') &amp;&amp; ($parent.$parent.$last) &amp;&amp; objects_sections['global_all'].length &gt; 0">

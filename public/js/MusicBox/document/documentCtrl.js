@@ -91,7 +91,7 @@ function DocumentCtrl($scope, $http , $sce, $location, $routeParams ,socket,rend
 
 	$scope.mapping_passes = 0;
 	$scope.mapping_pass = function(){
-		$scope.mapping_passes++
+		return $scope.mapping_passes++
 	}
   
 $scope.letters = [];
@@ -107,6 +107,8 @@ $scope.letters = [];
 			$scope.sectionstocount--;
 		}
 	}
+
+
 	$scope.update_markup_count = function(direction){
 		if(direction=='add'){
 			$scope.markup_total_count++;
@@ -671,12 +673,7 @@ console.log(m)
 	});
 
 	$scope.$watch('loaded_markups', function( newValue,oldValue) {
-			console.log('- Document level')
-			console.log('- markpups sorted after markups change watched')
-          	// filter markups > only if markup.type ==  "container"
-			
-
-		
+			console.log('[doc] - loaded_markups watched ')		
 	}, true);
 /*
 	$scope.$watch('markups', function( newValue,oldValue) {

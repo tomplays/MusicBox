@@ -15,10 +15,6 @@
 
 */
 
-
-// not very used.. only for video players in v1.
-// some tests for a reafactoring commented
-
 angular.module('musicBox.LetterDirectives', [])
 .directive('textListener', function($rootScope) {
 
@@ -50,17 +46,18 @@ angular.module('musicBox.LetterDirectives', [])
         $rootScope.ui.selected_range.end    = event.target.selectionEnd + scope.section.start
       }
       else if(eventname== 'saving'){
-                var string  = '';
-                _.each($rootScope.containers, function(container){
-                    string  += container.fulltext;
-                    console.log(container.fulltext)
-                })
-                $rootScope.doc.content = string;     
-                textarea_running('yo', 'yo') 
+        var string  = '';
+        _.each($rootScope.containers, function(container){
+            string  += container.fulltext;
+            console.log(container.fulltext)
+        })
+        $rootScope.doc.content = string;
       }
       else if(eventname== 'delete'){
-        $rootScope.ui.selected_range.start = absolute_start
-        $rootScope.ui.selected_range.end  =  absolute_end
+        $rootScope.ui.selected_range.start = scope.section.end + scope.section.start
+        $rootScope.ui.selected_range.end  = scope.section.end + scope.section.start
+
+
       }
        else if(eventname== 'mv'){
           $rootScope.ui.selected_range.start =  event.target.selectionStart + scope.section.start
@@ -69,7 +66,9 @@ angular.module('musicBox.LetterDirectives', [])
       else if(eventname== 'key'){
         
        
-          scope.$parent.section.end++
+        scope.section.end++
+         $rootScope.ui.selected_range.start =  scope.section.end + scope.section.start
+         $rootScope.ui.selected_range.end   =   scope.section.end + scope.section.start
 
 
         _.each($rootScope.markups, function(markup, i){
@@ -297,7 +296,9 @@ angular.module('musicBox.LetterDirectives', [])
     };
   })
 .directive('fluidtexte',   
-  function($rootScope, MusicBoxLoop) {
+  function($rootScope) {
+
+   
 
     // Toggle "letters mode" on click, mouvedown, ..
     function transforms(scope, ev){
@@ -305,31 +306,25 @@ angular.module('musicBox.LetterDirectives', [])
          scope.$apply(function(){
            // if($rootScope.doc_owner == true){
 
-              //$rootScope.ui.selected_range.start = 0
-              $rootScope.ui.selected_range.wait_ev = true;
-              scope.section.modeletters = 'single';
-              $rootScope.ui.selected_section_index =999
+            scope.section.modeletters = 'single';
+             
            // }
         });
     }
    
-    function link(scope, elem, attrs, $rootScope) { 
-    
-      elem.bind('mouseup', function() {
-          transforms(scope, 'mouseup', $rootScope)
+   
+     function link(scope, elem, attrs) { 
+     elem.bind('mouseup', function() {
+          transforms(scope, 'mouseup')
       })
 
       elem.bind('mousedown', function() {
           console.log(scope)
-          transforms(scope, 'mousedown', $rootScope)
+          transforms(scope, 'mousedown')
       })
 
       elem.bind('click', function() {
-        transforms(scope, 'click', $rootScope)
-      })
-
-      elem.bind('dblclick', function() {
-        // never happen
+        transforms(scope, 'click')
       })
     }
     return {
@@ -341,9 +336,3 @@ angular.module('musicBox.LetterDirectives', [])
             link: link,
         }
 })
-
-
-
-
-
-

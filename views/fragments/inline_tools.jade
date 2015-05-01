@@ -9,7 +9,8 @@ span.pusher
 					ul.typer.sub
 						li.pusher_item(class="" ng-repeat="t in objSchemas[object].modes.editor.fields.subtype.available") 
 							i.fa.btn_action(tooltip="insert markup" class="fa-{{t}}" ng-click="push_generic_from_ranges('markup', t,'inline')" ) 
-				
+						li.pusher_item(class="") 
+							i.fa.btn_action(tooltip="insert markup" class="fa-media" ng-click="push_generic_from_ranges('media', 'img','right', 'http://hacktuel.fr/img/lorem/400-400.jpg')" ) 
 				div(ng-if="object=='container_class'")
 					i.fa.btn_action(tooltip="insert markup" class="fa-{{t}}" ng-click="push_generic_from_ranges('container_class','css','inline', 'bg_dark')" ) text white
 				
@@ -31,11 +32,7 @@ span.pusher
 				{{ui.selected_range.textrange}} 
 
 		
-		
-
-
 // textarea(type="text", ng-model="section.fulltext")
-
 // h4 {{section.start}} - {{section.end}} - {{section.metadata}} - {{section.type}} - {{section.subtype}}
 // p {{ui.selected_range}}
 // debug
@@ -44,7 +41,8 @@ span.pusher
 // h2 insert_scratch :{{ui.selected_range.insert_scratch}}
 // h4 {{push}}
 // em {{ui.selected_range}}
-h1 {{ui.selected_range.start}} - {{ui.selected_range.end}}
+div.sectiondebug(ng-if="ui.debug")
+	h1 {{ui.selected_range.start}} - {{ui.selected_range.end}}
 // h1 {{ui.current_action}}
 // h5 {{ui.cursor_at}}
 // h4 {{ui.selected_range.start}}

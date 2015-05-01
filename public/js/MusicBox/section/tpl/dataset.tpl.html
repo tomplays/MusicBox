@@ -1,0 +1,64 @@
+
+<div class="one columns"> </div>
+<div class="ten columns">
+  <!-- span.filter_dataset_by filtered by :{{filter_dataset_by}} -->
+  <!-- a.filter_dataset_by_next(ng-click="slide_filter_dataset_by('filter_dataset_available')")  &raquo; {{filter_dataset_by_next}}-->
+  <table style="width:100%;">
+    <thead> 
+      <tr>
+        <th>Select</th>
+        <th>Actions</th>
+        <th>type</th>
+        <th>subtype</th>
+        <th>metadata</th>
+        <th>start</th>
+        <th>end</th>
+        <th>position</th>
+        <th>section index</th>
+        <th>isolated.</th>
+        <th>sel.</th>
+        <th>ed.</th>
+        <th>status.</th>
+        <th>moderation.</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-controller="MarkupCtrl" ng-repeat="markup in markups track by $index" class="trtype-{{markup.type}}">
+        <!-- , ng-if="markup.type==filter_dataset_by || filter_dataset_by == 'any'"-->
+        <td><span ng-click="toggle_select_markup('click')" class="markup-item-subtype clipped_{{markup.isselected}} markup-hn_{{markup.subtype}}">+ </span></td>
+        <td><i tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.save}}" ng-click="save('ok')" class="fa fa-save btn_action"></i><i tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.delete}}" ng-click="delete()" class="fa fa-remove btn_action"></i></td>
+        <td> 
+          <input ng-model="markup.type" type="text"/>
+        </td>
+        <td> 
+          <input ng-model="markup.subtype" type="text"/>
+        </td>
+        <td> 
+          <input ng-model="markup.metadata" type="text"/>
+        </td>
+        <td> 
+          <input ng-model="markup.start" type="number"/>
+        </td>
+        <td> 
+          <input ng-model="markup.end" type="number"/>
+        </td>
+        <td>{{markup.position}}</td>
+        <td>{{markup.sectionin}}</td>
+        <td>{{markup.isolated}}</td>
+        <td> <span>{{markup.selected}}</span></td>
+        <td><span>{{markup.editing}}</span></td>
+        <td><span>{{markup.status}}</span></td>
+        <td><i tooltip-placement="left" tooltip="set as approved" ng-click="change_value('status','approved', true)" class="fa fa-check btn_action"> </i><i tooltip-placement="left" tooltip="set as pending" ng-click="change_value('status','pending', true)" class="fa fa-close btn_action"> </i></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="one columns">
+  <!-- a(ng-click="Grabcollection('select')") Grabcollection (test function)-->
+  <!-- div.collection-->
+  <!-- code{{collection}}
+  -->
+  <!-- ulcode(ng-repeat="c in collection") {{c.subtype}}:{{c.metadata}} 
+  -->
+  <!-- a(ng-click="toggle_render('read')") Reading mode-->
+</div>

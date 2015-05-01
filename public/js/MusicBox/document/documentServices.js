@@ -34,6 +34,12 @@ angular.module('musicBox.DocumentService',[])
     this.Load()
 
   }
+
+
+  DocumentService.prototype.SetSlug = function () {
+   return
+
+  }
   
 
   DocumentService.prototype.Load = function (slug) {
@@ -174,17 +180,6 @@ angular.module('musicBox.DocumentService',[])
       }
      
 
-  DocumentService.prototype.Config = function () {
-
-
-      
-  }
-  DocumentService.prototype.RestartMusicBoxLoop = function () {
-
-
-      
-  }
-
  
 
 
@@ -229,28 +224,31 @@ angular.module('musicBox.DocumentService',[])
       
         var promise = this.api_method.doc_sync({id:$rootScope.doc.slug},serialize(data)).$promise;
         promise.then(function (Result) {
-
-          if($rootScope.ui.debug){
-              $rootScope.doc.formated_date = Result.doc.updated;
-
-          }
-           
-           console.log('SAVED')
-            thos.flash_message('-', 'line' , 2400, false)
-
-           
-            
-            $rootScope.ui.selected_range.markups_to_offset = []
-            $rootScope.ui.offset_queue = []
+          if(Result.doc){
 
 
-            _.each($rootScope.markups, function(m){
-                //  m.end = m.end+m.offset_end
-                //  m.start = m.start+m.offset_start
-                  m.offset_end=0
-                  m.offset_start=0
-                  m.has_offset=false
+            if($rootScope.ui.debug){
+                $rootScope.doc.formated_date = Result.doc.updated;
+
+            }
+             
+             console.log('SAVED')
+              thos.flash_message('-', 'line' , 2400, false)
+
+             
+              
+              $rootScope.ui.selected_range.markups_to_offset = []
+              $rootScope.ui.offset_queue = []
+
+
+              _.each($rootScope.markups, function(m){
+                  //  m.end = m.end+m.offset_end
+                  //  m.start = m.start+m.offset_start
+                    m.offset_end=0
+                    m.offset_start=0
+                    m.has_offset=false
              });
+          }
          
 
         }.bind(this));

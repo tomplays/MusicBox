@@ -29,11 +29,11 @@ div.mk_inside_visible(ng-if="(markup.visible && !markup.forced) || (markup.visib
 	span.icon_col.use_depth(ng-hide="markup.type== 'child' || markup.type== 'container'")
 		i(tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.select_edit}}" class="fa fa-{{markup.type}} fa-{{markup.subtype}} editing_{{markup.editing}} selected_{{markup.selected}}",  ng-click="toggle_select_markup('click')", ng-dblclick="toggle_select_markup( 'dblclick')"  ) 
 			span(ng-if="markup.type=='generic'") {{markup.subtype[0]}}
-		span select
+		// span select
 
 
 	span.icon_col.use_depth(ng-if="markup.type== 'container'")
-		i(tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.select_edit}}" class="fa fa-{{markup.type}} fa-{{markup.subtype}} editing_{{markup.editing}} selected_{{markup.selected}}",  ng-click="select_section()"  ) Select section # {{$parent.$index}}
+		i(tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.select_edit}}" class="fa fa-{{markup.type}} fa-{{markup.subtype}} editing_{{markup.editing}} selected_{{markup.selected}}",  ng-click="select_section()"  ) Select section # {{markup.sectionin}}
 	div.data_col
 
 		span.mk_val.metadata.use_depth(ng-bind-html="markup.metadata",  ng-if="(markup.objSchemas.modes.read.display.metadata.displayed =='metadata') && (markup.editing ==false) ") 

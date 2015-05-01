@@ -1,8 +1,18 @@
 
 
 
-div.section_debug(ng-if="ui.debug")
-	{{ui.selected_range.markups_to_offset}}
+div.sectiondebug(ng-if="ui.debug")
+	h3 mapping_passes {{mapping_passes}}
+	h3 section count {{sectionstocount}}
+
+	h2 stack ({{ ui.offset_queue.length }})
+	a(ng-click="sync_queue()")  sync queue
+	div(ng-repeat="s in ui.offset_queue")
+		em {{s.type}}
+		em {{s.start}}
+		em {{s.end}}
+
+	// {{ui.selected_range.markups_to_offset}}
 	// input(type="checkbox", ng-model="ui.sync_sections" , ng-true-value="true" ,ng-false-value="false")
 	// span {{ui.sync_sections}}
 	ul

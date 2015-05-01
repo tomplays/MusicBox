@@ -3,20 +3,20 @@ angular.module('musicBox.markup_controller', ['musicBox.section_controller']).co
 	
 	
 	$scope.init__= function () {
-		console.log(' - init markup')
-
-		if($scope.markup.type !=='container'){
-			//$scope.$parent.section.update_markup_section_count('add')
+		console.log('     ---- [m] init markup')
+		//console.log($scope.$parent.section_markups)
+		if($scope.$parent.section_markups && $scope.$parent.section_markups.all){
+			console.log('     ---- [m] '+$scope.$parent.section_markups.all)
 		}
-		
+		if($scope.markup.type !=='container'){			
+			//$scope.$parent.update_markupsection_count('add')
+		}
 		/*
-		
-		console.log($scope.markup)
-		console.log('parent ctrl')
-		console.log($scope.$parent)
-		console.log($scope.section)
-		console.log('mk index'+$scope.$parent.$index)
-		
+			console.log($scope.markup)
+			console.log('parent ctrl')
+			console.log($scope.$parent)
+			console.log($scope.section)
+			console.log('mk index'+$scope.$parent.$index)
 		*/
 		if(!$scope.$parent.$parent.objSchemas[$scope.markup.type]){
 			console.log('no schematype for markup!')
@@ -36,34 +36,29 @@ angular.module('musicBox.markup_controller', ['musicBox.section_controller']).co
             'forced'		 : ($scope.markup.type =='container' || $scope.markup.type =='markup' || $scope.markup.type =='container_class' ) ? true : false,
             'touched'        : false,
             'ready'          : 'init',
-            'fulltext'        : $scope.fulltext(),
-            'sectionin' 	 :  $scope.$parent.$index,
             'doc_id_id'      : '', // special cases for child documents (refs as doc_id in markup record)
        		'user_options'	 : $scope.apply_object_options('markup_user_options',$scope.markup.user_id.user_options),
 			'by_me' 		 : ( $scope.markup.user_id._id && $scope.$parent.userin._id  && ($scope.$parent.userin._id == $scope.markup.user_id._id ) ) ? true : false,
 			'can_approve' 	 : ($scope.$parent.doc_owner) ? true : false,
-			'objSchemas' 	 : $scope.objSchemas[$scope.markup.type]
-		        
-        })
-       	
+			'objSchemas' 	 : $scope.objSchemas[$scope.markup.type]      
+        })      	
 
 		$scope.markup =  _.extend($scope.markup, markup_);
-       	
-  		
-		//console.log('attribute_objects')
+ 
 		if($scope.markup.type =='container'){
 			 console.log('attribute_objects self container')
+		}
+		else{
+			// its own fulltext for section.
+			 $scope.markup.sectionin= $scope.$parent.sectionin
+  			$scope.markup.fulltext = $scope.fulltext()
 		}
               	
 		$scope.markup.visible = false;
 		if($scope.markup.deleted !== true && ($scope.markup.status == 'approved' || $scope.markup.by_me ==true || $scope.markup.can_approve == true) ) {
 			$scope.markup.visible = true;
 		}
-		       
-
-
-		
-
+		    
 		if($scope.markup.type =='child'){ 
 			// to keep doc_id._id (just id as string) in model and not pass to post object later..
 			if($scope.markup.doc_id){ 
@@ -85,25 +80,19 @@ angular.module('musicBox.markup_controller', ['musicBox.section_controller']).co
 		 	if( ($scope.$parent.objSchemas[$scope.markup.type].map_range && $scope.$parent.objSchemas[$scope.markup.type].map_range==true && $scope.markup.visible == true)  || ($scope.markup.subtype=='share_excerpt' && $scope.markup.visible == true)  ){
 		 	} 
 		*/
-      
-
-			
+      	
 		if($scope.markup.type == 'media' || $scope.markup.subtype == 'simple_page' ||  $scope.markup.subtype == 'doc_content_block' ){
 		    $scope.section.section_classes += 'has_image ';
 		    if($scope.markup.position){
 		          $scope.section.section_classes += ' focus_side_'+$scope.markup.position +' ';
 			}
-
 			if($scope.markup.position == 'background'){
 				$scope.section.section_styles = 'background-image:url('+markup.metadata+'); ' ;
 			}
 		}
-       	console.log(' - init markup end > next > map_letters')
-
-
+       	// console.log(' - init markup end > next > map_letters')
        	if($scope.markup.type !=='container'){
 			
-
 		}
 		if($scope.markup.type =='container'){
 			
@@ -112,10 +101,9 @@ angular.module('musicBox.markup_controller', ['musicBox.section_controller']).co
 		
 	}
 
-
 	$scope.fulltext = function (){
-		var fulltext = '';
-    	var i_array     =   0;
+	   var fulltext = '';
+       var i_array     =   0;
 	   for (var i = $scope.markup.start; i <= $scope.markup.end; i++) {
          	// console.log(i)
          	if($scope.$parent.doc.content[i]){
@@ -124,9 +112,6 @@ angular.module('musicBox.markup_controller', ['musicBox.section_controller']).co
      	}
      	return fulltext;
 	}
-	
-
-
 
   	//console.log($scope.section)
     /*
@@ -143,28 +128,20 @@ angular.module('musicBox.markup_controller', ['musicBox.section_controller']).co
 
 	var autosave = false;
 
-
-
 	$scope.handle_change_range = function(oldValue,newValue, sore){
 			console.log('handle_change_range '+sore+' of markup changes watched')
 			console.log(oldValue+'-->'+newValue)
-
 			//alert($scope.markup.sectionin)
-
 			if(newValue>$scope.section.end || newValue<$scope.section.start ){
-			
 				$scope.markup[sore] = oldValue
-
 			}
-
-			
 			//$scope.markup.$parent.letters = new Array()
 			//console.log($scope.markup)
-					//	console.log($scope.markup.$parent)
+			//	console.log($scope.markup.$parent)
 			//console.log($scope.$parent.section.letters)
-                _.each($scope.$parent.section.letters, function(l){
-                	l.classes = new Array();
-				})
+            _.each($scope.$parent.section.letters, function(l){
+              	l.classes = new Array();
+			})
 
             var st_at = $scope.markup.start-$scope.$parent.section.start
 
@@ -205,6 +182,7 @@ angular.module('musicBox.markup_controller', ['musicBox.section_controller']).co
         if(oldValue && newValue && newValue !== oldValue){
       	      // $scope.markup.fulltext = $scope.fulltext()
  			   $scope.markup.has_offset = true;
+ 			   //	alert('m end ininit')
 	           $scope.markup.offset_start = $scope.markup.offset_start - (newValue - oldValue)
 			   $scope.stack_markup()
 		}	 
@@ -219,24 +197,19 @@ angular.module('musicBox.markup_controller', ['musicBox.section_controller']).co
 		}
    });	
 
-
-
 	$scope.stack_markup = function(){
 		console.log('stack_markup')
 		console.log($scope.markup)
-		// $scope.$parent.attribute_objects()
+		 $scope.$parent.attribute_objects()
 		$scope.markup.touched= true;
 		if(!_.contains($scope.$parent.$parent.ui.offset_queue, $scope.markup)){
 			$scope.$parent.$parent.ui.offset_queue.push($scope.markup)
      	}
      	//$scope.$parent.section.fulltext = $scope.$parent.section.fulltext+'-'
-     	
 	}
-
 
      $scope.$watch('markup.type', function( oldValue, newValue) {
         if(oldValue && newValue && newValue !== oldValue){
-
 
         	if($scope.objSchemas[newValue]){
         		$scope.markup.objSchemas = $scope.objSchemas[newValue]
@@ -244,54 +217,43 @@ angular.module('musicBox.markup_controller', ['musicBox.section_controller']).co
         	else{
         		console.log('try to save to undef type')
         	}
-
 			$scope.markup.touched= true;
 			$scope.$parent.attribute_objects()
 			$scope.stack_markup()
-          
-
-
 		}
    });	
   
-    $scope.$watch('markup.subtype', function(  newValue, oldValue) {
+    $scope.$watch('markup.subtype', function( newValue, oldValue) {
         if(oldValue && newValue && newValue !== oldValue){
-       
 	       $scope.markup.touched= true;
 	       $scope.$parent.attribute_objects()
+	       $scope.stack_markup()
+	       $scope.save($scope.markup.subtype +' moved to '+newValue)
 		}
    });	
 
     $scope.$watch('markup.position', function( newValue, oldValue ) {
-		    // only for markups which ranges match container
-				
-			if(oldValue && newValue && newValue !== oldValue){
+		// only for markups which ranges match container
+		if(oldValue && newValue && newValue !== oldValue){
 
-				        if($scope.markup.start >= $scope.$parent.section.start && $scope.markup.end <= $scope.$parent.section.end){
-				                //console.log('watch position trigger>')
-								$scope.markup.sectionin = $scope.$parent.section.sectionin  
-					        //	console.log('markup.sectionin'+$scope.markup.sectionin)				
-					   }
-					   if(newValue !== oldValue){
-						  	//$scope.$parent.init_()		
-					}
-					$scope.markup.touched= true;
-	       			$scope.$parent.attribute_objects()
-	        }
-		
-
-
-	      //    
-
-	       
-
-	        //$scope.$parent.section.hello= new Object($scope.markup)
-
-	           // $scope.markup.position = newValue;
-	            //no toggle 
-	           // $scope.ui.focus_side = ''
-		
-
+			if($scope.markup.start >= $scope.$parent.section.start && $scope.markup.end <= $scope.$parent.section.end){
+				//console.log('watch position trigger>')
+				$scope.markup.sectionin = $scope.$parent.section.sectionin  
+				//	console.log('markup.sectionin'+$scope.markup.sectionin)				
+			}
+			if(newValue !== oldValue){
+				//$scope.$parent.init_()		
+			}
+			$scope.markup.touched= true;
+			//alert('p ininit')
+			$scope.$parent.attribute_objects()
+			$scope.stack_markup()
+		}
+		//    
+		//$scope.$parent.section.hello= new Object($scope.markup)
+        // $scope.markup.position = newValue;
+	    //no toggle 
+	    // $scope.ui.focus_side = ''
 		/*		if(!$scope.$parent.section.objects_[$scope.markup.type]){
 					$scope.$parent.section.objects_[$scope.markup.type] = new Array()
 					if(!$scope.$parent.section.objects_[$scope.markup.type][newValue]){
@@ -309,10 +271,7 @@ angular.module('musicBox.markup_controller', ['musicBox.section_controller']).co
 
 				//console.log($scope.$parent.objects_[$scope.markup.type][oldValue])
 			//	$scope.$parent.section.objects_[$scope.markup.type][oldValue] = _.without($scope.$parent.section.objects_[$scope.markup.type][oldValue], $scope.markup)
-	            /// doc.markup_save($scope.markup)
-
-        
-//}
+	            /// doc.markup_save($scope.markup)    
 
 
          // $scope.$parent.section.fulltext = $scope.$parent.section.fulltext+'-'
@@ -415,16 +374,13 @@ angular.module('musicBox.markup_controller', ['musicBox.section_controller']).co
 			$scope.$parent.section.focused  = 'side_right'
 		}
 		else{
-						$scope.$parent.defocus()
+			$scope.$parent.defocus()
 
 		}
 
 
 
-		$scope.ui.selected_range.start = $scope.markup.start
-		$scope.ui.selected_range.end   = $scope.markup.end
-		
-
+		$scope.ui.selected_range = new Object({start: $scope.markup.start, end: $scope.markup.end}) 
 		$scope.markup.inrange=true
 
 
@@ -460,23 +416,23 @@ angular.module('musicBox.markup_controller', ['musicBox.section_controller']).co
 	
 	// change and save a single markup attr-value
 	$scope.change_value = function(attr, value, save){
-		$scope.markup[attr] = value;
+
+		if(attr && value){
+			$scope.markup[attr] = value;
+		}
+		
 		if(save){
 			if(attr == 'status'){
-
 				$scope.save($scope.markup.type +' set as '+value)
 			}
 			else if(attr == 'position'){
 				$scope.save($scope.markup.type +' moved to '+value)
 			}
-
 			else
 			{
-				$scope.save($scope.markup.type +' moved to '+value)
-			}
-			
-		}
-		
+				$scope.save($scope.markup.type +' changed to '+value)
+			}	
+		}	
 	}
 
 	// toggle a single markup attr-value
@@ -485,20 +441,21 @@ angular.module('musicBox.markup_controller', ['musicBox.section_controller']).co
 		$scope.markup[attr] = !$scope.markup[attr]
 	}
 
-/**
-      * @description 
-      * Save a markup (attributes)
-      *
-      * @param {object} markup - markup to save
-      * @return {Function} init and/or flash
-      * 
-      * @function docfactory#markup_save
-      * @link docfactory#markup_save
-      * @todo ---
-      */
+	 /**
+	  * @description 
+	  * Save a markup (attributes)
+	  *
+	  * @param {object} markup - markup to save
+	  * @return {Function} init and/or flash
+	  * 
+	  * @function docfactory#markup_save
+	  * @link docfactory#markup_save
+	  * @todo ---
+	 */
 
 
      $scope.save = function (save_msg) {
+
         var thos = this;
         var promise = new Object();
         var data = new Object({
@@ -521,11 +478,11 @@ angular.module('musicBox.markup_controller', ['musicBox.section_controller']).co
 		data.metadata 	= $scope.markup.objSchemas.modes.editor.fields.metadata.forced ? $scope.markup.objSchemas.modes.editor.fields.metadata.forced : $scope.markup.metadata
 		data.position 	= $scope.markup.objSchemas.modes.editor.fields.position.forced ? $scope.markup.objSchemas.modes.editor.fields.position.forced : $scope.markup.position
 		data.type       = $scope.markup.objSchemas.modes.editor.fields.type.forced ? $scope.markup.objSchemas.modes.editor.fields.type.forced : $scope.markup.type
-		data.subtype = $scope.markup.objSchemas.modes.editor.fields.subtype.forced ? $scope.markup.objSchemas.modes.editor.fields.subtype.forced : $scope.markup.subtype
+		data.subtype 	= $scope.markup.objSchemas.modes.editor.fields.subtype.forced ? $scope.markup.objSchemas.modes.editor.fields.subtype.forced : $scope.markup.subtype
 
 
-	     promise.query =  MarkupRest.markup_save({id:$scope.$parent.doc.slug, mid:$scope.markup._id }, serialize(data) ).$promise;
-         promise.query.then(function (Result) {
+	    promise.query =  MarkupRest.markup_save({id:$scope.$parent.doc.slug, mid:$scope.markup._id }, serialize(data) ).$promise;
+        promise.query.then(function (Result) {
             var edited  = Result.edited[0][0]
             console.log(edited)
             if(save_msg){
@@ -584,7 +541,6 @@ angular.module('musicBox.markup_controller', ['musicBox.section_controller']).co
 	* @function MarkupCtrl#delete_markup
 	*/
 	$scope.delete = function (){
-		
 		if($scope.markup.type=="container" && $scope.sectionstocount == 1){
 			$scope.flashmessage('MusicBox can\'t delete last section', 'bad' , 3000)
 			return
@@ -600,6 +556,12 @@ angular.module('musicBox.markup_controller', ['musicBox.section_controller']).co
 				// instant apply
 				$scope.markup.visible = false;
 			
+				// remove markup from reference list
+				$scope.$parent.$parent.markups = _.without($scope.$parent.$parent.markups,$scope.markup)
+				
+				// retattribute mk's
+				$scope.$parent.attribute_objects()
+
 			}.bind(this));
 			promise.catch(function (response) {  
 				$scope.flashmessage(response.err, 'bad' , 3000)
@@ -640,39 +602,6 @@ angular.module('musicBox.markup_controller', ['musicBox.section_controller']).co
 					console.log(err)
 			})
 		}
-
+		
 		$scope.init__()
-
 }); // end controller
-
-
-
-
-
-/*
-$scope.map_letters = function( ){
-		var loop_start = $scope.markup.start 	- $scope.$parent.section.start;
-		var loop_end   = $scope.markup.end 		- $scope.$parent.section.start;
-		for (var mi = loop_start ; mi <= loop_end;mi++) {
-			if($scope.$parent.section.letters && $scope.$parent.section.letters[mi]){
-				
-				if($scope.markup.type == 'hyperlink'){
-						console.log('$scope.markup.type == hyperlink')
-						console.log($scope.markup)
-						$scope.$parent.section.letters[mi].href = $scope.markup.metadata
-				}
-				if($scope.markup.type !== 'container'){
-					$scope.$parent.section.letters[mi].classes.push($scope.markup.subtype)
-				}
-				//$scope.section.letters[mr].classes_array[markup.subtype] = true;
-				//$scope.section.letters[mr].char = mr;
-			}
-		}
-	}
-
-$scope.unmap_letters = function(){
-			_.each($scope.$parent.section.letters, function(l){
-				l.classes = _.without(l.classes, $scope.markup.subtype )
-			})
-}
-*/

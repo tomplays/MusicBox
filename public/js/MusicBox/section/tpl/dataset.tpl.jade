@@ -10,7 +10,8 @@
         th type
         th subtype
         th metadata
-        th start-end
+        th start
+        th end
         th position
         th section index
         th isolated.
@@ -20,23 +21,26 @@
         
         th moderation.
     tbody()
-      tr(ng-controller="MarkupCtrl" ng-repeat="markup in markups" class="trtype-{{markup.type}}")
+      tr(ng-controller="MarkupCtrl", ng-repeat="markup in markups track by $index" class="trtype-{{markup.type}}")
         // , ng-if="markup.type==filter_dataset_by || filter_dataset_by == 'any'"
         td()
          span.markup-item-subtype(ng-click="toggle_select_markup('click')", class="clipped_{{markup.isselected}} markup-hn_{{markup.subtype}}" ) + 
          
         td
-         i.fa.fa-save.btn_action(tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.save}}" ng-click="markup_save(markup)")
+         i.fa.fa-save.btn_action(tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.save}}" ng-click="save('ok')")
 
-        
-
-         i.fa.fa-remove.btn_action(tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.delete}}" ng-click="markup_delete(markup)")
-        td {{markup.type}}
+         i.fa.fa-remove.btn_action(tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.delete}}" ng-click="delete()")
+        td 
+          input(ng-model="markup.type" , type="text")
         td 
           input(ng-model="markup.subtype" , type="text")
         td 
-         input(ng-model="markup.metadata" , type="text")
-        td {{markup.start}} - {{markup.end}}
+          input(ng-model="markup.metadata" , type="text")
+        td 
+         input(ng-model="markup.start" , type="number")
+        td 
+         input(ng-model="markup.end" , type="number")
+        
         td {{markup.position}}
         td {{markup.sectionin}}
         td {{markup.isolated}}
@@ -47,14 +51,14 @@
         td
           span {{markup.status}}
         td
-          i.fa.fa-check.btn_action(tooltip-placement="left" tooltip="set as approved" ng-click="markup_moderate(markup, 'approved')") 
-          i.fa.fa-close.btn_action(tooltip-placement="left" tooltip="set as pending" ng-click="markup_moderate(markup, 'pending')") 
+          i.fa.fa-check.btn_action(tooltip-placement="left" tooltip="set as approved" ng-click="change_value('status','approved', true)") 
+          i.fa.fa-close.btn_action(tooltip-placement="left" tooltip="set as pending" ng-click="change_value('status','pending', true)") 
 
 .one.columns
-  a(ng-click="Grabcollection('select')") Grabcollection (test function)
-  div.collection
-   // code
+  // a(ng-click="Grabcollection('select')") Grabcollection (test function)
+  // div.collection
+  // code
     {{collection}}
-   ul
+  // ul
     code(ng-repeat="c in collection") {{c.subtype}}:{{c.metadata}} 
-  a(ng-click="toggle_render('read')") Reading mode
+  // a(ng-click="toggle_render('read')") Reading mode
