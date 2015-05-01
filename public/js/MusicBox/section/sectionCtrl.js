@@ -244,11 +244,63 @@ $scope.map_letters = function(){
 
 		*/
 		var out = ''
+		var open = false
+		var opened = false
+		var close = false
+		var closed = false
+
     		for (var i = 0; i < fulltext_block.length; i++) {
 				
 				
 
-				if($scope.section.letters[i] && $scope.section.letters[i].classes.length >= 0 ){
+    			
+
+
+
+				console.log('prev next i == '+i)
+				if($scope.section.letters[i] && $scope.section.letters[i].classes.length > 0 ){
+					console.log('has class:')
+					  //close = true
+					  open = true
+
+					
+				}
+				else{
+							console.log(' has NOT class ')
+
+					}
+
+
+if($scope.section.letters[i+1] && $scope.section.letters[i+1].classes.length > 0 ){
+						console.log('(next) has class ')
+						// > close to end of <>___</>*****<>___</>
+
+						 close = true
+
+					
+					}
+					else{
+							console.log('(next) has NOT class ')
+
+					}
+					if($scope.section.letters[i-1] && $scope.section.letters[i-1].classes.length > 0 ){
+						console.log('has class (prev):')
+						 open  = false
+
+					
+					}
+					else{
+							console.log('(prev) has NOT class ')
+							// means was open
+
+					}
+
+					if(i==0){
+    				console.log('first letter')
+    					 open = true
+    			}
+
+				if($scope.section.letters[i] && $scope.section.letters[i].classes.length > 0 ){
 					console.log($scope.section.letters[i].classes)
 					var classes_flat  = 'lt '
 					 _.each($scope.section.letters[i].classes, function(c,ci){
@@ -267,7 +319,20 @@ $scope.map_letters = function(){
 					//console.log($scope.section.letters[i].classes[])
 				}
 				else{
-					out +=fulltext_block[i]
+
+				
+					if(close === true){
+					//	out += '</span>';
+					//	open = false
+					//	opened = true
+					}
+					
+					if(open === true){
+					//		out += '<span>';
+					}
+					out += fulltext_block[i]
+				
+					
 				}
 
 			}

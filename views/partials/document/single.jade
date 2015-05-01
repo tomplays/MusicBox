@@ -24,7 +24,7 @@ div(ng-include="fragments['branding'][0]['url']")
 
 
 // CHAPTERS
-div.chapters(ng-if="doc_options['chapters-menu'].value == 'true' && ui.renderAvailable_active == 'read'" ng-include="fragments['chapters'][0]['url']")
+div.chapters(mb-chapters ng-if=" ui.renderAvailable_active == 'read'")
 
 // TOP MENUS
 div.top_menus(ng-include="fragments['top_menus'][0]['url']")
@@ -39,7 +39,7 @@ div(ng-include="fragments['before_doc'][0].url" )
 
 // h3 mode du document:{{ui.renderAvailable_active}} 
 div(ng-if="ui.renderAvailable_active == 'doc_options'", ng-include="fragments['doc_options'][0].url")
-div(ng-if="ui.renderAvailable_active == 'dataset'", ng-include="fragments['dataset'][0].url")
+
 div(ng-if="ui.renderAvailable_active == 'card'", ng-include="fragments['post_excerpt'][0].url")
 
 div(mb-document)

@@ -306,7 +306,7 @@ angular.module('musicBox.LetterDirectives', [])
          scope.$apply(function(){
            // if($rootScope.doc_owner == true){
 
-            scope.section.modeletters = 'single';
+                  scope.section.modeletters = 'single';
              
            // }
         });
