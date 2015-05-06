@@ -1,6 +1,9 @@
 /*
 
+REST API factory for markup.
 
+markup belongs to a doc (:Id/ param)
+markup as an id (:Mid/ param)
 
 */
 
@@ -26,7 +29,7 @@ angular.module('musicBox.MarkupRest', [])
       markup_delete:{
         method:"POST",
         params :  {Id:'@id', Mid:'@mid'},
-        url: api_url+'/doc/:Id/markup/delete/:Mid',
+        url: api_url+'/doc/:Id/markup/:Mid/delete',
       },
       markup_save:{       
         method:"POST",

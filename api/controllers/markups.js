@@ -247,10 +247,10 @@ exports.markup_create = function(req, res) {
 	else{
 		// set as pending if not doc_owner 
 		var markup_status 	= 'pending'
-		//console.log('req_user_id')
-		//console.log(req_user_id)
-		//console.log('doc.user._id')
-		//console.log(doc.user._id)
+		console.log('req_user_id')
+		console.log(req_user_id)
+		console.log('doc.user._id')
+		console.log(doc.user._id)
 		if(req_user_id == doc.user._id){
 
 				markup_status 	= 'approved';

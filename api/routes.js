@@ -99,8 +99,10 @@ module.exports = function(app, passport, auth) {
     app.get ('/api/v1/doc/:slug/markups/offset/:side/:start/:end/:qty', auth.requiresLogin, markups.markups_offset);
     app.post('/api/v1/doc/:slug/markup/:markup_id/offset', auth.requiresLogin,markups.markup_offset);
     app.post('/api/v1/doc/:slug/markup/:markup_id/edit',auth.requiresLogin_or_secret,  markups.markup_edit);
+    app.post ('/api/v1/doc/:slug/markup/:markup_id/delete', auth.requiresLogin_or_secret, markups.markup_delete);
+
+
     app.post('/api/v1/doc/:slug/markup/push', auth.requiresLogin, markups.markup_create);
-    app.post ('/api/v1/doc/:slug/markup/delete/:markup_id', auth.requiresLogin_or_secret, markups.markup_delete);
     // app.post('/api/v1/doc/:doc_id_or_title/markup/delete/' , docs.markup_delete);
 
     // create a doc
