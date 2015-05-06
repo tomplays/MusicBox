@@ -43,19 +43,55 @@ angular.module('musicBox.LetterDirectives', [])
  
       if(eventname == 'mousedown' || eventname == 'mouseup' ){
         $rootScope.ui.selected_range.start  = event.target.selectionStart + scope.section.start
-        $rootScope.ui.selected_range.end    = event.target.selectionEnd + scope.section.start
+        $rootScope.ui.selected_range.end    = event.target.selectionEnd + scope.section.start -1
       }
+
+
       else if(eventname== 'saving'){
         var string  = '';
+
         _.each($rootScope.containers, function(container){
             string  += container.fulltext;
             console.log(container.fulltext)
+
         })
-        $rootScope.doc.content = string;
+        $rootScope.doc.content = string
+        //.replace("\n", "");;
       }
       else if(eventname== 'delete'){
+        console.log(event.target)
+                console.log(event)
+
+       console.log(event.target.selectionStart)
+        console.log(event.target.selectionEnd)
+
         $rootScope.ui.selected_range.start = scope.section.end + scope.section.start
-        $rootScope.ui.selected_range.end  = scope.section.end + scope.section.start
+        $rootScope.ui.selected_range.end    = scope.section.end + scope.section.start
+
+
+
+
+        //scope.section.end--
+       _.each($rootScope.markups, function(markup, i){
+
+
+          console.log('before')
+          console.log(markup)
+          if(markup.type == 'container'){
+            markup.end--
+          }
+          else{
+           //   markup.end--
+          }
+
+
+          console.log('after')
+                    console.log(markup)
+
+        });
+                     
+
+        console.log($rootScope.ui.selected_range)
 
 
       }
@@ -63,19 +99,29 @@ angular.module('musicBox.LetterDirectives', [])
           $rootScope.ui.selected_range.start =  event.target.selectionStart + scope.section.start
           $rootScope.ui.selected_range.end   =   event.target.selectionEnd + scope.section.start
        }
-      else if(eventname== 'key'){
+      else if(eventname == 'key'){
         
        
-        scope.section.end++
+          
          $rootScope.ui.selected_range.start =  scope.section.end + scope.section.start
          $rootScope.ui.selected_range.end   =   scope.section.end + scope.section.start
 
 
         _.each($rootScope.markups, function(markup, i){
-          if(markup.type !== 'container'){
+          //f(markup.type !== 'container'){
                      
                 if(markup.end < event.target.selectionStart+ scope.section.start ){
-                    console.log('outmark:#1')   
+                    console.log('outmark:#1')  
+
+                    if(markup.type == 'container'){
+                       markup.end++
+                      if(!_.contains($rootScope.ui.offset_queue, markup)){
+                          $rootScope.ui.offset_queue.push(markup)
+                      }
+                    }
+
+
+                    
                 }
                 else{
                     if(markup.start <= event.target.selectionEnd+ scope.section.start){
@@ -96,7 +142,8 @@ angular.module('musicBox.LetterDirectives', [])
 
                     }
                 }                       
-          }
+        //  }
+
         })
          //$rootScope.$apply()
 
@@ -112,6 +159,8 @@ angular.module('musicBox.LetterDirectives', [])
 
   function link(scope, elem, attrs, $rootScope) { 
 
+    
+
       elem.bind("mousedown", function(event){
             textarea_running('mousedown', event, scope)
             // scope.$parent.section.debuggr.push('md')
@@ -125,10 +174,33 @@ angular.module('musicBox.LetterDirectives', [])
             scope.$apply();
               return
       })
+      
+/*
+      elem.bind("cut", function(event){
+            textarea_running('delete', event, scope)
+
+      })
+      elem.bind("paste", function(event){
+           // textarea_running('delete', event, scope)
+          console.log('onpaste ')
+      })
+*/
+
+     /* elem.bind("change", function(event){
+           console.log('change ev')
+            console.log(event)
+
+      })
+*/
+
+   
       elem.bind("keyup", function(event){
           console.log('ft')
           if(event.which== 13){
             textarea_running('saving', event, scope)
+
+
+
             scope.$parent.sync_queue()
              scope.$apply();
               return
@@ -140,23 +212,22 @@ angular.module('musicBox.LetterDirectives', [])
               return
               
           }
-          else if(event.which== 8){
+          else if(event.which == 8){
 
-            // alert(event.target.textLength)
-            //  alert(scope.section.end-scope.section.start)
-
+          
             if(event.target.textLength !==scope.section.end-scope.section.start){
-              scope.section.end = event.target.textLength;
+             // scope.section.end = event.target.textLength;
             }
+
               textarea_running('delete', event, scope)
-         //   scope.$parent.section.end = scope.$parent.section.end - 1;
-              scope.$parent.section.debuggr.push('delete'+event.target.selectionEnd)
+             // scope.section.end = scope.section.end - 1;
+              //scope.$parent.section.debuggr.push('delete'+event.target.selectionEnd)
           
            
           }
 
           else{
-              
+                console.log('key not delete')
             textarea_running('key', event, scope)
 
          
@@ -188,6 +259,8 @@ angular.module('musicBox.LetterDirectives', [])
       $rootScope.ui.selected_range.end =  scope.lt.absolute_order
       // alert($rootScope.ui.selected_range.end)
       $rootScope.ui.selected_range.textrange = '';
+
+
       // reorder if/sup test here.
       if( $rootScope.ui.selected_range.start >  scope.lt.absolute_order){
         var temp_s = $rootScope.ui.selected_range.start;
@@ -314,18 +387,18 @@ angular.module('musicBox.LetterDirectives', [])
    
    
      function link(scope, elem, attrs) { 
-     elem.bind('mouseup', function() {
-          transforms(scope, 'mouseup')
-      })
+       elem.bind('mouseup', function() {
+            transforms(scope, 'mouseup')
+        })
 
-      elem.bind('mousedown', function() {
-          console.log(scope)
-          transforms(scope, 'mousedown')
-      })
+        elem.bind('mousedown', function() {
+            console.log(scope)
+            transforms(scope, 'mousedown')
+        })
 
-      elem.bind('click', function() {
-        transforms(scope, 'click')
-      })
+        elem.bind('click', function() {
+          transforms(scope, 'click')
+        })
     }
     return {
             scope: {

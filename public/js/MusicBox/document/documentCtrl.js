@@ -523,7 +523,7 @@ console.log(m)
 		console.log('toggle_fragment_ranges'+kind)
 		var source = $scope.doc.markups;
 		
-
+alert('toggle_fragment_ranges')
 		if(kind=='single_markup'){
 
 			if(markup.type == 'mediarrr'){
@@ -623,36 +623,12 @@ console.log(m)
 	   // }
 	});
 	*/
-	$scope.$watch('MusicBoxLoop.state', function(newValue, oldValue) {
-	 
-	  	if(newValue && newValue !== oldValue){
-			console.log('mb')
+	
 
-			if($scope.MusicBoxLoop.state == 'ready'){
-				alert('rm here')
-				// new MusicBoxLoop().init(true); 
-			}
-	 	}
-	});
-
-	$scope.$watch('doc.published', function(newValue, oldValue) {
-	 
-	  	if(oldValue && newValue && newValue !== oldValue){
-	  		
-			if(newValue == 'public'){
-				/////$scope.ui.menus.quick_tools_published.open='no'
-			}
-	 	}
-	});
+	
 
 
-
-	$scope.$watch('doc.content', function(newValue, oldValue) {
-		if(oldValue && newValue && newValue !== oldValue){
-			console.log('- Document level')
-			console.log('- content change watched')
-		}
-	});
+	
 	$scope.$watch('doc.title', function(newValue, oldValue) {
 		if(newValue){
 			console.log('- Document level')
@@ -670,11 +646,44 @@ console.log(m)
 				console.log('- content change watched'+newValue)
 				$scope.doc.formated_date = moment(newValue).calendar() +', '+moment(newValue).fromNow(); 
 			}	
+	
+	});
+	
+
+
+	/*
+	$scope.$watch('doc.published', function(newValue, oldValue) {
+	 
+	  	if(oldValue && newValue && newValue !== oldValue){
+	  		
+			if(newValue == 'public'){
+				/////$scope.ui.menus.quick_tools_published.open='no'
+			}
+	 	}
+	});
+	$scope.$watch('MusicBoxLoop.state', function(newValue, oldValue) {
+	 
+	  	if(newValue && newValue !== oldValue){
+			console.log('mb')
+
+			if($scope.MusicBoxLoop.state == 'ready'){
+				alert('rm here')
+				// new MusicBoxLoop().init(true); 
+			}
+	 	}
+	});
+
+	$scope.$watch('doc.content', function(newValue, oldValue) {
+		if(oldValue && newValue && newValue !== oldValue){
+			console.log('- Document level')
+			console.log('- content change watched')
+		}
 	});
 
 	$scope.$watch('loaded_markups', function( newValue,oldValue) {
 			console.log('[doc] - loaded_markups watched ')		
 	}, true);
+	*/
 /*
 	$scope.$watch('markups', function( newValue,oldValue) {
 			

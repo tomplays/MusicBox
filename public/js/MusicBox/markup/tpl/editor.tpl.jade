@@ -93,11 +93,13 @@ form(name="myForm")
 			input( ng-model="markup.depth" type="text" )
 			h6 {{markup.fulltext}}
 			label  reverse text
-			input(ng-model="markup.metadata" type="text" )
+			input(ng-model="markup.fulltext" type="text" )
 
 	.object-tools
 		i.fa.fa-sliders.btn_action(tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.more_options}}" ng-click="toggle_attribute('object_tools')")
-		i.fa.fa-save.btn_action(ng-if="markup.touched == true" tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.save}}" ng-click="save()")
+		i.fa.fa-save.btn_action( tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.save}}" ng-click="save()")
+
+		// ng-if="markup.touched == true"
 
 		
 		i.fa.fa-remove.btn_action(tooltip-placement="left" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.delete}}" ng-click="delete()")

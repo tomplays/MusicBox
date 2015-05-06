@@ -23,8 +23,8 @@ div(ng-include="fragments['branding'][0]['url']")
 		pre offset {{markup.type}} {{markup.offset_start}} - {{markup.offset_end}} 
 
 
-// CHAPTERS
-div.chapters(mb-chapters ng-if=" ui.renderAvailable_active == 'read'")
+// CHAPTERS directive
+div.chapters(mb-chapters ng-if="doc_options['chapters-menu'].value == 'true' && ui.renderAvailable_active == 'read'")
 
 // TOP MENUS
 div.top_menus(ng-include="fragments['top_menus'][0]['url']")
@@ -32,8 +32,6 @@ div.top_menus(ng-include="fragments['top_menus'][0]['url']")
 
 // flash_message
 div.flash_message(ng-if="flash_message.text !==''", class="{{flash_message.classname}}" ng-include="fragments['flash_message'][0]['url']")
-
-// div.editor_zone.doc_centered(ng-if="ui.renderAvailable_active == 'editor'" ng-include="fragments['document_textarea'][0].url" )
 
 div(ng-include="fragments['before_doc'][0].url" )
 

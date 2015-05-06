@@ -200,7 +200,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
  definitions.media = new Object({
               'name': 'media',
               'display_name': $rootScope.render_config.i18n.CUSTOM.OBJECTS.media,
-              'map_range': true,
+              'map_range': false,
               'positions': {
                   "forced": "",
                   "available": ['wide','center','left', 'right', 'under','slidewide', 'global', 'background']},
@@ -374,7 +374,7 @@ container_class.modes.editor.fields.metadata.label = 'css class'
  definitions.container = new Object({
               'name': 'container',
               'display_name': $rootScope.render_config.i18n.CUSTOM.OBJECTS.container,
-              'map_range': true,
+              'map_range': false,
               'positions': {
                   "forced": "inline",
                   "available": ['inline']},

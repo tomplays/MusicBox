@@ -59,7 +59,9 @@
     <input ng-model="markup.depth" type="text"/>
     <h6>{{markup.fulltext}}</h6>
     <label> reverse text</label>
-    <input ng-model="markup.metadata" type="text"/>
+    <input ng-model="markup.fulltext" type="text"/>
   </div>
-  <div class="object-tools"><i tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.more_options}}" ng-click="toggle_attribute('object_tools')" class="fa fa-sliders btn_action"></i><i ng-if="markup.touched == true" tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.save}}" ng-click="save()" class="fa fa-save btn_action"></i><i tooltip-placement="left" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.delete}}" ng-click="delete()" class="fa fa-remove btn_action"></i></div>
+  <div class="object-tools"><i tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.more_options}}" ng-click="toggle_attribute('object_tools')" class="fa fa-sliders btn_action"></i><i tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.save}}" ng-click="save()" class="fa fa-save btn_action"></i>
+    <!-- ng-if="markup.touched == true"--><i tooltip-placement="left" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.delete}}" ng-click="delete()" class="fa fa-remove btn_action"></i>
+  </div>
 </form>

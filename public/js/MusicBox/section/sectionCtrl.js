@@ -1,24 +1,6 @@
 
 angular.module('musicBox.section_controller', []).controller('SectionCtrl', function($scope, $http, DocumentService, MarkupRest) {
 
-// contruct temp fulltext
-$scope.to_fulltext = function (s,e){
-    var fulltext = '';
-    var fulltext_block = ''
-    var i_array     =   0;
-	   for (var i = s; i <= e; i++) {
-         	// console.log(i)
-         	if($scope.$parent.doc.content[i]){
-         		fulltext += $scope.$parent.doc.content[i];
-         		fulltext_block += $scope.$parent.doc.content[i];
-
-         	}
-     	}
-     	$scope.section.fulltext = fulltext
-     	return fulltext;
-     	//$scope.compile_fulltext(fulltext_block)
-
-    }
 
 $scope.init_= function () {
 
@@ -34,7 +16,7 @@ $scope.init_= function () {
 	container_ = new Object({
 		'selecting' : -1,
 		'sectionin' : $scope.$parent.sectionstocount,
-		'isolated'  : false,
+		'isolated'  : true,
 		'selected'  : false,
 		'focused'   : '',
 		'editing_text':false,
@@ -48,7 +30,7 @@ $scope.init_= function () {
 	// .. and extend object
 	$scope.section = _.extend($scope.section, container_);
 
-	$scope.to_fulltext($scope.section.start, $scope.section.end)
+	$scope.init_fulltext($scope.section.start, $scope.section.end)
 	
 	// add to parent scope section count
 	$scope.$parent.update_section_count('add')
@@ -85,10 +67,42 @@ $scope.sectionmarkups = function(attr, value){
 	})
 }
 */
+
+// contruct temp fulltext, 
+// called at section init only 
+$scope.init_fulltext = function (s,e){
+    var fulltext = '';
+    var fulltext_block = ''
+    var i_array     =   0;
+	for (var i = s; i <= e; i++) {
+		// console.log(i)
+		if($scope.$parent.doc.content[i]){
+			fulltext += $scope.$parent.doc.content[i];
+			fulltext_block += $scope.$parent.doc.content[i];
+
+		}
+		else{
+			// there is no letter for section !
+			fulltext += '-';
+			fulltext_block += '-'
+
+		}
+	}
+
+	$scope.section.fulltext = fulltext
+	return fulltext;
+	//$scope.compile_fulltext(fulltext_block)
+
+}
+
+
 $scope.sections_objects_arrays = function(){
+
+
 			var objectsarray = new Object();
 
            objectsarray.section_styles  = '';
+
            //new Array('objects', 'objects_')
           // objectsarray['objects'] = [];
            objectsarray['objects_'] = [];
@@ -125,6 +139,10 @@ $scope.map_letters = function(){
 
  	var fulltext_block = ''
 
+ 	if(!$scope.section.letters){
+ 		//$scope.section.letters = []
+ 	}
+
   
 	_.each($scope.section.letters, function(l,li){
 
@@ -133,7 +151,6 @@ $scope.map_letters = function(){
 			var index_absolute_end   =   $scope.$parent.ui.selected_range.end -  $scope.section.start
 
 		}
-		console.log(li+'  KKK')
 
 		l.inrange=false;
 
@@ -165,11 +182,26 @@ $scope.map_letters = function(){
   		_.each(Object.keys($scope.section.objects_[o]), function(o_,k_){
 				if(_.isArray($scope.section.objects_[o][o_]) ){
 					_.each( $scope.section.objects_[o][o_] , function(markup,k__){
+							var m_objSchemas = $scope.$parent.objSchemas[markup.type]
+
 							
 
 													var loop_start = markup.start 		- $scope.section.start;
 													var loop_end   = markup.end 		- $scope.section.start;
-													for (var mi = loop_start ; mi < loop_end;mi++) {
+													
+
+														if(!$scope.section.letters[loop_start]){
+															//alert('test suite no start letter')
+														}
+														if(!$scope.section.letters[loop_end]){
+
+
+															//alert('test suite no end letter')
+														}
+														
+
+													for (var mi = loop_start ; mi <= loop_end;mi++) {
+
 
 
 														
@@ -177,8 +209,7 @@ $scope.map_letters = function(){
 														if($scope.section.letters && $scope.section.letters[mi]){
 
 
-															console.log(mi+'  ----')
-
+														
 															
 															
 															if(markup.type == 'container'){
@@ -189,18 +220,17 @@ $scope.map_letters = function(){
 																	console.log(markup)
 																	$scope.section.letters[mi].href = markup.metadata
 															}
-															if(markup.type=='container_class' ){ // or pos == inlined
+															if(!markup.deleted && markup.type=='container_class' ){ // or pos == inlined
 													  			$scope.section.section_classes += markup.metadata+' ';
 															}
 
-															if(markup.type !== 'container'){
-
+															if(m_objSchemas.map_range === true){
 																if(_.contains($scope.section.letters[mi].classes,markup.subtype )){
 
 																}else{
+	
 																	$scope.section.letters[mi].classes.push(markup.subtype)
-																	console.log(mi+'  --///:-')
-
+																	
 																}
 																
 															}
@@ -252,9 +282,9 @@ $scope.map_letters = function(){
 
     		for (var i = 0; i < fulltext_block.length; i++) {
 				
-				console.log(i+'  llll-')
+				
 
-    			var current = next = prev = prev_class = current_class = next_class = prev_range = next_range = false;
+    			var  prev_class = current_class = next_class  = false;
     			
 
     			/*if($scope.section.letters[i].inrange === true){
@@ -279,9 +309,8 @@ $scope.map_letters = function(){
 					current = true	
 				//	if(_.isArray())
 				//	current_class.push($scope.section.letters[i].classes) : current_class = new Array($scope.section.letters[i].classes)
-current_class = $scope.section.letters[i].classes
+					current_class = $scope.section.letters[i].classes
 					//current_class.push()
-					console.log(current_class)
 
 
 				}
@@ -300,7 +329,7 @@ current_class = $scope.section.letters[i].classes
 
 
 				// case letter as at least one class
-				if(_.isArray($scope.section.letters[i].classes)){
+				if(_.isArray(current_class)){
 					//console.log($scope.section.letters[i].classes)
 					
 
@@ -362,6 +391,9 @@ current_class = $scope.section.letters[i].classes
 
 			}
 
+
+
+
 		$scope.section.fulltext_block = out
 		//$scope.compile_fulltext(fulltext_block)	
 
@@ -374,9 +406,24 @@ $scope.attribute_objects = function(){
   	$scope.sections_objects_arrays()
 
 
+  	$scope.section.section_classes = ''
+
+
     		
 
-    _.each($scope.$parent.markups, function(markup){
+    _.each($scope.markups, function(markup){
+
+
+
+    	if(markup.start>markup.end){
+    		
+    		var temp =  markup.start
+    		markup.end = markup.start
+    		markup.start = temp
+
+    		//alert('m start inf start')
+
+    	}
 
 
     	if( $scope.$parent.ui.selected_range.start && $scope.$parent.ui.selected_range.end && markup.start >= $scope.$parent.ui.selected_range.start && markup.end <= $scope.$parent.ui.selected_range.end) {
@@ -393,9 +440,9 @@ $scope.attribute_objects = function(){
         // only for markups which ranges match container
         if(markup.start >= $scope.section.start && markup.end <= $scope.section.end){
 
-        	
+        	markup.isolated= 'false'
 
-	        ///// •¿¿ ///
+	        /////  ///
 	        if(markup.type !== "" && markup.position){ // > can add it
 
 				// adding to the global collection
@@ -404,7 +451,11 @@ $scope.attribute_objects = function(){
 				}
 				
 				// add markup to container objects (container::index::type::position) 
+				
+				
 				$scope.section.objects_[markup.type][markup.position].push(markup) 
+				
+
 				//$scope.section.objects_.flat.push(markup) 
 
 
@@ -435,9 +486,33 @@ $scope.attribute_objects = function(){
 $scope.$watch('section.fulltext', function(newValue, oldValue) {
 	console.log(' [Section] fulltext watched')
 
+
+
+	if(!newValue){
+		// deleted by user in textarea
+		newValue=  ''
+	}
 	if(oldValue && newValue){
-		console.log(' [Section] fulltext change : '+oldValue+'>'+newValue)
-		console.log('section fulltext watched with changes: '+oldValue+'>'+newValue)
+		console.log(' [Section] fulltext change : '+oldValue+' > '+newValue)
+
+		
+
+/*
+		// a way to detect multiple chars paste or deletions   (not in angular bindings)
+
+		// delta is sup or inf from 1
+		if(oldValue.length - newValue.length > 1){
+			//alert('A' + (oldValue.length - newValue.length))
+			$scope.section.end = newValue.length
+		}
+		if(oldValue.length - newValue.length  < -1){
+			$scope.section.end = newValue.length
+			//alert('B' + (oldValue.length - newValue.length))
+		}
+	*/
+
+
+		//newValue = newValue.replace("\n", "");
 		var temp_letters = new Array();
 		var i;
 		var i_array     =   0;
@@ -466,7 +541,9 @@ $scope.$watch('section.fulltext', function(newValue, oldValue) {
 
 			});
 
-			
+				if(!newValue[i]){
+					alert('sd')
+				}
 	        	if (newValue[i] === " ") {
 	            	letter_arr.char = '&nbsp;'
 	            	fulltext_block += ' '
