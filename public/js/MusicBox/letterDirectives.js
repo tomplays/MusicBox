@@ -96,15 +96,15 @@ angular.module('musicBox.LetterDirectives', [])
 
       }
        else if(eventname== 'mv'){
-          $rootScope.ui.selected_range.start =  event.target.selectionStart + scope.section.start
+          $rootScope.ui.selected_range.start =   event.target.selectionStart + scope.section.start
           $rootScope.ui.selected_range.end   =   event.target.selectionEnd + scope.section.start
        }
       else if(eventname == 'key'){
         
        
           
-         $rootScope.ui.selected_range.start =  scope.section.end + scope.section.start
-         $rootScope.ui.selected_range.end   =   scope.section.end + scope.section.start
+         $rootScope.ui.selected_range.start =   event.target.selectionStart 
+         $rootScope.ui.selected_range.end   =   event.target.selectionEnd
 
 
         _.each($rootScope.markups, function(markup, i){
@@ -121,7 +121,7 @@ angular.module('musicBox.LetterDirectives', [])
                     }
 
 
-                    
+
                 }
                 else{
                     if(markup.start <= event.target.selectionEnd+ scope.section.start){
@@ -196,7 +196,7 @@ angular.module('musicBox.LetterDirectives', [])
    
       elem.bind("keyup", function(event){
           console.log('ft')
-          if(event.which== 13){
+          if(event.which == 13){
             textarea_running('saving', event, scope)
 
 

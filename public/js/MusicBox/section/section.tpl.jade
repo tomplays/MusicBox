@@ -46,9 +46,9 @@ div(ng-if="section['objects_count']['by_positions'][layout.name].count > 0 || la
 
 			div.inline_tools(ng-include="fragments['inline_tools'][0]['url']" ng-if="section.editing_text ===true")
 			
-			div() 
-				// html escaped : 
-				// h4 {{section.fulltext_block}}
+			div(ng-if="ui.debug") 
+				html escaped : 
+				h4 {{section.fulltext_block}}
 				h4 {{section.modeletters}}
 
 

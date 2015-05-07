@@ -207,17 +207,33 @@ angular.module('musicBox.DocumentService',[])
 
         _.each($rootScope.ui.offset_queue, function(mk){
 
+          console.log(mk)
+          if( _.isFinite(mk.start) && _.isFinite(mk.end)){
+
+          }
+
+          else{
+           
+          }
+
+
           if(true){
              var a_mk = new Object({'id':mk._id, 'offset_start':mk.offset_start, 'offset_end':mk.offset_end, 'action':'offset', 'type':mk.type, 'subtype':mk.subtype })
              data.markups.push(a_mk)
           }
 
           if(!mk.offset_start && mk.offset_start !==0){
-          
+            //alert('bug #226 '+mk.offset_start+'--'+mk.offset_start)
             console.log('bug offset start')
+            mk.offset_start=0
+            thos.flash_message('mk bug offset', '-' , 2400, false)
+
           }
           if(!mk.offset_end){
             console.log('bug offset end')
+                         thos.flash_message('mk bug offset', '-' , 2400, false)
+
+            mk.offset_end=0
           }
                
         });
