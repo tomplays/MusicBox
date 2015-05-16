@@ -1,0 +1,26 @@
+.object-tools
+		i.fa.fa-sliders.btn_action(tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.more_options}}" ng-click="toggle_attribute('object_tools')")
+		i.fa.fa-save.btn_action( tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.save}}" ng-click="save()")
+
+		// ng-if="markup.touched == true"
+
+		
+		i.fa.fa-remove.btn_action(tooltip-placement="left" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.delete}}" ng-click="delete()")
+
+h2 is multi ? {{ui.selected_range.multi}} size ? {{ui.selected_range.size}}
+h5 {{render_config.i18n.CUSTOM.ACTIONS.edit}} section # {{section.index_}}
+h1 rebuild ? : {{section.rebuild}} {{section.rebuild_count}} Textlength: {{section.textlength}} objects count: {{section.objects_count.all}}
+h2 section letter length {{section.letters.length}}
+h4 ui.selected_range ;s: {{ui.selected_range.start }} ;end: {{ui.selected_range.end}}
+a(ng-click="insert_char('A','','')") insert a "A"
+label set start-end ranges
+		span.field.ranges
+			span.ranges_inputs
+				span.field.numberfloat._start
+					label start
+					input(required   type="number" , ng-model="section.start" )
+
+				span.field.numberfloat.number._end
+					label end
+					input(required  type="number" , ng-model="section.end" )
+				

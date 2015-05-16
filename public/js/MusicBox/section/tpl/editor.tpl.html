@@ -1,0 +1,14 @@
+
+<div class="object-tools"><i tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.more_options}}" ng-click="toggle_attribute('object_tools')" class="fa fa-sliders btn_action"></i><i tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.save}}" ng-click="save()" class="fa fa-save btn_action"></i>
+  <!-- ng-if="markup.touched == true"--><i tooltip-placement="left" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.delete}}" ng-click="delete()" class="fa fa-remove btn_action"></i>
+</div>
+<h2>is multi ? {{ui.selected_range.multi}} size ? {{ui.selected_range.size}}</h2>
+<h5>{{render_config.i18n.CUSTOM.ACTIONS.edit}} section # {{section.index_}}</h5>
+<h1>rebuild ? : {{section.rebuild}} {{section.rebuild_count}} Textlength: {{section.textlength}} objects count: {{section.objects_count.all}}</h1>
+<h2>section letter length {{section.letters.length}}</h2>
+<h4>ui.selected_range ;s: {{ui.selected_range.start }} ;end: {{ui.selected_range.end}}</h4><a ng-click="insert_char('A','','')">insert a "A"</a>
+<label>set start-end ranges<span class="field ranges"><span class="ranges_inputs"><span class="field numberfloat _start">
+        <label>start</label>
+        <input required="required" type="number" ng-model="section.start"/></span><span class="field numberfloat number _end">
+        <label>end</label>
+        <input required="required" type="number" ng-model="section.end"/></span></span></span></label>

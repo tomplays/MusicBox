@@ -8,7 +8,10 @@
     <div ng-if="layout.name == 'right'">
       <div class="forced forced-right">
         <!-- sections, container_class, inline_markup, media( if background)-->
-        <div ng-include="fragments['markup'][0].url" ng-repeat="markup in section.objects_['container']['inline'] " class="markup_ markup_type_container"></div>
+        <!--N SPLIT  div( ng-include="fragments['s'][0].url", class="markup_ markup_type_container", ng-repeat="markup in section.objects_['container']['inline'] ")
+        
+        
+        -->
         <div ng-repeat="markup in section.objects_['container_class']['inline']" ng-include="fragments['markup'][0].url" class="markup_ container_class_type_inline"></div>
         <div ng-repeat="markup in section.objects_['markup']['inline']" ng-include="fragments['markup'][0].url" class="markup_ markup_type_inline"></div>
         <div ng-repeat="markup in section.objects['media']['background']" ng-include="fragments['markup'][0].url" class="markup_ markup_type_bg"></div>
@@ -29,16 +32,18 @@
     
     -->
     <div ng-if="layout.name == 'inline'">
+      <mb-sectioneditor></mb-sectioneditor>
       <!-- h2 
       a(ng-click="sectionmarkups('selected', true)") {{section_markups.visible}}
       
       
       -->
       <div ng-include="fragments['inline_tools'][0]['url']" ng-if="section.editing_text ===true" class="inline_tools"></div>
-      <div> 
+      <div ng-if="ui.debug"> 
         <!-- html escaped : -->
         <!-- h4 {{section.fulltext_block}}-->
-        <h4>{{section.modeletters}}</h4>
+        <!-- h4 {{section.modeletters}}-->
+        
       </div>
       <div ng-if="section.editing_text ===true" class="fluidtextarea">
         <h3>Edit section text : </h3>
