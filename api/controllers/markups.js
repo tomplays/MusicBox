@@ -35,7 +35,9 @@ var documents = require('./documents')
 
 
 exports.markup_edit = function(req, res) {
+	console.log(req.body.edittype)
 	var edited = new Array();
+	
 	var exit_user = false;
 	var out ={};
 	var m_body = req.body; 
@@ -232,6 +234,7 @@ return json ( doc, owner, inserted)
 exports.markup_create = function(req, res) {
 	
 //bug ?
+console.log(req.body.edittype)
 	var req_user_id = req.user._id;
 	console.log(req_user_id)
 
@@ -344,7 +347,7 @@ return json ( doc, owner, deleted)
 
 */
 exports.markup_delete = function(req, res) {
-	//console.log(req.params.doc_id_or_title)
+	console.log(req.body.edittype)
 	var deleted= new Array();
 
 	var has_error = false;
@@ -423,7 +426,7 @@ exports.markup_delete = function(req, res) {
 			});
 		}
 		else{
-			console.log('is wonnnner')
+			console.log('is owner')
 			var out = {}
 			out.err = 'is not auhtorized'
 			res.json(out)
@@ -436,88 +439,4 @@ exports.markup_delete = function(req, res) {
 	});
 }
 
-exports.markup_offset= function(req, res) {
 
-	res.json('refactoring')
-	
-
-
-	
-	console.log(req.params)
-	console.log(req.body)
-	//res.send('ok')
-	var query = Document.findOne({ 'slug':req.params.slug });
-		query.populate('user','-email -hashed_password -salt').populate( {path:'markups.user_id', select:'-salt', model:'User'}).populate({path:'markups.doc_id', select:'-markups -secret', model:'Document'}).populate('markups.doc_id.user').populate('room').exec(function (err, doc) {
-
-		if (err) {
-		return handleError(err);
-		}
-		else{
-			_.each(doc.markups, function (m, i){
-				if(req.body.markup_id == m._id){
-					console.log('touch')
-					console.log(m)
-					/*
-					  		  data.markup_id = markup._id;
-					          data.side = 'left'
-					          data.start_qty = -2;
-					          data.end_qty = 4;
-					          data.qty = 1
-					*/
-					doc.markups[i].start = parseInt(doc.markups[i].start)+parseInt(req.body.start_qty);
-					doc.markups[i].end = parseInt(doc.markups[i].end)+parseInt(req.body.end_qty);
-				}
-			})
-			doc.save(function (err,article) {
-				if (err) {
-					res.send(err)
-				}
-				else{
-					// console.log('Success!');
-					res.json(doc)
-				}
-			});
-
-		}
-	});
-
-
-
-}
-
-exports.markups_offset = function(req, res) {
-
-	res.json('refactoring')
-
-	// /api/v1/doc/:doc_id_or_title/markups/offset/:side/:start/:end/:qty
-	var query = Document.findOne({ 'slug':req.params.slug });
-	query.exec(function (err, doc) {
-		if (err) {
-		return handleError(err);
-		}
-		else{
-			var qty = parseInt(req.params.qty)
-			_.each(doc.markups, function (td, i){
-				//if( (td.start <= req.params.start )  ){
-						if(req.params.side && req.params.side == 'left'){
-							doc.markups[i].end 		= 	parseInt(doc.markups[i].end) + qty;
-							doc.markups[i].start    =   parseInt(doc.markups[i].start) + qty;
-						}
-						else{
-							doc.markups[i].end 		= parseInt(doc.markups[i].end) - qty;
-							doc.markups[i].start 	= parseInt(doc.markups[i].start) - qty;
-						}
-				//}
-			});
-			doc.save(function (err,article) {
-				if (err) {
-					res.send(err)
-				}
-				else{
-					// console.log('Success!');
-					res.json(doc)
-				}
-			});
-		}
-	})
-}

@@ -34,7 +34,6 @@ angular.module('musicBox.MarkupService', [])
 
 
   MarkupService.prototype.add = function () {
-
       //  var promise = this.api_method.add({Id:this.slug},{  }).$promise;
       return true
 

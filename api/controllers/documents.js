@@ -30,6 +30,8 @@ Document = mongoose.model('Document'),
 meta_options = mongoose.model('Metaoptions'),
 User = mongoose.model('User'),
 Markup  = mongoose.model('Markup');
+
+
 var nconf = require('nconf');
 
 nconf.argv().env().file({file:'config.json'});
@@ -182,13 +184,21 @@ if(debugger_on){
 			} 
 			else{
 				if(doc){
-
-
+					var out 			= {}
+					out.doc 			= doc.toObject()
+					out.doc.sections = []
+					out.doc.markups_ = []
 
 					doc.markups.forEach(function(mk) {
-                   	 console.log(mk.status)
+                   		 // console.log(mk.status)
             			// userMap[user._id] = user
-          
+
+            			if(mk.type == 'container'){
+            				out.doc.sections.push(mk)
+            			}
+            			else{
+            				out.doc.markups_.push(mk)
+            			}
         			})
 
 					
@@ -203,8 +213,8 @@ if(debugger_on){
 					}
 					
 
-					var out 			= {}
-					out.doc 			= doc.toObject()
+				
+					
 					if(req.user){
 						 out.userin 	= req.user.toObject()
 					}
@@ -278,6 +288,10 @@ exports.doc_sync= function(req, res) {
 			res.json(err)
 		} 
 		else{
+
+
+			var sections = []
+			console.log(req.body.edittype)
 			//console.log(req.body.doc_content)
 			console.log('doc.markups')
 			console.log('#######')
@@ -287,36 +301,35 @@ exports.doc_sync= function(req, res) {
 			console.log('#######')
 	
 			_.each(doc.markups, function(doc_mk, i){
-doc.markups[i].touched = false
+					doc.markups[i].touched = false
 					//console.log(mk)
 					var match = _.find(req.body.markups, function(m){ return m.id  == doc_mk._id; });
 					if(match){
-						/*
-						console.log('original start: '+doc_mk.start)
-						console.log('offset start : '+match.offset_start)
-						console.log('original end: '+doc_mk.end )
-						console.log('offset end : '+parseFloat(match.offset_end))
-						//console.log('doc.markups[i] before')
-						//console.log(doc.markups[i])
-						*/
-						
-						doc.markups[i].start 	=  parseFloat(doc.markups[i].start) + parseFloat(match.offset_start);
-						doc.markups[i].end 		=  parseFloat(doc.markups[i].end)   + parseFloat(match.offset_end);
+						doc.markups[i].start 	=  parseInt(match.start)
+						doc.markups[i].end 		=  parseInt(match.end)
 						doc.markups[i].touched = true
-						//console.log('doc.markups[i] after')
-						//console.log(doc.markups[i])
-						//match.start = mk.start;
-						
+						console.log('match found:')
+						console.log(doc.markups[i])
 					}
 					else{
 
 						//console.log(chalk.red('doc_sync should not mismatch >>' ) );
 						//console.log(doc_mk)
 					}
+
+
+
+						
+				
+
+				
+            			if(doc_mk.type == 'container'){
+            				sections.push(doc_mk)
+            			}
 			});
 
-
-			// save content
+				doc.markModified('markups');
+				// save content
 				doc.content = req.body.doc_content;
 
 			   var out 			= {}
@@ -324,23 +337,29 @@ doc.markups[i].touched = false
 					 out.userin 	= req.user.toObject()
 				}
 				out.is_owner 		= exports.test_owner_or_key(doc,req)
-
-
-			doc.save(function(err,docsaved) {
-				if (err) {
-					res.send(err)
-				} 
-				else {
-					
-				  	console.log(chalk.green('doc sync') );
+	console.log(chalk.green('doc sync') );
+				  		//console.log(doc.markup );
 					out.doc 			= doc.toObject()
+
+
+
+					//doc.sections = []
+					//_.each(doc.markups, function(doc_mk, i){})
+
+
 					out.doc_title 		= doc.title
 					var now = new Date();
 					out.doc.updated     = now.toJSON();
 					out.doc.secret 		= 'api_secret'
-					//console.log(out)
-					res.json(out)
-				}
+					out.edittype 		= 	req.body.edittype
+					console.log(out)
+				
+
+			doc.save(function(err,doc) {
+			
+						res.json(out)
+				  
+				
 			});
 
 

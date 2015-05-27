@@ -4,6 +4,10 @@
 @green:#16a085;
 
 
+.fluidtext span{
+ // white-space:pre;
+}
+
 /* the "lt" class transforms a (span) letter element into a classic-like markup  */
 /*
   <span class="lt h1">hello</span>  
@@ -14,7 +18,8 @@
 
 .lt, 
 .as-lt{
-
+  
+   
   /* if not char associated with range */
   &.no-lt{
     background:rgba(243, 156, 18,0.5);
@@ -108,22 +113,28 @@
     background: none repeat scroll 0 0 rgba(231, 76, 60, 0.6);
 
     /*basic tests */
-     &.x.nd:after,
-     &.y.nd:after,
-     &.z.nd:after{
+     &.x:after,
+     &.y:after,
+      &.string:after,
+     &.z:after{
       font-size: 0.8em;
       opacity: 0.7;
       vertical-align: super;
      }
-      &.x.nd:after{
+      &.x:after{
          content: "x";
       }
-      &.y.nd:after{
+      &.y:after{
          content: "y";
       }
-      &.z.nd:after{
-         content: "z";
+      &.z:after{
+        content: "z";
       }
+        &.string:after{
+         content: "string";
+      }
+
+      
 
       &.selected {
         background: none repeat scroll 0 0 rgb(231, 76, 60);
@@ -286,6 +297,13 @@ ul.typer{
      .fa-string:before{
      content: "string";   
     }
+     .fa-year:before{
+     content: "year";   
+    }
+    
+
+
+
     .fa-else:before{
      content: "?";   
     }
@@ -445,8 +463,17 @@ ul.typer{
 
 
 
-/* "focus_on" */
-.lt.hyperlink{
+.lt.hyperlink, .lt.hyperlink a {
+    text-decoration: underline;
+    color:#9b59b6;
+     &.selected{
+      border-bottom:3px solid #9b59b6;
+       text-decoration: none;
+    }
+}  
+
+
+.lt.anchor, .lt.anchor a {
     text-decoration: underline;
     color:#9b59b6;
      &.selected{
@@ -847,5 +874,54 @@ i.fa-mood:before {
 
 
 span.lt[inrange="true"], span.lt.inrange {
-    background:#2ecc71;
+     &:before {
+    
+    }
+    border-left:2px solid #2ecc71;
+    
+    -webkit-animation-name: pulse;
+  animation-name: pulse;
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-timing-function: linear;
+  animation-timing-function: linear;
+  -webkit-animation-iteration-count: infinite;
+  animation-iteration-count: infinite;
 } 
+
+
+@-webkit-keyframes pulse {
+  25% {
+    -webkit-transform: scale(1.2);
+    transform: scale(1.2);
+  }
+  75% {
+    -webkit-transform: scale(0.8);
+    transform: scale(0.8);
+  }
+}
+
+@keyframes pulse {
+  25% {
+      border-left:2px solid #fff;
+   
+  }
+  75% {
+     border-left:2px solid #2ecc71;
+  }
+}
+.is_multi_true span.lt[inrange="true"], .is_multi_true  span.lt.inrange {
+  background:red;
+  border-left:none;
+  -webkit-animation-name: none;
+  animation-name: none;
+}
+
+span:last-child{
+   &.lt[inrange="true"], &.inrange {
+      border-left:none;
+      -webkit-animation-name: none;
+      animation-name: none;
+      border-right:2px solid #2ecc71;
+  }
+}

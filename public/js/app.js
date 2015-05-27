@@ -11,7 +11,8 @@ angular.module('musicBox',  [
    'musicBox.DocumentRest','musicBox.UserRest', 'musicBox.MarkupRest',
   'musicBox.UserService','musicBox.MusicBoxLoop', 
   'musicBox.DocumentService', 
-  'musicBox.SectionDirectives','musicBox.DocumentDirectives', 'musicBox.MarkupDirectives','musicBox.LetterDirectives'
+  'musicBox.SectionDirectives','musicBox.DocumentDirectives', 'musicBox.MarkupDirectives','musicBox.LetterDirectives',
+  'musicBox.eDirectives',
   ]).
   config(['$localeProvider','$routeProvider', '$locationProvider','$sceDelegateProvider', '$sceProvider', function($localeProvider,$routeProvider, $locationProvider, $sceDelegateProvider,$sceProvider ) {
     $routeProvider.

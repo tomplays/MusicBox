@@ -272,7 +272,7 @@ $scope.SetSlug = function (slug) {
 	}
 
 	$scope.doc_sync = function(){
-
+		
 		doc.docsync();
 	}
 
@@ -501,17 +501,19 @@ console.log(m)
     // limited to 70 chars
 
 	$scope.textrange =  function(){
-		var start 				= $scope.ui.selected_range.start
+		var start 				=  $scope.ui.selected_range.start
 		var end 				=  $scope.ui.selected_range.end
-        var content_string  	= $scope.doc.content
+        var content_string  	=  $scope.doc.content
         var text_range 			= '"';
         if(end-start > 70){ 
           // a.b.c ... x.y.z
           text_range 			= content_string[start]+content_string[start+1]+content_string[start+2]+content_string[start+3]+' ..('+ (end-start) +' letters)..'+content_string[end-3]+content_string[end-2]+content_string[end-1]+content_string[end]
         }
         else{
+        	var ci = 0
             for (var i = start; i <= end; i++) {
             	text_range 		+= content_string[i];
+
           	}
          }
          text_range				 +='"'
@@ -649,7 +651,44 @@ alert('toggle_fragment_ranges')
 	
 	});
 	
+$scope.$watch('ui.selected_range.start', function(newValue, oldValue) {
+		//if(oldValue && newValue ){
+				if(oldValue == newValue){
 
+				}
+				else{
+					console.log('ui.selected_range')
+					
+				
+
+					$scope.ui.selected_range.size = $scope.ui.selected_range.end - $scope.ui.selected_range.start +1
+					$scope.ui.selected_range.multi = $scope.ui.selected_range.size > 1 ? true : false
+					
+					$scope.ui.selected_range.textrange = $scope.textrange()
+
+					 
+				}
+		//}
+
+	});	
+
+	$scope.$watch('ui.selected_range.end', function(newValue, oldValue) {
+		//if(oldValue && newValue ){
+				if(oldValue == newValue){
+
+				}
+				else{
+					console.log('ui.selected_range section:')
+					
+				
+					$scope.ui.selected_range.size = $scope.ui.selected_range.end - $scope.ui.selected_range.start +1
+					$scope.ui.selected_range.multi = $scope.ui.selected_range.size > 1 ? true : false
+					$scope.ui.selected_range.textrange = $scope.textrange()
+
+				}
+		//}
+
+	});
 
 	/*
 	$scope.$watch('doc.published', function(newValue, oldValue) {

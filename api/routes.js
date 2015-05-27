@@ -96,8 +96,6 @@ module.exports = function(app, passport, auth) {
     app.post('/api/v1/doc/:slug/sync',     auth.requiresLogin,  docs.doc_sync);
 
 
-    app.get ('/api/v1/doc/:slug/markups/offset/:side/:start/:end/:qty', auth.requiresLogin, markups.markups_offset);
-    app.post('/api/v1/doc/:slug/markup/:markup_id/offset', auth.requiresLogin,markups.markup_offset);
     app.post('/api/v1/doc/:slug/markup/:markup_id/edit',auth.requiresLogin_or_secret,  markups.markup_edit);
     app.post ('/api/v1/doc/:slug/markup/:markup_id/delete', auth.requiresLogin_or_secret, markups.markup_delete);
 

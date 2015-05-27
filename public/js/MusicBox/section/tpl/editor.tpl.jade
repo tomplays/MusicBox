@@ -1,3 +1,6 @@
+ul
+	li(ng-repeat="e in ui.selected_range.debug track by $index") {{e}}
+
 .object-tools
 		i.fa.fa-sliders.btn_action(tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.more_options}}" ng-click="toggle_attribute('object_tools')")
 		i.fa.fa-save.btn_action( tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.save}}" ng-click="save()")
@@ -6,7 +9,8 @@
 
 		
 		i.fa.fa-remove.btn_action(tooltip-placement="left" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.delete}}" ng-click="delete()")
-
+p is touched ? {{section.touched}}
+p range: {{ui.selected_range.textrange}}
 h2 is multi ? {{ui.selected_range.multi}} size ? {{ui.selected_range.size}}
 h5 {{render_config.i18n.CUSTOM.ACTIONS.edit}} section # {{section.index_}}
 h1 rebuild ? : {{section.rebuild}} {{section.rebuild_count}} Textlength: {{section.textlength}} objects count: {{section.objects_count.all}}

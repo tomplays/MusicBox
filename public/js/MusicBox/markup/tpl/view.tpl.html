@@ -1,9 +1,10 @@
 
+<!-- h3 mtda : {{markup.metadata}}-->
+<!-- h3 markup.objSchemas : {{markup.objSchemas}}-->
 <div ng-if="(markup.visible &amp;&amp; !markup.forced) || (markup.visible &amp;&amp; markup.forced &amp;&amp; ui.renderAvailable_active== 'editor')" class="mk_inside_visible">
-  <!-- h4 has_offset :{{markup.has_offset}}  {{markup.offset_start}} -  {{markup.offset_end}}-->
   <!-- a(ng-click="offset(1,1)") offset me-->
   <!-- a(ng-click="match_selection()") match selection-->
-  <h1>isol ? {{markup.isolated}}</h1>
+  <!-- h1 isol ? {{markup.isolated}}-->
   <!-- m current: {{markup.start}} - {{markup.end}} -->
   <!--em {{markup}}-->
   <!-- debug -->
@@ -22,10 +23,12 @@
   
   
   -->
-  <div fluid="fluid" position="{{markup.position}}" subtype="{{markup.subtype}}" url="{{markup.metadata}}" ng-if="markup.type=='media' &amp;&amp; markup.subtype !=='img'" class="iframe_container iframe_{{markup.subtype}}"></div><img ng-if="markup.subtype=='img'" data-tdid="{{markup.id}}" ng-src="{{markup.metadata}}" class="mk_img"/><span ng-hide="markup.type== 'child' || markup.type== 'container'" class="icon_col use_depth"><i tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.select_edit}}" ng-click="toggle_select_markup('click')" ng-dblclick="toggle_select_markup( 'dblclick')" class="fa fa-{{markup.type}} fa-{{markup.subtype}} editing_{{markup.editing}} selected_{{markup.selected}}"> <span ng-if="markup.type=='generic'">{{markup.subtype[0]}}</span></i>
+  <div fluid="fluid" position="{{markup.position}}" subtype="{{markup.subtype}}" url="{{markup.metadata}}" ng-if="markup.type=='media' &amp;&amp; markup.subtype !=='img'" class="iframe_container iframe_{{markup.subtype}}"></div><img ng-if="markup.subtype=='img'" data-tdid="{{markup.id}}" ng-src="{{markup.metadata}}" class="mk_img"/><span ng-hide="markup.type== 'child'" class="icon_col use_depth"><i tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.select_edit}}" ng-click="toggle_select_markup('click')" ng-dblclick="toggle_select_markup( 'dblclick')" class="fa fa-{{markup.type}} fa-{{markup.subtype}} editing_{{markup.editing}} selected_{{markup.selected}}"> <span ng-if="markup.type=='generic'">{{markup.subtype[0]}}</span></i>
     <!-- span select-->
-    </span><span ng-if="markup.type== 'container'" class="icon_col use_depth"><i tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.select_edit}}" ng-click="select_section()" class="fa fa-{{markup.type}} fa-{{markup.subtype}} editing_{{markup.editing}} selected_{{markup.selected}}">Select section # {{markup.sectionin}}</i></span>
-  <div class="data_col"><span ng-bind-html="markup.metadata" ng-if="(markup.objSchemas.modes.read.display.metadata.displayed =='metadata') &amp;&amp; (markup.editing ==false) " class="mk_val metadata use_depth"> </span>
+    </span>
+  <!-- span.icon_col.use_depth(ng-if="markup.type== 'container'")i(tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.select_edit}}" class="fa fa-{{markup.type}} fa-{{markup.subtype}} editing_{{markup.editing}} selected_{{markup.selected}}",  ng-click="select_section()"  ) Select section # {{markup.sectionin}}
+  -->
+  <div class="data_col"><span ng-bind-html="markup.metadata" ng-if="(markup.objSchemas.modes.read.display.metadata.displayed =='metadata')  " class="mk_val metadata use_depth"> </span>
     <input ng-if="markup.editing ==true &amp;&amp; markup.type =='markup'" ng-model="markup.metadata" type="text"/><span ng-if="markup.objSchemas.modes.read.display.metadata.displayed =='subtype'" class="mk_val subtype use_depth mk_val_subtype_{{markup.subtype}}"> {{markup.subtype}} </span>
     <!-- date and user fields --><span class="mk_val mk_metas use_depth"><span ng-if="markup.objSchemas.modes.read.display.date" class="mk_val created">{{markup.created | date }} </span><span style="color:{{markup.user_options['color'].value}}" ng-if="markup.objSchemas.modes.read.display.user" class="mk_val mk_username">
          

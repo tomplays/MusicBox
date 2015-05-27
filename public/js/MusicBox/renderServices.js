@@ -48,6 +48,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
         $rootScope.ui.selected_range.markups_to_offset = new Array();
         $rootScope.ui.selected_range.insert = null;
         $rootScope.ui.offset_queue = new Array()
+        $rootScope.ui.selected_range.debug = new Array()
 
         $rootScope.ui.routing = $routeParams
 
@@ -519,8 +520,8 @@ container_class.modes.editor.fields.metadata.label = 'css class'
             },
           })
           definitions.data = new Object({
-              'name': 'data',
-              'display_name': $rootScope.render_config.i18n.CUSTOM.OBJECTS.comment,
+              'name':$rootScope.render_config.i18n.CUSTOM.OBJECTS.datavalue,
+              'display_name': $rootScope.render_config.i18n.CUSTOM.OBJECTS.datavalue,
               'map_range': true,
               'positions': {
                   "forced": "left",
@@ -535,7 +536,8 @@ container_class.modes.editor.fields.metadata.label = 'css class'
                         'tabs': {
                             'metadata': 'value',
                             'type': 'type',
-                            'subtype': 'subtype'
+                            'subtype': 'subtype',
+                            'position': 'position'
 
 
                         },
@@ -544,7 +546,7 @@ container_class.modes.editor.fields.metadata.label = 'css class'
                                   'ranges': { 
                                       'display' : true,
                                       'label':'link url',
-                                    'input' : 'range'
+                                      'input' : 'range'
                                   },
                                   'type': { 
                                       'display' : true,
@@ -557,22 +559,25 @@ container_class.modes.editor.fields.metadata.label = 'css class'
                                       'label':'position',
                                       'input' : 'select'
                                   },
-                                  'subtype': {
+                                   'subtype': {
                                     'display' : true,
-                                    'label':'subtye',
+                                    'label':'kind of link',
                                     'input' : 'select',
                                     'free_input' : false,
-                                    'show_editor': 'hidden',
-                                    'available' : ['x', 'y', 'z', 'string','int'],
-                                    
+                                    'show_editor': true,
+                                    'available' : ['x', 'y', 'z','string'],
+                                    'forced' : false
                                   },
+                                 
+                                   
+                            
                                   'metadata': {
                                     'display' : true,
-                                    'label':'subtye',
-                                    'input' : 'select',
-                                    'free_input' : false,
-                                    'show_editor': 'hidden',
-                                    'available' : ['']
+                                    'label':$rootScope.render_config.i18n.CUSTOM.OBJECTS.datavalue,
+                                    'input' : 'text',
+                                    'free_input' : true,
+                                    'show_editor': true,
+                                   
                                 
                                   }
 
@@ -615,7 +620,8 @@ container_class.modes.editor.fields.metadata.label = 'css class'
 
                         'tabs': {
                             'metadata': 'url',
-                            'type': 'type'
+                            'type': 'type',
+                            'subtype': 'subtype'
                           },
 
                           'fields' : {
@@ -640,9 +646,9 @@ container_class.modes.editor.fields.metadata.label = 'css class'
                                     'label':'kind of link',
                                     'input' : 'select',
                                     'free_input' : false,
-                                    'show_editor': 'hidden',
+                                    'show_editor': true,
                                     'available' : ['hyperlink', 'anchor'],
-                                    'forced' : 'hyperlink'
+                                    'forced' : false
                                   },
                                   'metadata': {
                                     'display' : true,

@@ -15,8 +15,9 @@ angular.module('musicBox.DocumentDirectives', [])
     return {
       link:link,
       restrict: "EA",
+      scope:true,
       templateUrl: function() {
-        return "js/MusicBox/document/document.tpl.html";
+        return "js/MusicBox/document/tpl/document.tpl.html";
       }
     };
     
@@ -28,7 +29,7 @@ angular.module('musicBox.DocumentDirectives', [])
     }
     return {
       restrict: "EA",
-      //  scope: true,
+      scope: true,
       link:link,
       templateUrl: function() {
         return "js/MusicBox/document/tpl/chapters.tpl.html";

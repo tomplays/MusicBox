@@ -13,7 +13,7 @@ module.exports = function(grunt) {
 		pkg: grunt.file.readJSON('package.json'),
 		vendor: grunt.file.readJSON(".bowerrc").directory,
 		cfg : grunt.file.readJSON('config.json'),
-
+		
 		open: {
      		 path: "<%= cfg.ROOT_URL %>:<%= cfg.PORT %>/init",
      		 app: "Google Chrome"
@@ -117,11 +117,11 @@ module.exports = function(grunt) {
 			dest: "dist/mbmin.js",
 				options: {
 					module: "MusicBox",
-					usemin: "mbmin.js" // <~~ This came from the <!-- build:js --> block
+					usemin: "cmbmin.js" // <~~ This came from the <!-- build:js --> block
 				}
 			}
 		},
-		uglify: {
+		JJJJuglify: {
 			options: {
 				beautify: false,
 				preserveComments: "some"
@@ -142,7 +142,7 @@ module.exports = function(grunt) {
 					}
 				}
 		},
-		usemin: {
+		JJJJusemin: {
 					html: "dist/index.html",
 					css: ["dist/style/{,*/}*.css"],
 					js: ["dist/js/{,*/}*.js"],
@@ -282,8 +282,14 @@ module.exports = function(grunt) {
 				'connect:livereload'
 	]);
 	//grunt.registerTask('newsletter', ['']);
-
-	grunt.registerTask('minify', ['useminPrepare', 'ngtemplates','concat','usemin']);
+//	grunt.registerTask('minifyz', ['usemin', 'cssmin']);
+	grunt.registerTask('minifyz', [
+	  'useminPrepare',
+	  'concat:generated',
+	  'uglify:generated',
+	  'filerev'
+	]);
+	// grunt.registerTask('minify', ['useminPrepare', 'ngtemplates','concat','usemin']);
 	grunt.registerTask('initdb', ['open']);
 	grunt.registerTask("deploy:test", "Deploy on TEST. server", ["rsync:test"]);
 };

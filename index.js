@@ -25,6 +25,14 @@ var locale = require("locale")
 
 nconf.argv().env().file({file:'config.json'});
 
+if(!nconf.get('DB_NAME')){
+    console.log(chalk.red('config error: Are you sure you copied config_default.json to config.json ?') );
+    console.log(chalk.red('run in terminal: ') );
+    console.log(chalk.red('$ (sudo) cp config_default.json config.json ') );
+    return 
+}
+
+
 var auth = require('./api/authorization');
 var db = mongoose.connection;
 var dbz = mongoose.connect('mongodb://localhost/'+nconf.get('DB_NAME'));
@@ -49,7 +57,10 @@ var walk = function(path) {
 walk(models_path);
 
 
-db.on('error', console.error.bind(console, 'connection error:'));
+db.on('error', console.error.bind(console, 'connection error: is your mongoDB instance running ? start with sudo mongod'));
+
+
+
 db.once('open', function callback () {
   console.log(chalk.green('Hello mongo') );
 });
@@ -70,7 +81,7 @@ var app = express();
 
 
 app.configure(function(){
-  app.set('port',nconf.get('PORT') );
+app.set('port',nconf.get('PORT') );
  
  
  app.set('views', __dirname + '/views');

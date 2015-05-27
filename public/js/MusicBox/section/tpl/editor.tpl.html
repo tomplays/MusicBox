@@ -1,7 +1,12 @@
 
+<ul>
+  <li ng-repeat="e in ui.selected_range.debug track by $index">{{e}}</li>
+</ul>
 <div class="object-tools"><i tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.more_options}}" ng-click="toggle_attribute('object_tools')" class="fa fa-sliders btn_action"></i><i tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.save}}" ng-click="save()" class="fa fa-save btn_action"></i>
   <!-- ng-if="markup.touched == true"--><i tooltip-placement="left" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.delete}}" ng-click="delete()" class="fa fa-remove btn_action"></i>
 </div>
+<p>is touched ? {{section.touched}}</p>
+<p>range: {{ui.selected_range.textrange}}</p>
 <h2>is multi ? {{ui.selected_range.multi}} size ? {{ui.selected_range.size}}</h2>
 <h5>{{render_config.i18n.CUSTOM.ACTIONS.edit}} section # {{section.index_}}</h5>
 <h1>rebuild ? : {{section.rebuild}} {{section.rebuild_count}} Textlength: {{section.textlength}} objects count: {{section.objects_count.all}}</h1>

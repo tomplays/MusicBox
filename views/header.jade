@@ -36,24 +36,22 @@ head
 				})
 
 
-
+	// build:css mbcss.css	
 	// bower:css
 	link(rel='stylesheet', href='/bower_components/font-awesome/css/font-awesome.css')
-	// endbower 
-
-	// build:js mbmin.js 
-	// bower:js
-	script(src='/bower_components/angular/angular.js')
-	script(src='/bower_components/angular-resource/angular-resource.js')
-	script(src='/bower_components/angular-route/angular-route.js')
-	script(src='/bower_components/angular-sanitize/angular-sanitize.js')
-	script(src='/bower_components/underscore/underscore.js')
-	script(src='/bower_components/momentjs/moment.js')
-	script(src='/bower_components/angular-bootstrap/ui-bootstrap-tpls.js')
-	
 	
 	// endbower 
 	// endbuild  
+
+	// build:js mbmin.js 
+	// bower:js
+
+
+	
+	// endbower 
+	// endbuild  
+	script(type='text/javascript', src='mbmin.js')
+
 
 	// script(type='text/javascript',  src='js/lib/serialize.min.js')
 
@@ -97,26 +95,25 @@ head
 		link(rel='stylesheet', href='css/min/main.css')
 
 		// Angular controllers
-
-		script(type='text/javascript', src='js/MusicBox/markup/markupCtrl.js')
-		// script(type='text/javascript', src='js/MusicBox/markup/markupServices.js')
-		script(type='text/javascript', src='js/MusicBox/markup/markupDirectives.js')
-
-		script(type='text/javascript', src='js/MusicBox/letterDirectives.js')
-
-		script(type='text/javascript', src='js/MusicBox/markup/markupRest.js')
-
-		script(type='text/javascript', src='js/MusicBox/section/sectionCtrl.js')
-		script(type='text/javascript', src='js/MusicBox/section/sectionDirectives.js')
-
-
+		
 		// document level
 		script(type='text/javascript', src='js/MusicBox/document/documentServices.js')
 		script(type='text/javascript', src='js/MusicBox/document/documentRest.js')
 		script(type='text/javascript', src='js/MusicBox/document/documentCtrl.js')
-		// script(type='text/javascript', src='js/MusicBox/document/document.js')
-
 		script(type='text/javascript', src='js/MusicBox/document/documentDirectives.js')
+
+		// sections
+		script(type='text/javascript', src='js/MusicBox/section/letterDirectives.js')
+		script(type='text/javascript', src='js/MusicBox/section/editableTextDirective.js')
+		script(type='text/javascript', src='js/MusicBox/section/sectionCtrl.js')
+		script(type='text/javascript', src='js/MusicBox/section/sectionDirectives.js')
+
+		// markups
+		script(type='text/javascript', src='js/MusicBox/markup/markupCtrl.js')
+		// script(type='text/javascript', src='js/MusicBox/markup/markupServices.js')
+		script(type='text/javascript', src='js/MusicBox/markup/markupDirectives.js')
+		script(type='text/javascript', src='js/MusicBox/markup/markupRest.js')
+
 
 		// user 
 		script(type='text/javascript', src='js/MusicBox/user/userServices.js')
@@ -135,6 +132,7 @@ head
 	if (env == 'prod')
 		link(rel='stylesheet', href='css/min/main.css')
 		// Calling 9 js files, minified crash for angular, whereas .debug no, why ?
+
 		// script(type='text/javascript', src='js/min/MusicBox.min.js')
 		script(type='text/javascript',  src='js/min/MusicBox.min-debug.js')
 
@@ -150,5 +148,5 @@ head
 		♪     ♪
 			♪     ♪
 		Boite à musique
-			~MusicBox v.02 Niagara
+			~MusicBox v.03 "fruityLoops"
 			Tom Wersinger

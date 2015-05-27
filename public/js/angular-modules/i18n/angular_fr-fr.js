@@ -62,7 +62,9 @@ $provide.value("$locale", {
 			"child":"Objet enfant",
 			"media":"Média",
 			"markup":"Balise 'classique'",
-			"hyperlink":"Lien"
+			"hyperlink":"Lien",
+			"datavalue":"Donnée brute"
+
 
 	},
 	"POSITIONS" : {

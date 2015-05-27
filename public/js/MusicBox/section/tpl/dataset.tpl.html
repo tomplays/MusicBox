@@ -23,7 +23,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr ng-controller="MarkupCtrl" ng-repeat="markup in markups track by $index" class="trtype-{{markup.type}}">
+      <tr ng-controller="MarkupCtrl" ng-if="markup.deleted !== true" ng-repeat="markup in markups" class="trtype-{{markup.type}}">
         <!-- , ng-if="markup.type==filter_dataset_by || filter_dataset_by == 'any'"-->
         <td><span ng-click="toggle_select_markup('click')" class="markup-item-subtype clipped_{{markup.isselected}} markup-hn_{{markup.subtype}}">+ </span></td>
         <td><i tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.save}}" ng-click="save('ok')" class="fa fa-save btn_action"></i><i tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.delete}}" ng-click="delete()" class="fa fa-remove btn_action"></i></td>

@@ -52,7 +52,7 @@ angular.module('musicBox.DocumentService',[])
        if(Result){
           $rootScope.doc = Result.doc
       
-          $rootScope.markups  = _.sortBy( Result.doc.markups,function (num) {
+          $rootScope.markups  = _.sortBy( Result.doc.markups_,function (num) {
                return num.start;
           });
           //    $rootScope.doc.markups  = Result.doc.markups;
@@ -85,7 +85,15 @@ angular.module('musicBox.DocumentService',[])
 
 
             new UserService().SetFromApi(Result.userin)
-            $rootScope.containers = _.filter($rootScope.markups, function(td){ return  td.type == 'container'; });
+            $rootScope.containers = _.sortBy( Result.doc.sections,function (num) {
+               return num.start;
+            });
+
+
+            $rootScope.sections = _.sortBy( Result.doc.sections,function (num) {
+               return num.start;
+            });
+            //_.filter($rootScope.sections, function(td){ return  td.type == 'container'; });
             $rootScope.doc_owner = Result.is_owner;
             console.log('is owner or has secret ('+ Result.is_owner+')')
        
@@ -201,43 +209,35 @@ angular.module('musicBox.DocumentService',[])
         var thos = this;
         //console.log($rootScope.ui.selected_range.markups_to_offset)
         data.doc_content = $rootScope.doc.content;
+      
         data.markups = new Array()
         // prepare / clean 
 
-
-        _.each($rootScope.ui.offset_queue, function(mk){
-
-          console.log(mk)
-          if( _.isFinite(mk.start) && _.isFinite(mk.end)){
-
-          }
-
-          else{
-           
-          }
+         _.each($rootScope.containers, function(s){
+            if(s.touched == true){
+              var a_s = new Object({'id':s._id, 'start': s.start,'end': s.end, 'action':'offset' })
+               data.markups.push(a_s)
+            }
 
 
-          if(true){
-             var a_mk = new Object({'id':mk._id, 'offset_start':mk.offset_start, 'offset_end':mk.offset_end, 'action':'offset', 'type':mk.type, 'subtype':mk.subtype })
-             data.markups.push(a_mk)
-          }
+         })
+        _.each($rootScope.markups, function(m){
 
-          if(!mk.offset_start && mk.offset_start !==0){
-            //alert('bug #226 '+mk.offset_start+'--'+mk.offset_start)
-            console.log('bug offset start')
-            mk.offset_start=0
-            thos.flash_message('mk bug offset', '-' , 2400, false)
-
-          }
-          if(!mk.offset_end){
-            console.log('bug offset end')
-                         thos.flash_message('mk bug offset', '-' , 2400, false)
-
-            mk.offset_end=0
-          }
+           if(m.touched == true){
+                         if( _.isFinite(m.start) && _.isFinite(m.end)){
+                             var a_mk = new Object({'id':m._id, 'start': m.start,'end': m.end, 'action':'offset' })
+                             data.markups.push(a_mk)
+                          }
+                          else{
+                            alert('doh ? ')
+                          }
+           } 
                
         });
-      
+        data.edittype = 'markups_sync'
+
+        console.log(data)
+        
         var promise = this.api_method.doc_sync({id:$rootScope.doc.slug},serialize(data)).$promise;
         promise.then(function (Result) {
           if(Result.doc){
@@ -248,22 +248,17 @@ angular.module('musicBox.DocumentService',[])
 
             }
              
-             console.log('SAVED')
-              thos.flash_message('-', 'line' , 2400, false)
+            console.log('SAVED')
+            thos.flash_message(Result.edittype, 'ok' , 2400, false)
 
-             
-              
-              $rootScope.ui.selected_range.markups_to_offset = []
-              $rootScope.ui.offset_queue = []
-
+            _.each($rootScope.containers, function(s){
+                 s.touched = false
+             });
 
               _.each($rootScope.markups, function(m){
-                  //  m.end = m.end+m.offset_end
-                  //  m.start = m.start+m.offset_start
-                    m.offset_end=0
-                    m.offset_start=0
-                    m.has_offset=false
+                 m.touched = false
              });
+              
           }
          
 
