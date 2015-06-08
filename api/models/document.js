@@ -22,7 +22,7 @@ var ObjectId = mongoose.Types.ObjectId;
 
 
 var MarkupSchema = new Schema({
-    _id:  {type:ObjectIdSchema, default: function () { return new ObjectId()} },
+    _id:  {type:String, default: function () { return new ObjectId()} },
     created: {
         type: Date,
         default: Date.now
@@ -140,7 +140,7 @@ var DocumentSchema = new Schema({
         type: String,
         default: 'draft'
     },
-    secret: {type:ObjectIdSchema, default: function () { return new ObjectId()} },
+    secret: { type: String, default: function () { return new ObjectId()} },
     thumbnail: {
         type: String,
          default: 'http://hacktuel.fr/img/logos/loguy/hacktuel.png'

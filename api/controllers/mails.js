@@ -30,7 +30,7 @@ directTransport = require('nodemailer-direct-transport'),
 fs = require('fs');
 
 nconf.argv().env().file({file:'config.json'});
-
+var sent_mail = 0;
 
 //var transporter = nodemailer.createTransport(directTransport());
 var transporter = nodemailer.createTransport({
@@ -46,7 +46,7 @@ var transporter = nodemailer.createTransport({
 
 var sendmailer = exports.sendmailer = function(options){
 		var mailOptions = {
-		    from: options.from ? options.from :  'hacktuel.fr  <homeof@gmail.com>', // sender address
+		    from: options.from ? options.from :  nconf.get('SITE_TITLE')+' <'+ nconf.get('MAIL_PROVIDER_MAIL')+'>', // sender address
 		    to: options.to ? options.to : 'homeof+debugmail@gmail.com', // list of receivers
 		    subject: options.subject ? options.subject : 'MB', // Subject line
 		    text: options.bodytext ? options.bodytext : '-', // plaintext body
@@ -57,13 +57,16 @@ var sendmailer = exports.sendmailer = function(options){
         if(!nconf.get('MAIL_API')){
             console.log('NO MAIL API')
         }
+
         else{
-       
+        console.log(' MAIL API')
                  transporter.sendMail(mailOptions, function(error, info){
                     if(error){
                         console.log(error);
                     }else{
                         console.log('Message sent: ' + info.response);
+                        sent_mail++;
+                        console.log(sent_mail)
                     }
         });
         console.log('sent mail>')
@@ -210,7 +213,7 @@ exports.subscribe_post = function(req, res) {
 			var admin_email = new Object({
 				'subject':'hacktuel.fr - new subscriber', 
 				'bodytext':'Veuillez cliquer ce <a href="http://localhost:8087/api/v1/subscribe_action?action=confirm&mail='+user.email+'&key='+user.secret+'">lien</a> pour activer votre abonnement à la newsletter d\'hacktuel</p><p>ou entrez directement cette adresse dans votre navigateur : http://localhost:8087/api/v1/subscribe_action?action=confirm&mail='+user.email+'&key='+user.secret+'</p>', 
-				'to':'homeofgmail.com'
+				'to':'homeof@gmail.com'
 			})
 			sendmailer(user_email)
 			//sendmailer(admin_email)
@@ -242,6 +245,10 @@ exports.subscribe_action = function(req, res) {
 									res.render('index', { action_: 'unsubscribed' , user_in:user_ } );
 		 					})
 	 					}
+						else if(req.query.action == 'reset'){
+							res.send('mail reset to: #todo > contact site owner')
+	 					}
+
 	 					else{
 							res.send('?action')
 	 					}

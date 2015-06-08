@@ -21,6 +21,9 @@ module.exports = function(app, passport, auth) {
     app.get('/signup', users.signup );
 	// USER
     app.get('/signout', users.signout);
+    app.post('/api/v1/user/lostpass', users.lostpass);
+
+
     //Setting the facebook oauth routes
     /*
     app.get('/auth/facebook', passport.authenticate('facebook', {
@@ -41,7 +44,9 @@ module.exports = function(app, passport, auth) {
     app.get('/me/account', auth.requiresLogin, users.account);
     app.get('/api/v1/me/account', auth.requiresLogin, users.account_api);
 
-  
+    app.post('/api/v1/me/edit', auth.requiresLogin, users.edit);
+
+
     var fileupload = require('fileupload').createFileUpload('public/uploads').middleware;
     app.post('/api/v1/media/upload', fileupload, function(req, res) {
        res.send(req.body.image)
@@ -51,6 +56,7 @@ module.exports = function(app, passport, auth) {
     app.get('/',                            docs.index_doc);
 
     app.get('/doc/create',  auth.requiresLogin, docs.doc_create_view ); 
+ // 'Third party editing'
 
 
     // routes errors
@@ -59,8 +65,7 @@ module.exports = function(app, passport, auth) {
 
     // views & partials
   	app.get('/doc/:slug',                   docs.index_doc);
-    app.get('/doc_editor/:slug',             docs.index_doc);
-
+    app.get('/doc_editor/:slug',            docs.index_doc);
 
     // lite mode
     app.get('/readonly/:slug',               docs.index_doc);
@@ -96,12 +101,12 @@ module.exports = function(app, passport, auth) {
     app.post('/api/v1/doc/:slug/sync',     auth.requiresLogin,  docs.doc_sync);
 
 
-    app.post('/api/v1/doc/:slug/markup/:markup_id/edit',auth.requiresLogin_or_secret,  markups.markup_edit);
-    app.post ('/api/v1/doc/:slug/markup/:markup_id/delete', auth.requiresLogin_or_secret, markups.markup_delete);
+    app.post('/api/v1/doc/:slug/markup/:markup_id/edit',auth.requiresLogin_or_secret,  markups.edit);
+    app.post ('/api/v1/doc/:slug/markup/:markup_id/delete', auth.requiresLogin_or_secret, markups.delete);
 
 
-    app.post('/api/v1/doc/:slug/markup/push', auth.requiresLogin, markups.markup_create);
-    // app.post('/api/v1/doc/:doc_id_or_title/markup/delete/' , docs.markup_delete);
+    app.post('/api/v1/doc/:slug/markup/push', auth.requiresLogin, markups.create);
+    // app.post('/api/v1/doc/:doc_id_or_title/markup/delete/' , docs.delete);
 
     // create a doc
     app.post('/api/v1/doc/create',  auth.requiresLogin, docs.doc_create);
@@ -131,18 +136,16 @@ module.exports = function(app, passport, auth) {
   	app.get('/init', docs.init );
 
 
-
     // newletter api
     app.get('/subscribe',                   mails.subscribe_view);
     app.post('/api/v1/subscribe',           mails.subscribe_post);
     app.get('/api/v1/subscribe_action',     mails.subscribe_action );
-
     app.get('/api/v1/get_subscribers',  auth.requiresLogin,   mails.get_subscribers);
     app.get('/api/v1/send_mail',                    mails.send_mail_from_html);
     app.get('/api/v1/send_mail_internal/:slug',     mails.send_mail_from_internal_document);
+    app.get('/api/v1/send_generate',                mails.generate_mail_to_html);
 
-    app.get('/api/v1/send_generate',        mails.generate_mail_to_html);
 
-
+   
 
 };

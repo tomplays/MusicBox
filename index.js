@@ -182,23 +182,26 @@ var server =  http.createServer(app);
 server.listen(app.get('port'), function(){
     console.log(chalk.green( "Express server listening on port "+ app.get('port')  ) );
 });
-var io;
-exports.io = io =  require('socket.io').listen(server, {log:false, origins:'*:*'}, function(){
+var io =  require('socket.io').listen(server, {log:false, origins:'*:*'}, function(){
   console.log(chalk.green('Hello io') );
 })
 
-
-
-
-io.on('connection', function(socket){ 
-    console.log(chalk.green('Hello client'+socket.handshake.address))
-    //console.log(socket);
-    socket.on('news', function(data){
+io.on('connection', function (socket) {
+ // socket.emit('news', { hello: 'world' });
+  socket.on('postdata', function(data){
       require('./api/socket').socketer(socket, data);
-    });
-
-    
   });
+
+
+  
+
+
+
+
+});
+
+
+
 // logger.init(app, passport, mongoose);
 //expose app
 /*

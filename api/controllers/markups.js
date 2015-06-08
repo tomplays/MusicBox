@@ -26,22 +26,25 @@ Markup  = mongoose.model('Markup');
 var nconf = require('nconf');
 nconf.argv().env().file({file:'config.json'});
 var chalk = require('chalk');
+
+
 var app;
 
 
 var documents = require('./documents')
+var mails = require('./mails.js');
 
 
 
 
-exports.markup_edit = function(req, res) {
+exports.edit = function(req, res) {
 	console.log(req.body.edittype)
 	var edited = new Array();
 	
 	var exit_user = false;
 	var out ={};
 	var m_body = req.body; 
-	console.log(req.body)
+	
 
 	if(req.user){
 		var req_user_id = req.user.toObject()._id;
@@ -73,40 +76,29 @@ exports.markup_edit = function(req, res) {
 
 
 						// APPROVE / LOGIC HERE
-
-
-
 						console.log(m.status)
 						console.log(m_body.status)
 
-//if()
-//m.status 	= 'moderated'
-m.status 	= m_body.status
-
-
-// case own
-if(req_user_id.equals(m.user_id._id) ){
-
-m.status 	= m_body.status
-
-}
-
-
-if(req_user_id.equals(doc.user._id)){
-
-m.status 	= m_body.status
-
-}
+						//if()
+						//m.status 	= 'moderated'
+						m.status 	= m_body.status ? m_body.status : 'pending'
+						// case own
+						if(req_user_id.equals(m.user_id._id) ){
+							m.status 	= m_body.status
+						}
+						if(req_user_id.equals(doc.user._id)){
+							m.status 	= m_body.status
+						}
 
 						
-					 	m.start 	= m_body.start
-					 	m.end 		= m_body.end
-					 	m.type 		= m_body.type
-					 	m.subtype 	= m_body.subtype
-					 	m.position	= m_body.position
-						m.metadata 	= m_body.metadata
+					 	m.start 	= m_body.start ? m_body.start : m.start
+					 	m.end 		= m_body.end ? m_body.end : m.end
+					 	m.type 		= m_body.type ? m_body.type : m.type
+					 	m.subtype 	= m_body.subtype ? m_body.subtype : m.subtype
+					 	m.position	= m_body.position ? m_body.position: m.position
+						m.metadata 	= m_body.metadata ? m_body.metadata : m.metadata
 						
-						m.depth     = m_body.depth
+						m.depth     = m_body.depth ? m_body.depth : m.depth 
 
 						if(m_body.doc_id){
 							console.log('DOC sub _id: '+m_body.doc_id)
@@ -231,10 +223,11 @@ use $Post markup to setup
 return json ( doc, owner, inserted)
 
 */
-exports.markup_create = function(req, res) {
+exports.create = function(req, res) {
 	
+
+	var out = {}
 //bug ?
-console.log(req.body.edittype)
 	var req_user_id = req.user._id;
 	console.log(req_user_id)
 
@@ -250,21 +243,16 @@ console.log(req.body.edittype)
 	else{
 		// set as pending if not doc_owner 
 		var markup_status 	= 'pending'
-		console.log('req_user_id')
-		console.log(req_user_id)
-		console.log('doc.user._id')
-		console.log(doc.user._id)
-		if(req_user_id == doc.user._id){
-
-				markup_status 	= 'approved';
-				if(req.body.status){
-					//markup_status 	= req.body.status
-				}
+		
+		out.is_owner 		=  documents.test_owner_or_key(doc,req)	
+		if(out.is_owner == true){
+			markup_status 	= 'approved';
 		}
+		else{
+			var email_object = new Object({'subject':'[New comment on document] - ', 'bodytext':'<p>Somebody just left a comment on a document you own.</p><p>by:<em>'+req.body.username+'</em></p><blockquote>'+req.body.metadata+'</blockquote> <p>You can set it as approved (and visible to anyone) <a href="'+nconf.get('ROOT_URL')+':'+nconf.get('PORT')+'/doc/'+req.params.slug+'">here</a></p>'})
+        	mails.sendmailer(email_object)
 
-
-/////// bug !!!
-
+		}
 
 		var markup = new Object( { 'username':req.body.username, 'user_id': req_user_id, 'position': req.body.position, 'start':req.body.start, 'end':req.body.end, 'subtype': req.body.subtype, 'type': req.body.type, 'status': markup_status, 'metadata': req.body.metadata, 'depth': req.body.depth} )
 		markup.isNew; // true
@@ -273,53 +261,34 @@ console.log(req.body.edittype)
 		doc.markups.push(markup)
 		
 		doc.markModified('markups');
-		//console.log('doc.markups after')
-		//console.log(doc.markups)
+		
 		var inserted = _.last(doc.markups);
-		// console.log(inserted)
+		
+
 		doc.save(function(err,doc) {
 			if (err) {
 				res.json(err)
 			} else {
-				
-
-
-							///
-
-							var query = Document.findOne({ 'slug':req.params.slug });
-								// console.log(req.body)
-								// console.log(req.body.username)
-								//query.populate('user','-email -hashed_password -salt').populate( {path:'markups.user_id', select:'-salt', model:'User'}).populate({path:'markups.doc_id', select:'-markups -secret', model:'Document'}).populate('markups.doc_id.user').populate('room').exec(function (err, doc) {
-								query.populate('user','-email -hashed_password -salt').populate( {path:'markups.user_id', select:'-salt -email -hashed_password', model:'User'}).populate({path:'markups.doc_id', select:'-markups -secret', model:'Document'}).populate('markups.doc_id.user').populate('room', {secret:0}).exec(function (err, doc) {
-
-								if (err) {
-									res.json(err)
-								}
-								else{
-
-											var out = {}
-								        	out.doc 			=  doc.toObject()
-											if(req.user){
-												out.userin 		= req.user.toObject()
-											}
-											out.is_owner 		=  documents.test_owner_or_key(doc,req)	
-											out.doc.secret 		= 'api_secret';
-											out.inserted = new Array(inserted);
-											res.json(out);
-
-
-								}
-
-							});
-
+				var query = Document.findOne({ 'slug':req.params.slug });
+					// console.log(req.body)
+					// console.log(req.body.username)
+					//query.populate('user','-email -hashed_password -salt').populate( {path:'markups.user_id', select:'-salt', model:'User'}).populate({path:'markups.doc_id', select:'-markups -secret', model:'Document'}).populate('markups.doc_id.user').populate('room').exec(function (err, doc) {
+					query.populate('user','-email -hashed_password -salt').populate( {path:'markups.user_id', select:'-salt -email -hashed_password', model:'User'}).populate({path:'markups.doc_id', select:'-markups -secret', model:'Document'}).populate('markups.doc_id.user').populate('room', {secret:0}).exec(function (err, doc) {
+					if (err) {
+						res.json(err)
+					}
+					else{
+			        	out.doc 			=  doc.toObject()
+						if(req.user){
+							out.userin 		= req.user.toObject()
+						}
+						out.is_owner 		=  documents.test_owner_or_key(doc,req)	
+						out.doc.secret 		= 'api_secret';
+						out.inserted = new Array(inserted);
+						res.json(out);
+					}
+				});
 			}
-
-
-
-
-
-
-
 		});
 	  }
 	});
@@ -346,28 +315,18 @@ endpoints :
 return json ( doc, owner, deleted)
 
 */
-exports.markup_delete = function(req, res) {
+exports.delete = function(req, res) {
 	console.log(req.body.edittype)
 	var deleted= new Array();
-
 	var has_error = false;
-
-
 	var query = Document.findOne({ 'slug':req.params.slug });
-	
     // complete query 
 	query.populate('user','-email -hashed_password -salt').populate( {path:'markups.user_id', select:'-salt', model:'User'}).populate({path:'markups.doc_id', select:'-markups -secret', model:'Document'}).populate('markups.doc_id.user').populate('room').exec(function (err, doc) {
 	
 	  if(err) {
 	  	res.send(err)
 	  }
-	  
-	  
-	  
-	  
 	  else{
-
-		
 
 		if(req.user.id == doc.user._id){
 			console.log('match')
@@ -431,8 +390,6 @@ exports.markup_delete = function(req, res) {
 			out.err = 'is not auhtorized'
 			res.json(out)
 		}
-		
-		
 		
 
 	  }

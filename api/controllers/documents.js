@@ -38,7 +38,7 @@ nconf.argv().env().file({file:'config.json'});
 
 var chalk = require('chalk');
 var app;
-var mail= require('./../../sendmail.js');
+var mails = require('./mails.js');
 
 
  	exports.doc_create_view= function(req, res) {
@@ -71,7 +71,7 @@ var mail= require('./../../sendmail.js');
 	*/
  	exports.index_doc= function(req, res) {
 
- 		var debugger_on = 'true' /// fix database for broken meta_options.
+ 		var debugger_on = 'false' /// fix database for broken meta_options.
 
 		var user_ = ''
 		if(req.user){
@@ -131,19 +131,20 @@ if(debugger_on){
 						}
 					});
 					
-if(debugger_on){
-						console.log(new_doc_options)
-						doc.doc_options = new_doc_options;
+						if(debugger_on){
+												/* console.log(new_doc_options)
+												doc.doc_options = new_doc_options;
 
-						doc.save(function(err,docsaved) {
-						if (err) {
-							
-						} 
-						else {
-						  	console.log(chalk.green('doc saved') );
-						  }
-						});
-}
+												doc.save(function(err,docsaved) {
+												if (err) {
+													
+												} 
+												else {
+												  	// console.log(chalk.green('doc saved') );
+												  }
+												});
+						*/
+						}
 					
 
 
@@ -177,8 +178,9 @@ if(debugger_on){
 	*/
 
 	exports.doc_get = function(req, res) {
+			console.log(req.query.secret)
 		var query = Document.findOne({ 'slug':req.params.slug })
-		query.populate('user','-email -hashed_password -salt').populate( {path:'markups.user_id', select:'-salt -email -hashed_password', model:'User'}).populate({path:'markups.doc_id', select:'-markups -secret', model:'Document'}).populate('markups.doc_id.user').populate('room', {secret:0}).exec(function (err, doc) {
+		query.populate('user','-email -hashed_password -salt').populate( {path:'markups.user_id', select:'-salt -email -hashed_password -secret', model:'User'}).populate({path:'markups.doc_id', select:'-markups -secret', model:'Document'}).populate('markups.doc_id.user').populate('room', {secret:0}).exec(function (err, doc) {
 			if (err){
 				res.json(err)
 			} 
@@ -186,8 +188,9 @@ if(debugger_on){
 				if(doc){
 					var out 			= {}
 					out.doc 			= doc.toObject()
-					out.doc.sections = []
-					out.doc.markups_ = []
+					out.is_owner  		= false
+					out.doc.sections 	= []
+					out.doc.markups_ 	= []
 
 					doc.markups.forEach(function(mk) {
                    		 // console.log(mk.status)
@@ -202,16 +205,7 @@ if(debugger_on){
         			})
 
 					
-					// test rights
-					if(doc.published =='draft'){
-								var user_can	= exports.test_owner_or_key(doc,req)
-								if(!user_can){
-									var message = 'This doc is a draft, are you the document owner ? are you logged in or using secret key ?';
-									res.json('err', { title: 'no access', message: message})
-									return;
-								}
-					}
-					
+				
 
 				
 					
@@ -219,12 +213,22 @@ if(debugger_on){
 						 out.userin 	= req.user.toObject()
 					}
 					out.is_owner 		= exports.test_owner_or_key(doc,req)
-					if(out.is_owner == true){
-							
+					if(out.is_owner !== true){
+							out.doc.secret 		= 'api_secret'
 					}
-					else{
-						out.doc.secret 		= 'api_secret'
+					
+
+
+					// test rights
+					if(doc.published =='draft'){
+								if(out.is_owner !== true){
+									var message = 'This doc is a draft, are you the document owner ? are you logged in or using secret key ?';
+									res.json('err', { title: 'no access', message: message})
+									return;
+								}
 					}
+
+
 					res.json(out)
 				}
 				else{
@@ -293,12 +297,12 @@ exports.doc_sync= function(req, res) {
 			var sections = []
 			console.log(req.body.edittype)
 			//console.log(req.body.doc_content)
-			console.log('doc.markups')
-			console.log('#######')
+			//console.log('doc.markups')
+			//console.log('#######')
 			//console.log(doc.markups)
-			console.log('#######################')
-			console.log(req.body.markups)
-			console.log('#######')
+			//console.log('#######################')
+			//console.log(req.body.markups)
+			//console.log('#######')
 	
 			_.each(doc.markups, function(doc_mk, i){
 					doc.markups[i].touched = false
@@ -308,8 +312,8 @@ exports.doc_sync= function(req, res) {
 						doc.markups[i].start 	=  parseInt(match.start)
 						doc.markups[i].end 		=  parseInt(match.end)
 						doc.markups[i].touched = true
-						console.log('match found:')
-						console.log(doc.markups[i])
+					//	console.log('match found:')
+					//	console.log(doc.markups[i])
 					}
 					else{
 
@@ -337,7 +341,7 @@ exports.doc_sync= function(req, res) {
 					 out.userin 	= req.user.toObject()
 				}
 				out.is_owner 		= exports.test_owner_or_key(doc,req)
-	console.log(chalk.green('doc sync') );
+					console.log(chalk.green('doc sync') );
 				  		//console.log(doc.markup );
 					out.doc 			= doc.toObject()
 
@@ -352,7 +356,7 @@ exports.doc_sync= function(req, res) {
 					out.doc.updated     = now.toJSON();
 					out.doc.secret 		= 'api_secret'
 					out.edittype 		= 	req.body.edittype
-					console.log(out)
+				//	console.log(out)
 				
 
 			doc.save(function(err,doc) {
@@ -435,9 +439,10 @@ exports.doc_create = function(req,res){
 
 	// to filter a better way
 	var raw_title        =     req.body.raw_title;
-	var raw_content      =     req.body.raw_content;
+	//var raw_content      =     req.body.raw_content;
+	//var raw_content      = 'The quick brown fox jumps over the lazy dog.'
+		var raw_content      = 'Your Text'
 
-	
 	if(req.body.published){
 		var published      = req.body.published
 	}
@@ -459,9 +464,20 @@ exports.doc_create = function(req,res){
 
 	 var text_size = _.size(raw_content)-1;
 
+
+
 	 var markup_section_base  = new Markup( {'user_id':req.user._id, 'username':req.user.username, 'start':0, 'end':text_size,  'type': 'container', 'subtype':'section', 'position':'inline', 'status':'approved'} )
 	 new_doc.markups.push(markup_section_base)
+	/*
 
+		  var markup_section_two  = new Markup( {'user_id':req.user._id, 'username':req.user.username, 'start':19, 'end':43,  'type': 'container', 'subtype':'section', 'position':'inline'} )
+		  new_doc.markups.push(markup_section_two)
+
+
+		   var markup_one  = new Markup( {'user_id':req.user._id, 'username':req.user.username, 'start':4, 'end':8,  'type': 'markup', 'subtype':'h1', 'position':'inline'} )
+		  new_doc.markups.push(markup_one)
+
+	*/
 
 	 // var markup_class= new Object( {'user_id':req.user._id, 'username':req.user.username, 'start':0, 'end':10,  'type': 'container_class', 'subtype':'css_class', 'metadata': 'bg_black', 'position':'inline'} )
 	 // new_doc.markups.push(markup_class)
@@ -509,7 +525,7 @@ exports.doc_create = function(req,res){
 	var branding_class  = new meta_options( {'option_name':'branding_class', 'option_value':'sa bg_transparent',  'option_type': '' } )
 	new_doc.doc_options.push(branding_class)
 
-	var   footer_center_html = new meta_options( {'option_name':'footer_center_html', 'option_value':"<i class=\'fa fa-file-text-o\'></i> powered by <a href=\'http://github.com/tomplays/MusicBox/\'>MusicBox beta*</a> - 2014 - <a href=\'http://hacktuel.fr\'>@Hacktuel.fr</a>",  'option_type': '' } )
+	var   footer_center_html = new meta_options( {'option_name':'footer_center_html', 'option_value':"<i class=\'fa fa-file-text-o\'></i> powered by <a href=\'http://github.com/tomplays/MusicBox/\'>MusicBox</a> - 2015 - <a href=\'http://hacktuel.fr\'>@Hacktuel.fr</a>",  'option_type': '' } )
 	new_doc.doc_options.push(footer_center_html)
 
 
@@ -525,10 +541,10 @@ exports.doc_create = function(req,res){
    	 	console.log(req.user)
 	}
 	else{
-		//return res.send('users/signup', {
-             //   errors: err.errors,
-             //   article: article
-          //  });
+		
+
+
+
 	}
 	//doc.populate('user', 'name username image_url').exec(function(err,doc) {
 	doc.save(function(err,doc) {
@@ -536,8 +552,8 @@ exports.doc_create = function(req,res){
    			res.json(err);
         } else {
 
-        	var email_object = new Object({'subject':'[new document] - ', 'text':'new document created!'})
-        	mail.sendmail(email_object)
+        	var email_object = new Object({'subject':'[new document] - ', 'bodytext':'new document created!'})
+        	mails.sendmailer(email_object)
 			//console.log(doc)
 			// var doc =  Document.findOne({title: filtered_title}).populate('user', '-salt name username image_url').populate('room').exec(function(err, doc) {
         	res.json(doc)
@@ -825,18 +841,18 @@ exports.doc_option_new  = function(req, res) {
 		// doc owner or markup owner
 		if(req.user){
 			if(req.user._id.equals(doc.user._id) ){	
-				console.log('user is owner')
+			//	console.log('user is owner')
 				return true;	
 			}
 			else{
 
 				
 				if( (req.body.secret && doc.secret==req.body.secret) || (req.query.secret && doc.secret==req.query.secret) ){
-					console.log('secret match')
+				//	console.log('secret match')
 					return true;
 				}
 				else{
-					console.log('and secret dont match(tell no one: '+doc.secret+'   )')
+			//		console.log('and secret dont match(tell no one: '+doc.secret+'   )')
 					var err = new Object({'message':'Need to be either doc owner or use right secret key', 'err_code':'100'})
 					return false
 				}
@@ -848,6 +864,8 @@ exports.doc_option_new  = function(req, res) {
 	function getRandomInt(min, max) {
  		return Math.floor(Math.random() * (max - min + 1)) + min;
 	}
+
+
 
 
 
@@ -897,6 +915,8 @@ exports.doc_option_new  = function(req, res) {
 	 var markup_section_base  = new Markup( {'user_id':user._id, 'username':user.username, 'start':0, 'end':text_size,  'type': 'container', 'subtype':'section', 'position':'inline'} )
 	 new_doc.markups.push(markup_section_base)
 
+
+   
 
 	
 

@@ -38,7 +38,7 @@ var RoomSchema = new Schema({
         default: 'open',
         trim: true
     },
-    secret: {type:ObjectIdSchema, default: function () { return new ObjectId()} },
+    secret: {type:String, default: function () { return new ObjectId()} },
     room_options: [meta_options]
 });
 mongoose.model('Room', RoomSchema);

@@ -85,17 +85,16 @@ module.exports = function(grunt) {
 					}
 				},
 				files: [ 
-					{
+				/*{
 						expand: true,
-						src: "**/*.jade",
-						dest: "dist",
-						cwd: "views",
-						ext: '.html'
-					}, 
+						src: "views/*.jade",
+						ext: ".tpl.html"
+					},
+				*/
 					{
 						expand: true,
 						src: "public/js/MusicBox/**/*.jade",
-						ext: '.tpl.html'
+						ext: ".tpl.html"
 					}
 				
 				 ]
@@ -117,11 +116,11 @@ module.exports = function(grunt) {
 			dest: "dist/mbmin.js",
 				options: {
 					module: "MusicBox",
-					usemin: "cmbmin.js" // <~~ This came from the <!-- build:js --> block
+					usemin: "mbmin.js" // <~~ This came from the <!-- build:js --> block
 				}
 			}
 		},
-		JJJJuglify: {
+		uglify: {
 			options: {
 				beautify: false,
 				preserveComments: "some"
@@ -142,7 +141,7 @@ module.exports = function(grunt) {
 					}
 				}
 		},
-		JJJJusemin: {
+		usemin: {
 					html: "dist/index.html",
 					css: ["dist/style/{,*/}*.css"],
 					js: ["dist/js/{,*/}*.js"],
@@ -248,8 +247,8 @@ module.exports = function(grunt) {
 
 			
 			templates: {
-				files: ['public/js/MusicBox/**/*.jade'], // compiling  auto-dedug
-				tasks: ['jade', 'manifest']
+				files: ['public/js/MusicBox/**/*.jade', 'views/**/*.jade'], // compiling  auto-dedug
+				tasks: ['jade'] //  'manifest'
 			},
 			
 			api_folder:{
@@ -267,9 +266,8 @@ module.exports = function(grunt) {
 
 
 	grunt.registerTask('stop', ['forever:server1:stop']); // , 'connect:server' // 'forever', 
-	grunt.registerTask('default', [
-				'forever:server1:restart','watch'
-	]);
+	grunt.registerTask('default', ['forever:server1:restart','watch']);
+	
 	// 'connect:livereload'
 	grunt.registerTask('build', [
 				'forever:server1:restart',
@@ -283,7 +281,7 @@ module.exports = function(grunt) {
 	]);
 	//grunt.registerTask('newsletter', ['']);
 //	grunt.registerTask('minifyz', ['usemin', 'cssmin']);
-	grunt.registerTask('minifyz', [
+	grunt.registerTask('minify', [
 	  'useminPrepare',
 	  'concat:generated',
 	  'uglify:generated',
