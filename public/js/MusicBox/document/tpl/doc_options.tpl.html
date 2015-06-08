@@ -1,0 +1,42 @@
+
+<!-- editor to add/edit/delete options-->
+<!-- todo :-->
+<!--  * i18n-->
+<!--  * api for delete and create-->
+<div ng-if="ui.renderAvailable_active == 'doc_options'">
+  <div class="doc_editor">
+    <h4>{{render_config.i18n.CUSTOM.DOCUMENT.document_options}}</h4>
+    <p ng-if="ui.renderAvailable_active !=='read'" class="back_read"><span ng-click="toggle_render('read')">&laquo; {{render_config.i18n.CUSTOM.ACTIONS.back_to_document}}</span></p>
+    <div class="edit_field_left">
+      <div class="edit_field excerpt_field">
+        <label>"L'extrait"</label>
+        <textarea ng-model="doc.excerpt"></textarea><i ng-click="edit_doc('excerpt')" class="fa fa-save"></i>
+      </div>
+      <div ng-if="doc.user.username =='Tom Wersinger'" class="edit_field room_field">
+        <label>Published in "room" ID : {{doc.room.slug}}</label>
+        <input type="text" ng-model="doc.room__id" name="doc.room__id"/><i ng-click="edit_doc('room_id')" class="fa fa-save"></i>
+      </div>
+      <div class="edit_field user_field">
+        <label>User ID : {{doc.user.username}} (transmit ownership)</label>
+        <input type="text" ng-model="doc.user._id" name="doc.user._id"/><i ng-click="edit_doc('user_id')" class="fa fa-save"></i>
+      </div>
+    </div>
+    <div class="edit_field_right">
+      <div class="edit_field thumbnai_field">
+        <label>"thumbnail" image url</label>
+        <input type="text" ng-model="doc.thumbnail" name="doc.thumbnail"/><i ng-click="edit_doc('thumbnail')" class="fa fa-save"></i><img ng-src="{{doc.thumbnail}}" class="thumbnail_input"/>
+      </div>
+    </div>
+    <label>Other options</label>
+    <div class="doc_options_table">
+      <div ng-repeat="opt in doc.doc_options" class="doc_options_item">
+        <label>{{opt.option_name}} </label>
+        <input name="doc_options[opt.option_name]" type="text" ng-model="doc_options[opt.option_name].value"/><i ng-click="doc_options_save(doc_options[opt.option_name].value, opt._id)" class="fa fa-save"></i><i ng-click="doc_options_delete(opt._id)" class="fa fa-remove"> </i>
+      </div>
+      <div class="doc_options_item item_new">
+        <label>new</label>
+        <input name="ui.doc_option_new_name" type="text" ng-model="ui.doc_option_new_name"/><i ng-click="doc_options_new()" class="fa fa-plus">new option</i>
+      </div>
+    </div>
+  </div>
+</div>

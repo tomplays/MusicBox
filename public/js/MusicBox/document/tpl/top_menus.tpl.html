@@ -1,0 +1,74 @@
+
+<!-- BTN's-->
+<!-- HELP -->
+<!-- USER logged-->
+<!-- USER not logged-->
+<!-- DOCUMENT options-->
+<!-- DOC published-->
+<!-- HELP MENU BTN-->
+<!-- DOC PUBLISHED > toggle mode / conditionnal owner-->
+<div class="top_menus"><i ng-class="{'visible_yes': ui.menus.quick_tools_help.open=='yes'}" ng-click="expand_tools('quick_tools_help')" ng-dblclick="expand_tools('quick_tools_help')" class="fa fa-question quick_tool_opener menuicon menuicon-help inside"></i>
+  <div class="quick_tools qt-help visible_{{ui.menus.quick_tools_help.open}}">
+    <p ng-click="toggle_render('read')" class="back_read">&laquo; {{render_config.i18n.CUSTOM.ACTIONS.back_to_document}}<i class="fa fa-eye"></i></p>
+    <div ng-if="render_config.i18n.id =='fr-fr'"> 
+      <h1>Guide utilisateur</h1><br/><br/>
+      <accordion close-other="close-other">
+        <accordion-group heading="Créer un compte et se connecter" ng-if="userin.username == ''">
+          <ul>
+            <li>Pour se créer un  compte : <a href="../../signup">ici</a></li>
+            <li>et pour se connecter : <a href="../../login">ici</a></li>
+            <li>Votre profil consultable <a href="../../me/account">ici</a></li>
+          </ul>
+        </accordion-group>
+        <accordion-group heading="Créer un nouveau document">
+          <ul>
+            <li>Pour créer un nouveau document : <a href="../../doc/create">ici</a></li>
+          </ul>
+        </accordion-group>
+        <accordion-group heading="Editer un nouveau document">
+          <ul>
+            <li>Pour modifier le contenu<i class="fa fa-edit"></i></li>
+            <li>Pour ajouter des commentaires, images, mise en forme</li>
+          </ul>
+        </accordion-group>
+      </accordion>
+    </div>
+    <div ng-if="render_config.i18n.id !== 'fr-fr'"> 
+      <h1>User guide help</h1>
+      <h3>Register / login to your account</h3>
+      <ul>
+        <li>to create an account go <a href="../../signup">here </a></li>
+        <li>to login go <a href="../../login">here </a></li>
+      </ul>
+      <h3>User Account
+        <p>once logged go <a href="../../me/account">here </a></p>
+      </h3>
+      <h3>Create new document</h3>
+      <p>go <a>here </a></p>
+      <h3>Edit a document</h3>
+      <h4>edit content</h4>
+      <h4>add markup, media, comments and other objects</h4>
+      <h3>Document options</h3>
+      <h3>Publish document</h3>
+      <h3>Comment moderation</h3>
+      <h3>Faq</h3>
+      <ul>
+        <!-- li blou-->
+      </ul>
+    </div>
+  </div>
+  <!-- GO PROFILE Link--><a href="/me/account" ng-if="userin.username !== '' " class="quick_tool_opener menuicon menuicon-user"> <i class="fa fa-user">&nbsp; {{userin.username}}</i></a>
+  <!-- GO LOGIN link--><a href="/login?redirect_url=http://localhost:8088/doc/{{doc.slug}}" ng-if="userin.username == '' " class="quick_tool_opener menuicon menuicon-sign-in"> <i class="fa fa-user"></i></a>
+  <!-- DOC OPTIONS > toggle mode--><a tooltip="{{render_config.i18n.CUSTOM.DOCUMENT.document_options}}" tooltip-placement="left" ng-if="doc_owner == true  || ui.secret " ng-click="toggle_render('doc_options')" ng-class="{'visible_yes': ui.renderAvailable_active =='doc_options'}" class="quick_tool_opener menuicon menuicon-document"> <i class="fa fa-cog"> </i></a>
+  <!-- edit > toggle mode--><a tooltip="edit" tooltip-placement="left" ng-if="(doc_owner == true  || ui.secret) &amp;&amp; ui.renderAvailable_active =='read'" ng-click="toggle_render('editor')" class="quick_tool_opener menuicon menuicon-editor"> <i ng-class="{'visible_yes': ui.renderAvailable_active =='editor'}" class="fa fa-pencil"></i></a>
+  <!-- edit > toggle mode--><a tooltip="edit" tooltip-placement="left" ng-if="(doc_owner == true  || ui.secret) &amp;&amp; ui.renderAvailable_active !=='read'" ng-click="toggle_render('read')" ng-class="{'visible_yes': ui.renderAvailable_active =='read'}" class="quick_tool_opener menuicon menuicon-editor"> <i class="fa fa-eye"></i></a>
+  <div class="quick_tools qt-published visible_{{ui.menus.quick_tools_published.open}}">
+    <p ng-click="toggle_render('read')" class="back_read">&laquo; {{render_config.i18n.CUSTOM.ACTIONS.back_to_document}}</p><span class="floating-edit"><span>This document is&nbsp; </span><span ng-if="doc.published == 'draft'">a&nbsp; </span>
+      <select ng-model="doc.published" name="doc.published">
+        <!-- option(value="{{doc.published}}") {{doc.published}}-->
+        <option value="draft">draft</option>
+        <option value="public">public</option>
+      </select><span><i ng-click="edit_doc('published')" class="fa fa-save"></i></span></span>
+    <h5 ng-if="doc.published == 'draft'">You can share its secret <a href="http://localhost:8088/doc/{{doc.slug}}?secret={{doc.secret}}">url : {{doc.secret}}</a></h5>
+  </div>
+</div>

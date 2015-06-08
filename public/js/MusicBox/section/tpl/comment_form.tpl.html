@@ -1,0 +1,46 @@
+<span tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.COMMENT.label}}" ng-click="open_pusher()" class="open_comment">+</span>
+<div ng-if="ui.menus.push_comment.open == $parent.$parent.$parent.$index" class="comment_form">
+  <div ng-if="userin.username == '' " class="user_not_in">
+    <p><a ng-click="external_link(root_url+':'+port+'/login')" ng-if="userin.username == '' ">{{render_config.i18n.CUSTOM.COMMENT.needs_logging}}</a></p>
+    <p><a ng-click="external_link(root_url+'/login?redirect_url=http://localhost:8088/doc/'+doc.slug)" ng-if="userin.username == '' " class="loginOrSignup">{{render_config.i18n.CUSTOM.USER.loginOrSignup}}</a></p>
+  </div>
+  <div ng-if="userin.username" class="user_in"><span class="floating-edit">
+      <!--span(ng-if="doc.published == 'draft'") a&nbsp; --></span>
+    <p>
+      <label>{{render_config.i18n.CUSTOM.ACTIONS.add}} {{render_config.i18n.CUSTOM.OBJECTS[push.type]}}</label>
+    </p>
+    <p ng-hide="ui.selected_range.start || ui.selected_range.end">
+      <label>Select a range of text first</label>
+    </p>
+    <p ng-if="ui.selected_range.start || ui.selected_range.end">Adding {{push.type}} from {{ui.selected_range.start}} to {{ui.selected_range.end}}</p>
+    <div ng-if="doc_owner ==true">
+      <p>
+        <label>{{render_config.i18n.CUSTOM.ACTIONS.select}} type</label>
+        <select ng-model="push.type">
+          <option ng-repeat="object in available_sections_objects" ng-if="objSchemas[object].modes.pusherleft == true" ng-value="{{object}}">{{object}}</option>
+        </select>
+      </p>
+      <p>
+        <label>{{render_config.i18n.CUSTOM.ACTIONS.select}} position</label>
+        <select ng-model="push.position">
+          <option ng-repeat="p in objSchemas[push.type].positions.available" ng-if="objSchemas[push.type].modes.pusherleft == true" ng-value="{{p}}">{{p}}</option>
+        </select>
+      </p>
+      <p>
+        <label>{{render_config.i18n.CUSTOM.ACTIONS.select}} subtype</label>
+        <select ng-model="push.subtype">
+          <option ng-repeat="st in objSchemas[push.type].modes.editor.fields.subtype.available" ng-if="objSchemas[push.type].modes.pusherleft == true" ng-value="{{st}}">{{st}}</option>
+        </select>
+      </p>
+    </div>
+    <p ng-if="push.rangetext"> 
+      <label>{{push.rangetext}}</label>
+    </p>
+    <textarea ng-model="push.metadata" type="text" value="{{render_config.i18n.CUSTOM.COMMENT.textarea}}"> </textarea>
+    <p class="logged_in_as">
+       
+      {{render_config.i18n.CUSTOM.COMMENT.logged_in_as}} <em><a href="/me/account">{{userin.username}}</a></em>
+    </p>
+    <p><a ng-show="ui.selected_range.start || ui.selected_range.end" ng-click="add()" class="btn_ok float_right">{{render_config.i18n.CUSTOM.ACTIONS.add}}</a></p>
+  </div>
+</div>

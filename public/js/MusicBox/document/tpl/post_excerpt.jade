@@ -1,0 +1,5 @@
+div.post_excerpt(ng-if="ui.renderAvailable_active == 'card'")
+	h1 {{doc.title}}
+	img(ng-src="{{doc.thumbnail}}")
+	code(ng-repeat="d in doc") {{d}} 
+		br
