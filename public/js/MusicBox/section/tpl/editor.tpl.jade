@@ -1,30 +1,63 @@
-ul
-	li(ng-repeat="e in ui.selected_range.debug track by $index") {{e}}
+.section_editor_head
+	.head-left
+		i(ng-click="select_section()" class="fa fa-container fa-section editing_{{section.editing}} selected_{{section.selected}}" ) 
+			span( ng-if="section.editing_text === false") Select section # {{$parent.$parent.$parent.$parent.$parent.$parent.$index}}
+			span( ng-if="section.editing_text === true") Unselect section
 
-.object-tools
-		i.fa.fa-sliders.btn_action(tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.more_options}}" ng-click="toggle_attribute('object_tools')")
+	.head-right(ng-if="section.editing_text === true")
+		i.fa.fa-remove.btn_action(tooltip-placement="left" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.delete}}" ng-click="delete()")
 		i.fa.fa-save.btn_action( tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.save}}" ng-click="save()")
 
-		// ng-if="markup.touched == true"
+.section_editor_body(ng-if="section.editing_text === true" class="touchedinput-{{section.touched}}")
 
-		
-		i.fa.fa-remove.btn_action(tooltip-placement="left" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.delete}}" ng-click="delete()")
-p is touched ? {{section.touched}}
-p range: {{ui.selected_range.textrange}}
-h2 is multi ? {{ui.selected_range.multi}} size ? {{ui.selected_range.size}}
-h5 {{render_config.i18n.CUSTOM.ACTIONS.edit}} section # {{section.index_}}
-h1 rebuild ? : {{section.rebuild}} {{section.rebuild_count}} Textlength: {{section.textlength}} objects count: {{section.objects_count.all}}
-h2 section letter length {{section.letters.length}}
-h4 ui.selected_range ;s: {{ui.selected_range.start }} ;end: {{ui.selected_range.end}}
-a(ng-click="insert_char('A','','')") insert a "A"
-label set start-end ranges
-		span.field.ranges
-			span.ranges_inputs
-				span.field.numberfloat._start
-					label start
-					input(required   type="number" , ng-model="section.start" )
-
-				span.field.numberfloat.number._end
-					label end
-					input(required  type="number" , ng-model="section.end" )
+		div.section_ranges
+			label Start-end ranges
+			span.field.ranges
+				span.ranges_inputs
+					span.field.numberfloat.oneline
+						span From 
+						input.section_end(type="number" , ng-model="section.start" )
+						span &nbsp;&nbsp;to 
+						input.section_start(type="number" , ng-model="section.end" )
+			a(ng-click="integrity_fix()") fix offsets
+		// div.section_quick_tools
+			.sobject-tools
+				// i.fa.fa-sliders.btn_action(tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.more_options}}" ng-click="toggle_attribute('object_tools')")
 				
+		tabset.editor-main-tab()			
+			tab(heading="Add section styles") 
+				div.pusher_css_styles
+					
+					i.fa.btn_action(tooltip="insert container class (css)" class="fa-container_class" ng-click="push_generic_from_ranges('container_class','css','inline', 'bg_dark')" ) text white
+				
+					i.fa.btn_action.pusher_markups(tooltip="insert container class (css)" class="fa-container_class" ng-click="push_generic_from_ranges('container_class','css','inline', 'bg_black')" ) background black
+
+			tab(heading="section styles" ng-if=" markups_by_start_end_position_type(section.start, section.end ,'any', 'container_class').length >0") 
+				
+				div(ng-repeat="markup in markups_by_start_end_position_type(section.start, section.end ,'any', 'container_class') track by $index")
+					div(class="markup_ markup_type_{{markup.type}}")
+						markup-view
+			tab(heading="slidewide" ng-if="markups_by_start_end_position_type(section.start, section.end ,'slidewide', 'media').length>0" ) 
+				div(ng-repeat="markup in markups_by_start_end_position_type(section.start, section.end ,'slidewide', 'media') track by $index")
+					div(class="markup_ markup_type_{{markup.type}}")
+						markup-view
+
+			tab(heading="background" ng-if="markups_by_start_end_position_type(section.start, section.end ,'background', 'media').length>0" ) 
+				div(ng-repeat="markup in markups_by_start_end_position_type(section.start, section.end ,'background', 'media') track by $index")
+					div(class="markup_ markup_type_{{markup.type}}")
+						markup-view
+
+
+
+
+	div(ng-if="ui.debug") 
+		ul
+			li(ng-repeat="e in ui.selected_range.debug track by $index") {{e}}
+		p is touched ? {{section.touched}}
+		p range: {{ui.selected_range.textrange}}
+		h2 is multi ? {{ui.selected_range.multi}} size ? {{ui.selected_range.size}}
+		h1 rebuild ? : {{section.rebuild}} {{section.rebuild_count}} Textlength: {{section.textlength}} objects count: {{section.objects_count.all}}
+		h2 section letter length {{section.letters.length}}
+		h4  s {{section.start }} ;end: {{section.end}}
+		// a(ng-click="insert_char('A','','')") insert a "A"
+

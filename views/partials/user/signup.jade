@@ -1,7 +1,11 @@
-div(class="branding sc bg_white")
+div(class="branding sc bg_transparent")
 	h1
 		a(href="/#!", title="") 
 			span #{locals.site_title}
+
+mb-topmenus
+mb-flashmessage
+
 div.main_center.register_form.bordered
 	h3 {{render_config.i18n.CUSTOM.USER.register}}
 	form(novalidate class="css-form")
@@ -14,10 +18,10 @@ div.main_center.register_form.bordered
 		input(type="text", ng-model="email"  )
 		
 		label {{render_config.i18n.CUSTOM.USER.pick_password}} 
-		input(type="password", ng-model="password", )
+		input(type="password", ng-model="password")
 
 		label {{render_config.i18n.CUSTOM.USER.subscribe_option}} 
-		input(type="checkbox", ng-model="newsletter", )
+		input(type="checkbox", ng-model="newsletter" )
 		
 		a.btn_ok.float_right(ng-click="checkregister()") {{render_config.i18n.CUSTOM.USER.register}}
 

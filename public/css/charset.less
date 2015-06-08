@@ -109,9 +109,8 @@
     font-family: "Gloria Hallelujah",cursive;
     font-size: 1em;
   }
-  &.data{
+  &.datavalue{
     background: none repeat scroll 0 0 rgba(231, 76, 60, 0.6);
-
     /*basic tests */
      &.x:after,
      &.y:after,
@@ -248,8 +247,10 @@
  .fa-super-quote:before{
      content: "quote+";   
 }
-i.fa-data:before {
-     content: "";
+i.fa-datavalue:before {
+    
+    content: "";
+    
 }
 
 
@@ -549,14 +550,17 @@ i.fa.fa-media{
 }
 
 i.fa.fa-container{
-   background:none repeat scroll 0 0 rgb(52, 152, 219);
-     color:#fff;
+    color: rgb(52, 152, 219);
     &:before{
      content:"";
   
     }
-}
+    &.selected_true{
+          
 
+
+  }
+}
 
 
 i.fa.fa-generic{
@@ -570,7 +574,7 @@ i.fa.fa-generic{
 }
 
 
-i.fa.fa-data{
+i.fa.fa-datavalue{
     background: none repeat scroll 0 0 rgba(231, 76, 60, 0.5);
     color: rgb(255, 255, 255);
     &.selected_true {
@@ -756,13 +760,13 @@ i.fa-list-item:before {
     display: block;
     font-weight:bold;
 }
-
+/*
 i.fa-container_class:before {
     content: "css";
     display: block;
     font-style:italic;
 }
-
+*/
 
 
 i.fa.fa-comment{
@@ -777,6 +781,10 @@ i.fa.fa-comment{
 
 
 
+
+
+
+
 i.fa.fa-hyperlink{
     background: none repeat scroll 0 0 rgba(142, 68, 173, 0.5);
     color: rgb(255, 255, 255);
@@ -787,6 +795,7 @@ i.fa.fa-hyperlink{
      
     }   
 }
+/*
 i.fa.fa-container_class{
     background: none repeat scroll 0 0 rgba(52, 73, 94, 0.8);
     color: rgb(255, 255, 255);
@@ -800,6 +809,7 @@ i.fa.fa-container_class{
      
     }   
 }
+*/
 
 
  i.fa-semantic {
@@ -910,18 +920,29 @@ span.lt[inrange="true"], span.lt.inrange {
      border-left:2px solid #2ecc71;
   }
 }
-.is_multi_true span.lt[inrange="true"], .is_multi_true  span.lt.inrange {
-  background:red;
+
+
+span.isfirst{
+   &.lt[inrange="true"], &.inrange {
+      border-right:none;
+      border-left:2px solid #2ecc71;
+  }
+}
+span.islast{
+   &.lt[inrange="true"], &.inrange {
+
+      border-right:2px solid #2ecc71;
+  }
+}
+
+.is_multi_true span.lt[inrange="true"], .is_multi_true span.lt.inrange {
+ 
   border-left:none;
+    border-right:none;
+background:#2ecc71;
+  
   -webkit-animation-name: none;
   animation-name: none;
 }
 
-span:last-child{
-   &.lt[inrange="true"], &.inrange {
-      border-left:none;
-      -webkit-animation-name: none;
-      animation-name: none;
-      border-right:2px solid #2ecc71;
-  }
-}
+

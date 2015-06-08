@@ -1,43 +1,12 @@
 
 // main render-view file
+// include : branding - flash_message - chapters - 
 
-// inludes partial
-// flash_message
-// * logo / title / editors ..
-//
-// loop each section
-// loop each layout
-// loop each objects 
-// h1 {{markup_total_count}}
-//h1(ng-if="ui.debug") {{ui.selected_range}}
-
-// {{flash_message}}
-//div(ng-repeat="markup in ui.offset_queue")
-	h6 s/e : {{markup.start}} {{markup.end}}  O_s/O_e : {{markup.offset_start}} {{markup.offset_end}}
-//a(ng-click="sync_queue()") sync
-
-div(ng-include="fragments['branding'][0]['url']") 
-
-
-// div(ng-repeat="markup in ui.selected_range.markups_to_offset")
-		pre offset {{markup.type}} {{markup.offset_start}} - {{markup.offset_end}} 
-
-
-// CHAPTERS directive
-div.chapters(mb-chapters ng-if="doc_options['chapters-menu'].value == 'true' && ui.renderAvailable_active == 'read'")
-
-// TOP MENUS
-div.top_menus(ng-include="fragments['top_menus'][0]['url']")
-
-
-// flash_message
-div.flash_message(ng-if="flash_message.text !==''", class="{{flash_message.classname}}" ng-include="fragments['flash_message'][0]['url']")
-
-div(ng-include="fragments['before_doc'][0].url" )
-
-// h3 mode du document:{{ui.renderAvailable_active}} 
-div(ng-if="ui.renderAvailable_active == 'doc_options'", ng-include="fragments['doc_options'][0].url")
-
-div(ng-if="ui.renderAvailable_active == 'card'", ng-include="fragments['post_excerpt'][0].url")
-
-div(mb-document)
+mb-branding
+mb-chapters
+mb-topmenus
+mb-flashmessage
+mb-beforedoc
+mb-docoptions
+mb-postexcerpt
+mb-document

@@ -10,6 +10,7 @@
         th type
         th subtype
         th metadata
+        th reverse
         th start
         th end
         th position
@@ -20,7 +21,7 @@
         th status.
         
         th moderation.
-    tbody()
+   
       tr(ng-controller="MarkupCtrl", ng-if="markup.deleted !== true" ng-repeat="markup in markups" class="trtype-{{markup.type}}")
         // , ng-if="markup.type==filter_dataset_by || filter_dataset_by == 'any'"
         td()
@@ -36,6 +37,8 @@
           input(ng-model="markup.subtype" , type="text")
         td 
           input(ng-model="markup.metadata" , type="text")
+        td 
+          a(ng-click="reverse()") reverse metadata
         td 
          input(ng-model="markup.start" , type="number")
         td 

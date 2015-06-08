@@ -5,84 +5,63 @@
     <!-- title, author, date, ..-->
     <doc-title ng-if="(layout.name == 'center') &amp;&amp; ($parent.$parent.$first)">		</doc-title>
     <div ng-if="layout.name == 'right'">
-      <div ng-if="section.editing_text ===true" class="forced forced-right">
-        <div ng-repeat="markup in markups_by_start_end_position_type(section.start, section.end ,'inline', 'markup') track by $index">
-          <div ng-include="fragments['markup'][0].url" class="markup_ markup_type_{{markup.type}}"></div>
-        </div>
-        <div ng-repeat="markup in markups_by_start_end_position_type(section.start, section.end ,'background', 'media') track by $index">
-          <div ng-include="fragments['markup'][0].url" class="markup_ markup_type_{{markup.type}}"></div>
-        </div>
-        <div ng-repeat="markup in markups_by_start_end_position_type(section.start, section.end ,'any', 'container_class') track by $index">
-          <div ng-include="fragments['markup'][0].url" class="markup_ markup_type_{{markup.type}}"></div>
-        </div>
-      </div>
+      <!-- edit/delete range and css objects.-->
+      <mb-sectioneditor ng-if="doc_owner == true" class="section_editor section-editor-right"></mb-sectioneditor>
       <!-- made to boot controller, not displayed here-->
-      <div ng-repeat="markup in markups_by_start_end_position_type(section.start, section.end ,'background', 'media') track by $index" ng-include="fragments['markup'][0].url" style="display:none" class="markup_ markup_type_bg"></div>
-    </div>
-    <div ng-if="object.visible !==false &amp;&amp; layout.include_objects !==false &amp;&amp; layout.name !=='slidewide' " ng-repeat="object in available_sections_objects">
-      <!-- h5 {{available_sections_objects}}-->
-      <!-- h4 section m-->
-      <div ng-repeat="markup in markups_by_start_end_position_type(section.start, section.end ,layout.name,object) track by $index">
-        <div ng-include="fragments['markup'][0].url" class="markup_ markup_type_{{markup.type}}"></div>
+      <div style="display:none" ng-repeat="markup in markups_by_start_end_position_type(section.start, section.end ,'background', 'media') track by $index" class="markup_ markup_type_bg">
+        <markup-view></markup-view>
       </div>
     </div>
-    <div ng-if="(doc_options.comments_open.value !=='false' || !doc_options.comments_open.value  ) &amp;&amp; layout.name == 'left'"><span tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.COMMENT.label}}" ng-click="open_pusher()" class="open_comment">+</span>
-      <div ng-if="ui.menus.push_comment.open == $parent.$parent.$parent.$index" ng-include="fragments['comment_form'][0].url" class="comment_form"></div>
+    <div ng-if="object.visible!==false &amp;&amp; layout.include_objects!==false &amp;&amp; layout.name!=='slidewide'" ng-repeat="object in available_sections_objects">
+      <div ng-repeat="markup in markups_by_start_end_position_type(section.start, section.end ,layout.name,object) track by $index">
+        <div class="markup_ markup_type_{{markup.type}}">
+          <markup-view></markup-view>
+        </div>
+      </div>
     </div>
-    <!-- div(ng-if="layout.name == 'slidewide'")
-    carousel( interval="1000")
-    	slide(ng-repeat="markup in section.objects['media']['slidewide']" active="markup.active" )
-    		p 
-    			img(src="{{markup.metadata}}")
-    
-    
-    
-    
-    -->
+    <mb-commentform ng-if="(doc_options.comments_open.value !=='false' || !doc_options.comments_open.value  ) &amp;&amp; layout.name == 'left'"></mb-commentform>
+    <div ng-if="layout.name == 'slidewide'">
+      <carousel interval="1000">
+        <slide ng-repeat="markup in markups_by_start_end_position_type(section.start, section.end ,'slidewide','media') track by $index">
+          <p> <img ng-src="{{markup.metadata}}"/></p>
+        </slide>
+      </carousel>
+    </div>
     <div ng-if="layout.name == 'inline'">
-      <mb-sectioneditor ng-if="ui.debug"></mb-sectioneditor>
       <!-- h2 
       a(ng-click="sectionmarkups('selected', true)") {{section_markups.visible}}
       
       -->
       <mb-sectioninlineeditor></mb-sectioninlineeditor>
-      <div ng-if="ui.debug"> 
-        <!-- html escaped : -->
-        <!-- h4 {{section.fulltext_block}}-->
-        <!-- h4 {{section.modeletters}}-->
-        
-      </div>
-      <div ng-if="section.editing_text ===true" class="fluidtextarea">
-        <h3>Edit section text : </h3>
+      <div ng-if="section.editing_text === true" class="fluidtextarea">
+        <!-- h3 Edit section text-->
         <textarea required="required" ng-trim="false" text-listener="text-listener" ng-model="section.fulltext"></textarea>
-        <!-- a.btn_ok(ng-click="save_section(section)") save-->
-        <!-- a.btn_ok(ng-click="doc_sync()") save-->
       </div>
-      <!---->
-      <!-- h1 editable:-->
+      <!-- h1 editable-->
       <!-- div.fluidtext(contentEditable="true" , mb-editable , section="section" , ng-bind-html="section.fulltext" ) -->
-      <div section="section" ng-if="section.modeletters == 'single'" class="theletters is_multi_{ui.selected_range.multi}}"><span lt="l" ng-repeat="l in section.letters"></span></div>
+      <div section="section" ng-if="section.modeletters == 'single'" class="theletters is_multi_{{ui.selected_range.multi}}"><span lt="l" ng-repeat="l in section.letters"></span></div>
       <div fluidtexte="fluidtexte" section="section" ng-hide="section.modeletters =='single'" class="fluidtext"> </div>
-      <div ng-if="section.editing_text == true &amp;&amp; ($parent.$parent.$parent.$last)" class="pusher_section"><i tooltip="new section" ng-click="new_section()" class="fa fa-plus-square pusher_item btn"></i></div>
+      <div ng-if="doc_owner == true &amp;&amp; ($parent.$parent.$parent.$last)" class="pusher_section"><i tooltip="new section" ng-click="new_section()" class="fa fa-plus-square pusher_item btn"></i></div>
     </div>
     <div ng-if="layout.name == 'global' &amp;&amp; $parent.$parent.$last">
       <!-- h4 {{layout.name}}-->
       <div ng-repeat="object in available_sections_objects track by $index">
         <div ng-repeat="markup in markups_by_start_end_position_type(0, section.end , layout.name, object) track by $index">
-          <div ng-include="fragments['markup'][0].url" class="markup_ markup_type_{{markup.type}}"></div>
+          <div class="markup_ markup_type_{{markup.type}}">
+            <markup-view></markup-view>
+          </div>
         </div>
       </div>
     </div>
     <!-- div.isolated(ng-if="layout.name == 'global' && $parent.$parent.$last &&  ui.isolated_markups.length > 0" )
     h4 isolated
-    div(ng-repeat="markup in ui.isolated_markups ", ng-include="fragments['markup'][0].url")
+    div(ng-repeat="markup in ui.isolated_markups")
+    	markup-view()
     
     -->
     <!-- div.virtuals(ng-if="layout.name == 'global' && $parent.$parent.$last  > 0 " )
     div(ng-repeat="virtual in virtuals")
     	div(ng-if="virtual.visible", ng-bind-html="virtual.string")
-    
-    
     
     -->
   </div>

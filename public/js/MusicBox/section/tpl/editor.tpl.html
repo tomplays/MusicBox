@@ -1,19 +1,55 @@
 
-<ul>
-  <li ng-repeat="e in ui.selected_range.debug track by $index">{{e}}</li>
-</ul>
-<div class="object-tools"><i tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.more_options}}" ng-click="toggle_attribute('object_tools')" class="fa fa-sliders btn_action"></i><i tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.save}}" ng-click="save()" class="fa fa-save btn_action"></i>
-  <!-- ng-if="markup.touched == true"--><i tooltip-placement="left" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.delete}}" ng-click="delete()" class="fa fa-remove btn_action"></i>
+<div class="section_editor_head">
+  <div class="head-left"><i ng-click="select_section()" class="fa fa-container fa-section editing_{{section.editing}} selected_{{section.selected}}"> <span ng-if="section.editing_text === false">Select section # {{$parent.$parent.$parent.$parent.$parent.$parent.$index}}</span><span ng-if="section.editing_text === true">Unselect section</span></i></div>
+  <div ng-if="section.editing_text === true" class="head-right"><i tooltip-placement="left" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.delete}}" ng-click="delete()" class="fa fa-remove btn_action"></i><i tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.save}}" ng-click="save()" class="fa fa-save btn_action"></i></div>
 </div>
-<p>is touched ? {{section.touched}}</p>
-<p>range: {{ui.selected_range.textrange}}</p>
-<h2>is multi ? {{ui.selected_range.multi}} size ? {{ui.selected_range.size}}</h2>
-<h5>{{render_config.i18n.CUSTOM.ACTIONS.edit}} section # {{section.index_}}</h5>
-<h1>rebuild ? : {{section.rebuild}} {{section.rebuild_count}} Textlength: {{section.textlength}} objects count: {{section.objects_count.all}}</h1>
-<h2>section letter length {{section.letters.length}}</h2>
-<h4>ui.selected_range ;s: {{ui.selected_range.start }} ;end: {{ui.selected_range.end}}</h4><a ng-click="insert_char('A','','')">insert a "A"</a>
-<label>set start-end ranges<span class="field ranges"><span class="ranges_inputs"><span class="field numberfloat _start">
-        <label>start</label>
-        <input required="required" type="number" ng-model="section.start"/></span><span class="field numberfloat number _end">
-        <label>end</label>
-        <input required="required" type="number" ng-model="section.end"/></span></span></span></label>
+<div ng-if="section.editing_text === true" class="section_editor_body touchedinput-{{section.touched}}">
+  <div class="section_ranges">
+    <label>Start-end ranges</label><span class="field ranges"><span class="ranges_inputs"><span class="field numberfloat oneline"><span>From </span>
+          <input type="number" ng-model="section.start" class="section_end"/><span>&nbsp;&nbsp;to </span>
+          <input type="number" ng-model="section.end" class="section_start"/></span></span></span><a ng-click="integrity_fix()">fix offsets</a>
+  </div>
+  <!-- div.section_quick_tools
+  .sobject-tools
+  	// i.fa.fa-sliders.btn_action(tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.more_options}}" ng-click="toggle_attribute('object_tools')")
+  	
+  -->
+  <tabset class="editor-main-tab">			
+    <tab heading="Add section styles"> 
+      <div class="pusher_css_styles"><i tooltip="insert container class (css)" ng-click="push_generic_from_ranges('container_class','css','inline', 'bg_dark')" class="fa btn_action fa-container_class">text white</i><i tooltip="insert container class (css)" ng-click="push_generic_from_ranges('container_class','css','inline', 'bg_black')" class="fa btn_action pusher_markups fa-container_class">background black</i></div>
+    </tab>
+    <tab heading="section styles" ng-if=" markups_by_start_end_position_type(section.start, section.end ,'any', 'container_class').length &gt;0"> 
+      <div ng-repeat="markup in markups_by_start_end_position_type(section.start, section.end ,'any', 'container_class') track by $index">
+        <div class="markup_ markup_type_{{markup.type}}">
+          <markup-view></markup-view>
+        </div>
+      </div>
+    </tab>
+    <tab heading="slidewide" ng-if="markups_by_start_end_position_type(section.start, section.end ,'slidewide', 'media').length&gt;0"> 
+      <div ng-repeat="markup in markups_by_start_end_position_type(section.start, section.end ,'slidewide', 'media') track by $index">
+        <div class="markup_ markup_type_{{markup.type}}">
+          <markup-view></markup-view>
+        </div>
+      </div>
+    </tab>
+    <tab heading="background" ng-if="markups_by_start_end_position_type(section.start, section.end ,'background', 'media').length&gt;0"> 
+      <div ng-repeat="markup in markups_by_start_end_position_type(section.start, section.end ,'background', 'media') track by $index">
+        <div class="markup_ markup_type_{{markup.type}}">
+          <markup-view></markup-view>
+        </div>
+      </div>
+    </tab>
+  </tabset>
+</div>
+<div ng-if="ui.debug"> 
+  <ul>
+    <li ng-repeat="e in ui.selected_range.debug track by $index">{{e}}</li>
+  </ul>
+  <p>is touched ? {{section.touched}}</p>
+  <p>range: {{ui.selected_range.textrange}}</p>
+  <h2>is multi ? {{ui.selected_range.multi}} size ? {{ui.selected_range.size}}</h2>
+  <h1>rebuild ? : {{section.rebuild}} {{section.rebuild_count}} Textlength: {{section.textlength}} objects count: {{section.objects_count.all}}</h1>
+  <h2>section letter length {{section.letters.length}}</h2>
+  <h4> s {{section.start }} ;end: {{section.end}}</h4>
+  <!-- a(ng-click="insert_char('A','','')") insert a "A"-->
+</div>

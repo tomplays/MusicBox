@@ -11,6 +11,7 @@
         <th>type</th>
         <th>subtype</th>
         <th>metadata</th>
+        <th>reverse</th>
         <th>start</th>
         <th>end</th>
         <th>position</th>
@@ -21,8 +22,6 @@
         <th>status.</th>
         <th>moderation.</th>
       </tr>
-    </thead>
-    <tbody>
       <tr ng-controller="MarkupCtrl" ng-if="markup.deleted !== true" ng-repeat="markup in markups" class="trtype-{{markup.type}}">
         <!-- , ng-if="markup.type==filter_dataset_by || filter_dataset_by == 'any'"-->
         <td><span ng-click="toggle_select_markup('click')" class="markup-item-subtype clipped_{{markup.isselected}} markup-hn_{{markup.subtype}}">+ </span></td>
@@ -36,6 +35,7 @@
         <td> 
           <input ng-model="markup.metadata" type="text"/>
         </td>
+        <td> <a ng-click="reverse()">reverse metadata</a></td>
         <td> 
           <input ng-model="markup.start" type="number"/>
         </td>
@@ -50,7 +50,7 @@
         <td><span>{{markup.status}}</span></td>
         <td><i tooltip-placement="left" tooltip="set as approved" ng-click="change_value('status','approved', true)" class="fa fa-check btn_action"> </i><i tooltip-placement="left" tooltip="set as pending" ng-click="change_value('status','pending', true)" class="fa fa-close btn_action"> </i></td>
       </tr>
-    </tbody>
+    </thead>
   </table>
 </div>
 <div class="one columns">

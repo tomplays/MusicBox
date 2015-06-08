@@ -35,7 +35,7 @@ div.inside_child(style="background:{{markup.child_options.block_color}}")
 				em {{markup.explicit_string}}
 
 	span.icon_col
-		i(class="fa fa-{{markup.type}} fa-{{markup.subtype}} editing_{{markup.editing}} selected_{{markup.selected}}",  ng-click="toggle_select_markup(markup, 'click')", ng-dblclick="toggle_select_markup(markup, 'dblclick')"  ) 
+		i(class="fa fa-{{markup.type}} fa-{{markup.subtype}} editing_{{markup.editing}} selected_{{markup.selected}}",  ng-click="toggle_select_markup('click')", ng-dblclick="toggle_select_markup('dblclick')"  ) 
 
 	// h4 {{markup.child_options.branding_class}}
 	// h4(ng-bind-html="markup.metadata" )

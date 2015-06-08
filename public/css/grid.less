@@ -395,7 +395,7 @@ section{
       .layout_name_wide img, 
       .layout_name_left img, 
        .layout_name_right img, 
-    /*  .layout_name_center img, */
+       .layout_name_center img,
       .layout_name_under img,
         .layout_name_global img {
           max-width: 100%;
@@ -493,15 +493,48 @@ section{
   }
 
     /*blue effect on selection*/
-    &.selected_true .layout_name_inline{
-   
+    &.selected_true{
+  
+        border-bottom:3px solid rgba(52, 152, 219,0.4);
+        border-top:3px solid rgba(52, 152, 219,0.4);
+        padding-top:2%;
+        margin-top:2%;
+        margin-bottom:2%;
+        padding-bottom:2%;
+      
 
 
+    }
+    &.selected_true:first-child  {
+     border-top: none;
 
     }
 
 
+    &.selected_true:last-child  {
+     border-bottom: none;
+
+    }
+
+  
+
+
+
+    
+
+
 }
+
+
+
+body.render_active_editor section{
+  opacity:0.2;
+  &.selected_true, &:hover{
+    opacity:1;
+  }
+}
+
+
 
 
 .doc_centered{
@@ -511,7 +544,12 @@ section{
 }
 
 
-
+ .section-editor{
+     
+    }
+.pusher_css_styles{
+  
+}
 
 /* all layouts positions variantes like: */
 
@@ -690,6 +728,7 @@ section{
   font-size: 1.2em;
   font-weight: bold; 
    cursor: pointer;
+     width:100%;
   &:hover{
     color:#000;
   }
@@ -1008,8 +1047,12 @@ div.markup_displayer_subtype_img {
 
 
 div.markup_displayer_subtype_img .icon_col {
-   bottom: -2%;
-   right: 2%;
+    background: rgba(0, 0, 0, 0.1) none repeat scroll 0 0;
+    padding-bottom: 3px;
+    padding-right: 10px;
+    padding-top: 3px;
+    right: 0;
+    width: 100%;
 }
 
 .markup_displayer_img .icon_col { 
@@ -1172,6 +1215,87 @@ div.markup_displayer_subtype_img .icon_col {
     background:none repeat scroll 0 0 rgb(52, 152, 219);
     float:right;
 }
+
+
+.section_editor{
+   
+        background: #fff;
+color:#000;
+float:left;
+width:100%;
+    padding: 2% 0;
+
+}
+
+.section_editor_head{
+  
+    .head-left{
+      float:left;
+      width:60%;
+    }
+
+    .head-right{
+      float:right;
+      width:38%;
+      text-align: right;
+    }
+
+
+}
+
+.section_editor_body{
+  &.touchedinput-true input{
+      border:2px solid  rgba(46, 204, 113,.9);
+    
+   }
+}
+
+.section_ranges{
+    border-bottom: 1px solid rgba(52, 152, 219,0.4);
+    border-top: 1px solid rgba(52, 152, 219,0.4);
+    float: left;
+    margin: 3% 0;
+    padding: 1% 0;
+    width: 100%;
+   
+    label{
+      font-weight: normal;
+     
+    }
+
+    .ranges_inputs{
+     float:left;
+      width:100%;
+    }
+   .numberfloat{
+      display: block;
+      float: left;
+     
+      input{
+       display: block;
+      float: left;
+      max-width: 64px;
+      width: auto;
+      }
+    } 
+    
+    .oneline span{
+     color:rgba(52, 152, 219,0.8);
+      float: left;
+        line-height: 30px;
+        margin-right: 4px;
+        text-transform: uppercase;
+    }
+
+}
+.section_quick_tools{
+    border-bottom: 1px solid rgba(52, 152, 219,0.4);
+    float: left;
+    padding: 1% 0;
+    width: 100%;
+    margin:1% 0;
+}
+
 
 .position_ghost{
     background-image: url("/img/test-a.png");
@@ -1355,7 +1479,7 @@ div.markup_displayer_subtype_img .icon_col {
     right: 1%;
     text-align: left;
     top: 2%;
-    width: 30%;
+    
     z-index: 999999;
 
     &:hover{
@@ -1513,11 +1637,13 @@ span.floating-edit{
 
 
     .pusher_markups{
-       border: 1px solid rgb(204, 204, 204);
-        border-radius: 10px;
+       
         float: left;
-        margin: 1% 0;
-        padding: 2% 1%;
+        margin: 0% 0;
+        padding: 0% 0%;
+                padding-bottom:1%;
+
+        width:100%;
         background:rgba(255,255,255,.9);
 
         i.fa{
@@ -1541,13 +1667,14 @@ span.floating-edit{
     }
 
  
-.pusher_range{
+.pusher_range {
+    color: rgb(46, 204, 113);
     float: right;
-    padding: 2% 0;
-    font-style:italic;
-    color:#2ecc71;
-    }
-
+    font-style: italic;
+    margin-left: 0;
+    padding: 0;
+ 
+}
 
      .pusher_item {
         float: left;
@@ -1555,14 +1682,19 @@ span.floating-edit{
     }
 
    .pusher_section{
-      border: 1px solid rgb(204, 204, 204);
+      border-top: 1px solid rgba(52, 152, 219, 0.6);
+      margin:3% 0;
       float: left;
       width: 100%;
         .pusher_item {
           float: left;
           margin: 0 48%;
+          color:rgb(52, 152, 219)
         }
     }
+
+
+
 
 
 .fixed_tools {
@@ -1851,6 +1983,8 @@ background:red;
 
 
 
+
+
 /* ______________________________________ */
 /*                              ♫         */
 /*                            */
@@ -1872,15 +2006,25 @@ body.render_active_doc_options{
 
 .fluidtextarea{
     float: left;
-    padding-bottom: 2%;
-    padding-top: 2%;
+    padding-bottom: 0%;
+    padding-top: 0%;
     width: 100%;
   textarea{
+
+     background-color: rgb(255, 255, 255);
+    border-radius: 0px;
+    box-shadow:none;
+  
+    display: block;
+  
+
+
     margin: 0%;
     min-height: 250px;
-    min-width: 98%;
-    padding: 1%;
     width: 100%;
+     min-width: 100%;
+    padding: 1%;
+    border: 1px solid rgb(204, 204, 204);
 }
 
 .btn_ok{
@@ -2113,6 +2257,20 @@ pulse fxxx
 }
 */
    
+ 
+
+  .touchedmk-true{
+          border-left:2px solid  rgba(46, 204, 113,.9);
+    -webkit-transition: background-color 10ms linear;
+    -moz-transition: background-color 10ms linear;
+    -o-transition: background-color 10ms linear;
+    -ms-transition: background-color 10ms linear;
+    transition: background-color 10ms linear;
+
+         
+
+      }
+
       .touched-true{
            background-color:  rgba(46, 204, 113,.9);
     -webkit-transition: background-color 10ms linear;
@@ -2124,6 +2282,9 @@ pulse fxxx
          
 
       }
+
+
+
       .touched-false{
               background-color:none;
                 -webkit-transition: background-color 10ms linear;
@@ -2155,6 +2316,8 @@ pulse fxxx
        -webkit-column-gap: 0px;        
      }
      }
+
+
 
     div.branding{
         .border-radius(1px);    
@@ -2226,19 +2389,21 @@ pulse fxxx
                     padding: 0;
                     width: 98%;
                }
+
+
+
       }
 
 
       .top_menus{
-         float: left;
-    
-    min-width: 100%;
    
-    margin-top: 0px;
-    width: 96%;
-    position:relative;
+   
+  
       }
-
+.pusher_range {
+    
+    font-size:10px;
+}
       .markup_displayer .data_col {
       
         width: 90%;
@@ -2250,6 +2415,7 @@ pulse fxxx
           padding: 1% 2%;
           position: absolute;
           right: 0;
+
       }
 
       input[type="text"], input[type="password"], input[type="date"], input[type="datetime"], input[type="email"], input[type="number"], input[type="search"], input[type="tel"], input[type="time"], input[type="url"], textarea {

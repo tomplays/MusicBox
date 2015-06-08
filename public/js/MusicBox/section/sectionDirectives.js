@@ -61,24 +61,33 @@ angular.module('musicBox.SectionDirectives', [])
           }
         };
 })
+.directive("mbCommentform", function($rootScope) {
 
+    var link = function(){
+      console.log(' [comment form] directive')
+    }
+        return {
+          restrict: "EA",
+          link:link,
+          templateUrl: function() {
+                return "js/MusicBox/section/tpl/comment_form.tpl.html";
+          }
+        };
+})
 .directive('fluidtexte',   
   function($rootScope) {
     // Toggle "letters mode" on click, mouvedown, ..
     
      function link(scope, elem, attrs) { 
-
-
-        scope.section.fulltext_block += scope.section.fulltext.length
-        //section.fulltext_block
-
-
         elem.bind('mousedown', function(event) {
             // console.log(event)
             scope.$apply(function(){
-                scope.section.modeletters = 'single';
-                var logevent = {'directive':'fluidtext', 'event':'mouseup'}
-                $rootScope.ui.selected_range.debug.push(logevent)
+            
+            /// OFF ONE-CLICK AUTO TOGGLE
+            //  scope.section.modeletters = 'single';
+           
+            //    var logevent = {'directive':'fluidtext', 'event':'mouseup'}
+            //    $rootScope.ui.selected_range.debug.push(logevent)
            })
         })
     }
@@ -87,7 +96,6 @@ angular.module('musicBox.SectionDirectives', [])
               section   : '=',     
             },
             template: '<span  ng-bind-html="section.fulltext_block"></span>',
-
             transclude :true,
             restrict: 'A',
             link: link,

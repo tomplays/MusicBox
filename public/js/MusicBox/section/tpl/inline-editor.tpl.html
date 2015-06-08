@@ -1,37 +1,37 @@
 
-<div ng-if="section.editing_text ===true" class="inline_tools"><span class="pusher">
-    <h2>yup</h2>
-    <div class="pusher_markups">{{available_sections_objects}}
+<div ng-if="section.editing_text === true" class="inline_tools"><span class="pusher">
+    <div class="pusher_markups">
+      <div ng-if="ui.selected_range.end" class="pusher_range"><span class="ranges"><span class="ranges_start_end">Selected letters from {{ui.selected_range.start}}  to {{ui.selected_range.end}}</span>
+          <!-- span.textrange
+          {{ui.selected_range.textrange}}
+          
+          --></span></div>
       <tabset class="editor-main-tab">
-        <tab heading="tabA"> 
-          <h1>section.keepsync : {{section.keepsync}}</h1>
-        </tab>
-        <tab ng-if="object=='markup' || object=='container_class'" heading="{{object}}" ng-repeat="object in available_sections_objects"> 
-          <div ng-if="object=='markup'">
-            <ul class="typer sub">
-              <li ng-repeat="t in objSchemas[object].modes.editor.fields.subtype.available" class="pusher_item"> <i tooltip="insert markup" ng-click="push_generic_from_ranges('markup', t,'inline')" class="fa btn_action fa-{{t}}"> </i></li>
-              <li class="pusher_item"> <i tooltip="insert markup" ng-click="push_generic_from_ranges('media', 'img','right', '')" class="fa btn_action fa-media"> </i><i tooltip="insert link" ng-click="push_generic_from_ranges('hyperlink', 'hyperlink','under', '')" class="fa btn_action fa-link"> </i></li>
-            </ul>
-          </div>
-          <div ng-if="object=='container_class'"><i tooltip="insert markup" ng-click="push_generic_from_ranges('container_class','css','inline', 'bg_dark')" class="fa btn_action fa-{{t}}">text white</i><i tooltip="insert markup" ng-click="push_generic_from_ranges('container_class','css','inline', 'bg_black')" class="fa btn_action fa-{{t}}">background black</i></div>
-        </tab>
-        <!-- li.pusher_item(class="") 
-        i.fa.btn_action(tooltip="insert markup" class="fa-media" ng-click="open_pusher_details('media')" ) 
-        
-        
-        
+        <!-- tab( heading="tabA") 
+        h1 section.keepsync : {{section.keepsync}}
         
         
         -->
+        <tab ng-if="object=='markup'" heading="Add {{object}}" ng-repeat="object in available_sections_objects"> 
+          <p>&nbsp;</p>
+          <div ng-if="object=='markup'">
+            <ul class="typer sub">
+              <li ng-repeat="t in objSchemas[object].modes.editor.fields.subtype.available" class="pusher_item"> <i tooltip="insert markup" ng-click="push_generic_from_ranges('markup', t,'inline')" class="fa btn_action fa-{{t}}"> </i></li>
+              <li class="pusher_item"> <i tooltip="insert markup" ng-click="push_generic_from_ranges('media', 'img','right', '')" class="fa btn_action fa-media"> </i><i tooltip="insert link" ng-click="push_generic_from_ranges('hyperlink', 'hyperlink','under', '')" class="fa btn_action fa-link"></i></li>
+            </ul>
+          </div>
+          <p>&nbsp;</p>
+        </tab>
+        <tab heading="Markups" ng-if="markups_by_start_end_position_type(section.start, section.end ,'inline', 'markup').length &gt; 0"> 
+          <!-- h1 section.keepsync : {{section.keepsync}}-->
+          <div ng-repeat="markup in markups_by_start_end_position_type(section.start, section.end ,'inline', 'markup') track by $index">
+            <div class="markup_ markup_type_{{markup.type}}">
+              <markup-view></markup-view>
+            </div>
+          </div>
+        </tab>
       </tabset>
-    </div>
-    <div ng-if="ui.selected_range.end &amp;&amp; ui.selected_range.start || ui.selected_range.start ===0" class="pusher_range"><span class="ranges">
-        <!-- p {{ui.selected_range.insert}} --><span class="ranges_start_end">Selected letters from {{ui.selected_range.start}}  to {{ui.selected_range.end}}</span>
-        <!-- span.textrange
-        {{ui.selected_range.textrange}} 
-        
-        
-        --></span></div></span>
+    </div></span>
   <!-- textarea(type="text", ng-model="section.fulltext")-->
   <!-- h4 {{section.start}} - {{section.end}} - {{section.metadata}} - {{section.type}} - {{section.subtype}}-->
   <!-- p {{ui.selected_range}}-->
@@ -48,9 +48,4 @@
   <!-- h5 {{ui.cursor_at}}-->
   <!-- h4 {{ui.selected_range.start}}-->
   <!-- h1 {{ui.current_action}}-->
-  <!-- em at start : {{section.cursor_at_start}}-->
-  <!-- em at end : {{section.cursor_at_end}}-->
-  <!-- h2 stack ({{ section.debuggr.length }})-->
-  <!-- div(ng-repeat="mess in section.debuggr track by $index")em {{mess}}
-  -->
 </div>

@@ -1,5 +1,11 @@
 angular.module('musicBox.DocumentRest', [])
-.factory("DocumentRest", function($resource, $rootScope){
+.factory("DocumentRest", function($resource, $rootScope,$routeParams){
+
+  var secret_string= ''
+
+  if($routeParams.secret){
+      secret_string = '?secret='+$routeParams.secret
+  }
 
   var parseResponse = function (data) {
     var data_ = angular.fromJson(data);
@@ -12,7 +18,7 @@ angular.module('musicBox.DocumentRest', [])
     {
       get:{
         method:"GET",
-        url: api_url+'/doc/:Id/',
+        url: api_url+'/doc/:Id'+secret_string,
         //transformResponse: parseResponse
         //interceptor: { response: parseResponse }
         //isArray: false

@@ -25,16 +25,19 @@ angular.module('musicBox.UserService', [])
           $rootScope.documents = data.user_documents;
           var options_array = [];
           _.each(data.user.user_options , function(option){
-            //console.log(option)
-             // console.log(option)
-              var op_name = option.option_name;
-              var op_value = option.option_value;
-              var op_type = option.option_type;
-              options_array[op_name]= [];
-              options_array[op_name]['value'] = op_value;
+            
+            
+              var op_name = option.option_name ? option.option_name : '';
+              var op_value = option.option_value ? option.option_value : '';
+              var op_type = option.option_type  ? option.option_type : '';
+              var opt = {'option_name' : op_name, 'option_value' : op_value,'option_type' : op_type }
+              options_array.push(opt)
+            
+           
           });
-          $rootScope.user_options = [];
-          $rootScope.user_options = options_array
+         console.log(options_array)
+         return options_array
+
   }
 
   return UserService;

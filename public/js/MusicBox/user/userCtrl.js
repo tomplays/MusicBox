@@ -20,7 +20,7 @@ var render;
 **/
 // todo : remove old api call
 
-function UserProfileCtrl($scope, $http , $location, $routeParams,  $locale, DocumentService, UserRest, UserService, renderfactory) {
+function UserProfileCtrl($scope, $http , $location, $routeParams,  $locale, DocumentService, UserRest, UserService, renderfactory,$timeout) {
 	  	 new renderfactory().init()
 
  		$scope.globals = GLOBALS;
@@ -31,7 +31,8 @@ function UserProfileCtrl($scope, $http , $location, $routeParams,  $locale, Docu
       		
       		var this_user = new UserService()
       		this_user.SetFromApi(Result.user)
-      		this_user.MapOptions(Result)
+      		
+      		$scope.userin.user_options = this_user.MapOptions(Result)
       		
 
 		 }.bind(this));
@@ -39,8 +40,60 @@ function UserProfileCtrl($scope, $http , $location, $routeParams,  $locale, Docu
 		      console.log(response);
 		 }.bind(this));
 
+
+
+      $scope.flashmessage = function (msg,classname ,timeout, closer) {
+        $scope.flash_message = {}
+        $scope.flash_message.text = msg;
+        $scope.flash_message.classname = classname;
+
+        if(!closer){
+            $scope.flash_message.closer =false;
+        }
+        else{
+            $scope.flash_message.closer = closer;
+        }
+        
+
+        // apply timeout if set to true
+        if(timeout){
+            $timeout(function(){
+                $scope.flash_message.text =  '';
+            },timeout);
+        }
+      }
+
+
+  		$scope.edit_user= function(){
+  			var data = new Object()
+  			_.each(['username', 'password', 'email', 'newsletter'] , function(f){ 
+  				data[f] = $scope.userin[f]
+  			});
+
+		 	var promise = UserRest.edit({}, serialize(data) ).$promise;
+    		promise.then(function (Result) {
+    			var msg = 'saved'
+    			if(Result.edited){
+					msg = Result.edited
+					$scope.flashmessage(msg, 'ok' , 2000, false)
+    			}
+    			if(Result.error){
+    				$scope.flashmessage(Result.error, 'bad' , 2000, false)
+    			}
+          		
+
+		 }.bind(this));
+		 promise.catch(function (response) {     
+		      console.log(response);
+		 }.bind(this));
+
+
+		}
+
         $scope.delete_document= function(doc){
+        	
         	var tdoc           	= new DocumentService();
+        	tdoc.SetSlugFromValue(doc.slug)
         	tdoc.doc_delete({id:doc.slug});
         	$scope.documents  = _.reject($scope.documents , function(doch){ return doch._id == doc._id });
         }
@@ -86,6 +139,8 @@ function UserCtrl($scope, $http , $location, $routeParams,  $locale, renderfacto
 	$scope.password  ='';
 	$scope.username = '';
 	$scope.complete = false;
+	
+	$scope.lostpass_form = false
 
 	$scope.checklogin = function(){
 		var data = new Object({'username': $scope.username, 'password': $scope.password, 'redirect_url':$routeParams.redirect_url})
@@ -95,6 +150,22 @@ function UserCtrl($scope, $http , $location, $routeParams,  $locale, renderfacto
          	window.location = e.redirect_url;
          }).error(function(data, status) {});  
 	}
+
+
+	$scope.toggle_lostpass_form = function(){
+
+		$scope.lostpass_form = true
+	}
+
+	$scope.lostpass_post = function(email){
+			
+			var data = new Object()
+			data.email 		= email;
+			$http.post(root_url+':'+PORT+'/api/v1/user/lostpass',serialize(data)  ).success(function(e) {
+        	 $scope.complete =true
+        	});  
+	}
+
 
 	$scope.checkregister = function (){
 		

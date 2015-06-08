@@ -45,9 +45,9 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
 
         $rootScope.ui                         = new Object();
         $rootScope.ui.selected_range          = new Object({'wait_ev' : false, 'set': false, 'start':null, 'end':null, 'textrange':''});
-        $rootScope.ui.selected_range.markups_to_offset = new Array();
-        $rootScope.ui.selected_range.insert = null;
-        $rootScope.ui.offset_queue = new Array()
+        //$rootScope.ui.selected_range.markups_to_offset = new Array();
+        //$rootScope.ui.selected_range.insert = null;
+        //$rootScope.ui.offset_queue = new Array()
         $rootScope.ui.selected_range.debug = new Array()
 
         $rootScope.ui.routing = $routeParams
@@ -70,6 +70,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
         $rootScope.ui.renderAvailable_active =  $routeParams.mode ? $routeParams.mode : $rootScope.ui.renderAvailable[0]
         // ?secret=  
         $rootScope.ui.secret  =  $routeParams.secret ? $routeParams.secret : false
+        var doc_secret = $rootScope.ui.secret 
         // ? debug
         $rootScope.ui.debug   = $routeParams.debug ? true : null;
        
@@ -101,7 +102,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
         $rootScope.inserttext = [];
         $rootScope.inserttext[0] =''
 
-        $rootScope.ui.lastover = {};
+        // $rootScope.ui.lastover = {};
 
 
         // the object to push init
@@ -109,6 +110,21 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
 
         // init flash message object
         $rootScope.flash_message = {'text':''};
+
+        /**
+      * @description 
+      * Show a message to user
+      *
+      *  @param {String} msg - message to show
+      *  @param {String} classname - a css class ('ok'/ 'bad' / ..)
+      *  @param {Number/Time} timeout - 
+
+      *  @return -
+      * 
+      * @function docfactory#flash_message
+      * @link docfactory#flash_message
+      * @todo --
+      */
 
         
           //console.log(self)
@@ -136,6 +152,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
                   "forced": "",
                   "available": ['inline']},
               'modes': {
+                'pusherleft': false,
                 'editor': {                   
                   'enabled': true,
                   'tabs': {
@@ -206,10 +223,11 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
                   "forced": "",
                   "available": ['wide','center','left', 'right', 'under','slidewide', 'global', 'background']},
               'modes': {
+                'pusherleft': true,
                 'editor': {                   
                   'enabled': true,
                   'tabs': {
-                            'metadata': 'url/src',
+                            'metadata': 'url',
                             'type': 'type',
                              'subtype': 'subtype',
                               'position': 'position'
@@ -287,7 +305,10 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
                   "forced": "left",
                   "available": ['wide','left', 'right', 'under', 'global']},
               'modes': {
-                'editor': {                   
+                 'pusherleft': true,
+                 'pusherleftopen': true,
+                 'editor': { 
+                 
                   'enabled': true,
                         'display' : {
                             'date': false, 
@@ -359,18 +380,91 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
             },
           })
 
+          definitions.child = new Object({
+              'name': 'child',
+              'display_name': $rootScope.render_config.i18n.CUSTOM.OBJECTS.comment,
+              'map_range': false,
+              'positions': {
+                  "forced": "left",
+                  "available": ['wide','left', 'right', 'under', 'global']},
+              'modes': {
+                'pusherleft': true,
+                'editor': {                   
+                  'enabled': true,
+                        'display' : {
+                            'date': false, 
+                            'user': false,
+                        },
+                        'tabs': {
+                            'metadata': 'text',
+                            'type': 'type',
+                            'subtype': 'subtype',
+                            'position': 'position'
+                        },
+
+                          'fields' : {
+                                  'ranges': { 
+                                      'display' : true,
+                                      'label':'link url',
+                                    'input' : 'range'
+                                  },
+                                  'type': { 
+                                      'display' : true,
+                                      'label':'type',
+                                    'input' : 'select'
+                                  },
+                                
+                                  'position':{ 
+                                      'display' : true,
+                                      'label':'position',
+                                      'input' : 'select'
+                                  },
+                                  'subtype': {
+                                    'display' : true,
+                                    'label':'subtype',
+                                    'input' : 'select',
+                                    'free_input' : false,
+                                    'show_editor': 'hidden',
+                                    'available' : ['simple_page'],
+                                    'forced' : 'simple_page'
+                                  },
+                                  'metadata': {
+                                    'display' : true,
+                                    'label':'comment text',
+                                    'input' : 'textarea',
+                                    'free_input' : false,
+                                    'show_editor': 'hidden'
+                                  
+                                  
+                                  }
+
+                          },
+                              
+                  },
+                  'read': {
+                          'enabled': true,
+                          'display' : {
+                                 'date': true, 
+                                 'user': true,
+                                 'metadata': {
+                                      'displayed':'metadata'
+                                 }
+
+                          },
+                        'icon': { 
+                            'before': {
+                                'show' : true,
+                                'class' : 'comment'
+                              }
+                          },           
+                  },
+            },
+          })
+
 
  definitions.note =  definitions.comment;
  definitions.generic =  definitions.comment;
  definitions.semantic =  definitions.comment;
- definitions.child =  definitions.comment;
-/*
-var container_class =  definitions.comment;
-container_class.positions.available = new Array('inline')
-container_class.modes.editor.fields.metadata.label = 'css class'
-//definitions.container_class = container_class;
-*/
-
 
  definitions.container = new Object({
               'name': 'container',
@@ -380,6 +474,7 @@ container_class.modes.editor.fields.metadata.label = 'css class'
                   "forced": "inline",
                   "available": ['inline']},
               'modes': {
+                'pusherleft': false,
                 'editor': {                   
                        'enabled': true,
                         'display' : {
@@ -449,6 +544,7 @@ container_class.modes.editor.fields.metadata.label = 'css class'
                   "forced": "inline",
                   "available": ['inline']},
               'modes': {
+                'pusherleft': false,
                 'editor': {                   
                   'enabled': true,
                         'display' : {
@@ -519,14 +615,15 @@ container_class.modes.editor.fields.metadata.label = 'css class'
                   },
             },
           })
-          definitions.data = new Object({
-              'name':$rootScope.render_config.i18n.CUSTOM.OBJECTS.datavalue,
+          definitions.datavalue = new Object({
+              'name': 'datavalue',
               'display_name': $rootScope.render_config.i18n.CUSTOM.OBJECTS.datavalue,
               'map_range': true,
               'positions': {
                   "forced": "left",
                   "available": ['under', 'global']},
               'modes': {
+                'pusherleft': true,
                 'editor': {                   
                   'enabled': true,
                         'display' : {
@@ -561,7 +658,7 @@ container_class.modes.editor.fields.metadata.label = 'css class'
                                   },
                                    'subtype': {
                                     'display' : true,
-                                    'label':'kind of link',
+                                    'label':'kind of data',
                                     'input' : 'select',
                                     'free_input' : false,
                                     'show_editor': true,
@@ -611,6 +708,7 @@ container_class.modes.editor.fields.metadata.label = 'css class'
                   "forced": "left",
                   "available": ['left', 'right', 'global']},
               'modes': {
+                'pusherleft': true,
                 'editor': {                   
                   'enabled': true,
                         'display' : {
@@ -723,33 +821,8 @@ container_class.modes.editor.fields.metadata.label = 'css class'
       },
       fragmentsAvailable:function (){
             var arr = [];
-            arr['markup']                    = [ {  url: 'fragments/markup'} ];
-            arr['section']                   = [ {  url: 'fragments/section.jade'} ];
-            arr['markup_editor']             = [ {  url: 'fragments/markup_editor.jade'} ];
-            arr['section_editor']            = [ {  url: 'fragments/section_editor.jade'} ];
-            arr['markup_push']               = [ {  url: 'fragments/markup_push.jade'} ];
             arr['author_card']               = [ {  url: 'fragments/author_card'} ]; 
-            arr['branding']                  = [ {  url: 'fragments/branding.jade'} ];
-            arr['before_doc']                = [ {  url: 'fragments/before_doc.jade'} ];
-            arr['doc_title']                 = [ {  url: 'fragments/doc_title.jade'} ];
-            arr['doc_options']               = [ {  url: 'fragments/doc_options.jade'} ];
-            arr['comment_form']              = [ {  url: 'fragments/comment_form.jade'} ];
             arr['child_markup']              = [ {  url: 'fragments/child_markup.jade'} ];
-            arr['dataset']                   = [ {  url: 'fragments/dataset.jade'} ];
-            arr['post_excerpt']              = [ {  url: 'fragments/post_excerpt.jade'} ];
-            arr['document_footer']           = [ {  url: 'fragments/document_footer.jade'} ];
-            arr['top_menus']                 = [ {  url: 'fragments/top_menus.jade'} ];
-            arr['fixed_tools']               = [ {  url: 'fragments/fixed_tools.jade'} ];
-            arr['inline_tools']              = [ {  url: 'fragments/inline_tools.jade'} ];
-            arr['chapters']                  = [ {  url: 'fragments/chapters.jade'} ];
-            arr['document_textarea']         = [ {  url: 'fragments/document_textarea.jade'} ];
-            arr['flash_message']             = [ {  url: 'fragments/flash_message.jade'} ];
-
-
-            //arr['doc_real']                = [ {  url: 'fragments/doc_real.jade'} ];
-            //arr['ad_welcome']              = [ {  url: 'fragments/ad_welcome.jade'} ];
-
-
         return arr;
       },
       classesAvailable:function (){

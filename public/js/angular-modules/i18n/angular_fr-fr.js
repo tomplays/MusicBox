@@ -41,7 +41,9 @@ $provide.value("$locale", {
 	 	"document_options":"Options du document",
 		"instructions" :"IIII",
 		"default_published." :"Choisissez un status",
-		"create_new" :"Créer nouveau Document"
+		"create_new" :"Créer nouveau document",
+		"create_first":"Creer votre premier document"
+
 	},
 
 	"DOCUMENT_FIELDS" : {
@@ -63,7 +65,7 @@ $provide.value("$locale", {
 			"media":"Média",
 			"markup":"Balise 'classique'",
 			"hyperlink":"Lien",
-			"datavalue":"Donnée brute"
+			"datavalue":"Donnee brute"
 
 
 	},

@@ -36,8 +36,8 @@ angular.module('musicBox.DocumentService',[])
   }
 
 
-  DocumentService.prototype.SetSlug = function () {
-   return
+  DocumentService.prototype.SetSlugFromValue = function (slug) {
+    this.slug = slug
 
   }
   
@@ -52,7 +52,7 @@ angular.module('musicBox.DocumentService',[])
        if(Result){
           $rootScope.doc = Result.doc
       
-          $rootScope.markups  = _.sortBy( Result.doc.markups_,function (num) {
+          $rootScope.markups  = _.sortBy(Result.doc.markups_,function (num) {
                return num.start;
           });
           //    $rootScope.doc.markups  = Result.doc.markups;
@@ -89,13 +89,19 @@ angular.module('musicBox.DocumentService',[])
                return num.start;
             });
 
-
+            /* to refactor... vs 'containers'
             $rootScope.sections = _.sortBy( Result.doc.sections,function (num) {
                return num.start;
             });
+            */
             //_.filter($rootScope.sections, function(td){ return  td.type == 'container'; });
+           
+
             $rootScope.doc_owner = Result.is_owner;
+            
             console.log('is owner or has secret ('+ Result.is_owner+')')
+
+
        
           }
           else{
@@ -248,8 +254,8 @@ angular.module('musicBox.DocumentService',[])
 
             }
              
-            console.log('SAVED')
-            thos.flash_message(Result.edittype, 'ok' , 2400, false)
+           
+            thos.flash_message('Document saved', 'ok' , 1600, false)
 
             _.each($rootScope.containers, function(s){
                  s.touched = false
@@ -491,7 +497,7 @@ angular.module('musicBox.DocumentService',[])
                           }
                    
                   }else{
-                   window.location = root_url+':'+PORT+'/doc/'+Result.slug+'?fresh';
+                   window.location = root_url+':'+PORT+'/doc/'+Result.slug+''; // fresh
 
                                //alert(Result.slug)
                                //   $rootScope.newdoc.created_link = Result.slug;

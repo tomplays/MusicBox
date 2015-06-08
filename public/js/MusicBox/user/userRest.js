@@ -17,7 +17,15 @@ angular.module('musicBox.UserRest', [])
         //transformResponse: parseResponse
         //interceptor: { response: parseResponse }
         //isArray: false
+      },
+      edit:{
+        method:"POST",
+        url: api_url+'/me/edit',
+        //transformResponse: parseResponse
+        //interceptor: { response: parseResponse }
+        //isArray: false
       }
+
     }
   );
 })

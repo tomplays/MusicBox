@@ -94,9 +94,8 @@ function DocumentCtrl($scope, $http , $sce, $location, $routeParams ,socket,rend
 		return $scope.mapping_passes++
 	}
   
-$scope.letters = [];
-         
-             $scope.max_reached_letter = 0;
+	$scope.letters = [];
+    $scope.max_reached_letter = 0;
 
 
 	$scope.update_section_count = function(direction){
@@ -159,6 +158,11 @@ $scope.SetSlug = function (slug) {
         // using it's route (defined in app.js routers)
         if($routeParams.docid){
           $scope.slug = $routeParams.docid
+
+        }
+        if($routeParams.docid){
+          $scope.slug = $routeParams.docid
+       
         }
     }
     else{
@@ -217,16 +221,12 @@ $scope.SetSlug = function (slug) {
         //console.log(' apply doc_options to object'+object)
         var options_array = [];
         _.each(options , function(option){
-            
            
             var op_name = option.option_name;
             options_array[op_name]          = [];
             options_array[op_name]['value'] = option.option_value
             options_array[op_name]['_id']   = option._id
             options_array[op_name]['type']  = option.option_type
-
-
-           
 
             if( option.option_value && option.option_type == 'google_typo' && object == 'document'){
                WebFont.load({
@@ -272,7 +272,6 @@ $scope.SetSlug = function (slug) {
 	}
 
 	$scope.doc_sync = function(){
-		
 		doc.docsync();
 	}
 
@@ -297,8 +296,6 @@ $scope.SetSlug = function (slug) {
 	$scope.doc_options_save = function (value, id){
 		doc.doc_option_edit(value, id);
 	}
-
-	
 	
 	$scope.doc_options_new = function (){
 		doc.doc_option_new();
@@ -324,17 +321,6 @@ $scope.SetSlug = function (slug) {
 		doc.markup_save(markup)
 	}
 
-
-	
-
-	$scope.open_pusher_details= function (type){
-
-		console.log(type)
-		//push_generic_from_ranges('media', 'media','left', 'http://img.ffffound.com/static-data/assets/6/aba9eee8a8620e87272efcaedb7b1314d21c0c46_m.jpg')
-	
-	}
-
-	
 
 	$scope.offset_markups = function (){
 		doc.offset_markups()
@@ -451,16 +437,6 @@ $scope.SetSlug = function (slug) {
         $scope.ui.menus['quick_tools_help'].open = 'no';
         $scope.ui.menus['quick_tools_published'].open = 'no';
 
-/*
-		_.each($scope.ui.menus[0], function(m, i){
-console.log(m)
-
-			m[0].open = "no"
-
-
-		})
-*/
-
 		//$scope.ui.menus[name].open = $scope.ui.menus[name].open * -1;
 		if($scope.ui.menus[name].open == 'no'){
 			$scope.ui.menus[name].open = 'yes'
@@ -519,89 +495,6 @@ console.log(m)
          text_range				 +='"'
          return text_range;
   	}
-	$scope.toggle_fragment_ranges = function (kind,classname, markup, value, trigger){
-}
-	$scope.toggle_fragment_ranges_ol = function (kind,classname, markup, value, trigger){
-		console.log('toggle_fragment_ranges'+kind)
-		var source = $scope.doc.markups;
-		
-alert('toggle_fragment_ranges')
-		if(kind=='single_markup'){
-
-			if(markup.type == 'mediarrr'){
-
-
-			}
-			else{
-				for (var i = markup.start; i <= markup.end; i++) {
-					var delta =  i  - $scope.containers[markup.sectionin].start;
-					//console.log(delta)
-					if($scope.containers[markup.sectionin].letters[delta]){
-						var _classes = $scope.containers[markup.sectionin].letters[delta]['classes'];
-						//$scope.letters[markup.sectionin][i]['classes'].push("editing")
-						
-						//console.log($scope.letters[markup.sectionin][i]['classes'])
-						if(_.contains(_classes, classname)  ){
-							//alert('s')
-							$scope.containers[markup.sectionin].letters[delta]['classes'] = _.without( _classes,classname)
-						}
-						else{
-							$scope.containers[markup.sectionin].letters[delta]['classes'].push(classname)
-						}
-					}
-				}
-
-			}
-			
-		}
-
-
-		if(kind=='by_range'){
- 			//	console.log('apply '+classname+' from '+$scope.ui.selected_range.start+ ' to: '+ $scope.ui.selected_range.end)
-			for (var i = $scope.ui.selected_range.start; i <= $scope.ui.selected_range.end; i++) {
-				//if($scope.containers[markup.sectionin].start){
-					// - $scope.containers[markup.sectionin].start;
-				if(markup.sectionin && $scope.letters[markup.sectionin][i]){
-					var delta =  i
-					//console.log('delta;'+delta+ ' cs/'+ markup.start)
-					//			var _classes = $scope.letters[markup.sectionin][delta]['classes'];
-					/*
-					if(_.contains(_classes, classname)  ){
-						//	$scope.letters[markup.sectionin][delta]['classes'] = _.without( _classes,classname)
-					}
-					else{
-						//	$scope.letters[markup.sectionin][delta]['classes'].push(classname)
-					}
-					*/
-				}
-				//}
-			}
-		}
-
-        // trigger 
-		//	console.log('TRIGGER ?'+trigger)
-
-		if(trigger){
-		///	$scope.containers[markup.sectionin].selecting = Math.random()
-		}
-		/*
-		if($scope.containers[markup.sectionin].start ){
-			var start_range =   markup.start - $scope.containers[markup.sectionin].start 
-			var end_range  	= 	markup.end 	 - $scope.containers[markup.sectionin].start
-		}
-		*/
-		return;
-		// match from an object and its range.
-		//if(markup.type !== 'container'){
-			//for (var i = 0; i <= 100; i++) {
-			//}
-		// match
-		
-		if(markup.type == 'container'){
-			console.log('range--in-g section')
-		}
-		return;
-	}
 
 
 		
@@ -658,7 +551,6 @@ $scope.$watch('ui.selected_range.start', function(newValue, oldValue) {
 				}
 				else{
 					console.log('ui.selected_range')
-					
 				
 
 					$scope.ui.selected_range.size = $scope.ui.selected_range.end - $scope.ui.selected_range.start +1
@@ -678,11 +570,13 @@ $scope.$watch('ui.selected_range.start', function(newValue, oldValue) {
 
 				}
 				else{
+
+
 					console.log('ui.selected_range section:')
 					
 				
-					$scope.ui.selected_range.size = $scope.ui.selected_range.end - $scope.ui.selected_range.start +1
-					$scope.ui.selected_range.multi = $scope.ui.selected_range.size > 1 ? true : false
+					$scope.ui.selected_range.size = $scope.ui.selected_range.end - $scope.ui.selected_range.start
+					$scope.ui.selected_range.multi = $scope.ui.selected_range.size > 0 ? true : false
 					$scope.ui.selected_range.textrange = $scope.textrange()
 
 				}
@@ -758,9 +652,20 @@ $scope.$watch('ui.selected_range.start', function(newValue, oldValue) {
 	socket.on('news', function (data) {
 		console.log(data);
 	})
-	socket.on('newsback', function (data) {
+	
+		socket.on('newsback', function (data) {
 		console.log('newsback')
 		console.log(data);
+		if(data.identifier && data.identifier== $scope.doc.slug){
+			_.each(data.markups_pushed, function(m){
+					m.user_id = {'_id':m.user.user_id}
+					$scope.markups.push(m)
+					console.log($scope.markups.length)
+					$scope.doc.markups.push(m)
+			})
+		}
+
+		
 	})
 
 

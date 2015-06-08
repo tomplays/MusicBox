@@ -43,19 +43,21 @@ head
 	// endbower 
 	// endbuild  
 
-	// build:js bower_components/mbmin.js 
+	// build:js js/mbmin.js 
 	// bower:js
-	script(src='/bower_components/angular/angular.js')
-	script(src='/bower_components/angular-resource/angular-resource.js')
-	script(src='/bower_components/angular-route/angular-route.js')
-	script(src='/bower_components/angular-sanitize/angular-sanitize.js')
-	script(src='/bower_components/underscore/underscore.js')
-	script(src='/bower_components/momentjs/moment.js')
-	script(src='/bower_components/angular-bootstrap/ui-bootstrap-tpls.js')
+	//
+		script(src='/bower_components/angular/angular.js')
+		script(src='/bower_components/angular-resource/angular-resource.js')
+		script(src='/bower_components/angular-route/angular-route.js')
+		script(src='/bower_components/angular-sanitize/angular-sanitize.js')
+		script(src='/bower_components/underscore/underscore.js')
+		script(src='/bower_components/momentjs/moment.js')
+		script(src='/bower_components/angular-bootstrap/ui-bootstrap-tpls.js')
+	
 	// endbower 
 	// endbuild  
 	
-	// script(type='text/javascript', src='mbmin.js')
+	script(type='text/javascript', src='mbmin.js')
 
 
 	// script(type='text/javascript',  src='js/lib/serialize.min.js')
@@ -129,7 +131,7 @@ head
 		script(type='text/javascript', src='js/app.js')
 
 		if(socket_url !== '')
-			// script(src='#{socket_url}:#{socket_server_port}/socket.io/socket.io.js')
+			script(src='#{socket_url}:#{socket_server_port}/socket.io/socket.io.js')
 	
 
 	

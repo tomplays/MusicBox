@@ -1,97 +1,77 @@
 div(ng-if="section['objects_count']['by_positions'][layout.name].count > 0 || layout.include_even_empty", ng-repeat="layout in available_layouts")
-	// h1{{section['objects_count']['by_positions'][layout.name].count}}
+
 	div(class="layout_ layout_name_{{layout.name}} has_count_{{section.objects_count.by_positions[layout.name].count}} has_object_{{section.objects_count.by_positions[layout.name].has_object}}")
 		
 		mb-dataset(ng-if="ui.renderAvailable_active == 'dataset' && (layout.name == 'center') && ($parent.$parent.$first)")
 		
-
 		// title, author, date, ..
 		doc-title(ng-if="(layout.name == 'center') && ($parent.$parent.$first)")		
 		div(ng-if="layout.name == 'right'")
 
+			// edit/delete range and css objects.
+			mb-sectioneditor(class="section_editor section-editor-right" ng-if="doc_owner == true")
+	
+			// made to boot controller, not displayed here
+			div(  style="display:none" ng-repeat="markup in markups_by_start_end_position_type(section.start, section.end ,'background', 'media') track by $index" class="markup_ markup_type_bg")
+				markup-view()
+
+		div(ng-if="object.visible!==false && layout.include_objects!==false && layout.name!=='slidewide'" , ng-repeat="object in available_sections_objects")
+			div(ng-repeat="markup in markups_by_start_end_position_type(section.start, section.end ,layout.name,object) track by $index" )
+				div(class="markup_ markup_type_{{markup.type}}")
+					markup-view()
+
+		mb-commentform(ng-if="(doc_options.comments_open.value !=='false' || !doc_options.comments_open.value  ) && layout.name == 'left'")
+		
 			
-			div.forced.forced-right
-				// sections, container_class, inline_markup, media( if background)
-				
-
-				//N SPLIT  div( ng-include="fragments['s'][0].url", class="markup_ markup_type_container", ng-repeat="markup in section.objects_['container']['inline'] ")
-					
-				
-				div(class="markup_ container_class_type_inline" , ng-repeat="markup in section.objects_['container_class']['inline']" ng-include="fragments['markup'][0].url")
-				
-				div(class="markup_ markup_type_inline", ng-repeat="markup in section.objects_['markup']['inline']", ng-include="fragments['markup'][0].url")
-
-
-				div(class="markup_ markup_type_bg", ng-repeat="markup in section.objects['media']['background']", ng-include="fragments['markup'][0].url")
-
-		div(ng-if="object.visible !==false && layout.include_objects !==false && layout.name !=='slidewide' " , ng-repeat='object in available_sections_objects')
-			// {{section.objects_[object][layout.name]}}
-			div(class="markup_ markup_type_{{markup.type}}" ng-repeat="markup in section.objects_[object][layout.name]", ng-include="fragments['markup'][0].url")
 			
 
-		div(ng-if="(doc_options.comments_open.value !=='false' || !doc_options.comments_open.value  ) && layout.name == 'left'")
-			
-			span.open_comment(tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.COMMENT.label}}" ng-click="open_pusher()") +
-			div.comment_form(ng-if="ui.menus.push_comment.open == $parent.$parent.$parent.$index",  ng-include="fragments['comment_form'][0].url")
-
-
-		// div(ng-if="layout.name == 'slidewide'")
+		div(ng-if="layout.name == 'slidewide'")
 			carousel( interval="1000")
-				slide(ng-repeat="markup in section.objects['media']['slidewide']" active="markup.active" )
+				slide(ng-repeat="markup in markups_by_start_end_position_type(section.start, section.end ,'slidewide','media') track by $index" )
 					p 
-						img(src="{{markup.metadata}}")
+						img(ng-src="{{markup.metadata}}")
 
 		div(ng-if="layout.name == 'inline'")
-			mb-sectioneditor()
 			
 			
 			// h2 
 				a(ng-click="sectionmarkups('selected', true)") {{section_markups.visible}}
 
-
-			div.inline_tools(ng-include="fragments['inline_tools'][0]['url']" ng-if="section.editing_text ===true")
+			mb-sectioninlineeditor()
 			
-			div(ng-if="ui.debug") 
-				// html escaped : 
-				// h4 {{section.fulltext_block}}
-				// h4 {{section.modeletters}}
-
-
-			div.fluidtextarea(ng-if="section.editing_text ===true")
-				h3 Edit section text : 
-
+			
+			div.fluidtextarea(ng-if="section.editing_text === true")
+				// h3 Edit section text
 				textarea(required ng-trim="false" , text-listener  , ng-model="section.fulltext")
-				// a.btn_ok(ng-click="save_section(section)") save
-				// a.btn_ok(ng-click="doc_sync()") save
+				
 
-			// h3 {{section.fulltext}}
-			// strong {{section.letters.length}}
+			// h1 editable
+			// div.fluidtext(contentEditable="true" , mb-editable , section="section" , ng-bind-html="section.fulltext" ) 
+			
+			div.theletters(section="section" class="is_multi_{{ui.selected_range.multi}}" ng-if="section.modeletters == 'single'")
+				span(lt="l" , ng-repeat="l in section.letters")
+			div.fluidtext(fluidtexte, section="section" ,  ng-hide="section.modeletters =='single'") 
+			
 
-			div.theletters(ng-if="section.modeletters == 'single'")
-				span(lt="l" , ng-repeat="l in section.letters") 
-
-			// 
-			div.fluidtext(fluidtexte, section="section" ,  ng-hide="section.modeletters =='single'" , ng-bind-html="section.fulltext_block") 
-
-			.pusher_section(ng-if="section.editing_text == true && ($parent.$parent.$parent.$last)")
+			.pusher_section(ng-if="doc_owner == true && ($parent.$parent.$parent.$last)")
 				i.fa.fa-plus-square.pusher_item.btn(tooltip="new section" ng-click="new_section()")
 
+		div(ng-if="layout.name == 'global' && $parent.$parent.$last")
+			// h4 {{layout.name}}
+			div(ng-repeat="object in available_sections_objects track by $index")
+				div(ng-repeat="markup in markups_by_start_end_position_type(0, section.end , layout.name, object) track by $index")
+					div(class="markup_ markup_type_{{markup.type}}")
+						markup-view()
+		
 
-
-		div(ng-if="(layout.name == 'global') && ($parent.$parent.$last) && objects_sections['global_all'].length > 0")
-					div.inside()
-						h4 global
-						div(class="markup_ markup_type_{{markup.type}}", ng-repeat="markup in objects_sections['global_all']" , ng-include="fragments['markup'][0].url")		
-
-		div.isolated(ng-if="layout.name == 'global' && $parent.$parent.$last &&  ui.isolated_markups.length > 0" )
+		// div.isolated(ng-if="layout.name == 'global' && $parent.$parent.$last &&  ui.isolated_markups.length > 0" )
 			h4 isolated
-			div(ng-repeat="markup in ui.isolated_markups ", ng-include="fragments['markup'][0].url")
+			div(ng-repeat="markup in ui.isolated_markups")
+				markup-view()
 
-		div.virtuals(ng-if="layout.name == 'global' && $parent.$parent.$last  > 0 " )
+		// div.virtuals(ng-if="layout.name == 'global' && $parent.$parent.$last  > 0 " )
 			div(ng-repeat="virtual in virtuals")
 				div(ng-if="virtual.visible", ng-bind-html="virtual.string")
-	
-
 
 // render into the layout loop, only "if last"
 // made to apply last section styles to footer

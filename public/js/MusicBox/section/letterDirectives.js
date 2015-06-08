@@ -76,8 +76,8 @@ angular.module('musicBox.LetterDirectives', [])
 
 
   function sets(){
- var logevent = {'directive':'lt', 'event':'none'}
-      //   $rootScope.ui.selected_range.debug.push(logevent)
+    var logevent = {'directive':'lt', 'event':'none'}
+    // $rootScope.ui.selected_range.debug.push(logevent)
     $rootScope.$apply(function(){});
       
   }  // SCAN /
@@ -101,10 +101,10 @@ angular.module('musicBox.LetterDirectives', [])
          // scope.lt.char = ''+scope.lt.absolute_order;
 
           if(scope.lt.islast){
-            
+           
           }
           if(scope.lt.isfirst){
-            
+           
           }
         
 
@@ -116,9 +116,12 @@ angular.module('musicBox.LetterDirectives', [])
                   window.open(scope.lt.href,'_blank');
               }
               else{
-                  $rootScope.ui.renderAvailable_active =  'editor'
-                  scope.$parent.section.editing_text = true;
-                  scope.$parent.section.editing = true;
+                  if($rootScope.doc_owner == true){
+                      $rootScope.ui.renderAvailable_active =  'editor'
+                      scope.$parent.section.editing_text = true;
+                      scope.$parent.section.editing = true;
+                  }
+                 
               }
 
              // scope.lt.char = '<clicker class="clickers">+</clicker>'
@@ -137,9 +140,18 @@ angular.module('musicBox.LetterDirectives', [])
                 else{
               //  $rootScope.ui.renderAvailable_active =  'editor'
                 }
+              
+
+              // AUTO OFF
+              /*
               $rootScope.ui.renderAvailable_active =  'editor'
+            
+
               scope.$parent.section.editing_text = true;
               scope.$parent.section.editing = true;
+             
+              */
+
               //alert('char: '+scope.lt.char+'scope.absolute_order:'+scope.lt.absolute_order+'  scope.order:'+scope.lt.order)
               sets()
           });
@@ -304,17 +316,20 @@ angular.module('musicBox.LetterDirectives', [])
   function($rootScope) {
   
      function link(scope, elem, attrs) { 
-        elem.bind('click', function(event) {
-          console.log(event.target)
-          scope.section.modeletters = 'single';
-         // alert('editable')
+          elem.bind('click', function(event) {
+          
+
+          // TOGGLE AUTO ONE_CLICK
+          //
+          // scope.section.modeletters = 'single';
         })
 
-    elem.bind(' DOMNodeInserted', function(event) {
+      /* elem.bind(' DOMNodeInserted', function(event) {
           console.log( 'DOMNodeInserted')
                  console.log(event)
 
         })
+      */
 
  elem.bind('change', function(event) {
 console.log(event)

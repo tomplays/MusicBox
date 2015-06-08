@@ -38,7 +38,8 @@ $provide.value("$locale", {
 	 	"document_options":"Document options",
 		"instructions" :"Pick a title",
 		"default_published." :"pick publish status",
-		"create_new" :"Create new Document"
+		"create_new" :"Create new document",
+		"create_first":"Create your first document"
 
 
 	},
@@ -76,7 +77,9 @@ $provide.value("$locale", {
 			"child":"Child object",
 			"media":"Media",
 			"markup":"'Classic' markup",
-			"hyperlink":"Link"
+			"hyperlink":"Link",
+			"datavalue":"raw data"
+
 
 	},
 	"POSITIONS" : {
