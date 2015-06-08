@@ -122,6 +122,10 @@ function UserCtrl($scope, $http , $location, $routeParams,  $locale, renderfacto
 	
 	$scope.register_url = root_url+':'+PORT+'/signup';
 	$scope.created_user_link   = root_url+':'+PORT+'/me/account?welcome';
+	if(action_){
+		$scope.action_ = action_
+	}
+	
 
 	if($routeParams.redirect_url){
 		$scope.created_user_link 	= $routeParams.redirect_url;

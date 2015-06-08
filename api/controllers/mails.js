@@ -24,7 +24,7 @@ meta_options = mongoose.model('Metaoptions'),
 User = mongoose.model('User'),
 nconf = require('nconf'),
 chalk = require('chalk'),
-mail= require('./../../sendmail.js'),
+crypto = require('crypto'),
 nodemailer = require('nodemailer'),
 directTransport = require('nodemailer-direct-transport'),
 fs = require('fs');
@@ -32,14 +32,19 @@ fs = require('fs');
 nconf.argv().env().file({file:'config.json'});
 var sent_mail = 0;
 
-//var transporter = nodemailer.createTransport(directTransport());
-var transporter = nodemailer.createTransport({
+if(nconf.get('MAIL_TRANSPORTER')  == 'gmail'){
+	var transporter = nodemailer.createTransport({
     service: 'Gmail',
-    auth: {
-        user: nconf.get('MAIL_PROVIDER_MAIL'),
-        pass: nconf.get('MAIL_PROVIDER_PASS')
-    }
-});
+	    auth: {
+	        user: nconf.get('MAIL_PROVIDER_MAIL'),
+	        pass: nconf.get('MAIL_PROVIDER_PASS')
+	    }
+	});
+}
+else{
+	var transporter = nodemailer.createTransport(directTransport());
+}
+
 
 // setup e-mail data (defaults)
 
@@ -224,8 +229,15 @@ exports.subscribe_post = function(req, res) {
 };
      
 exports.subscribe_action = function(req, res) {
-	if(req.query.action && req.query.mail && req.query.key){
-		User.findOne({email: req.query.mail}).exec(function(err, user) {
+
+	
+
+	if(req.query.action && req.query.email && req.query.key){
+		var qmail = req.query.email
+		qmail = qmail.replace(/\s/g, "+")
+		console.log(qmail)
+		User.findOne({email: qmail }).exec(function(err, user) {
+			console.log(user)
 			if (err){
 				res.send(err)
 			} 
@@ -246,7 +258,19 @@ exports.subscribe_action = function(req, res) {
 		 					})
 	 					}
 						else if(req.query.action == 'reset'){
-							res.send('mail reset to: #todo > contact site owner')
+
+ 
+ 			            			var newpass = crypto.randomBytes(10).toString('base64')
+ 			            			user.password = newpass
+									user.save(function(err) {
+									    if (err) {
+									        res.send('err')   
+									    }
+					                    else{
+					                    	res.render('index', { action_: 'Mail reset to:   '+newpass+ '   You can change it in your account infos.' , user_in:user } );
+					                    }
+					                       
+					                })
 	 					}
 
 	 					else{

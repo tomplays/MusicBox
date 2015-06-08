@@ -132,7 +132,8 @@ app.set('port',nconf.get('PORT') );
         app.locals.fbapp_id = nconf.get('FACEBOOK_ID');
         app.locals.port= nconf.get('PORT')
         app.locals.socket_server_port= nconf.get('SOCKET_SERVER_PORT')
-       
+        app.locals.action_ =  '';
+
         // contruct STRING
         app.locals.api_url= nconf.get('ROOT_URL')+':'+nconf.get('PORT')+'/'+nconf.get('API_SUFFIX_URL');
 

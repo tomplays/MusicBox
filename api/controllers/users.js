@@ -19,8 +19,7 @@ var mongoose = require('mongoose'),
      _ = require('underscore'),
     auth = require('../authorization'),
     mails = require('./mails.js'),
-    nconf = require('nconf');
-
+    nconf = require('nconf')
 
 nconf.argv().env().file({file:'config.json'});
 
@@ -65,17 +64,24 @@ exports.lostpass = function(req, res) {
 
     if(req.body.email){
 
-         User.findOne({email : req.body.email }).exec(function(err,user) {
-            if(user) {
-               // todo 
+        var qmail = req.body.email.replace(/\s/g, "+")
+        console.log(qmail)
 
-              console.log('mail')
-              var admin_email = new Object({
-                'subject': nconf.get('SITE_TITLE')+' - Reset password', 
-                'bodytext':'Veuillez cliquer ce <a href="'+nconf.get('ROOT_URL')+':'+nconf.get('PORT')+'/api/v1/subscribe_action?action=reset&mail='+user.email+'&key='+user.secret+'">lien</a> pour </p><p>ou entrez directement cette adresse dans votre navigateur : '+nconf.get('ROOT_URL')+':'+nconf.get('PORT')+'/api/v1/subscribe_action?action=reset&mail='+user.email+'&key='+user.secret+'</p>', 
-                'to':'homeof@gmail.com'
-                 })
-                 mails.sendmailer(admin_email)              
+         var user= User.findOne({email : qmail }).exec(function(err,user) {
+            if(user) {
+               // todo !! 
+
+              
+                        console.log('mail')
+                        var admin_email = new Object({
+                        'subject': nconf.get('SITE_TITLE')+' - Reset password', 
+                        'bodytext':'Veuillez cliquer ce <a href="'+nconf.get('ROOT_URL')+':'+nconf.get('PORT')+'/api/v1/subscribe_action?action=reset&email='+user.email+'&key='+user.secret+'">lien</a> pour </p><p>ou entrez directement cette adresse dans votre navigateur : '+nconf.get('ROOT_URL')+':'+nconf.get('PORT')+'/api/v1/subscribe_action?action=reset&email='+user.email+'&key='+user.secret+'</p>', 
+                        'to':'homeof@gmail.com'
+                         })
+                         mails.sendmailer(admin_email)   
+                
+
+                        
             } 
             else {
                

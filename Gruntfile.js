@@ -268,6 +268,9 @@ module.exports = function(grunt) {
 	grunt.registerTask('stop', ['forever:server1:stop']); // , 'connect:server' // 'forever', 
 	grunt.registerTask('default', ['forever:server1:restart','watch']);
 	
+	// for production templates
+	grunt.registerTask('rebuild', ['jade']); 
+
 	// 'connect:livereload'
 	grunt.registerTask('build', [
 				'forever:server1:restart',

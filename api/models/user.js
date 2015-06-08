@@ -5,7 +5,7 @@
  */
 var mongoose = require('mongoose'),
 Schema = mongoose.Schema,
-crypto = require('crypto'),
+crypto = require('crypto'), 
 authTypes = ['facebook', 'local'] ,
 meta_options = Schema.MetaoptionsSchema,
 ObjectIdSchema = Schema.ObjectId,

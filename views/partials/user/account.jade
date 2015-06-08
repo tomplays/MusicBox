@@ -98,6 +98,6 @@ div.main_center.user_account.bordered
 			a(href="/doc/create") {{render_config.i18n.CUSTOM.DOCUMENT.create_new}} 
 
 	a.btn_big.btn_newdoc(ng-if="documents.length==0 && userin.trust == 'confirmed'" title="{{render_config.i18n.CUSTOM.DOCUMENT.create_new}}" ng-click="create_doc()" ) {{render_config.i18n.CUSTOM.DOCUMENT.create_first}}
-	p(ng-if="userin.trust !== 'confirmed'") You ned to confirm your account (sent by mail) before being allowed to create document
+	p(ng-if="userin.trust !== 'confirmed'") You need to confirm your account (sent by mail) before being allowed to create document
 footer
 	p 2015 - MusicBox
