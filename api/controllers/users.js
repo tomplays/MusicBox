@@ -209,6 +209,7 @@ exports.create = function(req, res) {
     console.log(req.body)
 
     var user = new User(req.body);
+
     var message = null;
     user.user_options = new Array();
    // 52, 152, 219 blue! 
@@ -219,6 +220,8 @@ exports.create = function(req, res) {
     var user_option = new Object( {'option_name':'color', 'option_value': rand_color,  'option_type': '' } )
     user.user_options.push(user_option)
     user.provider = 'local';
+
+    user.markModified = true;
     console.log('req.body>')
     console.log(req.body)
     // TODO ; newletter > req.body.newsletter
@@ -237,9 +240,7 @@ exports.create = function(req, res) {
 
             return res.send(message);
         }
-        req.logIn(user, function(err) {
-
-            var user_email = new Object({
+         var user_email = new Object({
                 'subject':'['+ nconf.get('SITE_TITLE')+'] - Confirmer inscription', 
                 'bodytext':'Veuillez cliquer ce <a href="'+nconf.get('ROOT_URL')+':'+nconf.get('PORT')+'/api/v1/subscribe_action?action=confirm&mail='+user.email+'&key='+user.secret+'">lien</a> pour activer votre inscription </p><p>ou entrez directement cette adresse dans votre navigateur : '+nconf.get('ROOT_URL')+':'+nconf.get('PORT')+'/api/v1/subscribe_action?action=confirm&mail='+user.email+'&key='+user.secret+'</p>', 
                 'to':'homeof@gmail.com'
@@ -252,6 +253,12 @@ exports.create = function(req, res) {
             })
             mails.sendmailer(user_email)
             mails.sendmailer(admin_email)
+
+
+
+        req.logIn(user, function(err) {
+
+           
             
 
             // var email_object = new Object({'subject':'[SITE ADMIN new user] - ', 'bodytext':'new_user_signup'+JSON.stringify(user) })

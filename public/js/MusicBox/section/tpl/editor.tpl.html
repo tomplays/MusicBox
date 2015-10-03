@@ -7,7 +7,7 @@
   <div class="section_ranges">
     <label>Start-end ranges</label><span class="field ranges"><span class="ranges_inputs"><span class="field numberfloat oneline"><span>From </span>
           <input type="number" ng-model="section.start" class="section_end"/><span>&nbsp;&nbsp;to </span>
-          <input type="number" ng-model="section.end" class="section_start"/></span></span></span><a ng-click="integrity_fix()">fix offsets</a>
+          <input type="number" ng-model="section.end" class="section_start"/></span></span></span><a ng-click="integrity_fix()">fix offsets</a><a ng-click="split()">split</a><a ng-click="merge()">merge</a>
   </div>
   <!-- div.section_quick_tools
   .sobject-tools
@@ -16,7 +16,11 @@
   -->
   <tabset class="editor-main-tab">			
     <tab heading="Add section styles"> 
-      <div class="pusher_css_styles"><i tooltip="insert container class (css)" ng-click="push_generic_from_ranges('container_class','css','inline', 'bg_dark')" class="fa btn_action fa-container_class">text white</i><i tooltip="insert container class (css)" ng-click="push_generic_from_ranges('container_class','css','inline', 'bg_black')" class="fa btn_action pusher_markups fa-container_class">background black</i></div>
+      <div class="pusher_css_styles">
+        <ul>
+          <li ng-repeat="t in section.objSchemas_css.modes.editor.fields.metadata.available"> <i tooltip="insert container class (css)" ng-click="push_generic_from_ranges('container_class','css','inline', t)" class="fa btn_action fa-container_class">{{t}}</i></li>
+        </ul>
+      </div>
     </tab>
     <tab heading="section styles" ng-if=" markups_by_start_end_position_type(section.start, section.end ,'any', 'container_class').length &gt;0"> 
       <div ng-repeat="markup in markups_by_start_end_position_type(section.start, section.end ,'any', 'container_class') track by $index">

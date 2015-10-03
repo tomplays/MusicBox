@@ -9,20 +9,23 @@ nconf.argv().env().file({file:'config.json'});
 
 var mongoose = require('mongoose'),
 Schema = mongoose.Schema,
-meta_options = Schema.MetaoptionsSchema;
-
+meta_options = Schema.MetaoptionsSchema
 /**
- * Document Schema
- */
+ * Document Schema, 
+ * > Document is the most important data model.
+ * 
+
+*/
 
 // generate _id
 //http://stackoverflow.com/questions/11604928/is-there-a-way-to-auto-generate-objectid-when-a-mongoose-model-is-newed
 var ObjectIdSchema = Schema.ObjectId;
 var ObjectId = mongoose.Types.ObjectId;
 
-
 var MarkupSchema = new Schema({
-    _id:  {type:String, default: function () { return new ObjectId()} },
+    _id:  {
+        type:String, 
+        default: function () { return new ObjectId()} },
     created: {
         type: Date,
         default: Date.now
@@ -43,7 +46,7 @@ var MarkupSchema = new Schema({
     },
     doc_id:{
           type: Schema.ObjectId,
-           trim: true,
+          trim: true,
           ref: 'Document'
     },
     start: {
@@ -100,6 +103,9 @@ MarkupSchema.virtual('metadata')
 
 */
 
+
+mongoose.model('Markup', MarkupSchema);
+module.exports.Schema = MarkupSchema;
 
 
 //MarkupSchema.set('toJSON', { virtuals: true });
@@ -190,6 +196,5 @@ DocumentSchema.path('title').validate(function(title) {
 }, 'Title cannot be blank');
 
 
-
-mongoose.model('Markup',MarkupSchema);
 mongoose.model('Document', DocumentSchema);
+module.exports.Schema = DocumentSchema;

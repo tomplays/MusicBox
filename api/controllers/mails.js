@@ -232,8 +232,8 @@ exports.subscribe_action = function(req, res) {
 
 	
 
-	if(req.query.action && req.query.email && req.query.key){
-		var qmail = req.query.email
+	if(req.query.action && req.query.mail && req.query.key){
+		var qmail = req.query.mail
 		qmail = qmail.replace(/\s/g, "+")
 		console.log(qmail)
 		User.findOne({email: qmail }).exec(function(err, user) {
@@ -242,6 +242,7 @@ exports.subscribe_action = function(req, res) {
 				res.send(err)
 			} 
 			if(user){
+				console.log(user.secret+' VSVSVSVVSVSVVSVS : '+req.query.key)
 	 				if(user.secret == req.query.key){ // test match (secret/GET value)
 	 					if(req.query.action == 'confirm'){
 	 						user.trust = 'confirmed'
@@ -260,8 +261,14 @@ exports.subscribe_action = function(req, res) {
 						else if(req.query.action == 'reset'){
 
  
- 			            			var newpass = crypto.randomBytes(10).toString('base64')
+ 			            			var newpass = 'secret'
+ 			            			//crypto.randomBytes(10).toString('base64')
  			            			user.password = newpass
+ 			            			user.reset(newpass)
+ 			            			console.log(user)
+
+
+
 									user.save(function(err) {
 									    if (err) {
 									        res.send('err')   

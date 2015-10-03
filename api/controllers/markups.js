@@ -97,7 +97,8 @@ exports.edit = function(req, res) {
 					 	m.subtype 	= m_body.subtype ? m_body.subtype : m.subtype
 					 	m.position	= m_body.position ? m_body.position: m.position
 						m.metadata 	= m_body.metadata ? m_body.metadata : m.metadata
-						
+												m._id 	=  m._id
+
 						m.depth     = m_body.depth ? m_body.depth : m.depth 
 
 						if(m_body.doc_id){
@@ -254,7 +255,7 @@ exports.create = function(req, res) {
 
 		}
 
-		var markup = new Object( { 'username':req.body.username, 'user_id': req_user_id, 'position': req.body.position, 'start':req.body.start, 'end':req.body.end, 'subtype': req.body.subtype, 'type': req.body.type, 'status': markup_status, 'metadata': req.body.metadata, 'depth': req.body.depth} )
+		var markup = new Markup( { 'username':req.body.username, 'user_id': req_user_id, 'position': req.body.position, 'start':req.body.start, 'end':req.body.end, 'subtype': req.body.subtype, 'type': req.body.type, 'status': markup_status, 'metadata': req.body.metadata, 'depth': req.body.depth} )
 		markup.isNew; // true
 
 		//markup = markup.toObject();

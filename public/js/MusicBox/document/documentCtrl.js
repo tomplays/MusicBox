@@ -75,6 +75,40 @@ function DocumentCtrlRo($scope, $http , $sce, $location, $routeParams ,socket,re
 }
 
 
+function DocumentCtrlCompiled($scope, $http , $sce, $location, $routeParams ,socket,renderfactory, DocumentService,DocumentRest,$anchorScroll, MusicBoxLoop,  $timeout) {
+ 	
+
+	//some setup 
+
+	$scope.doc = {slug:$routeParams.docid, mode:'compiled'}
+$scope.cursor = {}
+	var cursor = function(letter){
+
+			
+			$scope.cursor.start_relative = letter.position.relative
+			$scope.cursor.start_absolute = letter.position.absolute
+
+			$scope.cursor.start_local = letter.position.local
+
+	}
+
+
+ 	var promise = DocumentRest.get({Id:$scope.doc.slug},{  }).$promise;
+    promise.then(function (Result) {
+       if(Result){
+       	console.log(Result)
+       	       	$scope.docresult = Result
+
+       	$scope.doc.compiled_doc = Result.compiled_full
+       }
+      });
+
+    $scope.la = function(action, letter){
+    	
+    	console.log(letter)
+    	cursor(letter) 
+    }
+}
 
 function DocumentCtrl($scope, $http , $sce, $location, $routeParams ,socket,renderfactory, DocumentService, $anchorScroll, MusicBoxLoop,  $timeout) {
 		

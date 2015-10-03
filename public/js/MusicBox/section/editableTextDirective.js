@@ -59,10 +59,16 @@ angular.module('musicBox.eDirectives', [])
     }
 
   function textarea_running(eventname, event, scope){
+
+      console.log(eventname, event)
+
       $rootScope.ui.current_action = eventname
 
       var logevent = {directive:'textListener', name:eventname, time:Math.random(), before_start:$rootScope.ui.selected_range.start,before_end:$rootScope.ui.selected_range.end}
       logevent.ranges_test = []
+     
+
+
       if(eventname== 'mv'){
                 logevent = {directive:'', name:eventname, time:'', before_start:$rootScope.ui.selected_range.start,before_end:$rootScope.ui.selected_range.end}
                 
@@ -125,6 +131,10 @@ angular.module('musicBox.eDirectives', [])
 
 
 
+        console.log($rootScope.ui.selected_range)
+
+
+
 
       }
 
@@ -134,7 +144,7 @@ angular.module('musicBox.eDirectives', [])
         _.each($rootScope.containers, function(container){
 
           // remove line breaks
-           container.fulltext =  container.fulltext.replace(/(\r\n|\n|\r)/gm,"");
+         //  container.fulltext =  container.fulltext.replace(/(\r\n|\n|\r)/gm,"");
           
             string  += container.fulltext;
             console.log(container.fulltext)
@@ -429,7 +439,9 @@ if(eventname == 'key'){
        })
 */
 
+
       elem.bind("mousedown", function(event){
+            event.MB = scope
             textarea_running('mousedown', event, scope)
             // scope.$parent.section.debuggr.push('md')
             scope.$apply();
@@ -464,13 +476,13 @@ if(eventname == 'key'){
       })
       */
       elem.bind("keyup", function(event){ 
-     
+      
           if(event.which == 13){
              //event.preventDefault();
 
 
              //alert(' e.preventDefault();')
-           textarea_running('saving', event, scope)
+            textarea_running('saving', event, scope)
             scope.$parent.sync_queue() 
           }
           else if(event.which == 224){

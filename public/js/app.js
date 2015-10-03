@@ -25,8 +25,8 @@ angular.module('musicBox',  [
         controller: DocumentNewCtrl
       }).
       when('/readonly/:docid', {
-        templateUrl: '/../partials/document/document_ro',
-        controller: DocumentCtrlRo
+        templateUrl: '/../partials/document/compiled',
+        controller: DocumentCtrlCompiled
       }).
       when('/docs/:mode', {
         templateUrl: '/partials/document/list',

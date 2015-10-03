@@ -5,7 +5,7 @@ angular.module('musicBox.section_controller', []).controller('SectionCtrl', func
 
 $scope.init_= function () {
 
-	
+	console.log()
 	/* some variable seting for each container */
 	container_ = new Object({
 		'selecting' : -1,
@@ -13,9 +13,9 @@ $scope.init_= function () {
 		'isolated'  : true,
 		'selected'  : false,
 		'focused'   : '',
-		'editing_text':false,
+		'editing_text': $scope.ui.debug ? true : false,
 		'ready' : 'init',
-		'modeletters' : 'compiled',
+		'modeletters' : $scope.ui.debug ? 'single' : 'compliled',
 		'section_classes':'', 
 		'stack': [],
 		'rebuild' : false,
@@ -25,10 +25,11 @@ $scope.init_= function () {
 		'debuggr' : ['init'],
         'has_offset'     : false,
         'touched'     : false,
-        'keepsync'     : true
-
-
+        'keepsync'     : true,
+        'objSchemas' 	 : $scope.objSchemas['container'] ?  $scope.objSchemas['container'] : [],
+        'objSchemas_css' 	 : $scope.objSchemas['container_class'] ?  $scope.objSchemas['container_class'] : []
 	})
+
 	// .. and extend object
 	$scope.section = _.extend($scope.section, container_);
 
@@ -73,14 +74,15 @@ $scope.sectionmarkups = function(attr, value){
 // contruct temp fulltext, 
 // called at section init only 
 $scope.init_fulltext = function (s,e){
+	
     var fulltext = '';
     var fulltext_block = ''
     var i_array     =   0;
 	for (var i = s; i <= e; i++) {
 		// console.log(i)
-		if($scope.$parent.doc.content[i]){
-			fulltext += $scope.$parent.doc.content[i];
-			fulltext_block += $scope.$parent.doc.content[i];
+		if($scope.doc && $scope.doc.content[i]){
+			fulltext += $scope.doc.content[i];
+			fulltext_block += $scope.doc.content[i];
 
 		}
 		else{
@@ -153,13 +155,18 @@ $scope.map_letters = function(){
 		}
 
 		l.inrange=false;
+						console.log(li , index_absolute_start ,index_absolute_end)
 
 		if( 
 			//($scope.$parent.ui.selected_range.start || $scope.$parent.ui.selected_range.start == 0 ) 
 			//&& 
 			//($scope.$parent.ui.selected_range.end || $scope.$parent.ui.selected_range.end ==0) 
 			//&& 
-			( (li > index_absolute_start && li < index_absolute_end) ||  li == index_absolute_end ||  li == index_absolute_start) ) {
+
+			li == index_absolute_start || li == index_absolute_start-1 || li == index_absolute_start-2){
+
+
+			//( (li > index_absolute_start && li < index_absolute_end) ||  li == index_absolute_end ||  li == index_absolute_start) ) {
 			l.inrange = true;
 		}
 
@@ -369,11 +376,6 @@ $scope.compile_html = function(fulltext_block ){
 							else{
 								
 							}
-
-
-
-							
-
 
 
 						}
@@ -809,12 +811,8 @@ $scope.add= function (){
 		}
 
 		
-
-	
         var promise = new Object();
         var data = new Object($scope.$parent.push);
-
-
 
         data.username = $scope.userin.username;
         data.user_id = $scope.userin._id;
@@ -859,20 +857,17 @@ $scope.add= function (){
 		var string  = '';
         _.each($scope.$parent.containers, function(container){
             string  += container.fulltext;
-            console.log(container.fulltext)
-
         })
 		$scope.doc.content = string+'Your text'
 		$scope.sync_queue()
 			
-		//$scope.section.end = $scope.section.end+1
 
-		$scope.push.start  = parseInt($scope.section.end+1)
-		$scope.push.end  =   parseInt($scope.section.end+9)
-		$scope.push.position  =   'inline'
-		$scope.push.type = 'container';
-		$scope.push.subtype = 'section';	
-		$scope.add();	
+		$scope.push.start  		= parseInt($scope.section.end+1)
+		$scope.push.end  		= parseInt($scope.section.end+9)
+		$scope.push.position  	=  'inline'
+		$scope.push.type 		= 'container';
+		$scope.push.subtype 	= 'section';	
+		$scope.add();
 		
 	}
 
@@ -993,6 +988,65 @@ $scope.add= function (){
 
       }
 
+$scope.merge= function (){
+      	alert('merged')
+		}
+
+     $scope.split= function (){
+
+
+     	//alert($scope.ui.selected_range.start+'-'+$scope.ui.selected_range.end+' - '+$scope.section.start+' - '+$scope.section.end)
+      	
+
+      	if($scope.ui.selected_range.start == $scope.ui.selected_range.end){
+      		alert('split one>two at '+$scope.ui.selected_range.start)
+      	}
+
+
+      	var mks = $scope.markups_by_start_end_position_type($scope.ui.selected_range.start,$scope.ui.selected_range.end, 'any','any')
+      	console.log(mks)
+
+
+      	if($scope.ui.selected_range.start == $scope.section.start ){
+      	//	alert('start in')
+      	
+      	}
+      	if($scope.ui.selected_range.end == $scope.section.end ){
+      	//	alert('endin')
+      	}
+		
+		$scope.section.end = $scope.section.end-4
+		
+
+		$scope.push.start  		= parseInt($scope.section.end+1)
+		$scope.push.end  		= parseInt($scope.section.end+2)
+		$scope.push.position  	=  'inline'
+		$scope.push.type 		= 'container';
+		$scope.push.subtype 	= 'section';	
+		$scope.add();
+
+
+		$scope.push.start  		= parseInt($scope.section.end+3)
+		$scope.push.end  		= parseInt($scope.section.end+4)
+		$scope.push.position  	=  'inline'
+		$scope.push.type 		= 'container';
+		$scope.push.subtype 	= 'section';	
+		$scope.add();
+
+		$scope.save()
+		$scope.init_()
+
+
+
+     	// the four in/out points
+     	// is first ?
+     	// is last ? 
+
+
+
+
+	}
+
 	$scope.$watch('section.start', function(newValue, oldValue) {
 		
 		if(oldValue && newValue ){
@@ -1004,7 +1058,7 @@ $scope.add= function (){
 				if($scope.section.start < 0 || newValue < 0 || oldValue < 0){
 					$scope.section.start = 0;
 
-					unregister();
+					//unregister();
 					return
 				}
 				console.log('section.start')
@@ -1079,9 +1133,9 @@ $scope.add= function (){
 				console.log('section.rebuild')
 				$scope.section.rebuild = false;
 				$scope.section.rebuild_count++ 
-				console.log('(to >)'+$scope.section.rebuild)
+				console.log('(to >)'+$scope.section.rebuild+'count'+$scope.section.rebuild_count)
 
-				$scope.attribute_objects()
+				//$scope.attribute_objects()
 
 			}
 

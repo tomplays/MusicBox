@@ -20,6 +20,11 @@
 						span &nbsp;&nbsp;to 
 						input.section_start(type="number" , ng-model="section.end" )
 			a(ng-click="integrity_fix()") fix offsets
+			a(ng-click="split()") split
+			a(ng-click="merge()") merge
+
+
+
 		// div.section_quick_tools
 			.sobject-tools
 				// i.fa.fa-sliders.btn_action(tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.more_options}}" ng-click="toggle_attribute('object_tools')")
@@ -27,10 +32,11 @@
 		tabset.editor-main-tab()			
 			tab(heading="Add section styles") 
 				div.pusher_css_styles
-					
-					i.fa.btn_action(tooltip="insert container class (css)" class="fa-container_class" ng-click="push_generic_from_ranges('container_class','css','inline', 'bg_dark')" ) text white
-				
-					i.fa.btn_action.pusher_markups(tooltip="insert container class (css)" class="fa-container_class" ng-click="push_generic_from_ranges('container_class','css','inline', 'bg_black')" ) background black
+					ul
+						li(class="" ng-repeat="t in section.objSchemas_css.modes.editor.fields.metadata.available") 
+							i.fa.btn_action(tooltip="insert container class (css)" class="fa-container_class" ng-click="push_generic_from_ranges('container_class','css','inline', t)" ) {{t}}
+								
+		
 
 			tab(heading="section styles" ng-if=" markups_by_start_end_position_type(section.start, section.end ,'any', 'container_class').length >0") 
 				
@@ -41,14 +47,10 @@
 				div(ng-repeat="markup in markups_by_start_end_position_type(section.start, section.end ,'slidewide', 'media') track by $index")
 					div(class="markup_ markup_type_{{markup.type}}")
 						markup-view
-
 			tab(heading="background" ng-if="markups_by_start_end_position_type(section.start, section.end ,'background', 'media').length>0" ) 
 				div(ng-repeat="markup in markups_by_start_end_position_type(section.start, section.end ,'background', 'media') track by $index")
 					div(class="markup_ markup_type_{{markup.type}}")
 						markup-view
-
-
-
 
 	div(ng-if="ui.debug") 
 		ul

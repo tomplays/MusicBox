@@ -22,9 +22,6 @@ div(ng-if="section['objects_count']['by_positions'][layout.name].count > 0 || la
 
 		mb-commentform(ng-if="(doc_options.comments_open.value !=='false' || !doc_options.comments_open.value  ) && layout.name == 'left'")
 		
-			
-			
-
 		div(ng-if="layout.name == 'slidewide'")
 			carousel( interval="1000")
 				slide(ng-repeat="markup in markups_by_start_end_position_type(section.start, section.end ,'slidewide','media') track by $index" )
@@ -47,7 +44,7 @@ div(ng-if="section['objects_count']['by_positions'][layout.name].count > 0 || la
 
 			// h1 editable
 			// div.fluidtext(contentEditable="true" , mb-editable , section="section" , ng-bind-html="section.fulltext" ) 
-			
+			h4 {{section.rebuild_count}}
 			div.theletters(section="section" class="is_multi_{{ui.selected_range.multi}}" ng-if="section.modeletters == 'single'")
 				span(lt="l" , ng-repeat="l in section.letters")
 			div.fluidtext(fluidtexte, section="section" ,  ng-hide="section.modeletters =='single'") 

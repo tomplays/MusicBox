@@ -92,8 +92,8 @@ angular.module('musicBox.markup_controller', ['musicBox.section_controller']).co
        var i_array     =   0;
 	   for (var i = $scope.markup.start; i <= $scope.markup.end; i++) {
          	// console.log(i)
-         	if($scope.$parent.doc.content[i]){
-         		fulltext += $scope.$parent.$parent.doc.content[i];
+         	if($scope.doc.content[i]){
+         		fulltext += $scope.doc.content[i];
          	}
      	}
      	return fulltext;
@@ -153,7 +153,12 @@ angular.module('musicBox.markup_controller', ['musicBox.section_controller']).co
 	    	}
 	        $scope.stack_markup()
 		}
-   });	
+   });
+
+
+
+
+   
 
 	$scope.stack_markup = function(){
 		//console.log('stack_markup')

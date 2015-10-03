@@ -589,7 +589,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
                                     'input' : 'select',
                                     'free_input' : false,
                                     'show_editor': 'hidden',
-                                    'available' : ['bg_black', 'bg_dark'],
+                                    'available' : ['bg_black', 'bg_dark', 'two-cols', 'pad-top-bottom', 'text-right', 'gradient-pink'],
                                   
                                   }
 

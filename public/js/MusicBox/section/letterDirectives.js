@@ -77,12 +77,14 @@ angular.module('musicBox.LetterDirectives', [])
 
   function sets(){
     var logevent = {'directive':'lt', 'event':'none'}
+
     // $rootScope.ui.selected_range.debug.push(logevent)
     $rootScope.$apply(function(){});
       
   }  // SCAN /
 
     function link(scope, elem, attrs) { 
+
 
           // $rootScope.ui.current_action = 'mousedown'
           // console.log(scope.lt)
@@ -109,7 +111,7 @@ angular.module('musicBox.LetterDirectives', [])
         
 
           elem.bind('click', function(event) {
-
+  scope.lt.inrange='click'
            
               if(scope.lt.href){
                   // window.location=  ; 
@@ -124,6 +126,7 @@ angular.module('musicBox.LetterDirectives', [])
                  
               }
 
+
              // scope.lt.char = '<clicker class="clickers">+</clicker>'
 
 
@@ -131,6 +134,8 @@ angular.module('musicBox.LetterDirectives', [])
           });
 
           elem.bind('dblclick', function(event) {
+              scope.lt.inrange='dblclick'
+
                 // console.log(scope.lt)
                 if($rootScope.ui.renderAvailable_active ==  'editor'){
                  // $rootScope.ui.renderAvailable_active =  'read'
@@ -157,6 +162,8 @@ angular.module('musicBox.LetterDirectives', [])
           });
           elem.bind('mouseup', function(e) { // restarting a selection
   //selection_ends(scope,e) 
+    scope.lt.inrange='mouseup'
+
               if( $rootScope.ui.selected_range.start >  $rootScope.ui.selected_range.end){
                alert('583')
 
@@ -218,6 +225,8 @@ angular.module('musicBox.LetterDirectives', [])
   alert('k')
  })
 
+
+
           elem.bind('mouseup', function(e) { // selection ends
                console.log(scope)
 
@@ -269,13 +278,14 @@ angular.module('musicBox.LetterDirectives', [])
 
               sets()
           });
-          /*
+         /*
            elem.bind('mouseover', function(e) {  // while selection is active
              //selection_running(scope) 
-             //  scope.lt.inrange=true
+            
              sets()
           });
-          */
+*/
+         
     }
 
     return {

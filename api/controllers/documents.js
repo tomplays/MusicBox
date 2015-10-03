@@ -75,7 +75,7 @@ var mails = require('./mails.js');
 
 		var user_ = ''
 		if(req.user){
-			// user_ = new Object({'_id': req.user._id , 'username': req.user.username,  'image_url': req.user.image_url})
+			 user_ = new Object({'_id': req.user._id , 'username': req.user.username,  'image_url': req.user.image_url})
 		}
 		var doc_req_slug 	  = 'homepage';
 		var doc_slug_discret  =  nconf.get('ROOT_URL')+':'+nconf.get('PORT');
@@ -169,6 +169,432 @@ if(debugger_on){
 	}
 
 
+exports.prerender = function(doc) {
+	var output = {}
+	var trace = {}
+	trace.sections = []
+	trace.segments = []
+	trace.segments_flattten = '';
+	var tempsegement_start;
+	var tempsegement_start_at;
+	var newsegment;
+
+	var tempsegement_content= '';
+	var tempsegement_content_single = '';
+
+	output.sections 	= []
+	
+
+var segments = []
+	// opening wrapping all div
+	output.compiled_full = '<div>'
+	output.prerendered 	= true
+
+
+
+
+
+	var sections =   _.filter(doc.markups, function(td){ return  td.type == 'container'; });
+	sections.forEach(function(s,si) {
+				trace.sections[si] = {start:s.start, end:s.end, segments: new Array() }
+	})
+	var local_count = 0
+	_.each(sections, function(s,si) {
+
+	
+		
+		console.log(segments)
+		var s_text = '';
+		var c_text = '';
+		var s_letters = []
+		var s_objects = []
+		s_objects.right = []
+		s_objects.inline = []
+		s.segments = []
+
+
+		console.log('</section><section>')
+
+
+		var compiled = ''
+
+		
+		for (var pos= s.start; pos<=s.end; pos++){ 
+
+			var s_letter = {'letter': doc.content[pos]}
+			s_letter.position = {'absolute': pos, relative: pos - s.start, local:local_count}
+
+			local_count++;
+			s_letters.push(s_letter)
+			s_text += doc.content[pos]
+			console.log('zou-'+doc.content[pos])
+		}
+
+
+		trace.sections[si].text = s_text
+		trace.sections[si].letters = s_letters
+		console.log(doc.markups._id)
+		var s_markups = _.filter(doc.markups,function (m) {
+			 return m.type !== 'container' && m.start >= s.start && m.end <= s.end;
+		});
+
+		// var o_markups = []
+
+		// inject type
+
+
+		_.each(s_markups,function(m) {
+				var offstart =  m.start - s.start
+				var offend =  m.end - s.start
+
+				// section_class++
+				
+				
+			//	var mkin = {'position':m.position, 'type':m.type,'subtype':m.subtype, 'metadata':m.metadata}
+				var p = m.position
+			//	s_objects[p].push(mkin)
+
+			//console.log(m._id);
+
+
+				for (var pos_mk = offstart; pos_mk<=offend; pos_mk++){
+					if(!s_letters[pos_mk].oo){
+						s_letters[pos_mk].oo = []
+					}
+
+					var mkin = {'type':m.type,'subtype':m.subtype, 'm_id' : m._id} 
+					console.log(m)
+
+
+					s_letters[pos_mk].oo.push(mkin)
+				}
+		})
+
+
+		var compiled_inline = '';
+		
+		
+		var mx_length = 0
+
+
+		_.each(s_letters, function(l,i) {
+		
+
+				
+					console.log(i)
+			
+
+
+
+					/// var segment = new Object({size:0, content: '', opening:'', closing:''})
+
+	    			
+	    			var next_class = []
+	    			var prev_class = []
+	    			var current_class = [];
+
+	    			var is_first = i == 0 ? true : false
+	    			var is_last= i == s_letters.length-1 ? true : false
+
+
+	    			
+
+
+					l.classes = {ids:new Array(),'current': new Array(), 'next': new Array(), 'prev': new Array()}
+					l.segment = {'opening': null, 'closing': null}
+
+	    			//l.position.relative=i
+
+					if(l.oo && (l.oo.length > 0 ) ){
+					//	current = true	
+						l.oo.forEach(function(c){
+							current_class.push(c.type+'_'+c.subtype);
+							l.classes.current.push(c.type+'_'+c.subtype);
+							l.classes.ids.push(c.m_id)
+						})
+					}
+
+					
+
+					if( s_letters[i+1] && s_letters[i+1].oo && s_letters[i+1].oo.length > 0 ){
+						// next = true;
+						 var sl = s_letters[i+1].oo
+						 sl.forEach(function(c){
+							next_class.push(c.type+'_'+c.subtype);
+							l.classes.next.push(c.type+'_'+c.subtype);
+							l.classes.ids.push(c.m_id)
+						}) 
+					}
+
+
+
+
+
+					
+					if(s_letters[i-1] && s_letters[i-1].oo && s_letters[i-1].oo.length > 0 ){
+						// prev = true
+						  var sl = s_letters[i-1].oo
+						 sl.forEach(function(c){
+							prev_class.push(c.type+'_'+c.subtype);
+							l.classes.prev.push(c.type+'_'+c.subtype);
+l.classes.ids.push(c.m_id)
+						})
+						
+					}
+
+
+
+
+
+
+
+
+						var classes_flat  = 'lt '
+						
+						 _.each(current_class, function(c,ci){
+							classes_flat += c+' ';
+						})
+						  _.each(prev_class, function(c,ci){
+							//classes_flat += c+' ';
+						})
+						   _.each(next_class, function(c,ci){
+							//classes_flat += c+' ';
+						})
+
+
+
+
+
+
+
+					tempsegement_content_single +="<span class='"+classes_flat+"'>"+l.letter+"</span>"
+
+
+
+
+
+					
+					if(current_class.length>0){
+						// current letter has at least one class
+						
+						if( _.isEqual(prev_class,current_class))  {
+							compiled_inline +=  l.letter
+							tempsegement_content +=l.letter
+
+
+							
+							
+
+						}
+						else{
+							//classes_flat =''; // debug
+							
+
+							
+
+							tempsegement_start= "<span class='"+classes_flat+"'>"
+							tempsegement_content +=l.letter
+							tempsegement_start_at= i
+
+							compiled_inline += "<span class='"+classes_flat+"'>"
+							compiled_inline +=  l.letter
+
+						//	var segment = new Object({size:0, content: l.letter, closing:'' ,opening : "<span class='hc ci--"+i+"  "+classes_flat+"'>"})
+
+							
+						
+						
+							
+
+							l.segment.opening=true;
+							
+							
+						}
+						if(next_class.length>0 && _.isEqual(next_class , current_class) ) {
+									///??? 	//	compiled_inline +=  l.letter
+										//	????? tempsegement_content +=l.letter
+						
+						}
+						else{
+							// content_length_reach=0;
+							compiled_inline += '</span>'
+							l.segment.closing=true;
+							
+						
+
+						
+
+						}
+					}
+					else{
+						
+						// current letter has no class
+
+						if(prev_class.length>0 || i==0 ){
+							// prev was a self closing letter or first letter then open span
+
+							compiled_inline +="<span class='lt'>"
+							l.segment.opening=true;
+
+
+							tempsegement_start= "<span class='"+classes_flat+"'>"
+							tempsegement_start_at= i
+
+							//var segment = {size:0, content: '---', closing:'' ,opening : "<span>"}
+
+							
+						}
+						
+						compiled_inline += l.letter
+						tempsegement_content +=l.letter
+
+					//	segment.content += l.letter
+						
+						if(next_class.length>0 || is_last == true ){
+										
+							// next is a letter with classes or is last letter then close span
+							compiled_inline +='</span>'
+							l.segment.closing=true;
+						}
+					}	
+
+
+
+					// "finally"
+					if(l.segment.closing === true){
+						   newsegment = {content_single : tempsegement_content_single, end_at:i,content:tempsegement_content, chars_length : (i - tempsegement_start_at + 1), start_at:tempsegement_start_at, /*start:tempsegement_start, closing:'</span>'*/}
+							newsegment.flatten =  tempsegement_start+tempsegement_content+'</span>';
+
+							// add to output
+							segments.push(newsegment)
+
+							// reset content string
+							tempsegement_content =''
+							tempsegement_content_single =''
+					}
+ 					// c_text +="<span class='is_last-"+is_last+" is_first-"+is_first+" "+classes_flat+" count-"+i+" has_prev-"+prev_class+" has_next-"+next_class+"'>"+l.letter+"</span>"
+ 					l.m_id = _.uniq(l.ids) 
+		
+
+		})
+
+		console.log(segments)
+		
+		trace.segments= segments
+		trace.segments_count= _.size(segments)
+
+		// without layout (experimental)
+		segments.forEach(function (seg) {
+			trace.segments_flattten += seg.flatten
+		});
+
+
+
+		
+		//  compile each layout side
+		var compiled_sides = ''
+
+
+		//var posy = ['inline']
+		var posy = ['wide','left','center', 'inline', 'right', 'under', 'global']
+
+		posy.forEach(function (key) {
+
+			var compiled_side = ''
+			var compiled_side_inside = ''
+			var compiled_side_class = ''
+
+
+			 // extra title in center zone if first section 
+             if(key=='center' && si===0){
+
+             		compiled_side_inside += "<h1>"+doc.title+"</h1>"
+             }
+
+             // adds gloabl for last section
+             if(key=='global' && si== sections.length-1 ){
+
+             		if(!s_objects[key]){
+             			   //compiled_side_inside += "<h2></h2>"
+             		}
+					else{
+						 compiled_side_inside += "<h2>Global</h2>"
+
+					}
+
+             }
+
+             if(key=='inline'){
+             		compiled_side_inside += compiled_inline
+             }
+            
+
+
+		  	if(s_objects[key] && s_objects[key].length > 0 && key !=='inline'){
+		  			compiled_side_class += 'is_empty-false' 
+		  		    
+					var ooo = s_objects[key];
+					ooo.forEach(function(o,i){
+					
+				
+					compiled_side_inside += "<div>"
+					if(o.type=="media"){
+						compiled_side_inside += "<span><img src='"+o.metadata+"' /></span>"
+
+					}
+					else{
+						compiled_side_inside += "<span>"+o.metadata+"</span>"
+					}
+					compiled_side_inside += "</div>"
+		
+					
+				})
+			}
+			else{
+				if(key =='inline'){
+					compiled_side_class += 'is_empty-false' 
+				}
+				else if(key=='center' && si===0){
+             	
+					compiled_side_class += 'is_empty-false' 
+            	 }
+				else{
+					compiled_side_class += 'is_empty-true' 
+				}
+				
+			}
+
+
+			compiled_side += "<div class='side_"+key+" "+compiled_side_class+"'> "
+			compiled_side += compiled_side_inside			
+			compiled_side += '</div>'
+
+			compiled_sides += compiled_side
+		});
+
+
+		// wrap level in section 
+		compiled += '<section>'
+		compiled += compiled_sides
+		compiled += '</section>'
+
+
+		
+		// 'pretext':s_text, 'letters': s_letters, 'mk': o_markups, 'c_text': c_text, 'objects':s_objects, 
+		//var out_s = {'compiled': compiled}
+		//output.sections.push(out_s)
+		output.compiled_full += compiled
+
+	})
+	output.compiled_full +='</div>'
+	   //var o = new Object({'subject':'doc titlz - newsletter', 'bodytext': output.compiled_full})
+	   // mails.sendmailer(o)
+	output.compiled_full_array =trace
+
+	return output
+
+}
+
 	/**
 	* @description  single document record
 	* @params : slug $get
@@ -189,21 +615,7 @@ if(debugger_on){
 					var out 			= {}
 					out.doc 			= doc.toObject()
 					out.is_owner  		= false
-					out.doc.sections 	= []
-					out.doc.markups_ 	= []
-
-					doc.markups.forEach(function(mk) {
-                   		 // console.log(mk.status)
-            			// userMap[user._id] = user
-
-            			if(mk.type == 'container'){
-            				out.doc.sections.push(mk)
-            			}
-            			else{
-            				out.doc.markups_.push(mk)
-            			}
-        			})
-
+					
 					
 				
 
@@ -215,18 +627,44 @@ if(debugger_on){
 					out.is_owner 		= exports.test_owner_or_key(doc,req)
 					if(out.is_owner !== true){
 							out.doc.secret 		= 'api_secret'
-					}
-					
-
-
-					// test rights
-					if(doc.published =='draft'){
-								if(out.is_owner !== true){
+							if(doc.published =='draft'){	
 									var message = 'This doc is a draft, are you the document owner ? are you logged in or using secret key ?';
 									res.json('err', { title: 'no access', message: message})
 									return;
-								}
+							}
+
 					}
+					// test rights
+					
+
+					out = _.extend(out, exports.prerender(doc));
+
+
+				//	out.doc.compiled_full = out.compiled_full
+				//	out.doc.compiled_full_array = out.compiled_full_array
+
+				
+					out.doc.sections 	= []
+					out.doc.markups_ 	= []
+
+					doc.markups.forEach(function(mk) {
+                   		 // console.log(mk.status)
+            			// userMap[user._id] = user
+
+            			if(mk.type == 'container'){
+            				out.doc.sections.push(mk)
+
+
+            			}
+            			else{
+            				out.doc.markups_.push(mk)
+            			}
+
+
+
+
+        			})
+
 
 
 					res.json(out)
@@ -237,6 +675,9 @@ if(debugger_on){
 			}
 		})
 	}
+
+
+
 
 exports.list = function(req, res) {
 
@@ -260,10 +701,7 @@ exports.list = function(req, res) {
 		out.docs = []
 		_.each(docs, function(doc, i){
 			out.docs.push(doc)
-
-
 		});
-
 		res.json(out)
 	}
 
@@ -285,6 +723,7 @@ exports.listRender = function(req, res) {
 exports.doc_sync= function(req, res) {
 	//console.log('req.body.markups')
 	//console.log(req.body.markups)
+	console.log(req.params.slug)
 	var query = Document.findOne({ 'slug':req.params.slug });
 	// complete query 
 	query.populate('user','-email -hashed_password -salt').populate( {path:'markups.user_id', select:'-salt -email -hashed_password', model:'User'}).populate({path:'markups.doc_id', select:'-markups -secret', model:'Document'}).populate('markups.doc_id.user').populate('room', {secret:0}).exec(function (err, doc) {
@@ -294,6 +733,7 @@ exports.doc_sync= function(req, res) {
 		else{
 
 
+	console.log(doc)
 			var sections = []
 			console.log(req.body.edittype)
 			//console.log(req.body.doc_content)
@@ -312,8 +752,11 @@ exports.doc_sync= function(req, res) {
 						doc.markups[i].start 	=  parseInt(match.start)
 						doc.markups[i].end 		=  parseInt(match.end)
 						doc.markups[i].touched = true
-					//	console.log('match found:')
-					//	console.log(doc.markups[i])
+				
+				console.log('match found:')
+				console.log(doc.markups[i])
+
+					
 					}
 					else{
 
@@ -321,30 +764,30 @@ exports.doc_sync= function(req, res) {
 						//console.log(doc_mk)
 					}
 
-
-
-						
 				
+            		if(doc_mk.type == 'container'){
+            			sections.push(doc_mk)
+            		}
 
-				
-            			if(doc_mk.type == 'container'){
-            				sections.push(doc_mk)
-            			}
+
+            		
 			});
-
+				doc.content = req.body.doc_content;
+				console.log('req.body.doc_content'+req.body.doc_content)
 				doc.markModified('markups');
 				// save content
-				doc.content = req.body.doc_content;
+				
 
 			   var out 			= {}
+               
+
                if(req.user){
 					 out.userin 	= req.user.toObject()
 				}
 				out.is_owner 		= exports.test_owner_or_key(doc,req)
 					console.log(chalk.green('doc sync') );
 				  		//console.log(doc.markup );
-					out.doc 			= doc.toObject()
-
+				
 
 
 					//doc.sections = []
@@ -352,19 +795,18 @@ exports.doc_sync= function(req, res) {
 
 
 					out.doc_title 		= doc.title
-					var now = new Date();
-					out.doc.updated     = now.toJSON();
-					out.doc.secret 		= 'api_secret'
-					out.edittype 		= 	req.body.edittype
-				//	console.log(out)
 				
 
-			doc.save(function(err,doc) {
-			
-						res.json(out)
-				  
-				
-			});
+						doc.save(function(errors, doc) {
+								out.doc 			= doc.toObject()
+									var now = new Date();
+									out.doc.updated     = now.toJSON();
+									out.doc.secret 		= 'api_secret'
+									out.edittype 		= 	req.body.edittype
+									res.json(out)
+						 
+							
+						});
 
 
 		}
@@ -457,7 +899,7 @@ exports.doc_create = function(req,res){
 	
 
 	//var ar = new Object({'title':'bloue'+Math.random()})
-	var new_doc = new Object({'title':filtered_title, 'slug': slug, 'content': filtered_content, 'published': published })
+	var new_doc = new Document({'title':filtered_title, 'slug': slug, 'content': filtered_content, 'published': published })
 
 	 new_doc.markups = new Array()
 	 new_doc.doc_options = new Array()
@@ -525,7 +967,7 @@ exports.doc_create = function(req,res){
 	var branding_class  = new meta_options( {'option_name':'branding_class', 'option_value':'sa bg_transparent',  'option_type': '' } )
 	new_doc.doc_options.push(branding_class)
 
-	var   footer_center_html = new meta_options( {'option_name':'footer_center_html', 'option_value':"<i class=\'fa fa-file-text-o\'></i> powered by <a href=\'http://github.com/tomplays/MusicBox/\'>MusicBox</a> - 2015 - <a href=\'http://hacktuel.fr\'>@Hacktuel.fr</a>",  'option_type': '' } )
+	var   footer_center_html = new meta_options( {'option_name':'footer_center_html', 'option_value':"<i class=\'fa fa-file-text-o\'></i> powered by <a href=\'http://musicbox.mx/\'>MusicBox</a> - 2015",  'option_type': '' } )
 	new_doc.doc_options.push(footer_center_html)
 
 
@@ -839,6 +1281,7 @@ exports.doc_option_new  = function(req, res) {
 	// UTILs
 	exports.test_owner_or_key = function(doc,req){
 		// doc owner or markup owner
+		//console.log(req)
 		if(req.user){
 			if(req.user._id.equals(doc.user._id) ){	
 			//	console.log('user is owner')
@@ -873,7 +1316,7 @@ exports.doc_option_new  = function(req, res) {
 
  exports.init = function (req, res) {
 
-	var user = new User({'username':'bqsob', 'email':'sfqsqsdfss@sd.fr', 'password':'secret'});
+	var user = new User({'username':'bob', 'email':'homeof@@gmail.com', 'password':'secret'});
     var message = null;
     user.user_options = new Array();
     

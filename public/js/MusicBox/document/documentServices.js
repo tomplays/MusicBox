@@ -30,7 +30,6 @@ angular.module('musicBox.DocumentService',[])
   };
   DocumentService.prototype.FreshLoad = function () {
     this.SetSlug()
-   
     this.Load()
 
   }

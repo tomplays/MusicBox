@@ -42,7 +42,8 @@ var UserSchema = new Schema({
          type: String,
          default: 'registered'
     },
-    secret: { type: String, default: function () { return new ObjectId()} },
+     secret: { type: String, default: function () { return new ObjectId()} },
+
     image_url : String,
     hashed_password: String,
     provider: String,
@@ -64,6 +65,14 @@ UserSchema.virtual('password').set(function(password) {
 }).get(function() {
     return this._password;
 });
+
+
+/*
+
+UserSchema.virtual('secret').set(function() {
+    return this.makeSalt()
+})
+*/
 
 /**
  * Validations
@@ -102,6 +111,8 @@ UserSchema.path('hashed_password').validate(function(hashed_password) {
  * Pre-save hook
  */
 UserSchema.pre('save', function(next) {
+
+  
     if (!this.isNew) return next();
 
     if (!validatePresenceOf(this.password) && authTypes.indexOf(this.provider) === -1)
@@ -121,6 +132,11 @@ UserSchema.methods = {
      * @return {Boolean}
      * @api public
      */
+     reset: function (password){
+        var passreset = password;
+        this.salt = this.makeSalt();
+        this.hashed_password = this.encryptPassword(passreset);
+     },
     authenticate: function(plainText, cb) {
         if( this.encryptPassword(plainText) === this.hashed_password) 
         {
