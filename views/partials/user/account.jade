@@ -1,6 +1,6 @@
 div(class="branding sc bg_transparent")
 	h1
-		a(href="/", title="") 
+		a(href="/#!?s", title="") 
 			span #{locals.site_title}
 
 mb-topmenus
@@ -25,7 +25,7 @@ div.main_center.user_account.bordered
 	p
 		label {{render_config.i18n.CUSTOM.USER.pick_email}} - {{render_config.i18n.CUSTOM.USER.hidden_from_public}}
 		input(type="text", ng-model="userin.email")
-	p
+	p(ng-if="!userin.username == 'musicbox'")
 		label {{render_config.i18n.CUSTOM.USER.pick_password}}
 		input(type="password", ng-model="userin.password")
 
