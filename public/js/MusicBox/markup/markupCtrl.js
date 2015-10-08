@@ -1,13 +1,10 @@
 
 angular.module('musicBox.markup_controller', ['musicBox.section_controller']).controller('MarkupCtrl', function($scope, $http, MarkupRest,socket) {
 	
-	
-
 	$scope.init__= function () {
 		//console.log($scope.$parent.section_markups)
-		
-				
-		console.log('     ---- [m] init markup')
+					
+		console.log('   ---- -- [m] init markup'+$scope.markup.type)
 		
 		if(!$scope.$parent.$parent.objSchemas[$scope.markup.type]){
 			console.log('no schematype for markup!')
@@ -36,17 +33,19 @@ angular.module('musicBox.markup_controller', ['musicBox.section_controller']).co
         })      	
 
 		$scope.markup =  _.extend($scope.markup, markup_);
- 
-		
-			// its own fulltext for section.
-			$scope.markup.sectionin = $scope.$parent.section.sectionin
-  			$scope.markup.fulltext  = $scope.fulltext()
-		
+
+		// its own fulltext for section.
+		$scope.markup.sectionin = $scope.$parent.section.sectionin
+  		$scope.markup.fulltext  = $scope.fulltext()
 
 
-             
+  		if($scope.markup.type=='container_class' ){ // or pos == inlined
+			$scope.section.section_classes += $scope.markup.metadata+' ';
+		}
+		     
 		$scope.markup.visible = false;
 		if($scope.markup.deleted !== true && ($scope.markup.status == 'approved' || $scope.markup.by_me ==true || $scope.markup.can_approve == true) ) {
+			//$scope.markup.visible = true;
 			$scope.markup.visible = true;
 		}
 		    
@@ -128,8 +127,6 @@ angular.module('musicBox.markup_controller', ['musicBox.section_controller']).co
 	});
 	*/
 
-
-	
 	
 	$scope.$watch('markup.start', function(  newValue, oldValue) {
 		
@@ -155,11 +152,6 @@ angular.module('musicBox.markup_controller', ['musicBox.section_controller']).co
 		}
    });
 
-
-
-
-   
-
 	$scope.stack_markup = function(){
 		//console.log('stack_markup')
 		//console.log($scope.markup)
@@ -184,9 +176,6 @@ angular.module('musicBox.markup_controller', ['musicBox.section_controller']).co
   
     $scope.$watch('markup.subtype', function( newValue, oldValue) {
         if(oldValue && newValue && newValue !== oldValue){
-
-
-
 	       $scope.markup.touched= true;
 	       $scope.$parent.attribute_objects()
 	       $scope.stack_markup()
@@ -215,77 +204,34 @@ angular.module('musicBox.markup_controller', ['musicBox.section_controller']).co
       
     });
 	
-
-	/*
-    $scope.$watch('markup.selected', function(newValue, oldValue) {
-          // only new value check
-          if(oldValue !== newValue ){
-          	console.log('watch untrigger markup.selected')
-          	console.log($scope.markup)
-          	console.log($scope.$parent.section.letters)
-
-          	//$scope.$parent.section[letters][$scope.markup.sta]
-        	//$scope.toggle_fragment_ranges('single_markup', 'selected', $scope.markup, newValue, true)
-          }
-          else{
-    		// console.log('watch untrigger')
-          }
-    });
-	*/
-
-	/*
-	$scope.$watch('markup.inrange', function(newValue, oldValue) {
-          // only new value check
-           if(oldValue !== newValue ){
-           		var s = $scope.ui.selected_range.start - $scope.$parent.section.start
-		        var e = $scope.ui.selected_range.end - $scope.$parent.section.start
-
-
-			for (var pos= s; pos<=e; pos++){ 
-				$scope.$parent.section.letters[pos].inrange = true;
-			}
-
-           
-          }
-          else{
-            console.log('watch untrigger')
-          }
-
-    });
-	*/
-	
-
-
-
 	// used for editing a markup posittion ui.
 	// icon click or section select
 	$scope.toggle_select_markup = function (event_name){
 
 		///// $scope.$parent.section.objects_ = '';
 
-		$scope.section.modeletters = 'single'
+		if($scope.section.modeletters !== 'single'){
+			$scope.section.modeletters = 'single'
+		}
 
 		
-	if(event_name == 'dblclick'){
-			if($scope.doc_owner || $scope.markup.by_me === true){
-				$scope.markup.editing = !$scope.markup.editing
-			}
-			if($scope.markup.by_me === false){
-				return
-			}
-			
-	}
-		
-		
-		
+		if(event_name == 'dblclick'){
+				if($scope.doc_owner || $scope.markup.by_me === true){
+					$scope.markup.editing = !$scope.markup.editing
+				}
+				if($scope.markup.by_me === false){
+					return
+				}
+				
+		}
 		if(event_name == 'click'){
-			
-
 			$scope.markup.selected = !$scope.markup.selected
 			$scope.markup.inrange= !$scope.markup.inrange
-
-
 		}
+
+
+
+
 		if($scope.markup.editing === true){
 			$scope.markup.selected = true;
 		}
@@ -306,9 +252,21 @@ angular.module('musicBox.markup_controller', ['musicBox.section_controller']).co
 
 		}
 
+
+
+
+		// set or unset range
+		if($scope.markup.selected == true){
+			$scope.ui.selected_range.start =  $scope.markup.start
+			$scope.ui.selected_range.end   =  $scope.markup.end
+		}
+		else{
+			$scope.ui.selected_range.start = null
+			$scope.ui.selected_range.end   = null
+		}
+
 		// apply its range
-		$scope.ui.selected_range.start =  $scope.markup.start
-		$scope.ui.selected_range.end   = $scope.markup.end
+		//$scope.$parent.map_letters()
 		
 
     }	
@@ -491,4 +449,49 @@ $scope.$watch('markup.fulltext', function(newValue, oldValue) {
 
 		
 		$scope.init__()
+
+
+		// each time range is modified, each markup compare range with its start and end
+		// if in range, 
+		//	> set markup as selected == true
+		//  > each letters dor markup range are set to inrange = true
+		$scope.$watch('ui.selected_range.redraw', function(newValue, oldValue) {
+
+			
+			var z, z_real, rtest;
+			rtest = ranges_test($scope.ui.selected_range.start,$scope.ui.selected_range.end, $scope.markup.start,$scope.markup.end,'e')
+			console.log('rtest:'+rtest+' --- '+$scope.markup.metadata)
+			
+			// apply range if at least one part of markup is into
+			// excerpt for container class
+
+						// dirty string...
+						if($scope.markup.type =="container_class"){
+							$scope.section.section_classes += $scope.markup.metadata+' ';
+						}
+
+			if(rtest !==1 && rtest !==5 && $scope.markup.type !=="container_class"){
+				//console.log('rtest select')
+				$scope.markup.selected = true;
+				$scope.markup.inrange  = true;
+				// map the markup
+				for (z = $scope.markup.start; z <= $scope.markup.end; z++) {
+					z_real = z - $scope.section.start
+					if($scope.section.letters[z_real]){
+						$scope.section.letters[z_real].inrange = true;
+
+
+						// direct injection test
+						// $scope.section.letters[z_real]['classes'].push($scope.markup.subtype);
+
+					}
+					else{
+						console.log('no letter for position (array index)'+z_real+'(markup pos:'+z+')')
+						
+
+					}
+				}
+			}
+
+		})
 }); // end controller

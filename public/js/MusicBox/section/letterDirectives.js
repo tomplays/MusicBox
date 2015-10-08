@@ -80,7 +80,14 @@ angular.module('musicBox.LetterDirectives', [])
 
     // $rootScope.ui.selected_range.debug.push(logevent)
     $rootScope.$apply(function(){});
-      
+      console.log('waiting '+$rootScope.ui.selected_range.wait_ev)
+      if($rootScope.ui.selected_range.wait_ev == false){
+       //console.log($rootScope.ui.selected_range)
+
+      }
+
+console.log('sets')
+
   }  // SCAN /
 
     function link(scope, elem, attrs) { 
@@ -111,8 +118,7 @@ angular.module('musicBox.LetterDirectives', [])
         
 
           elem.bind('click', function(event) {
-  scope.lt.inrange='click'
-           
+        
               if(scope.lt.href){
                   // window.location=  ; 
                   window.open(scope.lt.href,'_blank');
@@ -128,13 +134,14 @@ angular.module('musicBox.LetterDirectives', [])
 
 
              // scope.lt.char = '<clicker class="clickers">+</clicker>'
+              $rootScope.ui.selected_range.wait_ev =false
+             // alert('char: '+scope.lt.char+'scope.absolute_order:'+scope.lt.absolute_order+'  scope.order:'+scope.lt.order)
 
 
               sets()
           });
 
           elem.bind('dblclick', function(event) {
-              scope.lt.inrange='dblclick'
 
                 // console.log(scope.lt)
                 if($rootScope.ui.renderAvailable_active ==  'editor'){
@@ -156,21 +163,11 @@ angular.module('musicBox.LetterDirectives', [])
               scope.$parent.section.editing = true;
              
               */
-
+ $rootScope.ui.selected_range.wait_ev = false
               //alert('char: '+scope.lt.char+'scope.absolute_order:'+scope.lt.absolute_order+'  scope.order:'+scope.lt.order)
               sets()
           });
-          elem.bind('mouseup', function(e) { // restarting a selection
-  //selection_ends(scope,e) 
-    scope.lt.inrange='mouseup'
-
-              if( $rootScope.ui.selected_range.start >  $rootScope.ui.selected_range.end){
-               alert('583')
-
-              }
-
-          })
- 
+        
 
           elem.bind('mousedown', function(e) { // restarting a selection
               //selection_starts(scope)
@@ -220,17 +217,19 @@ angular.module('musicBox.LetterDirectives', [])
               sets()
           });
 
- elem.bind('change', function(e) { // selection ends
-
-  alert('k')
- })
-
-
+          elem.bind('change', function(e) { // selection ends
+            alert('k')
+          })
 
           elem.bind('mouseup', function(e) { // selection ends
-               console.log(scope)
 
 
+
+             
+              if( $rootScope.ui.selected_range.start >  $rootScope.ui.selected_range.end){
+               alert('583')
+
+              }
                
               if(!$rootScope.ui.selected_range.end){
                 if(scope.lt.absolute_order==0){
@@ -253,7 +252,7 @@ angular.module('musicBox.LetterDirectives', [])
                     }
                }
                else{
- $rootScope.ui.selected_range.end = scope.lt.absolute_order
+                  $rootScope.ui.selected_range.end = scope.lt.absolute_order
 
                }
 
@@ -274,7 +273,7 @@ angular.module('musicBox.LetterDirectives', [])
               if($rootScope.ui.selected_range.end<0){
                 $rootScope.ui.selected_range.end=0
               }
-
+               $rootScope.ui.selected_range.wait_ev = false  // now waiting mouseup!
 
               sets()
           });
@@ -289,7 +288,7 @@ angular.module('musicBox.LetterDirectives', [])
     }
 
     return {
-          template: '<span class="lt" ng-class="lt.classes" inrange="{{lt.inrange}}" ng-bind-html="lt.char"></span>',
+          template: '<span class="lt" ng-class="lt.classes" inselection="{{lt.inselection}}" inrange="{{lt.inrange}}" ng-bind-html="lt.char"></span>',
           replace :false,
           restrict: 'A',
           link:link,

@@ -79,12 +79,12 @@ angular.module('musicBox.SectionDirectives', [])
     // Toggle "letters mode" on click, mouvedown, ..
     
      function link(scope, elem, attrs) { 
-        elem.bind('mousedown', function(event) {
+        elem.bind('click', function(event) {
             // console.log(event)
             scope.$apply(function(){
             
             /// OFF ONE-CLICK AUTO TOGGLE
-            //  scope.section.modeletters = 'single';
+           scope.section.modeletters = 'single';
            
             //    var logevent = {'directive':'fluidtext', 'event':'mouseup'}
             //    $rootScope.ui.selected_range.debug.push(logevent)

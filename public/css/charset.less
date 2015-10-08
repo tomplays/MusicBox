@@ -883,20 +883,20 @@ i.fa-mood:before {
 }
 
 
-span.lt[inrange="true"], span.lt.inrange {
+span.lt[inrange="true"]{
      &:before {
     
     }
     border-left:2px solid #2ecc71;
     
-    -webkit-animation-name: pulse;
-  animation-name: pulse;
-  -webkit-animation-duration: 1s;
-  animation-duration: 1s;
-  -webkit-animation-timing-function: linear;
-  animation-timing-function: linear;
-  -webkit-animation-iteration-count: infinite;
-  animation-iteration-count: infinite;
+        -webkit-animation-name: pulse;
+      animation-name: pulse;
+      -webkit-animation-duration: 1s;
+      animation-duration: 1s;
+      -webkit-animation-timing-function: linear;
+      animation-timing-function: linear;
+      -webkit-animation-iteration-count: infinite;
+      animation-iteration-count: infinite;
 } 
 
 
@@ -923,19 +923,19 @@ span.lt[inrange="true"], span.lt.inrange {
 
 
 span.isfirst{
-   &.lt[inrange="true"], &.inrange {
+   &.lt[inrange="true"]{
       border-right:none;
       border-left:2px solid #2ecc71;
   }
 }
 span.islast{
-   &.lt[inrange="true"], &.inrange {
-
+   &.lt[inrange="true"] {
+ border:1px solid red;
       border-right:2px solid #2ecc71;
   }
 }
 
-.is_multi_true span.lt[inrange="true"], .is_multi_true span.lt.inrange {
+span.lt[inrange="true"] {
  
   border-left:none;
     border-right:none;
@@ -944,5 +944,25 @@ background:#2ecc71;
   -webkit-animation-name: none;
   animation-name: none;
 }
+/*
+.is_multi_true 
+*/
 
 
+
+
+
+ span.lt[inrange="true"] {
+background:red;
+}
+
+span.lt[inselection="true"] { 
+  border-bottom:2px solid blue;
+}
+
+
+ span.lt[inrange="true"] {
+  &[inselection="true"]{
+  background:pink;
+  }
+}

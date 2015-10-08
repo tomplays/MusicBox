@@ -1,13 +1,15 @@
 // the document title, time, author... 
 // + document options editor
 div.doc_header()
+	h4 {{mapping_pass}}
+	// ng-if="ui.renderAvailable_active !=='embed'"
 	// p {{doc_options.include_audio_autoplay.value}}
 	// audio(id="video1" controls src="{{doc_options.include_audio_file.value}}" type="audio/mpeg")
 	h2(ng-bind-html="doc_options.doc_notices_before_title.value")
 	// h2(ng-bind-html="doc_options.doc_notices_before_title.value+'&nbsp;'" , class="editing_{{ui.editing_doc_notices_before_title}}" , ng-dblclick="edit_doc_option('doc_notices_before_title')") 
 		
 	//.edit_field(ng-if="ui.editing_doc_notices_before_title")
-		label Edit "Before Title"
+		label Edit Before Title
 		input(ng-if="ui.editing_doc_notices_before_title", ng-model="doc_options.doc_notices_before_title.value", name="doc_options.doc_notices_before_title.value")
 		a.btn_ok.float_right(ng-click="edit_doc_option('doc_notices_before_title')") Save
 

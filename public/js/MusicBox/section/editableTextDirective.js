@@ -23,12 +23,17 @@ function ranges_test(as,ae,ms,me, type){
 
           // start into
            if(as > ms && as<=me && ae >= me){
+             console.log('4 : as,ae,ms,me')
+                console.log(as,ae,ms,me)
                 c = 4
                 f++
           }
 
            // strict after
           if(ae>ms && ae>me){
+              console.log('4 : as,ae,ms,me')
+                console.log(as,ae,ms,me)
+               
                 c = 5
                 f++
           }
@@ -40,7 +45,10 @@ function ranges_test(as,ae,ms,me, type){
           }
 
           if(f>1){
-            // c = -10
+             c = -10
+          }
+           if(f==0){
+             c = -110
           }
                     
 

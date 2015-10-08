@@ -1,9 +1,25 @@
 
+
+
+/*
+
+triggers / callback
+
+
+			attribute_objects()->map_letters->
+
+
+
+*/
+
+
+
 angular.module('musicBox.section_controller', []).controller('SectionCtrl', function($scope, $http, DocumentService, MarkupRest,socket) {
 
 
 
 $scope.init_= function () {
+	  console.log('init_ (section)')
 
 	console.log()
 	/* some variable seting for each container */
@@ -15,7 +31,7 @@ $scope.init_= function () {
 		'focused'   : '',
 		'editing_text': $scope.ui.debug ? true : false,
 		'ready' : 'init',
-		'modeletters' : $scope.ui.debug ? 'single' : 'compliled',
+		'modeletters' : $scope.ui.debug ? 'single' : 'compiled',
 		'section_classes':'', 
 		'stack': [],
 		'rebuild' : false,
@@ -74,7 +90,8 @@ $scope.sectionmarkups = function(attr, value){
 // contruct temp fulltext, 
 // called at section init only 
 $scope.init_fulltext = function (s,e){
-	
+	  console.log('init_fulltext (section)')
+
     var fulltext = '';
     var fulltext_block = ''
     var i_array     =   0;
@@ -92,7 +109,6 @@ $scope.init_fulltext = function (s,e){
 
 		}
 	}
-
 	$scope.section.fulltext = fulltext
 	return fulltext;
 	//$scope.compile_fulltext(fulltext_block)
@@ -102,12 +118,12 @@ $scope.init_fulltext = function (s,e){
 // main filter for markups
 $scope.markups_by_start_end_position_type  = function(ss, se , p , t ){
 		var arr_debug= [ss,se,p,t]
-		
+		// console.log('markups_by_start_end_position_type')
 
 		var arr_m = []
 		_.each($scope.markups, function(m){
 				if( (!m.deleted) && (m.position == p  || p =='any' ) && (m.type == t  || t=='any') && (m.start >= parseInt(ss) || ss == 'any') && (m.end <= parseInt(se) || se =='any' ) ){
-					m.visible = true
+					///m.visible = true
 					arr_m.push(m)
 				}
 		});
@@ -117,6 +133,9 @@ $scope.markups_by_start_end_position_type  = function(ss, se , p , t ){
 		}
 		return arr_m;
 }
+
+
+
 
 
 $scope.map_letters = function(){
@@ -135,6 +154,9 @@ $scope.map_letters = function(){
 		l.classes_array = ''
 
 
+		var li_real = li+parseInt($scope.section.start)
+
+
 		if(li==0){
 			$scope.section.letters[li].classes.push('isfirst')
 			$scope.section.letters[li].isfirst = true
@@ -148,14 +170,14 @@ $scope.map_letters = function(){
 
        
 
-		if(($scope.$parent.ui.selected_range.start || $scope.$parent.ui.selected_range.start ==0 )  && $scope.$parent.ui.selected_range.end){
-			var index_absolute_start =   $scope.ui.selected_range.start -  $scope.section.start
-			var index_absolute_end   =   $scope.ui.selected_range.end 	-  $scope.section.start
+		//if(($scope.$parent.ui.selected_range.start || $scope.$parent.ui.selected_range.start ==0 )  && $scope.$parent.ui.selected_range.end){
+			var index_absolute_start =   $scope.ui.selected_range.start -  parseInt($scope.section.start)
+			var index_absolute_end   =   $scope.ui.selected_range.end 	-  parseInt($scope.section.start)
 
-		}
+		//}
 
 		l.inrange=false;
-						console.log(li , index_absolute_start ,index_absolute_end)
+		//	console.log(li , index_absolute_start ,index_absolute_end)
 
 		if( 
 			//($scope.$parent.ui.selected_range.start || $scope.$parent.ui.selected_range.start == 0 ) 
@@ -163,9 +185,9 @@ $scope.map_letters = function(){
 			//($scope.$parent.ui.selected_range.end || $scope.$parent.ui.selected_range.end ==0) 
 			//&& 
 
-			li == index_absolute_start || li == index_absolute_start-1 || li == index_absolute_start-2){
+			li == index_absolute_start || (li > index_absolute_start && li <= index_absolute_end )  ){
 
-
+			//console.log('true at '+li+' LR; '+li_real )
 			//( (li > index_absolute_start && li < index_absolute_end) ||  li == index_absolute_end ||  li == index_absolute_start) ) {
 			l.inrange = true;
 		}
@@ -215,6 +237,11 @@ $scope.map_letters = function(){
 			var loop_end   = markup.end 		- $scope.section.start;
 												
 
+			if(markup.type=='container_class' ){ // or pos == inlined
+				//$scope.section.section_classes += markup.metadata+' ';
+			}
+
+
 			if(!$scope.section.letters[loop_start]){
 				alert('test suite no start letter')
 			}
@@ -238,17 +265,14 @@ $scope.map_letters = function(){
 							$scope.section.letters[mi].classes.push(markup.type)
 
 						}
-						if(markup.type == 'hyperlink'){
+						if(markup.type == 'hyperlink' && markup.metadata){
 								console.log('markup.type == hyperlink')
 								console.log(markup)
 								$scope.section.letters[mi].href = markup.metadata
 						}
-						if(markup.type=='container_class' ){ // or pos == inlined
-				  			$scope.section.section_classes += markup.metadata+' ';
-						}
-
+						
 						if(m_objSchemas.map_range === true){
-							if(markup.deleted || _.contains($scope.section.letters[mi].classes,markup.subtype )){
+							if(markup.deleted || _.contains($scope.section.letters[mi].classes, markup.subtype )){
 
 							}
 							else{
@@ -428,11 +452,12 @@ $scope.compile_html = function(fulltext_block ){
 				}
 	return out
 }
+ $scope.section.section_classes = ''
 $scope.attribute_objects = function(){
   console.log('attribute_objects')
 
 
-  	$scope.$parent.mapping_pass()
+  		   $scope.$parent.mapping_pass()
            var objectsarray = new Object();
 
           
@@ -458,52 +483,43 @@ $scope.attribute_objects = function(){
 			console.log(objectsarray)
 
 
-  	        $scope.section.section_classes = ''
+  	       
 
 
     		
   	       var mkr = _.filter($scope.markups, function(m){ return m.start >= $scope.section.start; })
-    _.each(mkr, function(markup){
+		    _.each(mkr, function(markup){
 
-    	
+		    	if(markup.start > markup.end){
+		    		var temp =  markup.start
+		    		markup.end = markup.start
+		    		markup.start = temp
+		    	}
 
-    	if(markup.start > markup.end){
-    		
-    		var temp =  markup.start
-    		markup.end = markup.start
-    		markup.start = temp
+		    	// if( $scope.$parent.ui.selected_range.start && $scope.$parent.ui.selected_range.end && markup.start >= $scope.$parent.ui.selected_range.start && markup.end <= $scope.$parent.ui.selected_range.end) {
+				//	markup.inrange = true;
+				//	markup.selected = true;
+				// }
+				// else{
+				//	markup.inrange = false;
+				//	markup.selected = false;
+				//}
+		        // only for markups which ranges match container
 
-    		//
+		        if(  markup.start >= $scope.section.start && markup.end <= $scope.section.end){
 
-    	}
+		        	markup.isolated= 'false'
 
+			        /////  ///
+			        if(markup.type !== "" && markup.position){ // > can add it
+						$scope.section.objects_count['by_positions'][markup.position].count++;
+						$scope.section.objects_count['by_positions'][markup.position].has_object  = true;
+					
+					}
+		    	} // if in-range
+		    	
 
-    	if( $scope.$parent.ui.selected_range.start && $scope.$parent.ui.selected_range.end && markup.start >= $scope.$parent.ui.selected_range.start && markup.end <= $scope.$parent.ui.selected_range.end) {
-			markup.inrange = true;
-			markup.selected = true;
-		}
-		else{
-			markup.inrange = false;
-			markup.selected = false;
-		}
-           
-
-
-        // only for markups which ranges match container
-        if(  markup.start >= $scope.section.start && markup.end <= $scope.section.end){
-
-        	markup.isolated= 'false'
-
-	        /////  ///
-	        if(markup.type !== "" && markup.position){ // > can add it
-				$scope.section.objects_count['by_positions'][markup.position].count++;
-				$scope.section.objects_count['by_positions'][markup.position].has_object  = true;
-			
-			}
-    	} // if in-range
-    	
-
-    }); // each markups end.
+		    }); // each markups end.
 	$scope.map_letters()
 }
 
@@ -528,9 +544,11 @@ $scope.$watch('section.fulltext', function(newValue, oldValue) {
 			console.log(' [Section] fulltext same value')
 
 		}
+		else{
+			console.log(' [Section] fulltext change : '+oldValue+' > '+newValue)
+		}
 
-
-		console.log(' [Section] fulltext change : '+oldValue+' > '+newValue)
+		
 
 		
 		
@@ -653,9 +671,10 @@ $scope.$watch('section.objects_', function(o, n) {
 */
 
 $scope.$watch('section.has_offset', function(o, markup) {
-
-		 	if(markup){
+			
+		 	if(o && markup){
 				console.log(markup)
+				console.log('section.has_offset'+o+markup)
 		 		if(!$scope.section.objects_[markup.type]){
 					$scope.section.objects_[markup.type] = new Array()
 					if(!$scope.section.objects_[markup.type][markup.position]){
@@ -671,26 +690,6 @@ $scope.$watch('section.has_offset', function(o, markup) {
 });	
 
 
-$scope.integrity_fix = function (){
-
-//alert($scope.section.fulltext.length)
-//alert($scope.section.end - $scope.section.start - 1)
-if($scope.section.fulltext.length > parseInt($scope.section.end - $scope.section.start)+1){
-
-		$scope.flashmessage('size mismatch >', 'bad' , 2000, false)
-
-}
-if($scope.section.fulltext.length < parseInt($scope.section.end - $scope.section.start)+1){
-
-	$scope.flashmessage('size mismatch <', 'bad' , 2000, false)
-	$scope.section.end = $scope.section.fulltext.length-1+$scope.section.start
-
-}
-if($scope.section.fulltext.length == parseInt($scope.section.end - $scope.section.start)+1){
-$scope.flashmessage('size match', 'ok' , 2000, false)
-	
-}
-}
 
 	$scope.delete = function (){
  		var section_count  = _.filter($scope.containers, function(s){ 
@@ -1065,7 +1064,7 @@ $scope.merge= function (){
 				console.log(oldValue+'->-'+newValue)
 				$scope.section.textlength= $scope.section.end - $scope.section.start
 
-				$scope.section.rebuild = true
+			//	$scope.section.rebuild = true
 				$scope.section.touched = true
 
 			}
@@ -1086,7 +1085,7 @@ $scope.merge= function (){
 				$scope.section.textlength= $scope.section.end - $scope.section.start
 				//$scope.section.fulltext = $scope.section.fulltext+'-'
 
-				$scope.section.rebuild = true;
+			//	$scope.section.rebuild = true;
 				$scope.section.touched = true
 			}
 
@@ -1107,7 +1106,7 @@ $scope.merge= function (){
 
 	});
 */
-	
+	/*
 	$scope.$watch('section.textlength', function(newValue, oldValue) {
 		
 		if(oldValue && newValue ){
@@ -1124,46 +1123,67 @@ $scope.merge= function (){
 			
 		}
 	});
-	$scope.$watch('section.rebuild', function(newValue, oldValue) {
+*/
+	$scope.$watch('ui.selected_range.redraw', function(newValue, oldValue) {
 		
-			if(newValue === false){
+			if(oldValue == newValue || newValue == false){
 
 			}
 			else{
-				console.log('section.rebuild')
-				$scope.section.rebuild = false;
+				console.log('redraw section')
+				// $scope.section.rebuild = false;
 				$scope.section.rebuild_count++ 
-				console.log('(to >)'+$scope.section.rebuild+'count'+$scope.section.rebuild_count)
+				var j_real;
+	  				
+				_.each($scope.section.letters, function(l, i){
+						l.inrange = false;
+						l.inselection = false;
 
-				//$scope.attribute_objects()
+				})
 
+				// map the range			
+				for (var j = $scope.ui.selected_range.start; j <= $scope.ui.selected_range.end; j++) {
+					
+					j_real = j - $scope.section.start;
+					if($scope.section.letters[j_real]){
+						$scope.section.letters[j_real].inselection = true;
+					}
+				}
+				
 			}
+		
+						
+	})
 
-	});
-	$scope.$watch('ui.selected_range.start', function(newValue, oldValue) {
-		//if(oldValue && newValue ){
-		if(oldValue == newValue){
-		}
-		else{
-			// console.log('ui.selected_range')
-			$scope.section.rebuild = true; 
-		}
-		//}
-
-	});	
-
-	$scope.$watch('ui.selected_range.end', function(newValue, oldValue) {
-		//if(oldValue && newValue ){
-		if(oldValue == newValue){
-		}
-		else{
-			// console.log('ui.selected_range section:')
-			$scope.section.rebuild = true;
-		}
-		//}
-
-	});	
+	
 
 	$scope.init_()
+
+
+
+
+
+
+
+
+
+
+$scope.integrity_fix = function (){
+
+	//alert($scope.section.fulltext.length)
+	//alert($scope.section.end - $scope.section.start - 1)
+	if($scope.section.fulltext.length > parseInt($scope.section.end - $scope.section.start)+1){
+		$scope.flashmessage('size mismatch >', 'bad' , 2000, false)
+
+	}
+	if($scope.section.fulltext.length < parseInt($scope.section.end - $scope.section.start)+1){
+		$scope.flashmessage('size mismatch <', 'bad' , 2000, false)
+		$scope.section.end = $scope.section.fulltext.length-1+$scope.section.start
+
+	}
+	if($scope.section.fulltext.length == parseInt($scope.section.end - $scope.section.start)+1){
+		$scope.flashmessage('size match', 'ok' , 2000, false)
+	}
+}
 	
 }); // end controller

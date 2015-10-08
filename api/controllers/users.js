@@ -75,7 +75,7 @@ exports.lostpass = function(req, res) {
                         console.log('mail')
                         var admin_email = new Object({
                         'subject': nconf.get('SITE_TITLE')+' - Reset password', 
-                        'bodytext':'Veuillez cliquer ce <a href="'+nconf.get('ROOT_URL')+':'+nconf.get('PORT')+'/api/v1/subscribe_action?action=reset&email='+user.email+'&key='+user.secret+'">lien</a> pour </p><p>ou entrez directement cette adresse dans votre navigateur : '+nconf.get('ROOT_URL')+':'+nconf.get('PORT')+'/api/v1/subscribe_action?action=reset&email='+user.email+'&key='+user.secret+'</p>', 
+                        'bodytext':'Veuillez cliquer ce <a href="'+nconf.get('ROOT_URL')+':'+nconf.get('PORT')+'/api/v1/subscribe_action?action=reset&mail='+user.email+'&key='+user.secret+'">lien</a> pour </p><p>ou entrez directement cette adresse dans votre navigateur : '+nconf.get('ROOT_URL')+':'+nconf.get('PORT')+'/api/v1/subscribe_action?action=reset&mail='+user.email+'&key='+user.secret+'</p>', 
                         'to':'homeof@gmail.com'
                          })
                          mails.sendmailer(admin_email)   

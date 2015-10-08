@@ -81,14 +81,16 @@ function DocumentCtrlCompiled($scope, $http , $sce, $location, $routeParams ,soc
 	//some setup 
 
 	$scope.doc = {slug:$routeParams.docid, mode:'compiled'}
-$scope.cursor = {}
-	var cursor = function(letter){
+	$scope.cursor = {}
+	var cursor = function(letter,action){
 
 			
 			$scope.cursor.start_relative = letter.position.relative
 			$scope.cursor.start_absolute = letter.position.absolute
 
 			$scope.cursor.start_local = letter.position.local
+
+			$scope.cursor.action = action
 
 	}
 
@@ -99,14 +101,14 @@ $scope.cursor = {}
        	console.log(Result)
        	       	$scope.docresult = Result
 
-       	$scope.doc.compiled_doc = Result.compiled_full
+       //	$scope.doc.compiled_doc = Result.doc.compiled_full
        }
       });
 
     $scope.la = function(action, letter){
     	
     	console.log(letter)
-    	cursor(letter) 
+    	cursor(letter, action) 
     }
 }
 
@@ -125,7 +127,7 @@ function DocumentCtrl($scope, $http , $sce, $location, $routeParams ,socket,rend
 
 	$scope.mapping_passes = 0;
 	$scope.mapping_pass = function(){
-		return $scope.mapping_passes++
+		$scope.mapping_passes++
 	}
   
 	$scope.letters = [];
@@ -507,6 +509,7 @@ $scope.SetSlug = function (slug) {
 		return false;
 	}
 
+
     // transform ranges to string
     // limited to 70 chars
 
@@ -577,45 +580,40 @@ $scope.SetSlug = function (slug) {
 			}	
 	
 	});
-	
-$scope.$watch('ui.selected_range.start', function(newValue, oldValue) {
-		//if(oldValue && newValue ){
-				if(oldValue == newValue){
+	$scope.$watch('ui.selected_range.redraw', function(newValue, oldValue) {
+		
+		if(newValue === false){
 
-				}
-				else{
-					console.log('ui.selected_range')
-				
-
-					$scope.ui.selected_range.size = $scope.ui.selected_range.end - $scope.ui.selected_range.start +1
-					$scope.ui.selected_range.multi = $scope.ui.selected_range.size > 1 ? true : false
+		}
+		else{
 					
-					$scope.ui.selected_range.textrange = $scope.textrange()
+				console.log('reset all document markups to selected = false')
+				_.each($scope.markups, function(m, i){
+  					m.selected = false;
+  					m.inrange = false;
+				})
 
-					 
-				}
-		//}
+				// stop redraw loop (each section)
+				$scope.ui.selected_range.redraw=false
+				$scope.ui.selected_range.set=true
+				$scope.ui.selected_range.size = $scope.ui.selected_range.end - $scope.ui.selected_range.start
+				$scope.ui.selected_range.multi = ($scope.ui.selected_range.end - $scope.ui.selected_range.start) > 0 ? true : false
 
+
+		}
+	})
+
+	
+	$scope.$watch('ui.selected_range.start', function(newValue, oldValue) {
+				    if($scope.ui.selected_range.wait_ev == false){
+						$scope.ui.selected_range.redraw=true
+					}
 	});	
 
 	$scope.$watch('ui.selected_range.end', function(newValue, oldValue) {
-		//if(oldValue && newValue ){
-				if(oldValue == newValue){
-
-				}
-				else{
-
-
-					console.log('ui.selected_range section:')
-					
-				
-					$scope.ui.selected_range.size = $scope.ui.selected_range.end - $scope.ui.selected_range.start
-					$scope.ui.selected_range.multi = $scope.ui.selected_range.size > 0 ? true : false
-					$scope.ui.selected_range.textrange = $scope.textrange()
-
-				}
-		//}
-
+					if($scope.ui.selected_range.wait_ev == false){
+						$scope.ui.selected_range.redraw=true
+					}
 	});
 
 	/*

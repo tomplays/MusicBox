@@ -8,11 +8,15 @@
       <!-- edit/delete range and css objects.-->
       <mb-sectioneditor ng-if="doc_owner == true" class="section_editor section-editor-right"></mb-sectioneditor>
       <!-- made to boot controller, not displayed here-->
-      <div style="display:none" ng-repeat="markup in markups_by_start_end_position_type(section.start, section.end ,'background', 'media') track by $index" class="markup_ markup_type_bg">
+      <div ng-repeat="markup in markups_by_start_end_position_type(section.start, section.end ,'background', 'media') track by $index" class="markup_ markup_type_bg">
+        <markup-view></markup-view>
+      </div>
+      <div style="display:none" ng-repeat="markup in markups_by_start_end_position_type(section.start, section.end ,'any', 'container_class') track by $index" class="markup_ markup_type_">
         <markup-view></markup-view>
       </div>
     </div>
     <div ng-if="object.visible!==false &amp;&amp; layout.include_objects!==false &amp;&amp; layout.name!=='slidewide'" ng-repeat="object in available_sections_objects">
+      <!--h3 {{object}} -->
       <div ng-repeat="markup in markups_by_start_end_position_type(section.start, section.end ,layout.name,object) track by $index">
         <div class="markup_ markup_type_{{markup.type}}">
           <markup-view></markup-view>
@@ -28,6 +32,8 @@
       </carousel>
     </div>
     <div ng-if="layout.name == 'inline'">
+      <!-- pre {{ui.selected_range}}-->
+      <!-- h3 {{section.rebuild_count}}-->
       <!-- h2 
       a(ng-click="sectionmarkups('selected', true)") {{section_markups.visible}}
       
@@ -68,6 +74,6 @@
 </div>
 <!-- render into the layout loop, only "if last"-->
 <!-- made to apply last section styles to footer-->
-<footer ng-if="$last">
+<footer ng-if="$last &amp;&amp; ui.renderAvailable_active !=='embed'">
   <p ng-bind-html="doc_options.footer_center_html.value"></p>
 </footer>

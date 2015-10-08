@@ -1,22 +1,24 @@
 h2 {{doc.mode}}
-
 a(ng-click="cursor()") cursor
 pre {{cursor}}
+
+
 
 div(ng-bind-html="doc.compiled_doc")
 section
 	h5 section mode
 	div
 		div(ng-repeat="s in docresult.compiled_full_array.sections")
-			p # section {{$index}} - {{s.start}} - {{s.end}}
-			p {{s.text}}
-			textarea(text-listener ng-model="s.text") {{s.text}}
-			span(ng-click="la('click', l)" ng-repeat="l in s.letters" ng-class="l.classes.current") {{l.letter}}
+		
+			// p # section {{$index}} - {{s.start}} - {{s.end}}
+			// p {{s.text}}
+			//textarea( ng-model="s.text") {{s.text}}
+			span(ng-click="la('click', l)",  ng-mouseup="la('mouseup', l)"  ng-keyup="la('keyup', l)", ng-mousedown="la('mousedown', l)" ng-mouseover="la('mouseover', l)" ng-repeat="l in s.letters" ng-class="l.classes.current") {{l.letter}}
 
 
 
 section
 	h5 segments mode
-	span(ng-repeat="s in docresult.compiled_full_array.segments")
-		// # segment {{$index}} - 
-		// span(ng-bind-html="::s.flatten") 
+	span(ng-repeat="s in docresult.segments" ng-class="s.classes" )
+		{{::s.content}}
+	

@@ -27,13 +27,13 @@ musicBox.run(function($rootScope, $http, $route) {
       // console.log('route.change')
        
        console.log($route)
-       if(!$rootScope.doc){
+       //if(!$rootScope.doc){
         $rootScope.doc       = '';
-       }
+       //}
      
-       if(!$rootScope.ui){
+       //if(!$rootScope.ui){
           $rootScope.ui        = '';
-      }
+      //}
   }
   });
 /*

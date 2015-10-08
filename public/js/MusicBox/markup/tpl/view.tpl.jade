@@ -1,7 +1,8 @@
-div(ng-controller="MarkupCtrl", class="markup_box markup_box_depth_{{markup.depth}} markup_box_status_{{markup.status}}   markup_displayer_ markup_displayer markup_displayer_{{markup.type}} markup_displayer_subtype_{{markup.subtype}}  by_me_{{markup.by_me}} is_editing_{{markup.editing}}  touchedmk-{{markup.touched}}")
-
-
+div(ng-controller="MarkupCtrl", class="markup_box markup_box_depth_{{markup.depth}} markup_box_status_{{markup.status}}   markup_displayer_ markup_displayer markup_displayer_{{markup.type}} markup_displayer_subtype_{{markup.subtype}}  by_me_{{markup.by_me}} is_editing_{{markup.editing}}  touchedmk-{{markup.touched}} ")
+	// h4 even not visible {{markup.visible}} {{markup.type}}
 	// h3 mtda : {{markup.metadata}}
+	// h3 inrange / selected : {{markup.inrange}} - {{markup.selected}}
+
 	// h3 markup.objSchemas : {{markup.objSchemas}}
 
 	div.mk_inside_visible(ng-if="(markup.visible && !markup.forced) || (markup.visible && markup.forced && ui.renderAvailable_active== 'editor')")
@@ -53,7 +54,7 @@ div(ng-controller="MarkupCtrl", class="markup_box markup_box_depth_{{markup.dept
 					{{markup.username}}
 			
 			
-			//.fast_editor
+			.fast_editor
 				span.flag(ng-if="markup.status !== 'approved'")
 					i.fa.fa-flag.pending(tooltip="only visible by you and doc owner" ng-click="markup.editing = true")
 

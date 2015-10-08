@@ -84,7 +84,7 @@ module.exports = function(app, passport, auth) {
 
     // DOC
     // single doc record
-    app.get ('/api/v1/doc/:slug',                   docs.doc_get);
+    app.get ('/api/v1/doc/:slug/:output?',                   docs.doc_get);
     app.post('/api/v1/doc/:doc_id/edit',            auth.requiresLogin_or_secret,  docs.doc_edit);
     app.post('/api/v1/doc/:slug/delete',            auth.requiresLogin_or_secret, docs.doc_delete);
     

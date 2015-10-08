@@ -247,11 +247,13 @@ module.exports = function(grunt) {
 
 			
 			templates: {
+					options: { livereload: true },
 				files: ['public/js/MusicBox/**/*.jade', 'views/**/*.jade'], // compiling  auto-dedug
-				tasks: ['jade'] //  'manifest'
+				tasks: ['jade', 'copy:dist'] //  'manifest'
 			},
 			
 			api_folder:{
+
 				options: { livereload: true },
 				files: ['api/**/*.js'], // restart server on controllers, routes and models changes
 				// tasks: ['forever:server1:restart']
@@ -265,8 +267,9 @@ module.exports = function(grunt) {
 
 
 
+
 	grunt.registerTask('stop', ['forever:server1:stop']); // , 'connect:server' // 'forever', 
-	grunt.registerTask('default', ['forever:server1:restart','watch']);
+	grunt.registerTask('default', ['forever:server1:restart','watch','less', 'jade', 'connect:livereload']);
 	
 	// for production templates
 	grunt.registerTask('rebuild', ['jade']); 
@@ -278,8 +281,8 @@ module.exports = function(grunt) {
 				'copy:dist',
 				'watch',
 				'less',
-				'jasmine', 
-				'ngtemplates',
+				//'jasmine', 
+				//'ngtemplates',
 				'connect:livereload'
 	]);
 	//grunt.registerTask('newsletter', ['']);

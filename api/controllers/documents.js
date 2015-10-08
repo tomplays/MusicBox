@@ -172,6 +172,16 @@ if(debugger_on){
 exports.prerender = function(doc) {
 	var output = {}
 	var trace = {}
+
+
+
+
+	//output.sections 	= []
+	//output.markups_ 	= []
+
+					
+
+
 	trace.sections = []
 	trace.segments = []
 	trace.segments_flattten = '';
@@ -182,26 +192,33 @@ exports.prerender = function(doc) {
 	var tempsegement_content= '';
 	var tempsegement_content_single = '';
 
-	output.sections 	= []
+	
 	
 
-var segments = []
+    var segments = []
 	// opening wrapping all div
 	output.compiled_full = '<div>'
-	output.prerendered 	= true
+	// output.prerendered 	= true
 
 
 
 
 
 	var sections =   _.filter(doc.markups, function(td){ return  td.type == 'container'; });
+	
+
+
 	sections.forEach(function(s,si) {
-				trace.sections[si] = {start:s.start, end:s.end, segments: new Array() }
+	//	output.sections.push(s)
+		trace.sections[si] = {index: si, start:s.start, end:s.end, segments: new Array() }
 	})
+
+
+
+
 	var local_count = 0
 	_.each(sections, function(s,si) {
 
-	
 		
 		console.log(segments)
 		var s_text = '';
@@ -234,9 +251,13 @@ var segments = []
 		trace.sections[si].text = s_text
 		trace.sections[si].letters = s_letters
 		console.log(doc.markups._id)
+		
+
 		var s_markups = _.filter(doc.markups,function (m) {
 			 return m.type !== 'container' && m.start >= s.start && m.end <= s.end;
 		});
+
+
 
 		// var o_markups = []
 
@@ -322,7 +343,6 @@ var segments = []
 						 sl.forEach(function(c){
 							next_class.push(c.type+'_'+c.subtype);
 							l.classes.next.push(c.type+'_'+c.subtype);
-							l.classes.ids.push(c.m_id)
 						}) 
 					}
 
@@ -337,7 +357,6 @@ var segments = []
 						 sl.forEach(function(c){
 							prev_class.push(c.type+'_'+c.subtype);
 							l.classes.prev.push(c.type+'_'+c.subtype);
-l.classes.ids.push(c.m_id)
 						})
 						
 					}
@@ -458,11 +477,11 @@ l.classes.ids.push(c.m_id)
 						}
 					}	
 
-
+l.classes.ids= _.uniq(l.classes.ids) 
 
 					// "finally"
 					if(l.segment.closing === true){
-						   newsegment = {content_single : tempsegement_content_single, end_at:i,content:tempsegement_content, chars_length : (i - tempsegement_start_at + 1), start_at:tempsegement_start_at, /*start:tempsegement_start, closing:'</span>'*/}
+						   newsegment = {classes: l.classes.current, class_size:l.classes.ids.length, ids: l.classes.ids, content_single : tempsegement_content_single, end_at:i,content:tempsegement_content, chars_length : (i - tempsegement_start_at + 1), start_at:tempsegement_start_at, /*start:tempsegement_start, closing:'</span>'*/}
 							newsegment.flatten =  tempsegement_start+tempsegement_content+'</span>';
 
 							// add to output
@@ -473,15 +492,17 @@ l.classes.ids.push(c.m_id)
 							tempsegement_content_single =''
 					}
  					// c_text +="<span class='is_last-"+is_last+" is_first-"+is_first+" "+classes_flat+" count-"+i+" has_prev-"+prev_class+" has_next-"+next_class+"'>"+l.letter+"</span>"
- 					l.m_id = _.uniq(l.ids) 
+ 					
+
+ 					
 		
 
 		})
 
-		console.log(segments)
+		//console.log(segments)
 		
 		trace.segments= segments
-		trace.segments_count= _.size(segments)
+		trace.segments_count = _.size(segments)
 
 		// without layout (experimental)
 		segments.forEach(function (seg) {
@@ -589,7 +610,10 @@ l.classes.ids.push(c.m_id)
 	output.compiled_full +='</div>'
 	   //var o = new Object({'subject':'doc titlz - newsletter', 'bodytext': output.compiled_full})
 	   // mails.sendmailer(o)
-	output.compiled_full_array =trace
+	
+
+
+	output.compiled_full_array = trace
 
 	return output
 
@@ -615,12 +639,7 @@ l.classes.ids.push(c.m_id)
 					var out 			= {}
 					out.doc 			= doc.toObject()
 					out.is_owner  		= false
-					
-					
-				
 
-				
-					
 					if(req.user){
 						 out.userin 	= req.user.toObject()
 					}
@@ -635,22 +654,25 @@ l.classes.ids.push(c.m_id)
 
 					}
 					// test rights
-					
 
-					out = _.extend(out, exports.prerender(doc));
+					out.modeapi			= req.params.output
 
+					//if(req.params.output && req.params.output=='segments'){
+					//	out.doc.markups = []
+					//	out.doc.doc_options=  []
+					//	//out.doc = []
+					//	out.userin ={}
+					//	var outobjects = exports.prerender(doc);
+					//	out.doc.segments = outobjects.compiled_full_array.segments;
 
-				//	out.doc.compiled_full = out.compiled_full
-				//	out.doc.compiled_full_array = out.compiled_full_array
-
-				
+					//}
+                    		out = _.extend(out, exports.prerender(doc)); 
 					out.doc.sections 	= []
 					out.doc.markups_ 	= []
+					
 
 					doc.markups.forEach(function(mk) {
-                   		 // console.log(mk.status)
-            			// userMap[user._id] = user
-
+                   		
             			if(mk.type == 'container'){
             				out.doc.sections.push(mk)
 
@@ -662,11 +684,13 @@ l.classes.ids.push(c.m_id)
 
 
 
+});
+			
 
-        			})
 
 
-
+					//	out.doc.compiled_full = outobjects.compiled_full_array.compiled_full
+					//out.doc.compiled_full_array = out.compiled_full_array
 					res.json(out)
 				}
 				else{

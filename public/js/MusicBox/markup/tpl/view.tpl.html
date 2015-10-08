@@ -1,6 +1,8 @@
 
-<div ng-controller="MarkupCtrl" class="markup_box markup_box_depth_{{markup.depth}} markup_box_status_{{markup.status}}   markup_displayer_ markup_displayer markup_displayer_{{markup.type}} markup_displayer_subtype_{{markup.subtype}}  by_me_{{markup.by_me}} is_editing_{{markup.editing}}  touchedmk-{{markup.touched}}">
+<div ng-controller="MarkupCtrl" class="markup_box markup_box_depth_{{markup.depth}} markup_box_status_{{markup.status}}   markup_displayer_ markup_displayer markup_displayer_{{markup.type}} markup_displayer_subtype_{{markup.subtype}}  by_me_{{markup.by_me}} is_editing_{{markup.editing}}  touchedmk-{{markup.touched}} ">
+  <!-- h4 even not visible {{markup.visible}} {{markup.type}}-->
   <!-- h3 mtda : {{markup.metadata}}-->
+  <!-- h3 inrange / selected : {{markup.inrange}} - {{markup.selected}}-->
   <!-- h3 markup.objSchemas : {{markup.objSchemas}}-->
   <div ng-if="(markup.visible &amp;&amp; !markup.forced) || (markup.visible &amp;&amp; markup.forced &amp;&amp; ui.renderAvailable_active== 'editor')" class="mk_inside_visible">
     <!-- a(ng-click="offset(1,1)") offset me-->
@@ -33,14 +35,7 @@
       <!-- date and user fields --><span class="mk_val mk_metas use_depth"><span ng-if="markup.objSchemas.modes.read.display.date" class="mk_val created">{{markup.created | date }} </span><span style="color:{{markup.user_options['color'].value}}" ng-if="markup.objSchemas.modes.read.display.user" class="mk_val mk_username">
            
           {{markup.username}}</span></span>
-      <!--.fast_editor
-      span.flag(ng-if="markup.status !== 'approved'")
-      	i.fa.fa-flag.pending(tooltip="only visible by you and doc owner" ng-click="markup.editing = true")
-      
-      	i.fa.fa-remove.btn_action(tooltip-placement="left" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.delete}}" ng-click="delete()")
-      
-      
-      --><span ng-include="fragments['child_markup'][0].url" ng-if="markup.type == 'child' "></span>
+      <div class="fast_editor"><span ng-if="markup.status !== 'approved'" class="flag"><i tooltip="only visible by you and doc owner" ng-click="markup.editing = true" class="fa fa-flag pending"></i><i tooltip-placement="left" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.delete}}" ng-click="delete()" class="fa fa-remove btn_action"></i></span></div><span ng-include="fragments['child_markup'][0].url" ng-if="markup.type == 'child' "></span>
     </div>
     <markup-editor ng-if="markup.editing == true" class="markup_editor markup_editor_{{markup.type}}"></markup-editor>
   </div>

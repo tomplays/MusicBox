@@ -12,11 +12,19 @@ div(ng-if="section['objects_count']['by_positions'][layout.name].count > 0 || la
 			mb-sectioneditor(class="section_editor section-editor-right" ng-if="doc_owner == true")
 	
 			// made to boot controller, not displayed here
-			div(  style="display:none" ng-repeat="markup in markups_by_start_end_position_type(section.start, section.end ,'background', 'media') track by $index" class="markup_ markup_type_bg")
+			div(  ng-repeat="markup in markups_by_start_end_position_type(section.start, section.end ,'background', 'media') track by $index" class="markup_ markup_type_bg")
 				markup-view()
+			div(ng-controller="MarkupCtrl", style="display:none" ng-repeat="markup in markups_by_start_end_position_type(section.start, section.end ,'any', 'container_class') track by $index")
+				
+
+
+
 
 		div(ng-if="object.visible!==false && layout.include_objects!==false && layout.name!=='slidewide'" , ng-repeat="object in available_sections_objects")
+			//h3 {{object}} 
 			div(ng-repeat="markup in markups_by_start_end_position_type(section.start, section.end ,layout.name,object) track by $index" )
+				
+
 				div(class="markup_ markup_type_{{markup.type}}")
 					markup-view()
 
@@ -30,6 +38,8 @@ div(ng-if="section['objects_count']['by_positions'][layout.name].count > 0 || la
 
 		div(ng-if="layout.name == 'inline'")
 			
+			// pre {{ui.selected_range}}
+			// h3 {{section.rebuild_count}}
 			
 			// h2 
 				a(ng-click="sectionmarkups('selected', true)") {{section_markups.visible}}
@@ -44,7 +54,6 @@ div(ng-if="section['objects_count']['by_positions'][layout.name].count > 0 || la
 
 			// h1 editable
 			// div.fluidtext(contentEditable="true" , mb-editable , section="section" , ng-bind-html="section.fulltext" ) 
-			h4 {{section.rebuild_count}}
 			div.theletters(section="section" class="is_multi_{{ui.selected_range.multi}}" ng-if="section.modeletters == 'single'")
 				span(lt="l" , ng-repeat="l in section.letters")
 			div.fluidtext(fluidtexte, section="section" ,  ng-hide="section.modeletters =='single'") 
@@ -72,5 +81,5 @@ div(ng-if="section['objects_count']['by_positions'][layout.name].count > 0 || la
 
 // render into the layout loop, only "if last"
 // made to apply last section styles to footer
-footer(ng-if="$last")
+footer(ng-if="$last && ui.renderAvailable_active !=='embed'")
 	p(ng-bind-html="doc_options.footer_center_html.value")
