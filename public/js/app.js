@@ -5,12 +5,12 @@
 
 angular.module('musicBox',  [
   'ui.bootstrap',
-  'musicBox.document_controller','musicBox.section_controller', 'musicBox.markup_controller',
+  'musicBox.document_controller','musicBox.section_controller','musicBox.sectionpusher_controller',  'musicBox.markup_controller',
    'ngLocale', 'ngResource', 'ngRoute','musicBox.services',
    'musicBox.directives', 'ngSanitize',  
    'musicBox.DocumentRest','musicBox.UserRest', 'musicBox.MarkupRest',
   'musicBox.UserService','musicBox.MusicBoxLoop', 
-  'musicBox.DocumentService', 
+  'musicBox.DocumentService',  'musicBox.MarkupService', 
   'musicBox.SectionDirectives','musicBox.DocumentDirectives', 'musicBox.MarkupDirectives','musicBox.LetterDirectives',
   'musicBox.eDirectives',
   ]).

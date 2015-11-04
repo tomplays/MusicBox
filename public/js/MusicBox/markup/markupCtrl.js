@@ -1,10 +1,26 @@
 
-angular.module('musicBox.markup_controller', ['musicBox.section_controller']).controller('MarkupCtrl', function($scope, $http, MarkupRest,socket) {
+
+
+/**
+init_()
+
+
+
+
+**/
+
+
+angular.module('musicBox.markup_controller', ['musicBox.section_controller']).controller('MarkupCtrl', function($scope, $http, MarkupRest,socket,MarkupService) {
 	
 	$scope.init__= function () {
 		//console.log($scope.$parent.section_markups)
 					
 		console.log('   ---- -- [m] init markup'+$scope.markup.type)
+
+
+
+       
+		
 		
 		if(!$scope.$parent.$parent.objSchemas[$scope.markup.type]){
 			console.log('no schematype for markup!')
@@ -26,17 +42,29 @@ angular.module('musicBox.markup_controller', ['musicBox.section_controller']).co
             'touched'        : false,
             'ready'          : 'init',
             'doc_id_id'      : '', // special cases for child documents (refs as doc_id in markup record)
-       		'user_options'	 : $scope.apply_object_options('markup_user_options',$scope.markup.user_id.user_options),
+       		//'user_options'	 : $scope.apply_object_options('markup_user_options',$scope.markup.user_id.user_options),
 			'by_me' 		 : ( $scope.markup.user_id._id && $scope.$parent.userin._id  && ($scope.$parent.userin._id == $scope.markup.user_id._id ) ) ? true : false,
 			'can_approve' 	 : ($scope.$parent.doc_owner) ? true : false,
-			'objSchemas' 	 : $scope.objSchemas[$scope.markup.type] ?  $scope.objSchemas[$scope.markup.type] : []     
+			'objSchemas' 	 : $scope.objSchemas[$scope.markup.type] ?  $scope.objSchemas[$scope.markup.type] : [],
+			'servicetype'  	 :'markup'
+       
+
         })      	
 
 		$scope.markup =  _.extend($scope.markup, markup_);
 
+
+		var _markup = new MarkupService().init($scope.markup)
+		$scope.markup.user_options = _markup.apply_object_options('markup_user_options',$scope.markup.user_id.user_options)
+		// console.log(_markup.options_array.color.value)
+		
 		// its own fulltext for section.
+
+
 		$scope.markup.sectionin = $scope.$parent.section.sectionin
-  		$scope.markup.fulltext  = $scope.fulltext()
+		$scope.markup.fulltext  = $scope.fulltext()
+		
+  		
 
 
   		if($scope.markup.type=='container_class' ){ // or pos == inlined
@@ -87,17 +115,28 @@ angular.module('musicBox.markup_controller', ['musicBox.section_controller']).co
 
 	$scope.fulltext = function (){
 
+		if($scope.markup.objSchemas && $scope.markup.objSchemas.compute_fulltext === false){
+			console.log('NO ft')
+			return
+		}
+		
+		
 	   var fulltext = '';
        var i_array     =   0;
 	   for (var i = $scope.markup.start; i <= $scope.markup.end; i++) {
-         	// console.log(i)
+         	
+
+         	var y = i-$scope.section.start
          	if($scope.doc.content[i]){
-         		fulltext += $scope.doc.content[i];
+         		//console.log(i)
+
+         		fulltext += $scope.section.letters[i].char;
          	}
+         	i_array++;
+
      	}
      	return fulltext;
 	}
-
   	//console.log($scope.section)
     /*
     $scope.$watchCollection('[markup.start, markup.end]', function(newValue, oldValue) {
@@ -127,36 +166,61 @@ angular.module('musicBox.markup_controller', ['musicBox.section_controller']).co
 	});
 	*/
 
+	$scope.$watch('markup.start_or_end', function(  newValue, oldValue) {
+
+
+      if(oldValue == newValue || newValue == false){
+				console.log('mk end redraw')
+			}
+			else{
+
+        	   $scope.markup.fulltext = $scope.fulltext();
+ 			   $scope.markup.has_offset = true;
+			  
+			   if($scope.markup.start < $scope.$parent.section.start){
+		    		$scope.markup.start = $scope.$parent.section.start
+		       }
+		       if($scope.markup.end > $scope.$parent.section.end){
+	    		$scope.markup.end = $scope.$parent.section.end
+	    	   }
+
+
+
+			   $scope.stack_markup()
+
+        	  // $scope.markup.start_or_end = false
+
+        }
+		
+   
+
+   });	
 	
 	$scope.$watch('markup.start', function(  newValue, oldValue) {
 		
         if(oldValue && newValue && newValue !== oldValue){
-      	       $scope.markup.fulltext = $scope.fulltext()
- 			   $scope.markup.has_offset = true;
-				if($scope.markup.start < $scope.$parent.section.start){
-		    		$scope.markup.start = $scope.$parent.section.start
-		    	}
-			   $scope.stack_markup()
-		}	 
+      	      
+        	   $scope.markup.start_or_end = Math.random()
+		}
+		
    });	
 
    $scope.$watch('markup.end', function(oldValue, newValue) {
+   
         if(oldValue && newValue && newValue !== oldValue){
-			$scope.markup.fulltext = $scope.fulltext()
-	        $scope.markup.has_offset = true;
-	    	// check not after
-	    	if($scope.markup.end > $scope.$parent.section.end){
-	    		$scope.markup.end = $scope.$parent.section.end
-	    	}
-	        $scope.stack_markup()
+			$scope.markup.start_or_end = Math.random()
+
 		}
+		
    });
 
 	$scope.stack_markup = function(){
-		//console.log('stack_markup')
-		//console.log($scope.markup)
-		 $scope.$parent.attribute_objects()
-		 $scope.markup.touched= true;
+		console.log('stack_markup')
+
+	     $scope.$parent.attribute_objects()
+		 $scope.markup.touched = true;
+
+
 	}
 
      $scope.$watch('markup.type', function( oldValue, newValue) {
@@ -329,6 +393,7 @@ $scope.$watch('markup.fulltext', function(newValue, oldValue) {
 
      $scope.save = function (save_msg) {
 
+     	
         var thos = this;
         var promise = new Object();
         var data = new Object({
@@ -350,8 +415,8 @@ $scope.$watch('markup.fulltext', function(newValue, oldValue) {
 		data.subtype 	= $scope.markup.objSchemas.modes.editor.fields.subtype.forced ? $scope.markup.objSchemas.modes.editor.fields.subtype.forced : $scope.markup.subtype
 		data.edittype = 'edit_markup'
 
-	    promise.query =  MarkupRest.markup_save({id:$scope.$parent.doc.slug, mid:$scope.markup._id }, serialize(data) ).$promise;
-        promise.query.then(function (Result) {
+	    var promise=  MarkupRest.save({id:$scope.$parent.doc.slug, mid:$scope.markup._id }, serialize(data) ).$promise;
+        promise.then(function (Result) {
             var edited  = Result.edited[0][0]
             
             if(save_msg){
@@ -361,7 +426,7 @@ $scope.$watch('markup.fulltext', function(newValue, oldValue) {
             	$scope.flashmessage(edited.type +' saved', 'help' , 3000)
             }
           }.bind(this));
-          promise.query.catch(function (response) {  
+          promise.catch(function (response) {  
             console.log(response)   
            	$scope.flashmessage(response.err.err_code, 'bad' , 3000)
           }.bind(this));
@@ -375,36 +440,78 @@ $scope.$watch('markup.fulltext', function(newValue, oldValue) {
      }
 
      // apply active selection ranges to a markup then save it.
+	
+
 	$scope.match_selection = function (markup){
 		// todo: should check notnull / section limits
 		$scope.markup.start     =  $scope.ui.selected_range.start
 		$scope.markup.end 		=  $scope.ui.selected_range.end
 		
+
+
 		$scope.save()
 	}
+	$scope.apply_reverse =function(){
+	
 
+		console.log($scope.markup)
+		//alert($scope.markup.end)
+
+
+		 for (var i = $scope.markup.start; i <= $scope.markup.end; i++) {
+         	// console.log(i)
+         	if($scope.section.letters[i]){
+         		// $scope.section.letters[i].char = '-';
+         		// $scope.doc.content[i] = 'jklj'
+
+         	}
+     	}
+
+
+		
+
+	}
 	/**
 	* delete a markup on click
 	* @function MarkupCtrl#delete_markup
 	*/
 	$scope.delete = function (){
+
+
+		var ttft = $scope.get_markups($scope.section.start, $scope.section.end)
 		
-			
+		console.log('$scope.section_markups.length before'+ttft.length)
+
 			$scope.markup.deleted = true;
 			$scope.markup.visible = false;
 
-			var promise = MarkupRest.markup_delete( {id:$scope.$parent.doc.slug, mid:$scope.markup._id }).$promise;
+			var promise = MarkupRest.delete( {id:$scope.$parent.doc.slug, mid:$scope.markup._id}).$promise;
 			promise.then(function (Result) {
-				$scope.flashmessage('Markup deleted', 'ok' , 2000, false)
+				
 				// not enough for letter mapping
 				// remove markup from reference list
 				//	$scope.markups = _.without($scope.markups, $scope.markup)
 				// retattribute mk's
 				$scope.$parent.section.section_classes = ''	
+				
 				console.log($scope.$parent.section)
 				//	$scope.$parent.section.objects_ = []
 				//	$scope.$parent.init_fulltext($scope.section.start, $scope.section.end)
-				$scope.$parent.section.attribute_objects()
+
+
+
+
+
+				$scope.section.section_markups = $scope.get_markups($scope.section.start, $scope.section.end)
+				console.log('$scope.section_markups.length after'+$scope.section.section_markups.length)
+
+
+				$scope.ui.selected_range.redraw = true;
+				$scope.$parent.attribute_objects()
+
+
+
+				$scope.flashmessage('Markup deleted', 'ok' , 2000, false)
 
 
 			}.bind(this));
@@ -413,6 +520,9 @@ $scope.$watch('markup.fulltext', function(newValue, oldValue) {
 			}.bind(this));
 		// toggle
 		$scope.ui.focus_side = ''
+
+        
+
 	}
 
 
@@ -455,43 +565,59 @@ $scope.$watch('markup.fulltext', function(newValue, oldValue) {
 		// if in range, 
 		//	> set markup as selected == true
 		//  > each letters dor markup range are set to inrange = true
-		$scope.$watch('ui.selected_range.redraw', function(newValue, oldValue) {
 
-			
-			var z, z_real, rtest;
-			rtest = ranges_test($scope.ui.selected_range.start,$scope.ui.selected_range.end, $scope.markup.start,$scope.markup.end,'e')
-			console.log('rtest:'+rtest+' --- '+$scope.markup.metadata)
-			
-			// apply range if at least one part of markup is into
-			// excerpt for container class
+		$scope.$watch('markup.redraw', function(newValue, oldValue) {
+			if(oldValue == newValue || newValue == false){
+				console.log('mk end redraw')
+			}
+			else{
+				console.log('############ mk.redraw')
 
-						// dirty string...
-						if($scope.markup.type =="container_class"){
-							$scope.section.section_classes += $scope.markup.metadata+' ';
+				$scope.markup.fulltext = $scope.fulltext()
+				var z, z_real, rtest;
+				rtest = ranges_test($scope.ui.selected_range.start,$scope.ui.selected_range.end, $scope.markup.start,$scope.markup.end )
+				console.log('rtest:'+rtest+' --- '+$scope.markup.metadata)
+				
+				// apply range if at least one part of markup is into
+				// excerpt for container class
+
+							// dirty string...
+							if($scope.markup.type =="container_class"){
+								$scope.section.section_classes += $scope.markup.metadata+' ';
+							}
+
+				if(rtest !==1 && rtest !==5 && $scope.markup.type !=="container_class"){
+
+
+					//console.log('rtest select')
+					$scope.markup.selected = true;
+					$scope.markup.inrange  = true;
+					// map the markup
+					for (z = $scope.markup.start; z <= $scope.markup.end; z++) {
+						z_real = z - $scope.section.start
+						if($scope.section.letters[z_real]){
+							$scope.section.letters[z_real].inrange = true;
+
+
+							// direct injection test
+							// $scope.section.letters[z_real]['classes'].push($scope.markup.subtype);
+
 						}
-
-			if(rtest !==1 && rtest !==5 && $scope.markup.type !=="container_class"){
-				//console.log('rtest select')
-				$scope.markup.selected = true;
-				$scope.markup.inrange  = true;
-				// map the markup
-				for (z = $scope.markup.start; z <= $scope.markup.end; z++) {
-					z_real = z - $scope.section.start
-					if($scope.section.letters[z_real]){
-						$scope.section.letters[z_real].inrange = true;
+						else{
+							console.log('no letter for position (array index)'+z_real+'(markup pos:'+z+')')
 
 
-						// direct injection test
-						// $scope.section.letters[z_real]['classes'].push($scope.markup.subtype);
-
-					}
-					else{
-						console.log('no letter for position (array index)'+z_real+'(markup pos:'+z+')')
-						
-
+						}
 					}
 				}
-			}
 
+				// finally
+				$scope.markup.redraw= false;
+
+			}
 		})
+
+		
+		
+
 }); // end controller

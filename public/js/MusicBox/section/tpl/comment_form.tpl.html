@@ -1,4 +1,9 @@
-<span tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.COMMENT.label}}" ng-click="open_pusher()" class="open_comment">+</span>
+
+<!-- div(ng-controller="SectionPushCtrl")
+a(ng-click="open_pmusher()") sss
+
+
+--><span tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.COMMENT.label}}" ng-click="open_pusher()" class="open_comment">+</span>
 <div ng-if="ui.menus.push_comment.open == $parent.$parent.$parent.$index" class="comment_form">
   <div ng-if="userin.username == '' " class="user_not_in">
     <p><a ng-click="external_link(root_url+':'+port+'/login')" ng-if="userin.username == '' ">{{render_config.i18n.CUSTOM.COMMENT.needs_logging}}</a></p>

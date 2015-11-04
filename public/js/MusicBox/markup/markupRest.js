@@ -16,24 +16,26 @@ angular.module('musicBox.MarkupRest', [])
     return data_
   };
 
+  var route_object = 'markup' 
+ 
+
+
   return $resource(
     {Id:'@id', Mid:'@mid'},
     {},
     {
-      markup_push:{
+      new:{
         method:"POST",
-        isArray: false,
-        url: api_url+'/doc/:Id/markup/push',
-         transformResponse: parseResponse
+        url: api_url+'/doc/:Id/'+route_object+'/push',
       },
-      markup_delete:{
+      delete:{
         method:"POST",
-        params :  {Id:'@id', Mid:'@mid'},
-        url: api_url+'/doc/:Id/markup/:Mid/delete',
+        params :  {Id:'@id', Mid:'@mid',  Aid: '@aid'},
+        url: api_url+'/doc/:Id/'+route_object+'/:Mid/delete',
       },
-      markup_save:{       
+      save:{       
         method:"POST",
-        url: api_url+'/doc/:id/markup/:mid/edit',
+        url: api_url+'/doc/:id/'+route_object+'/:mid/edit',
       }
     }
   );

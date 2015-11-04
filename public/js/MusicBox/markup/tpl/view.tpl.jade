@@ -2,8 +2,24 @@ div(ng-controller="MarkupCtrl", class="markup_box markup_box_depth_{{markup.dept
 	// h4 even not visible {{markup.visible}} {{markup.type}}
 	// h3 mtda : {{markup.metadata}}
 	// h3 inrange / selected : {{markup.inrange}} - {{markup.selected}}
-
+	// p {{markup.selected}}
+	// p {{markup.inrange}}
 	// h3 markup.objSchemas : {{markup.objSchemas}}
+	// pre {{markup}}
+	// .fast_editor
+		span.flag()
+			i.fa.fa-remove.btn_action(tooltip-placement="left" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.delete}}" ng-click="delete()")
+	
+
+	// h6(ng-bind-html="markup.fulltext")
+	
+
+
+	//div
+		label  reverse text
+		input(ng-model="markup.fulltext" type="text" )
+		a(ng-click="apply_reverse()") reverse_apply
+
 
 	div.mk_inside_visible(ng-if="(markup.visible && !markup.forced) || (markup.visible && markup.forced && ui.renderAvailable_active== 'editor')")
 		// a(ng-click="offset(1,1)") offset me
@@ -54,7 +70,7 @@ div(ng-controller="MarkupCtrl", class="markup_box markup_box_depth_{{markup.dept
 					{{markup.username}}
 			
 			
-			.fast_editor
+			// .fast_editor
 				span.flag(ng-if="markup.status !== 'approved'")
 					i.fa.fa-flag.pending(tooltip="only visible by you and doc owner" ng-click="markup.editing = true")
 

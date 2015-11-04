@@ -23,16 +23,16 @@ function ranges_test(as,ae,ms,me, type){
 
           // start into
            if(as > ms && as<=me && ae >= me){
-             console.log('4 : as,ae,ms,me')
-                console.log(as,ae,ms,me)
+            // console.log('4 : as,ae,ms,me')
+             //   console.log(as,ae,ms,me)
                 c = 4
                 f++
           }
 
            // strict after
           if(ae>ms && ae>me){
-              console.log('4 : as,ae,ms,me')
-                console.log(as,ae,ms,me)
+             //   console.log('4 : as,ae,ms,me')
+              //  console.log(as,ae,ms,me)
                
                 c = 5
                 f++
@@ -105,23 +105,28 @@ angular.module('musicBox.eDirectives', [])
       }
 
       else if(eventname == 'mousedown' || eventname == 'mouseup' ){
-        
-        $rootScope.ui.selected_range.start  = parseInt(event.target.selectionStart + scope.section.start)
-        $rootScope.ui.selected_range.end    = parseInt(event.target.selectionEnd + scope.section.start -1)
 
-        if($rootScope.ui.selected_range.end == -1){
-            $rootScope.ui.selected_range.end=0
+
+
+         
+
+
+        var rstart =  parseInt(event.target.selectionStart + scope.section.start-1)
+        var rend   =  parseInt(event.target.selectionEnd + scope.section.start -1)
+        
+        if(rend == -1){
+            rend=0
         }
-        if($rootScope.ui.selected_range.start == -1){
-            $rootScope.ui.selected_range.start=0
+        if(rstart == -1){
+            rstart=0
         }
 
 
               // #FIXVAL : if click after last letter
               if(parseInt(event.target.selectionStart + scope.section.start)  == parseInt(scope.section.end+1)){
                  
-                  $rootScope.ui.selected_range.end = parseInt(scope.section.end)
-                  $rootScope.ui.selected_range.start= parseInt(scope.section.end)
+                  rend = parseInt(scope.section.end)
+                  rstart= parseInt(scope.section.end)
 
                }
                else{
@@ -129,21 +134,25 @@ angular.module('musicBox.eDirectives', [])
                 //  $rootScope.ui.selected_range.start  = parseInt(event.target.selectionStart + scope.section.start) 
                }
 
+            if(rstart > rend){
+              var temp_s = rstart;
+               rstart  = rend
+               rend = temp_s
+            }
 
-
-        if($rootScope.ui.selected_range.start > $rootScope.ui.selected_range.end){
-          var temp_s = $rootScope.ui.selected_range.start;
-           $rootScope.ui.selected_range.start  = $rootScope.ui.selected_range.end
-            $rootScope.ui.selected_range.end = temp_s
+        if(eventname == 'mousedown' ){
+                $rootScope.ui.selected_range.wait_ev = true 
+         }
+        if(eventname == 'mouseup' ){
+                $rootScope.ui.selected_range.wait_ev = false 
         }
+
+        $rootScope.ui.selected_range.start = rstart
+        $rootScope.ui.selected_range.end   = rend
 
 
 
         console.log($rootScope.ui.selected_range)
-
-
-
-
       }
 
       else if(eventname== 'saving'){
@@ -159,6 +168,7 @@ angular.module('musicBox.eDirectives', [])
 
         })
         $rootScope.doc.content = string
+        ///$scope.$parent.sync_queue() 
         //
       }
       else if(eventname== 'delete'){
@@ -253,7 +263,7 @@ angular.module('musicBox.eDirectives', [])
 
 
                     if(m.start > $rootScope.ui.selected_range.start && m.end<$rootScope.ui.selected_range.end){
-                      //alert('into delete')
+                     alert('into delete')
                       m.deleted=true
                     }
 
@@ -261,10 +271,12 @@ angular.module('musicBox.eDirectives', [])
                       // reduc both
                       m.start--
                       m.end--
+                        markup.start_and_end = true
                     }
 
                 console.log('after')
                 console.log(m.start+'' +m.end)
+
 
               //  console.log(scope.section)
 
@@ -294,7 +306,9 @@ angular.module('musicBox.eDirectives', [])
 
  
    else if(eventname == 'click'){
-              
+
+    console.log(eventname)
+       /*       
               // #FIXVAL : if click after last letter
               if(parseInt(event.target.selectionStart + scope.section.start)  == parseInt(scope.section.end+1)){
                  
@@ -307,7 +321,7 @@ angular.module('musicBox.eDirectives', [])
                   $rootScope.ui.selected_range.start  = parseInt(event.target.selectionStart + scope.section.start) 
                }
 
-
+          $rootScope.ui.selected_range.wait_ev = false
           $rootScope.$apply()
 
 
@@ -317,7 +331,7 @@ angular.module('musicBox.eDirectives', [])
 
         // parseInt(event.target.selectionStart + scope.section.start)
 
-
+*/
    }
 
  
@@ -349,7 +363,6 @@ if(eventname == 'key'){
           // $rootScope.ui.selected_range.start = $rootScope.ui.selected_range.start + pastedDataLength-2
           // $rootScope.ui.selected_range.end = $rootScope.ui.selected_range.start + pastedDataLength-2
          $rootScope.ui.selected_range.debug.push('pasted  '+pastedDataLength)
-      
          qty = pastedDataLength;
       }
 
@@ -364,29 +377,37 @@ if(eventname == 'key'){
 
 
           //event.target.selectionEnd-1
+
+
+
        
         _.each($rootScope.markups, function(markup, i){
+
+              console.log('in range '+markup.inrange+'('+markup.start+'-'+markup.end+'--'+$rootScope.ui.selected_range.start+'//'+$rootScope.ui.selected_range.end)
+              //  console.log(markup)
     
               var offset = {'start':0, 'end':0};
               var test_r = ranges_test(logevent.selectionStart, logevent.selectionEnd, markup.start, markup.end, 'markup')
               logevent.ranges_test.push(test_r)
                
               // only two cases : before or into (1 or 3)
+
+
               switch (test_r) {
                 case 1:
                         offset.end = offset.end+qty
                         offset.start= offset.start+qty
-
                         markup.touched= true;
                         break;
                 case 3:
-                 offset.end = offset.end+qty
-                  markup.touched= true;
+                  offset.end = offset.end+qty
+                  markup.touched = true;
                   break;
               } 
-
+             
               markup.start  =   markup.start+offset.start
               markup.end    =   markup.end+offset.end
+
         })
 
          logevent.jj = []
@@ -399,7 +420,7 @@ if(eventname == 'key'){
           switch (test_range) {
               case 1:
                     offset.start= offset.start+qty
-                                           offset.end = offset.end+qty
+                     offset.end = offset.end+qty
 
                     scope.section.touched = true;
                     break;
@@ -425,8 +446,8 @@ if(eventname == 'key'){
 
         }) 
 
-        $rootScope.ui.selected_range.start= $rootScope.ui.selected_range.start+qty
-        $rootScope.ui.selected_range.end = $rootScope.ui.selected_range.end+qty
+        $rootScope.ui.selected_range.start = $rootScope.ui.selected_range.start+qty
+        $rootScope.ui.selected_range.end   = $rootScope.ui.selected_range.end+qty
 
         logevent.after_start      = $rootScope.ui.selected_range.start
         logevent.after_end        = $rootScope.ui.selected_range.end
@@ -435,34 +456,37 @@ if(eventname == 'key'){
 
         $rootScope.$apply(function(){})
       }
+
+
    
   }
 
   function link(scope, elem, attrs, $rootScope) { 
 
-       /*elem.bind("click", function(event){
-         textarea_running('click', event, scope)
-           scope.$apply();
-          return
-       })
-*/
 
 
       elem.bind("mousedown", function(event){
             event.MB = scope
             textarea_running('mousedown', event, scope)
-            // scope.$parent.section.debuggr.push('md')
             scope.$apply();
             return
       })
 
-      elem.bind("mouseup", function(event){
-            //alert('mup')
+      
+
+      elem.bind("mouseup", function(event){           
             textarea_running('mouseup', event, scope)
-            // scope.$parent.section.debuggr.push('up--'+ event.target.selectionStart+'-'+event.target.selectionEnd)
             scope.$apply();
             return
       })
+      elem.bind("click", function(event){     
+          console.log('click > no action, binded to mousup')      
+           // textarea_running('click', event, scope)
+           // scope.$apply();
+           // return
+      })
+
+
       
       elem.bind("cut", function(event){
             // same as delete but with another "quantity"
@@ -484,6 +508,9 @@ if(eventname == 'key'){
       })
       */
       elem.bind("keyup", function(event){ 
+
+
+          console.log('onkeyup '+event.which)
       
           if(event.which == 13){
              //event.preventDefault();
@@ -492,6 +519,7 @@ if(eventname == 'key'){
              //alert(' e.preventDefault();')
             textarea_running('saving', event, scope)
             scope.$parent.sync_queue() 
+            
           }
           else if(event.which == 224){
             // textarea_running('key', event, scope)
@@ -516,12 +544,11 @@ if(eventname == 'key'){
           }
           scope.$apply();
           return
-
-          //    scope.$apply();
-          //   return
-          //  scope.$parent.section.debuggr.push('hey'+event.which+'--'+ event.target.selectionStart+'-'+event.target.selectionEnd)
-            
+        
       });
+
+
+
       // scope.$apply();      
       //  return
     }

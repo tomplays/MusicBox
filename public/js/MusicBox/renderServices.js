@@ -147,13 +147,14 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
           definitions.markup = new Object({
               'name': 'markup',
               'display_name': $rootScope.render_config.i18n.CUSTOM.OBJECTS.markup,
+              'compute_fulltext': true,
               'map_range': true,
               'positions': {
                   "forced": "",
                   "available": ['inline']},
               'modes': {
                 'pusherleft': false,
-                'editor': {                   
+                 'editor': {                   
                   'enabled': true,
                   'tabs': {
                             'subtype': 'subtype'
@@ -219,6 +220,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
               'name': 'media',
               'display_name': $rootScope.render_config.i18n.CUSTOM.OBJECTS.media,
               'map_range': false,
+               'compute_fulltext': true,
               'positions': {
                   "forced": "",
                   "available": ['wide','center','left', 'right', 'under','slidewide', 'global', 'background']},
@@ -301,6 +303,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
               'name': 'comment',
               'display_name': $rootScope.render_config.i18n.CUSTOM.OBJECTS.comment,
               'map_range': true,
+               'compute_fulltext': false,
               'positions': {
                   "forced": "left",
                   "available": ['wide','left', 'right', 'under', 'global']},
@@ -383,6 +386,8 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
           definitions.child = new Object({
               'name': 'child',
               'display_name': $rootScope.render_config.i18n.CUSTOM.OBJECTS.comment,
+                             'compute_fulltext': false,
+
               'map_range': false,
               'positions': {
                   "forced": "left",
@@ -469,6 +474,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
  definitions.container = new Object({
               'name': 'container',
               'display_name': $rootScope.render_config.i18n.CUSTOM.OBJECTS.container,
+              'compute_fulltext': true,
               'map_range': false,
               'positions': {
                   "forced": "inline",
@@ -540,6 +546,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
               'name': 'container class',
               'display_name': $rootScope.render_config.i18n.CUSTOM.OBJECTS.container_class,
               'map_range': false,
+              'compute_fulltext': false,
               'positions': {
                   "forced": "inline",
                   "available": ['inline']},
@@ -619,6 +626,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
               'name': 'datavalue',
               'display_name': $rootScope.render_config.i18n.CUSTOM.OBJECTS.datavalue,
               'map_range': true,
+              'compute_fulltext': true,
               'positions': {
                   "forced": "left",
                   "available": ['under', 'global']},
@@ -704,6 +712,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
               'name': 'Link',
               'display_name': $rootScope.render_config.i18n.CUSTOM.OBJECTS.hyperlink,
               'map_range': true,
+              'compute_fulltext':true,
               'positions': {
                   "forced": "left",
                   "available": ['left', 'right', 'global']},

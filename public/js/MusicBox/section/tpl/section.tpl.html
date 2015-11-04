@@ -11,9 +11,8 @@
       <div ng-repeat="markup in markups_by_start_end_position_type(section.start, section.end ,'background', 'media') track by $index" class="markup_ markup_type_bg">
         <markup-view></markup-view>
       </div>
-      <div style="display:none" ng-repeat="markup in markups_by_start_end_position_type(section.start, section.end ,'any', 'container_class') track by $index" class="markup_ markup_type_">
-        <markup-view></markup-view>
-      </div>
+      <div ng-controller="MarkupCtrl" style="display:none" ng-repeat="markup in markups_by_start_end_position_type(section.start, section.end ,'any', 'container_class') track by $index"></div>
+      <div ng-controller="MarkupCtrl" style="display:none" ng-repeat="markup in markups_by_start_end_position_type(section.start, section.end ,'inline', 'markup') track by $index"></div>
     </div>
     <div ng-if="object.visible!==false &amp;&amp; layout.include_objects!==false &amp;&amp; layout.name!=='slidewide'" ng-repeat="object in available_sections_objects">
       <!--h3 {{object}} -->
@@ -34,6 +33,7 @@
     <div ng-if="layout.name == 'inline'">
       <!-- pre {{ui.selected_range}}-->
       <!-- h3 {{section.rebuild_count}}-->
+      <pre ng-repeat="md in markups_pushed">{{md.start}} {{md.end}} {{md.metadata}} {{md}}</pre>
       <!-- h2 
       a(ng-click="sectionmarkups('selected', true)") {{section_markups.visible}}
       

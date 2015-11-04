@@ -1,15 +1,10 @@
 
 <div ng-if="section.editing_text === true" class="inline_tools"><span class="pusher">
     <div class="pusher_markups">
-      <div ng-if="ui.selected_range.end" class="pusher_range"><span class="ranges"><span class="ranges_start_end">Selected letters from {{ui.selected_range.start}}  to {{ui.selected_range.end}}</span>
-          <!-- span.textrange
-          {{ui.selected_range.textrange}}
-          
-          --></span></div>
+      <div ng-if="ui.selected_range" class="pusher_range"><span class="ranges"><span class="ranges_start_end">Selected letters from {{ui.selected_range.start}}  to {{ui.selected_range.end}}</span><span class="ranges_start_end">size: {{ui.selected_range.size}} multi {{ui.selected_range.multi}}</span><span class="textrange">{{ui.selected_range.textrange}}</span><span class="wait_ev wait_ev--{{ui.selected_range.wait_ev}}">&nbsp;</span></span></div>
       <tabset class="editor-main-tab">
         <!-- tab( heading="tabA") 
         h1 section.keepsync : {{section.keepsync}}
-        
         
         -->
         <tab ng-if="object=='markup'" heading="Add {{object}}" ng-repeat="object in available_sections_objects"> 

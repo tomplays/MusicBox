@@ -187,9 +187,12 @@ var io =  require('socket.io').listen(server, {log:false, origins:'*:*'}, functi
   console.log(chalk.green('Hello io') );
 })
 
+
 io.on('connection', function (socket) {
+     console.log(chalk.green('connection IO') );
  // socket.emit('news', { hello: 'world' });
   socket.on('postdata', function(data){
+    
       require('./api/socket').socketer(socket, data);
   });
 

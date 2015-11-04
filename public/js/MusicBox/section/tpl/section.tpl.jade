@@ -14,9 +14,11 @@ div(ng-if="section['objects_count']['by_positions'][layout.name].count > 0 || la
 			// made to boot controller, not displayed here
 			div(  ng-repeat="markup in markups_by_start_end_position_type(section.start, section.end ,'background', 'media') track by $index" class="markup_ markup_type_bg")
 				markup-view()
+				
 			div(ng-controller="MarkupCtrl", style="display:none" ng-repeat="markup in markups_by_start_end_position_type(section.start, section.end ,'any', 'container_class') track by $index")
 				
-
+			div(ng-controller="MarkupCtrl", style="display:none" ng-repeat="markup in markups_by_start_end_position_type(section.start, section.end ,'inline', 'markup') track by $index")
+				
 
 
 
@@ -40,6 +42,9 @@ div(ng-if="section['objects_count']['by_positions'][layout.name].count > 0 || la
 			
 			// pre {{ui.selected_range}}
 			// h3 {{section.rebuild_count}}
+
+			pre(ng-repeat="md in markups_pushed") {{md.start}} {{md.end}} {{md.metadata}} {{md}}
+
 			
 			// h2 
 				a(ng-click="sectionmarkups('selected', true)") {{section_markups.visible}}

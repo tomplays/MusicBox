@@ -14,7 +14,9 @@ triggers / callback
 
 
 
-angular.module('musicBox.section_controller', []).controller('SectionCtrl', function($scope, $http, DocumentService, MarkupRest,socket) {
+
+angular.module('musicBox.section_controller', []).controller('SectionCtrl', function($scope, $http, DocumentService, MarkupRest,socket, MarkupService) {
+
 
 
 
@@ -42,25 +44,44 @@ $scope.init_= function () {
         'has_offset'     : false,
         'touched'     : false,
         'keepsync'     : true,
-        'objSchemas' 	 : $scope.objSchemas['container'] ?  $scope.objSchemas['container'] : [],
-        'objSchemas_css' 	 : $scope.objSchemas['container_class'] ?  $scope.objSchemas['container_class'] : []
+        'objSchemas' 	 :   $scope.objSchemas['container'] ?  $scope.objSchemas['container'] : [],
+        'objSchemas_css' 	 : $scope.objSchemas['container_class'] ?  $scope.objSchemas['container_class'] : [],
+        'servicetype'  	 :'section'
+
+	
 	})
 
 	// .. and extend object
 	$scope.section = _.extend($scope.section, container_);
 
+
+	var _section = new MarkupService().init($scope.section)
+	//	$scope.markup.user_options = _markup.apply_object_options('markup_user_options',$scope.markup.user_id.user_options)
+
+
+	$scope.section.section_markups 			= $scope.get_markups($scope.section.start, $scope.section.end)
+	$scope.section.section_markups_length 	= $scope.section.section_markups.length
+
+
+
 	$scope.init_fulltext($scope.section.start, $scope.section.end)
 	
 	// add to parent scope section count
-	$scope.$parent.update_section_count('add')
+	//$scope.$parent.update_section_count('add')
 
 
 	// reach letter max test
 	if($scope.section.end > $scope.$parent.max_reached_letter){
 		$scope.$parent.max_reached_letter = $scope.section.end
-	} 
+	}
 
 
+
+	
+	console.log('$scope.section')
+
+
+	console.log($scope.section)
 
 	// continous test (prev end match current start)
 
@@ -115,23 +136,50 @@ $scope.init_fulltext = function (s,e){
 
 }
 
-// main filter for markups
-$scope.markups_by_start_end_position_type  = function(ss, se , p , t ){
-		var arr_debug= [ss,se,p,t]
-		// console.log('markups_by_start_end_position_type')
 
+$scope.get_markups  = function(ss,se){
 		var arr_m = []
 		_.each($scope.markups, function(m){
+				if( m.deleted !== true && (m.start >= parseInt(ss)) && (m.end <= parseInt(se)) ){
+					///m.visible = true
+					arr_m.push(m)
+				}
+		});
+		return arr_m;
+}
+
+
+// main filter for markups
+$scope.get_local_markups_by_start_end_position_type  = function(p,t){
+		//console.log('markups_by_start_end_position_type (l)')
+		var arr_m = []
+		_.each($scope.section.section_markups, function(m){
+				if( (m.position == p  || p =='any' ) && (m.type == t  || t=='any')  ){
+					arr_m.push(m)
+				}
+		});
+		return arr_m;
+}
+
+// main filter for markups
+$scope.markups_by_start_end_position_type  = function(ss, se , p , t ){
+	//console.log('>get local')
+	return $scope.get_local_markups_by_start_end_position_type(p,t)
+	/*
+		
+		console.log('markups_by_start_end_position_type'+ss+se+p+t)
+
+		var arr_m = []
+		_.each($scope.section_markups, function(m){
 				if( (!m.deleted) && (m.position == p  || p =='any' ) && (m.type == t  || t=='any') && (m.start >= parseInt(ss) || ss == 'any') && (m.end <= parseInt(se) || se =='any' ) ){
 					///m.visible = true
 					arr_m.push(m)
 				}
 		});
 
-		if($scope.ui.debug) {
-			// arr_m.push(arr_debug)
-		}
+		
 		return arr_m;
+		*/
 }
 
 
@@ -156,18 +204,19 @@ $scope.map_letters = function(){
 
 		var li_real = li+parseInt($scope.section.start)
 
-
 		if(li==0){
-			$scope.section.letters[li].classes.push('isfirst')
+
+			$scope.section.letters[li].classes.push('isfirst-section')
 			$scope.section.letters[li].isfirst = true
 
 		}
 		if(li == $scope.section.letters.length-1){
-			$scope.section.letters[li].classes.push('islast')
+			$scope.section.letters[li].classes.push('islast-section')
 			$scope.section.letters[li].islast = true
 		}
 
-
+//console.log(l)
+//console.log($scope.section.letters[li])
        
 
 		//if(($scope.$parent.ui.selected_range.start || $scope.$parent.ui.selected_range.start ==0 )  && $scope.$parent.ui.selected_range.end){
@@ -228,7 +277,8 @@ $scope.map_letters = function(){
 	
 
 
-	var s_markups  = $scope.markups_by_start_end_position_type($scope.section.start, $scope.section.end, 'any', 'any')
+	var s_markups  = $scope.section.section_markups
+	// $scope.markups_by_start_end_position_type($scope.section.start, $scope.section.end, 'any', 'any')
   	
   	_.each(s_markups, function(markup,k){
   			var m_objSchemas = $scope.$parent.objSchemas[markup.type]
@@ -257,6 +307,13 @@ $scope.map_letters = function(){
 			
 				if($scope.section.letters && $scope.section.letters[mi]){
 
+
+						if(mi ==  loop_start){
+							$scope.section.letters[mi].classes.push('isfirst-range')
+						}
+						if(mi ==  loop_end){
+							$scope.section.letters[mi].classes.push('islast-range')
+						}
 
 						
 
@@ -453,8 +510,13 @@ $scope.compile_html = function(fulltext_block ){
 	return out
 }
  $scope.section.section_classes = ''
+
+
+
+
+
 $scope.attribute_objects = function(){
-  console.log('attribute_objects')
+  			console.log('attribute_objects')
 
 
   		   $scope.$parent.mapping_pass()
@@ -480,14 +542,15 @@ $scope.attribute_objects = function(){
             });
 
 			$scope.section = _.extend($scope.section, objectsarray );
-			console.log(objectsarray)
-
-
-  	       
-
+			
 
     		
-  	       var mkr = _.filter($scope.markups, function(m){ return m.start >= $scope.section.start; })
+  	       var mkr = $scope.section.section_markups
+
+  	       // _.filter($scope.markups, function(m){ return m.start >= $scope.section.start; })
+		    
+
+
 		    _.each(mkr, function(markup){
 
 		    	if(markup.start > markup.end){
@@ -520,6 +583,7 @@ $scope.attribute_objects = function(){
 		    	
 
 		    }); // each markups end.
+console.log($scope.section)
 	$scope.map_letters()
 }
 
@@ -575,7 +639,7 @@ $scope.$watch('section.fulltext', function(newValue, oldValue) {
 		var str_start   =   0;
 		var str_end     =   _.size(newValue)-1;
 		// confing could be a option/mode feature
-		var content_string  = $scope.$parent.doc.content
+		var content_string  = $scope.doc.content
 		var classes_arr = new Array()
 		// classes_arr.h1 = {}
 		// classes_arr.h2 = {}
@@ -699,12 +763,14 @@ $scope.$watch('section.has_offset', function(o, markup) {
 			$scope.flashmessage('Can\'t delete last section ', 'bad' , 2000, false)
 			return
 		}
-		$scope.section.deleted = true;
-		$scope.section.visible = false;
-
-		var promise = MarkupRest.markup_delete( {id:$scope.$parent.doc.slug, mid:$scope.section._id}).$promise;
+		
+		var promise = MarkupRest.delete( {id:$scope.$parent.doc.slug, mid: $scope.section._id, aid:'delete'}).$promise;
 		promise.then(function (Result) {
+			
+			$scope.section.deleted = true;
+			$scope.section.visible = false;
 			$scope.flashmessage('Section deleted', 'ok' , 2000, false)
+
 		}.bind(this));
 		promise.catch(function (response) {  
 			$scope.flashmessage(response.err, 'bad' , 3000)
@@ -733,8 +799,8 @@ $scope.$watch('section.has_offset', function(o, markup) {
 					c.selected 		= !c.selected;
 					c.editing 		= !c.editing
 					c.editing_text 	= !c.editing_text
-					$scope.ui.selected_range.start = parseInt(c.start)
-					$scope.ui.selected_range.end = parseInt(c.end)
+					//$scope.ui.selected_range.start = parseInt(c.start)
+					//$scope.ui.selected_range.end = parseInt(c.end)
 					$scope.section.modeletters =  'single'
 					if(c.selected == true){
 						$scope.section.focused  = 'side_right'
@@ -786,12 +852,12 @@ $scope.add= function (){
 		}
 		if(!$scope.$parent.push.metadata)	{	
 
-
+			
 				if($scope.$parent.push.type == "media" ){ 
-					$scope.$parent.push.metadata = 'http://hacktuel.fr/img/lorem/400-400.jpg'
+					$scope.$parent.push.metadata = root_url+':'+PORT+'/img/lorem/400-400.jpg'
 				}
 				else if($scope.$parent.push.type == "link" ){ 
-					$scope.$parent.push.metadata = 'http://hacktuel.fr'
+					$scope.$parent.push.metadata = root_url+':'+PORT
 				}
 				else{
 					$scope.$parent.push.metadata	= '' 
@@ -822,7 +888,7 @@ $scope.add= function (){
         var thos = this;
         // this.Markup_pre();
 
-        promise.query = MarkupRest.markup_push( {Id:$scope.$parent.doc.slug},promise.data).$promise;
+        promise.query = MarkupRest.new({Id:$scope.$parent.doc.slug},promise.data).$promise;
         promise.query.then(function (Result) {
 				if(Result.inserted[0]){
 					var mi = Result.inserted[0]
@@ -831,11 +897,15 @@ $scope.add= function (){
 						$scope.$parent.containers.push(mi)
 					}
 					else{
-						$scope.$parent.markups.push(mi)
+						$scope.markups.push(mi)
 					}
 					//console.log(mi)
             	    $scope.flashmessage(mi.type +' inserted', 'ok' , 1400, false)
 					$scope.close_pusher()
+					
+
+
+					$scope.section.section_markups = $scope.get_markups($scope.section.start, $scope.section.end)
 					$scope.attribute_objects()
 				}
         		else{
@@ -894,6 +964,8 @@ $scope.add= function (){
 	}
 
 	// open close the pusher box.
+
+	
 	$scope.open_pusher = function (){
 		
 		$scope.defocus()
@@ -923,8 +995,9 @@ $scope.add= function (){
 
 		return
 	}
+	
 
-	$scope.section_markups = new Object({'all':0, 'visible':0});
+	////$scope.section_markups = new Object({'all':0, 'visible':0});
 
 	$scope.update_markup_section_count = function(direction){
 		if(direction=='add'){
@@ -964,12 +1037,11 @@ $scope.add= function (){
 					            'end'			: $scope.section.end
 					         });
 
-	
 		// can be null.
 		data.secret = $scope.ui.secret;
 		data.edittype = 'edit_markup'
 
-	    promise.query =  MarkupRest.markup_save({id:$scope.$parent.doc.slug, mid:$scope.section._id }, serialize(data) ).$promise;
+	    promise.query =  MarkupRest.save({id:$scope.$parent.doc.slug, mid:$scope.section._id }, serialize(data) ).$promise;
         promise.query.then(function (Result) {
             var edited  = Result.edited[0][0]
             
@@ -1124,9 +1196,53 @@ $scope.merge= function (){
 		}
 	});
 */
+
+	$scope.$watch('section.redraw', function(newValue, oldValue) {
+	if(oldValue == newValue || newValue == false){
+
+
+	}else{
+		console.log('############ section.redraw')
+			     _.each($scope.section.letters, function(l, i){
+						l.inrange = false;
+						l.inselection = false;
+
+				})
+
+				// map the range			
+				for (var j = $scope.ui.selected_range.start; j <= $scope.ui.selected_range.end; j++) {
+					
+					j_real = j - $scope.section.start;
+					if($scope.section.letters[j_real]){
+						$scope.section.letters[j_real].inselection = true;
+					}
+				}
+
+
+		    $scope.section.section_markups = $scope.get_markups($scope.section.start, $scope.section.end)
+			$scope.attribute_objects()
+			$scope.section.redraw= false;
+
+			_.each($scope.section.section_markups, function(m, i){
+
+					m.selected = false;
+	  				m.inrange = false;
+					m.redraw = true;
+
+			})
+
+
+	}
+		
+
+
+	})
+/*
+
 	$scope.$watch('ui.selected_range.redraw', function(newValue, oldValue) {
 		
 			if(oldValue == newValue || newValue == false){
+					console.log('redraw section NO')
 
 			}
 			else{
@@ -1149,11 +1265,20 @@ $scope.merge= function (){
 						$scope.section.letters[j_real].inselection = true;
 					}
 				}
+
+				console.log('ui.selected_range.redraw count mks A:'+$scope.section.section_markups.length)
+
+				//$scope.section_markups = $scope.get_markups($scope.section.start, $scope.section.end)
+				//console.log('ui.selected_range.redraw count mks B:'+$scope.section_markups.length)
+
+			    $scope.attribute_objects()
+
 				
 			}
 		
 						
 	})
+*/
 
 	
 
@@ -1170,7 +1295,7 @@ $scope.merge= function (){
 
 $scope.integrity_fix = function (){
 
-	//alert($scope.section.fulltext.length)
+	//xx$scope.section.fulltext.length)
 	//alert($scope.section.end - $scope.section.start - 1)
 	if($scope.section.fulltext.length > parseInt($scope.section.end - $scope.section.start)+1){
 		$scope.flashmessage('size mismatch >', 'bad' , 2000, false)
@@ -1187,3 +1312,13 @@ $scope.integrity_fix = function (){
 }
 	
 }); // end controller
+
+
+
+
+angular.module('musicBox.sectionpusher_controller', ['musicBox.section_controller']).controller('SectionPushCtrl', function($scope, $http, DocumentService, MarkupRest,socket) {
+$scope.open_pmusher = function (){
+	console.log($scope.section)
+}
+})
+

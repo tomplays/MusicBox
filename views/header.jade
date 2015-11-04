@@ -40,21 +40,18 @@ head
 	// build:css mbcss.css	
 	// bower:css
 	link(rel='stylesheet', href='/bower_components/font-awesome/css/font-awesome.css')
-	
 	// endbower 
 	// endbuild  
 
 	// build:js js/mbmin.js 
 	// bower:js
-	//
-		script(src='/bower_components/angular/angular.js')
-		script(src='/bower_components/angular-resource/angular-resource.js')
-		script(src='/bower_components/angular-route/angular-route.js')
-		script(src='/bower_components/angular-sanitize/angular-sanitize.js')
-		script(src='/bower_components/underscore/underscore.js')
-		script(src='/bower_components/momentjs/moment.js')
-		script(src='/bower_components/angular-bootstrap/ui-bootstrap-tpls.js')
-	
+	script(src='/bower_components/angular/angular.js')
+	script(src='/bower_components/angular-resource/angular-resource.js')
+	script(src='/bower_components/angular-route/angular-route.js')
+	script(src='/bower_components/angular-sanitize/angular-sanitize.js')
+	script(src='/bower_components/underscore/underscore.js')
+	script(src='/bower_components/momentjs/moment.js')
+	script(src='/bower_components/angular-bootstrap/ui-bootstrap-tpls.js')
 	// endbower 
 	// endbuild  
 	
@@ -93,7 +90,7 @@ head
 		script(type='text/javascript', src='bower_components/momentjs/min/moment-with-langs.min.js')
 		script(type='text/javascript', src='bower_components/momentjs/lang/fr.js')
 
-		
+
 		script(type='text/javascript', src='js/MusicBox/services.js')
 		script(type='text/javascript', src='js/MusicBox/renderServices.js')
 
@@ -103,9 +100,12 @@ head
 		link(rel='stylesheet', href='css/min/main.css')
 
 		// Angular controllers
+
 		
 		// document level
 		script(type='text/javascript', src='js/MusicBox/document/documentServices.js')
+		script(type='text/javascript', src='js/MusicBox/MusicBoxServices.js')
+
 		script(type='text/javascript', src='js/MusicBox/document/documentRest.js')
 		script(type='text/javascript', src='js/MusicBox/document/documentCtrl.js')
 		script(type='text/javascript', src='js/MusicBox/document/documentDirectives.js')
@@ -118,7 +118,6 @@ head
 
 		// markups
 		script(type='text/javascript', src='js/MusicBox/markup/markupCtrl.js')
-		// script(type='text/javascript', src='js/MusicBox/markup/markupServices.js')
 		script(type='text/javascript', src='js/MusicBox/markup/markupDirectives.js')
 		script(type='text/javascript', src='js/MusicBox/markup/markupRest.js')
 
@@ -127,6 +126,9 @@ head
 		script(type='text/javascript', src='js/MusicBox/user/userServices.js')
 		script(type='text/javascript', src='js/MusicBox/user/userRest.js')		
 		script(type='text/javascript', src='js/MusicBox/user/userCtrl.js')
+
+
+
 
 		// Angular top level 'app' routing 
 		script(type='text/javascript', src='js/app.js')

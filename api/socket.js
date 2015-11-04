@@ -20,8 +20,8 @@ var app;
 exports.socketer = function(socket, data){
 	console.log('socket data')
 	// console.log(data)
-
-
+	var content_pushed = []
+	var markups_pushed = []
 
 	if(data.identifier){
 			var query = Document.findOne({ 'slug':data.identifier});
@@ -31,19 +31,29 @@ exports.socketer = function(socket, data){
 				} 
 				else{
 					if(doc){
-						var markups_pushed = []
+						
 						_.each(data.actions, function(action){
+
 							if(action.type == 'markup_push'){
-								console.log(action.markup)
-								var markup = new Object( { 'username':data.user.username, 'user_id': data.user.user_id, 'position': action.markup.position, 'start':action.markup.start, 'end':action.markup.end, 'subtype':action.markup.subtype, 'type':action.markup.type, 'status': 'pending', 'metadata': action.markup.metadata, 'depth': 1} )
-								
-
-
+								//console.log(action.markup)
+								var markup = new Markup( { 'username':data.user.username, 'user_id': data.user.user_id, 'position': action.markup.position, 'start':action.markup.start, 'end':action.markup.end, 'subtype':action.markup.subtype, 'type':action.markup.type, 'status': 'pending', 'metadata': action.markup.metadata, 'depth': 1} )
+								markup.user = {'username':data.user.username, 'user_id': data.user.user_id}
+								markup.user_id =  data.user.user_id
 								markup.isNew; // true
 								doc.markups.push(markup)
-								markup.user = {'username':data.user.username, 'user_id': data.user.user_id}
 								markups_pushed.push(markup)
+
 							}
+							if(action.type == 'content_push' &&  action.value){
+								console.log('content_push')
+								console.log(data)
+								doc.content = action.value+''+doc.content
+								content_pushed.push(action)
+
+							}
+
+
+
 						})
 						
 						doc.markModified('markups');
@@ -54,7 +64,13 @@ exports.socketer = function(socket, data){
 							else {
 								console.log('pushed')
 
-								data.markups_pushed = markups_pushed
+								if(markups_pushed.length>0){
+									data.markups_pushed = markups_pushed
+
+								}
+								if(content_pushed.length>0){
+									data.content_pushed = doc.content
+								}
 
 
 								socket.broadcast.emit('newsback', data)

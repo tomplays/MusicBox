@@ -21,7 +21,7 @@ can redirect window
  */
 var temp_scope;
 angular.module('musicBox.DocumentService',[])
-.factory("DocumentService", function($rootScope, $http,$sce, $resource,$location, $routeParams ,renderfactory, DocumentRest, UserService, $timeout, $locale) {
+.factory("DocumentService", function($rootScope, $http,$sce, $resource,$location, $routeParams ,renderfactory, DocumentRest, UserService, $timeout, $locale,MarkupService) {
 
   
   var DocumentService = function() {
@@ -57,9 +57,7 @@ angular.module('musicBox.DocumentService',[])
           //    $rootScope.doc.markups  = Result.doc.markups;
          
 
-          $rootScope.doc_options      =    this.apply_object_options('document', Result.doc.doc_options)
-          $rootScope.author_options   =    this.apply_object_options('author',   Result.doc.user.user_options)
-               
+       
 
               if(Result.doc.room){
                   $rootScope.doc.room__id = Result.doc.room._id;
@@ -81,6 +79,16 @@ angular.module('musicBox.DocumentService',[])
         
                 $rootScope.objects_sections = [];
                 $rootScope.objects_sections['global_all'] = [];
+                
+
+               // // new service call.
+                Result.doc.servicetype = 'document'
+                var _doc = new MarkupService().init(Result.doc)
+
+
+                $rootScope.doc_options      =    _doc.apply_object_options('document', Result.doc.doc_options)
+                $rootScope.author_options    =   _doc.apply_object_options('author',   Result.doc.user.user_options)
+               
 
 
             new UserService().SetFromApi(Result.userin)
@@ -123,9 +131,7 @@ angular.module('musicBox.DocumentService',[])
 
   DocumentService.prototype.populate = function (Result) {
 
-         var d = Result.doc
-     
-
+      
         
           // filter markups > only if markup.type ==  "container"
         
@@ -158,40 +164,6 @@ angular.module('musicBox.DocumentService',[])
        
       
   }
-   /**
-      * @description Sub-function to set objects options (doc_options, users_options, etc..)
-      * @param {String} object - kind of object to map
-      * @param {Array} options - source array
-      * @return {{Array}}
-      * @function docfactory#apply_object_options
-      * @todo ---
-      */
-
-      DocumentService.prototype.apply_object_options = function(object, options){
-        //console.log(' apply doc_options to object'+object)
-        var options_array = [];
-        _.each(options , function(option){
-            
-           
-            var op_name = option.option_name;
-            options_array[op_name]          = [];
-            options_array[op_name]['value'] = option.option_value
-            options_array[op_name]['_id']   = option._id
-            options_array[op_name]['type']  = option.option_type
-            if( option.option_value && option.option_type == 'google_typo' && object == 'document'){
-               WebFont.load({
-                  google: {
-                   families: [option.option_value]
-                  }
-               }); 
-               var fixed = options_array[op_name]['value'];
-               options_array[op_name]['fixed'] =  fixed.replace(/ /g, '_').replace(/,/g, '').replace(/:/g, '').replace(/400/g, '').replace(/700/g, '') 
-            }
-        });       
-        // console.log(options_array) 
-        return options_array;
-      }
-     
 
  
 
@@ -243,7 +215,7 @@ angular.module('musicBox.DocumentService',[])
 
         console.log(data)
         
-        var promise = this.api_method.doc_sync({id:$rootScope.doc.slug},serialize(data)).$promise;
+        var promise = this.api_method.sync({id:$rootScope.doc.slug},serialize(data)).$promise;
         promise.then(function (Result) {
           if(Result.doc){
 
@@ -288,7 +260,6 @@ angular.module('musicBox.DocumentService',[])
       * 
       * @function docfactory#save_doc
       * @link docfactory#save_doc
-      * @todo rename to doc_save
       */
 
       DocumentService.prototype.save_doc = function (field) {
@@ -308,7 +279,7 @@ angular.module('musicBox.DocumentService',[])
         }
 
 
-        var promise = this.api_method.doc_save({id:$rootScope.doc._id},serialize(data)).$promise;
+        var promise = this.api_method.save({id:$rootScope.doc._id},serialize(data)).$promise;
         promise.then(function (Result) {
             var restart = false
             if(field == 'room_id'){
@@ -383,9 +354,9 @@ angular.module('musicBox.DocumentService',[])
         }
         var data = new Object({'_id':id,'value':value})
       
-        var promise = this.api_method.doc_option_edit({id:this.slug},serialize(data)).$promise;
+        var promise = this.api_method.option_edit({id:this.slug},serialize(data)).$promise;
         promise.then(function (Result) {
-              thos.populate(Result)
+             
               thos.flash_message('option saved (->'+data.value+')', 'ok' , 3000)
              
         }.bind(this));
@@ -413,9 +384,9 @@ angular.module('musicBox.DocumentService',[])
         var thos = this;
         var data = new Object({'_id':_id})
    
-        var promise = this.api_method.doc_option_delete({id:this.slug},serialize(data)).$promise;
+        var promise = this.api_method.option_delete({id:this.slug},serialize(data)).$promise;
         promise.then(function (Result) {
-              thos.populate(Result)
+             
               thos.flash_message('option deleted', 'ok' , 3000)
               // reinit, no need to redraw containers
         }.bind(this));
@@ -443,9 +414,9 @@ angular.module('musicBox.DocumentService',[])
         var thos = this;
         var data = new Object({'option_name':$rootScope.ui.doc_option_new_name })
     
-        var promise = this.api_method.doc_option_new({id:this.slug},serialize(data)).$promise;
+        var promise = this.api_method.option_new({id:this.slug},serialize(data)).$promise;
         promise.then(function (Result) {
-              thos.populate(Result)
+             
               thos.flash_message('document option created','ok', 3000)
         }.bind(this));
         promise.catch(function (response) { 
@@ -480,7 +451,7 @@ angular.module('musicBox.DocumentService',[])
 
         var data =  $rootScope.newdoc;
         
-        var promise = this.api_method.doc_new({},serialize(data)).$promise;
+        var promise = this.api_method.new({},serialize(data)).$promise;
         promise.then(function (Result) {
 
 
@@ -584,7 +555,7 @@ angular.module('musicBox.DocumentService',[])
         var thos = this;
         var promise = new Object();
      
-        promise.query = DocumentRest.doc_delete( {id:this.slug}).$promise;
+        promise.query = this.api_method.delete( {id:this.slug}).$promise;
         promise.query.then(function (Result) {
             thos.flash_message('deleted', 'ok' , 3000)
 

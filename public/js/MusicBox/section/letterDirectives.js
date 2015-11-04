@@ -17,21 +17,23 @@
 
 angular.module('musicBox.LetterDirectives', [])
 .directive('lt',   function($rootScope, MusicBoxLoop) {
-  
+ // var use_markup = 'h1'
+  var use_markup = 'span'
+
   function selection_ends(scope,e){
       // $rootScope.ui.selected_range.end = scope.lt.order+scope.$parent.section.start // 'end' is last event..
       
 
       console.log(e)
       $rootScope.ui.selected_range.end =  scope.lt.absolute_order+1
-      
       $rootScope.ui.selected_range.start=  scope.lt.absolute_order
-
-
       // alert($rootScope.ui.selected_range.end)
       $rootScope.ui.selected_range.textrange = '';
-/*
+      $rootScope.ui.selected_range.wait_ev = false  // now ready!
 
+
+
+/*
       // reorder if/sup test here.
       if( $rootScope.ui.selected_range.start >  scope.lt.absolute_order){
         var temp_s = $rootScope.ui.selected_range.start;
@@ -47,7 +49,6 @@ angular.module('musicBox.LetterDirectives', [])
         }
 
 */
-      $rootScope.ui.selected_range.wait_ev = false  // now ready!
 
 
   }
@@ -73,20 +74,23 @@ angular.module('musicBox.LetterDirectives', [])
   }
   */
 
-
-
+  var tsts = 0
+  var logevent = {'directive':'lt', 'event':'none','count':tsts, 'waiting':null}
   function sets(){
-    var logevent = {'directive':'lt', 'event':'none'}
+    tsts++
+   
+    logevent.started = $rootScope.ui.selected_range.start
+    logevent.ended = $rootScope.ui.selected_range.end
+
+    console.log(logevent)
 
     // $rootScope.ui.selected_range.debug.push(logevent)
     $rootScope.$apply(function(){});
-      console.log('waiting '+$rootScope.ui.selected_range.wait_ev)
-      if($rootScope.ui.selected_range.wait_ev == false){
-       //console.log($rootScope.ui.selected_range)
-
-      }
-
-console.log('sets')
+    console.log('waiting '+$rootScope.ui.selected_range.wait_ev)
+    //if($rootScope.ui.selected_range.wait_ev == false){
+     
+    //}
+    console.log('sets')
 
   }  // SCAN /
 
@@ -137,7 +141,7 @@ console.log('sets')
               $rootScope.ui.selected_range.wait_ev =false
              // alert('char: '+scope.lt.char+'scope.absolute_order:'+scope.lt.absolute_order+'  scope.order:'+scope.lt.order)
 
-
+             logevent.event = 'click'
               sets()
           });
 
@@ -163,7 +167,7 @@ console.log('sets')
               scope.$parent.section.editing = true;
              
               */
- $rootScope.ui.selected_range.wait_ev = false
+              $rootScope.ui.selected_range.wait_ev = false
               //alert('char: '+scope.lt.char+'scope.absolute_order:'+scope.lt.absolute_order+'  scope.order:'+scope.lt.order)
               sets()
           });
@@ -172,8 +176,7 @@ console.log('sets')
           elem.bind('mousedown', function(e) { // restarting a selection
               //selection_starts(scope)
 
-
- 
+             
               if(!$rootScope.ui.selected_range.end){
                 if(scope.lt.order==0){
                       $rootScope.ui.selected_range.end= 0
@@ -208,12 +211,11 @@ console.log('sets')
 
               }
               
-
-
               console.log(e)
-              $rootScope.ui.selected_range.wait_ev = true  // now waiting mouseup!
-            //  $rootScope.ui.selected_range.end =    scope.lt.absolute_order
-         
+              $rootScope.ui.selected_range.wait_ev = false  // now waiting mouseup!
+           
+             logevent.event = 'mousedown'
+ 
               sets()
           });
 
@@ -223,72 +225,74 @@ console.log('sets')
 
           elem.bind('mouseup', function(e) { // selection ends
 
+            logevent.event = 'mouseup'
 
 
-             
-              if( $rootScope.ui.selected_range.start >  $rootScope.ui.selected_range.end){
+            var rstart =  $rootScope.ui.selected_range.start
+            var rend =    $rootScope.ui.selected_range.end
+
+              if(rstart  >  rend){
                alert('583')
 
               }
                
-              if(!$rootScope.ui.selected_range.end){
+              if(!rend){
                 if(scope.lt.absolute_order==0){
-                      $rootScope.ui.selected_range.end= 0
+                     rend= 0
                     }
                     else{
-                      $rootScope.ui.selected_range.end= scope.lt.absolute_order
+                      rend= scope.lt.absolute_order
                     }
                }
                else{
-                 $rootScope.ui.selected_range.end = scope.lt.order
+                 rend = scope.lt.order
 
                }
-                if(!$rootScope.ui.selected_range.start){
 
-                   if($rootScope.ui.selected_range.start==0){
-                    }
-                    else{
-                      $rootScope.ui.selected_range.start= scope.lt.absolute_order
-                    }
+               if(!rstart){
+
+                  if(rstart==0){
+                  }
+                  else{
+                      rstart= scope.lt.absolute_order
+                  }
                }
                else{
-                  $rootScope.ui.selected_range.end = scope.lt.absolute_order
+                  rend = scope.lt.absolute_order
 
                }
 
-
-
-
-
-              //selection_ends(scope,e) 
-              if( $rootScope.ui.selected_range.start >  $rootScope.ui.selected_range.end){
-                var temp_s = $rootScope.ui.selected_range.start+1;
-                $rootScope.ui.selected_range.start  = $rootScope.ui.selected_range.end
-                $rootScope.ui.selected_range.end = temp_s
-
+              if(rstart >  rend){
+                 var temp_s = rstart+1;
+                 rstart  = rend
+                 rend = temp_s
+                 logevent.event = 'mouseup-reversed'
               }
               
-
-
-              if($rootScope.ui.selected_range.end<0){
-                $rootScope.ui.selected_range.end=0
+              if(rend<0){
+               rend=0
               }
-               $rootScope.ui.selected_range.wait_ev = false  // now waiting mouseup!
+
+
+             
+              $rootScope.ui.selected_range.wait_ev    = false  // now waiting mouseup!
+              $rootScope.ui.selected_range.start      = rstart 
+              $rootScope.ui.selected_range.end        = rend
+              
 
               sets()
           });
-         /*
+          /*
            elem.bind('mouseover', function(e) {  // while selection is active
              //selection_running(scope) 
-            
              sets()
           });
-*/
+          */
          
     }
 
     return {
-          template: '<span class="lt" ng-class="lt.classes" inselection="{{lt.inselection}}" inrange="{{lt.inrange}}" ng-bind-html="lt.char"></span>',
+          template: '<'+use_markup+' contenteditable____ class="lt" ng-class="lt.classes" inselection="{{lt.inselection}}" inrange="{{lt.inrange}}" ng-bind-html="lt.char"></'+use_markup+'>',
           replace :false,
           restrict: 'A',
           link:link,
@@ -299,6 +303,23 @@ console.log('sets')
   })
 
 
+.directive("contenteditable__", function() {
+  return {
+    restrict: "A",
+    link: function(scope, element, attrs, ngModel) {
+
+      
+
+      element.bind("blur keyup change", function() {
+        console.log(element.html())
+         //console.log(scope.lt.char)
+               // element.html('I')
+               // scope.lt.char ='('
+               // scope.$apply();
+      });
+    }
+  };
+})
 
 
 
@@ -341,7 +362,7 @@ console.log('sets')
       */
 
  elem.bind('change', function(event) {
-console.log(event)
+alert(event)
             console.log('change mbeditable')
  })
          elem.bind('keyup', function(event) {

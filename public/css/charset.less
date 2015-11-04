@@ -111,35 +111,42 @@
   }
   &.datavalue{
     background: none repeat scroll 0 0 rgba(231, 76, 60, 0.6);
-    /*basic tests */
-     &.x:after,
-     &.y:after,
-      &.string:after,
-     &.z:after{
-      font-size: 0.8em;
-      opacity: 0.7;
-      vertical-align: super;
+    font-family: monospace;
+    
+     &[inrange="true"]{
+        background: none repeat scroll 0 0 rgb(231, 76, 1.0);
      }
-      &.x:after{
-         content: "x";
-      }
-      &.y:after{
-         content: "y";
-      }
-      &.z:after{
-        content: "z";
-      }
-        &.string:after{
-         content: "string";
+
+
+    &.islast-range{
+
+
+      /*basic tests */
+       &.x:after,
+       &.y:after,
+        &.string:after,
+       &.z:after{
+        font-size: 0.8em;
+        opacity: 0.7;
+        vertical-align: super;
+       }
+        &.x:after{
+           content: "x";
+        }
+        &.y:after{
+           content: "y";
+        }
+        &.z:after{
+          content: "z";
+        }
+          &.string:after{
+           content: "string";
+        }
       }
 
       
 
-      &.selected {
-        background: none repeat scroll 0 0 rgb(231, 76, 60);
-        font-family: monospace;
-        font-size: 2em;
-      }
+     
   }
   &.cite, 
   &.quote{
@@ -387,7 +394,7 @@ ul.typer{
 .lt.comment{
     background: none repeat scroll 0 0 rgba(39, 174, 96, 0.3);
     
-    &.selected {
+    &.selected,  &[inrange="true"] {
       
       background: none repeat scroll 0 0 rgba(39, 174, 96, 0.7);
     }
@@ -939,7 +946,7 @@ span.lt[inrange="true"] {
  
   border-left:none;
     border-right:none;
-background:#2ecc71;
+// background:#2ecc71;
   
   -webkit-animation-name: none;
   animation-name: none;
@@ -952,8 +959,10 @@ background:#2ecc71;
 
 
 
+
+
  span.lt[inrange="true"] {
-background:red;
+// background:red;
 }
 
 span.lt[inselection="true"] { 
@@ -962,7 +971,26 @@ span.lt[inselection="true"] {
 
 
  span.lt[inrange="true"] {
-  &[inselection="true"]{
-  background:pink;
+    &[inselection="true"]{
+      background:pink;
+    }
   }
+
+.wait_ev{
+   border-radius: 8px;
+    display: inline-block;
+    float: left;
+    height: 7px;
+    margin-right: 3px;
+    margin-top: 7px;
+    opacity: 0.8;
+    width: 7px;
+}
+
+.wait_ev--true{
+  background:red;
+}
+.wait_ev--false {
+  background: #2ecc71 none repeat scroll 0 0;
+   
 }

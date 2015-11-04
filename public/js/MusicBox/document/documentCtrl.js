@@ -112,10 +112,15 @@ function DocumentCtrlCompiled($scope, $http , $sce, $location, $routeParams ,soc
     }
 }
 
-function DocumentCtrl($scope, $http , $sce, $location, $routeParams ,socket,renderfactory, DocumentService, $anchorScroll, MusicBoxLoop,  $timeout) {
+function DocumentCtrl($scope, $http , $sce, $location, $routeParams ,socket,renderfactory, DocumentService, $anchorScroll, MusicBoxLoop,  $timeout, MarkupService) {
 		
 
 	doc = new DocumentService()
+
+
+
+			
+
 	
 	/**
 	* initialization for document and render factory (services)
@@ -244,39 +249,7 @@ $scope.SetSlug = function (slug) {
 
 
 
- /**
-      * @description Sub-function to set objects options (doc_options, users_options, etc..)
-      * @param {String} object - kind of object to map
-      * @param {Array} options - source array
-      * @return {{Array}}
-      * @function docfactory#apply_object_options
-      * @todo ---
-      */
 
-      $scope.apply_object_options = function(object, options){
-        //console.log(' apply doc_options to object'+object)
-        var options_array = [];
-        _.each(options , function(option){
-           
-            var op_name = option.option_name;
-            options_array[op_name]          = [];
-            options_array[op_name]['value'] = option.option_value
-            options_array[op_name]['_id']   = option._id
-            options_array[op_name]['type']  = option.option_type
-
-            if( option.option_value && option.option_type == 'google_typo' && object == 'document'){
-               WebFont.load({
-                  google: {
-                   families: [option.option_value]
-                  }
-               }); 
-               var fixed = options_array[op_name]['value'];
-               options_array[op_name]['fixed'] =  fixed.replace(/ /g, '_').replace(/,/g, '').replace(/:/g, '').replace(/400/g, '').replace(/700/g, '') 
-            }
-        });       
-        // console.log(options_array) 
-        return options_array;
-      }
 
 	/**
 	*
@@ -581,39 +554,64 @@ $scope.SetSlug = function (slug) {
 	
 	});
 	$scope.$watch('ui.selected_range.redraw', function(newValue, oldValue) {
-		
-		if(newValue === false){
+		console.log('<<<<<<<<<< ui.selected_range.redraw')
 
+
+		console.log(newValue, oldValue)
+		if(!newValue || newValue === false){
+			console.log('<<<<<<<<<< do nothing (ui.selected_range.redraw end)')
 		}
 		else{
 					
 				console.log('reset all document markups to selected = false')
 				_.each($scope.markups, function(m, i){
-  					m.selected = false;
-  					m.inrange = false;
+	  				
 				})
 
 				// stop redraw loop (each section)
 				$scope.ui.selected_range.redraw=false
 				$scope.ui.selected_range.set=true
-				$scope.ui.selected_range.size = $scope.ui.selected_range.end - $scope.ui.selected_range.start
+				$scope.ui.selected_range.size = $scope.ui.selected_range.end - $scope.ui.selected_range.start + 1
 				$scope.ui.selected_range.multi = ($scope.ui.selected_range.end - $scope.ui.selected_range.start) > 0 ? true : false
+
+
+				_.each($scope.containers, function(c,i){
+					console.log(c)
+					c.redraw = true;
+  					
+				})
 
 
 		}
 	})
 
-	
+	 $scope.$watch('markups', function(oldValue, newValue) {
+      
+		//
+   },true);
+
 	$scope.$watch('ui.selected_range.start', function(newValue, oldValue) {
+			if(newValue==null){
+				
+			}
+			else{
 				    if($scope.ui.selected_range.wait_ev == false){
 						$scope.ui.selected_range.redraw=true
 					}
+			}
 	});	
 
 	$scope.$watch('ui.selected_range.end', function(newValue, oldValue) {
+
+			if(newValue==null){
+				
+			}
+			else{
 					if($scope.ui.selected_range.wait_ev == false){
 						$scope.ui.selected_range.redraw=true
 					}
+			}
+					
 	});
 
 	/*
@@ -685,18 +683,41 @@ $scope.SetSlug = function (slug) {
 		console.log(data);
 	})
 	
-		socket.on('newsback', function (data) {
+
+	
+	socket.on('newsback', function (data) {
 		console.log('newsback')
 		console.log(data);
-		if(data.identifier && data.identifier== $scope.doc.slug){
+		console.log($scope.doc)
+		
+		if(!$scope.markups_pushed){
+			$scope.markups_pushed = []
+		}
+		console.log($scope.markups_pushed)
+
+		if(data.identifier && data.identifier == $scope.doc.slug && data.markups_pushed){
 			_.each(data.markups_pushed, function(m){
-					m.user_id = {'_id':m.user.user_id}
+				//	m.user_id = {'_id':m.user.user_id}
 					$scope.markups.push(m)
-					console.log($scope.markups.length)
-					$scope.doc.markups.push(m)
+				    //  console.log($scope.markups_pushed.length)
+				    //	$scope.markups_pushed.push(m)
+					
 			})
+			$scope.ui.selected_range.redraw= true
+
+
 		}
 
+		if(data.identifier && data.identifier == $scope.doc.slug && data.content_pushed){
+			
+			$scope.doc.content = data.content_pushed
+			_.each($scope.containers, function(c,i){
+					console.log(c)
+					c.redraw = true;
+					
+  					
+				})
+		}
 		
 	})
 

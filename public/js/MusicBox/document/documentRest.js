@@ -23,7 +23,11 @@ angular.module('musicBox.DocumentRest', [])
         //interceptor: { response: parseResponse }
         //isArray: false
       },
-      doc_delete:{
+      new :{       
+        method:"POST",
+        url: api_url+'/doc/create',
+      },
+      delete:{
         method:"POST",
         url: api_url+'/doc/:Id/delete',
          params :  {Id:'@id'},
@@ -31,11 +35,11 @@ angular.module('musicBox.DocumentRest', [])
         //interceptor: { response: parseResponse }
         //isArray: false
       },
-      doc_save:{     
+      save:{     
         method:"POST",
         url: api_url+'/doc/:id/edit',  
       },
-      doc_sync:{     
+      sync:{     
         method:"POST",
         url: api_url+'/doc/:id/sync',  
       },
@@ -43,17 +47,13 @@ angular.module('musicBox.DocumentRest', [])
         method:"POST",
         url: api_url+'/doc/:id/doc_option_edit'
       },
-      doc_option_delete:{ 
+      option_delete:{ 
         method:"POST",
         url: api_url+'/doc/:id/doc_option_delete'
       },
-      doc_option_new :{       
+      option_new :{       
         method:"POST",
         url: api_url+'/doc/:id/doc_option_new'
-      },
-      doc_new :{       
-        method:"POST",
-        url: api_url+'/doc/create',
       }
     }
   );
