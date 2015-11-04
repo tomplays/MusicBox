@@ -170,17 +170,9 @@ if(debugger_on){
 
 
 exports.prerender = function(doc) {
+	console.log('Mb server side loop')
 	var output = {}
 	var trace = {}
-
-
-
-
-	//output.sections 	= []
-	//output.markups_ 	= []
-
-					
-
 
 	trace.sections = []
 	trace.segments = []
@@ -193,24 +185,23 @@ exports.prerender = function(doc) {
 	var tempsegement_content_single = '';
 
 	
-	
+	var layout_zones = ['wide','slidewide','left','center', 'inline', 'right', 'under', 'global']
+
+		
 
     var segments = []
 	// opening wrapping all div
-	output.compiled_full = '<div>'
+
+	var compiled_full = '<div>'
+	
 	// output.prerendered 	= true
 
 
 
-
-
 	var sections =   _.filter(doc.markups, function(td){ return  td.type == 'container'; });
-	
-
-
 	sections.forEach(function(s,si) {
 	//	output.sections.push(s)
-		trace.sections[si] = {index: si, start:s.start, end:s.end, segments: new Array() }
+		trace.sections[si] = {index: si, start:s.start, end:s.end, segments: new Array('') }
 	})
 
 
@@ -220,17 +211,23 @@ exports.prerender = function(doc) {
 	_.each(sections, function(s,si) {
 
 		
-		console.log(segments)
+		//console.log(segments)
 		var s_text = '';
 		var c_text = '';
 		var s_letters = []
 		var s_objects = []
-		s_objects.right = []
+
+		layout_zones.forEach(function (key) {
+			s_objects[key] = []
+		})
+		
+		
+
 		s_objects.inline = []
-		s.segments = []
+		s.segments = ['jk']
 
 
-		console.log('</section><section>')
+		//console.log('</section><section>')
 
 
 		var compiled = ''
@@ -244,13 +241,13 @@ exports.prerender = function(doc) {
 			local_count++;
 			s_letters.push(s_letter)
 			s_text += doc.content[pos]
-			console.log('zou-'+doc.content[pos])
+			//console.log('zou-'+doc.content[pos])
 		}
 
 
 		trace.sections[si].text = s_text
 		trace.sections[si].letters = s_letters
-		console.log(doc.markups._id)
+	//	console.log(doc.markups._id)
 		
 
 		var s_markups = _.filter(doc.markups,function (m) {
@@ -271,11 +268,14 @@ exports.prerender = function(doc) {
 				// section_class++
 				
 				
-			//	var mkin = {'position':m.position, 'type':m.type,'subtype':m.subtype, 'metadata':m.metadata}
+			    var mkin = {'position':m.position, 'type':m.type,'subtype':m.subtype, 'metadata':m.metadata}
 				var p = m.position
-			//	s_objects[p].push(mkin)
+				if(s_objects[p]){
+					s_objects[p].push(mkin)
+				}
+			    
 
-			//console.log(m._id);
+			    //console.log(m._id);
 
 
 				for (var pos_mk = offstart; pos_mk<=offend; pos_mk++){
@@ -283,8 +283,8 @@ exports.prerender = function(doc) {
 						s_letters[pos_mk].oo = []
 					}
 
-					var mkin = {'type':m.type,'subtype':m.subtype, 'm_id' : m._id} 
-					console.log(m)
+					var mkin = {'type':m.type, 'subtype':m.subtype, 'm_id' : m._id} 
+					//console.log(m)
 
 
 					s_letters[pos_mk].oo.push(mkin)
@@ -302,7 +302,7 @@ exports.prerender = function(doc) {
 		
 
 				
-					console.log(i)
+					//console.log(i)
 			
 
 
@@ -314,73 +314,119 @@ exports.prerender = function(doc) {
 	    			var prev_class = []
 	    			var current_class = [];
 
-	    			var is_first = i == 0 ? true : false
-	    			var is_last= i == s_letters.length-1 ? true : false
+	    			var is_first = (i == 0) ? true : false
+	    			var is_last  = (i == s_letters.length-1) ? true : false
 
+					l.is_first = is_first
+					l.is_last = is_last
 
-	    			
-
-
-					l.classes = {ids:new Array(),'current': new Array(), 'next': new Array(), 'prev': new Array()}
+					l.classes = { ids:new Array(),'current': new Array(),'current_flat': 'lt ', 'next': new Array(), 'prev': new Array()}
+					l.classes.current_ = {ids:new Array(), classes :new Array(), flat:'lt '}
 					l.segment = {'opening': null, 'closing': null}
 
 	    			//l.position.relative=i
+					//_____________________________________________________________
+	    			/*
+						three pass loop to inject "current, next and previous" classes object
+	    			*/
+					//  i+ -1 (prev) i+ 0 (current) i+1 (next)
+					var class_arr;
+					for (class_arr = 0; class_arr<=2; class_arr++){
+						var fix_index = class_arr-1;
+						var class_arr_index = i+fix_index
+						// console.log('fix_index'+fix_index)
+						//console.log(class_arr_index)
+						if( s_letters[class_arr_index] && s_letters[class_arr_index].oo && s_letters[class_arr_index].oo.length > 0 ){
+						 	
+						 	var  sl = s_letters[class_arr_index].oo
+
+							 sl.forEach(function(c){
+							 	var class_string = c.type+'_'+c.subtype
+
+							 	if(fix_index == -1){
+							 		prev_class.push(class_string);
+									l.classes.prev.push(class_string);
+							 			// todo
+							 	}
+							 	if(fix_index == 1){
+							 		next_class.push(class_string);
+									l.classes.next.push(class_string);
+							 		
+							 	}
+							 	else if(fix_index == 0){
+							 		current_class.push(c.type+'_'+c.subtype);
+									l.classes.current.push(c.type+'_'+c.subtype);
+									l.classes.ids.push(c.m_id)
+							 		// todo
+							 		
+							 	}
+
+							})
+
+							if(fix_index == 0){
+								// todo : rename as {l.classes.current_flat (string) }
+								var classes_flat  = 'lt '
+								 _.each(l.classes.current, function(c,ci){
+									classes_flat += c+' ';
+									l.classes.current_flat += c+' ';
+								})
+							}
+
+
+						}
+
+					}
+					//_____________________________________________________________
+
+
+					/*
 
 					if(l.oo && (l.oo.length > 0 ) ){
-					//	current = true	
 						l.oo.forEach(function(c){
-							current_class.push(c.type+'_'+c.subtype);
-							l.classes.current.push(c.type+'_'+c.subtype);
-							l.classes.ids.push(c.m_id)
+							
 						})
+
+
+						// todo : rename as {l.classes.current_flat (string) }
+						var classes_flat  = 'lt '
+						
+						 _.each(l.classes.current, function(c,ci){
+							classes_flat += c+' ';
+							l.classes.current_flat += c+' ';
+						})
+
+
 					}
 
 					
-
+				
 					if( s_letters[i+1] && s_letters[i+1].oo && s_letters[i+1].oo.length > 0 ){
 						// next = true;
 						 var sl = s_letters[i+1].oo
 						 sl.forEach(function(c){
-							next_class.push(c.type+'_'+c.subtype);
-							l.classes.next.push(c.type+'_'+c.subtype);
+							//next_class.push(c.type+'_'+c.subtype);
+							//l.classes.next.push(c.type+'_'+c.subtype);
 						}) 
 					}
-
-
-
-
-
+					
 					
 					if(s_letters[i-1] && s_letters[i-1].oo && s_letters[i-1].oo.length > 0 ){
 						// prev = true
-						  var sl = s_letters[i-1].oo
+						 var sl = s_letters[i-1].oo
 						 sl.forEach(function(c){
-							prev_class.push(c.type+'_'+c.subtype);
-							l.classes.prev.push(c.type+'_'+c.subtype);
+							
 						})
 						
 					}
 
-
-
-
-
-
-
-
-						var classes_flat  = 'lt '
-						
-						 _.each(current_class, function(c,ci){
-							classes_flat += c+' ';
-						})
-						  _.each(prev_class, function(c,ci){
+				 _.each(prev_class, function(c,ci){
 							//classes_flat += c+' ';
 						})
 						   _.each(next_class, function(c,ci){
 							//classes_flat += c+' ';
 						})
 
-
+					*/
 
 
 
@@ -466,8 +512,6 @@ exports.prerender = function(doc) {
 						
 						compiled_inline += l.letter
 						tempsegement_content +=l.letter
-
-					//	segment.content += l.letter
 						
 						if(next_class.length>0 || is_last == true ){
 										
@@ -477,31 +521,37 @@ exports.prerender = function(doc) {
 						}
 					}	
 
-l.classes.ids= _.uniq(l.classes.ids) 
+					l.classes.ids= _.uniq(l.classes.ids) 
 
-					// "finally"
+					// "finally" if the letter is a "closing segment" letter
 					if(l.segment.closing === true){
-						   newsegment = {classes: l.classes.current, class_size:l.classes.ids.length, ids: l.classes.ids, content_single : tempsegement_content_single, end_at:i,content:tempsegement_content, chars_length : (i - tempsegement_start_at + 1), start_at:tempsegement_start_at, /*start:tempsegement_start, closing:'</span>'*/}
+						    newsegment = {
+						    	start_at:tempsegement_start_at,
+						    	classes: l.classes.current, 
+						    	class_size:l.classes.ids.length,
+						    	ids: l.classes.ids, 
+						    	content_single : tempsegement_content_single, 
+						    	end_at:i,content:tempsegement_content,
+						    	chars_length : (i - tempsegement_start_at + 1)
+						    }
+
 							newsegment.flatten =  tempsegement_start+tempsegement_content+'</span>';
 
 							// add to output
 							segments.push(newsegment)
+							trace.sections[si].segments.push(newsegment)
 
 							// reset content string
 							tempsegement_content =''
 							tempsegement_content_single =''
 					}
  					// c_text +="<span class='is_last-"+is_last+" is_first-"+is_first+" "+classes_flat+" count-"+i+" has_prev-"+prev_class+" has_next-"+next_class+"'>"+l.letter+"</span>"
- 					
-
- 					
-		
 
 		})
 
 		//console.log(segments)
 		
-		trace.segments= segments
+		trace.segments = segments
 		trace.segments_count = _.size(segments)
 
 		// without layout (experimental)
@@ -509,30 +559,35 @@ l.classes.ids= _.uniq(l.classes.ids)
 			trace.segments_flattten += seg.flatten
 		});
 
+		s.segments = new Array(segments);
 
+		
+
+		// SUB
+		// var sectionLayout = exports.tolayout()
+		// console.log(sectionLayout )
 
 		
 		//  compile each layout side
 		var compiled_sides = ''
 
 
-		//var posy = ['inline']
-		var posy = ['wide','left','center', 'inline', 'right', 'under', 'global']
+		// var layout_zones = ['inline']
+	
 
-		posy.forEach(function (key) {
+		layout_zones.forEach(function (key) {
 
 			var compiled_side = ''
 			var compiled_side_inside = ''
 			var compiled_side_class = ''
 
 
-			 // extra title in center zone if first section 
+			 // add title in center zone if first section 
              if(key=='center' && si===0){
-
              		compiled_side_inside += "<h1>"+doc.title+"</h1>"
              }
 
-             // adds gloabl for last section
+             // adds global for last section
              if(key=='global' && si== sections.length-1 ){
 
              		if(!s_objects[key]){
@@ -540,25 +595,22 @@ l.classes.ids= _.uniq(l.classes.ids)
              		}
 					else{
 						 compiled_side_inside += "<h2>Global</h2>"
-
 					}
-
              }
 
              if(key=='inline'){
              		compiled_side_inside += compiled_inline
              }
             
-
-
 		  	if(s_objects[key] && s_objects[key].length > 0 && key !=='inline'){
-		  			compiled_side_class += 'is_empty-false' 
+		  			compiled_side_class += ' is_empty-false ' 
 		  		    
 					var ooo = s_objects[key];
-					ooo.forEach(function(o,i){
+					ooo.forEach(function(o,ioo){
+						
+					compiled_side_inside += "<div class='markup_box markup_box--"+o.type+" markup_index--"+ioo+"'>"
 					
-				
-					compiled_side_inside += "<div>"
+
 					if(o.type=="media"){
 						compiled_side_inside += "<span><img src='"+o.metadata+"' /></span>"
 
@@ -566,6 +618,8 @@ l.classes.ids= _.uniq(l.classes.ids)
 					else{
 						compiled_side_inside += "<span>"+o.metadata+"</span>"
 					}
+
+
 					compiled_side_inside += "</div>"
 		
 					
@@ -586,34 +640,43 @@ l.classes.ids= _.uniq(l.classes.ids)
 			}
 
 
-			compiled_side += "<div class='side_"+key+" "+compiled_side_class+"'> "
-			compiled_side += compiled_side_inside			
-			compiled_side += '</div>'
+			compiled_side += "<div class='side_"+key+" "+compiled_side_class+"'>"+compiled_side_inside+"</div>"
 
+
+
+			// each side string
 			compiled_sides += compiled_side
 		});
 
 
-		// wrap level in section 
-		compiled += '<section>'
+		// wrap layout in section 
+		compiled += "<section class='section-index--"+si+"'>"
 		compiled += compiled_sides
 		compiled += '</section>'
+
+
+
 
 
 		
 		// 'pretext':s_text, 'letters': s_letters, 'mk': o_markups, 'c_text': c_text, 'objects':s_objects, 
 		//var out_s = {'compiled': compiled}
 		//output.sections.push(out_s)
-		output.compiled_full += compiled
+		compiled_full += compiled
 
 	})
-	output.compiled_full +='</div>'
+	compiled_full +='</div>'
 	   //var o = new Object({'subject':'doc titlz - newsletter', 'bodytext': output.compiled_full})
 	   // mails.sendmailer(o)
 	
 
 
-	output.compiled_full_array = trace
+	 output.compiled_full_array = trace
+
+
+
+	output.sections___ = trace.sections;
+	output.compiled_full = compiled_full;
 
 	return output
 
