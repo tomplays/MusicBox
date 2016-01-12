@@ -18,14 +18,6 @@ module.exports = function(grunt) {
      		 path: "<%= cfg.ROOT_URL %>:<%= cfg.PORT %>/init",
      		 app: "Google Chrome"
     	},
-		wiredep: {
-			app: {
-				src: ['views/index.html', 'views/index.jade', 'views/header.jade'],
- 				 ignorePath: '../public',
-		         dependencies: true,
-		        //devDependencies: false, 
-			}
-		},
 		less: {				
 				options: {
 					 paths: ["public/css"],
@@ -36,7 +28,7 @@ module.exports = function(grunt) {
 						 expand: true,
 						 cwd: "public/css",
 						 src: "**/*.less",
-						 dest: "public/css/min",
+						 dest: "public/css/compiled",
 						 ext: ".css",
 				}
 		},
@@ -64,6 +56,23 @@ module.exports = function(grunt) {
 						}
 				},
 		},
+/*
+		minified : {
+		  files: {
+
+ 						  expand: true,
+				          cwd: 'public/c/MusicBox',
+				          src: 'user/*.js',
+				          dest: 'tmp/zami.js'
+
+		 
+		  },
+		  options : {
+		   // sourcemap: true,
+		  
+		  }
+		},
+*/
 		jade: {
 			compile: {
 				options: {
@@ -120,11 +129,80 @@ module.exports = function(grunt) {
 				}
 			}
 		},
+		/*
 		uglify: {
-			options: {
-				beautify: false,
-				preserveComments: "some"
+			
+
+			 options: {
+			     	beautify: false,
+					preserveComments: "some",
+					mangle:false
+			    },
+			    targetA: {
+
+
+	     
+					src: ["public/c/MusicBox/user/*.js"],
+
+				
+				
+					dest: 'public/js/MusicBox/user/min-user.js'
+             			
+			     
+			    }
+		},
+		*/
+		ngAnnotate: {
+		   
+		   
+			dist: {
+				
+
+				files: [{
+					expand: true,
+					cwd: "public/js",
+					src: ["MusicBox/**/*.js"],
+					dest: "public/c"
+				}]
+
 			}
+		},
+		concat: {
+   			 
+   			 js: { 
+       			 src: [ 
+
+
+					    'public/bower_components/angular/angular.js',
+						'public/bower_components/angular-resource/angular-resource.js',
+						'public/bower_components/angular-route/angular-route.js',
+						'public/bower_components/angular-sanitize/angular-sanitize.js',
+						'public/bower_components/underscore/underscore.js',
+						'public/bower_components/momentjs/moment.js',
+						'public/bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
+						'public/js/lib/webfont.js',
+						'public/bower_components/momentjs/min/moment-with-langs.min.js',
+						'public/bower_components/momentjs/lang/fr.js',
+						'public/c/MusicBox/*.js', 
+						'public/c/MusicBox/user/*.js',
+						'public/c/MusicBox/document/*.js', 
+						'public/c/MusicBox/section/*.js', 
+						'public/c/MusicBox/markup/*.js'
+				 ],
+       			 dest: 'public/js/min/MusicBox-js-min.js'
+    		 },
+    		 css: { 
+       			 src: [ 
+					    'public/css/bootstrap.min.css',
+					    'public/css/compiled/grid.css',
+					    'public/css/compiled/charset.css',
+					    'public/css/compiled/custom.css'						
+				 ],
+       			 dest: 'public/css/min/MusicBox-css-min.css'
+    		 }
+
+
+
 		},
 		useminPrepare: {
 			html: "dist/index.html",
@@ -230,33 +308,31 @@ module.exports = function(grunt) {
 		
 		watch: {
 			js: {
-				options: { livereload: true },
+				options: { /* livereload: true */ },
 				files: ['public/js/**/*.js'], // less auto-compilation
-				tasks: ['less']
+				tasks: ['ngAnnotate:dist','concat:js']
 			},
 
+			
 			styles: {
 				options: { livereload: true },
 				files: ['public/css/**/*.less'], // less auto-compilation
 				tasks: ['less']
 			},
-			bower: {
-				files: ["bower.json"],
-				tasks: ["wiredep"]
-			},
 
 			
 			templates: {
-					options: { livereload: true },
-				files: ['public/js/MusicBox/**/*.jade', 'views/**/*.jade'], // compiling  auto-dedug
-				tasks: ['jade', 'copy:dist'] //  'manifest'
+				options: { livereload: true },
+				files: ['public/js/MusicBox/**/*.jade','views/*.jade' , 'views/**/*.jade'], // compiling  auto-dedug
+				tasks: ['jade']
+				// , 'copy:dist'  //  'manifest'
 			},
 			
 			api_folder:{
 
 				options: { livereload: true },
-				files: ['api/**/*.js'], // restart server on controllers, routes and models changes
-				// tasks: ['forever:server1:restart']
+				files: ['api/**/*.js', 'config.json', 'index.js'], // restart server on controllers, routes and models changes
+				tasks: ['forever:server1:restart']
 
 			}
 			
@@ -286,13 +362,18 @@ module.exports = function(grunt) {
 				'connect:livereload'
 	]);
 	//grunt.registerTask('newsletter', ['']);
-//	grunt.registerTask('minifyz', ['usemin', 'cssmin']);
-	grunt.registerTask('minify', [
-	  'useminPrepare',
-	  'concat:generated',
-	  'uglify:generated',
-	  'filerev'
+	
+	grunt.registerTask('minify', [	
+		'ngAnnotate:dist',
+		'concat:js',
+		'concat:css'
 	]);
+
+	grunt.registerTask('prod', ['forever:server1:restart']);
+
+
+
+
 	// grunt.registerTask('minify', ['useminPrepare', 'ngtemplates','concat','usemin']);
 	grunt.registerTask('initdb', ['open']);
 	grunt.registerTask("deploy:test", "Deploy on TEST. server", ["rsync:test"]);
