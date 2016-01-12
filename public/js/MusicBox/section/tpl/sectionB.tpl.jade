@@ -1,0 +1,12 @@
+div(ng-if="section['objects_count']['by_positions'][layout.name].count > 0 || layout.include_even_empty", ng-repeat="layout in available_layouts")
+pre {{section.section_index}}
+pre {{section.start}}
+pre {{section.end}}
+pre {{section.map}}
+p {{section.fulltext}}
+
+pre letters : {{section.letters}}
+pre objs {{section.objects}}
+
+
+a(ng-click="fire_map('fulltext')") fire map fulltext
