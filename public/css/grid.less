@@ -366,7 +366,11 @@ section{
     padding:7% 0px;
   }
 
-
+   &.aligned{
+   .theletters, .fluidtext{
+      text-align:center;
+     }
+   }
   &.two-cols{
      .theletters, .fluidtext{
        -moz-column-count: 2;
@@ -1540,8 +1544,14 @@ width:100%;
     &.active,
     &.active:hover,
     & .fa.visible_yes,  
+    & .fa.visible_true,  
+
     &.visible_yes,
+     &.visible_true,
     & .fa.visible_yes:hover,
+    & .fa.visible_true:hover,
+
+     &.visible_true:hover,
     &.visible_yes:hover{
         opacity: 1;
         background:#2980b9;
@@ -1579,7 +1589,8 @@ span.floating-edit{
 
     background: rgba(236, 240, 241, .7);
     z-index: 99;
-    &.visible_yes,&.visible_yes:hover{
+    &.visible_yes,&.visible_yes:hover,
+        &.visible_true,&.visible_true:hover{
 
        background:  rgba(255, 255, 255, 0.96);
       

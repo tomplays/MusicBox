@@ -909,11 +909,11 @@ span.lt[inrange="true"]{
 
 @-webkit-keyframes pulse {
   25% {
-    -webkit-transform: scale(1.2);
+   // -webkit-transform: scale(1.2);
     transform: scale(1.2);
   }
   75% {
-    -webkit-transform: scale(0.8);
+   // -webkit-transform: scale(0.8);
     transform: scale(0.8);
   }
 }
@@ -942,15 +942,21 @@ span.islast{
   }
 }
 
+
+
+
+
+/*
 span.lt[inrange="true"] {
  
   border-left:none;
     border-right:none;
-// background:#2ecc71;
+//
   
   -webkit-animation-name: none;
   animation-name: none;
 }
+*/
 /*
 .is_multi_true 
 */
@@ -960,19 +966,28 @@ span.lt[inrange="true"] {
 
 
 
-
- span.lt[inrange="true"] {
-// background:red;
+span.lt[inrange="true"] {
+    background:red;
 }
 
-span.lt[inselection="true"] { 
-  border-bottom:2px solid blue;
+
+span.lt[inselection="true"][inselection="true"] { 
+  border-left:1px solid blue;
+   border-right:0px solid blue;
+}
+
+
+
+.boundaries_end_true {
+  border-right:1px solid blue;
+  // border-left:0px solid blue;
+
 }
 
 
  span.lt[inrange="true"] {
     &[inselection="true"]{
-      background:pink;
+     
     }
   }
 
