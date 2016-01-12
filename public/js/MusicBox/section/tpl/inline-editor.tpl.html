@@ -6,12 +6,14 @@
         <!-- tab( heading="tabA") 
         h1 section.keepsync : {{section.keepsync}}
         
+        
         -->
         <tab ng-if="object=='markup'" heading="Add {{object}}" ng-repeat="object in available_sections_objects"> 
           <p>&nbsp;</p>
           <div ng-if="object=='markup'">
             <ul class="typer sub">
               <li ng-repeat="t in objSchemas[object].modes.editor.fields.subtype.available" class="pusher_item"> <i tooltip="insert markup" ng-click="push_generic_from_ranges('markup', t,'inline')" class="fa btn_action fa-{{t}}"> </i></li>
+              <li class="pusher_item"> |</li>
               <li class="pusher_item"> <i tooltip="insert markup" ng-click="push_generic_from_ranges('media', 'img','right', '')" class="fa btn_action fa-media"> </i><i tooltip="insert link" ng-click="push_generic_from_ranges('hyperlink', 'hyperlink','under', '')" class="fa btn_action fa-link"></i></li>
             </ul>
           </div>
@@ -24,6 +26,11 @@
               <markup-view></markup-view>
             </div>
           </div>
+        </tab>
+        <tab heading="Operations" ng-if="section.operations.length&gt;0">
+          <ul>
+            <li ng-repeat="op in section.operations">{{op}}</li>
+          </ul><a ng-click="operations_clear()" class="btn">clear</a><a ng-click="reverse_operation()" class="btn">reverse last operation</a>
         </tab>
       </tabset>
     </div></span>

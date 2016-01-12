@@ -46,7 +46,9 @@ angular.module('musicBox.markup_controller', ['musicBox.section_controller']).co
 			'by_me' 		 : ( $scope.markup.user_id._id && $scope.$parent.userin._id  && ($scope.$parent.userin._id == $scope.markup.user_id._id ) ) ? true : false,
 			'can_approve' 	 : ($scope.$parent.doc_owner) ? true : false,
 			'objSchemas' 	 : $scope.objSchemas[$scope.markup.type] ?  $scope.objSchemas[$scope.markup.type] : [],
-			'servicetype'  	 :'markup'
+			'servicetype'  	 :'markup',
+			'operation'		 :	$scope.markup.operation ?  $scope.markup.operation : {},
+       		'operations': []
        
 
         })      	
@@ -61,7 +63,7 @@ angular.module('musicBox.markup_controller', ['musicBox.section_controller']).co
 		// its own fulltext for section.
 
 
-		$scope.markup.sectionin = $scope.$parent.section.sectionin
+		// $scope.markup.sectionin = $scope.$parent.$parent.$index
 		$scope.markup.fulltext  = $scope.fulltext()
 		
   		
@@ -127,7 +129,7 @@ angular.module('musicBox.markup_controller', ['musicBox.section_controller']).co
          	
 
          	var y = i-$scope.section.start
-         	if($scope.doc.content[i]){
+         	if($scope.doc.content[i] && $scope.section.letters[i]){
          		//console.log(i)
 
          		fulltext += $scope.section.letters[i].char;
@@ -180,7 +182,10 @@ angular.module('musicBox.markup_controller', ['musicBox.section_controller']).co
 			   if($scope.markup.start < $scope.$parent.section.start){
 		    		$scope.markup.start = $scope.$parent.section.start
 		       }
+
+
 		       if($scope.markup.end > $scope.$parent.section.end){
+		       
 	    		$scope.markup.end = $scope.$parent.section.end
 	    	   }
 
@@ -215,9 +220,10 @@ angular.module('musicBox.markup_controller', ['musicBox.section_controller']).co
    });
 
 	$scope.stack_markup = function(){
-		console.log('stack_markup')
+		 console.log('stack_markup')
 
-	     $scope.$parent.attribute_objects()
+	    //// SHOULD ONLY TRIGGER IN "MANUAL" mode...
+ 	     $scope.$parent.attribute_objects()
 		 $scope.markup.touched = true;
 
 
@@ -243,7 +249,7 @@ angular.module('musicBox.markup_controller', ['musicBox.section_controller']).co
 	       $scope.markup.touched= true;
 	       $scope.$parent.attribute_objects()
 	       $scope.stack_markup()
-	       $scope.save($scope.markup.subtype +' moved to '+newValue)
+	       $scope.save('Markup subtype '+oldValue+' edited to '+newValue)
 		}
    });	
 
@@ -325,8 +331,8 @@ angular.module('musicBox.markup_controller', ['musicBox.section_controller']).co
 			$scope.ui.selected_range.end   =  $scope.markup.end
 		}
 		else{
-			$scope.ui.selected_range.start = null
-			$scope.ui.selected_range.end   = null
+			// $scope.ui.selected_range.start = null
+			// $scope.ui.selected_range.end   = null
 		}
 
 		// apply its range
@@ -395,7 +401,7 @@ $scope.$watch('markup.fulltext', function(newValue, oldValue) {
 
      	
         var thos = this;
-        var promise = new Object();
+       
         var data = new Object({
 					            'start'			: $scope.markup.start,
 					            'end'			: $scope.markup.end,
@@ -432,6 +438,8 @@ $scope.$watch('markup.fulltext', function(newValue, oldValue) {
           }.bind(this));
 
       }
+
+
 
      $scope.offset= function (s,e){
      		$scope.markup.start = $scope.markup.start+s
@@ -478,9 +486,7 @@ $scope.$watch('markup.fulltext', function(newValue, oldValue) {
 	$scope.delete = function (){
 
 
-		var ttft = $scope.get_markups($scope.section.start, $scope.section.end)
 		
-		console.log('$scope.section_markups.length before'+ttft.length)
 
 			$scope.markup.deleted = true;
 			$scope.markup.visible = false;
@@ -488,29 +494,7 @@ $scope.$watch('markup.fulltext', function(newValue, oldValue) {
 			var promise = MarkupRest.delete( {id:$scope.$parent.doc.slug, mid:$scope.markup._id}).$promise;
 			promise.then(function (Result) {
 				
-				// not enough for letter mapping
-				// remove markup from reference list
-				//	$scope.markups = _.without($scope.markups, $scope.markup)
-				// retattribute mk's
-				$scope.$parent.section.section_classes = ''	
-				
-				console.log($scope.$parent.section)
-				//	$scope.$parent.section.objects_ = []
-				//	$scope.$parent.init_fulltext($scope.section.start, $scope.section.end)
-
-
-
-
-
-				$scope.section.section_markups = $scope.get_markups($scope.section.start, $scope.section.end)
-				console.log('$scope.section_markups.length after'+$scope.section.section_markups.length)
-
-
-				$scope.ui.selected_range.redraw = true;
-				$scope.$parent.attribute_objects()
-
-
-
+				$scope.section.redraw = true;
 				$scope.flashmessage('Markup deleted', 'ok' , 2000, false)
 
 
@@ -558,7 +542,43 @@ $scope.$watch('markup.fulltext', function(newValue, oldValue) {
 		}
 
 		
-		$scope.init__()
+		
+	$scope.$watch('markup.map_ranges', function(newValue, oldValue) {
+			if(oldValue == newValue || newValue == false){
+				console.log('mk end map_ranges')
+			}
+			else{
+				console.log('############ map_ranges')
+
+			
+				var z, z_real, rtest;
+				rtest = ranges_test($scope.ui.selected_range.start,$scope.ui.selected_range.end, $scope.markup.start,$scope.markup.end, 'markup' )
+				console.log('rtest:'+rtest+' --- '+$scope.markup.metadata)
+				
+				$scope.markup.selected = false;
+				$scope.markup.inrange  = false;
+			
+				if(rtest == 3){
+					
+
+
+				
+					$scope.markup.selected = true;
+					$scope.markup.inrange  = true;
+					// map the markup
+					
+				}
+
+				// finally
+				$scope.markup.map_ranges= false;
+
+			}
+		})
+
+
+	
+
+
 
 
 		// each time range is modified, each markup compare range with its start and end
@@ -574,50 +594,69 @@ $scope.$watch('markup.fulltext', function(newValue, oldValue) {
 				console.log('############ mk.redraw')
 
 				$scope.markup.fulltext = $scope.fulltext()
-				var z, z_real, rtest;
-				rtest = ranges_test($scope.ui.selected_range.start,$scope.ui.selected_range.end, $scope.markup.start,$scope.markup.end )
-				console.log('rtest:'+rtest+' --- '+$scope.markup.metadata)
 				
-				// apply range if at least one part of markup is into
-				// excerpt for container class
+			
 
 							// dirty string...
 							if($scope.markup.type =="container_class"){
 								$scope.section.section_classes += $scope.markup.metadata+' ';
 							}
 
-				if(rtest !==1 && rtest !==5 && $scope.markup.type !=="container_class"){
-
-
-					//console.log('rtest select')
-					$scope.markup.selected = true;
-					$scope.markup.inrange  = true;
-					// map the markup
-					for (z = $scope.markup.start; z <= $scope.markup.end; z++) {
-						z_real = z - $scope.section.start
-						if($scope.section.letters[z_real]){
-							$scope.section.letters[z_real].inrange = true;
-
-
-							// direct injection test
-							// $scope.section.letters[z_real]['classes'].push($scope.markup.subtype);
-
-						}
-						else{
-							console.log('no letter for position (array index)'+z_real+'(markup pos:'+z+')')
-
-
-						}
-					}
-				}
-
+				
 				// finally
 				$scope.markup.redraw= false;
 
 			}
 		})
 
+
+$scope.$watch('markup.operation.before.state', function(newValue, oldValue) {
+
+		if(newValue == 'new'){
+			 $scope.apply_operation()
+
+		}
+		if(newValue == 'error'){
+			$scope.markup.operations.push($scope.markup.operation)
+		}
+
+
+	})
+	$scope.apply_operation = function(){
+ 			 //$scope.markup.operation.after = {}
+
+
+			 if($scope.markup.operation.before.end){
+			 	$scope.markup.end =  parseInt($scope.markup.operation.before.end+$scope.markup.operation.before.end_qty)
+				//$scope.markup.operation.after.new_end = $scope.markup.end
+			 }
+			 if($scope.markup.operation.before.start){
+			 	$scope.markup.start = parseInt($scope.markup.operation.before.start+$scope.markup.operation.before.start_qty)
+			 	//$scope.markup.operation.after.new_start = $scope.markup.start
+
+			 }
+
+			 
+
+ 			$scope.markup.operation.before.state= 'done'
+ 			//$scope.markup.operation.after.state= 'done'
+
+ 			
+			 $scope.markup.operations.push($scope.markup.operation)
+	}
+
+	$scope.reverse_operation = function(){
+
+
+	}
+
+
+
+$scope.operations_clear= function(){
+	 $scope.markup.operations= []
+}
+
 		
-		
+		$scope.init__()
 
 }); // end controller

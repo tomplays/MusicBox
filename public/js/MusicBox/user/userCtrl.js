@@ -10,6 +10,7 @@
 	
 */
 
+angular.module('musicBox.user_controller', []);
 
 // ** GLOBAL MISC VARS
 var inheriting = {};

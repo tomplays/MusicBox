@@ -54,6 +54,10 @@ angular.module('musicBox.DocumentService',[])
           $rootScope.markups  = _.sortBy(Result.doc.markups_,function (num) {
                return num.start;
           });
+
+          $rootScope.doc.markups  = _.sortBy(Result.doc.markups_,function (num) {
+               return num.start;
+          });
           //    $rootScope.doc.markups  = Result.doc.markups;
          
 
@@ -68,6 +72,10 @@ angular.module('musicBox.DocumentService',[])
                    $rootScope.doc.room = new Object({'_id':'-'});
                }
              
+
+  $rootScope.doc.operation = {}
+       $rootScope.doc.operations = []
+
                 var encoded_url = root_url+':'+PORT;
                 if(Result.doc.slug !=='homepage'){
                     encoded_url += '/doc/'+Result.doc.slug;
@@ -93,6 +101,11 @@ angular.module('musicBox.DocumentService',[])
 
             new UserService().SetFromApi(Result.userin)
             $rootScope.containers = _.sortBy( Result.doc.sections,function (num) {
+               return num.start;
+            });
+
+
+            $rootScope.doc.containers = _.sortBy( Result.doc.sections,function (num) {
                return num.start;
             });
 
@@ -141,8 +154,8 @@ angular.module('musicBox.DocumentService',[])
         if($rootScope.max_reached_letter !==  $rootScope.doc.content.length){
           console.log('unreached letter found :'+ $rootScope.max_reached_letter +'--'+$rootScope.doc.content.length)
           //max_reached_letter.end = container.end
-          if(_.last($rootScope.containers) && $rootScope.max_reached_letter  <  $rootScope.doc.content.length){
-              console.log('should patch last section from :'+ _.last($rootScope.containers).end+ ' to'+$rootScope.doc.content.length)
+          if(_.last($rootScope.doc.containers) && $rootScope.max_reached_letter  <  $rootScope.doc.content.length){
+              console.log('should patch last section from :'+ _.last($rootScope.doc.containers).end+ ' to'+$rootScope.doc.content.length)
           }
         } 
 
@@ -184,21 +197,34 @@ angular.module('musicBox.DocumentService',[])
         ///api/v1/doc/create
         var data = new Object();
         var thos = this;
-        //console.log($rootScope.ui.selected_range.markups_to_offset)
-        data.doc_content = $rootScope.doc.content;
+
       
+     
         data.markups = new Array()
         // prepare / clean 
+        var string  = '';
+         _.each($rootScope.doc.containers, function(s){
+         
+          // remove line breaks
+          //  container.fulltext =  container.fulltext.replace(/(\r\n|\n|\r)/gm,"");
+        
+          // console.log(container.fulltext)
+  string  += s.fulltext;
 
-         _.each($rootScope.containers, function(s){
             if(s.touched == true){
               var a_s = new Object({'id':s._id, 'start': s.start,'end': s.end, 'action':'offset' })
                data.markups.push(a_s)
             }
-
-
          })
-        _.each($rootScope.markups, function(m){
+
+   $rootScope.doc.content = string
+        
+        // equivalent service call // $scope.sync_queue()
+       
+        data.doc_content = string
+      
+
+        _.each($rootScope.doc.markups, function(m){
 
            if(m.touched == true){
                          if( _.isFinite(m.start) && _.isFinite(m.end)){
@@ -214,10 +240,14 @@ angular.module('musicBox.DocumentService',[])
         data.edittype = 'markups_sync'
 
         console.log(data)
+        //// $rootScope.doc.operation.before.sync = data;
+
+          data.doc_content = string
         
         var promise = this.api_method.sync({id:$rootScope.doc.slug},serialize(data)).$promise;
         promise.then(function (Result) {
           if(Result.doc){
+
 
 
             if($rootScope.ui.debug){
@@ -228,11 +258,11 @@ angular.module('musicBox.DocumentService',[])
            
             thos.flash_message('Document saved', 'ok' , 1600, false)
 
-            _.each($rootScope.containers, function(s){
+            _.each($rootScope.doc.containers, function(s){
                  s.touched = false
              });
 
-              _.each($rootScope.markups, function(m){
+              _.each($rootScope.doc.markups, function(m){
                  m.touched = false
              });
               
@@ -467,7 +497,7 @@ angular.module('musicBox.DocumentService',[])
                           }
                    
                   }else{
-                   window.location = root_url+':'+PORT+'/doc/'+Result.slug+''; // fresh
+                   window.location = root_url+':'+PORT+'/doc/'+Result.slug+'?fresh'; // fresh
 
                                //alert(Result.slug)
                                //   $rootScope.newdoc.created_link = Result.slug;
@@ -617,7 +647,7 @@ angular.module('musicBox.DocumentService',[])
           data.start_qty  = start_qty
           data.end_qty    = end_qty
         
-
+ 
           $http.post(api_url+'/doc/'+$rootScope.doc.slug+'/markup/'+markup._id+'/offset', serialize(data) ).success(function(m) {
             console.log(m)
               alert('??')

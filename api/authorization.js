@@ -15,14 +15,14 @@ exports.requiresLogin_or_secret = function(req, res, next) {
         console.log('user is in')
     }
     else{
-     console.log('user is not in')
+        console.log('user is not in')
     }
     
-    if (req.body.secret) {
-         console.log('using secret')
+    if (req.body.secret && req.body.secret == true) {
+       console.log('using secret'+req.body.secret)
     }
     else{
-        console.log('not using secret')
+       console.log('not using secret')
     }
 
     // if both are null == no acces.

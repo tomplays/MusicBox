@@ -170,7 +170,7 @@ if(debugger_on){
 
 
 exports.prerender = function(doc) {
-	console.log('Mb server side loop')
+	// console.log('Mb server side loop')
 	var output = {}
 	var trace = {}
 
@@ -342,6 +342,10 @@ exports.prerender = function(doc) {
 
 							 sl.forEach(function(c){
 							 	var class_string = c.type+'_'+c.subtype
+
+
+							 	
+							 	
 
 							 	if(fix_index == -1){
 							 		prev_class.push(class_string);
@@ -810,7 +814,7 @@ exports.listRender = function(req, res) {
 exports.doc_sync= function(req, res) {
 	//console.log('req.body.markups')
 	//console.log(req.body.markups)
-	console.log(req.params.slug)
+	// console.log(req.params.slug)
 	var query = Document.findOne({ 'slug':req.params.slug });
 	// complete query 
 	query.populate('user','-email -hashed_password -salt').populate( {path:'markups.user_id', select:'-salt -email -hashed_password', model:'User'}).populate({path:'markups.doc_id', select:'-markups -secret', model:'Document'}).populate('markups.doc_id.user').populate('room', {secret:0}).exec(function (err, doc) {
@@ -820,7 +824,7 @@ exports.doc_sync= function(req, res) {
 		else{
 
 
-	console.log(doc)
+			console.log('doc_sync')
 			var sections = []
 			console.log(req.body.edittype)
 			//console.log(req.body.doc_content)
@@ -830,7 +834,8 @@ exports.doc_sync= function(req, res) {
 			//console.log('#######################')
 			//console.log(req.body.markups)
 			//console.log('#######')
-	
+			var markup_count_updated = 0
+			// LOOP each editing doc markups to find and upadate coresponding one 
 			_.each(doc.markups, function(doc_mk, i){
 					doc.markups[i].touched = false
 					//console.log(mk)
@@ -839,9 +844,9 @@ exports.doc_sync= function(req, res) {
 						doc.markups[i].start 	=  parseInt(match.start)
 						doc.markups[i].end 		=  parseInt(match.end)
 						doc.markups[i].touched = true
-				
-				console.log('match found:')
-				console.log(doc.markups[i])
+						markup_count_updated++
+					//	console.log('match found:')
+					//	console.log(doc.markups[i])
 
 					
 					}
@@ -855,12 +860,23 @@ exports.doc_sync= function(req, res) {
             		if(doc_mk.type == 'container'){
             			sections.push(doc_mk)
             		}
-
-
             		
 			});
+
+			var content_size_pre = doc.content.length
+			var content_size_after =  req.body.doc_content.length
+
+
 				doc.content = req.body.doc_content;
-				console.log('req.body.doc_content'+req.body.doc_content)
+				console.log('doc content updated from '+content_size_pre+' to'+content_size_after)
+				console.log('delta'+(content_size_after-content_size_pre))
+
+
+
+				// +req.body.doc_content)
+
+				console.log('modified markups='+markup_count_updated)
+
 				doc.markModified('markups');
 				// save content
 				
@@ -889,7 +905,7 @@ exports.doc_sync= function(req, res) {
 									var now = new Date();
 									out.doc.updated     = now.toJSON();
 									out.doc.secret 		= 'api_secret'
-									out.edittype 		= 	req.body.edittype
+									out.edittype 		= req.body.edittype
 									res.json(out)
 						 
 							
@@ -1493,7 +1509,7 @@ exports.doc_option_new  = function(req, res) {
 	var branding_class  = new meta_options( {'option_name':'branding_class', 'option_value':'sa bg_transparent',  'option_type': '' } )
 	new_doc.doc_options.push(branding_class)
 
-	var   footer_center_html = new meta_options( {'option_name':'footer_center_html', 'option_value':"<i class=\'fa fa-file-text-o\'></i> powered by <a href=\'http://github.com/tomplays/MusicBox/\'>MusicBox beta*</a> - 2014 - <a href=\'http://hacktuel.fr\'>@Hacktuel.fr</a>",  'option_type': '' } )
+	var   footer_center_html = new meta_options( {'option_name':'footer_center_html', 'option_value':"<i class=\'fa fa-file-text-o\'></i> powered by <a href=\'http://github.com/tomplays/MusicBox/\'>MusicBox beta*</a> - 2016",  'option_type': '' } )
 	new_doc.doc_options.push(footer_center_html)
 
 

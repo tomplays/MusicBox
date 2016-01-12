@@ -16,6 +16,7 @@ div.inline_tools(ng-if="section.editing_text === true")
 				// tab( heading="tabA") 
 					h1 section.keepsync : {{section.keepsync}}
 				
+
 				tab(ng-if="object=='markup'" heading='Add {{object}}' ng-repeat="object in available_sections_objects") 
 					p &nbsp;
 
@@ -23,6 +24,7 @@ div.inline_tools(ng-if="section.editing_text === true")
 						ul.typer.sub
 							li.pusher_item(class="" ng-repeat="t in objSchemas[object].modes.editor.fields.subtype.available") 
 								i.fa.btn_action(tooltip="insert markup" class="fa-{{t}}" ng-click="push_generic_from_ranges('markup', t,'inline')" ) 
+							li.pusher_item(class="")  |
 							li.pusher_item(class="") 
 								i.fa.btn_action(tooltip="insert markup" class="fa-media" ng-click="push_generic_from_ranges('media', 'img','right', '')" ) 
 								i.fa.btn_action(tooltip="insert link" class="fa-link" ng-click="push_generic_from_ranges('hyperlink', 'hyperlink','under', '')" )
@@ -30,11 +32,19 @@ div.inline_tools(ng-if="section.editing_text === true")
 
 				
 				tab(heading="Markups" ng-if="markups_by_start_end_position_type(section.start, section.end ,'inline', 'markup').length > 0") 
+
 					// h1 section.keepsync : {{section.keepsync}}
 					div(ng-repeat="markup in markups_by_start_end_position_type(section.start, section.end ,'inline', 'markup') track by $index")
 						div(class="markup_ markup_type_{{markup.type}}")
 							
 							markup-view
+				tab(heading="Operations" ng-if="section.operations.length>0")
+				
+					ul
+						li(ng-repeat="op in section.operations") {{op}}
+					a.btn(ng-click="operations_clear()") clear
+					a.btn(ng-click="reverse_operation()") reverse last operation
+
 							
 
 	// textarea(type="text", ng-model="section.fulltext")

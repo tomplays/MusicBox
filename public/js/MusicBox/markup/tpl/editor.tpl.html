@@ -38,6 +38,12 @@
         <div class="btn-group typer.position">
           <label ng-repeat="t in markup.objSchemas.positions.available" ng-click="change_value('position', t, true)" ng-model="markup.position" btn-radio="t" class="btn btn-primary">{{render_config.i18n.CUSTOM.POSITIONS[t]}}</label>
         </div></span></tab>
+    <tab heading="O.">
+      <pre>{{markup.operation}}</pre>
+      <ul>
+        <li ng-repeat="op in markup.operations">{{op}}</li>
+      </ul>
+    </tab>
   </tabset>
   <div ng-if="markup.type =='child' " class="object-tools">					<span class="field smallinput">
       <label>sub-doc id</label>

@@ -63,21 +63,21 @@ exports.edit = function(req, res) {
 		 _.each(doc.markups , function (m, i){
 			 	// single match.
 				if(m._id == req.params.markup_id){
-					console.log(req_user_id +' vs: '+ doc.user._id)
-					console.log(m.user_id.toObject()._id)
+					//console.log(req_user_id +' vs: '+ doc.user._id)
+					//console.log(m.user_id.toObject()._id)
 					// doc owner or markup owner
 
 
-					console.log(req.body)
+					//console.log(req.body)
 					
 
 					if(req_user_id.equals(doc.user._id)  || req_user_id.equals(m.user_id._id) ){
-						console.log("m.status")
+					//	console.log("m.status")
 
 
 						// APPROVE / LOGIC HERE
-						console.log(m.status)
-						console.log(m_body.status)
+				//		console.log(m.status)
+				//		console.log(m_body.status)
 
 						//if()
 						//m.status 	= 'moderated'
@@ -102,22 +102,22 @@ exports.edit = function(req, res) {
 						m.depth     = m_body.depth ? m_body.depth : m.depth 
 
 						if(m_body.doc_id){
-							console.log('DOC sub _id: '+m_body.doc_id)
+						//	console.log('DOC sub _id: '+m_body.doc_id)
 						
 							var memo_doc = m.doc_id;
 							
-								console.log('CA')
+						//		console.log('CA')
 
 							if(m.doc_id !=='' && m.doc_id && m.doc_id._id){
 								m.doc_id._id = m_body.doc_id;
 
-								console.log('CB')
+						//		console.log('CB')
 							}
 							else{
 								if( m_body.doc_id !== ''){
 										m.doc_id = m_body.doc_id;
 
-									console.log('CC')
+						//			console.log('CC')
 								}
 								else{
 									m.doc_id = '';
@@ -130,22 +130,22 @@ exports.edit = function(req, res) {
 						}
 						else{
 							m.doc_id = null;
-								console.log(' doc_id set to null')
+							//	console.log(' doc_id set to null')
 						}
 
 						 // arrays updated  
 						 edited.push(m)
 						 doc.markups[i] = m
-						console.log('C0')
+						// console.log('C0')
 
 					}
 					else{
-							console.log('user is not markup owner')
+						//	console.log('user is not markup owner')
 							if(m_body.secret == doc.secret){
-								console.log('but secret match')
+							//	console.log('but secret match')
 							}
 							else{
-								console.log('and secret dont match(   '+doc.secret+'   )')
+							//	console.log('and secret dont match(   '+doc.secret+'   )')
 								var err = new Object ({'err_code':'Need to be either doc owner or use right secret key' })
 
 								exit_user = true;
@@ -186,7 +186,7 @@ exports.edit = function(req, res) {
 								out.doc = doc
 								out.edited = [];
 								out.edited.push(edited)
-								console.log(edited)
+								console.log(out)
 								res.json(out)
 							}
 					}); // save

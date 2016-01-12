@@ -15,7 +15,7 @@ head
 	meta(property="og:description", content="#{doc_excerpt}")
 	meta(property="og:site_name", content="#{site_title}")
 	meta(property="og:url", content="#{doc_slug_discret}")
-	link(rel='icon', type='image/png', href='favicon.png')
+	link(rel='icon', type='image/png', href='img/logos/musicbox.png')
 	script(type='text/javascript').
 		var musicBox
 		var SOCKET_URL = '#{socket_url}'
@@ -26,7 +26,6 @@ head
 		var doc_include_js = '#{doc_include_js}'
 		var action_ = '#{action_}'
 		var USERIN = new Object({'username':'#{user_in.username}', 'image_url': '#{user_in.image_url}', '_id': '#{user_in._id}'} )
-
 	// room view ? 
 	if(room)
 		script(type='text/javascript').
@@ -36,72 +35,48 @@ head
 				'room_branding':'#{room.options_.branding_image_url.value}'
 				})
 
-
-	// build:css mbcss.css	
-	// bower:css
+	// cant compress
 	link(rel='stylesheet', href='/bower_components/font-awesome/css/font-awesome.css')
-	// endbower 
-	// endbuild  
 
-	// build:js js/mbmin.js 
-	// bower:js
-	script(src='/bower_components/angular/angular.js')
-	script(src='/bower_components/angular-resource/angular-resource.js')
-	script(src='/bower_components/angular-route/angular-route.js')
-	script(src='/bower_components/angular-sanitize/angular-sanitize.js')
-	script(src='/bower_components/underscore/underscore.js')
-	script(src='/bower_components/momentjs/moment.js')
-	script(src='/bower_components/angular-bootstrap/ui-bootstrap-tpls.js')
-	// endbower 
-	// endbuild  
-	
-	script(type='text/javascript', src='mbmin.js')
-
-
-	// script(type='text/javascript',  src='js/lib/serialize.min.js')
-
-	
-	//i18n dynamic load except grunt
-	if (env !== 'grunt' )	
-	script(type='text/javascript',  src='#{lang_js_url}')
+	if(socket_url !== '')
+		script(src='#{socket_url}:#{socket_server_port}/socket.io/socket.io.js')
 
 	if (env == 'dev' )	
+		// DEV  ENV
+		link(href="css/bootstrap.min.css",rel="stylesheet")
+		link(rel='stylesheet', href='css/main.css')
+
+		script(src='/bower_components/angular/angular.js')
+		script(src='/bower_components/angular-resource/angular-resource.js')
+		script(src='/bower_components/angular-route/angular-route.js')
+		script(src='/bower_components/angular-sanitize/angular-sanitize.js')
+		script(src='/bower_components/underscore/underscore.js')
+		script(src='/bower_components/momentjs/moment.js')
+		script(src='/bower_components/angular-bootstrap/ui-bootstrap-tpls.js')
+		
 		script(type='text/javascript',  src='#{root_url}:35729/livereload.js')
 
 		
 		// sub if (hard version of file minified or kept locally)
-		script(type='text/javascript', src='js/MusicBox/filters.js')
-		script(type='text/javascript', src='js/MusicBox/directives.js')
-
-		// Misc libs/utils
-		// script(type='text/javascript', src='bower_components/jquery/dist/jquery.min.js')
-		// script(type='text/javascript', src='bower_components/underscore/underscore-min.js')
-		
-
-		
-		link(href="css/min/bootstrap.min.css",rel="stylesheet")
-
-		
-
 		// font loader kept local
 		script(type='text/javascript', src='js/lib/webfont.js')
-
 		// calendar functions lib. (momentjs)
 		script(type='text/javascript', src='bower_components/momentjs/min/moment-with-langs.min.js')
 		script(type='text/javascript', src='bower_components/momentjs/lang/fr.js')
 
 
+		script(type='text/javascript', src='js/MusicBox/filters.js')
+		script(type='text/javascript', src='js/MusicBox/plugins.js')
+
+
+		script(type='text/javascript', src='js/MusicBox/directives.js')
+
 		script(type='text/javascript', src='js/MusicBox/services.js')
 		script(type='text/javascript', src='js/MusicBox/renderServices.js')
-
-		script(type='text/javascript', src='js/MusicBox/MusicBoxLoop.js')
-
 		
-		link(rel='stylesheet', href='css/min/main.css')
 
 		// Angular controllers
 
-		
 		// document level
 		script(type='text/javascript', src='js/MusicBox/document/documentServices.js')
 		script(type='text/javascript', src='js/MusicBox/MusicBoxServices.js')
@@ -115,6 +90,7 @@ head
 		script(type='text/javascript', src='js/MusicBox/section/editableTextDirective.js')
 		script(type='text/javascript', src='js/MusicBox/section/sectionCtrl.js')
 		script(type='text/javascript', src='js/MusicBox/section/sectionDirectives.js')
+
 
 		// markups
 		script(type='text/javascript', src='js/MusicBox/markup/markupCtrl.js')
@@ -131,21 +107,19 @@ head
 
 
 		// Angular top level 'app' routing 
-		script(type='text/javascript', src='js/app.js')
+		script(type='text/javascript', src='js/MusicBox/app.js')
 
-		if(socket_url !== '')
-			script(src='#{socket_url}:#{socket_server_port}/socket.io/socket.io.js')
-	
-
-	
-	if (env == 'grunt')
+		
+	// if (env == 'grunt')
 	if (env == 'prod')
-		link(rel='stylesheet', href='css/min/main.css')
-		// Calling 9 js files, minified crash for angular, whereas .debug no, why ?
-
-		// script(type='text/javascript', src='js/min/MusicBox.min.js')
-		script(type='text/javascript',  src='js/min/MusicBox.min-debug.js')
-
+		// PROD ENV
+		link(rel='stylesheet', href='css/min/MusicBox-css-min.css')
+		script(type='text/javascript',  src='js/min/MusicBox-js-min.js')
+	
+	// i18n dynamic load except grunt
+	if (env !== 'grunt' )	
+		script(type='text/javascript',  src='#{lang_js_url}')
+	
 	if (doc_include_js)
 		// script(type='text/javascript', src='js/custom_doc/jquery-1.11.1.min.js')
 		// script(type='text/javascript', src='js/custom_doc/skrollr.min.js')
@@ -153,10 +127,15 @@ head
 
 	if (doc_include_css)
 		link(rel='stylesheet', href='#{doc_include_css}')
-
+	
+	// Misc libs/utils
+	// script(type='text/javascript', src='bower_components/jquery/dist/jquery.min.js')
+	// script(type='text/javascript', src='bower_components/underscore/underscore-min.js')
+	// script(type='text/javascript',  src='js/lib/serialize.min.js')
+	
 	//
 		♪     ♪
 			♪     ♪
 		Boite à musique
-			~MusicBox v.03 "fruityLoops"
+			~MusicBox v.03 "fruityLoops operation" 
 			Tom Wersinger

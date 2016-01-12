@@ -1,10 +1,14 @@
 
 <div ng-if="section['objects_count']['by_positions'][layout.name].count &gt; 0 || layout.include_even_empty" ng-repeat="layout in available_layouts">
   <div class="layout_ layout_name_{{layout.name}} has_count_{{section.objects_count.by_positions[layout.name].count}} has_object_{{section.objects_count.by_positions[layout.name].has_object}}">
-    <mb-dataset ng-if="ui.renderAvailable_active == 'dataset' &amp;&amp; (layout.name == 'center') &amp;&amp; ($parent.$parent.$first)"></mb-dataset>
     <!-- title, author, date, ..-->
-    <doc-title ng-if="(layout.name == 'center') &amp;&amp; ($parent.$parent.$first)">		</doc-title>
+    <doc-title ng-if="(layout.include_title) &amp;&amp; ($parent.$parent.$first) &amp;&amp;  (ui.renderAvailable_active !=='embed') "></doc-title>
+    <mb-dataset ng-if="ui.dataset.active &amp;&amp; (layout.include_dataset)"></mb-dataset>
+    <!--  -->
     <div ng-if="layout.name == 'right'">
+      <!-- h1 {{section.selected}}-->
+      <!-- h2 {{ui.selected_range.working_section}}-->
+      <!-- pre {{section.cursor_in}}-->
       <!-- edit/delete range and css objects.-->
       <mb-sectioneditor ng-if="doc_owner == true" class="section_editor section-editor-right"></mb-sectioneditor>
       <!-- made to boot controller, not displayed here-->
@@ -31,9 +35,10 @@
       </carousel>
     </div>
     <div ng-if="layout.name == 'inline'">
+      <!-- pre {{ui.current_action}}-->
       <!-- pre {{ui.selected_range}}-->
       <!-- h3 {{section.rebuild_count}}-->
-      <pre ng-repeat="md in markups_pushed">{{md.start}} {{md.end}} {{md.metadata}} {{md}}</pre>
+      <!-- pre(ng-repeat="md in markups_pushed") {{md.start}} {{md.end}} {{md.metadata}} {{md}}-->
       <!-- h2 
       a(ng-click="sectionmarkups('selected', true)") {{section_markups.visible}}
       
@@ -42,11 +47,16 @@
       <div ng-if="section.editing_text === true" class="fluidtextarea">
         <!-- h3 Edit section text-->
         <textarea required="required" ng-trim="false" text-listener="text-listener" ng-model="section.fulltext"></textarea>
+        <!--div.mtextarea(contentEditable="true" , required ng-trim="false" , text-listener  , ng-bind-html="section.fulltext")-->
+        
+        
       </div>
       <!-- h1 editable-->
       <!-- div.fluidtext(contentEditable="true" , mb-editable , section="section" , ng-bind-html="section.fulltext" ) -->
-      <div section="section" ng-if="section.modeletters == 'single'" class="theletters is_multi_{{ui.selected_range.multi}}"><span lt="l" ng-repeat="l in section.letters"></span></div>
+      <div section="section" ng-if="section.modeletters == 'single'" class="theletters is_multi_{{ui.selected_range.multi}} boundaries_end_{{ui.boundaries.endAtEnd}}"><span lt="l" ng-repeat="l in section.letters"></span></div>
       <div fluidtexte="fluidtexte" section="section" ng-hide="section.modeletters =='single'" class="fluidtext"> </div>
+      <!-- div.fluidtddext {{section.fulltext_block}}-->
+      
       <div ng-if="doc_owner == true &amp;&amp; ($parent.$parent.$parent.$last)" class="pusher_section"><i tooltip="new section" ng-click="new_section()" class="fa fa-plus-square pusher_item btn"></i></div>
     </div>
     <div ng-if="layout.name == 'global' &amp;&amp; $parent.$parent.$last">

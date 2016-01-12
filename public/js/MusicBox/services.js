@@ -1,3 +1,5 @@
+'use strict';
+
  /**
 * @constructor
 */
@@ -28,11 +30,11 @@ musicBox.run(function($rootScope, $http, $route) {
        
        console.log($route)
        //if(!$rootScope.doc){
-        $rootScope.doc       = '';
+        $rootScope.doc       = null;
        //}
      
        //if(!$rootScope.ui){
-          $rootScope.ui        = '';
+          $rootScope.ui        = null;
       //}
   }
   });

@@ -103,6 +103,12 @@ MarkupSchema.virtual('metadata')
 
 */
 
+/*
+MarkupSchema.pre('save', function(next) {
+   this.save({},{ $set: { updated: new Date() } });
+  next();
+});
+*/
 
 mongoose.model('Markup', MarkupSchema);
 module.exports.Schema = MarkupSchema;
@@ -149,7 +155,7 @@ var DocumentSchema = new Schema({
     secret: { type: String, default: function () { return new ObjectId()} },
     thumbnail: {
         type: String,
-         default: 'http://hacktuel.fr/img/logos/loguy/hacktuel.png'
+         default: 'img/logos/musicbox.png'
     },
     lang: {
         type: String,

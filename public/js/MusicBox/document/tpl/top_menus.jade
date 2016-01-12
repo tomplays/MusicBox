@@ -9,7 +9,7 @@
 // DOC PUBLISHED > toggle mode / conditionnal owner
 
 div.top_menus
-	i.fa.fa-question.quick_tool_opener.menuicon.menuicon-help( ng-class="{'visible_yes': ui.menus.quick_tools_help.open=='yes'}"  class="inside", ng-click="expand_tools('quick_tools_help')", ng-dblclick="expand_tools('quick_tools_help')" )
+	i.fa.fa-question.quick_tool_opener.menuicon.menuicon-help( ng-class="{'visible_yes': ui.menus.quick_tools_help.open}"  class="inside", ng-click="expand_tools('quick_tools_help')", ng-dblclick="expand_tools('quick_tools_help')" )
 
 	div.quick_tools.qt-help(class="visible_{{ui.menus.quick_tools_help.open}}")
 		p.back_read(ng-click="toggle_render('read')") &laquo; {{render_config.i18n.CUSTOM.ACTIONS.back_to_document}}

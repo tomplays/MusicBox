@@ -1,7 +1,7 @@
 .section_editor_head
 	.head-left
 		i(ng-click="select_section()" class="fa fa-container fa-section editing_{{section.editing}} selected_{{section.selected}}" ) 
-			span( ng-if="section.editing_text === false") Select section # {{$parent.$parent.$parent.$parent.$parent.$parent.$index}}
+			span( ng-if="section.editing_text === false") Select section 
 			span( ng-if="section.editing_text === true") Unselect section
 
 	.head-right(ng-if="section.editing_text === true")
@@ -38,11 +38,12 @@
 								
 		
 
-			tab(heading="section styles" ng-if=" markups_by_start_end_position_type(section.start, section.end ,'any', 'container_class').length >0") 
+			tab(heading="section styles" ng-if="markups_by_start_end_position_type(section.start, section.end ,'any', 'container_class').length >0") 
 				
 				div(ng-repeat="markup in markups_by_start_end_position_type(section.start, section.end ,'any', 'container_class') track by $index")
 					div(class="markup_ markup_type_{{markup.type}}")
 						markup-view
+						
 			tab(heading="slidewide" ng-if="markups_by_start_end_position_type(section.start, section.end ,'slidewide', 'media').length>0" ) 
 				div(ng-repeat="markup in markups_by_start_end_position_type(section.start, section.end ,'slidewide', 'media') track by $index")
 					div(class="markup_ markup_type_{{markup.type}}")

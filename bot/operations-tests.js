@@ -4,17 +4,56 @@ var request = require('request');
 var _ = require("underscore");
 
 var nconf = require('nconf');
+//var Xray = require('x-ray');
+//var x = Xray();
 
-nconf.argv().env().file({file:'./config.json'});
-//console.log(nconf.stores.file.store)
+nconf.argv().env().file({file:'../config.json'});
+
+
 var server_url = nconf.get('ROOT_URL')+':'+nconf.get('PORT')
+console.log('connecting to :'+server_url)
 var socket = io.connect(server_url); 
 
+var sh = require('sh');
 
 
-var slug = 'draft-019505752704254087'
+
+var slug = 'draft-03073258369695395'
 
 function runner(socket){
+
+
+// https://fr.wikipedia.org/wiki/Sp%C3%A9cial:Page_au_hasard
+ /*
+x('http://motherboard.vice.com/en_us', 'body', [{
+
+rrr: 'h3 a',
+ items: x('article', [{
+  //  title: 'h3 a',
+       hr: 'h3 a@href'
+
+  }]),
+     title: '.firstHeading',
+    footer: '#mw-content-text img@src',
+}])
+
+
+ // .paginate('.next_page@href')
+ // .limit(3)
+ (function(err, r) {
+  console.log(r) 
+
+  _.each(r[0].items, function(i){
+  	console.log(i.hr.replace('http://motherboard.vice.com/read/', '').replace(/-/g, ' '))
+  }) 
+  // sh('open '+r[0].footer) 
+  // Google 
+})
+
+*/
+
+
+
 
 	var content_push_value =  new Date()
 
@@ -58,22 +97,43 @@ function runner(socket){
 	
 
 		var actions_array = []
-
-
-
 		request(server_url+'/api/v1/doc/'+slug, function(errorz, dd, res) {
 			console.log('got doc :'+slug)
-
 				// console.log(res.doc)
 				resp = JSON.parse(res)
 			//	console.log(resp.doc.content)
-
 				var tstring = resp.doc.content;
+socket.emit('postdata', 
+												{ 
+													time			: new Date(),
+													object			: 'document',
+													identifier		: slug,
+													secret			: '5618a3b0be8398be16781a13',
+													user: { 
+															username:'tom', 
+															user_id: '560facdd5c9adcd3187a7bae',
+															secret	: '560facdd5c9adcd3187a7bad',
+													},
+													actions : 
+																[{
+																	type:'markup_push',
+																		markup: {
+																			type: 'markup',
+																			subtype: 'em',
+																			start:3,
+																			end:8,
+																			position:'inline',
+																			metadata: ''
+																		}
+																	}]
+															
+												}
+						);
 
 
 
 
-
+/*
 
 socket.emit('postdata', 
 												{ 
@@ -100,9 +160,8 @@ socket.emit('postdata',
 						);
 
 
-
 				
-
+*/
 
 
 				_.each(mapObj, function(obs){
@@ -136,7 +195,6 @@ socket.emit('postdata',
 
 
 /*
-
 						socket.emit('postdata', 
 												{ 
 													time			: new Date(),
@@ -166,20 +224,20 @@ socket.emit('postdata',
 
 
 */
-
 						tstring = tstring.replace(str1, function(){
 								return word;
 						});
 					}
 					//console.log(tstring)
 				}) // each words
- 				process.exit();
+ 			//	process.exit();
 		}) // request
 
 }
 
 
 socket.on('connect', function () { 
+	console.log('connected')
 		runner(socket);
 });
 

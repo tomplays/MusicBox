@@ -9,8 +9,8 @@
   <h2 ng-bind-html="doc_options.doc_notices_before_title.value"></h2>
   <!-- h2(ng-bind-html="doc_options.doc_notices_before_title.value+'&nbsp;'" , class="editing_{{ui.editing_doc_notices_before_title}}" , ng-dblclick="edit_doc_option('doc_notices_before_title')") 
   -->
-  <!--.edit_field(ng-if="ui.editing_doc_notices_before_title")
-  label Edit Before Title
+  <!-- .edit_field(ng-if="ui.editing_doc_notices_before_title")
+  label Edit beforetitle
   input(ng-if="ui.editing_doc_notices_before_title", ng-model="doc_options.doc_notices_before_title.value", name="doc_options.doc_notices_before_title.value")
   a.btn_ok.float_right(ng-click="edit_doc_option('doc_notices_before_title')") Save
   
@@ -18,7 +18,7 @@
   <h1 ng-if="test_draft(doc.title)" ng-click="edit_doc('title')">{{render_config.i18n.CUSTOM.DOCUMENT.default_title}}<span tooltip="edit title" class="hint">edit title</span></h1>
   <h1 ng-hide="test_draft(doc.title)" ng-if="doc_options.display_doc_title.value =='doc_header' || !doc_options.display_doc_title.value" ng-dblclick="edit_doc('title')">{{doc.title}} &nbsp;</h1>
   <div ng-if="ui.editing_title" class="edit_field float-block w-100"><span class="float-block">
-      <label>Edit "Title"</label>
+      <label>Edit "Title" </label>
       <input ng-model="doc.title"/></span><a ng-click="edit_doc('title')" class="btn_ok save_title">Save</a></div>
   <h3 ng-bind-html="doc_options.doc_notices_after_title.value"></h3>
   <!-- h3(ng-bind-html="doc_options.doc_notices_after_title.value+'&nbsp;'" , class="editing_{{ui.editing_doc_notices_after_title}}" , ng-dblclick="edit_doc_option('doc_notices_after_title')") -->

@@ -12,6 +12,7 @@ var rooms   = require('../api/controllers/rooms');
 
 var mails  = require('../api/controllers/mails');
 
+var plugins  = require('../api/controllers/plugins');
 
 module.exports = function(app, passport, auth) {
     
@@ -54,6 +55,9 @@ module.exports = function(app, passport, auth) {
 
    
     app.get('/',                            docs.index_doc);
+ // home Mb
+ //   app.get('/', plugins.welcome);
+
 
     app.get('/doc/create',  auth.requiresLogin, docs.doc_create_view ); 
  // 'Third party editing'
@@ -145,6 +149,9 @@ module.exports = function(app, passport, auth) {
     app.get('/api/v1/send_mail_internal/:slug',     mails.send_mail_from_internal_document);
     app.get('/api/v1/send_generate',                mails.generate_mail_to_html);
 
+
+
+   
 
    
 

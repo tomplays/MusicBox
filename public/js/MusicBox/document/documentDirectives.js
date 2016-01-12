@@ -60,6 +60,8 @@ angular.module('musicBox.DocumentDirectives', [])
       }
     };
 })
+
+
 .directive("mbBeforedoc", function($rootScope) {
     var link= function(){
       //if($rootScope.ui.debug){
@@ -121,8 +123,11 @@ angular.module('musicBox.DocumentDirectives', [])
     };
 })
 .directive("mbTopmenus", function($rootScope) {
-    var link= function(){
-      console.log(' [top menus] directive')
+    var link= function(scope){
+      if($rootScope.ui.renderAvailable_active !=='embed'){
+          $rootScope.ui.topmenus = {'active':false}
+      }
+      console.log(' [top menus] directive'+scope.visible+$rootScope.ui.renderAvailable_active)
     }
     return {
       // replace:true,

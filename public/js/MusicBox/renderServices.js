@@ -1,6 +1,7 @@
+angular.module('musicBox.render', [])
 
 
-musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $locale) {
+.factory('renderfactory', function ($rootScope, $http, $routeParams, $locale) {
     return function (inf) {
      var self = {
        init: function () {
@@ -45,6 +46,8 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
 
         $rootScope.ui                         = new Object();
         $rootScope.ui.selected_range          = new Object({'wait_ev' : false, 'set': false, 'start':null, 'end':null, 'textrange':''});
+         $rootScope.ui.boundaries = new Object();
+
         //$rootScope.ui.selected_range.markups_to_offset = new Array();
         //$rootScope.ui.selected_range.insert = null;
         //$rootScope.ui.offset_queue = new Array()
@@ -57,7 +60,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
 
         $rootScope.ui.selected_objects        = [];
         $rootScope.ui.selected_objects_filter = null;
-
+        $rootScope.ui.dataset = {'active': $routeParams.dataset == true  ? true : false}
               
 
         $rootScope.ui.renderAvailable         = self.renderAvailable()
@@ -74,6 +77,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
         // ? debug
         $rootScope.ui.debug   = $routeParams.debug ? true : null;
        
+
       
 
         if($routeParams.docid){
@@ -95,7 +99,9 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
         // top page menu tools
 
        // $rootScope.ui.menus['quick_tools']            = new Object({'open': 'no'});
-        $rootScope.ui.menus['quick_tools_help']       = new Object({'open': 'no'});
+        $rootScope.ui.menus['quick_tools_help']       = new Object({'open': $routeParams.fresh ? true : false});
+
+
         $rootScope.ui.menus['quick_tools_published'] = new Object({'open': 'no'});
         $rootScope.ui.menus['quick_tools_document'] = new Object({'open': 'no'});
 
@@ -467,9 +473,9 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
           })
 
 
- definitions.note =  definitions.comment;
- definitions.generic =  definitions.comment;
- definitions.semantic =  definitions.comment;
+ definitions.note =  _.clone(definitions.comment);
+ definitions.generic =  _.clone(definitions.comment);
+ definitions.semantic =  _.clone(definitions.comment);
 
  definitions.container = new Object({
               'name': 'container',
@@ -596,7 +602,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
                                     'input' : 'select',
                                     'free_input' : false,
                                     'show_editor': 'hidden',
-                                    'available' : ['bg_black', 'bg_dark', 'two-cols', 'pad-top-bottom', 'text-right', 'gradient-pink'],
+                                    'available' : ['bg_black', 'bg_dark', 'two-cols', 'pad-top-bottom', 'text-right', 'gradient-pink', 'aligned '],
                                   
                                   }
 
@@ -798,7 +804,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
 
 
         var arr = new Array(
-          {name:'wide', order:0, ID:0, actif:true},
+          {name:'wide', order:0, ID:0,  include_dataset:true,  include_even_empty:true}, // for dataset
           {name:'slidewide', order:4, ID:1},
           {name:'center', order:2, include_title:true,  ID:2, include_even_empty:true},
           {name:'left', order:7, ID:3, include_even_empty:true},  // "left" layout is after inline (css-technique : margin-left:-50%)
@@ -813,6 +819,9 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
 
           );
 
+
+      
+
         arr  = _.sortBy(arr,function (num) {
          return num.order;
         });
@@ -825,7 +834,7 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
       },
 
       renderAvailable:function (){
-        var arr = new Array('read','fragments','doc_options','editor','dataset','logs', 'card', 'media');
+        var arr = new Array('read','fragments','doc_options','editor','logs', 'card', 'media');
         return arr 
       },
       fragmentsAvailable:function (){
@@ -847,6 +856,8 @@ musicBox.factory('renderfactory', function ($rootScope, $http, $routeParams, $lo
             {id:13, icon :'pa40_topbtm', notice: 'padding 40px haut et bas',group: 'pd'},
             {id:12, icon :'pa100_topbtm', notice: 'padding 100px haut et bas',group: 'pd'},
             {id:19, icon :'textright', notice: 'Texte aligné à droite',group: 'pd'},
+             {id:899, icon :'aligned', notice: 'Texte aligné au centre',group: 'pd'},
+
             { id: 45, icon: 'bigger_fonts',  notice: 'Bigger fonts size' , group: 'fs' }, 
             /*
             {id:14, icon :'rotate_r_45', notice: 'rotate r_45'},

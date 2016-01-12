@@ -1,4 +1,4 @@
-.directive('fluidtext',   
+/*.directive('fluidtext',   
   function($rootScope, $compile) {
    
     function link(scope, elem, attrs) { 
@@ -57,3 +57,4 @@
            // template: '<p>{{section.fulltext}}</p>'
         }
 })
+*/

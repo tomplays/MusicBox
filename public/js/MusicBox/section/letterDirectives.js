@@ -16,9 +16,14 @@
 */
 
 angular.module('musicBox.LetterDirectives', [])
-.directive('lt',   function($rootScope, MusicBoxLoop) {
+.directive('lt',   function($rootScope) {
  // var use_markup = 'h1'
+
+
   var use_markup = 'span'
+
+
+
 
   function selection_ends(scope,e){
       // $rootScope.ui.selected_range.end = scope.lt.order+scope.$parent.section.start // 'end' is last event..
@@ -76,11 +81,15 @@ angular.module('musicBox.LetterDirectives', [])
 
   var tsts = 0
   var logevent = {'directive':'lt', 'event':'none','count':tsts, 'waiting':null}
-  function sets(){
+  function sets(scope){
     tsts++
    
     logevent.started = $rootScope.ui.selected_range.start
     logevent.ended = $rootScope.ui.selected_range.end
+
+
+             $rootScope.ui.selected_range.working_section        =  scope.$parent.section.sectionin  
+
 
     console.log(logevent)
 
@@ -96,9 +105,11 @@ angular.module('musicBox.LetterDirectives', [])
 
     function link(scope, elem, attrs) { 
 
+     //  console.log(scope.lt)
+
 
           // $rootScope.ui.current_action = 'mousedown'
-          // console.log(scope.lt)
+          //
           // scope.lt.classes = new Array('h2') 
           // = scope.lt.classes
          /* scope.lt.char =   scope.$parent.section.start+' p:'+scope.lt.char +'- order:'+scope.lt.order+' abs;'+scope.lt.absolute_order
@@ -119,8 +130,23 @@ angular.module('musicBox.LetterDirectives', [])
           if(scope.lt.isfirst){
            
           }
-        
+/*
+           scope.lt.isparentready = false
 
+
+           var tc =   scope.lt.classes
+
+
+
+          tc.push('lt')
+          tc.push('ispr')
+          console.log(tc)
+
+          scope.lt.tc = tc
+
+        //  scope.$apply()
+
+*/
           elem.bind('click', function(event) {
         
               if(scope.lt.href){
@@ -133,8 +159,10 @@ angular.module('musicBox.LetterDirectives', [])
                       scope.$parent.section.editing_text = true;
                       scope.$parent.section.editing = true;
                   }
+
                  
               }
+
 
 
              // scope.lt.char = '<clicker class="clickers">+</clicker>'
@@ -142,10 +170,11 @@ angular.module('musicBox.LetterDirectives', [])
              // alert('char: '+scope.lt.char+'scope.absolute_order:'+scope.lt.absolute_order+'  scope.order:'+scope.lt.order)
 
              logevent.event = 'click'
-              sets()
+             sets(scope)
           });
 
           elem.bind('dblclick', function(event) {
+
 
                 // console.log(scope.lt)
                 if($rootScope.ui.renderAvailable_active ==  'editor'){
@@ -169,7 +198,7 @@ angular.module('musicBox.LetterDirectives', [])
               */
               $rootScope.ui.selected_range.wait_ev = false
               //alert('char: '+scope.lt.char+'scope.absolute_order:'+scope.lt.absolute_order+'  scope.order:'+scope.lt.order)
-              sets()
+              sets(scope)
           });
         
 
@@ -213,10 +242,9 @@ angular.module('musicBox.LetterDirectives', [])
               
               console.log(e)
               $rootScope.ui.selected_range.wait_ev = false  // now waiting mouseup!
-           
              logevent.event = 'mousedown'
  
-              sets()
+              sets(scope)
           });
 
           elem.bind('change', function(e) { // selection ends
@@ -278,9 +306,10 @@ angular.module('musicBox.LetterDirectives', [])
               $rootScope.ui.selected_range.wait_ev    = false  // now waiting mouseup!
               $rootScope.ui.selected_range.start      = rstart 
               $rootScope.ui.selected_range.end        = rend
-              
 
-              sets()
+
+
+              sets(scope)
           });
           /*
            elem.bind('mouseover', function(e) {  // while selection is active
@@ -292,7 +321,7 @@ angular.module('musicBox.LetterDirectives', [])
     }
 
     return {
-          template: '<'+use_markup+' contenteditable____ class="lt" ng-class="lt.classes" inselection="{{lt.inselection}}" inrange="{{lt.inrange}}" ng-bind-html="lt.char"></'+use_markup+'>',
+          template: '<span contenteditable_  class="lt" ng-class="lt.classes" inselection="{{lt.inselection}}" inrange="{{lt.inrange}}" ng-bind-html="lt.char"></span>',
           replace :false,
           restrict: 'A',
           link:link,
@@ -303,7 +332,7 @@ angular.module('musicBox.LetterDirectives', [])
   })
 
 
-.directive("contenteditable__", function() {
+.directive("contenteditable_ddd", function() {
   return {
     restrict: "A",
     link: function(scope, element, attrs, ngModel) {
@@ -361,17 +390,14 @@ angular.module('musicBox.LetterDirectives', [])
         })
       */
 
- elem.bind('change', function(event) {
-alert(event)
-            console.log('change mbeditable')
- })
+
          elem.bind('keyup', function(event) {
-           console.log(event)
+            console.log(event)
             console.log('keyup mbeditable')
             //alert(event.target.selectionStart)
-          //scope.$apply(function(){
-           //  scope.$parent.section.end++
-             //          scope.$parent.section.fulltext = event.target.textContent
+            //scope.$apply(function(){
+            //  scope.$parent.section.end++
+            //  scope.$parent.section.fulltext = event.target.textContent
 
                  
                 //  return

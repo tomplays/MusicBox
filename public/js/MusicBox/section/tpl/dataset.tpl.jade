@@ -5,7 +5,7 @@
   table(style="width:100%;")
     thead 
       tr
-        th Select
+        th &nbsp;
         th Actions
         th type
         th subtype
@@ -14,15 +14,17 @@
         th start
         th end
         th position
-        th section index
+        th sectionin
         th isolated.
+        th touched.
         th sel.
         th ed.
         th status.
-        
         th moderation.
-   
-      tr(ng-controller="MarkupCtrl", ng-if="markup.deleted !== true" ng-repeat="markup in markups" class="trtype-{{markup.type}}")
+        th op. count
+      
+      //  
+      tr(ng-controller="MarkupCtrl", ng-repeat="markup in section.section_markups" class="trtype-{{markup.type}}")
         // , ng-if="markup.type==filter_dataset_by || filter_dataset_by == 'any'"
         td()
          span.markup-item-subtype(ng-click="toggle_select_markup('click')", class="clipped_{{markup.isselected}} markup-hn_{{markup.subtype}}" ) + 
@@ -47,6 +49,7 @@
         td {{markup.position}}
         td {{markup.sectionin}}
         td {{markup.isolated}}
+        td {{markup.touched}}
         td 
           span {{markup.selected}}
         td
@@ -54,8 +57,12 @@
         td
           span {{markup.status}}
         td
-          i.fa.fa-check.btn_action(tooltip-placement="left" tooltip="set as approved" ng-click="change_value('status','approved', true)") 
-          i.fa.fa-close.btn_action(tooltip-placement="left" tooltip="set as pending" ng-click="change_value('status','pending', true)") 
+          span
+            i.fa.fa-check.btn_action(ng-click="change_value('status','approved', true)") 
+          span
+            i.fa.fa-close.btn_action( ng-click="change_value('status','pending', true)") 
+        td
+          span {{markup.operations.length}}
 
 .one.columns
   // a(ng-click="Grabcollection('select')") Grabcollection (test function)

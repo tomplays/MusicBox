@@ -7,7 +7,7 @@
 <!-- DOC published-->
 <!-- HELP MENU BTN-->
 <!-- DOC PUBLISHED > toggle mode / conditionnal owner-->
-<div class="top_menus"><i ng-class="{'visible_yes': ui.menus.quick_tools_help.open=='yes'}" ng-click="expand_tools('quick_tools_help')" ng-dblclick="expand_tools('quick_tools_help')" class="fa fa-question quick_tool_opener menuicon menuicon-help inside"></i>
+<div class="top_menus"><i ng-class="{'visible_yes': ui.menus.quick_tools_help.open}" ng-click="expand_tools('quick_tools_help')" ng-dblclick="expand_tools('quick_tools_help')" class="fa fa-question quick_tool_opener menuicon menuicon-help inside"></i>
   <div class="quick_tools qt-help visible_{{ui.menus.quick_tools_help.open}}">
     <p ng-click="toggle_render('read')" class="back_read">&laquo; {{render_config.i18n.CUSTOM.ACTIONS.back_to_document}}<i class="fa fa-eye"></i></p>
     <div ng-if="render_config.i18n.id =='fr-fr'"> 

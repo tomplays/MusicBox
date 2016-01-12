@@ -48,6 +48,61 @@ var GLOBALS;
 var render;
 var doc;
 
+angular.module('musicBox.page', [])
+
+.controller('MusicBoxCtrl', ['$scope', '$http','$sce', function($scope, $http, $sce) {
+
+		 $scope.ggg = 'page as ctrl'
+
+}])
+
+.directive('mb', function($rootScope) {
+  
+
+  function link(scope, elem, attrs) { 
+  
+
+       
+
+    }
+   
+
+   return {
+    	restrict: "EA",
+    	//require: '^letters',
+		// link:link,
+
+		templateUrl: function(){
+
+			var turl = "js/MusicBox/document/tpl/pagectrl.tpl.html"
+        	return turl;
+
+				
+			//	return '<span order="{{l.order}}" class="{{l.classes_flat}}" ng-bind-html="l.char"></span>'
+
+			
+		},
+    //	replace :true,
+		//	<span class="{{l.classes_flat}}" ng-repeat="l in letters">{{l.char}}</span>
+	    //  transclude :true,    	
+	    // templateUrl: function(elem, attr){
+	    // return 'script/level.tpl.html';
+	    // },
+	   controller: function($scope){
+
+	   		console.log($scope)
+			// $scope.ggg = 'dd'
+ 	
+		}
+		
+    };
+})
+
+// global CMS handler
+
+
+
+
 angular.module('musicBox.document_controller', []);
 
 
@@ -70,12 +125,8 @@ angular.module('musicBox.document_controller', []);
  */
 
 
-function DocumentCtrlRo($scope, $http , $sce, $location, $routeParams ,socket,renderfactory, DocumentService, $anchorScroll) {
-	console.log('DocumentCtrlRo')
-}
 
-
-function DocumentCtrlCompiled($scope, $http , $sce, $location, $routeParams ,socket,renderfactory, DocumentService,DocumentRest,$anchorScroll, MusicBoxLoop,  $timeout) {
+function DocumentCtrlCompiled($scope, $http , $sce, $location, $routeParams ,socket,renderfactory, DocumentService,DocumentRest,$anchorScroll,  $timeout) {
  	
 
 	//some setup 
@@ -112,7 +163,9 @@ function DocumentCtrlCompiled($scope, $http , $sce, $location, $routeParams ,soc
     }
 }
 
-function DocumentCtrl($scope, $http , $sce, $location, $routeParams ,socket,renderfactory, DocumentService, $anchorScroll, MusicBoxLoop,  $timeout, MarkupService) {
+
+
+function DocumentCtrl($scope, $http , $sce, $location, $routeParams ,socket,renderfactory, DocumentService, $anchorScroll, $timeout, MarkupService) {
 		
 
 	doc = new DocumentService()
@@ -120,7 +173,9 @@ function DocumentCtrl($scope, $http , $sce, $location, $routeParams ,socket,rend
 
 
 			
-
+	 $scope.inserted = function(l){
+		alert(l)
+	}
 	
 	/**
 	* initialization for document and render factory (services)
@@ -129,6 +184,9 @@ function DocumentCtrl($scope, $http , $sce, $location, $routeParams ,socket,rend
 
 	$scope.sectionstocount=0;
 	$scope.markup_total_count = 0;
+
+
+
 
 	$scope.mapping_passes = 0;
 	$scope.mapping_pass = function(){
@@ -140,12 +198,15 @@ function DocumentCtrl($scope, $http , $sce, $location, $routeParams ,socket,rend
 
 
 	$scope.update_section_count = function(direction){
+
 		if(direction=='add'){
-			$scope.sectionstocount++;
+			$scope.sectionstocount = $scope.sectionstocount+1;
 		}
 		else{
-			$scope.sectionstocount--;
+			$scope.sectionstocount = $scope.sectionstocount-1;
 		}
+	//	alert($scope.sectionstocount)
+	//	return $scope.sectionstocount
 	}
 
 
@@ -217,8 +278,8 @@ $scope.SetSlug = function (slug) {
     new renderfactory().init()
       
 
-    if($routeParams.fresh ){
-        $scope.ui.menus.quick_tools_help.active= 'yes'    
+    if($scope.ui.menus.quick_tools_help.visible == true){
+    	
         $scope.flashmessage($scope.render_config.i18n.CUSTOM.HELP.fresh_document, 'help' , 3000, true)
     }
 
@@ -231,7 +292,7 @@ $scope.SetSlug = function (slug) {
 		console.log('DocumentCtrl init')
 		$scope.SetSlug()
 		$scope.RenderConfig()
-		doc.Load($scope.slug)	
+		doc.Load($scope.slug)
 		return
 	}
 	
@@ -429,6 +490,31 @@ $scope.SetSlug = function (slug) {
 	*/ 
 	$scope.virtualize = function(collection){
 		//	doc.virtualize(collection)
+	
+   /*
+                $rootScope.virtuals= new Array();
+                var virtual_summary = new Object({'slug': 'summary', 'header': 'Text summary', 'auto': {'bytype': 'h1-h6'} , 'implicit': {'bytype': 'summary'} } )
+                var virtual_data_x = new Object({'slug': 'data_x', 'header': 'data serie (x)', 'explicit': {'bysubtype': 'x'} } )
+                var virtual_data_y = new Object({'slug': 'data_y', 'header': 'data serie (y)', 'explicit': {'bysubtype': 'y'} } )
+                var virtual_data = new Object({'slug': 'data', 'header': 'data serie (any)', 'explicit': {'bytype': 'data'} } )
+
+            
+                $rootScope.virtuals.push(virtual_summary)
+                $rootScope.virtuals.push(virtual_data_x)
+                $rootScope.virtuals.push(virtual_data_y)
+                $rootScope.virtuals.push(virtual_data)
+                */
+              
+
+                // var virtual_containers = new Object({'slug': 'sections', 'header': 'containers ', 'auto': {'bytype': 'h1-h6'} , 'implicit': {'bytype': 'container'} } )
+                // $rootScope.virtuals.push(virtual_containers)
+
+                // no need yet but works. 
+                // self.virtualize()
+          
+                
+
+
 	}
 
 	/* */
@@ -436,25 +522,23 @@ $scope.SetSlug = function (slug) {
 
 	$scope.sync_section_next = function(section, index){
 		console.log(index)
-		$scope.containers[index+1].start = $scope.containers[index+1].start+1;
+		$scope.doc.containers[index+1].start = $scope.doc.containers[index+1].start+1;
 	}
 
 	$scope.expand_tools = function(name){
-
-
-        $scope.ui.menus['quick_tools_document'].open = 'no';
-        $scope.ui.menus['quick_tools_help'].open = 'no';
-        $scope.ui.menus['quick_tools_published'].open = 'no';
-
-		//$scope.ui.menus[name].open = $scope.ui.menus[name].open * -1;
-		if($scope.ui.menus[name].open == 'no'){
-			$scope.ui.menus[name].open = 'yes'
+/*
+        $scope.ui.menus['quick_tools_document'].open =false
+        $scope.ui.menus['quick_tools_help'].open= false;
+        $scope.ui.menus['quick_tools_published'].open = false
+        */
+		if(!$scope.ui.menus[name].open || $scope.ui.menus[name].open === false){
+			$scope.ui.menus[name].open = true
 		}
 		else{
-			$scope.ui.menus[name].open = 'no'
+			$scope.ui.menus[name].open = false
 		}
-		//return;
-		//alert('d')
+		
+		
 	}
 	
 	
@@ -521,7 +605,7 @@ $scope.SetSlug = function (slug) {
 
 	/*
 	var tttt = 0;
-	$scope.$watch('containers', function(newValue, oldValue) {
+	$scope.$watch('doc.containers', function(newValue, oldValue) {
 	   tttt++;
 	   // if(oldValue){
 	   // 	console.log('////////'+tttt)
@@ -554,41 +638,44 @@ $scope.SetSlug = function (slug) {
 	
 	});
 	$scope.$watch('ui.selected_range.redraw', function(newValue, oldValue) {
-		console.log('<<<<<<<<<< ui.selected_range.redraw')
+		//console.log('<<<<<<<<<< ui.selected_range.redraw')
 
 
-		console.log(newValue, oldValue)
+		//console.log(newValue, oldValue)
 		if(!newValue || newValue === false){
-			console.log('<<<<<<<<<< do nothing (ui.selected_range.redraw end)')
+			//console.log('<<<<<<<<<< do nothing (ui.selected_range.redraw end)')
 		}
 		else{
 					
-				console.log('reset all document markups to selected = false')
-				_.each($scope.markups, function(m, i){
+				//console.log('reset all document markups to selected = false')
+			//	_.each($scope.markups, function(m, i){
 	  				
-				})
+			//	})
 
 				// stop redraw loop (each section)
 				$scope.ui.selected_range.redraw=false
 				$scope.ui.selected_range.set=true
-				$scope.ui.selected_range.size = $scope.ui.selected_range.end - $scope.ui.selected_range.start + 1
-				$scope.ui.selected_range.multi = ($scope.ui.selected_range.end - $scope.ui.selected_range.start) > 0 ? true : false
+				$scope.ui.selected_range.size = $scope.ui.selected_range.end - $scope.ui.selected_range.start
 
 
-				_.each($scope.containers, function(c,i){
-					console.log(c)
-					c.redraw = true;
-  					
+				// at least one char
+				if($scope.ui.selected_range.size == 0){
+					$scope.ui.selected_range.size = 1
+				}
+				$scope.ui.selected_range.multi =  ($scope.ui.selected_range.size) > 1 ? true : false
+			
+
+				_.each($scope.doc.containers, function(c,i){
+					c.inrange_letters_and_markups =  true;
 				})
-
-
 		}
 	})
-
-	 $scope.$watch('markups', function(oldValue, newValue) {
+/*
+	 $scope.$watch('doc.markups', function(oldValue, newValue) {
       
 		//
    },true);
+*/
 
 	$scope.$watch('ui.selected_range.start', function(newValue, oldValue) {
 			if(newValue==null){
@@ -614,6 +701,69 @@ $scope.SetSlug = function (slug) {
 					
 	});
 
+
+
+
+
+
+	$scope.$watch('doc.operation.before.state', function(newValue, oldValue) {
+
+			if(newValue == 'new'){
+				 $scope.apply_operation()
+
+			}
+			if(newValue == 'error'){
+				$scope.doc.operations.push($scope.doc.operation)
+			}
+	})
+
+	$scope.apply_operation = function(){
+
+ 			//  $scope.doc.operation.after = {}
+
+ 			if($scope.doc.operation.before.type == 'save'){
+				doc.docsync();	
+ 			}
+ 			 $scope.doc.operation.before.state= 'done'
+ 			 // $scope.doc.operation.after.state= 'done'
+ 			 // should be in service-promise 
+ 			 $scope.push_to_operations()
+			
+	} 
+
+	$scope.push_to_operations = function(){
+	 	$scope.doc.operations.push($scope.doc.operation)
+	}
+
+	$scope.reverse_operation = function(){
+				
+	console.log($scope.doc.operation)
+		}
+
+
+	$scope.operations_clear= function(){
+
+		 $scope.doc.operations= []
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	/*
 	$scope.$watch('doc.published', function(newValue, oldValue) {
 	 
@@ -624,17 +774,7 @@ $scope.SetSlug = function (slug) {
 			}
 	 	}
 	});
-	$scope.$watch('MusicBoxLoop.state', function(newValue, oldValue) {
-	 
-	  	if(newValue && newValue !== oldValue){
-			console.log('mb')
-
-			if($scope.MusicBoxLoop.state == 'ready'){
-				alert('rm here')
-				// new MusicBoxLoop().init(true); 
-			}
-	 	}
-	});
+	
 
 	$scope.$watch('doc.content', function(newValue, oldValue) {
 		if(oldValue && newValue && newValue !== oldValue){
@@ -697,12 +837,13 @@ $scope.SetSlug = function (slug) {
 
 		if(data.identifier && data.identifier == $scope.doc.slug && data.markups_pushed){
 			_.each(data.markups_pushed, function(m){
-				//	m.user_id = {'_id':m.user.user_id}
-					$scope.markups.push(m)
+				    //	m.user_id = {'_id':m.user.user_id}
+					$scope.doc.markups.push(m)
 				    //  console.log($scope.markups_pushed.length)
 				    //	$scope.markups_pushed.push(m)
 					
 			})
+
 			$scope.ui.selected_range.redraw= true
 
 
@@ -711,7 +852,7 @@ $scope.SetSlug = function (slug) {
 		if(data.identifier && data.identifier == $scope.doc.slug && data.content_pushed){
 			
 			$scope.doc.content = data.content_pushed
-			_.each($scope.containers, function(c,i){
+			_.each($scope.doc.containers, function(c,i){
 					console.log(c)
 					c.redraw = true;
 					
@@ -778,6 +919,10 @@ function DocumentsListCtrl($scope, $http , $location, $routeParams, socket) {
 function  DocumentCtrlJasmine($scope, $http , $sce, $location, $routeParams, renderfactory,socket,docfactory){
 	return 'hello';
 } 
+
+function DocumentCtrlRo($scope, $http , $sce, $location, $routeParams ,socket,renderfactory, DocumentService, $anchorScroll) {
+	console.log('DocumentCtrlRo')
+}
 
 
 

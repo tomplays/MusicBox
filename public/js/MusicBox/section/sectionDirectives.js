@@ -1,23 +1,47 @@
+'use strict';
+
 angular.module('musicBox.SectionDirectives', [])
 
 .directive("mbSection", function($rootScope) {
 
 		var link= function(scope){
-					console.log(' [Section] directive')
-          scope.section.index_ = scope.$index
-
+          console.log(' [Section] directive')
 		}
         return {
-          restrict: "A",
-         scope: true,
-          link:link,
-          
+        restrict: "A", 
+        scope: true,
+        controller: 'SectionCtrl',
+        link:link,
           templateUrl: function() {
                 return "js/MusicBox/section/tpl/section.tpl.html";
           }
         };
 })
+.directive("mbSectionb", function($rootScope) {
 
+    var link= function(scope){
+          
+        //  scope.section.index_ = scope.$index
+      //    scope.section.sectionin= scope.$index
+          console.log(' [SectionB] directive')
+ //         console.log('iii?'+scope.section.index_ )
+    //       scope.$apply()
+
+
+    }
+        return {
+          restrict: "A",
+         
+        scope: true,
+        controller: 'SectionBCtrl',
+
+      //  link:link,
+          
+          templateUrl: function() {
+                return "js/MusicBox/section/tpl/sectionB.tpl.html";
+          }
+        };
+})
 .directive("mbSectioninlineeditor", function($rootScope) {
 
     var link = function(){
@@ -49,9 +73,9 @@ angular.module('musicBox.SectionDirectives', [])
 })
 .directive("mbDataset", function($rootScope) {
 
-		var link = function(){
-			console.log(' [dataset Section] directive')
-		}
+    var link = function(){
+      console.log(' [dataset SECTION] directive')
+    }
         return {
           restrict: "EA",
           scope: true,
@@ -61,6 +85,7 @@ angular.module('musicBox.SectionDirectives', [])
           }
         };
 })
+
 .directive("mbCommentform", function($rootScope) {
 
     var link = function(){
@@ -95,7 +120,7 @@ angular.module('musicBox.SectionDirectives', [])
             scope: {
               section   : '=',     
             },
-            template: '<span  ng-bind-html="section.fulltext_block"></span>',
+            template: '<span ng-bind-html="section.fulltext_block"></span>',
             transclude :true,
             restrict: 'A',
             link: link,
