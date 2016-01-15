@@ -307,9 +307,9 @@ module.exports = function(grunt) {
 
 		
 		watch: {
-			js: {
+			jqdsds: {
 				options: { /* livereload: true */ },
-				files: ['public/js/**/*.js'], // less auto-compilation
+				files: ['public/jsdssd/**/*.js'], // less auto-compilation
 				tasks: ['ngAnnotate:dist','concat:js']
 			},
 
