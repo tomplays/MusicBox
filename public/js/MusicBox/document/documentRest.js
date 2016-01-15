@@ -43,7 +43,7 @@ angular.module('musicBox.DocumentRest', [])
         method:"POST",
         url: api_url+'/doc/:id/sync',  
       },
-      doc_option_edit:{     
+      option_edit:{     
         method:"POST",
         url: api_url+'/doc/:id/doc_option_edit'
       },

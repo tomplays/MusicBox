@@ -26,7 +26,8 @@
         </div>
       </div>
     </div>
-    <mb-commentform ng-if="(doc_options.comments_open.value !=='false' || !doc_options.comments_open.value  ) &amp;&amp; layout.name == 'left'"></mb-commentform>
+    <!-- old mb-commentform(ng-if="(doc_options.comments_open.value !=='false' || !doc_options.comments_open.value  ) && layout.name == 'left'")-->
+    <mb-pusher type="column" position="{{layout.name}}" ng-if="(doc_options.comments_open.value !=='false' || !doc_options.comments_open.value  ) &amp;&amp; layout.name == 'left'"></mb-pusher>
     <div ng-if="layout.name == 'slidewide'">
       <carousel interval="1000">
         <slide ng-repeat="markup in markups_by_start_end_position_type(section.start, section.end ,'slidewide','media') track by $index">
@@ -57,7 +58,7 @@
       <div fluidtexte="fluidtexte" section="section" ng-hide="section.modeletters =='single'" class="fluidtext"> </div>
       <!-- div.fluidtddext {{section.fulltext_block}}-->
       
-      <div ng-if="doc_owner == true &amp;&amp; ($parent.$parent.$parent.$last)" class="pusher_section"><i tooltip="new section" ng-click="new_section()" class="fa fa-plus-square pusher_item btn"></i></div>
+      <mb-pusher type="new_section" position="{{layout.name}}"></mb-pusher>
     </div>
     <div ng-if="layout.name == 'global' &amp;&amp; $parent.$parent.$last">
       <!-- h4 {{layout.name}}-->

@@ -31,7 +31,9 @@
 				
 		tabset.editor-main-tab()			
 			tab(heading="Add section styles") 
-				div.pusher_css_styles
+				mb-pusher(type="container_class", position="{{layout.name}}")
+
+				// OLD div.pusher_css_styles
 					ul
 						li(class="" ng-repeat="t in section.objSchemas_css.modes.editor.fields.metadata.available") 
 							i.fa.btn_action(tooltip="insert container class (css)" class="fa-container_class" ng-click="push_generic_from_ranges('container_class','css','inline', t)" ) {{t}}

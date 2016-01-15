@@ -9,15 +9,18 @@
         
         -->
         <tab ng-if="object=='markup'" heading="Add {{object}}" ng-repeat="object in available_sections_objects"> 
-          <p>&nbsp;</p>
-          <div ng-if="object=='markup'">
-            <ul class="typer sub">
-              <li ng-repeat="t in objSchemas[object].modes.editor.fields.subtype.available" class="pusher_item"> <i tooltip="insert markup" ng-click="push_generic_from_ranges('markup', t,'inline')" class="fa btn_action fa-{{t}}"> </i></li>
-              <li class="pusher_item"> |</li>
-              <li class="pusher_item"> <i tooltip="insert markup" ng-click="push_generic_from_ranges('media', 'img','right', '')" class="fa btn_action fa-media"> </i><i tooltip="insert link" ng-click="push_generic_from_ranges('hyperlink', 'hyperlink','under', '')" class="fa btn_action fa-link"></i></li>
-            </ul>
-          </div>
-          <p>&nbsp;</p>
+          <!-- p &nbsp;-->
+          <mb-pusher type="inline_objects" position="{{layout.name}}"></mb-pusher>
+          <!-- old div(ng-if="object=='markup'")
+          ul.typer.sub
+          	li.pusher_item(class="" ng-repeat="t in objSchemas[object].modes.editor.fields.subtype.available") 
+          		i.fa.btn_action(tooltip="insert markup" class="fa-{{t}}" ng-click="push_generic_from_ranges('markup', t,'inline')" ) 
+          	li.pusher_item(class="")  |
+          	li.pusher_item(class="") 
+          		i.fa.btn_action(tooltip="insert markup" class="fa-media" ng-click="push_generic_from_ranges('media', 'img','right', '')" ) 
+          		i.fa.btn_action(tooltip="insert link" class="fa-link" ng-click="push_generic_from_ranges('hyperlink', 'hyperlink','under', '')" )
+          -->
+          <!-- p &nbsp;-->
         </tab>
         <tab heading="Markups" ng-if="markups_by_start_end_position_type(section.start, section.end ,'inline', 'markup').length &gt; 0"> 
           <!-- h1 section.keepsync : {{section.keepsync}}-->
@@ -29,7 +32,7 @@
         </tab>
         <tab heading="Operations" ng-if="section.operations.length&gt;0">
           <ul>
-            <li ng-repeat="op in section.operations">{{op}}</li>
+            <li ng-repeat="op in section.operations">{{op}}<a ng-click="reverse_operation(op)"></a></li>
           </ul><a ng-click="operations_clear()" class="btn">clear</a><a ng-click="reverse_operation()" class="btn">reverse last operation</a>
         </tab>
       </tabset>

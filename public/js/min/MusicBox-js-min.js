@@ -39592,7 +39592,7 @@ angular.module('musicBox.DocumentRest', [])
         method:"POST",
         url: api_url+'/doc/:id/sync',  
       },
-      doc_option_edit:{     
+      option_edit:{     
         method:"POST",
         url: api_url+'/doc/:id/doc_option_edit'
       },
@@ -41166,103 +41166,33 @@ angular.module('musicBox.LetterDirectives', [])
 /*
 
 triggers / callback
+attribute_objects()->map_letters->
 
 
-			attribute_objects()->map_letters->
+>> MAIN FUNCTIONS/LOGIC 
 
+	base section : {
+					start: 0
+					end: n
+	}
 
+	>> INIT()
+		> 
 
 */
 
 
-angular.module('musicBox.sectionB_controller', []).controller('SectionBCtrl', ["$scope", "$http", "DocumentService", "MarkupRest", "socket", "MarkupService", function($scope, $http, DocumentService, MarkupRest,socket, MarkupService) {
 
-
-
-$scope.init_= function () {
-	var container_ = new Object({
-			'section_index' : $scope.$parent.$index, 
-			'map' : {
-				'fulltext':true,
-				'letters':false,
-				'objects':true,
-				'layout': false,
-			}
-
-	})
-	$scope.section = _.extend($scope.section, container_);
-}
-
-$scope.fire_map= function (map) {
-	$scope.section.map[map] = true;
-}
-
-
-
-$scope.$watch('section.map.fulltext', function(newValue, oldValue) {
-	if( newValue == true){
-		
-		$scope.section.map.fulltext = false;
-		$scope.section.fulltext = 'fsdfsdf';
-		$scope.section.map.letters = true;
-
-
-
-	}
-	else{
-
-	}
-});
-
-$scope.$watch('section.map.objects', function(newValue, oldValue) {
-	if( newValue == true){
-		
-		$scope.section.map.objects = false;
-		$scope.section.objects = [];
-
-
-	}
-	else{
-
-	}
-});
-
-
-$scope.$watch('section.map.letters', function(newValue, oldValue) {
-	if( newValue == true){
-		
-		$scope.section.map.letters = false;
-		$scope.section.letters = [];
-
-
-	}
-	else{
-
-	}
-});
-
-
-
-
-
-
-$scope.init_()
-
-
-}])
 
 angular.module('musicBox.section_controller', []).controller('SectionCtrl', ["$scope", "$http", "DocumentService", "MarkupRest", "socket", "MarkupService", function($scope, $http, DocumentService, MarkupRest,socket, MarkupService) {
 
 
-$scope.inserted = function(l){
-		alert(l)
-	}
+
 
 $scope.init_= function (index_) {
-	console.log('init_ (section)')
-	console.log()
-	/* some variable seting for each container */
+	console.log('init_ (section #'+ index_+')')
 
+	/* some variable seting for each container */
 	var container_ = new Object({
 		'selecting' : -1,
 		'sectionin' : index_,
@@ -41282,8 +41212,8 @@ $scope.init_= function (index_) {
         'has_offset'     : false,
         'touched'     : false,
         'keepsync'     : true,
-        'objSchemas' 	 :   $scope.objSchemas['container'] ?  $scope.objSchemas['container'] : [],
-        'objSchemas_css' 	 : $scope.objSchemas['container_class'] ?  $scope.objSchemas['container_class'] : [],
+        'objSchemas' : $scope.objSchemas['container'],
+        'objSchemas_css': $scope.objSchemas['container_class'],
         'servicetype'  	 :'section',
         'operation': {},
         'operations': []
@@ -41291,7 +41221,7 @@ $scope.init_= function (index_) {
 	
 	})
 
-	// .. and extend object
+	// extend this 
 	$scope.section = _.extend($scope.section, container_);
 
 
@@ -42184,17 +42114,15 @@ $scope.add= function (){
            console.log(response)   
         }.bind(this));
 	}
-	$scope.alert_= function (){
-		// alert('alert_')
-	}
 
 
-	// short function to push a section
-	$scope.new_section= function (){
+$scope.alert_= function (){
+	// alert('alert_')
+}
+
+// short function to push a section
+$scope.new_section= function (){
 		// $scope.section.fulltext  = $scope.section.fulltext
-		
-	
-
 		$scope.push.start  		= parseInt($scope.section.end+1)
 		$scope.push.end  		= parseInt($scope.section.end+9)
 		$scope.push.position  	=  'inline'
@@ -42204,30 +42132,25 @@ $scope.add= function (){
 		$scope.$parent.sync_queue()
 		$scope.add();
 		
-	}
+}
 
 
 
-	$scope.defocus = function (){
+$scope.defocus = function (){
 
 		  _.each($scope.$parent.doc.containers, function(container){
             	container.focused  = ''          
 		  })
-	}
+}
 
-
-	
-
-
-	$scope.close_pusher = function (){
-		 $scope.defocus()
-		$scope.$parent.ui.focus_side 				= ''
-		$scope.$parent.ui.menus.push_comment.open 	= -1
-		$scope.$parent.push.metadata 				= '';
-		$scope.$parent.push.start 					=	null;
-		$scope.$parent.push.end 					=	null;
-
-	}
+$scope.close_pusher = function (){
+	$scope.defocus()
+	$scope.$parent.ui.focus_side 				= ''
+	$scope.$parent.ui.menus.push_comment.open 	= -1
+	$scope.$parent.push.metadata 				= '';
+	$scope.$parent.push.start 					=	null;
+	$scope.$parent.push.end 					=	null;
+}
 
 	// open close the pusher box.
 
@@ -42294,6 +42217,7 @@ $scope.add= function (){
 
 
 	}
+
 	 $scope.save = function (save_msg) {
 
         var thos = this;
@@ -42327,9 +42251,9 @@ $scope.add= function (){
 
 $scope.merge= function (){
       	alert('merged')
-		}
+}
 
-     $scope.split= function (){
+$scope.split= function (){
 
 
      	//alert($scope.ui.selected_range.start+'-'+$scope.ui.selected_range.end+' - '+$scope.section.start+' - '+$scope.section.end)
@@ -42385,7 +42309,7 @@ $scope.merge= function (){
 	}
 
 	
-	$scope.$watch('section.operation.before.state', function(newValue, oldValue) {
+$scope.$watch('section.operation.before.state', function(newValue, oldValue) {
 
 		if(newValue == 'new'){
 			 $scope.apply_operation()
@@ -42394,10 +42318,9 @@ $scope.merge= function (){
 		if(newValue == 'error'){
 			$scope.section.operations.push($scope.section.operation)
 		}
+})
 
-
-	})
-	$scope.apply_operation = function(){
+$scope.apply_operation = function(){
 
  			 $scope.section.operation.after = {}
 
@@ -42484,6 +42407,8 @@ $scope.operations_clear= function(){
    
 
    });	
+
+
 
 /*
 	$scope.$watch('section.objects_count.all', function(newValue, oldValue) {
@@ -42604,11 +42529,9 @@ $scope.$watch('section.inrange_letters_and_markups', function(newValue, oldValue
 
 
 
-
-
-
-
-
+$scope.inserted = function(l){
+	alert(l)
+}
 
 
 $scope.integrity_fix = function (){
@@ -42640,6 +42563,81 @@ $scope.open_pmusher = function (){
 }
 }])
 
+angular.module('musicBox.sectionB_controller', []).controller('SectionBCtrl', ["$scope", "$http", "DocumentService", "MarkupRest", "socket", "MarkupService", function($scope, $http, DocumentService, MarkupRest,socket, MarkupService) {
+
+
+
+$scope.init_= function () {
+	var container_ = new Object({
+			'section_index' : $scope.$parent.$index, 
+			'map' : {
+				'fulltext':true,
+				'letters':false,
+				'objects':true,
+				'layout': false,
+			}
+
+	})
+	$scope.section = _.extend($scope.section, container_);
+}
+
+$scope.fire_map= function (map) {
+	$scope.section.map[map] = true;
+}
+
+
+
+$scope.$watch('section.map.fulltext', function(newValue, oldValue) {
+	if( newValue == true){
+		
+		$scope.section.map.fulltext = false;
+		$scope.section.fulltext = 'fsdfsdf';
+		$scope.section.map.letters = true;
+
+
+
+	}
+	else{
+
+	}
+});
+
+$scope.$watch('section.map.objects', function(newValue, oldValue) {
+	if( newValue == true){
+		
+		$scope.section.map.objects = false;
+		$scope.section.objects = [];
+
+
+	}
+	else{
+
+	}
+});
+
+
+$scope.$watch('section.map.letters', function(newValue, oldValue) {
+	if( newValue == true){
+		
+		$scope.section.map.letters = false;
+		$scope.section.letters = [];
+
+
+	}
+	else{
+
+	}
+});
+
+
+
+
+
+
+$scope.init_()
+
+
+}])
 
 'use strict';
 

@@ -159,7 +159,7 @@ angular.module('musicBox.render', [])
                   "forced": "",
                   "available": ['inline']},
               'modes': {
-                'pusherleft': false,
+                'pusherleft': true,
                  'editor': {                   
                   'enabled': true,
                   'tabs': {
@@ -174,7 +174,8 @@ angular.module('musicBox.render', [])
                                   'type': { 
                                       'display' : true,
                                       'label':'type',
-                                      'input' : 'select'
+                                      'input' : 'select',
+                                       'show_editor': true
 
                                   },
                                   'position':{ 
@@ -188,7 +189,7 @@ angular.module('musicBox.render', [])
                                     'label':'subtype',
                                     'input' : 'select',
                                     'free_input' : false,
-                                    'show_editor': 'hidden',
+                                    'show_editor': false,
                                     'available' : ['h1','h2', 'h3', 'h4', 'h5','h6','em', 'strong', 'code', 'quote'],
                                   },
                                     'metadata': {
@@ -196,9 +197,9 @@ angular.module('musicBox.render', [])
                                     'label':'subtye',
                                     'input' : 'select',
                                     'free_input' : false,
-                                    'show_editor': 'hidden',
+                                    'show_editor': false,
                                     'available' : [''],
-                                    'forced' : '-'
+                                    'forced' : ''
                                   }
 
                           },
@@ -209,7 +210,7 @@ angular.module('musicBox.render', [])
                           'display' : {
                               
                                  'metadata': {
-                                      'displayed':'subtype'
+                                  'displayed':'subtype'
                                  }
 
                           },
@@ -250,27 +251,32 @@ angular.module('musicBox.render', [])
                                   'type': { 
                                       'display' : true,
                                       'label':'type',
-                                      'input' : 'select'
+                                      'input' : 'select',
+                                       'show_editor': true
                                   },
                                   'position':{ 
                                       'display' : true,
                                       'label':'position',
-                                      'input' : 'select'
+                                      'input' : 'select',
+                                      'show_editor': true,
+                                      'default': 'left'
                                   },
                                   'subtype': {
                                     'display' : true,
                                     'label':'subtype',
                                     'input' : 'select',
                                     'free_input' : false,
-                                    'show_editor': 'hidden',
+                                    'show_editor': true,
+                                    'default': 'img',
                                     'available' : ['img', 'soundcloud-track', 'vimeo-video', 'youtube-video', 'open-street-map', 'google-map'],
+                                 
                                   },
                                     'metadata': {
                                     'display' : true,
-                                    'label':'url',
+                                    'label':'url or embed object url',
                                     'input' : 'text',
                                     'free_input' : false,
-                                    'show_editor': 'hidden',
+                                    'show_editor': true,
                               
                         
                                   },
@@ -279,7 +285,8 @@ angular.module('musicBox.render', [])
                                     'label':'send',
                                     'input' : 'select',
                                     'free_input' : false,
-                                    'show_editor': 'hidden',
+                                    'show_editor': true,
+
                                
                                   }
 
@@ -318,7 +325,7 @@ angular.module('musicBox.render', [])
                  'pusherleftopen': true,
                  'editor': { 
                  
-                  'enabled': true,
+                        'enabled': true,
                         'display' : {
                             'date': false, 
                             'user': false,
@@ -332,36 +339,41 @@ angular.module('musicBox.render', [])
 
                           'fields' : {
                                   'ranges': { 
-                                      'display' : true,
-                                      'label':'link url',
-                                    'input' : 'range'
+                                    'display' : true,
+                                    'label':'ranges',
+                                    'input' : 'range',
+                                    'show_editor': true
                                   },
                                   'type': { 
-                                      'display' : true,
-                                      'label':'type',
-                                    'input' : 'select'
+                                    'display' : true,
+                                    'label':'type',
+                                    'input' : 'select',
+                                    'show_editor': true,
                                   },
                                 
                                   'position':{ 
                                       'display' : true,
                                       'label':'position',
-                                      'input' : 'select'
+                                      'input' : 'select',
+                                      'show_editor': true,
+                                      'default': 'left'
                                   },
                                   'subtype': {
                                     'display' : true,
                                     'label':'subtype',
                                     'input' : 'select',
                                     'free_input' : false,
-                                    'show_editor': 'hidden',
+                                    'show_editor': false,
                                     'available' : ['comment'],
-                                    'forced' : 'comment'
+                                    'forced' : 'comment',
+                                     'default': 'comment'
                                   },
                                   'metadata': {
                                     'display' : true,
                                     'label':'comment text',
                                     'input' : 'textarea',
                                     'free_input' : false,
-                                    'show_editor': 'hidden'
+                                    'show_editor': true
                                   
                                   
                                   }
@@ -422,20 +434,22 @@ angular.module('musicBox.render', [])
                                   'type': { 
                                       'display' : true,
                                       'label':'type',
-                                    'input' : 'select'
+                                    'input' : 'select',
+                                      'show_editor': true
                                   },
                                 
                                   'position':{ 
                                       'display' : true,
                                       'label':'position',
-                                      'input' : 'select'
+                                      'input' : 'select',
+                                       'show_editor': true
                                   },
                                   'subtype': {
                                     'display' : true,
                                     'label':'subtype',
                                     'input' : 'select',
                                     'free_input' : false,
-                                    'show_editor': 'hidden',
+                                    'show_editor': true,
                                     'available' : ['simple_page'],
                                     'forced' : 'simple_page'
                                   },
@@ -500,24 +514,27 @@ angular.module('musicBox.render', [])
                         'fields' : {
                                   'ranges': { 
                                       'display' : true,
-                                      'label':'link url',
-                                      'input' : 'range'
+                                      'label':'container ranges',
+                                      'input' : 'range',
+                                       'show_editor': false
                                   },
                                   'type': { 
                                       'display' : false,
+                                      'show_editor': false,
                                       'forced' : 'container'
                                   },
                                 
                                   'position':{ 
                                       'display' : false,
-                                      'forced' : 'inline'
+                                      'forced' : 'inline',
+                                      'show_editor': false
                                   },
                                   'subtype': {
                                     'display' : true,
                                     'label':'subtype',
                                     'input' : 'select',
                                     'free_input' : false,
-                                    'show_editor': 'hidden',
+                                    'show_editor': false,
                                     'available' : ['section'],
                                     'forced' : 'section'
                                   },
@@ -572,36 +589,41 @@ angular.module('musicBox.render', [])
                           'fields' : {
                                   'ranges': { 
                                       'display' : true,
-                                      'label':'link url',
-                                    'input' : 'range'
+                                      'label':'ranges',
+                                    'input' : 'range',
+                                      'show_editor': false,
                                   },
                                   'type': { 
                                       'display' : true,
                                       'label':'type',
-                                      'input' : 'select'
+                                      'input' : 'select',
+                                        'show_editor': false,
                                   },
                                 
                                   'position':{ 
                                     'display' : true,
                                     'label':'position',
                                     'input' : 'select',
-                                      'forced' : 'inline'
+                                    'show_editor': false,
+                                    'forced' : 'inline',
+                                    'default': 'inline'
                                   },
                                   'subtype': {
                                     'display' : true,
                                     'label':'subtype',
                                     'input' : 'select',
                                     'free_input' : false,
-                                    'show_editor': 'hidden',
+                                    'show_editor': false,
                                     'available' : ['css'],
-                                    'forced' : 'css'
+                                    'forced' : 'css',
+                                    'default':'css'
                                   },
                                   'metadata': {
                                     'display' : true,
                                     'label':'Css class',
                                     'input' : 'select',
                                     'free_input' : false,
-                                    'show_editor': 'hidden',
+                                    'show_editor': true,
                                     'available' : ['bg_black', 'bg_dark', 'two-cols', 'pad-top-bottom', 'text-right', 'gradient-pink', 'aligned '],
                                   
                                   }
@@ -639,7 +661,7 @@ angular.module('musicBox.render', [])
               'modes': {
                 'pusherleft': true,
                 'editor': {                   
-                  'enabled': true,
+                        'enabled': true,
                         'display' : {
                             'date': false, 
                             'user': false,
@@ -652,23 +674,25 @@ angular.module('musicBox.render', [])
 
 
                         },
-
-                          'fields' : {
+                        'fields' : {
                                   'ranges': { 
                                       'display' : true,
-                                      'label':'link url',
+                                      'label':'ranges',
                                       'input' : 'range'
                                   },
                                   'type': { 
                                       'display' : true,
                                       'label':'type',
-                                     'input' : 'select'
+                                      'input' : 'select',
+                                        'show_editor': true
                                   },
                                 
                                   'position':{ 
                                       'display' : true,
                                       'label':'position',
-                                      'input' : 'select'
+                                      'input' : 'select',
+                                      'default' : 'left'
+                                  
                                   },
                                    'subtype': {
                                     'display' : true,
@@ -677,7 +701,9 @@ angular.module('musicBox.render', [])
                                     'free_input' : false,
                                     'show_editor': true,
                                     'available' : ['x', 'y', 'z','string'],
-                                    'forced' : false
+                                    'default' : 'x',
+                                    'forced' : 'x',
+
                                   },
                                  
                                    
@@ -721,7 +747,7 @@ angular.module('musicBox.render', [])
               'compute_fulltext':true,
               'positions': {
                   "forced": "left",
-                  "available": ['left', 'right', 'global']},
+                  "available": ['left', 'right', 'global', 'inline']},
               'modes': {
                 'pusherleft': true,
                 'editor': {                   
@@ -746,13 +772,15 @@ angular.module('musicBox.render', [])
                                   'type': { 
                                       'display' : true,
                                       'label':'type',
-                                      'input' : 'select'
+                                      'input' : 'select', 
+                                      'show_editor': true
                                   },
                                 
                                   'position':{ 
                                       'display' : true,
                                       'label':'position',
-                                      'input' : 'select'
+                                      'input' : 'select',
+                                      'default' : 'left'
                                   },
                                   'subtype': {
                                     'display' : true,
@@ -761,6 +789,7 @@ angular.module('musicBox.render', [])
                                     'free_input' : false,
                                     'show_editor': true,
                                     'available' : ['hyperlink', 'anchor'],
+                                    'default' : 'hyperlink',
                                     'forced' : false
                                   },
                                   'metadata': {

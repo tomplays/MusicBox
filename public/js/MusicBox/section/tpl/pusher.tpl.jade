@@ -1,0 +1,91 @@
+.div
+	.pusher(ng-if="isvisible")
+		// h1 inside pusher {{type}} {{position}}
+		// h3 isvalid: {{isvalid}}
+
+		span.open_comment(ng-if="type=='column'" tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.COMMENT.label}}" ng-click="pusher_toggle()") +
+
+		.pusher(ng-if="isopen")
+
+			div(ng-if="type=='column'")
+					
+				div.user_not_in(ng-if="userin.username == '' ")
+					p
+						a(ng-click="external_link(root_url+':'+port+'/login')" , ng-if="userin.username == '' ") {{render_config.i18n.CUSTOM.COMMENT.needs_logging}}
+					p
+						a.loginOrSignup(ng-click="external_link(root_url+'/login?redirect_url=#{root_url}:#{port}/doc/'+doc.slug)" , ng-if="userin.username == '' ") {{render_config.i18n.CUSTOM.USER.loginOrSignup}}
+
+
+				div.user_in(ng-if="userin.username")
+					p.logged_in_as {{render_config.i18n.CUSTOM.COMMENT.logged_in_as}} 
+						em
+							a(href="/me/account") {{userin.username}}
+
+					p
+						label {{render_config.i18n.CUSTOM.ACTIONS.add}} {{render_config.i18n.CUSTOM.OBJECTS[push.type]}}
+					p(ng-hide="ui.selected_range.start || ui.selected_range.end")
+						label Select a range of text first
+					p(ng-if="ui.selected_range.start || ui.selected_range.end") Adding {{push.type}} from {{ui.selected_range.start}} to {{ui.selected_range.end}}
+					
+					
+
+
+
+			// h1 inside pusher opened
+			// pre {{push}}
+			// pre {{available_sections_objects}}
+
+			p(ng-if="objSchemas[push.type].modes.editor.fields.type.show_editor && type!=='inline_objects'")
+				label {{render_config.i18n.CUSTOM.ACTIONS.select}} type
+				select(ng-model="push.type")
+					option(ng-repeat="object in available_sections_objects" ng-if="objSchemas[object].modes.pusherleft") {{object}}
+			
+
+			p(ng-if="objSchemas[push.type].modes.editor.fields.position.show_editor")
+				label {{render_config.i18n.CUSTOM.ACTIONS.select}} position
+				select(ng-model="push.position" )
+					option(ng-repeat="p in objSchemas[push.type].positions.available" ng-value="{{p}}" ) {{p}}
+			
+
+			p(ng-if="objSchemas[push.type].modes.editor.fields.subtype.show_editor")
+				label {{render_config.i18n.CUSTOM.ACTIONS.select}} subtype
+				select(ng-model="push.subtype")
+					option(ng-repeat="st in objSchemas[push.type].modes.editor.fields.subtype.available"  ng-value="{{st}}" ) {{st}}
+
+
+
+			p(ng-if="objSchemas[push.type].modes.editor.fields.metadata.show_editor == true")
+				label {{objSchemas[push.type].modes.editor.fields.metadata.label}}
+				textarea(ng-if="objSchemas[push.type].modes.editor.fields.metadata.input == 'textarea'" ng-model="push.metadata", type="text", value="{{render_config.i18n.CUSTOM.COMMENT.textarea}}") 
+
+				input(ng-if="objSchemas[push.type].modes.editor.fields.metadata.input == 'text'" ng-model="push.metadata", type="text") 
+
+			p(ng-if="objSchemas[push.type].modes.editor.fields.ranges.show_editor == true")
+				label {{objSchemas[push.type].modes.editor.fields.ranges.label}}
+
+			
+			.pusher_section(ng-if="type=='new_section'")
+				i.fa.fa-plus-square.pusher_item.btn( tooltip="new section" ng-click="new_section()")
+
+			.pusher_css_styles(ng-if="type=='container_class'")
+				ul
+					li.pusher_item(class="" ng-repeat="t in objSchemas[push.type].modes.editor.fields.metadata.available") 
+						i.fa.btn_action(tooltip="insert container class (css)" class="fa-container_class" ng-click="push_generic_from_ranges('container_class','css','inline', t)" ) {{t}}
+								
+
+			div(ng-if="type=='inline_objects' ")
+				ul.typer.sub
+					li.pusher_item(class="" ng-repeat="t in objSchemas['markup'].modes.editor.fields.subtype.available") 
+						i.fa.btn_action(tooltip="insert markup" class="fa-{{t}}" ng-click="push_generic_from_ranges('markup',t,'inline')" ) 
+					li.pusher_item(class="")  |
+					li.pusher_item(class="") 
+						i.fa.btn_action(tooltip="insert markup" class="fa-media" ng-click="push_generic_from_ranges('media', 'img','right', '')" ) 
+						i.fa.btn_action(tooltip="insert link" class="fa-link" ng-click="push_generic_from_ranges('hyperlink', 'hyperlink','under', '')" )
+			
+			p
+				a.btn_ok.float_right(ng-show="isvalid" ng-click="add()") {{render_config.i18n.CUSTOM.ACTIONS.add}} {{push.type}}
+
+			
+				
+
+		

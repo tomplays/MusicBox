@@ -6,16 +6,15 @@
 angular.module('musicBox',  [
   'ui.bootstrap',
   'musicBox.page',
-  'musicBox.document_controller','musicBox.section_controller','musicBox.sectionB_controller','musicBox.sectionpusher_controller',  'musicBox.markup_controller',
+  'musicBox.document_controller','musicBox.section_controller','musicBox.sectionB_controller', 'musicBox.SectionPusherDirectives', 'musicBox.markup_controller',
    'musicBox.user_controller',
-   'ngLocale', 'ngResource', 'ngRoute','musicBox.services'
-   ,'musicBox.render',
+   'ngLocale', 'ngResource', 'ngRoute','musicBox.services','musicBox.render',
    'musicBox.directives', 'ngSanitize',  
    'musicBox.DocumentRest','musicBox.UserRest', 'musicBox.MarkupRest',
   'musicBox.UserService', 
   'musicBox.DocumentService',  'musicBox.MarkupService', 
   'musicBox.SectionDirectives','musicBox.DocumentDirectives', 'musicBox.MarkupDirectives','musicBox.LetterDirectives',
-  'musicBox.eDirectives',
+  'musicBox.eDirectives'
   ]).
   config(['$localeProvider','$routeProvider', '$locationProvider','$sceDelegateProvider', '$sceProvider', function($localeProvider,$routeProvider, $locationProvider, $sceDelegateProvider,$sceProvider ) {
     $routeProvider.
@@ -89,5 +88,3 @@ angular.module('musicBox',  [
 
 
 
-// instead of empty file include, but files exist #v+
-// if/not included switcher
