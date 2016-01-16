@@ -12,7 +12,10 @@ html(manifest="" class="is_home_{{ui.is_home}} is_single_{{ui.is_single}} doc_id
 				// bot and search engine only content 
 				// text served as stored in database (no markup)
 				h2 #{doc_title}
-				img(src="#{doc_thumbnail}")
+				if(is_view == 'document')
+					img(src="#{doc_thumbnail}")
+				if(is_view == 'user')
+					h2 user_page
 				h4 #{doc_excerpt}
 				p #{raw_content}
 				footer #{site_title}

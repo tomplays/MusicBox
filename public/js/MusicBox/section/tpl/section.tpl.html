@@ -26,7 +26,7 @@
         </div>
       </div>
     </div>
-    <!-- old mb-commentform(ng-if="(doc_options.comments_open.value !=='false' || !doc_options.comments_open.value  ) && layout.name == 'left'")-->
+    <!-- mb-commentform(ng-if="(doc_options.comments_open.value !=='false' || !doc_options.comments_open.value  ) && layout.name == 'left'")-->
     <mb-pusher type="column" position="{{layout.name}}" ng-if="(doc_options.comments_open.value !=='false' || !doc_options.comments_open.value  ) &amp;&amp; layout.name == 'left'"></mb-pusher>
     <div ng-if="layout.name == 'slidewide'">
       <carousel interval="1000">

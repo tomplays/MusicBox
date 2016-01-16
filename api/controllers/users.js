@@ -54,7 +54,7 @@ exports.list= function(req, res) {
 
 exports.login = function(req, res) {
     var user_ = new Object({'username': null,  'image_url':null})
-    res.render('index', { user_in:user_ } );
+    res.render('index', { user_in:user_ , is_view : 'user' } );
 };
 
 
@@ -104,7 +104,7 @@ exports.lostpass = function(req, res) {
 
 exports.signup = function(req, res) {
   var user_ = new Object({'username': null,  'image_url':null})
-  res.render('index', { user_in:user_ } ); 
+  res.render('index', { user_in:user_ , is_view : 'user'} ); 
 };
 
 exports.signin_login= function(req, res) {
@@ -138,6 +138,7 @@ exports.account = function(req, res) {
         res.render('index', {
             doc: new Object(),
             user_in : user_,
+            is_view : 'user'
         });
 }
 

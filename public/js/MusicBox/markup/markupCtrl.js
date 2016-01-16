@@ -1,30 +1,12 @@
 
-
-
-/**
-init_()
-
-
-
-
-**/
-
-
-angular.module('musicBox.markup_controller', ['musicBox.section_controller']).controller('MarkupCtrl', function($scope, $http, MarkupRest,socket,MarkupService) {
+angular.module('musicBox.markup.controller', ['musicBox.section']).controller('MarkupCtrl', function($scope, $http, MarkupRest,socket,MarkupService) {
 	
 	$scope.init__= function () {
-		//console.log($scope.$parent.section_markups)
 					
-		console.log('   ---- -- [m] init markup'+$scope.markup.type)
+		console.log('   ---- -- [m] init markup type: '+$scope.markup.type)
 
-
-
-       
-		
-		
 		if(!$scope.$parent.$parent.objSchemas[$scope.markup.type]){
 			console.log('no schematype for markup!')
-		//	console.log($scope.markup)
 			return false;
 		}
 		
@@ -32,17 +14,16 @@ angular.module('musicBox.markup_controller', ['musicBox.section_controller']).co
             'offset_start'   : 0,
             'offset_end'     : 0,
             'has_offset'     : false,
-         //   'isolated'       : 'true',
             'selected'       : false,
             'editing'        : false,
+            'fast_editor'	 : ($scope.$parent.doc_owner) ? true : false,
             'inrange'        : false,
             'uptodate'       : '',
-             'deleted'        : false,
+            'deleted'        : false,
             'forced'		 : ($scope.markup.type =='container' || $scope.markup.type =='markup' || $scope.markup.type =='container_class' ) ? true : false,
             'touched'        : false,
             'ready'          : 'init',
             'doc_id_id'      : '', // special cases for child documents (refs as doc_id in markup record)
-       		//'user_options'	 : $scope.apply_object_options('markup_user_options',$scope.markup.user_id.user_options),
 			'by_me' 		 : ( $scope.markup.user_id._id && $scope.$parent.userin._id  && ($scope.$parent.userin._id == $scope.markup.user_id._id ) ) ? true : false,
 			'can_approve' 	 : ($scope.$parent.doc_owner) ? true : false,
 			'objSchemas' 	 : $scope.objSchemas[$scope.markup.type] ?  $scope.objSchemas[$scope.markup.type] : [],
@@ -172,7 +153,7 @@ angular.module('musicBox.markup_controller', ['musicBox.section_controller']).co
 
 
       if(oldValue == newValue || newValue == false){
-				console.log('mk end redraw')
+				//console.log('mk end redraw')
 			}
 			else{
 
@@ -223,10 +204,14 @@ angular.module('musicBox.markup_controller', ['musicBox.section_controller']).co
 		 console.log('stack_markup')
 
 	    //// SHOULD ONLY TRIGGER IN "MANUAL" mode...
- 	     $scope.$parent.attribute_objects()
+ 	    //  $scope.$parent.attribute_objects()
 		 $scope.markup.touched = true;
 
 
+	}
+
+	$scope.stack_markup_manual = function(){
+ 	   $scope.$parent.attribute_objects()
 	}
 
      $scope.$watch('markup.type', function( oldValue, newValue) {
@@ -308,17 +293,17 @@ angular.module('musicBox.markup_controller', ['musicBox.section_controller']).co
 
 		// focus'
 		if($scope.markup.position=="left" && $scope.markup.editing){
-			$scope.$parent.defocus()
+			$scope.$parent.defocus_containers()
 
 			$scope.$parent.section.focused = 'side_left'
 
 		}
 		else if( ($scope.markup.position=="right" || $scope.markup.position=="inline") && $scope.markup.editing){
-			$scope.$parent.defocus()
+			$scope.$parent.defocus_containers()
 			$scope.$parent.section.focused  = 'side_right'
 		}
 		else{
-			$scope.$parent.defocus()
+			$scope.$parent.defocus_containers()
 
 		}
 
@@ -454,14 +439,10 @@ $scope.$watch('markup.fulltext', function(newValue, oldValue) {
 		// todo: should check notnull / section limits
 		$scope.markup.start     =  $scope.ui.selected_range.start
 		$scope.markup.end 		=  $scope.ui.selected_range.end
-		
-
-
 		$scope.save()
 	}
 	$scope.apply_reverse =function(){
 	
-
 		console.log($scope.markup)
 		//alert($scope.markup.end)
 
@@ -545,15 +526,15 @@ $scope.$watch('markup.fulltext', function(newValue, oldValue) {
 		
 	$scope.$watch('markup.map_ranges', function(newValue, oldValue) {
 			if(oldValue == newValue || newValue == false){
-				console.log('mk end map_ranges')
+				// console.log('mk end map_ranges')
 			}
 			else{
-				console.log('############ map_ranges')
+				//console.log('############ map_ranges')
 
 			
 				var z, z_real, rtest;
 				rtest = ranges_test($scope.ui.selected_range.start,$scope.ui.selected_range.end, $scope.markup.start,$scope.markup.end, 'markup' )
-				console.log('rtest:'+rtest+' --- '+$scope.markup.metadata)
+				//console.log('rtest:'+rtest+' --- '+$scope.markup.metadata)
 				
 				$scope.markup.selected = false;
 				$scope.markup.inrange  = false;
@@ -588,10 +569,10 @@ $scope.$watch('markup.fulltext', function(newValue, oldValue) {
 
 		$scope.$watch('markup.redraw', function(newValue, oldValue) {
 			if(oldValue == newValue || newValue == false){
-				console.log('mk end redraw')
+				// console.log('mk end redraw')
 			}
 			else{
-				console.log('############ mk.redraw')
+				// console.log('############ mk.redraw')
 
 				$scope.markup.fulltext = $scope.fulltext()
 				
@@ -609,23 +590,16 @@ $scope.$watch('markup.fulltext', function(newValue, oldValue) {
 			}
 		})
 
-
-$scope.$watch('markup.operation.before.state', function(newValue, oldValue) {
-
+    $scope.$watch('markup.operation.before.state', function(newValue, oldValue) {
 		if(newValue == 'new'){
 			 $scope.apply_operation()
-
 		}
 		if(newValue == 'error'){
 			$scope.markup.operations.push($scope.markup.operation)
 		}
-
-
 	})
 	$scope.apply_operation = function(){
  			 //$scope.markup.operation.after = {}
-
-
 			 if($scope.markup.operation.before.end){
 			 	$scope.markup.end =  parseInt($scope.markup.operation.before.end+$scope.markup.operation.before.end_qty)
 				//$scope.markup.operation.after.new_end = $scope.markup.end
@@ -633,30 +607,20 @@ $scope.$watch('markup.operation.before.state', function(newValue, oldValue) {
 			 if($scope.markup.operation.before.start){
 			 	$scope.markup.start = parseInt($scope.markup.operation.before.start+$scope.markup.operation.before.start_qty)
 			 	//$scope.markup.operation.after.new_start = $scope.markup.start
-
-			 }
-
-			 
+			 } 
 
  			$scope.markup.operation.before.state= 'done'
  			//$scope.markup.operation.after.state= 'done'
-
- 			
-			 $scope.markup.operations.push($scope.markup.operation)
+			$scope.markup.operations.push($scope.markup.operation)
 	}
 
-	$scope.reverse_operation = function(){
+	$scope.reverse_operation = function(){}
 
-
+	$scope.operations_clear= function(){
+		 $scope.markup.operations= []
 	}
+	
 
-
-
-$scope.operations_clear= function(){
-	 $scope.markup.operations= []
-}
-
-		
-		$scope.init__()
+	$scope.init__()
 
 }); // end controller

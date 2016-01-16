@@ -10,7 +10,7 @@
 	
 */
 
-angular.module('musicBox.user_controller', []);
+angular.module('musicBox.user.controller', []);
 
 // ** GLOBAL MISC VARS
 var inheriting = {};
@@ -22,7 +22,7 @@ var render;
 // todo : remove old api call
 
 function UserProfileCtrl($scope, $http , $location, $routeParams,  $locale, DocumentService, UserRest, UserService, renderfactory,$timeout) {
-	  	 new renderfactory().init()
+	  	 new renderfactory().init('user')
 
  		$scope.globals = GLOBALS;
         $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
@@ -31,7 +31,7 @@ function UserProfileCtrl($scope, $http , $location, $routeParams,  $locale, Docu
     	promise.then(function (Result) {
       		
       		var this_user = new UserService()
-      		this_user.SetFromApi(Result.user)
+      		this_user.SetFromData(Result.user)
       		
       		$scope.userin.user_options = this_user.MapOptions(Result)
       		
@@ -109,29 +109,28 @@ function UserProfileCtrl($scope, $http , $location, $routeParams,  $locale, Docu
 			newdoc_service.newdoc();
 	}
 }
-function UserCtrl($scope, $http , $location, $routeParams,  $locale, renderfactory, UserService) {
+function UserCtrl($scope, $http , $location, $routeParams,  $locale, renderfactory, UserService, UserRest) {
 	
-	console.log('User Controller')
+	console.log('User Controller (signup, login, newsletter)')
 
 	// call a render 
-	new renderfactory().init()
+	new renderfactory().init('user')
 
 	// get user
-	new UserService().SetFromLocale()
+	new UserService().SetFromData(USERIN)
 
 	
-	
-	$scope.register_url = root_url+':'+PORT+'/signup';
 	$scope.created_user_link   = root_url+':'+PORT+'/me/account?welcome';
-	if(action_){
-		$scope.action_ = action_
-	}
+	$scope.register_url = root_url+':'+PORT+'/signup';
 	
-
 	if($routeParams.redirect_url){
 		$scope.created_user_link 	= $routeParams.redirect_url;
 		$scope.register_url 		+= '?redirect_url='+$routeParams.redirect_url
 
+	}
+
+	if(action_){
+		$scope.action_ = action_
 	}
 
 	//	$scope.render_config = new Object({'i18n':  $locale})
@@ -150,25 +149,30 @@ function UserCtrl($scope, $http , $location, $routeParams,  $locale, renderfacto
 	$scope.checklogin = function(){
 		var data = new Object({'username': $scope.username, 'password': $scope.password, 'redirect_url':$routeParams.redirect_url})
 		//console.log($routeParams.redirect_url)
-		$http.post(root_url+':'+PORT+'/api/v1/userlogin', serialize(data) ).success(function(e) {
-         	//console.log(e)
-         	window.location = e.redirect_url;
-         }).error(function(data, status) {});  
+		var promise = UserRest.login({}, serialize(data) ).$promise;
+		promise.then(function (Result) {
+          		window.location = Result.redirect_url;
+
+		 }.bind(this));
+		 promise.catch(function (response) {     
+		      console.log(response);
+		 }.bind(this));
 	}
 
-
 	$scope.toggle_lostpass_form = function(){
-
 		$scope.lostpass_form = true
 	}
 
 	$scope.lostpass_post = function(email){
-			
-			var data = new Object()
-			data.email 		= email;
-			$http.post(root_url+':'+PORT+'/api/v1/user/lostpass',serialize(data)  ).success(function(e) {
-        	 $scope.complete =true
-        	});  
+		var data = new Object({'email' :email } )	
+		var promise = UserRest.lostpass({}, serialize(data) ).$promise;
+		promise.then(function (Result) {
+          		$scope.complete 	 = true
+          		$scope.lostpass_form = false
+		 }.bind(this));
+		 promise.catch(function (response) {     
+		      console.log(response);
+		 }.bind(this));	 
 	}
 
 
@@ -176,16 +180,21 @@ function UserCtrl($scope, $http , $location, $routeParams,  $locale, renderfacto
 		
 		if($scope.password && $scope.username && $scope.password !=="" && $scope.username !=="" ){
 			$scope.errors= ''
-			var data = new Object()
-			data.username 	= $scope.username;
-			data.password 	= $scope.password;
-			data.email 		= $scope.email;
-			data.newsletter	= $scope.newsletter ? $scope.newsletter : false ;
- 			$http.post(root_url+':'+PORT+'/register', serialize(data) ).success(function(e) {
-        	 	$scope.complete = true;
-        		window.location = $scope.created_user_link 
-
-        	});  
+			var data = new Object({
+					'username' 	: $scope.username,
+					'password' 	: $scope.password,
+					'email' 	: $scope.email,
+					'newsletter': $scope.newsletter ? $scope.newsletter : false 
+			})
+			var promise = UserRest.register({}, serialize(data) ).$promise;
+			promise.then(function (Result) {
+	          		$scope.complete = true;
+	          		
+        			window.location = $scope.created_user_link 
+			 }.bind(this));
+			 promise.catch(function (response) {     
+			      console.log(response);
+			 }.bind(this));	 	
 		}
 		else{
 			$scope.errors= 'complete the fields please'
@@ -197,11 +206,13 @@ function UserCtrl($scope, $http , $location, $routeParams,  $locale, renderfacto
 			$scope.errors= ''
 			var data = new Object()
 			data.email 		= $scope.email;
-			
- 			$http.post(root_url+':'+PORT+'/api/v1/subscribe', serialize(data) ).success(function(e) {
-        	 	//window.location = $scope.created_user_link 
-        	 	 $scope.complete = true;
-        	});  
+			var promise = UserRest.subscribe({}, serialize(data) ).$promise;
+			promise.then(function (Result) {
+	          		 $scope.complete = true;
+			 }.bind(this));
+			 promise.catch(function (response) {     
+			      console.log(response);
+			 }.bind(this));	 	
 		}
 		else{
 			$scope.errors= 'complete the fields please'

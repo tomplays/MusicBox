@@ -20,7 +20,7 @@ can redirect window
  * @inject $rootScope, $http, $location,$sce, $routeParams, socket, renderfactory, $locale, $timeout
  */
 var temp_scope;
-angular.module('musicBox.DocumentService',[])
+angular.module('musicBox.document.service',[])
 .factory("DocumentService", function($rootScope, $http,$sce, $resource,$location, $routeParams ,renderfactory, DocumentRest, UserService, $timeout, $locale,MarkupService) {
 
   
@@ -37,7 +37,6 @@ angular.module('musicBox.DocumentService',[])
 
   DocumentService.prototype.SetSlugFromValue = function (slug) {
     this.slug = slug
-
   }
   
 
@@ -73,8 +72,8 @@ angular.module('musicBox.DocumentService',[])
                }
              
 
-  $rootScope.doc.operation = {}
-       $rootScope.doc.operations = []
+                $rootScope.doc.operation = {}
+                $rootScope.doc.operations = []
 
                 var encoded_url = root_url+':'+PORT;
                 if(Result.doc.slug !=='homepage'){
@@ -99,7 +98,9 @@ angular.module('musicBox.DocumentService',[])
                
 
 
-            new UserService().SetFromApi(Result.userin)
+            new UserService().SetFromData(Result.userin)
+            $rootScope.userin.login_url = '/login?redirect_url='+root_url+':'+PORT+'/doc/'+Result.doc.slug
+
             $rootScope.containers = _.sortBy( Result.doc.sections,function (num) {
                return num.start;
             });
@@ -142,41 +143,7 @@ angular.module('musicBox.DocumentService',[])
 
 
 
-  DocumentService.prototype.populate = function (Result) {
 
-      
-        
-          // filter markups > only if markup.type ==  "container"
-        
-         
-       
-/*
-        if($rootScope.max_reached_letter !==  $rootScope.doc.content.length){
-          console.log('unreached letter found :'+ $rootScope.max_reached_letter +'--'+$rootScope.doc.content.length)
-          //max_reached_letter.end = container.end
-          if(_.last($rootScope.doc.containers) && $rootScope.max_reached_letter  <  $rootScope.doc.content.length){
-              console.log('should patch last section from :'+ _.last($rootScope.doc.containers).end+ ' to'+$rootScope.doc.content.length)
-          }
-        } 
-
-
-
-        // reloop to find isolate markups
-        $rootScope.ui.isolated_markups = []
-
-        _.each($rootScope.doc.markups, function(markup){
-          
-          if(!markup.isolated == false  ){
-            console.log('markup.isolated' )
-          //  markup.isolated = true;
-          //  $rootScope.ui.isolated_markups.push(markup)
-          }
-        })
-*/
-        
-       
-      
-  }
 
  
 
@@ -209,7 +176,7 @@ angular.module('musicBox.DocumentService',[])
           //  container.fulltext =  container.fulltext.replace(/(\r\n|\n|\r)/gm,"");
         
           // console.log(container.fulltext)
-  string  += s.fulltext;
+          string  += s.fulltext;
 
             if(s.touched == true){
               var a_s = new Object({'id':s._id, 'start': s.start,'end': s.end, 'action':'offset' })
@@ -242,7 +209,7 @@ angular.module('musicBox.DocumentService',[])
         console.log(data)
         //// $rootScope.doc.operation.before.sync = data;
 
-          data.doc_content = string
+        data.doc_content = string
         
         var promise = this.api_method.sync({id:$rootScope.doc.slug},serialize(data)).$promise;
         promise.then(function (Result) {
@@ -256,7 +223,7 @@ angular.module('musicBox.DocumentService',[])
             }
              
            
-            thos.flash_message('Document saved', 'ok' , 1600, false)
+          thos.flash_message('Document saved', 'ok' , 1600, false)
 
             _.each($rootScope.doc.containers, function(s){
                  s.touched = false
@@ -497,12 +464,8 @@ angular.module('musicBox.DocumentService',[])
                           }
                    
                   }else{
-                   window.location = root_url+':'+PORT+'/doc/'+Result.slug+'?fresh'; // fresh
+                              window.location = root_url+':'+PORT+'/doc/'+Result.slug+'?fresh'; // fresh
 
-                               //alert(Result.slug)
-                               //   $rootScope.newdoc.created_link = Result.slug;
-                               //   $rootScope.newdoc.created_link_title = Result.title;
-                               //   $rootScope.newdoc.created_secret = Result.secret;
 
                   }
 
@@ -518,29 +481,8 @@ angular.module('musicBox.DocumentService',[])
 
 
 
-  DocumentService.prototype.SlugFromUrl = function () {
-       
-  }
-
- 
 
 
-
-  /*
-        DocumentService.prototype.Markup_pre = function () {
-          
-
-          var data = new Object();
-          data.username = $rootScope.userin.username;
-          data.user_id = $rootScope.userin._id;
-          data.type = 'kjkj'
-          data.subtype = 'section';
-          data.start =0;
-          data.end = 100;
-          return data;
-
-        };
-    */
 
   /**
       * @description 
@@ -562,18 +504,18 @@ angular.module('musicBox.DocumentService',[])
         $rootScope.flash_message.text = msg;
         $rootScope.flash_message.classname = classname;
 
-        if(!closer){
-            $rootScope.flash_message.closer =false;
-        }
-        else{
-            $rootScope.flash_message.closer = closer;
-        }
-        
+          if(!closer){
+              $rootScope.flash_message.closer = false;
+          }
+          else{
+              $rootScope.flash_message.closer = closer;
+          }
+        console.log('flash_message'+msg,classname ,timeout, closer)
 
         // apply timeout if set to true
         if(timeout){
             $timeout(function(){
-                $rootScope.flash_message.text =  '';
+                $rootScope.flash_message.text =  '' ;
             },timeout);
         }
       };

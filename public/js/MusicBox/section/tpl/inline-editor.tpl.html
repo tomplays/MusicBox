@@ -30,10 +30,22 @@
             </div>
           </div>
         </tab>
-        <tab heading="Operations" ng-if="section.operations.length&gt;0">
+        <tab heading="Add section styles"> 
+          <mb-pusher type="container_class" position="{{layout.name}}"></mb-pusher>
+        </tab>
+        <tab heading="section styles" ng-if="markups_by_start_end_position_type(section.start, section.end ,'any', 'container_class').length &gt;0"> 
+          <div ng-repeat="markup in markups_by_start_end_position_type(section.start, section.end ,'any', 'container_class') track by $index">
+            <div class="markup_ markup_type_{{markup.type}}">
+              <markup-view></markup-view>
+            </div>
+          </div>
+        </tab>
+        <tab heading="Operations" ng-if="section.operations.length&gt;0"><a ng-click="operations_clear()" class="btn">clear</a><a ng-click="reverse_operation()" class="btn">reverse last operation</a>
           <ul>
-            <li ng-repeat="op in section.operations">{{op}}<a ng-click="reverse_operation(op)"></a></li>
-          </ul><a ng-click="operations_clear()" class="btn">clear</a><a ng-click="reverse_operation()" class="btn">reverse last operation</a>
+            <li ng-repeat="op in section.operations">{{op.grp_log}}<a ng-click="expand_operation(op)" class="btn">+</a>
+              <pre ng-if="op.expanded">{{op}}</pre>
+            </li>
+          </ul>
         </tab>
       </tabset>
     </div></span>

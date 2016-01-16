@@ -153,7 +153,7 @@ if(debugger_on){
 						user_in : user_,
 						doc_title : doc.title,
 						raw_content : doc.content,
-
+						is_view : 'document',
 						doc_thumbnail : doc.thumbnail,
 						doc_excerpt: doc.excerpt,
 						doc_slug_discret : doc_slug_discret,
@@ -1419,7 +1419,7 @@ exports.doc_option_new  = function(req, res) {
 
  exports.init = function (req, res) {
 
-	var user = new User({'username':'bob', 'email':'homeof@@gmail.com', 'password':'secret'});
+	var user = new User({'username':'bob', 'email':'homeof@gmail.com', 'password':'secret'});
     var message = null;
     user.user_options = new Array();
     

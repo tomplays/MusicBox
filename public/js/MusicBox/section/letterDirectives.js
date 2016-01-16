@@ -15,7 +15,7 @@
 
 */
 
-angular.module('musicBox.LetterDirectives', [])
+angular.module('musicBox.section.directive.letters', [])
 .directive('lt',   function($rootScope) {
  // var use_markup = 'h1'
 

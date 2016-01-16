@@ -4,9 +4,10 @@ div(ng-controller="MarkupCtrl", class="markup_box markup_box_depth_{{markup.dept
 	// h3 inrange / selected : {{markup.inrange}} - {{markup.selected}}
 	// p {{markup.selected}}
 	// p {{markup.inrange}}
+	// pre is:{{markup.isolated}}
 	// h3 markup.objSchemas : {{markup.objSchemas}}
 	// pre {{markup}}
-	// .fast_editor
+	.fast_editor(ng-if="markup.fast_editor")
 		span.flag()
 			i.fa.fa-remove.btn_action(tooltip-placement="left" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.delete}}" ng-click="delete()")
 	

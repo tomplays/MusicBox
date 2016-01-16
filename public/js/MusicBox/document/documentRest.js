@@ -1,4 +1,4 @@
-angular.module('musicBox.DocumentRest', [])
+angular.module('musicBox.document.rest', [])
 .factory("DocumentRest", function($resource, $rootScope,$routeParams){
 
   var secret_string= ''

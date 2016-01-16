@@ -1,5 +1,5 @@
 
-angular.module('musicBox.UserRest', [])
+angular.module('musicBox.user.rest', [])
 .factory("UserRest", function($resource, $rootScope){
 
   var parseResponse = function (data) {
@@ -14,18 +14,27 @@ angular.module('musicBox.UserRest', [])
       account:{
         method:"GET",
         url: api_url+'/me/account',
-        //transformResponse: parseResponse
-        //interceptor: { response: parseResponse }
-        //isArray: false
       },
       edit:{
         method:"POST",
         url: api_url+'/me/edit',
-        //transformResponse: parseResponse
-        //interceptor: { response: parseResponse }
-        //isArray: false
+      },
+      subscribe:{
+        method:"POST",
+        url: api_url+'/subscribe',
+      },
+      register:{
+        method:"POST",
+        url: api_url+'/user/register',
+      },
+      lostpass:{
+        method:"POST",
+        url: api_url+'/user/lostpass',
+      },
+      login:{
+        method:"POST",
+        url:  api_url+'/user/userlogin',
       }
-
     }
   );
 })

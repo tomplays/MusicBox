@@ -1,5 +1,5 @@
 
-angular.module('musicBox.MarkupService',[]).factory("MarkupService", function(MarkupRest, DocumentRest) {
+angular.module('musicBox.markup.service',[]).factory("MarkupService", function(MarkupRest, DocumentRest) {
 
   
   var MarkupService = function() {
@@ -29,6 +29,7 @@ angular.module('musicBox.MarkupService',[]).factory("MarkupService", function(Ma
 
       case 'markup':
           this.apimethod = MarkupRest
+          object.isolated  = object.isolated ? object.isolated : 'undef'
           break;
       
       case 'document':

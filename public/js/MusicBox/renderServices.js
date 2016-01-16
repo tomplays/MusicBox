@@ -4,8 +4,12 @@ angular.module('musicBox.render', [])
 .factory('renderfactory', function ($rootScope, $http, $routeParams, $locale) {
     return function (inf) {
      var self = {
-       init: function () {
-          console.log('renderService:init')
+       init: function (view) {
+        
+         console.log('renderService:init for view: '+view)
+         $rootScope.is_view = view
+
+
        
 
          $rootScope.render_config = new Object()
@@ -14,13 +18,19 @@ angular.module('musicBox.render', [])
         
          $rootScope.render_config.i18n =  $locale;
 
+
+
         // inject locale service. defined in public/js/angualr-modules/i18n/angular_lang-lang.js
         
 
         // DEPREC. use :  $rootScope.render_config.i18n instead
         $rootScope.i18n                       = $locale;
+
+
+       
+
+
         //console.log($rootScope.i18n.id)
-        $rootScope.objSchemas                  =   self.objSchemas(); 
 
         //$rootScope.$emit('renderEvent', { action:'render_ready' });
         self.config                           = [];
@@ -33,11 +43,23 @@ angular.module('musicBox.render', [])
         $rootScope.globals                    = GLOBALS;
         $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
 
+
+        if(view == 'document'){
+            $rootScope.objSchemas                  =   self.objSchemas(); 
+            $rootScope.available_sections_objects =   self.objAvailable(); 
+            $rootScope.available_layouts          =   self.posAvailable();
+            $rootScope.item_position              = '';
+            $rootScope.fragments                 =   self.fragmentsAvailable();
+        }
+        else if(view == 'user'){
+           
+        }
+        else{
+           
+        }
+
         
-        $rootScope.available_sections_objects =   self.objAvailable(); 
-        $rootScope.available_layouts          =   self.posAvailable();
-        $rootScope.item_position              = '';
-        $rootScope.fragments                 =   self.fragmentsAvailable();
+       
        
         // $rootScope.classesofsections       =   self.classesAvailable();
 
@@ -46,7 +68,7 @@ angular.module('musicBox.render', [])
 
         $rootScope.ui                         = new Object();
         $rootScope.ui.selected_range          = new Object({'wait_ev' : false, 'set': false, 'start':null, 'end':null, 'textrange':''});
-         $rootScope.ui.boundaries = new Object();
+        $rootScope.ui.boundaries = new Object();
 
         //$rootScope.ui.selected_range.markups_to_offset = new Array();
         //$rootScope.ui.selected_range.insert = null;
@@ -797,7 +819,7 @@ angular.module('musicBox.render', [])
                                     'label':'url',
                                     'input' : 'text',
                                     'free_input' : true,
-                                    'show_editor': 'hidden',
+                                    'show_editor': true,
                                     'available' : ['hyperlink']
                                   }
 

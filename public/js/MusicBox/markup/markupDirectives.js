@@ -1,4 +1,4 @@
-angular.module('musicBox.MarkupDirectives', [])
+angular.module('musicBox.markup.directive', [])
 
 .directive("markupView", function() {
 

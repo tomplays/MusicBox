@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('musicBox.SectionPusherDirectives', [])
+angular.module('musicBox.section.directive.pusher', [])
 
 .directive("mbPusher", function($rootScope,MarkupRest, renderfactory) {
     var global_active_pusher =true;
@@ -32,7 +32,8 @@ angular.module('musicBox.SectionPusherDirectives', [])
                                       position   : ($scope.type=='new_section' || $scope.type=='inline_objects') ? 'inline' : 'left',
                                       metadata : ($scope.type=='new_section') ? '' : 'write your comment here',
                                       username : $scope.userin.username,
-                                      user_id : $scope.userin._id
+                                      user_id : $scope.userin._id,
+                                      has_ranges:  ($scope.type=='new_section') ? true :false,
 
                    }
                    $scope.push = _.extend($scope.push, push_set)
@@ -40,9 +41,10 @@ angular.module('musicBox.SectionPusherDirectives', [])
 
 
           if($scope.type=='new_section'){
-              $scope.available_sections_objects = ['container']
               $scope.push.type=  'container';
-              $scope.push.subtype =  'section' 
+              $scope.push.subtype =  'section'
+              $scope.available_sections_objects = ['container']
+
           }
            else if($scope.type=='inline_objects'){
                 $scope.push.type =  'markup' 
@@ -60,10 +62,15 @@ angular.module('musicBox.SectionPusherDirectives', [])
                 $scope.push.type =  'comment' 
                 $scope.push.subtype =  'comment' 
                 $scope.push.metadata  = $scope.objSchemas[$scope.push.type].modes.editor.fields.metadata.label
-                $scope.available_sections_objects = $rootScope.available_sections_objects
+
+                if($rootScope.doc_owner == true ){
+                  $scope.available_sections_objects = $rootScope.available_sections_objects
+                }
+                else{
+                  $scope.available_sections_objects = ['comment']
+                }
             }
            
-                
           $scope.push_generic_from_ranges= function (type, subtype, position,metadata){
 
               $scope.push.metadata = (metadata) ? metadata : ''
@@ -89,19 +96,45 @@ angular.module('musicBox.SectionPusherDirectives', [])
                   promise.then(function (Result) {
                   if(Result.inserted[0]){
                     var mi = Result.inserted[0]
+                    mi.isnew = true
+                    mi.operation = {'created':true}  
                   
+                    // add to doc containers
                     if(mi.type== 'container'){
-                      $scope.$parent.doc.content = $scope.$parent.doc.content+'Your text' 
-                      $scope.$parent.doc.containers.push(mi)
+
+                       mi.fulltext = 'Your text' 
+                       
+                       var operation_ = {
+                          'object_': mi, 
+                          'before':{'state':'new',  'type': 'push_container',
+                          }, 
+                          'grp_log': Math.random()*1000, 
+                          'reversable': true,
+                         
+                        } 
+                        $scope.$parent.doc.operation = operation_
+
+
+                    
+                     
                     }
+
+                    // add to doc markups (and its section as an operation)
                     else{
-                      mi.isnew = true
-                      mi.operation = {'created':true}
-                      $scope.$parent.doc.markups.push(mi)
-                      $scope.$parent.section.redraw = true;
+                        var operation_ = {
+                          'object_': mi, 
+                          'before':{'state':'new',  'type': 'push_markup',
+                          }, 
+                          'grp_log': Math.random()*1000, 
+                          'reversable': true,
+                         
+                        } 
                       
+                        $scope.$parent.section.operation = operation_
+
+                 
                     }
-                    $scope.$parent.add(mi)
+                  
                 
 
                   }
@@ -156,7 +189,18 @@ angular.module('musicBox.SectionPusherDirectives', [])
            }
 
            $scope.pusher_toggle = function(){
-             $scope.isopen = !$scope.isopen         
+             $scope.isopen = !$scope.isopen
+             if($scope.isopen == true){
+                $scope.$parent.defocus_containers();
+                $scope.$parent.section.focused  = 'side_left'
+             
+             }
+             else{
+                  $scope.$parent.defocus_containers();
+               
+             }
+             $scope.$parent.section.modeletters = 'single'
+           
            }
 
           $scope.pusher_isvalid = function(){
@@ -174,10 +218,21 @@ angular.module('musicBox.SectionPusherDirectives', [])
 
                  
                 }
+                
                 else{
                   $scope.push.start =  $rootScope.ui.selected_range.start
                   $scope.push.end   =  $rootScope.ui.selected_range.end
-                }      
+                }
+
+
+
+              }
+
+              if($scope.push.start && $scope.push.start!==null && $scope.push.end && $scope.push.end!==null){
+                  $scope.push.has_ranges =true
+              }
+              else{
+                 $scope.push.has_ranges = false
               }
           })
 
@@ -189,7 +244,7 @@ angular.module('musicBox.SectionPusherDirectives', [])
 
                      $scope.push.start     =  parseInt($scope.$parent.section.end)+1
                      $scope.push.end   =  parseInt($scope.$parent.section.end)+9
-                    console.log($scope.push)
+                     console.log('Pusher (new_section) updated')
                 }
                 else{
                 

@@ -533,7 +533,7 @@ section{
 
 
 body.render_active_editor section{
-  opacity:0.2;
+  // pusher_rangeopacity:0.2;
   &.selected_true, &:hover{
     opacity:1;
   }
@@ -1680,11 +1680,16 @@ span.floating-edit{
 
  
 .pusher_range {
+
     color: rgb(46, 204, 113);
-    float: right;
+    float: left;
     font-style: italic;
     margin-left: 0;
     padding: 0;
+    width:100%;
+    .ranges{
+     float: right;
+    }
  
 }
 

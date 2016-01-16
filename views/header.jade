@@ -23,6 +23,7 @@ head
 		var PORT = '#{port}'
 		var root_url = '#{root_url}'
 		var api_url = '#{api_url}'
+		var is_view = '#{is_view}'
 		var doc_include_js = '#{doc_include_js}'
 		var action_ = '#{action_}'
 		var USERIN = new Object({'username':'#{user_in.username}', 'image_url': '#{user_in.image_url}', '_id': '#{user_in._id}'} )
@@ -78,6 +79,7 @@ head
 		// Angular controllers
 
 		// document level
+		script(type='text/javascript', src='js/MusicBox/document/document.js')
 		script(type='text/javascript', src='js/MusicBox/document/documentServices.js')
 		script(type='text/javascript', src='js/MusicBox/MusicBoxServices.js')
 
@@ -86,6 +88,7 @@ head
 		script(type='text/javascript', src='js/MusicBox/document/documentDirectives.js')
 
 		// sections
+		script(type='text/javascript', src='js/MusicBox/section/section.js')
 		script(type='text/javascript', src='js/MusicBox/section/letterDirectives.js')
 		script(type='text/javascript', src='js/MusicBox/section/editableTextDirective.js')
 		script(type='text/javascript', src='js/MusicBox/section/sectionCtrl.js')
@@ -95,12 +98,14 @@ head
 
 
 		// markups
+		script(type='text/javascript', src='js/MusicBox/markup/markup.js')
 		script(type='text/javascript', src='js/MusicBox/markup/markupCtrl.js')
 		script(type='text/javascript', src='js/MusicBox/markup/markupDirectives.js')
 		script(type='text/javascript', src='js/MusicBox/markup/markupRest.js')
 
 
 		// user 
+		script(type='text/javascript', src='js/MusicBox/user/user.js')
 		script(type='text/javascript', src='js/MusicBox/user/userServices.js')
 		script(type='text/javascript', src='js/MusicBox/user/userRest.js')		
 		script(type='text/javascript', src='js/MusicBox/user/userCtrl.js')

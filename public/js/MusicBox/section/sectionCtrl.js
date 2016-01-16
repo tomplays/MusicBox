@@ -19,7 +19,9 @@ attribute_objects()->map_letters->
 
 */
 
-angular.module('musicBox.section_controller', []).controller('SectionCtrl', function($scope, $http, DocumentService, MarkupRest,socket, MarkupService) {
+
+
+angular.module('musicBox.section.controller', []).controller('SectionCtrl', function($scope, $http, DocumentService, MarkupRest,socket, MarkupService) {
 
 $scope.init_= function (index_) {
 	console.log('init_ (section #'+ index_+')')
@@ -28,7 +30,6 @@ $scope.init_= function (index_) {
 	var container_ = new Object({
 		'selecting' : -1,
 		'sectionin' : index_,
-		'isolated'  : 'true',
 		'selected'  : false,
 		'focused'   : '',
 		'editing_text': $scope.ui.debug ? true : false,
@@ -99,18 +100,6 @@ $scope.init_= function (index_) {
 	*/
 }
 
-/*
-$scope.sectionmarkups = function(attr, value){
-	_.each($scope.$parent.markups, function(m,y){
-		if(m.sectionin == $scope.$parent.$index && m.type !=='container'){
-			m[attr] = value;
-		}
-		else{
-			m[attr] = !value;
-		}            
-	})
-}
-*/
 
 // contruct temp fulltext, 
 // called at section init only 
@@ -149,6 +138,7 @@ $scope.get_markups  = function(ss,se){
 				if( !m.deleted && (m.start >= parseInt(ss)) && (m.end <= parseInt(se)) ){
 					///m.visible = true
 					m.sectionin = $scope.section.sectionin
+					m.isolated= 'false'
 					arr_m.push(m)
 				}
 		});
@@ -603,10 +593,8 @@ $scope.attribute_objects = function(){
 				//}
 		        // only for markups which ranges match container
 
-		        if(  markup.start >= $scope.section.start && markup.end <= $scope.section.end){
 
-		        	markup.isolated= 'false'
-		        	markup.sectionin= $scope.section.sectionin
+		        
 
 			        /////  ///
 			        if(markup.type !== "" && markup.position){ // > can add it
@@ -614,7 +602,7 @@ $scope.attribute_objects = function(){
 						$scope.section.objects_count['by_positions'][markup.position].has_object  = true;
 					
 					}
-		    	} // if in-range
+		    
 		    	
 
 		    }); // each markups end.
@@ -757,7 +745,7 @@ $scope.$watch('section.fulltext', function(newValue, oldValue) {
 
 
 $scope.$watch('section.section_markups_ready',function(newValue, oldValue) {
-	if(  newValue == 'true'){
+	if(newValue == 'true'){
 		$scope.attribute_objects()
 		$scope.section.section_markups_ready = 'done';
 		
@@ -869,105 +857,6 @@ $scope.$watch('section.has_offset', function(o, markup) {
 			});
 
     }	
-
-
-		$scope.push_generic_from_ranges= function (type, subtype, position,metadata){
-			alert('old')
-		}
-			// short function to push a comment
-
-		$scope.add= function (push){
-			$scope.flashmessage(push.type +' inserted', 'ok' , 1400, false)	
-		}
-
-
-$scope.alert_= function (){
-	// alert('alert_')
-}
-
-// short function to push a section
-$scope.new_section= function (){
-		// $scope.section.fulltext  = $scope.section.fulltext
-		$scope.push.start  		= parseInt($scope.section.end+1)
-		$scope.push.end  		= parseInt($scope.section.end+9)
-		$scope.push.position  	=  'inline'
-		$scope.push.type 		= 'container';
-		$scope.push.subtype 	= 'section';	
-
-		$scope.$parent.sync_queue()
-		$scope.add();
-		
-}
-
-
-
-$scope.defocus = function (){
-			// call parent CTRL > to move in documentCtrl
-		  _.each($scope.$parent.doc.containers, function(container){
-            	container.focused  = ''          
-		  })
-}
-// todo > move to PusherCtrl
-$scope.close_pusher = function (){
-	$scope.defocus()
-	$scope.$parent.ui.focus_side 				= ''
-	$scope.$parent.ui.menus.push_comment.open 	= -1
-	$scope.$parent.push.metadata 				= '';
-	$scope.$parent.push.start 					=	null;
-	$scope.$parent.push.end 					=	null;
-}
-
-
-	// todo > move to PusherCtrl
-
-	$scope.open_pusher = function (){
-		// open close the pusher box.
-
-		
-		$scope.defocus()
-		
-		if($scope.$parent.ui.menus.push_comment.open == $scope.$parent.$index){
-			$scope.$parent.ui.menus.push_comment.open =-1
-		}
-		else{
-			$scope.$parent.ui.menus.push_comment.open = $scope.$parent.$index
-			$scope.section.focused  = 'side_left'
-		}
-		
-
-	
-		if(!$scope.push.type){
-			$scope.push.type = 'comment'
-		}
-		if(!$scope.push.subtype){
-			$scope.push.subtype = 'comment'
-		}	
-		if(!$scope.push.position){
-			$scope.push.position = 'under'
-		}
-		
-		
-		$scope.section.modeletters = 'single'
-
-		return
-	}
-	
-
-	////$scope.section_markups = new Object({'all':0, 'visible':0});
-
-	$scope.update_markup_section_count = function(direction){
-		alert('old')
-		if(direction=='add'){
-			$scope.section_markups.visible++;
-			$scope.section_markups.all++;
-
-		}
-		else{
-			$scope.section_markups.visible--;
-			$scope.section_markups.all--;
-
-		}
-	}
 
 
 	$scope.insert_char = function(c,s,e){
@@ -1090,17 +979,30 @@ $scope.$watch('section.operation.before.state', function(newValue, oldValue) {
 
 $scope.apply_operation = function(){
 
+
  			 $scope.section.operation.after = {}
 
-			 if($scope.section.operation.before.end){
+			 if( ($scope.section.operation.before.end && $scope.section.operation.before.type == 'offset') ){
 			 	$scope.section.end =  parseInt($scope.section.operation.before.end+$scope.section.operation.before.end_qty)
 				//$scope.section.operation.after.new_end = $scope.section.end
 			 }
-			 if($scope.section.operation.before.start || $scope.section.operation.before.start == 0){
+			 if( ($scope.section.operation.before.start || $scope.section.operation.before.start == 0) && $scope.section.operation.before.type == 'offset'){
 			
 			 	$scope.section.start = parseInt($scope.section.operation.before.start)+parseInt($scope.section.operation.before.start_qty)
 			 //	$scope.section.operation.after.new_start = $scope.section.start
 			 }
+
+
+			 if( $scope.section.operation.before.type == 'push_markup'){
+			 			var m = $scope.section.operation.object_
+			 			m.deleted = false
+
+						$scope.doc.markups.push(m)
+						$scope.section.redraw = true;
+						$scope.flashmessage($scope.section.operation.object_.type +' inserted', 'ok' , 1400, false)	
+			
+			 }
+
 
  			 $scope.section.operation.before.state= 'done'
  			 $scope.section.operation.after.state= 'done'
@@ -1266,12 +1168,6 @@ $scope.$watch('section.inrange_letters_and_markups', function(newValue, oldValue
 
 
 
-
-
-
-
-
-
 //OLD way
 
 	$scope.$watch('section.redraw', function(newValue, oldValue) {
@@ -1283,22 +1179,18 @@ $scope.$watch('section.inrange_letters_and_markups', function(newValue, oldValue
 		console.log('############ section.redraw')
 
 		    $scope.section.section_markups = $scope.get_markups($scope.section.start, $scope.section.end)
+		
 			$scope.map_letters()
 			$scope.section.inrange_letters_and_markups = true;
 			$scope.section.redraw = false;
+				$scope.attribute_objects()
 	}
 		
 
 
 	})
 
-	
 
-
-
-$scope.inserted = function(l){
-	alert(l)
-}
 
 
 $scope.integrity_fix = function (){
@@ -1323,7 +1215,7 @@ $scope.integrity_fix = function (){
 
 
 
-angular.module('musicBox.sectionB_controller', []).controller('SectionBCtrl', function($scope, $http, DocumentService, MarkupRest,socket, MarkupService) {
+angular.module('musicBox.section.controller_b', []).controller('SectionBCtrl', function($scope, $http, DocumentService, MarkupRest,socket, MarkupService) {
 
 
 

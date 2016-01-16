@@ -7,23 +7,23 @@ mb-topmenus
 mb-flashmessage
 
 div.main_center.register_form.bordered
-	h3 {{render_config.i18n.CUSTOM.USER.register}}
+	h3 {{i18n.CUSTOM.USER.register}}
 	form(novalidate class="css-form")
 		p(style="color:red") {{errors}}
 	
-		label {{render_config.i18n.CUSTOM.USER.pick_username}} 
+		label {{i18n.CUSTOM.USER.pick_username}} 
 		input(type="text", ng-model="username")
 
-		label {{render_config.i18n.CUSTOM.USER.pick_email}} 
+		label {{i18n.CUSTOM.USER.pick_email}} 
 		input(type="text", ng-model="email"  )
 		
-		label {{render_config.i18n.CUSTOM.USER.pick_password}} 
+		label {{i18n.CUSTOM.USER.pick_password}} 
 		input(type="password", ng-model="password")
 
-		label {{render_config.i18n.CUSTOM.USER.subscribe_option}} 
+		label {{i18n.CUSTOM.USER.subscribe_option}} 
 		input(type="checkbox", ng-model="newsletter" )
 		
-		a.btn_ok.float_right(ng-click="checkregister()") {{render_config.i18n.CUSTOM.USER.register}}
+		a.btn_ok.float_right(ng-click="checkregister()") {{i18n.CUSTOM.USER.register}}
 
 
 		// p 

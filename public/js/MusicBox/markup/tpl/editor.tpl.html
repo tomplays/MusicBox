@@ -41,7 +41,7 @@
     <tab heading="O.">
       <pre>{{markup.operation}}</pre>
       <ul>
-        <li ng-repeat="op in markup.operations">{{op}}</li>
+        <li ng-repeat="op in markup.operations track by op.grp">{{op}}</li>
       </ul>
     </tab>
   </tabset>

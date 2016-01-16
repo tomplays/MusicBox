@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('musicBox.SectionDirectives', [])
+angular.module('musicBox.section.directive.section', [])
 
 .directive("mbSection", function($rootScope) {
 

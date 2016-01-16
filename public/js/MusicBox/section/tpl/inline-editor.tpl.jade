@@ -40,13 +40,25 @@ div.inline_tools(ng-if="section.editing_text === true")
 						div(class="markup_ markup_type_{{markup.type}}")
 							
 							markup-view
-				tab(heading="Operations" ng-if="section.operations.length>0")
+
+				tab(heading="Add section styles") 
+					mb-pusher(type="container_class", position="{{layout.name}}")
 				
-					ul
-						li(ng-repeat="op in section.operations") {{op}}
-							a(ng-click="reverse_operation(op)")
+
+				tab(heading="section styles" ng-if="markups_by_start_end_position_type(section.start, section.end ,'any', 'container_class').length >0") 
+					div(ng-repeat="markup in markups_by_start_end_position_type(section.start, section.end ,'any', 'container_class') track by $index")
+						div(class="markup_ markup_type_{{markup.type}}")
+							markup-view
+				
+
+				tab(heading="Operations" ng-if="section.operations.length>0")
 					a.btn(ng-click="operations_clear()") clear
 					a.btn(ng-click="reverse_operation()") reverse last operation
+					ul
+						li(ng-repeat="op in section.operations") {{op.grp_log}}
+							a.btn(ng-click="expand_operation(op)") +
+							pre(ng-if="op.expanded") {{op}}
+					
 
 							
 

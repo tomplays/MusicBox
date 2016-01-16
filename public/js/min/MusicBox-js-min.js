@@ -36539,7 +36539,7 @@ var musicBox = angular.module('musicBox.MusicBoxLoop', ['musicBox.document_contr
   }
 }]);
 
-angular.module('musicBox.MarkupService',[]).factory("MarkupService", ["MarkupRest", "DocumentRest", function(MarkupRest, DocumentRest) {
+angular.module('musicBox.markup.service',[]).factory("MarkupService", ["MarkupRest", "DocumentRest", function(MarkupRest, DocumentRest) {
 
   
   var MarkupService = function() {
@@ -36569,6 +36569,7 @@ angular.module('musicBox.MarkupService',[]).factory("MarkupService", ["MarkupRes
 
       case 'markup':
           this.apimethod = MarkupRest
+          object.isolated  = object.isolated ? object.isolated : 'undef'
           break;
       
       case 'document':
@@ -36644,22 +36645,20 @@ angular.module('musicBox.MarkupService',[]).factory("MarkupService", ["MarkupRes
 }])
 'use strict';
 
-// Declare app level module which depends on filters, and services
+// Declare app level modules
 
 
 angular.module('musicBox',  [
   'ui.bootstrap',
-  'musicBox.page',
-  'musicBox.document_controller','musicBox.section_controller','musicBox.sectionB_controller','musicBox.sectionpusher_controller',  'musicBox.markup_controller',
-   'musicBox.user_controller',
-   'ngLocale', 'ngResource', 'ngRoute','musicBox.services'
-   ,'musicBox.render',
-   'musicBox.directives', 'ngSanitize',  
-   'musicBox.DocumentRest','musicBox.UserRest', 'musicBox.MarkupRest',
-  'musicBox.UserService', 
-  'musicBox.DocumentService',  'musicBox.MarkupService', 
-  'musicBox.SectionDirectives','musicBox.DocumentDirectives', 'musicBox.MarkupDirectives','musicBox.LetterDirectives',
-  'musicBox.eDirectives',
+  'ngLocale', 'ngResource', 'ngRoute',
+  'ngSanitize',  
+  'musicBox.socket',
+  'musicBox.render',
+  'musicBox.directives', 
+  'musicBox.document',
+  'musicBox.section',
+  'musicBox.markup',
+  'musicBox.user'
   ]).
   config(['$localeProvider','$routeProvider', '$locationProvider','$sceDelegateProvider', '$sceProvider', function($localeProvider,$routeProvider, $locationProvider, $sceDelegateProvider,$sceProvider ) {
     $routeProvider.
@@ -36729,12 +36728,36 @@ angular.module('musicBox',  [
    //  $sceDelegateProvider.resourceUrlWhitelist(['*']);
     }
   ])
+.run(["$rootScope", "$http", "$route", function($rootScope, $http, $route) {
+   console.log('cross controllers service listening ..')
+   // $rootScope.$on('summarizeEvent', function(event, args) {
+       // $rootScope.$broadcast('summarize', args);
+    // });
+ 
+  $rootScope.$on('$routeChangeSuccess', function (e, cur, prev) {
+    if(cur && prev && cur !== prev){
+      console.log(prev.originalPath)
+      console.log(cur.originalPath)
+      // $rootScope.$emit('docEvent', {action: 'reload' });
+      // if(prev.originalPath == '')
+      // from '/docs/:mode' to '/doc/:docid'
+      // console.log('route.change')
+       
+       console.log($route)
+       //if(!$rootScope.doc){
+        $rootScope.doc       = null;
+       //}
+     
+       //if(!$rootScope.ui){
+          $rootScope.ui        = null;
+      //}
+  }
+  });
+}]);
   // .config( ['$controllerProvider', function($controllerProvider) { $controllerProvider.allowGlobals(); }]);
 
 
 
-// instead of empty file include, but files exist #v+
-// if/not included switcher
 
 /*.directive('keyListener', function($rootScope, DocumentService) {
 
@@ -37111,14 +37134,32 @@ filter('trusted', function() {
 
 // Place any jQuery/helper plugins in here.
 
+// MISC UTILS
+function urlencode(str) {
+    return escape(str.replace(/%/g, '%25').replace(/\+/g, '%2B')).replace(/%25/g, '%')
+}
+function serialize(obj, prefix) {
+  var str = [];
+  for(var p in obj) {
+    var k = prefix ? prefix + "[" + p + "]" : p, v = obj[p]
+    str.push(typeof v == "object" ?
+      serialize(v, k) :
+      encodeURIComponent(k) + "=" + encodeURIComponent(v))
+  }
+  return str.join("&")
+}
 angular.module('musicBox.render', [])
 
 
 .factory('renderfactory', ["$rootScope", "$http", "$routeParams", "$locale", function ($rootScope, $http, $routeParams, $locale) {
     return function (inf) {
      var self = {
-       init: function () {
-          console.log('renderService:init')
+       init: function (view) {
+        
+         console.log('renderService:init for view: '+view)
+         $rootScope.is_view = view
+
+
        
 
          $rootScope.render_config = new Object()
@@ -37127,13 +37168,19 @@ angular.module('musicBox.render', [])
         
          $rootScope.render_config.i18n =  $locale;
 
+
+
         // inject locale service. defined in public/js/angualr-modules/i18n/angular_lang-lang.js
         
 
         // DEPREC. use :  $rootScope.render_config.i18n instead
         $rootScope.i18n                       = $locale;
+
+
+       
+
+
         //console.log($rootScope.i18n.id)
-        $rootScope.objSchemas                  =   self.objSchemas(); 
 
         //$rootScope.$emit('renderEvent', { action:'render_ready' });
         self.config                           = [];
@@ -37146,11 +37193,23 @@ angular.module('musicBox.render', [])
         $rootScope.globals                    = GLOBALS;
         $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
 
+
+        if(view == 'document'){
+            $rootScope.objSchemas                  =   self.objSchemas(); 
+            $rootScope.available_sections_objects =   self.objAvailable(); 
+            $rootScope.available_layouts          =   self.posAvailable();
+            $rootScope.item_position              = '';
+            $rootScope.fragments                 =   self.fragmentsAvailable();
+        }
+        else if(view == 'user'){
+           
+        }
+        else{
+           
+        }
+
         
-        $rootScope.available_sections_objects =   self.objAvailable(); 
-        $rootScope.available_layouts          =   self.posAvailable();
-        $rootScope.item_position              = '';
-        $rootScope.fragments                 =   self.fragmentsAvailable();
+       
        
         // $rootScope.classesofsections       =   self.classesAvailable();
 
@@ -37159,7 +37218,7 @@ angular.module('musicBox.render', [])
 
         $rootScope.ui                         = new Object();
         $rootScope.ui.selected_range          = new Object({'wait_ev' : false, 'set': false, 'start':null, 'end':null, 'textrange':''});
-         $rootScope.ui.boundaries = new Object();
+        $rootScope.ui.boundaries = new Object();
 
         //$rootScope.ui.selected_range.markups_to_offset = new Array();
         //$rootScope.ui.selected_range.insert = null;
@@ -37272,7 +37331,7 @@ angular.module('musicBox.render', [])
                   "forced": "",
                   "available": ['inline']},
               'modes': {
-                'pusherleft': false,
+                'pusherleft': true,
                  'editor': {                   
                   'enabled': true,
                   'tabs': {
@@ -37287,7 +37346,8 @@ angular.module('musicBox.render', [])
                                   'type': { 
                                       'display' : true,
                                       'label':'type',
-                                      'input' : 'select'
+                                      'input' : 'select',
+                                       'show_editor': true
 
                                   },
                                   'position':{ 
@@ -37301,7 +37361,7 @@ angular.module('musicBox.render', [])
                                     'label':'subtype',
                                     'input' : 'select',
                                     'free_input' : false,
-                                    'show_editor': 'hidden',
+                                    'show_editor': false,
                                     'available' : ['h1','h2', 'h3', 'h4', 'h5','h6','em', 'strong', 'code', 'quote'],
                                   },
                                     'metadata': {
@@ -37309,9 +37369,9 @@ angular.module('musicBox.render', [])
                                     'label':'subtye',
                                     'input' : 'select',
                                     'free_input' : false,
-                                    'show_editor': 'hidden',
+                                    'show_editor': false,
                                     'available' : [''],
-                                    'forced' : '-'
+                                    'forced' : ''
                                   }
 
                           },
@@ -37322,7 +37382,7 @@ angular.module('musicBox.render', [])
                           'display' : {
                               
                                  'metadata': {
-                                      'displayed':'subtype'
+                                  'displayed':'subtype'
                                  }
 
                           },
@@ -37363,27 +37423,32 @@ angular.module('musicBox.render', [])
                                   'type': { 
                                       'display' : true,
                                       'label':'type',
-                                      'input' : 'select'
+                                      'input' : 'select',
+                                       'show_editor': true
                                   },
                                   'position':{ 
                                       'display' : true,
                                       'label':'position',
-                                      'input' : 'select'
+                                      'input' : 'select',
+                                      'show_editor': true,
+                                      'default': 'left'
                                   },
                                   'subtype': {
                                     'display' : true,
                                     'label':'subtype',
                                     'input' : 'select',
                                     'free_input' : false,
-                                    'show_editor': 'hidden',
+                                    'show_editor': true,
+                                    'default': 'img',
                                     'available' : ['img', 'soundcloud-track', 'vimeo-video', 'youtube-video', 'open-street-map', 'google-map'],
+                                 
                                   },
                                     'metadata': {
                                     'display' : true,
-                                    'label':'url',
+                                    'label':'url or embed object url',
                                     'input' : 'text',
                                     'free_input' : false,
-                                    'show_editor': 'hidden',
+                                    'show_editor': true,
                               
                         
                                   },
@@ -37392,7 +37457,8 @@ angular.module('musicBox.render', [])
                                     'label':'send',
                                     'input' : 'select',
                                     'free_input' : false,
-                                    'show_editor': 'hidden',
+                                    'show_editor': true,
+
                                
                                   }
 
@@ -37431,7 +37497,7 @@ angular.module('musicBox.render', [])
                  'pusherleftopen': true,
                  'editor': { 
                  
-                  'enabled': true,
+                        'enabled': true,
                         'display' : {
                             'date': false, 
                             'user': false,
@@ -37445,36 +37511,41 @@ angular.module('musicBox.render', [])
 
                           'fields' : {
                                   'ranges': { 
-                                      'display' : true,
-                                      'label':'link url',
-                                    'input' : 'range'
+                                    'display' : true,
+                                    'label':'ranges',
+                                    'input' : 'range',
+                                    'show_editor': true
                                   },
                                   'type': { 
-                                      'display' : true,
-                                      'label':'type',
-                                    'input' : 'select'
+                                    'display' : true,
+                                    'label':'type',
+                                    'input' : 'select',
+                                    'show_editor': true,
                                   },
                                 
                                   'position':{ 
                                       'display' : true,
                                       'label':'position',
-                                      'input' : 'select'
+                                      'input' : 'select',
+                                      'show_editor': true,
+                                      'default': 'left'
                                   },
                                   'subtype': {
                                     'display' : true,
                                     'label':'subtype',
                                     'input' : 'select',
                                     'free_input' : false,
-                                    'show_editor': 'hidden',
+                                    'show_editor': false,
                                     'available' : ['comment'],
-                                    'forced' : 'comment'
+                                    'forced' : 'comment',
+                                     'default': 'comment'
                                   },
                                   'metadata': {
                                     'display' : true,
                                     'label':'comment text',
                                     'input' : 'textarea',
                                     'free_input' : false,
-                                    'show_editor': 'hidden'
+                                    'show_editor': true
                                   
                                   
                                   }
@@ -37535,20 +37606,22 @@ angular.module('musicBox.render', [])
                                   'type': { 
                                       'display' : true,
                                       'label':'type',
-                                    'input' : 'select'
+                                    'input' : 'select',
+                                      'show_editor': true
                                   },
                                 
                                   'position':{ 
                                       'display' : true,
                                       'label':'position',
-                                      'input' : 'select'
+                                      'input' : 'select',
+                                       'show_editor': true
                                   },
                                   'subtype': {
                                     'display' : true,
                                     'label':'subtype',
                                     'input' : 'select',
                                     'free_input' : false,
-                                    'show_editor': 'hidden',
+                                    'show_editor': true,
                                     'available' : ['simple_page'],
                                     'forced' : 'simple_page'
                                   },
@@ -37613,24 +37686,27 @@ angular.module('musicBox.render', [])
                         'fields' : {
                                   'ranges': { 
                                       'display' : true,
-                                      'label':'link url',
-                                      'input' : 'range'
+                                      'label':'container ranges',
+                                      'input' : 'range',
+                                       'show_editor': false
                                   },
                                   'type': { 
                                       'display' : false,
+                                      'show_editor': false,
                                       'forced' : 'container'
                                   },
                                 
                                   'position':{ 
                                       'display' : false,
-                                      'forced' : 'inline'
+                                      'forced' : 'inline',
+                                      'show_editor': false
                                   },
                                   'subtype': {
                                     'display' : true,
                                     'label':'subtype',
                                     'input' : 'select',
                                     'free_input' : false,
-                                    'show_editor': 'hidden',
+                                    'show_editor': false,
                                     'available' : ['section'],
                                     'forced' : 'section'
                                   },
@@ -37685,36 +37761,41 @@ angular.module('musicBox.render', [])
                           'fields' : {
                                   'ranges': { 
                                       'display' : true,
-                                      'label':'link url',
-                                    'input' : 'range'
+                                      'label':'ranges',
+                                    'input' : 'range',
+                                      'show_editor': false,
                                   },
                                   'type': { 
                                       'display' : true,
                                       'label':'type',
-                                      'input' : 'select'
+                                      'input' : 'select',
+                                        'show_editor': false,
                                   },
                                 
                                   'position':{ 
                                     'display' : true,
                                     'label':'position',
                                     'input' : 'select',
-                                      'forced' : 'inline'
+                                    'show_editor': false,
+                                    'forced' : 'inline',
+                                    'default': 'inline'
                                   },
                                   'subtype': {
                                     'display' : true,
                                     'label':'subtype',
                                     'input' : 'select',
                                     'free_input' : false,
-                                    'show_editor': 'hidden',
+                                    'show_editor': false,
                                     'available' : ['css'],
-                                    'forced' : 'css'
+                                    'forced' : 'css',
+                                    'default':'css'
                                   },
                                   'metadata': {
                                     'display' : true,
                                     'label':'Css class',
                                     'input' : 'select',
                                     'free_input' : false,
-                                    'show_editor': 'hidden',
+                                    'show_editor': true,
                                     'available' : ['bg_black', 'bg_dark', 'two-cols', 'pad-top-bottom', 'text-right', 'gradient-pink', 'aligned '],
                                   
                                   }
@@ -37752,7 +37833,7 @@ angular.module('musicBox.render', [])
               'modes': {
                 'pusherleft': true,
                 'editor': {                   
-                  'enabled': true,
+                        'enabled': true,
                         'display' : {
                             'date': false, 
                             'user': false,
@@ -37765,23 +37846,25 @@ angular.module('musicBox.render', [])
 
 
                         },
-
-                          'fields' : {
+                        'fields' : {
                                   'ranges': { 
                                       'display' : true,
-                                      'label':'link url',
+                                      'label':'ranges',
                                       'input' : 'range'
                                   },
                                   'type': { 
                                       'display' : true,
                                       'label':'type',
-                                     'input' : 'select'
+                                      'input' : 'select',
+                                        'show_editor': true
                                   },
                                 
                                   'position':{ 
                                       'display' : true,
                                       'label':'position',
-                                      'input' : 'select'
+                                      'input' : 'select',
+                                      'default' : 'left'
+                                  
                                   },
                                    'subtype': {
                                     'display' : true,
@@ -37790,7 +37873,9 @@ angular.module('musicBox.render', [])
                                     'free_input' : false,
                                     'show_editor': true,
                                     'available' : ['x', 'y', 'z','string'],
-                                    'forced' : false
+                                    'default' : 'x',
+                                    'forced' : 'x',
+
                                   },
                                  
                                    
@@ -37834,7 +37919,7 @@ angular.module('musicBox.render', [])
               'compute_fulltext':true,
               'positions': {
                   "forced": "left",
-                  "available": ['left', 'right', 'global']},
+                  "available": ['left', 'right', 'global', 'inline']},
               'modes': {
                 'pusherleft': true,
                 'editor': {                   
@@ -37859,13 +37944,15 @@ angular.module('musicBox.render', [])
                                   'type': { 
                                       'display' : true,
                                       'label':'type',
-                                      'input' : 'select'
+                                      'input' : 'select', 
+                                      'show_editor': true
                                   },
                                 
                                   'position':{ 
                                       'display' : true,
                                       'label':'position',
-                                      'input' : 'select'
+                                      'input' : 'select',
+                                      'default' : 'left'
                                   },
                                   'subtype': {
                                     'display' : true,
@@ -37874,6 +37961,7 @@ angular.module('musicBox.render', [])
                                     'free_input' : false,
                                     'show_editor': true,
                                     'available' : ['hyperlink', 'anchor'],
+                                    'default' : 'hyperlink',
                                     'forced' : false
                                   },
                                   'metadata': {
@@ -37881,7 +37969,7 @@ angular.module('musicBox.render', [])
                                     'label':'url',
                                     'input' : 'text',
                                     'free_input' : true,
-                                    'show_editor': 'hidden',
+                                    'show_editor': true,
                                     'available' : ['hyperlink']
                                   }
 
@@ -38009,71 +38097,8 @@ angular.module('musicBox.render', [])
 // this file contains 
 // event register
 // thx to btford seed  : https://github.com/btford/angular-socket-io-im/
-var musicBox =  angular.module('musicBox.services', []);
-
-musicBox.run(["$rootScope", function($rootScope) {
-    console.log('cross controllers service listening ..')
-    /*
-      Receive emitted message and broadcast it.
-    */
-    // $rootScope.$on('summarizeEvent', function(event, args) {
-       // $rootScope.$broadcast('summarize', args);
-    // });
-}]);
-musicBox.run(["$rootScope", "$http", "$route", function($rootScope, $http, $route) {
- 
-  $rootScope.$on('$routeChangeSuccess', function (e, cur, prev) {
-    if(cur && prev && cur !== prev){
-      console.log(prev.originalPath)
-      console.log(cur.originalPath)
-      // $rootScope.$emit('docEvent', {action: 'reload' });
-      // if(prev.originalPath == '')
-      // from '/docs/:mode' to '/doc/:docid'
-      // console.log('route.change')
-       
-       console.log($route)
-       //if(!$rootScope.doc){
-        $rootScope.doc       = null;
-       //}
-     
-       //if(!$rootScope.ui){
-          $rootScope.ui        = null;
-      //}
-  }
-  });
-/*
-   $rootScope.$on('renderEvent', function(event, args) {
-          $rootScope.$broadcast('render', args);
-      });  
-
-     $rootScope.$on('render', function(event, args) {
-        console.log(args, event)
-
-    }); 
-
-    $rootScope.$on('docEvent', function(event, args) {
-        $rootScope.$broadcast('doc', args);
-    });
-    $rootScope.$on('sectionEvent', function(event, args) {
-        $rootScope.$broadcast('section', args);
-    });
-    $rootScope.$on('letterEvent', function(event, args) {
-        $rootScope.$broadcast('letter', args);
-    });
-    $rootScope.$on('fragmentEvent', function(event, args) {
-        $rootScope.$broadcast('fragment', args);
-    });
-    $rootScope.$on('keyEvent', function(event, args) {
-        $rootScope.$broadcast('key', args);
-    });
- */
-}]);
-
-
-
-
- // SOCKET part 
-musicBox.factory('socket', ["$rootScope", "$http", "$location", function($rootScope, $http, $location)  {
+angular.module('musicBox.socket', [])
+.factory('socket', ["$rootScope", "$http", "$location", function($rootScope, $http, $location)  {
   //  app.locals.port=
   if(SOCKET_URL !==""){
      console.log('loading sockets')
@@ -38118,6 +38143,12 @@ musicBox.factory('socket', ["$rootScope", "$http", "$location", function($rootSc
   };
 }]);
 
+angular.module('musicBox.user', [
+	'musicBox.user.controller',
+	'musicBox.user.rest',
+	'musicBox.user.service'
+]);
+
 'use strict';
 
 /*
@@ -38130,7 +38161,7 @@ musicBox.factory('socket', ["$rootScope", "$http", "$location", function($rootSc
 	
 */
 
-angular.module('musicBox.user_controller', []);
+angular.module('musicBox.user.controller', []);
 
 // ** GLOBAL MISC VARS
 var inheriting = {};
@@ -38142,7 +38173,7 @@ var render;
 // todo : remove old api call
 
 function UserProfileCtrl($scope, $http , $location, $routeParams,  $locale, DocumentService, UserRest, UserService, renderfactory,$timeout) {
-	  	 new renderfactory().init()
+	  	 new renderfactory().init('user')
 
  		$scope.globals = GLOBALS;
         $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
@@ -38151,7 +38182,7 @@ function UserProfileCtrl($scope, $http , $location, $routeParams,  $locale, Docu
     	promise.then(function (Result) {
       		
       		var this_user = new UserService()
-      		this_user.SetFromApi(Result.user)
+      		this_user.SetFromData(Result.user)
       		
       		$scope.userin.user_options = this_user.MapOptions(Result)
       		
@@ -38229,29 +38260,28 @@ function UserProfileCtrl($scope, $http , $location, $routeParams,  $locale, Docu
 			newdoc_service.newdoc();
 	}
 }
-function UserCtrl($scope, $http , $location, $routeParams,  $locale, renderfactory, UserService) {
+function UserCtrl($scope, $http , $location, $routeParams,  $locale, renderfactory, UserService, UserRest) {
 	
-	console.log('User Controller')
+	console.log('User Controller (signup, login, newsletter)')
 
 	// call a render 
-	new renderfactory().init()
+	new renderfactory().init('user')
 
 	// get user
-	new UserService().SetFromLocale()
+	new UserService().SetFromData(USERIN)
 
 	
-	
-	$scope.register_url = root_url+':'+PORT+'/signup';
 	$scope.created_user_link   = root_url+':'+PORT+'/me/account?welcome';
-	if(action_){
-		$scope.action_ = action_
-	}
+	$scope.register_url = root_url+':'+PORT+'/signup';
 	
-
 	if($routeParams.redirect_url){
 		$scope.created_user_link 	= $routeParams.redirect_url;
 		$scope.register_url 		+= '?redirect_url='+$routeParams.redirect_url
 
+	}
+
+	if(action_){
+		$scope.action_ = action_
 	}
 
 	//	$scope.render_config = new Object({'i18n':  $locale})
@@ -38270,25 +38300,30 @@ function UserCtrl($scope, $http , $location, $routeParams,  $locale, renderfacto
 	$scope.checklogin = function(){
 		var data = new Object({'username': $scope.username, 'password': $scope.password, 'redirect_url':$routeParams.redirect_url})
 		//console.log($routeParams.redirect_url)
-		$http.post(root_url+':'+PORT+'/api/v1/userlogin', serialize(data) ).success(function(e) {
-         	//console.log(e)
-         	window.location = e.redirect_url;
-         }).error(function(data, status) {});  
+		var promise = UserRest.login({}, serialize(data) ).$promise;
+		promise.then(function (Result) {
+          		window.location = Result.redirect_url;
+
+		 }.bind(this));
+		 promise.catch(function (response) {     
+		      console.log(response);
+		 }.bind(this));
 	}
 
-
 	$scope.toggle_lostpass_form = function(){
-
 		$scope.lostpass_form = true
 	}
 
 	$scope.lostpass_post = function(email){
-			
-			var data = new Object()
-			data.email 		= email;
-			$http.post(root_url+':'+PORT+'/api/v1/user/lostpass',serialize(data)  ).success(function(e) {
-        	 $scope.complete =true
-        	});  
+		var data = new Object({'email' :email } )	
+		var promise = UserRest.lostpass({}, serialize(data) ).$promise;
+		promise.then(function (Result) {
+          		$scope.complete 	 = true
+          		$scope.lostpass_form = false
+		 }.bind(this));
+		 promise.catch(function (response) {     
+		      console.log(response);
+		 }.bind(this));	 
 	}
 
 
@@ -38296,16 +38331,21 @@ function UserCtrl($scope, $http , $location, $routeParams,  $locale, renderfacto
 		
 		if($scope.password && $scope.username && $scope.password !=="" && $scope.username !=="" ){
 			$scope.errors= ''
-			var data = new Object()
-			data.username 	= $scope.username;
-			data.password 	= $scope.password;
-			data.email 		= $scope.email;
-			data.newsletter	= $scope.newsletter ? $scope.newsletter : false ;
- 			$http.post(root_url+':'+PORT+'/register', serialize(data) ).success(function(e) {
-        	 	$scope.complete = true;
-        		window.location = $scope.created_user_link 
-
-        	});  
+			var data = new Object({
+					'username' 	: $scope.username,
+					'password' 	: $scope.password,
+					'email' 	: $scope.email,
+					'newsletter': $scope.newsletter ? $scope.newsletter : false 
+			})
+			var promise = UserRest.register({}, serialize(data) ).$promise;
+			promise.then(function (Result) {
+	          		$scope.complete = true;
+	          		
+        			window.location = $scope.created_user_link 
+			 }.bind(this));
+			 promise.catch(function (response) {     
+			      console.log(response);
+			 }.bind(this));	 	
 		}
 		else{
 			$scope.errors= 'complete the fields please'
@@ -38317,11 +38357,13 @@ function UserCtrl($scope, $http , $location, $routeParams,  $locale, renderfacto
 			$scope.errors= ''
 			var data = new Object()
 			data.email 		= $scope.email;
-			
- 			$http.post(root_url+':'+PORT+'/api/v1/subscribe', serialize(data) ).success(function(e) {
-        	 	//window.location = $scope.created_user_link 
-        	 	 $scope.complete = true;
-        	});  
+			var promise = UserRest.subscribe({}, serialize(data) ).$promise;
+			promise.then(function (Result) {
+	          		 $scope.complete = true;
+			 }.bind(this));
+			 promise.catch(function (response) {     
+			      console.log(response);
+			 }.bind(this));	 	
 		}
 		else{
 			$scope.errors= 'complete the fields please'
@@ -38330,7 +38372,7 @@ function UserCtrl($scope, $http , $location, $routeParams,  $locale, renderfacto
 	}
 }
 
-angular.module('musicBox.UserRest', [])
+angular.module('musicBox.user.rest', [])
 .factory("UserRest", ["$resource", "$rootScope", function($resource, $rootScope){
 
   var parseResponse = function (data) {
@@ -38345,69 +38387,79 @@ angular.module('musicBox.UserRest', [])
       account:{
         method:"GET",
         url: api_url+'/me/account',
-        //transformResponse: parseResponse
-        //interceptor: { response: parseResponse }
-        //isArray: false
       },
       edit:{
         method:"POST",
         url: api_url+'/me/edit',
-        //transformResponse: parseResponse
-        //interceptor: { response: parseResponse }
-        //isArray: false
+      },
+      subscribe:{
+        method:"POST",
+        url: api_url+'/subscribe',
+      },
+      register:{
+        method:"POST",
+        url: api_url+'/user/register',
+      },
+      lostpass:{
+        method:"POST",
+        url: api_url+'/user/lostpass',
+      },
+      login:{
+        method:"POST",
+        url:  api_url+'/user/userlogin',
       }
-
     }
   );
 }])
-angular.module('musicBox.UserService', [])
-
-
+angular.module('musicBox.user.service', [])
 
 .factory("UserService", ["$rootScope", function($rootScope) {
 
-  
   var UserService = function() {
      console.log('UserService')
-     $rootScope.userin = new Object({'username':''});
+     $rootScope.userin = new Object({'username':'', 'account_url':'me/account', 'login_url':'/login', 'signout_url':'/signout'});
   };
 
+  UserService.prototype.SetFromData = function(u) {
+      if(u){
 
-  UserService.prototype.SetFromApi = function(data) {
-      if(data){
-        $rootScope.userin = data;
+        if(u.username !== ''){
+          u.islogged=true
+        }
+        $rootScope.userin = _.extend($rootScope.userin, u);
+
+
       }
    };
 
-  UserService.prototype.SetFromLocale = function() {
-     if(USERIN){
-       $rootScope.userin = USERIN;
-     }
-  }
-
- UserService.prototype.MapOptions = function(data) {
-          $rootScope.documents = [];
-          $rootScope.documents = data.user_documents;
-          var options_array = [];
-          _.each(data.user.user_options , function(option){
-            
-            
-              var op_name = option.option_name ? option.option_name : '';
-              var op_value = option.option_value ? option.option_value : '';
-              var op_type = option.option_type  ? option.option_type : '';
-              var opt = {'option_name' : op_name, 'option_value' : op_value,'option_type' : op_type }
-              options_array.push(opt)
-            
-           
-          });
-         console.log(options_array)
-         return options_array
+  UserService.prototype.MapOptions = function(data) {
+            $rootScope.documents = [];
+            $rootScope.documents = data.user_documents;
+            var options_array = [];
+            _.each(data.user.user_options , function(option){
+              
+              
+                var op_name = option.option_name ? option.option_name : '';
+                var op_value = option.option_value ? option.option_value : '';
+                var op_type = option.option_type  ? option.option_type : '';
+                var opt = {'option_name' : op_name, 'option_value' : op_value,'option_type' : op_type }
+                options_array.push(opt)
+              
+             
+            });
+           console.log(options_array)
+           return options_array
 
   }
-
   return UserService;
-
 }]);
+angular.module('musicBox.document', [
+	'musicBox.document.rest',
+	'musicBox.document.service',
+	'musicBox.document.directive',
+	'musicBox.document.controller',
+])
+
 'use strict';
 
 /*
@@ -38458,73 +38510,14 @@ var GLOBALS;
 var render;
 var doc;
 
-angular.module('musicBox.page', [])
-
-.controller('MusicBoxCtrl', ['$scope', '$http','$sce', function($scope, $http, $sce) {
-
-		 $scope.ggg = 'page as ctrl'
-
-}])
-
-.directive('mb', ["$rootScope", function($rootScope) {
-  
-
-  function link(scope, elem, attrs) { 
-  
-
-       
-
-    }
-   
-
-   return {
-    	restrict: "EA",
-    	//require: '^letters',
-		// link:link,
-
-		templateUrl: function(){
-
-			var turl = "js/MusicBox/document/tpl/pagectrl.tpl.html"
-        	return turl;
-
-				
-			//	return '<span order="{{l.order}}" class="{{l.classes_flat}}" ng-bind-html="l.char"></span>'
-
-			
-		},
-    //	replace :true,
-		//	<span class="{{l.classes_flat}}" ng-repeat="l in letters">{{l.char}}</span>
-	    //  transclude :true,    	
-	    // templateUrl: function(elem, attr){
-	    // return 'script/level.tpl.html';
-	    // },
-	   controller: ["$scope", function($scope){
-
-	   		console.log($scope)
-			// $scope.ggg = 'dd'
- 	
-		}]
-		
-    };
-}])
-
-// global CMS handler
 
 
+angular.module('musicBox.document.controller', []);
 
 
-angular.module('musicBox.document_controller', []);
-
-
-//musicBox.controller('FragmentCtrl');
-
-
-// musicBox.controller('DocumentNewCtrl', DocumentNewCtrl);
-
-//console.log(musicBox)
 
  /**
- * Represents a document.
+ * controller for document.
  * @class DocumentCtrl
  * @param {Object} $scope - angular service
  * @param {Object} $http -  angular service
@@ -38533,47 +38526,6 @@ angular.module('musicBox.document_controller', []);
  * @param {Factory} renderfactory -  angular custom factory for render
  * @param {Factory} docfactory -  angular custom factory for document 
  */
-
-
-
-function DocumentCtrlCompiled($scope, $http , $sce, $location, $routeParams ,socket,renderfactory, DocumentService,DocumentRest,$anchorScroll,  $timeout) {
- 	
-
-	//some setup 
-
-	$scope.doc = {slug:$routeParams.docid, mode:'compiled'}
-	$scope.cursor = {}
-	var cursor = function(letter,action){
-
-			
-			$scope.cursor.start_relative = letter.position.relative
-			$scope.cursor.start_absolute = letter.position.absolute
-
-			$scope.cursor.start_local = letter.position.local
-
-			$scope.cursor.action = action
-
-	}
-
-
- 	var promise = DocumentRest.get({Id:$scope.doc.slug},{  }).$promise;
-    promise.then(function (Result) {
-       if(Result){
-       	console.log(Result)
-       	       	$scope.docresult = Result
-
-       //	$scope.doc.compiled_doc = Result.doc.compiled_full
-       }
-      });
-
-    $scope.la = function(action, letter){
-    	
-    	console.log(letter)
-    	cursor(letter, action) 
-    }
-}
-
-
 
 function DocumentCtrl($scope, $http , $sce, $location, $routeParams ,socket,renderfactory, DocumentService, $anchorScroll, $timeout, MarkupService) {
 		
@@ -38664,6 +38616,14 @@ function DocumentCtrl($scope, $http , $sce, $location, $routeParams ,socket,rend
         }
       }
 
+     $scope.defocus_containers = function (){
+			// call parent CTRL > to move in documentCtrl
+		  _.each($scope.doc.containers, function(container){
+            	container.focused  = ''
+
+		  })
+	}
+
 $scope.SetSlug = function (slug) {
     if(!slug){
         $scope.slug= 'homepage';
@@ -38685,7 +38645,7 @@ $scope.SetSlug = function (slug) {
 
 
  $scope.RenderConfig = function () {
-    new renderfactory().init()
+    new renderfactory().init('document')
       
 
     if($scope.ui.menus.quick_tools_help.visible == true){
@@ -38754,6 +38714,9 @@ $scope.SetSlug = function (slug) {
 	$scope.doc_sync = function(){
 		doc.docsync();
 	}
+	
+
+	
 
 	// when user doubleclick an option (edit in place)
 	// used for footer option and before/after title
@@ -38854,9 +38817,13 @@ $scope.SetSlug = function (slug) {
 	*/
 	
 
+	  
+                  
+                    
 	
-	
-	$scope.sync_queue = function(){
+	$scope.insert_new_container = function(mi){
+		
+		  $scope.doc.containers.push(mi)
 		  doc.docsync();
 	}
 
@@ -38885,6 +38852,7 @@ $scope.SetSlug = function (slug) {
 	* @param  {String} link - redirect link
 	*/
 	$scope.external_link = function (link){
+
 		window.location = link;
 	}
 
@@ -39132,8 +39100,19 @@ $scope.SetSlug = function (slug) {
  			//  $scope.doc.operation.after = {}
 
  			if($scope.doc.operation.before.type == 'save'){
-				doc.docsync();	
+				doc.docsync();
  			}
+ 			if($scope.doc.operation.before.type == 'push_container'){
+ 				var c = $scope.doc.operation.object_
+				$scope.doc.containers.push(c)
+				$scope.doc.content += c.fulltext
+				doc.docsync();
+ 			}
+			
+
+
+
+
  			 $scope.doc.operation.before.state= 'done'
  			 // $scope.doc.operation.after.state= 'done'
  			 // should be in service-promise 
@@ -39156,7 +39135,9 @@ $scope.SetSlug = function (slug) {
 		 $scope.doc.operations= []
 	}
 
-
+	$scope.expand_operation = function(op){
+		op.expanded = op.expanded ? !op.expanded : true
+	}
 
 
 
@@ -39387,25 +39368,48 @@ function DocumentNewCtrl($scope, $compile, $http , $sce, $location, $routeParams
 //DocumentNewCtrl.$inject = ['$scope', '$http' ,'docfactory', '$timeout'];
 
 
-// MISC UTILS
-function urlencode(str) {
-    return escape(str.replace(/%/g, '%25').replace(/\+/g, '%2B')).replace(/%25/g, '%')
+function DocumentCtrlCompiled($scope, $http , $sce, $location, $routeParams ,socket,renderfactory, DocumentService,DocumentRest,$anchorScroll,  $timeout) {
+ 	
+
+	//some setup 
+
+	$scope.doc = {slug:$routeParams.docid, mode:'compiled'}
+	$scope.cursor = {}
+	var cursor = function(letter,action){
+
+			
+			$scope.cursor.start_relative = letter.position.relative
+			$scope.cursor.start_absolute = letter.position.absolute
+
+			$scope.cursor.start_local = letter.position.local
+
+			$scope.cursor.action = action
+
+	}
+
+
+ 	var promise = DocumentRest.get({Id:$scope.doc.slug},{  }).$promise;
+    promise.then(function (Result) {
+       if(Result){
+       	console.log(Result)
+       	       	$scope.docresult = Result
+
+       //	$scope.doc.compiled_doc = Result.doc.compiled_full
+       }
+      });
+
+    $scope.la = function(action, letter){
+    	
+    	console.log(letter)
+    	cursor(letter, action) 
+    }
 }
-function serialize(obj, prefix) {
-  var str = [];
-  for(var p in obj) {
-    var k = prefix ? prefix + "[" + p + "]" : p, v = obj[p]
-    str.push(typeof v == "object" ?
-      serialize(v, k) :
-      encodeURIComponent(k) + "=" + encodeURIComponent(v))
-  }
-  return str.join("&")
-}
 
 
 
 
-angular.module('musicBox.DocumentDirectives', [])
+
+angular.module('musicBox.document.directive', [])
 
 .directive("mbDocument", function() {
 		
@@ -39547,7 +39551,7 @@ angular.module('musicBox.DocumentDirectives', [])
     };
 }])
 ;
-angular.module('musicBox.DocumentRest', [])
+angular.module('musicBox.document.rest', [])
 .factory("DocumentRest", ["$resource", "$rootScope", "$routeParams", function($resource, $rootScope,$routeParams){
 
   var secret_string= ''
@@ -39629,7 +39633,7 @@ can redirect window
  * @inject $rootScope, $http, $location,$sce, $routeParams, socket, renderfactory, $locale, $timeout
  */
 var temp_scope;
-angular.module('musicBox.DocumentService',[])
+angular.module('musicBox.document.service',[])
 .factory("DocumentService", ["$rootScope", "$http", "$sce", "$resource", "$location", "$routeParams", "renderfactory", "DocumentRest", "UserService", "$timeout", "$locale", "MarkupService", function($rootScope, $http,$sce, $resource,$location, $routeParams ,renderfactory, DocumentRest, UserService, $timeout, $locale,MarkupService) {
 
   
@@ -39646,7 +39650,6 @@ angular.module('musicBox.DocumentService',[])
 
   DocumentService.prototype.SetSlugFromValue = function (slug) {
     this.slug = slug
-
   }
   
 
@@ -39682,8 +39685,8 @@ angular.module('musicBox.DocumentService',[])
                }
              
 
-  $rootScope.doc.operation = {}
-       $rootScope.doc.operations = []
+                $rootScope.doc.operation = {}
+                $rootScope.doc.operations = []
 
                 var encoded_url = root_url+':'+PORT;
                 if(Result.doc.slug !=='homepage'){
@@ -39708,7 +39711,9 @@ angular.module('musicBox.DocumentService',[])
                
 
 
-            new UserService().SetFromApi(Result.userin)
+            new UserService().SetFromData(Result.userin)
+            $rootScope.userin.login_url = '/login?redirect_url='+root_url+':'+PORT+'/doc/'+Result.doc.slug
+
             $rootScope.containers = _.sortBy( Result.doc.sections,function (num) {
                return num.start;
             });
@@ -39751,41 +39756,7 @@ angular.module('musicBox.DocumentService',[])
 
 
 
-  DocumentService.prototype.populate = function (Result) {
 
-      
-        
-          // filter markups > only if markup.type ==  "container"
-        
-         
-       
-/*
-        if($rootScope.max_reached_letter !==  $rootScope.doc.content.length){
-          console.log('unreached letter found :'+ $rootScope.max_reached_letter +'--'+$rootScope.doc.content.length)
-          //max_reached_letter.end = container.end
-          if(_.last($rootScope.doc.containers) && $rootScope.max_reached_letter  <  $rootScope.doc.content.length){
-              console.log('should patch last section from :'+ _.last($rootScope.doc.containers).end+ ' to'+$rootScope.doc.content.length)
-          }
-        } 
-
-
-
-        // reloop to find isolate markups
-        $rootScope.ui.isolated_markups = []
-
-        _.each($rootScope.doc.markups, function(markup){
-          
-          if(!markup.isolated == false  ){
-            console.log('markup.isolated' )
-          //  markup.isolated = true;
-          //  $rootScope.ui.isolated_markups.push(markup)
-          }
-        })
-*/
-        
-       
-      
-  }
 
  
 
@@ -39818,7 +39789,7 @@ angular.module('musicBox.DocumentService',[])
           //  container.fulltext =  container.fulltext.replace(/(\r\n|\n|\r)/gm,"");
         
           // console.log(container.fulltext)
-  string  += s.fulltext;
+          string  += s.fulltext;
 
             if(s.touched == true){
               var a_s = new Object({'id':s._id, 'start': s.start,'end': s.end, 'action':'offset' })
@@ -39851,7 +39822,7 @@ angular.module('musicBox.DocumentService',[])
         console.log(data)
         //// $rootScope.doc.operation.before.sync = data;
 
-          data.doc_content = string
+        data.doc_content = string
         
         var promise = this.api_method.sync({id:$rootScope.doc.slug},serialize(data)).$promise;
         promise.then(function (Result) {
@@ -39865,7 +39836,7 @@ angular.module('musicBox.DocumentService',[])
             }
              
            
-            thos.flash_message('Document saved', 'ok' , 1600, false)
+          thos.flash_message('Document saved', 'ok' , 1600, false)
 
             _.each($rootScope.doc.containers, function(s){
                  s.touched = false
@@ -40106,12 +40077,8 @@ angular.module('musicBox.DocumentService',[])
                           }
                    
                   }else{
-                   window.location = root_url+':'+PORT+'/doc/'+Result.slug+'?fresh'; // fresh
+                              window.location = root_url+':'+PORT+'/doc/'+Result.slug+'?fresh'; // fresh
 
-                               //alert(Result.slug)
-                               //   $rootScope.newdoc.created_link = Result.slug;
-                               //   $rootScope.newdoc.created_link_title = Result.title;
-                               //   $rootScope.newdoc.created_secret = Result.secret;
 
                   }
 
@@ -40127,29 +40094,8 @@ angular.module('musicBox.DocumentService',[])
 
 
 
-  DocumentService.prototype.SlugFromUrl = function () {
-       
-  }
-
- 
 
 
-
-  /*
-        DocumentService.prototype.Markup_pre = function () {
-          
-
-          var data = new Object();
-          data.username = $rootScope.userin.username;
-          data.user_id = $rootScope.userin._id;
-          data.type = 'kjkj'
-          data.subtype = 'section';
-          data.start =0;
-          data.end = 100;
-          return data;
-
-        };
-    */
 
   /**
       * @description 
@@ -40171,18 +40117,18 @@ angular.module('musicBox.DocumentService',[])
         $rootScope.flash_message.text = msg;
         $rootScope.flash_message.classname = classname;
 
-        if(!closer){
-            $rootScope.flash_message.closer =false;
-        }
-        else{
-            $rootScope.flash_message.closer = closer;
-        }
-        
+          if(!closer){
+              $rootScope.flash_message.closer = false;
+          }
+          else{
+              $rootScope.flash_message.closer = closer;
+          }
+        console.log('flash_message'+msg,classname ,timeout, closer)
 
         // apply timeout if set to true
         if(timeout){
             $timeout(function(){
-                $rootScope.flash_message.text =  '';
+                $rootScope.flash_message.text =  '' ;
             },timeout);
         }
       };
@@ -40327,7 +40273,7 @@ angular.module('musicBox.DocumentService',[])
 
 
 
-angular.module('musicBox.eDirectives', [])
+angular.module('musicBox.section.directive.textarea', [])
 .directive('textListener', ["$rootScope", function($rootScope) {
 
     return {
@@ -40484,7 +40430,7 @@ angular.module('musicBox.eDirectives', [])
 
 
                   // console.log(test_r)
-                    var operation = { 'object': obj, 'before':{'state':'init'}, 'grp_log':grp_log, 'reversable': true }
+                    var operation = { 'object_': obj, 'before':{'state':'init'}, 'grp_log':grp_log, 'reversable': true }
                     
 
                     switch (test_r) {
@@ -40763,7 +40709,7 @@ function boundaries_test(s, r){
 
 */
 
-angular.module('musicBox.LetterDirectives', [])
+angular.module('musicBox.section.directive.letters', [])
 .directive('lt',   ["$rootScope", function($rootScope) {
  // var use_markup = 'h1'
 
@@ -41160,6 +41106,14 @@ angular.module('musicBox.LetterDirectives', [])
             link: link,
         }
 }])
+angular.module('musicBox.section', [
+	'musicBox.section.controller',
+	'musicBox.section.controller_b',
+	'musicBox.section.directive.textarea',
+	'musicBox.section.directive.section',
+	'musicBox.section.directive.letters',
+	'musicBox.section.directive.pusher'
+])
 'use strict';
 
 
@@ -41183,11 +41137,7 @@ attribute_objects()->map_letters->
 
 
 
-
-angular.module('musicBox.section_controller', []).controller('SectionCtrl', ["$scope", "$http", "DocumentService", "MarkupRest", "socket", "MarkupService", function($scope, $http, DocumentService, MarkupRest,socket, MarkupService) {
-
-
-
+angular.module('musicBox.section.controller', []).controller('SectionCtrl', ["$scope", "$http", "DocumentService", "MarkupRest", "socket", "MarkupService", function($scope, $http, DocumentService, MarkupRest,socket, MarkupService) {
 
 $scope.init_= function (index_) {
 	console.log('init_ (section #'+ index_+')')
@@ -41196,7 +41146,6 @@ $scope.init_= function (index_) {
 	var container_ = new Object({
 		'selecting' : -1,
 		'sectionin' : index_,
-		'isolated'  : 'true',
 		'selected'  : false,
 		'focused'   : '',
 		'editing_text': $scope.ui.debug ? true : false,
@@ -41204,11 +41153,11 @@ $scope.init_= function (index_) {
 		'modeletters' : $scope.ui.debug ? 'single' : 'compiled',
 		'section_classes':'', 
 		'stack': [],
-		'rebuild' : false,
+	//	'rebuild' : false,
 		'rebuild_count' : 0, 
-		'textlength': 9,
-		'objects_count': '0',
-		'debuggr' : ['init'],
+		'textlength': null,
+	//	'objects_count': '0',
+	//	'debuggr' : ['init'],
         'has_offset'     : false,
         'touched'     : false,
         'keepsync'     : true,
@@ -41216,8 +41165,12 @@ $scope.init_= function (index_) {
         'objSchemas_css': $scope.objSchemas['container_class'],
         'servicetype'  	 :'section',
         'operation': {},
-        'operations': []
-
+        'operations': [],
+        'fulltext' : $scope.init_fulltext($scope.section.start, $scope.section.end),
+        'section_markups' : $scope.get_markups($scope.section.start, $scope.section.end),
+        'section_markups_ready' : 'false',
+        'section_fulltext_ready' : 'false',
+        
 	
 	})
 
@@ -41225,16 +41178,14 @@ $scope.init_= function (index_) {
 	$scope.section = _.extend($scope.section, container_);
 
 
-	var _section = new MarkupService().init($scope.section)
+	new MarkupService().init($scope.section)
 	//	$scope.markup.user_options = _markup.apply_object_options('markup_user_options',$scope.markup.user_id.user_options)
 
 
-	$scope.section.section_markups 			= $scope.get_markups($scope.section.start, $scope.section.end)
-	$scope.section.section_markups_length 	= $scope.section.section_markups.length
+	//$scope.
+	//$scope.section.section_markups_length 	= $scope.section.section_markups.length
 
-
-
-	$scope.init_fulltext($scope.section.start, $scope.section.end)
+	
 	
 	// add to parent scope section count
 	
@@ -41265,18 +41216,6 @@ $scope.init_= function (index_) {
 	*/
 }
 
-/*
-$scope.sectionmarkups = function(attr, value){
-	_.each($scope.$parent.markups, function(m,y){
-		if(m.sectionin == $scope.$parent.$index && m.type !=='container'){
-			m[attr] = value;
-		}
-		else{
-			m[attr] = !value;
-		}            
-	})
-}
-*/
 
 // contruct temp fulltext, 
 // called at section init only 
@@ -41301,6 +41240,7 @@ $scope.init_fulltext = function (s,e){
 		}
 	}
 	$scope.section.fulltext = fulltext
+
 	return fulltext;
 	//$scope.compile_fulltext(fulltext_block)
 
@@ -41314,11 +41254,13 @@ $scope.get_markups  = function(ss,se){
 				if( !m.deleted && (m.start >= parseInt(ss)) && (m.end <= parseInt(se)) ){
 					///m.visible = true
 					m.sectionin = $scope.section.sectionin
+					m.isolated= 'false'
 					arr_m.push(m)
 				}
 		});
 		console.log('get markups>')
 		console.log(arr_m)
+		$scope.section_markups_ready = 'true';
 
 		return arr_m;
 }
@@ -41363,6 +41305,7 @@ $scope.markups_by_start_end_position_type  = function(ss, se , p , t ){
 
 $scope.map_letters = function(){
   console.log('map_letters (section)')
+
 
  	var fulltext_block = ''
 
@@ -41714,10 +41657,9 @@ $scope.compile_html = function(fulltext_block ){
 $scope.attribute_objects = function(){
   			console.log('attribute_objects')
 	
-  			console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
-
-  		   $scope.$parent.mapping_pass()
-           var objectsarray = new Object();
+  		
+  		
+            var objectsarray = new Object();
 
           
 
@@ -41739,7 +41681,8 @@ $scope.attribute_objects = function(){
             });
 
 			$scope.section = _.extend($scope.section, objectsarray );
-			
+			console.log('O A')
+			console.log(objectsarray)
 
     		
   	       var mkr = $scope.section.section_markups
@@ -41766,10 +41709,8 @@ $scope.attribute_objects = function(){
 				//}
 		        // only for markups which ranges match container
 
-		        if(  markup.start >= $scope.section.start && markup.end <= $scope.section.end){
 
-		        	markup.isolated= 'false'
-		        	markup.sectionin= $scope.section.sectionin
+		        
 
 			        /////  ///
 			        if(markup.type !== "" && markup.position){ // > can add it
@@ -41777,12 +41718,12 @@ $scope.attribute_objects = function(){
 						$scope.section.objects_count['by_positions'][markup.position].has_object  = true;
 					
 					}
-		    	} // if in-range
+		    
 		    	
 
 		    }); // each markups end.
-    console.log($scope.section)
-	$scope.map_letters()
+    //console.log($scope.section)
+	
 }
 
 
@@ -41909,20 +41850,47 @@ $scope.$watch('section.fulltext', function(newValue, oldValue) {
 			alert('no letter ')
 		}
 		$scope.section.letters  = temp_letters;
-		$scope.attribute_objects()
+	
+		$scope.section.section_fulltext_ready =Math.random();
+		$scope.map_letters()
+
+		
 	}
 });	
 
 
 
-/*
-$scope.$watch('section.start', function(o, markup) {})
-$scope.$watch('section.end', function(o, markup) {})
-$scope.$watch('section.objects_', function(o, n) {
-	console.log('oBJECT SECTION')
-},true)
+$scope.$watch('section.section_markups_ready',function(newValue, oldValue) {
+	if(newValue == 'true'){
+		$scope.attribute_objects()
+		$scope.section.section_markups_ready = 'done';
+		
 
-*/
+	}
+	else{
+
+	}
+});
+
+$scope.$watch('section.section_fulltext_ready',function(newValue, oldValue) {
+	//if(newValue == 'true'){
+		
+		
+		
+
+		
+		
+		
+	//	$scope.section.section_fulltext_ready = 'done';
+		
+
+	//}
+	//else{
+
+	//}
+});
+
+
 
 $scope.$watch('section.has_offset', function(o, markup) {
 			
@@ -42005,201 +41973,6 @@ $scope.$watch('section.has_offset', function(o, markup) {
 			});
 
     }	
-
-
-$scope.push_generic_from_ranges= function (type, subtype, position,metadata){
-
-		$scope.$parent.push.metadata = (metadata) ? metadata : ''
-		$scope.$parent.push.type = (type) ? type : 'comment';
-		$scope.$parent.push.subtype = (subtype) ? subtype : 'comment';
-		$scope.$parent.push.position = (position) ? position : 'left';
-		$scope.$parent.push.sectionin = $scope.section.sectionin
-		$scope.add();
-	}
-	// short function to push a comment
-
-$scope.add= function (){
-	
-		if(!$scope.$parent.push.start)	{	$scope.$parent.push.start	= parseInt($scope.$parent.ui.selected_range.start)  	}
-		if(!$scope.$parent.push.end)	{	$scope.$parent.push.end	    = parseInt($scope.$parent.ui.selected_range.end)	}
-
-
-		if(!$scope.$parent.push.position)	{	$scope.$parent.push.position 	= 'left'	}
-		if(!$scope.$parent.push.type)		{	$scope.$parent.push.type 		= 'comment' }
-		if(!$scope.$parent.push.subtype)	{	
-
-				if($scope.$parent.push.type == "media" ){ 
-					$scope.$parent.push.subtype = 'img'
-				}
-				else if($scope.$parent.push.type == "link" ){ 
-					$scope.$parent.push.subtype = 'hyperlink'
-				}
-				else{
-					$scope.$parent.push.subtype 	= 'comment'	
-
-				}	
-			
-
-		}
-		if(!$scope.$parent.push.metadata)	{	
-
-			
-				if($scope.$parent.push.type == "media" ){ 
-					$scope.$parent.push.metadata = root_url+':'+PORT+'/img/lorem/400-400.jpg'
-				}
-				else if($scope.$parent.push.type == "link" ){ 
-					$scope.$parent.push.metadata = root_url+':'+PORT
-				}
-				else{
-					$scope.$parent.push.metadata	= '' 
-
-				}		
-
-
-		}
-		if(!$scope.$parent.push.status)		{	$scope.$parent.push.status		= 'approved' }
-		if(!$scope.$parent.push.depth)		{	$scope.$parent.push.depth 		= 1 }
-		if(!$scope.$parent.push.doc_id_id)	{	$scope.$parent.push.doc_id_id 	= 'null'	}
-		
-		// force autoset / force-correct
-		if($scope.$parent.push.type == "markup" || $scope.$parent.push.type == "container" || $scope.$parent.push.type == "container_class" ){ 
-			$scope.$parent.push.position = 'inline'
-		}
-
-		
-        var promise = new Object();
-        var data = new Object($scope.$parent.push);
-
-        data.username = $scope.userin.username;
-        data.user_id = $scope.userin._id;
-        promise.data = serialize(data);
-
-        console.log('ready to push')
-        console.log(promise.data)
-        var thos = this;
-        // this.Markup_pre();
-
-        promise.query = MarkupRest.new({Id:$scope.$parent.doc.slug},promise.data).$promise;
-        promise.query.then(function (Result) {
-				if(Result.inserted[0]){
-					var mi = Result.inserted[0]
-				
-					if(mi.type== 'container'){
-						$scope.$parent.doc.content = $scope.$parent.doc.content+'Your text' 
-						$scope.$parent.doc.containers.push(mi)
-
-					}
-					else{
-						mi.isnew = true
-						mi.operation = {'created':true}
-						$scope.doc.markups.push(mi)
-						$scope.section.redraw = true;
-
-					}
-					//console.log(mi)
-            	    $scope.flashmessage(mi.type +' inserted', 'ok' , 1400, false)
-					$scope.close_pusher()
-					
-//
-
-				//	$scope.section.section_markups = $scope.get_markups($scope.section.start, $scope.section.end)
-				//	$scope.attribute_objects()
-				}
-        		else{
-        			alert('err')
-        		}
-			// $scope.$parent.push = new Object()
-	    }.bind(this));
-        promise.query.catch(function(response) {  
-           console.log(response)   
-        }.bind(this));
-	}
-
-
-$scope.alert_= function (){
-	// alert('alert_')
-}
-
-// short function to push a section
-$scope.new_section= function (){
-		// $scope.section.fulltext  = $scope.section.fulltext
-		$scope.push.start  		= parseInt($scope.section.end+1)
-		$scope.push.end  		= parseInt($scope.section.end+9)
-		$scope.push.position  	=  'inline'
-		$scope.push.type 		= 'container';
-		$scope.push.subtype 	= 'section';	
-
-		$scope.$parent.sync_queue()
-		$scope.add();
-		
-}
-
-
-
-$scope.defocus = function (){
-
-		  _.each($scope.$parent.doc.containers, function(container){
-            	container.focused  = ''          
-		  })
-}
-
-$scope.close_pusher = function (){
-	$scope.defocus()
-	$scope.$parent.ui.focus_side 				= ''
-	$scope.$parent.ui.menus.push_comment.open 	= -1
-	$scope.$parent.push.metadata 				= '';
-	$scope.$parent.push.start 					=	null;
-	$scope.$parent.push.end 					=	null;
-}
-
-	// open close the pusher box.
-
-	
-	$scope.open_pusher = function (){
-		
-		$scope.defocus()
-		
-		if($scope.$parent.ui.menus.push_comment.open == $scope.$parent.$index){
-			$scope.$parent.ui.menus.push_comment.open =-1
-		}
-		else{
-			$scope.$parent.ui.menus.push_comment.open = $scope.$parent.$index
-			$scope.section.focused  = 'side_left'
-		}
-		
-
-	
-		if(!$scope.push.type){
-			$scope.push.type = 'comment'
-		}
-		if(!$scope.push.subtype){
-			$scope.push.subtype = 'comment'
-		}	
-		if(!$scope.push.position){
-			$scope.push.position = 'under'
-		}
-		
-		
-		$scope.section.modeletters = 'single'
-
-		return
-	}
-	
-
-	////$scope.section_markups = new Object({'all':0, 'visible':0});
-
-	$scope.update_markup_section_count = function(direction){
-		if(direction=='add'){
-			$scope.section_markups.visible++;
-			$scope.section_markups.all++;
-
-		}
-		else{
-			$scope.section_markups.visible--;
-			$scope.section_markups.all--;
-
-		}
-	}
 
 
 	$scope.insert_char = function(c,s,e){
@@ -42322,17 +42095,30 @@ $scope.$watch('section.operation.before.state', function(newValue, oldValue) {
 
 $scope.apply_operation = function(){
 
+
  			 $scope.section.operation.after = {}
 
-			 if($scope.section.operation.before.end){
+			 if( ($scope.section.operation.before.end && $scope.section.operation.before.type == 'offset') ){
 			 	$scope.section.end =  parseInt($scope.section.operation.before.end+$scope.section.operation.before.end_qty)
 				//$scope.section.operation.after.new_end = $scope.section.end
 			 }
-			 if($scope.section.operation.before.start || $scope.section.operation.before.start == 0){
+			 if( ($scope.section.operation.before.start || $scope.section.operation.before.start == 0) && $scope.section.operation.before.type == 'offset'){
 			
 			 	$scope.section.start = parseInt($scope.section.operation.before.start)+parseInt($scope.section.operation.before.start_qty)
 			 //	$scope.section.operation.after.new_start = $scope.section.start
 			 }
+
+
+			 if( $scope.section.operation.before.type == 'push_markup'){
+			 			var m = $scope.section.operation.object_
+			 			m.deleted = false
+
+						$scope.doc.markups.push(m)
+						$scope.section.redraw = true;
+						$scope.flashmessage($scope.section.operation.object_.type +' inserted', 'ok' , 1400, false)	
+			
+			 }
+
 
  			 $scope.section.operation.before.state= 'done'
  			 $scope.section.operation.after.state= 'done'
@@ -42341,7 +42127,9 @@ $scope.apply_operation = function(){
 	} 
 $scope.reverse_operation = function(operation){
 			
-		console.log($scope.section.operation)
+		// console.log($scope.section.operation)
+		operation.reversable= false;
+		alert(operation.grp_log)
 }
 
 
@@ -42445,6 +42233,7 @@ $scope.operations_clear= function(){
 	});
 */
 
+
 $scope.apply_ui_inrange_letters = function(){
 
 	_.each($scope.section.letters, function(l, i){
@@ -42495,16 +42284,10 @@ $scope.$watch('section.inrange_letters_and_markups', function(newValue, oldValue
 
 
 
-
-
-
-
-
-
 //OLD way
 
 	$scope.$watch('section.redraw', function(newValue, oldValue) {
-	if(oldValue == newValue || newValue == false){
+	if(oldValue === newValue || newValue == false){
 
 
 	}else{
@@ -42512,26 +42295,18 @@ $scope.$watch('section.inrange_letters_and_markups', function(newValue, oldValue
 		console.log('############ section.redraw')
 
 		    $scope.section.section_markups = $scope.get_markups($scope.section.start, $scope.section.end)
-			$scope.attribute_objects()
-			$scope.section.inrange_letters_and_markups = true;
-			$scope.section.redraw= false;
-
 		
-
-
+			$scope.map_letters()
+			$scope.section.inrange_letters_and_markups = true;
+			$scope.section.redraw = false;
+				$scope.attribute_objects()
 	}
 		
 
 
 	})
 
-	// $scope.init_()
 
-
-
-$scope.inserted = function(l){
-	alert(l)
-}
 
 
 $scope.integrity_fix = function (){
@@ -42556,14 +42331,7 @@ $scope.integrity_fix = function (){
 
 
 
-
-angular.module('musicBox.sectionpusher_controller', ['musicBox.section_controller']).controller('SectionPushCtrl', ["$scope", "$http", "DocumentService", "MarkupRest", "socket", function($scope, $http, DocumentService, MarkupRest,socket) {
-$scope.open_pmusher = function (){
-	console.log($scope.section)
-}
-}])
-
-angular.module('musicBox.sectionB_controller', []).controller('SectionBCtrl', ["$scope", "$http", "DocumentService", "MarkupRest", "socket", "MarkupService", function($scope, $http, DocumentService, MarkupRest,socket, MarkupService) {
+angular.module('musicBox.section.controller_b', []).controller('SectionBCtrl', ["$scope", "$http", "DocumentService", "MarkupRest", "socket", "MarkupService", function($scope, $http, DocumentService, MarkupRest,socket, MarkupService) {
 
 
 
@@ -42641,7 +42409,7 @@ $scope.init_()
 
 'use strict';
 
-angular.module('musicBox.SectionDirectives', [])
+angular.module('musicBox.section.directive.section', [])
 
 .directive("mbSection", ["$rootScope", function($rootScope) {
 
@@ -42770,6 +42538,337 @@ angular.module('musicBox.SectionDirectives', [])
 
 
 
+'use strict';
+
+angular.module('musicBox.section.directive.pusher', [])
+
+.directive("mbPusher", ["$rootScope", "MarkupRest", "renderfactory", function($rootScope,MarkupRest, renderfactory) {
+    var global_active_pusher =true;
+
+    var link= function(scope){
+       //   console.log(' [mbPusher] directive')
+    }
+    var controller= ["$scope", function($scope){
+          /*
+             console.log($scope.$parent.section)
+             console.log($scope.$parent.$parent.doc)
+             console.log($rootScope.userin.username)
+             console.log($rootScope.doc_owner)
+          */
+
+           $scope.userin  = $rootScope.userin
+           $scope.render_config =$rootScope.render_config
+           $scope.objSchemas = $rootScope.objSchemas 
+           $scope.ui = $rootScope.ui
+           $scope.push = {}
+           
+           $scope.preset_push = function(){
+                    
+                    var push_set= {
+                                      isanon : true,
+                                      isowner: $rootScope.doc_owner,
+                                      start: ($scope.type=='new_section') ? $scope.$parent.section.end+1 : $rootScope.ui.selected_range.start,
+                                      end: ($scope.type=='new_section') ? $scope.$parent.section.end+9 :  $rootScope.ui.selected_range.end,
+                                      position   : ($scope.type=='new_section' || $scope.type=='inline_objects') ? 'inline' : 'left',
+                                      metadata : ($scope.type=='new_section') ? '' : 'write your comment here',
+                                      username : $scope.userin.username,
+                                      user_id : $scope.userin._id,
+                                      has_ranges:  ($scope.type=='new_section') ? true :false,
+
+                   }
+                   $scope.push = _.extend($scope.push, push_set)
+           }
+
+
+          if($scope.type=='new_section'){
+              $scope.push.type=  'container';
+              $scope.push.subtype =  'section'
+              $scope.available_sections_objects = ['container']
+
+          }
+           else if($scope.type=='inline_objects'){
+                $scope.push.type =  'markup' 
+                $scope.push.subtype =  'h1' 
+                $scope.available_sections_objects = ['markup', 'hyperlink', 'media']
+
+            }
+            else if($scope.type=='container_class'){
+                $scope.push.type =  'container_class' 
+                $scope.push.subtype =  'css' 
+                $scope.available_sections_objects = ['container_class']
+
+            }
+            else{
+                $scope.push.type =  'comment' 
+                $scope.push.subtype =  'comment' 
+                $scope.push.metadata  = $scope.objSchemas[$scope.push.type].modes.editor.fields.metadata.label
+
+                if($rootScope.doc_owner == true ){
+                  $scope.available_sections_objects = $rootScope.available_sections_objects
+                }
+                else{
+                  $scope.available_sections_objects = ['comment']
+                }
+            }
+           
+          $scope.push_generic_from_ranges= function (type, subtype, position,metadata){
+
+              $scope.push.metadata = (metadata) ? metadata : ''
+              $scope.push.type = (type) ? type : 'comment';
+              $scope.push.subtype = subtype ? subtype : 'comment';
+              $scope.push.position = (position) ? position : 'left';
+
+                if(type !=='hyperlink' && type !=='media'){
+                   $scope.add();
+                }    
+          }
+
+         
+           $scope.add = function(){
+
+                 var push = $scope.push
+                 if(!$scope.push.status) { $scope.push.status   = 'approved' }
+                 if(!$scope.push.depth)   { $scope.push.depth    = 1 }
+                 if(!$scope.push.doc_id_id) { $scope.push.doc_id_id  = 'null'  }
+                 console.log('ready to push')
+                 
+                 var promise= MarkupRest.new({Id:$scope.$parent.doc.slug}, serialize($scope.push)).$promise;
+                  promise.then(function (Result) {
+                  if(Result.inserted[0]){
+                    var mi = Result.inserted[0]
+                    mi.isnew = true
+                    mi.operation = {'created':true}  
+                  
+                    // add to doc containers
+                    if(mi.type== 'container'){
+
+                       mi.fulltext = 'Your text' 
+                       
+                       var operation_ = {
+                          'object_': mi, 
+                          'before':{'state':'new',  'type': 'push_container',
+                          }, 
+                          'grp_log': Math.random()*1000, 
+                          'reversable': true,
+                         
+                        } 
+                        $scope.$parent.doc.operation = operation_
+
+
+                    
+                     
+                    }
+
+                    // add to doc markups (and its section as an operation)
+                    else{
+                        var operation_ = {
+                          'object_': mi, 
+                          'before':{'state':'new',  'type': 'push_markup',
+                          }, 
+                          'grp_log': Math.random()*1000, 
+                          'reversable': true,
+                         
+                        } 
+                      
+                        $scope.$parent.section.operation = operation_
+
+                 
+                    }
+                  
+                
+
+                  }
+                  else{
+                      alert('err')
+                  }
+                }.bind(this));
+                  promise.catch(function(response) {  
+                     console.log(response)   
+                  }.bind(this));
+           }
+
+
+
+            $scope.pusher_isvisible = function(){
+              if(global_active_pusher !== true){
+                  return false
+              }
+              if($scope.type=='new_section' && $rootScope.doc_owner == true && $scope.$parent.$parent.$parent.$parent.$last){
+                return true
+              }
+              if( $scope.type=='inline_objects' && $rootScope.doc_owner == true){
+                 return true
+               }
+              if( $scope.type=='container_class' && $rootScope.doc_owner == true && $scope.$parent.$parent.$parent.$parent.$last){
+                 return true
+              }
+              return true;
+           
+            
+           }
+
+           $scope.new_section = function(){
+             $scope.add()
+           }
+
+
+            $scope.pusher_isopen = function(){
+
+              if( $scope.type=='new_section' && $rootScope.doc_owner == true && $scope.$parent.$parent.$parent.$parent.$last){
+                 return true
+              }
+               if( $scope.type=='inline_objects' && $rootScope.doc_owner == true){
+                 return true
+              }
+
+              if( $scope.type=='container_class' && $rootScope.doc_owner == true){
+                 return true
+              }
+
+              return false
+           }
+
+           $scope.pusher_toggle = function(){
+             $scope.isopen = !$scope.isopen
+             if($scope.isopen == true){
+                $scope.$parent.defocus_containers();
+                $scope.$parent.section.focused  = 'side_left'
+             
+             }
+             else{
+                  $scope.$parent.defocus_containers();
+               
+             }
+             $scope.$parent.section.modeletters = 'single'
+           
+           }
+
+          $scope.pusher_isvalid = function(){
+               if($scope.type=='new_section' || $scope.type=='container_class'){
+                 return true;
+                }
+                return false;
+           }
+
+           /// watch rootscope UI changes
+          $rootScope.$watch('ui.selected_range.redraw', function(newValue, oldValue) {
+              if(oldValue == newValue){}
+              else{
+                if($scope.type=='new_section'){
+
+                 
+                }
+                
+                else{
+                  $scope.push.start =  $rootScope.ui.selected_range.start
+                  $scope.push.end   =  $rootScope.ui.selected_range.end
+                }
+
+
+
+              }
+
+              if($scope.push.start && $scope.push.start!==null && $scope.push.end && $scope.push.end!==null){
+                  $scope.push.has_ranges =true
+              }
+              else{
+                 $scope.push.has_ranges = false
+              }
+          })
+
+    
+          $scope.$watch('[$parent.section.end, $parent.section.start]', function(newValue, oldValue) {
+              if(oldValue == newValue){}
+              else{
+                if($scope.type=='new_section'){
+
+                     $scope.push.start     =  parseInt($scope.$parent.section.end)+1
+                     $scope.push.end   =  parseInt($scope.$parent.section.end)+9
+                     console.log('Pusher (new_section) updated')
+                }
+                else{
+                
+                }      
+              }
+          }, true)
+       
+          $scope.$watch('push.type', function(newValue, oldValue) {
+              if(oldValue == newValue){}
+              else{
+                
+                // auto-fix some cases..   
+                if($scope.push.type == "container" ){ 
+                      $scope.push.subtype = 'section'
+                      $scope.push.metadata  = '' 
+                      $scope.push.position = 'inline'
+                }
+                else if($scope.push.type == "container_class" ){ 
+                      $scope.push.position = 'inline'
+                }
+                else if($scope.push.type == "media" ){ 
+                       $scope.push.metadata = root_url+':'+PORT+'/img/lorem/400-400.jpg'
+                       $scope.push.subtype  = $scope.objSchemas[$scope.push.type].modes.editor.fields.subtype.default
+                       $scope.push.position = $scope.objSchemas[$scope.push.type].modes.editor.fields.position.default
+                }
+                else if($scope.push.type == "hyperlink" ){ 
+                      $scope.push.metadata = root_url+':'+PORT
+                      $scope.push.subtype  = $scope.objSchemas[$scope.push.type].modes.editor.fields.subtype.default
+                }
+                else if($scope.push.type == "markup"){
+                      $scope.push.metadata  = '' 
+                      $scope.push.subtype  = 'h1'
+                      $scope.push.position = 'inline'
+                } 
+                else{
+                       $scope.push.position = $scope.objSchemas[$scope.push.type].modes.editor.fields.position.default
+                       $scope.push.subtype  = $scope.objSchemas[$scope.push.type].modes.editor.fields.subtype.default
+                       $scope.push.metadata  = $scope.objSchemas[$scope.push.type].modes.editor.fields.metadata.label
+                       // FALSE //  not defined    $scope.push.subtype  = $scope.objSchemas[$scope.push.type].subtype.available[0]
+                }
+              }
+           })
+
+
+            $scope.$watch('push', function(newValue, oldValue) {
+              if(oldValue == newValue){}
+              else{
+                  if($scope.push.type && $scope.push.subtype  && $scope.push.start!==null && $scope.push.end!==null){
+                    $scope.isvalid = true;
+                  };
+              }
+           }, true) 
+
+
+           $scope.isvisible   = $scope.pusher_isvisible()
+           $scope.isopen      = $scope.pusher_isopen()
+           $scope.isvalid     = $scope.pusher_isvalid()
+           $scope.preset_push()
+
+    }]
+        return {
+        restrict: "AE", 
+        scope: {
+            type: "@",
+            position: "@"
+        },
+        replace : true,
+        controller: controller,
+        link:link,
+          templateUrl: function() {
+                return "js/MusicBox/section/tpl/pusher.tpl.html";
+          }
+        };
+}])
+
+
+
+angular.module('musicBox.markup', [
+	'musicBox.markup.service',
+	'musicBox.markup.rest',
+	'musicBox.markup.controller',
+	'musicBox.markup.directive'
+])
+
 
 
 
@@ -42782,21 +42881,15 @@ init_()
 **/
 
 
-angular.module('musicBox.markup_controller', ['musicBox.section_controller']).controller('MarkupCtrl', ["$scope", "$http", "MarkupRest", "socket", "MarkupService", function($scope, $http, MarkupRest,socket,MarkupService) {
+
+angular.module('musicBox.markup.controller', ['musicBox.section']).controller('MarkupCtrl', ["$scope", "$http", "MarkupRest", "socket", "MarkupService", function($scope, $http, MarkupRest,socket,MarkupService) {
 	
 	$scope.init__= function () {
-		//console.log($scope.$parent.section_markups)
 					
-		console.log('   ---- -- [m] init markup'+$scope.markup.type)
+		console.log('   ---- -- [m] init markup type: '+$scope.markup.type)
 
-
-
-       
-		
-		
 		if(!$scope.$parent.$parent.objSchemas[$scope.markup.type]){
 			console.log('no schematype for markup!')
-		//	console.log($scope.markup)
 			return false;
 		}
 		
@@ -42804,17 +42897,16 @@ angular.module('musicBox.markup_controller', ['musicBox.section_controller']).co
             'offset_start'   : 0,
             'offset_end'     : 0,
             'has_offset'     : false,
-         //   'isolated'       : 'true',
             'selected'       : false,
             'editing'        : false,
+            'fast_editor'	 : ($scope.$parent.doc_owner) ? true : false,
             'inrange'        : false,
             'uptodate'       : '',
-             'deleted'        : false,
+            'deleted'        : false,
             'forced'		 : ($scope.markup.type =='container' || $scope.markup.type =='markup' || $scope.markup.type =='container_class' ) ? true : false,
             'touched'        : false,
             'ready'          : 'init',
             'doc_id_id'      : '', // special cases for child documents (refs as doc_id in markup record)
-       		//'user_options'	 : $scope.apply_object_options('markup_user_options',$scope.markup.user_id.user_options),
 			'by_me' 		 : ( $scope.markup.user_id._id && $scope.$parent.userin._id  && ($scope.$parent.userin._id == $scope.markup.user_id._id ) ) ? true : false,
 			'can_approve' 	 : ($scope.$parent.doc_owner) ? true : false,
 			'objSchemas' 	 : $scope.objSchemas[$scope.markup.type] ?  $scope.objSchemas[$scope.markup.type] : [],
@@ -42944,7 +43036,7 @@ angular.module('musicBox.markup_controller', ['musicBox.section_controller']).co
 
 
       if(oldValue == newValue || newValue == false){
-				console.log('mk end redraw')
+				//console.log('mk end redraw')
 			}
 			else{
 
@@ -42995,10 +43087,14 @@ angular.module('musicBox.markup_controller', ['musicBox.section_controller']).co
 		 console.log('stack_markup')
 
 	    //// SHOULD ONLY TRIGGER IN "MANUAL" mode...
- 	     $scope.$parent.attribute_objects()
+ 	    //  $scope.$parent.attribute_objects()
 		 $scope.markup.touched = true;
 
 
+	}
+
+	$scope.stack_markup_manual = function(){
+ 	   $scope.$parent.attribute_objects()
 	}
 
      $scope.$watch('markup.type', function( oldValue, newValue) {
@@ -43080,17 +43176,17 @@ angular.module('musicBox.markup_controller', ['musicBox.section_controller']).co
 
 		// focus'
 		if($scope.markup.position=="left" && $scope.markup.editing){
-			$scope.$parent.defocus()
+			$scope.$parent.defocus_containers()
 
 			$scope.$parent.section.focused = 'side_left'
 
 		}
 		else if( ($scope.markup.position=="right" || $scope.markup.position=="inline") && $scope.markup.editing){
-			$scope.$parent.defocus()
+			$scope.$parent.defocus_containers()
 			$scope.$parent.section.focused  = 'side_right'
 		}
 		else{
-			$scope.$parent.defocus()
+			$scope.$parent.defocus_containers()
 
 		}
 
@@ -43226,14 +43322,10 @@ $scope.$watch('markup.fulltext', function(newValue, oldValue) {
 		// todo: should check notnull / section limits
 		$scope.markup.start     =  $scope.ui.selected_range.start
 		$scope.markup.end 		=  $scope.ui.selected_range.end
-		
-
-
 		$scope.save()
 	}
 	$scope.apply_reverse =function(){
 	
-
 		console.log($scope.markup)
 		//alert($scope.markup.end)
 
@@ -43317,15 +43409,15 @@ $scope.$watch('markup.fulltext', function(newValue, oldValue) {
 		
 	$scope.$watch('markup.map_ranges', function(newValue, oldValue) {
 			if(oldValue == newValue || newValue == false){
-				console.log('mk end map_ranges')
+				// console.log('mk end map_ranges')
 			}
 			else{
-				console.log('############ map_ranges')
+				//console.log('############ map_ranges')
 
 			
 				var z, z_real, rtest;
 				rtest = ranges_test($scope.ui.selected_range.start,$scope.ui.selected_range.end, $scope.markup.start,$scope.markup.end, 'markup' )
-				console.log('rtest:'+rtest+' --- '+$scope.markup.metadata)
+				//console.log('rtest:'+rtest+' --- '+$scope.markup.metadata)
 				
 				$scope.markup.selected = false;
 				$scope.markup.inrange  = false;
@@ -43360,10 +43452,10 @@ $scope.$watch('markup.fulltext', function(newValue, oldValue) {
 
 		$scope.$watch('markup.redraw', function(newValue, oldValue) {
 			if(oldValue == newValue || newValue == false){
-				console.log('mk end redraw')
+				// console.log('mk end redraw')
 			}
 			else{
-				console.log('############ mk.redraw')
+				// console.log('############ mk.redraw')
 
 				$scope.markup.fulltext = $scope.fulltext()
 				
@@ -43381,23 +43473,16 @@ $scope.$watch('markup.fulltext', function(newValue, oldValue) {
 			}
 		})
 
-
-$scope.$watch('markup.operation.before.state', function(newValue, oldValue) {
-
+    $scope.$watch('markup.operation.before.state', function(newValue, oldValue) {
 		if(newValue == 'new'){
 			 $scope.apply_operation()
-
 		}
 		if(newValue == 'error'){
 			$scope.markup.operations.push($scope.markup.operation)
 		}
-
-
 	})
 	$scope.apply_operation = function(){
  			 //$scope.markup.operation.after = {}
-
-
 			 if($scope.markup.operation.before.end){
 			 	$scope.markup.end =  parseInt($scope.markup.operation.before.end+$scope.markup.operation.before.end_qty)
 				//$scope.markup.operation.after.new_end = $scope.markup.end
@@ -43405,35 +43490,25 @@ $scope.$watch('markup.operation.before.state', function(newValue, oldValue) {
 			 if($scope.markup.operation.before.start){
 			 	$scope.markup.start = parseInt($scope.markup.operation.before.start+$scope.markup.operation.before.start_qty)
 			 	//$scope.markup.operation.after.new_start = $scope.markup.start
-
-			 }
-
-			 
+			 } 
 
  			$scope.markup.operation.before.state= 'done'
  			//$scope.markup.operation.after.state= 'done'
-
- 			
-			 $scope.markup.operations.push($scope.markup.operation)
+			$scope.markup.operations.push($scope.markup.operation)
 	}
 
-	$scope.reverse_operation = function(){
+	$scope.reverse_operation = function(){}
 
-
+	$scope.operations_clear= function(){
+		 $scope.markup.operations= []
 	}
+	
 
-
-
-$scope.operations_clear= function(){
-	 $scope.markup.operations= []
-}
-
-		
-		$scope.init__()
+	$scope.init__()
 
 }]); // end controller
 
-angular.module('musicBox.MarkupDirectives', [])
+angular.module('musicBox.markup.directive', [])
 
 .directive("markupView", function() {
 
@@ -43468,7 +43543,7 @@ markup as an id (:Mid/ param)
 */
 
 
-angular.module('musicBox.MarkupRest', [])
+angular.module('musicBox.markup.rest', [])
 .factory("MarkupRest", ["$resource", "$rootScope", function($resource, $rootScope){
 
   var parseResponse = function (data) {

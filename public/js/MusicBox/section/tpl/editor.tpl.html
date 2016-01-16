@@ -7,7 +7,12 @@
   <div class="section_ranges">
     <label>Start-end ranges</label><span class="field ranges"><span class="ranges_inputs"><span class="field numberfloat oneline"><span>From </span>
           <input type="number" ng-model="section.start" class="section_end"/><span>&nbsp;&nbsp;to </span>
-          <input type="number" ng-model="section.end" class="section_start"/></span></span></span><a ng-click="integrity_fix()">fix offsets</a><a ng-click="split()">split</a><a ng-click="merge()">merge</a>
+          <input type="number" ng-model="section.end" class="section_start"/></span></span></span>
+    <!-- a(ng-click="integrity_fix()") fix offsets-->
+    <!-- a(ng-click="split()") split-->
+    <!-- a(ng-click="merge()") merge-->
+    
+    
   </div>
   <!-- div.section_quick_tools
   .sobject-tools
@@ -15,24 +20,6 @@
   	
   -->
   <tabset class="editor-main-tab">			
-    <tab heading="Add section styles"> 
-      <mb-pusher type="container_class" position="{{layout.name}}"></mb-pusher>
-      <!-- OLD div.pusher_css_styles
-      ul
-      	li(class="" ng-repeat="t in section.objSchemas_css.modes.editor.fields.metadata.available") 
-      		i.fa.btn_action(tooltip="insert container class (css)" class="fa-container_class" ng-click="push_generic_from_ranges('container_class','css','inline', t)" ) {{t}}
-      			
-      
-      
-      -->
-    </tab>
-    <tab heading="section styles" ng-if="markups_by_start_end_position_type(section.start, section.end ,'any', 'container_class').length &gt;0"> 
-      <div ng-repeat="markup in markups_by_start_end_position_type(section.start, section.end ,'any', 'container_class') track by $index">
-        <div class="markup_ markup_type_{{markup.type}}">
-          <markup-view></markup-view>
-        </div>
-      </div>
-    </tab>
     <tab heading="slidewide" ng-if="markups_by_start_end_position_type(section.start, section.end ,'slidewide', 'media').length&gt;0"> 
       <div ng-repeat="markup in markups_by_start_end_position_type(section.start, section.end ,'slidewide', 'media') track by $index">
         <div class="markup_ markup_type_{{markup.type}}">

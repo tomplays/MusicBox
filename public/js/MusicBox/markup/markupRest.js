@@ -8,7 +8,7 @@ markup as an id (:Mid/ param)
 */
 
 
-angular.module('musicBox.MarkupRest', [])
+angular.module('musicBox.markup.rest', [])
 .factory("MarkupRest", function($resource, $rootScope){
 
   var parseResponse = function (data) {

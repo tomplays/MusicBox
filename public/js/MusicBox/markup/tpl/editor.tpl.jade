@@ -63,7 +63,7 @@ form(name="myForm")
 		tab(heading="O.")
 			pre {{markup.operation}}
 			ul
-				li(ng-repeat="op in markup.operations") {{op}}
+				li(ng-repeat="op in markup.operations track by op.grp") {{op}}
 	
 	.object-tools(ng-if="markup.type =='child' ")					
 		span.field.smallinput()

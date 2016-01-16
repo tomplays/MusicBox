@@ -48,73 +48,14 @@ var GLOBALS;
 var render;
 var doc;
 
-angular.module('musicBox.page', [])
-
-.controller('MusicBoxCtrl', ['$scope', '$http','$sce', function($scope, $http, $sce) {
-
-		 $scope.ggg = 'page as ctrl'
-
-}])
-
-.directive('mb', function($rootScope) {
-  
-
-  function link(scope, elem, attrs) { 
-  
-
-       
-
-    }
-   
-
-   return {
-    	restrict: "EA",
-    	//require: '^letters',
-		// link:link,
-
-		templateUrl: function(){
-
-			var turl = "js/MusicBox/document/tpl/pagectrl.tpl.html"
-        	return turl;
-
-				
-			//	return '<span order="{{l.order}}" class="{{l.classes_flat}}" ng-bind-html="l.char"></span>'
-
-			
-		},
-    //	replace :true,
-		//	<span class="{{l.classes_flat}}" ng-repeat="l in letters">{{l.char}}</span>
-	    //  transclude :true,    	
-	    // templateUrl: function(elem, attr){
-	    // return 'script/level.tpl.html';
-	    // },
-	   controller: function($scope){
-
-	   		console.log($scope)
-			// $scope.ggg = 'dd'
- 	
-		}
-		
-    };
-})
-
-// global CMS handler
 
 
+angular.module('musicBox.document.controller', []);
 
 
-angular.module('musicBox.document_controller', []);
-
-
-//musicBox.controller('FragmentCtrl');
-
-
-// musicBox.controller('DocumentNewCtrl', DocumentNewCtrl);
-
-//console.log(musicBox)
 
  /**
- * Represents a document.
+ * controller for document.
  * @class DocumentCtrl
  * @param {Object} $scope - angular service
  * @param {Object} $http -  angular service
@@ -123,47 +64,6 @@ angular.module('musicBox.document_controller', []);
  * @param {Factory} renderfactory -  angular custom factory for render
  * @param {Factory} docfactory -  angular custom factory for document 
  */
-
-
-
-function DocumentCtrlCompiled($scope, $http , $sce, $location, $routeParams ,socket,renderfactory, DocumentService,DocumentRest,$anchorScroll,  $timeout) {
- 	
-
-	//some setup 
-
-	$scope.doc = {slug:$routeParams.docid, mode:'compiled'}
-	$scope.cursor = {}
-	var cursor = function(letter,action){
-
-			
-			$scope.cursor.start_relative = letter.position.relative
-			$scope.cursor.start_absolute = letter.position.absolute
-
-			$scope.cursor.start_local = letter.position.local
-
-			$scope.cursor.action = action
-
-	}
-
-
- 	var promise = DocumentRest.get({Id:$scope.doc.slug},{  }).$promise;
-    promise.then(function (Result) {
-       if(Result){
-       	console.log(Result)
-       	       	$scope.docresult = Result
-
-       //	$scope.doc.compiled_doc = Result.doc.compiled_full
-       }
-      });
-
-    $scope.la = function(action, letter){
-    	
-    	console.log(letter)
-    	cursor(letter, action) 
-    }
-}
-
-
 
 function DocumentCtrl($scope, $http , $sce, $location, $routeParams ,socket,renderfactory, DocumentService, $anchorScroll, $timeout, MarkupService) {
 		
@@ -254,6 +154,14 @@ function DocumentCtrl($scope, $http , $sce, $location, $routeParams ,socket,rend
         }
       }
 
+     $scope.defocus_containers = function (){
+			// call parent CTRL > to move in documentCtrl
+		  _.each($scope.doc.containers, function(container){
+            	container.focused  = ''
+
+		  })
+	}
+
 $scope.SetSlug = function (slug) {
     if(!slug){
         $scope.slug= 'homepage';
@@ -275,7 +183,7 @@ $scope.SetSlug = function (slug) {
 
 
  $scope.RenderConfig = function () {
-    new renderfactory().init()
+    new renderfactory().init('document')
       
 
     if($scope.ui.menus.quick_tools_help.visible == true){
@@ -344,6 +252,9 @@ $scope.SetSlug = function (slug) {
 	$scope.doc_sync = function(){
 		doc.docsync();
 	}
+	
+
+	
 
 	// when user doubleclick an option (edit in place)
 	// used for footer option and before/after title
@@ -444,9 +355,13 @@ $scope.SetSlug = function (slug) {
 	*/
 	
 
+	  
+                  
+                    
 	
-	
-	$scope.sync_queue = function(){
+	$scope.insert_new_container = function(mi){
+		
+		  $scope.doc.containers.push(mi)
 		  doc.docsync();
 	}
 
@@ -475,6 +390,7 @@ $scope.SetSlug = function (slug) {
 	* @param  {String} link - redirect link
 	*/
 	$scope.external_link = function (link){
+
 		window.location = link;
 	}
 
@@ -722,8 +638,19 @@ $scope.SetSlug = function (slug) {
  			//  $scope.doc.operation.after = {}
 
  			if($scope.doc.operation.before.type == 'save'){
-				doc.docsync();	
+				doc.docsync();
  			}
+ 			if($scope.doc.operation.before.type == 'push_container'){
+ 				var c = $scope.doc.operation.object_
+				$scope.doc.containers.push(c)
+				$scope.doc.content += c.fulltext
+				doc.docsync();
+ 			}
+			
+
+
+
+
  			 $scope.doc.operation.before.state= 'done'
  			 // $scope.doc.operation.after.state= 'done'
  			 // should be in service-promise 
@@ -746,7 +673,9 @@ $scope.SetSlug = function (slug) {
 		 $scope.doc.operations= []
 	}
 
-
+	$scope.expand_operation = function(op){
+		op.expanded = op.expanded ? !op.expanded : true
+	}
 
 
 
@@ -977,20 +906,43 @@ function DocumentNewCtrl($scope, $compile, $http , $sce, $location, $routeParams
 //DocumentNewCtrl.$inject = ['$scope', '$http' ,'docfactory', '$timeout'];
 
 
-// MISC UTILS
-function urlencode(str) {
-    return escape(str.replace(/%/g, '%25').replace(/\+/g, '%2B')).replace(/%25/g, '%')
+function DocumentCtrlCompiled($scope, $http , $sce, $location, $routeParams ,socket,renderfactory, DocumentService,DocumentRest,$anchorScroll,  $timeout) {
+ 	
+
+	//some setup 
+
+	$scope.doc = {slug:$routeParams.docid, mode:'compiled'}
+	$scope.cursor = {}
+	var cursor = function(letter,action){
+
+			
+			$scope.cursor.start_relative = letter.position.relative
+			$scope.cursor.start_absolute = letter.position.absolute
+
+			$scope.cursor.start_local = letter.position.local
+
+			$scope.cursor.action = action
+
+	}
+
+
+ 	var promise = DocumentRest.get({Id:$scope.doc.slug},{  }).$promise;
+    promise.then(function (Result) {
+       if(Result){
+       	console.log(Result)
+       	       	$scope.docresult = Result
+
+       //	$scope.doc.compiled_doc = Result.doc.compiled_full
+       }
+      });
+
+    $scope.la = function(action, letter){
+    	
+    	console.log(letter)
+    	cursor(letter, action) 
+    }
 }
-function serialize(obj, prefix) {
-  var str = [];
-  for(var p in obj) {
-    var k = prefix ? prefix + "[" + p + "]" : p, v = obj[p]
-    str.push(typeof v == "object" ?
-      serialize(v, k) :
-      encodeURIComponent(k) + "=" + encodeURIComponent(v))
-  }
-  return str.join("&")
-}
+
 
 
 

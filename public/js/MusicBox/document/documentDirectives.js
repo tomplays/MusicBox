@@ -1,4 +1,4 @@
-angular.module('musicBox.DocumentDirectives', [])
+angular.module('musicBox.document.directive', [])
 
 .directive("mbDocument", function() {
 		

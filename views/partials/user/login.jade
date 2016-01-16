@@ -11,7 +11,7 @@ div.main_center.login_form.bordered
 		form(name="myForm" , novalidate class="css-form  ")
 			p {{myForm.errors}}
 			h3 
-				{{render_config.i18n.CUSTOM.USER.login}}
+				{{i18n.CUSTOM.USER.login}}
 			label Username
 			input(required  type="text",  ng-model= "username",  name="username")
 			label Password
@@ -21,7 +21,7 @@ div.main_center.login_form.bordered
 	div.lostpass
 		a(ng-click="toggle_lostpass_form()") Lost password ?
 		div(ng-if="lostpass_form")
-			label {{render_config.i18n.CUSTOM.USER.pick_email}} 
+			label {{i18n.CUSTOM.USER.pick_email}} 
 			input(type="text", ng-value="lost" ng-model="lost", name="lost"  )
 			a.btn_ok.float_right(ng-if="complete == false" ng-click="lostpass_post(lost)") reset password
 			a.btn_ok.float_right(ng-if="complete == true") reset link sent
@@ -29,6 +29,6 @@ div.main_center.login_form.bordered
 
 
 	div.right_part
-		h3 {{render_config.i18n.CUSTOM.USER.no_account_yet}}
-		a(href="{{register_url}}") {{render_config.i18n.CUSTOM.USER.register}}
+		h3 {{i18n.CUSTOM.USER.no_account_yet}}
+		a(href="{{register_url}}") {{i18n.CUSTOM.USER.register}}
 		// ou avec facebook

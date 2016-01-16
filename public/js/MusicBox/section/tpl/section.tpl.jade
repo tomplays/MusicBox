@@ -33,8 +33,7 @@ div(ng-if="section['objects_count']['by_positions'][layout.name].count > 0 || la
 				div(class="markup_ markup_type_{{markup.type}}")
 					markup-view()
 
-		// old mb-commentform(ng-if="(doc_options.comments_open.value !=='false' || !doc_options.comments_open.value  ) && layout.name == 'left'")
-
+		// mb-commentform(ng-if="(doc_options.comments_open.value !=='false' || !doc_options.comments_open.value  ) && layout.name == 'left'")
 		mb-pusher(type="column", position="{{layout.name}}", ng-if="(doc_options.comments_open.value !=='false' || !doc_options.comments_open.value  ) && layout.name == 'left'")
 		
 		div(ng-if="layout.name == 'slidewide'")

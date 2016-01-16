@@ -57,7 +57,7 @@
 
 
 
-angular.module('musicBox.eDirectives', [])
+angular.module('musicBox.section.directive.textarea', [])
 .directive('textListener', function($rootScope) {
 
     return {
@@ -214,7 +214,7 @@ angular.module('musicBox.eDirectives', [])
 
 
                   // console.log(test_r)
-                    var operation = { 'object': obj, 'before':{'state':'init'}, 'grp_log':grp_log, 'reversable': true }
+                    var operation = { 'object_': obj, 'before':{'state':'init'}, 'grp_log':grp_log, 'reversable': true }
                     
 
                     switch (test_r) {

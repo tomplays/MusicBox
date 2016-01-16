@@ -124,15 +124,16 @@ app.set('port',nconf.get('PORT') );
         // thx @ http://stackoverflow.com/questions/5276892/expressjs-how-to-output-pretty-html
         app.locals.pretty = true;
         
-        app.locals.site_title = nconf.get('SITE_TITLE');
-        app.locals.site_description = nconf.get('SITE_DESCRIPTION');
-        app.locals.site_description_long = nconf.get('SITE_DESCRIPTION_LONG');
-        app.locals.env = nconf.get('ENV');
-        app.locals.root_url= nconf.get('ROOT_URL');
-        app.locals.fbapp_id = nconf.get('FACEBOOK_ID');
-        app.locals.port= nconf.get('PORT')
-        app.locals.socket_server_port= nconf.get('SOCKET_SERVER_PORT')
-        app.locals.action_ =  '';
+        app.locals.site_title               = nconf.get('SITE_TITLE');
+        app.locals.site_description         = nconf.get('SITE_DESCRIPTION');
+        app.locals.site_description_long    = nconf.get('SITE_DESCRIPTION_LONG');
+        app.locals.env                      = nconf.get('ENV');
+        app.locals.root_url                 = nconf.get('ROOT_URL');
+        app.locals.fbapp_id                 = nconf.get('FACEBOOK_ID');
+        app.locals.port                     = nconf.get('PORT')
+        app.locals.socket_server_port       = nconf.get('SOCKET_SERVER_PORT')
+        app.locals.action_                  = '';
+        app.locals.is_view                  = 'undef';
 
         // contruct STRING
         app.locals.api_url= nconf.get('ROOT_URL')+':'+nconf.get('PORT')+'/'+nconf.get('API_SUFFIX_URL');

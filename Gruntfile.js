@@ -27,7 +27,7 @@ module.exports = function(grunt) {
 					 // no need for files, the config below should work
 						 expand: true,
 						 cwd: "public/css",
-						 src: "**/*.less",
+						 src: "*.less",
 						 dest: "public/css/compiled",
 						 ext: ".css",
 				}
@@ -316,7 +316,7 @@ module.exports = function(grunt) {
 			
 			styles: {
 				options: { livereload: true },
-				files: ['public/css/**/*.less'], // less auto-compilation
+				files: ['public/css/*.less'], // less auto-compilation
 				tasks: ['less']
 			},
 

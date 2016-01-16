@@ -18,7 +18,7 @@ module.exports = function(app, passport, auth) {
     
 
     app.get('/login', users.login );
-    app.post('/register', users.create);
+    app.post('/api/v1/user/register', users.create);
     app.get('/signup', users.signup );
 	// USER
     app.get('/signout', users.signout);
@@ -123,7 +123,7 @@ module.exports = function(app, passport, auth) {
      app.get('/sockets/list/doc/:slug', index.sockets_list);
 
     //
-    app.post('/api/v1/userlogin', passport.authenticate('local', {}), users.signin_login);
+    app.post('/api/v1/user/userlogin', passport.authenticate('local', {}), users.signin_login);
 
     
     // ROOM & ROOMS
