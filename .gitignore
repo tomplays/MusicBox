@@ -27,6 +27,12 @@ start.sh
 compressor_CSS.sh
 compressor_JS.sh
 
+
+public/js/MusicBox/document/tpl/*.html
+public/js/MusicBox/section/tpl/*.html
+public/js/MusicBox/markup/tpl/*.html
+
+
 README.md
 public/img/
 bower_components/
