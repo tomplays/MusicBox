@@ -1,20 +1,18 @@
 'use strict';
 
-// Declare app level module which depends on filters, and services
+// Declare app level modules
 
 
 angular.module('musicBox',  [
+  'ngLocale', 'ngResource', 'ngRoute', 'ngSanitize', 
   'ui.bootstrap',
-  'musicBox.page',
-  'musicBox.document_controller','musicBox.section_controller','musicBox.sectionB_controller', 'musicBox.SectionPusherDirectives', 'musicBox.markup_controller',
-   'musicBox.user_controller',
-   'ngLocale', 'ngResource', 'ngRoute','musicBox.services','musicBox.render',
-   'musicBox.directives', 'ngSanitize',  
-   'musicBox.DocumentRest','musicBox.UserRest', 'musicBox.MarkupRest',
-  'musicBox.UserService', 
-  'musicBox.DocumentService',  'musicBox.MarkupService', 
-  'musicBox.SectionDirectives','musicBox.DocumentDirectives', 'musicBox.MarkupDirectives','musicBox.LetterDirectives',
-  'musicBox.eDirectives'
+  'musicBox.socket',
+  'musicBox.render',
+  'musicBox.directives', 
+  'musicBox.document',
+  'musicBox.section',
+  'musicBox.markup',
+  'musicBox.user'
   ]).
   config(['$localeProvider','$routeProvider', '$locationProvider','$sceDelegateProvider', '$sceProvider', function($localeProvider,$routeProvider, $locationProvider, $sceDelegateProvider,$sceProvider ) {
     $routeProvider.
@@ -84,6 +82,32 @@ angular.module('musicBox',  [
    //  $sceDelegateProvider.resourceUrlWhitelist(['*']);
     }
   ])
+.run(function($rootScope, $http, $route) {
+   console.log('cross controllers service listening ..')
+   // $rootScope.$on('summarizeEvent', function(event, args) {
+       // $rootScope.$broadcast('summarize', args);
+    // });
+ 
+  $rootScope.$on('$routeChangeSuccess', function (e, cur, prev) {
+    if(cur && prev && cur !== prev){
+      console.log(prev.originalPath)
+      console.log(cur.originalPath)
+      // $rootScope.$emit('docEvent', {action: 'reload' });
+      // if(prev.originalPath == '')
+      // from '/docs/:mode' to '/doc/:docid'
+      // console.log('route.change')
+       
+       console.log($route)
+       //if(!$rootScope.doc){
+        $rootScope.doc       = null;
+       //}
+     
+       //if(!$rootScope.ui){
+          $rootScope.ui        = null;
+      //}
+  }
+  });
+});
   // .config( ['$controllerProvider', function($controllerProvider) { $controllerProvider.allowGlobals(); }]);
 
 
