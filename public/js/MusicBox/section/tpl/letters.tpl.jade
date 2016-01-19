@@ -1,0 +1,5 @@
+div
+	div.theletters( class="is_multi_{{ui.selected_range.multi}} boundaries_end_{{ui.boundaries.endAtEnd}}" ng-if="section.modeletters == 'single' ")
+		span(lt="l", ng-repeat="l in section.letters")
+
+	mb-fulltext(class="fluidtext" section="section" ng-if="section.modeletters !=='single'" ng-bind-html="section.fulltext_block")
