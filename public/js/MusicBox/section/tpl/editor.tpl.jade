@@ -1,20 +1,24 @@
 .section_editor_head
-	.head-left
+	// .head-left
 		i(ng-click="select_section()" class="fa fa-container fa-section editing_{{section.editing}} selected_{{section.selected}}" ) 
 			span( ng-if="section.editing_text === false") Select section 
 			span( ng-if="section.editing_text === true") Unselect section
 
 	.head-right(ng-if="section.editing_text === true")
+		h4 delete 
 		i.fa.fa-remove.btn_action(tooltip-placement="left" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.delete}}" ng-click="delete()")
-		i.fa.fa-save.btn_action( tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.save}}" ng-click="save()")
+		// i.fa.fa-save.btn_action( tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.save}}" ng-click="save()")
 
-.section_editor_body(ng-if="section.editing_text === true" class="touchedinput-{{section.touched}}")
-
+	// .section_editor_body(ng-if="section.editing_text === true" class="touchedinput-{{section.touched}}")
 		div.section_ranges
 			label Start-end ranges
 			span.field.ranges
 				span.ranges_inputs
 					span.field.numberfloat.oneline
+						span From__  {{section.startt}}
+						input.section_end(type="number" , ng-model="section.startt" )
+
+
 						span From 
 						input.section_end(type="number" , ng-model="section.start" )
 						span &nbsp;&nbsp;to 

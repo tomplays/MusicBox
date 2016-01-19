@@ -73,6 +73,7 @@ angular.module('musicBox.section.directive.textarea', [])
 
       elem.bind("mousedown", function(event){
           move('mousedown', event, scope)
+          
           return
       })
 
@@ -270,6 +271,7 @@ angular.module('musicBox.section.directive.textarea', [])
           })
 
       // key or delete = 
+       console.log('-------------CASE EDIT ONLY')
       $rootScope.ui.selected_range.start = $rootScope.ui.selected_range.start+qty
       $rootScope.ui.selected_range.end   = $rootScope.ui.selected_range.end+qty
       $rootScope.ui.boundaries = boundaries_test(scope.section, $rootScope.ui.selected_range)
@@ -303,7 +305,7 @@ angular.module('musicBox.section.directive.textarea', [])
       if(eventname == 'mousedown' ){
         $rootScope.ui.selected_range.wait_ev = true 
       }
-      else if(eventname == 'mouseup'){
+      else { // if(eventname == 'mouseup')
         $rootScope.ui.selected_range.wait_ev = false 
       }
 
@@ -434,7 +436,7 @@ function ranges_test(as,ae,ms,me,type, boundaries){
           if(f==0){
              c = -110
           }              
-          console.log('RANGE RESULTS='+ c)
+          console.log('RANGE RESULTS for '+type+'='+ c)
           return c
    }
 

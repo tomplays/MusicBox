@@ -11,18 +11,13 @@ angular.module('musicBox.markup.controller', ['musicBox.section']).controller('M
 		}
 		
         markup_ = new Object({
-            'offset_start'   : 0,
-            'offset_end'     : 0,
-            'has_offset'     : false,
             'selected'       : false,
             'editing'        : false,
             'fast_editor'	 : ($scope.$parent.doc_owner) ? true : false,
             'inrange'        : false,
-            'uptodate'       : '',
             'deleted'        : false,
             'forced'		 : ($scope.markup.type =='container' || $scope.markup.type =='markup' || $scope.markup.type =='container_class' ) ? true : false,
             'touched'        : false,
-            'ready'          : 'init',
             'doc_id_id'      : '', // special cases for child documents (refs as doc_id in markup record)
 			'by_me' 		 : ( $scope.markup.user_id._id && $scope.$parent.userin._id  && ($scope.$parent.userin._id == $scope.markup.user_id._id ) ) ? true : false,
 			'can_approve' 	 : ($scope.$parent.doc_owner) ? true : false,
@@ -30,8 +25,6 @@ angular.module('musicBox.markup.controller', ['musicBox.section']).controller('M
 			'servicetype'  	 :'markup',
 			'operation'		 :	$scope.markup.operation ?  $scope.markup.operation : {},
        		'operations': []
-       
-
         })      	
 
 		$scope.markup =  _.extend($scope.markup, markup_);
@@ -99,7 +92,7 @@ angular.module('musicBox.markup.controller', ['musicBox.section']).controller('M
 	$scope.fulltext = function (){
 
 		if($scope.markup.objSchemas && $scope.markup.objSchemas.compute_fulltext === false){
-			console.log('NO ft')
+		//	console.log('NO ft')
 			return
 		}
 		
@@ -110,7 +103,7 @@ angular.module('musicBox.markup.controller', ['musicBox.section']).controller('M
          	
 
          	var y = i-$scope.section.start
-         	if($scope.doc.content[i] && $scope.section.letters[i]){
+         	if($scope.doc.content[i] && $scope.section.letters && $scope.section.letters[i]){
          		//console.log(i)
 
          		fulltext += $scope.section.letters[i].char;
@@ -158,15 +151,13 @@ angular.module('musicBox.markup.controller', ['musicBox.section']).controller('M
 			else{
 
         	   $scope.markup.fulltext = $scope.fulltext();
- 			   $scope.markup.has_offset = true;
-			  
+ 			 
 			   if($scope.markup.start < $scope.$parent.section.start){
 		    		$scope.markup.start = $scope.$parent.section.start
 		       }
 
 
 		       if($scope.markup.end > $scope.$parent.section.end){
-		       
 	    		$scope.markup.end = $scope.$parent.section.end
 	    	   }
 
@@ -223,7 +214,7 @@ angular.module('musicBox.markup.controller', ['musicBox.section']).controller('M
         	else{
         		console.log('try to save to undef type')
         	}
-			$scope.markup.touched= true;
+		
 			$scope.$parent.attribute_objects()
 			$scope.stack_markup()
 		}
@@ -231,7 +222,7 @@ angular.module('musicBox.markup.controller', ['musicBox.section']).controller('M
   
     $scope.$watch('markup.subtype', function( newValue, oldValue) {
         if(oldValue && newValue && newValue !== oldValue){
-	       $scope.markup.touched= true;
+      
 	       $scope.$parent.attribute_objects()
 	       $scope.stack_markup()
 	       $scope.save('Markup subtype '+oldValue+' edited to '+newValue)
@@ -250,7 +241,6 @@ angular.module('musicBox.markup.controller', ['musicBox.section']).controller('M
 			if(newValue !== oldValue){
 				//$scope.$parent.init_()		
 			}
-			$scope.markup.touched= true;
 			
 			$scope.$parent.attribute_objects()
 			$scope.stack_markup()
@@ -316,6 +306,8 @@ angular.module('musicBox.markup.controller', ['musicBox.section']).controller('M
 			$scope.ui.selected_range.end   =  $scope.markup.end
 		}
 		else{
+			$scope.ui.selected_range.start =  $scope.section.start
+			$scope.ui.selected_range.end   =  $scope.section.end
 			// $scope.ui.selected_range.start = null
 			// $scope.ui.selected_range.end   = null
 		}
@@ -387,18 +379,20 @@ $scope.$watch('markup.fulltext', function(newValue, oldValue) {
      	
         var thos = this;
        
-        var data = new Object({
+        var data ={
 					            'start'			: $scope.markup.start,
 					            'end'			: $scope.markup.end,
 					            'depth'			: $scope.markup.depth,
-					            'status'		: $scope.markup.status
-					         });
+					            'status'		: $scope.markup.status,
+					            'secret' : $scope.ui.secret,
+					            'doc_id' : $scope.markup.doc_id_id ? $scope.markup.doc_id_id : ''
+					         };
 
 		if($scope.markup.doc_id_id){
-			data.doc_id = $scope.markup.doc_id_id
+		//	data.
 		}
 		// can be null.
-		data.secret = $scope.ui.secret;
+		
 		// check-forced types_data
 		data.metadata 	= $scope.markup.objSchemas.modes.editor.fields.metadata.forced ? $scope.markup.objSchemas.modes.editor.fields.metadata.forced : $scope.markup.metadata
 		data.position 	= $scope.markup.objSchemas.modes.editor.fields.position.forced ? $scope.markup.objSchemas.modes.editor.fields.position.forced : $scope.markup.position
@@ -406,15 +400,17 @@ $scope.$watch('markup.fulltext', function(newValue, oldValue) {
 		data.subtype 	= $scope.markup.objSchemas.modes.editor.fields.subtype.forced ? $scope.markup.objSchemas.modes.editor.fields.subtype.forced : $scope.markup.subtype
 		data.edittype = 'edit_markup'
 
+
+
 	    var promise=  MarkupRest.save({id:$scope.$parent.doc.slug, mid:$scope.markup._id }, serialize(data) ).$promise;
         promise.then(function (Result) {
-            var edited  = Result.edited[0][0]
             
             if(save_msg){
 				$scope.flashmessage(save_msg, 'help' , 3000)
             }
             else{
-            	$scope.flashmessage(edited.type +' saved', 'help' , 3000)
+            	$scope.flashmessage(Result.edited[0][0].type +' saved', 'help' , 3000)
+            	console.log(Result.edited[0][0])
             }
           }.bind(this));
           promise.catch(function (response) {  
@@ -525,11 +521,10 @@ $scope.$watch('markup.fulltext', function(newValue, oldValue) {
 		
 		
 	$scope.$watch('markup.map_ranges', function(newValue, oldValue) {
-			if(oldValue == newValue || newValue == false){
-				// console.log('mk end map_ranges')
-			}
-			else{
-				//console.log('############ map_ranges')
+			
+
+			if(newValue && oldValue && newValue !== oldValue ){
+				// console.log('############MARKUP TEST map_ranges='+newValue +'=:'+ oldValue)
 
 			
 				var z, z_real, rtest;
@@ -541,19 +536,19 @@ $scope.$watch('markup.fulltext', function(newValue, oldValue) {
 			
 				if(rtest == 3){
 					
-
-
 				
 					$scope.markup.selected = true;
 					$scope.markup.inrange  = true;
 					// map the markup
 					
 				}
+			}
+			
 
 				// finally
-				$scope.markup.map_ranges= false;
+				
 
-			}
+			
 		})
 
 
@@ -574,14 +569,14 @@ $scope.$watch('markup.fulltext', function(newValue, oldValue) {
 			else{
 				// console.log('############ mk.redraw')
 
-				$scope.markup.fulltext = $scope.fulltext()
+				// $scope.markup.fulltext = $scope.fulltext()
 				
 			
 
 							// dirty string...
-							if($scope.markup.type =="container_class"){
-								$scope.section.section_classes += $scope.markup.metadata+' ';
-							}
+						//	if($scope.markup.type =="container_class"){
+						//		$scope.section.section_classes += $scope.markup.metadata+' ';
+						//	}
 
 				
 				// finally
@@ -623,4 +618,10 @@ $scope.$watch('markup.fulltext', function(newValue, oldValue) {
 
 	$scope.init__()
 
-}); // end controller
+}).controller('MarkupEditorCtrl', function($scope, $http, MarkupRest,socket,MarkupService) {
+
+//alert($scope.section.end)
+//alert($scope.markup.end)
+
+})
+	

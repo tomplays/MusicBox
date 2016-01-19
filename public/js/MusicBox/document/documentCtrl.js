@@ -50,6 +50,7 @@ var doc;
 
 
 
+
 angular.module('musicBox.document.controller', []);
 
 
@@ -64,6 +65,7 @@ angular.module('musicBox.document.controller', []);
  * @param {Factory} renderfactory -  angular custom factory for render
  * @param {Factory} docfactory -  angular custom factory for document 
  */
+
 
 function DocumentCtrl($scope, $http , $sce, $location, $routeParams ,socket,renderfactory, DocumentService, $anchorScroll, $timeout, MarkupService) {
 		
@@ -562,11 +564,16 @@ $scope.SetSlug = function (slug) {
 			//console.log('<<<<<<<<<< do nothing (ui.selected_range.redraw end)')
 		}
 		else{
+		
 					
 				//console.log('reset all document markups to selected = false')
 			//	_.each($scope.markups, function(m, i){
 	  				
 			//	})
+
+	 if( $scope.ui.selected_range.wait_ev == true   ){
+       
+     
 
 				// stop redraw loop (each section)
 				$scope.ui.selected_range.redraw=false
@@ -582,8 +589,15 @@ $scope.SetSlug = function (slug) {
 			
 
 				_.each($scope.doc.containers, function(c,i){
-					c.inrange_letters_and_markups =  true;
+				
+					 c.inrange_letters  = Math.random()
+					 c.inrange_markups  =  Math.random()
+					 
+
+					  console.log('-------------CASE UI ONLY')
 				})
+ }
+
 		}
 	})
 /*
@@ -835,6 +849,23 @@ function SocketsListCtrl($scope, $http , $location, $routeParams, socket) {
 		 })
 		}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /** 
 * @class DocumentsListCtrl
 **/

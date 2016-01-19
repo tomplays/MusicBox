@@ -28,9 +28,9 @@ compressor_CSS.sh
 compressor_JS.sh
 
 
-public/js/MusicBox/document/tpl/*.html
-public/js/MusicBox/section/tpl/*.html
-public/js/MusicBox/markup/tpl/*.html
+public/js/MusicBox/document/tpl/*.tpl.html
+public/js/MusicBox/section/tpl/*.tpl.html
+public/js/MusicBox/markup/tpl/*.tpl.html
 
 
 README.md

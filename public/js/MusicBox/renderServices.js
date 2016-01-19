@@ -1,7 +1,25 @@
+angular.module('musicBox.document.ui', [])
+
+.factory('ooo', function ($rootScope, $http, $routeParams, $locale) {
+   
+      return function (inf) {
+     var self = {
+       init: function () {
+    alert('fd')
+       }
+         }
+
+          return self;
+        }
+  
+    
+});
+
+
 angular.module('musicBox.render', [])
 
 
-.factory('renderfactory', function ($rootScope, $http, $routeParams, $locale) {
+.factory('renderfactory', function ($rootScope, $http, $routeParams, $locale, ooo) {
     return function (inf) {
      var self = {
        init: function (view) {
@@ -11,9 +29,10 @@ angular.module('musicBox.render', [])
 
 
        
-
-         $rootScope.render_config = new Object()
-         $rootScope.render_config.loading = new Object()
+         var ttthgh = ooo()
+         ttthgh.init()
+         $rootScope.render_config = {}
+         $rootScope.render_config.loading = {}
          $rootScope.render_config.loading.inited = true;
         
          $rootScope.render_config.i18n =  $locale;

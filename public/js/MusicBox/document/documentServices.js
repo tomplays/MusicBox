@@ -20,6 +20,13 @@ can redirect window
  * @inject $rootScope, $http, $location,$sce, $routeParams, socket, renderfactory, $locale, $timeout
  */
 var temp_scope;
+
+
+
+
+
+
+
 angular.module('musicBox.document.service',[])
 .factory("DocumentService", function($rootScope, $http,$sce, $resource,$location, $routeParams ,renderfactory, DocumentRest, UserService, $timeout, $locale,MarkupService) {
 

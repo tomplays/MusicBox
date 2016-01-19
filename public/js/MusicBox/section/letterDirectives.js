@@ -15,6 +15,543 @@
 
 */
 
+
+angular.module('musicBox.section.directive.letters.letters_controller', ['musicBox.section']).controller('LettersCtrl', function($scope, $rootScope) {
+
+//console.log($rootScope)
+//console.log($scope)
+
+/*
+$scope.f = $scope.section.fulltext
+$scope.fl = $scope.section.inrange_letters_and_markupsllll
+$scope.mks = $scope.section.section_markups
+console.log($scope.fff)
+console.log($scope.mks)
+*/
+
+      $scope.$watch('section.fulltext', function(newValue, oldValue) {
+                 console.log(' [Section] fulltext ')
+                 //newValue = newValue.replace("\n", "");
+        console.log('----B-------------- BUILD LETTERS (BASE) ARRAYS')
+
+    var temp_letters = new Array();
+        var i;
+        var i_array     =   0;
+        var fulltext    =   '';
+        var str_start   =   0;
+        var str_end     =   _.size($scope.section.fulltext)-1;
+        // confing could be a option/mode feature
+        var content_string  = $rootScope.doc.content
+        var classes_arr = []
+        // classes_arr.h1 = {}
+        // classes_arr.h2 = {}
+           var fulltext_block = ''
+
+
+
+          var at_least_one = false
+
+
+
+        //alert(str_end)
+          for (i = str_start; i <= str_end; i++) {
+
+            
+          var letter_arr = new Object({
+            'classes_flat': '',
+            'order': i,
+            'inrange':false,
+            'href':'',
+            'absolute_order': $scope.section.start+i,
+
+          });
+                  ///console.log(letter_arr)
+
+
+            if(!$scope.section.fulltext[i]){
+              
+            }
+            else{
+              at_least_one = true
+              if($scope.section.fulltext[i] === " ") {
+
+                      letter_arr.char = '&nbsp;'
+                      fulltext_block += '&nbsp;'
+                  }
+                  else{
+                    letter_arr.char = $scope.section.fulltext[i]
+                    fulltext_block +=$scope.section.fulltext[i]
+                  }
+
+            }
+
+
+                
+            letter_arr.isfirst = false
+            letter_arr.islast = false
+                if(str_start == i)
+            {
+            //  letter_arr.char = '>'+letter_arr.char 
+              letter_arr.isfirst = true
+            }
+
+            if(i == str_end)
+            {
+              //letter_arr.char += '<'
+            
+              letter_arr.islast = true
+            }
+
+            temp_letters[i_array]  = letter_arr;
+
+           
+
+            i_array++;
+        }
+        
+
+        if( at_least_one === false){
+          alert('no letter ')
+        }
+       
+          
+        $scope.section.letters = temp_letters;
+        $scope.section.lettersarray = Math.random()
+       
+
+
+      // optionnal (if range  were set in params..) 
+      // not triggered on init 
+      // $scope.section.inrange_letters = Math.random()
+                    
+
+
+      })
+
+
+   $scope.$watch('section.lettersarray', function(newValue, oldValue) {
+        console.log('----B-------------- call LETTER MAPS CLASSES ARRAYS')
+         $scope.map_letters()    
+
+   })
+     
+
+
+/*
+      $scope.$watch('section.remap_fulltext_block', function(newValue, oldValue) {
+
+
+              if(newValue == true){
+                console.log(' compile fulltext_block (ONLY ONCE )')
+                  $scope.section.fulltext_block  = 'undef...';
+                  $scope.section.remap_fulltext_block = false
+              }
+
+      })
+*/
+
+
+      $scope.$watch('section.inrange_letters', function(newValue, oldValue) {
+       
+
+         if(!oldValue == true){
+            
+          } 
+
+          console.log('----B------START-------- call LETTER MAPS INRANGE ATTRIBUTE (ONLY IF UI )')
+               
+                  _.each($scope.section.letters, function(l, i){
+                  l.inrange = false;
+                  var c_real = i + $scope.section.start;
+                  // map the range  
+                    if(c_real>=$rootScope.ui.selected_range.start && c_real <= $rootScope.ui.selected_range.end){
+                     
+
+                     l.inrange = true;
+                   
+
+                    }
+                    else{
+                     
+
+
+                    }
+                 
+                  })
+           
+          console.log('----B-----DONE--------- call LETTER MAPS INRANGE ATTRIBUTE (ONLY IF UI DONE)')
+
+
+          
+
+    })
+
+
+
+
+
+
+
+$scope.map_letters = function(){
+  console.log('map_letters (section)')
+
+  var fulltext_block = ''
+
+  if(!$scope.section.letters){
+    //$scope.section.letters = []
+  }
+
+  
+  _.each($scope.section.letters, function(l,li){
+
+    l.classes = []
+    l.classes_array = ''
+
+
+    var li_real = li+parseInt($scope.section.start)
+
+    if(li==0){
+
+      $scope.section.letters[li].classes.push('isfirst-section')
+      $scope.section.letters[li].isfirst = true
+
+    }
+    if(li == $scope.section.letters.length-1){
+      $scope.section.letters[li].classes.push('islast-section')
+      $scope.section.letters[li].islast = true
+    }
+
+//console.log(l)
+//console.log($scope.section.letters[li])
+       
+
+    //if(($scope.$parent.ui.selected_range.start || $scope.$parent.ui.selected_range.start ==0 )  && $scope.$parent.ui.selected_range.end){
+      var index_absolute_start =   $rootScope.ui.selected_range.start -  parseInt($scope.section.start)
+      var index_absolute_end   =   $rootScope.ui.selected_range.end   -  parseInt($scope.section.start)
+
+    //}
+
+    //l.inrange=false;
+    //  console.log(li , index_absolute_start ,index_absolute_end)
+
+    if( 
+
+      // li == 3 || 
+      //($scope.$parent.ui.selected_range.start || $scope.$parent.ui.selected_range.start == 0 ) 
+      //&& 
+      //($scope.$parent.ui.selected_range.end || $scope.$parent.ui.selected_range.end ==0) 
+      //&& 
+
+      li == index_absolute_start || (li > index_absolute_start && li <= index_absolute_end )  ){
+
+      //console.log('true at '+li+' LR; '+li_real )
+      //( (li > index_absolute_start && li < index_absolute_end) ||  li == index_absolute_end ||  li == index_absolute_start) ) {
+    //  l.inrange = true;
+    }
+
+
+
+    
+
+
+    if($scope.section.letters[li].char == '&nbsp;'){
+      fulltext_block += ' '
+    }
+    else{
+      fulltext_block += $scope.section.letters[li].char;
+    }
+    
+
+  
+  })
+
+  if( $scope.$parent.ui.selected_range.end == $scope.section.end && $scope.section.letters[$scope.section.end]) {
+      //$scope.section.letters[$scope.section.end].inrange = true;
+    }
+  if( $scope.$parent.ui.selected_range.start == $scope.section.start) {
+     // $scope.section.letters[0].inrange = true;
+  }
+
+
+  if( $scope.$parent.ui.selected_range.start == $scope.section.end) {
+    if($scope.section.letters[$scope.section.end]){
+
+     // $scope.section.letters[$scope.section.end].inrange = true;
+    }
+    else{
+      //// alert('??')
+    }
+  }
+  
+
+
+  var s_markups  = $scope.section.section_markups
+  // console.log(s_markups)
+  // $scope.markups_by_start_end_position_type($scope.section.start, $scope.section.end, 'any', 'any')
+    
+    _.each(s_markups, function(markup,k){
+        var m_objSchemas = $scope.$parent.objSchemas[markup.type]
+
+        var loop_start = parseInt(markup.start) - parseInt($scope.section.start);
+      var loop_end   = markup.end     - $scope.section.start;
+                        
+
+      if(markup.type=='container_class' ){ // or pos == inlined
+        //$scope.section.section_classes += markup.metadata+' ';
+      }
+
+
+      if(!$scope.section.letters[loop_start]){
+      //  alert('test suite no start letter')
+      }
+      if(!$scope.section.letters[loop_end]){
+
+
+        //alert('test suite no end letter')
+      }
+      
+      for (var mi = loop_start ; mi <= loop_end;mi++) {
+
+
+      
+        if($scope.section.letters && $scope.section.letters[mi]){
+
+
+            if(mi ==  loop_start){
+              $scope.section.letters[mi].classes.push('isfirst-range')
+            }
+            if(mi ==  loop_end){
+              $scope.section.letters[mi].classes.push('islast-range islast-range--')
+            }
+
+            
+
+            if(markup.type == 'datavalue'){
+              $scope.section.letters[mi].classes.push(markup.subtype)
+              $scope.section.letters[mi].classes.push(markup.type)
+
+            }
+            if(markup.type == 'hyperlink' && markup.metadata){
+              //  console.log('markup.type == hyperlink')
+              //  console.log(markup)
+                $scope.section.letters[mi].href = markup.metadata
+            }
+            
+            if(m_objSchemas.map_range === true){
+              if(_.contains($scope.section.letters[mi].classes, markup.subtype )){
+
+$scope.section.letters[mi].classes.push(markup.subtype) 
+              }
+              else{
+                $scope.section.letters[mi].classes.push(markup.subtype) 
+              }
+              
+            }
+        }
+      }
+
+    })
+
+
+
+
+    if($scope.section.modeletters == 'compiled'){
+      var out = ''
+      $scope.section.fulltext_block = $scope.compile_html(fulltext_block)
+      console.log(' block html compiled')
+    }
+    else{
+      console.log('use less compile')
+    }
+
+
+}
+
+
+
+
+
+
+// transform a string into a rich "classic html" markup string
+// used only at page load, because after click, text is transformed into 'single' letters directives
+
+$scope.compile_html = function(fulltext_block ){
+  var out = ''
+
+  for (var i = 0; i < fulltext_block.length; i++) {
+          
+          
+
+            var  prev_class = false
+            var current_class = false
+            var next_class  = false;
+            
+
+            /*if($scope.section.letters[i].inrange === true){
+             _.isArray(current_class) ? current_class.push('inrange') : current_class = new Array('inrange')
+          }
+
+            if(i==0){
+                  //     _.isArray(current_class) ? current_class.push('iss') : current_class = new Array('iss')
+
+
+            }
+
+            if(i+1 == $scope.section.letters.length ){
+                                   _.isArray(current_class) ? current_class.push('issd') : current_class = new Array('issd')
+
+          /// current_class.push('is_last')
+
+            }
+            */
+          //console.log('prev next i == '+i)
+          if($scope.section.letters[i] && ($scope.section.letters[i].classes.length > 0 ) ){
+            var current = true  
+          //  if(_.isArray())
+          //  current_class.push($scope.section.letters[i].classes) : current_class = new Array($scope.section.letters[i].classes)
+            
+            //if($scope.section.letters[i].href !== '')
+            current_class = $scope.section.letters[i].classes
+
+
+            //current_class.push()
+
+
+          }
+          
+
+          if( $scope.section.letters[i+1] && $scope.section.letters[i+1].classes.length > 0 ){
+             var next = true;
+             next_class = $scope.section.letters[i+1].classes;
+          }
+          
+          if($scope.section.letters[i-1] && $scope.section.letters[i-1].classes.length > 0 ){
+             var prev = true
+             prev_class = $scope.section.letters[i-1].classes
+          }
+
+
+          
+          
+
+
+          // case letter as at least one class
+          if(_.isArray(current_class)){
+            //console.log($scope.section.letters[i].classes)
+            
+
+            // add to array before compare
+            
+
+            // default class
+            var classes_flat  = 'lt '
+            // flatten 
+             _.each(current_class, function(c,ci){
+              classes_flat += c+' ';
+            })
+
+            
+            var inside = ''
+            
+            if($scope.section.letters[i].href !== ''){
+
+
+              //inside = '<a href="'+$scope.section.letters[i].href+'">'+fulltext_block[i]+'</a>'
+              
+              if($scope.section.letters[i-1] && $scope.section.letters[i-1].href !== ''){
+                inside += fulltext_block[i]
+              }
+              else{
+                inside += '<a title="hyperlink to '+$scope.section.letters[i].href+'" target="_blank" href="'+$scope.section.letters[i].href+'">'+fulltext_block[i]
+              }
+
+
+              if($scope.section.letters[i+1] && $scope.section.letters[i+1].href == ''){
+                inside +='</a>'
+              }
+              else{
+                
+              }
+
+
+            }
+            else{
+
+              if(fulltext_block[i] == ' '){
+              inside = '&nbsp;'
+            
+            }
+            else{
+              inside = fulltext_block[i]
+            }
+              
+              
+                
+              
+
+            }
+
+            if(  _.isEqual(prev_class , current_class))  {
+              out += inside
+
+            }
+            else{
+              out += '<span class="'+classes_flat+'">'+inside
+
+            }
+            if(_.isArray(next_class) && _.isEqual(next_class , current_class) ) {
+            
+            }
+            else{
+              out += '</span>'
+
+            }
+
+
+            //out += '<span class="'+classes_flat+'">'+inside+'</span>'
+
+            
+            //console.log($scope.section.letters[i].classes[])
+          }
+
+          // case letter has no classes
+          else{
+            
+
+            if(_.isArray(prev_class) || i==0 ){
+              // prev was a self closing letter or first letter then open span
+              out +='<span>'
+            }
+            
+            
+
+            if(fulltext_block[i] == ' '){
+              out += '&nbsp;'
+            
+            }
+            else{
+              out += fulltext_block[i]
+            }
+
+            
+            if(_.isArray(next_class) || i+1 == $scope.section.letters.length){
+              // next is a letter or is last letter then close span
+              out +='</span>'
+            }
+        
+          }
+
+        }
+  return out
+}
+
+
+
+
+
+})
+
+
 angular.module('musicBox.section.directive.letters', [])
 .directive('lt',   function($rootScope) {
  // var use_markup = 'h1'
@@ -88,10 +625,10 @@ angular.module('musicBox.section.directive.letters', [])
     logevent.ended = $rootScope.ui.selected_range.end
 
 
-             $rootScope.ui.selected_range.working_section        =  scope.$parent.section.sectionin  
+    $rootScope.ui.selected_range.working_section        =  scope.$parent.section.sectionin  
 
 
-    console.log(logevent)
+   // console.log(logevent)
 
     // $rootScope.ui.selected_range.debug.push(logevent)
     $rootScope.$apply(function(){});
@@ -240,7 +777,7 @@ angular.module('musicBox.section.directive.letters', [])
 
               }
               
-              console.log(e)
+              console.log('event for <lt>')
               $rootScope.ui.selected_range.wait_ev = false  // now waiting mouseup!
              logevent.event = 'mousedown'
  
@@ -321,7 +858,7 @@ angular.module('musicBox.section.directive.letters', [])
     }
 
     return {
-          template: '<span contenteditable_  class="lt" ng-class="lt.classes" inselection="{{lt.inselection}}" inrange="{{lt.inrange}}" ng-bind-html="lt.char"></span>',
+          template: '<span contenteditable_  class="lt" ng-class="lt.classes" inselection="{{lt.inselection}}" inrange="{{lt.inrange}}" ng-bind-html="lt.char"><span>',
           replace :false,
           restrict: 'A',
           link:link,
@@ -332,13 +869,17 @@ angular.module('musicBox.section.directive.letters', [])
   })
 
 
+
+
+
+
+
+
+
 .directive("contenteditable_ddd", function() {
   return {
     restrict: "A",
     link: function(scope, element, attrs, ngModel) {
-
-      
-
       element.bind("blur keyup change", function() {
         console.log(element.html())
          //console.log(scope.lt.char)

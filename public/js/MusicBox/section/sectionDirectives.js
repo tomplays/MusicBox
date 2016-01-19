@@ -17,6 +17,41 @@ angular.module('musicBox.section.directive.section', [])
           }
         };
 })
+.directive("mbText", function($rootScope) {
+
+    var link = function(){
+    
+      console.log(' [text] directive')
+    }
+        return {
+          restrict: "EA",
+          link:link,
+           scope: {
+              section   : '=',     
+            },
+          templateUrl: function() {
+                return "js/MusicBox/section/tpl/text.tpl.html";
+          }
+        };
+})
+.directive("mbLetters", function($rootScope) {
+
+    var link = function(){
+      
+      console.log(' [tletters] directive')
+    }
+        return {
+          restrict: "EA",
+          link:link,
+         scope: {
+              section   : '=',     
+            },
+          controller:"LettersCtrl",
+          templateUrl: function() {
+                return "js/MusicBox/section/tpl/letters.tpl.html";
+          }
+        };
+})
 .directive("mbSectionb", function($rootScope) {
 
     var link= function(scope){
@@ -65,6 +100,7 @@ angular.module('musicBox.section.directive.section', [])
         return {
           restrict: "EA",
           scope: true,
+          controller: 'SectionEditorCtrl',
           link:link,
           templateUrl: function() {
                 return "js/MusicBox/section/tpl/editor.tpl.html";
@@ -86,6 +122,7 @@ angular.module('musicBox.section.directive.section', [])
         };
 })
 
+
 .directive("mbCommentform", function($rootScope) {
 
     var link = function(){
@@ -99,20 +136,20 @@ angular.module('musicBox.section.directive.section', [])
           }
         };
 })
-.directive('fluidtexte',   
+.directive('mbFulltext',   
   function($rootScope) {
     // Toggle "letters mode" on click, mouvedown, ..
     
      function link(scope, elem, attrs) { 
+          console.log(' [mbFulltext] directive')
+
         elem.bind('mousedown click', function(event) {
             // console.log(event)
             scope.$apply(function(){
-            
-            /// OFF ONE-CLICK AUTO TOGGLE
-           scope.section.modeletters = 'single';
-           
-            //    var logevent = {'directive':'fluidtext', 'event':'mouseup'}
-            //    $rootScope.ui.selected_range.debug.push(logevent)
+              /// OFF ONE-CLICK AUTO TOGGLE
+              scope.section.modeletters = 'single';
+              //    var logevent = {'directive':'fluidtext', 'event':'mouseup'}
+              //    $rootScope.ui.selected_range.debug.push(logevent)
            })
         })
     }
@@ -120,9 +157,9 @@ angular.module('musicBox.section.directive.section', [])
             scope: {
               section   : '=',     
             },
-            template: '<span ng-bind-html="section.fulltext_block"></span>',
+           // template: '',
             transclude :true,
-            restrict: 'A',
+            restrict: 'EA',
             link: link,
         }
 })

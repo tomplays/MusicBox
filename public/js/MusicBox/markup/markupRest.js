@@ -18,8 +18,6 @@ angular.module('musicBox.markup.rest', [])
 
   var route_object = 'markup' 
  
-
-
   return $resource(
     {Id:'@id', Mid:'@mid'},
     {},

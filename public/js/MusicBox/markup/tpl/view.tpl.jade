@@ -1,4 +1,8 @@
 div(ng-controller="MarkupCtrl", class="markup_box markup_box_depth_{{markup.depth}} markup_box_status_{{markup.status}}   markup_displayer_ markup_displayer markup_displayer_{{markup.type}} markup_displayer_subtype_{{markup.subtype}}  by_me_{{markup.by_me}} is_editing_{{markup.editing}}  touchedmk-{{markup.touched}} ")
+	
+	markup-editor(class="markup_editor markup_editor_{{markup.type}}", ng-if="markup.editing == true")
+	
+
 	// h4 even not visible {{markup.visible}} {{markup.type}}
 	// h3 mtda : {{markup.metadata}}
 	// h3 inrange / selected : {{markup.inrange}} - {{markup.selected}}
@@ -52,7 +56,6 @@ div(ng-controller="MarkupCtrl", class="markup_box markup_box_depth_{{markup.dept
 				span(ng-if="markup.type=='generic'") {{markup.subtype[0]}}
 			// span select
 
-
 		// span.icon_col.use_depth(ng-if="markup.type== 'container'")
 			i(tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.select_edit}}" class="fa fa-{{markup.type}} fa-{{markup.subtype}} editing_{{markup.editing}} selected_{{markup.selected}}",  ng-click="select_section()"  ) Select section # {{markup.sectionin}}
 		div.data_col
@@ -60,7 +63,6 @@ div(ng-controller="MarkupCtrl", class="markup_box markup_box_depth_{{markup.dept
 			span.mk_val.metadata.use_depth(ng-bind-html="markup.metadata",  ng-if="(markup.objSchemas.modes.read.display.metadata.displayed =='metadata')  ") 
 
 			input(ng-if="markup.editing ==true && markup.type =='markup'" , ng-model="markup.metadata", type="text" )
-
 
 			span.mk_val.subtype.use_depth(class="mk_val_subtype_{{markup.subtype}}", ng-if="markup.objSchemas.modes.read.display.metadata.displayed =='subtype'")  {{markup.subtype}} 
 
@@ -81,4 +83,3 @@ div(ng-controller="MarkupCtrl", class="markup_box markup_box_depth_{{markup.dept
 			span(ng-include="fragments['child_markup'][0].url", ng-if="markup.type == 'child' ")
 		
 
-		markup-editor(class="markup_editor markup_editor_{{markup.type}}", ng-if="markup.editing == true")

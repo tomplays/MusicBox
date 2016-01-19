@@ -2,20 +2,42 @@
 
 
 /*
+		SET base value for section
 
-triggers / callback
-attribute_objects()->map_letters->
+		GET markups (collection A)
+			
+			> attribute objects (LAYOUT)
+		
+
+		SET FUllTEXT
+				> watched in letters directive
+					> contruct letters array (base)
+						> map classes (ft+ (collection A))
+
+		
+
+		seLEct
+
+		// SAVE / dElEtE
 
 
->> MAIN FUNCTIONS/LOGIC 
 
-	base section : {
-					start: 0
-					end: n
-	}
+		PUSH Markup
+		
+		//OPerattions: 	
+	
 
-	>> INIT()
-		> 
+		WATCH: 
+			start -> start_or_end
+			end   -> start or end
+
+			start or end > stack list
+
+
+			inrange_markups  : reset inrange for markups 
+				> calls markupCTRL 
+						-> test range (true | false)
+
 
 */
 
@@ -27,22 +49,14 @@ $scope.init_= function (index_) {
 	console.log('init_ (section #'+ index_+')')
 
 	/* some variable seting for each container */
-	var container_ = new Object({
-		'selecting' : -1,
+	var container_ ={
+	
 		'sectionin' : index_,
 		'selected'  : false,
 		'focused'   : '',
 		'editing_text': $scope.ui.debug ? true : false,
-		'ready' : 'init',
 		'modeletters' : $scope.ui.debug ? 'single' : 'compiled',
 		'section_classes':'', 
-		'stack': [],
-	//	'rebuild' : false,
-		'rebuild_count' : 0, 
-		'textlength': null,
-	//	'objects_count': '0',
-	//	'debuggr' : ['init'],
-        'has_offset'     : false,
         'touched'     : false,
         'keepsync'     : true,
         'objSchemas' : $scope.objSchemas['container'],
@@ -51,18 +65,19 @@ $scope.init_= function (index_) {
         'operation': {},
         'operations': [],
         'fulltext' : $scope.init_fulltext($scope.section.start, $scope.section.end),
-        'section_markups' : $scope.get_markups($scope.section.start, $scope.section.end),
-        'section_markups_ready' : 'false',
-        'section_fulltext_ready' : 'false',
-        
-	
-	})
+	}
 
 	// extend this 
 	$scope.section = _.extend($scope.section, container_);
-
-
 	new MarkupService().init($scope.section)
+
+	/// need for layout 
+
+	// ON INIT ..
+
+	$scope.get_markups($scope.section.start, $scope.section.end)
+
+	
 	//	$scope.markup.user_options = _markup.apply_object_options('markup_user_options',$scope.markup.user_id.user_options)
 
 
@@ -104,7 +119,7 @@ $scope.init_= function (index_) {
 // contruct temp fulltext, 
 // called at section init only 
 $scope.init_fulltext = function (s,e){
-	 console.log('init_fulltext (section)')
+	console.log('init_fulltext (section)')
 
     var fulltext = '';
     var fulltext_block = ''
@@ -123,426 +138,21 @@ $scope.init_fulltext = function (s,e){
 
 		}
 	}
-	$scope.section.fulltext = fulltext
+	//$scope.section.fulltext = fulltext
+
+	// $scope.section.fulltext__ = fulltext+'llll'
+
 
 	return fulltext;
 	//$scope.compile_fulltext(fulltext_block)
 
 }
-
-
-$scope.get_markups  = function(ss,se){
-		var arr_m = []
-		_.each($scope.doc.markups, function(m){
-
-				if( !m.deleted && (m.start >= parseInt(ss)) && (m.end <= parseInt(se)) ){
-					///m.visible = true
-					m.sectionin = $scope.section.sectionin
-					m.isolated= 'false'
-					arr_m.push(m)
-				}
-		});
-		console.log('get markups>')
-		console.log(arr_m)
-		$scope.section_markups_ready = 'true';
-
-		return arr_m;
-}
-
-
-// main filter for markups
-$scope.get_local_markups_by_start_end_position_type  = function(p,t){
-		//console.log('markups_by_start_end_position_type (l)')
-		var arr_m = []
-		_.each($scope.section.section_markups, function(m){
-				if( (m.position == p  || p =='any' ) && (m.type == t  || t=='any')  ){
-					arr_m.push(m)
-				}
-		});
-		return arr_m;
-}
-
-// main filter for markups
-$scope.markups_by_start_end_position_type  = function(ss, se , p , t ){
-	//console.log('>get local')
-	return $scope.get_local_markups_by_start_end_position_type(p,t)
-	/*
-		
-		console.log('markups_by_start_end_position_type'+ss+se+p+t)
-
-		var arr_m = []
-		_.each($scope.section_markups, function(m){
-				if( (!m.deleted) && (m.position == p  || p =='any' ) && (m.type == t  || t=='any') && (m.start >= parseInt(ss) || ss == 'any') && (m.end <= parseInt(se) || se =='any' ) ){
-					///m.visible = true
-					arr_m.push(m)
-				}
-		});
-
-		
-		return arr_m;
-		*/
-}
-
-
-
-
-
-$scope.map_letters = function(){
-  console.log('map_letters (section)')
-
-
- 	var fulltext_block = ''
-
- 	if(!$scope.section.letters){
- 		//$scope.section.letters = []
- 	}
-
-  
-	_.each($scope.section.letters, function(l,li){
-
-		l.classes = []
-		l.classes_array = ''
-
-
-		var li_real = li+parseInt($scope.section.start)
-
-		if(li==0){
-
-			$scope.section.letters[li].classes.push('isfirst-section')
-			$scope.section.letters[li].isfirst = true
-
-		}
-		if(li == $scope.section.letters.length-1){
-			$scope.section.letters[li].classes.push('islast-section')
-			$scope.section.letters[li].islast = true
-		}
-
-//console.log(l)
-//console.log($scope.section.letters[li])
-       
-
-		//if(($scope.$parent.ui.selected_range.start || $scope.$parent.ui.selected_range.start ==0 )  && $scope.$parent.ui.selected_range.end){
-			var index_absolute_start =   $scope.ui.selected_range.start -  parseInt($scope.section.start)
-			var index_absolute_end   =   $scope.ui.selected_range.end 	-  parseInt($scope.section.start)
-
-		//}
-
-		l.inrange=false;
-		//	console.log(li , index_absolute_start ,index_absolute_end)
-
-		if( 
-			//($scope.$parent.ui.selected_range.start || $scope.$parent.ui.selected_range.start == 0 ) 
-			//&& 
-			//($scope.$parent.ui.selected_range.end || $scope.$parent.ui.selected_range.end ==0) 
-			//&& 
-
-			li == index_absolute_start || (li > index_absolute_start && li <= index_absolute_end )  ){
-
-			//console.log('true at '+li+' LR; '+li_real )
-			//( (li > index_absolute_start && li < index_absolute_end) ||  li == index_absolute_end ||  li == index_absolute_start) ) {
-			l.inrange = true;
-		}
-
-
-
-		
-
-
-		if($scope.section.letters[li].char == '&nbsp;'){
-			fulltext_block += ' '
-		}
-		else{
-			fulltext_block += $scope.section.letters[li].char;
-		}
-		
-
-	
-	})
-
-	if( $scope.$parent.ui.selected_range.end == $scope.section.end && $scope.section.letters[$scope.section.end]) {
-			$scope.section.letters[$scope.section.end].inrange = true;
-		}
-	if( $scope.$parent.ui.selected_range.start == $scope.section.start) {
-			$scope.section.letters[0].inrange = true;
-	}
-
-
-	if( $scope.$parent.ui.selected_range.start == $scope.section.end) {
-		if($scope.section.letters[$scope.section.end]){
-
-			$scope.section.letters[$scope.section.end].inrange = true;
-		}
-		else{
-			//// alert('??')
-		}
-	}
-	
-
-
-	var s_markups  = $scope.section.section_markups
-	// $scope.markups_by_start_end_position_type($scope.section.start, $scope.section.end, 'any', 'any')
-  	
-  	_.each(s_markups, function(markup,k){
-  			var m_objSchemas = $scope.$parent.objSchemas[markup.type]
-
-  			var loop_start = parseInt(markup.start) - parseInt($scope.section.start);
-			var loop_end   = markup.end 		- $scope.section.start;
-												
-
-			if(markup.type=='container_class' ){ // or pos == inlined
-				//$scope.section.section_classes += markup.metadata+' ';
-			}
-
-
-			if(!$scope.section.letters[loop_start]){
-			//	alert('test suite no start letter')
-			}
-			if(!$scope.section.letters[loop_end]){
-
-
-				//alert('test suite no end letter')
-			}
-			
-			for (var mi = loop_start ; mi <= loop_end;mi++) {
-
-
-			
-				if($scope.section.letters && $scope.section.letters[mi]){
-
-
-						if(mi ==  loop_start){
-							$scope.section.letters[mi].classes.push('isfirst-range')
-						}
-						if(mi ==  loop_end){
-							$scope.section.letters[mi].classes.push('islast-range islast-range--')
-						}
-
-						
-
-						if(markup.type == 'datavalue'){
-							$scope.section.letters[mi].classes.push(markup.subtype)
-							$scope.section.letters[mi].classes.push(markup.type)
-
-						}
-						if(markup.type == 'hyperlink' && markup.metadata){
-							//	console.log('markup.type == hyperlink')
-							//	console.log(markup)
-								$scope.section.letters[mi].href = markup.metadata
-						}
-						
-						if(m_objSchemas.map_range === true){
-							if(_.contains($scope.section.letters[mi].classes, markup.subtype )){
-
-$scope.section.letters[mi].classes.push(markup.subtype)	
-							}
-							else{
-								$scope.section.letters[mi].classes.push(markup.subtype)	
-							}
-							
-						}
-				}
-			}
-
-  	})
-
-
-
-
-		if($scope.section.modeletters == 'compiled'){
-			var out = ''
-			$scope.section.fulltext_block = $scope.compile_html(fulltext_block)
-			console.log(' block html compiled')
-		}
-		else{
-			console.log('use less compile')
-		}
-
-}
-
-
-// transform a string into a rich "classic html" markup string
-// used only at page load, because after click, text is transformed into 'single' letters directives
-
-$scope.compile_html = function(fulltext_block ){
-	var out = ''
-
-	for (var i = 0; i < fulltext_block.length; i++) {
-					
-					
-
-	    			var  prev_class = false
-	    			var current_class = false
-	    			var next_class  = false;
-	    			
-
-	    			/*if($scope.section.letters[i].inrange === true){
-						 _.isArray(current_class) ? current_class.push('inrange') : current_class = new Array('inrange')
-					}
-
-						if(i==0){
-									//		 _.isArray(current_class) ? current_class.push('iss') : current_class = new Array('iss')
-
-
-						}
-
-						if(i+1 == $scope.section.letters.length ){
-																	 _.isArray(current_class) ? current_class.push('issd') : current_class = new Array('issd')
-
-					///	current_class.push('is_last')
-
-						}
-						*/
-					//console.log('prev next i == '+i)
-					if($scope.section.letters[i] && ($scope.section.letters[i].classes.length > 0 ) ){
-						var current = true	
-					//	if(_.isArray())
-					//	current_class.push($scope.section.letters[i].classes) : current_class = new Array($scope.section.letters[i].classes)
-						
-						//if($scope.section.letters[i].href !== '')
-						current_class = $scope.section.letters[i].classes
-
-
-						//current_class.push()
-
-
-					}
-					
-
-					if( $scope.section.letters[i+1] && $scope.section.letters[i+1].classes.length > 0 ){
-						 var next = true;
-						 next_class = $scope.section.letters[i+1].classes;
-					}
-					
-					if($scope.section.letters[i-1] && $scope.section.letters[i-1].classes.length > 0 ){
-						 var prev = true
-						 prev_class = $scope.section.letters[i-1].classes
-					}
-
-
-					
-					
-
-
-					// case letter as at least one class
-					if(_.isArray(current_class)){
-						//console.log($scope.section.letters[i].classes)
-						
-
-						// add to array before compare
-						
-
-						// default class
-						var classes_flat  = 'lt '
-						// flatten 
-						 _.each(current_class, function(c,ci){
-							classes_flat += c+' ';
-						})
-
-						
-						var inside = ''
-						
-						if($scope.section.letters[i].href !== ''){
-
-
-							//inside = '<a href="'+$scope.section.letters[i].href+'">'+fulltext_block[i]+'</a>'
-							
-							if($scope.section.letters[i-1] && $scope.section.letters[i-1].href !== ''){
-								inside += fulltext_block[i]
-							}
-							else{
-								inside += '<a title="hyperlink to '+$scope.section.letters[i].href+'" target="_blank" href="'+$scope.section.letters[i].href+'">'+fulltext_block[i]
-							}
-
-
-							if($scope.section.letters[i+1] && $scope.section.letters[i+1].href == ''){
-								inside +='</a>'
-							}
-							else{
-								
-							}
-
-
-						}
-						else{
-
-							if(fulltext_block[i] == ' '){
-							inside = '&nbsp;'
-						
-						}
-						else{
-							inside = fulltext_block[i]
-						}
-							
-							
-								
-							
-
-						}
-
-						if(  _.isEqual(prev_class , current_class))  {
-							out += inside
-
-						}
-						else{
-							out += '<span class="'+classes_flat+'">'+inside
-
-						}
-						if(_.isArray(next_class) && _.isEqual(next_class , current_class) ) {
-						
-						}
-						else{
-							out += '</span>'
-
-						}
-
-
-						//out += '<span class="'+classes_flat+'">'+inside+'</span>'
-
-						
-						//console.log($scope.section.letters[i].classes[])
-					}
-
-					// case letter has no classes
-					else{
-						
-
-						if(_.isArray(prev_class) || i==0 ){
-							// prev was a self closing letter or first letter then open span
-							out +='<span>'
-						}
-						
-						
-
-						if(fulltext_block[i] == ' '){
-							out += '&nbsp;'
-						
-						}
-						else{
-							out += fulltext_block[i]
-						}
-
-						
-						if(_.isArray(next_class) || i+1 == $scope.section.letters.length){
-							// next is a letter or is last letter then close span
-							out +='</span>'
-						}
-				
-					}
-
-				}
-	return out
-}
- $scope.section.section_classes = ''
-
-
-
-
-
 $scope.attribute_objects = function(){
-  			console.log('attribute_objects')
+  			
 	
   		
-  		
+  	
+
             var objectsarray = new Object();
 
           
@@ -565,8 +175,7 @@ $scope.attribute_objects = function(){
             });
 
 			$scope.section = _.extend($scope.section, objectsarray );
-			console.log('O A')
-			console.log(objectsarray)
+		
 
     		
   	       var mkr = $scope.section.section_markups
@@ -606,8 +215,47 @@ $scope.attribute_objects = function(){
 		    	
 
 		    }); // each markups end.
-    //console.log($scope.section)
+    		//console.log($scope.section)
 	
+
+	console.log('SECTION LAYOUT OK (attribute_objects)')
+}
+
+
+$scope.get_markups  = function(ss,se){
+		var arr_m = []
+		_.each($scope.doc.markups, function(m){
+
+				if( !m.deleted && (m.start >= parseInt(ss)) && (m.end <= parseInt(se)) ){
+					///m.visible = true
+					m.sectionin = $scope.section.sectionin
+					m.isolated= 'false'
+					arr_m.push(m)
+				}
+		});
+		console.log('get markups> '+ arr_m.length +' markups to map')
+		$scope.section.section_markups = arr_m;
+		$scope.attribute_objects()
+		return arr_m;
+}
+
+
+// main filter for markups
+$scope.get_local_markups_by_start_end_position_type  = function(p,t){
+		//console.log('markups_by_start_end_position_type (l)')
+		var arr_m = []
+		_.each($scope.section.section_markups, function(m){
+				if( (m.position == p  || p =='any' ) && (m.type == t  || t=='any')  ){
+					arr_m.push(m)
+				}
+		});
+		return arr_m;
+}
+
+// main filter for markups
+$scope.markups_by_start_end_position_type  = function(ss, se , p , t ){
+	//console.log('>get local')
+	return $scope.get_local_markups_by_start_end_position_type(p,t)
 }
 
 
@@ -615,185 +263,37 @@ $scope.attribute_objects = function(){
 
 
 
+
+
+/*
 $scope.$watch('section.fulltext', function(newValue, oldValue) {
-	console.log(' [Section] fulltext watched')
+	// console.log(' [Section] fulltext watched')
 
 
 
 	if(!newValue){
 		// deleted by user in textarea
 		newValue=  ''
+		
 	}
-	if(oldValue && newValue){
+   
 
-
+	else{
 		if(oldValue == newValue){
-			console.log(' [Section] fulltext same value')
+			console.log(' [Section watcher :  fulltext] fulltext same or init value')
 
 		}
 		else{
-			console.log(' [Section] fulltext change : '+oldValue+' > '+newValue)
+			console.log(' [Section watcher :  fulltext] fulltext change : '+oldValue+' > '+newValue)
 		}
 
-		
 
-		
-		
-
-		// a way to detect multiple chars paste or deletions   (not in angular bindings)
-
-		// delta is sup or inf from 1
-		if(oldValue.length - newValue.length > 1){
-			//alert('A' + (oldValue.length - newValue.length))
-			//$scope.section.end = newValue.length
-		}
-		if(oldValue.length - newValue.length  < -1){
-			//$scope.section.end = newValue.length
-			//alert('B' + (oldValue.length - newValue.length))
-		}
-	
-
-
-		//newValue = newValue.replace("\n", "");
-		var temp_letters = new Array();
-		var i;
-		var i_array     =   0;
-		var fulltext    =   '';
-		var str_start   =   0;
-		var str_end     =   _.size(newValue)-1;
-		// confing could be a option/mode feature
-		var content_string  = $scope.doc.content
-		var classes_arr = new Array()
-		// classes_arr.h1 = {}
-		// classes_arr.h2 = {}
-	     var fulltext_block = ''
-
-
-
-	    var at_least_one = false
-
-
-
-		//alert(str_end)
-	    for (i = str_start; i <= str_end; i++) {
-
-	    	
-			var letter_arr = new Object({
-			
-			  'classes_flat': '',
-			  'order': i,
-			  'inrange':false,
-			  'href':'',
-			  'absolute_order': $scope.section.start+i,
-
-			});
-				    	///console.log(letter_arr)
-
-
-				if(!newValue[i]){
-					
-				}
-				else{
-					at_least_one = true
-					if(newValue[i] === " ") {
-
-	            		letter_arr.char = '&nbsp;'
-	            		fulltext_block += '&nbsp;'
-	         		}
-	         		else{
-	         			letter_arr.char = newValue[i]
-	         			fulltext_block += newValue[i]
-	         		}
-
-				}
-
-
-	        	
-				letter_arr.isfirst = false
-				letter_arr.islast = false
-	         	if(str_start == i)
-				{
-				//	letter_arr.char = '>'+letter_arr.char 
-					letter_arr.isfirst = true
-				}
-
-				if(i == str_end)
-				{
-					//letter_arr.char += '<'
-				
-					letter_arr.islast = true
-				}
-
-		  	temp_letters[i_array]  = letter_arr;
-
-		  	i_array++;
-		}
-		
-
-		if( at_least_one === false){
-			alert('no letter ')
-		}
-		$scope.section.letters  = temp_letters;
-	
-		$scope.section.section_fulltext_ready =Math.random();
-		$scope.map_letters()
-
-		
 	}
 });	
+*/
 
 
 
-$scope.$watch('section.section_markups_ready',function(newValue, oldValue) {
-	if(newValue == 'true'){
-		$scope.attribute_objects()
-		$scope.section.section_markups_ready = 'done';
-		
-
-	}
-	else{
-
-	}
-});
-
-$scope.$watch('section.section_fulltext_ready',function(newValue, oldValue) {
-	//if(newValue == 'true'){
-		
-		
-		
-
-		
-		
-		
-	//	$scope.section.section_fulltext_ready = 'done';
-		
-
-	//}
-	//else{
-
-	//}
-});
-
-
-
-$scope.$watch('section.has_offset', function(o, markup) {
-			
-		 	if(o && markup){
-				console.log(markup)
-				console.log('section.has_offset'+o+markup)
-		 		if(!$scope.section.objects_[markup.type]){
-					$scope.section.objects_[markup.type] = new Array()
-					if(!$scope.section.objects_[markup.type][markup.position]){
-						$scope.section.objects_[markup.type][markup.position] = new Array()
-					}
-				}
-				$scope.section.objects_[markup.type][markup.position].push(markup)
-				console.log('markup pushed')
-
-		 		//$scope.ui.selected_range.insert_applied=true;
-		 	} 
-
-});	
 
 
 
@@ -854,26 +354,13 @@ $scope.$watch('section.has_offset', function(o, markup) {
 						$scope.ui.renderAvailable_active =  'read'
 					}
 				}
+					
 			});
+			$scope.ui.selected_range.start =  $scope.section.start
+			$scope.ui.selected_range.end   =  $scope.section.end
 
     }	
 
-
-	$scope.insert_char = function(c,s,e){
-			//alert(c,s,e)
-			$scope.section.modeletters = 'single' 
-			$scope.section.fulltext= c+''+$scope.section.fulltext
-			//for(var p=0,)
-
-			$scope.ui.selected_range.start = 4
-			// $scope.section.fulltext.length
-			$scope.ui.selected_range.end = 7
-			// $scope.section.fulltext.length
-
-			$scope.section.end++
-
-
-	}
 
 	 $scope.save = function (save_msg) {
 
@@ -905,6 +392,189 @@ $scope.$watch('section.has_offset', function(o, markup) {
           }.bind(this));
 
       }
+
+	
+$scope.$watch('section.operation.before.state', function(newValue, oldValue) {
+
+		if(newValue == 'new'){
+			 $scope.apply_operation()
+
+		}
+		if(newValue == 'error'){
+			$scope.section.operations.push($scope.section.operation)
+		}
+})
+
+$scope.apply_operation = function(){
+
+
+ 			 $scope.section.operation.after = {}
+
+			 if( ($scope.section.operation.before.end && $scope.section.operation.before.type == 'offset') ){
+			 	$scope.section.end =  parseInt($scope.section.operation.before.end+$scope.section.operation.before.end_qty)
+				//$scope.section.operation.after.new_end = $scope.section.end
+			 }
+			 if( ($scope.section.operation.before.start || $scope.section.operation.before.start == 0) && $scope.section.operation.before.type == 'offset'){
+			
+			 	$scope.section.start = parseInt($scope.section.operation.before.start)+parseInt($scope.section.operation.before.start_qty)
+			 //	$scope.section.operation.after.new_start = $scope.section.start
+			 }
+
+
+			 if( $scope.section.operation.before.type == 'push_markup'){
+			 			var m = $scope.section.operation.object_
+			 			m.deleted = false
+
+						$scope.doc.markups.push(m)
+					
+						
+						$scope.section.redraw = true;
+						
+					
+						$scope.flashmessage($scope.section.operation.object_.type +' inserted', 'ok' , 1400, false)	
+			
+			 }
+
+
+ 			 $scope.section.operation.before.state= 'done'
+ 			 $scope.section.operation.after.state= 'done'
+ 			 $scope.section.operation.after.ss= $scope.section.start
+			 $scope.section.operations.push($scope.section.operation)
+	} 
+$scope.reverse_operation = function(operation){
+			
+		// console.log($scope.section.operation)
+		operation.reversable= false;
+		alert(operation.grp_log)
+}
+
+
+$scope.operations_clear= function(){
+
+	 $scope.section.operations= []
+}
+
+$scope.apply_ui_inrange_markups = function(){
+	if($scope.section.section_markups.length>0){
+		 _.each($scope.section.section_markups, function(m, i){
+		    // toggle change, call $scope.markup controller watcher
+		    m.map_ranges  =  Math.random()
+		 })
+		console.log('LAYOUT --  SECTION_MARKUP(S) '+$scope.section.section_markups.length+'   REMAPPED INRANGE ')
+
+
+	}
+	else{
+		console.log('LAYOUT -- (NONE) SECTION_MARKUP   REMAPPED INRANGE ')
+
+	}
+  	
+}
+
+
+
+
+	$scope.$watch('section.end', function(newValue, oldValue) {
+		
+			if(oldValue == newValue){
+
+			}
+			else{
+			
+				$scope.section.start_or_end = Math.random()
+			}
+
+	});
+
+	$scope.$watch('section.start', function(newValue, oldValue) {
+		
+		if(oldValue && newValue ){
+			if(oldValue == newValue){
+
+			}
+			else{
+
+				if($scope.section.start < 0 || newValue < 0 || oldValue < 0){
+					$scope.section.start = 0;
+
+					//unregister();
+					return
+				}
+			
+			//	$scope.section.rebuild = true
+			$scope.section.start_or_end = Math.random()
+
+			}
+			
+		}
+	});
+
+
+	$scope.$watch('section.start_or_end', function(  newValue, oldValue) {
+
+
+      if(oldValue == newValue || newValue == false){
+			//	console.log(' nothing ')
+			}
+			else{
+
+				// $scope.section.textlength= $scope.section.end - $scope.section.start
+        		$scope.section.touched = true
+        		
+
+        }
+		
+   
+
+   });	
+
+
+
+
+
+					
+$scope.$watch('section.inrange_markups', function(newValue, oldValue) {
+		// remap MARKUP CHILDRENS 
+	if(oldValue === newValue || newValue == false){
+
+
+	}
+	else{
+		$scope.apply_ui_inrange_markups()
+
+	}
+})
+
+
+
+
+	$scope.$watch('section.redraw', function(newValue, oldValue) {
+	if(oldValue === newValue || newValue == false){
+
+
+	}
+	else{
+				        $scope.section.section_markups = $scope.get_markups($scope.section.start, $scope.section.end)
+						
+						
+						//$scope.section.inrange_markups = true;
+						// eq
+						$scope.apply_ui_inrange_markups()
+
+						// remap classes call watcher
+						$scope.section.lettersarray = Math.random()
+						$scope.inrange_letters      = Math.random()
+		   	            $scope.section.redraw = false;
+	
+	}
+		
+
+
+	})
+
+ 
+///// TO CLEAN
+
 
 $scope.merge= function (){
       	alert('merged')
@@ -965,252 +635,46 @@ $scope.split= function (){
 
 	}
 
-	
-$scope.$watch('section.operation.before.state', function(newValue, oldValue) {
 
-		if(newValue == 'new'){
-			 $scope.apply_operation()
+	$scope.integrity_fix = function (){
+
+		//xx$scope.section.fulltext.length)
+		//alert($scope.section.end - $scope.section.start - 1)
+		if($scope.section.fulltext.length > parseInt($scope.section.end - $scope.section.start)+1){
+			$scope.flashmessage('size mismatch >', 'bad' , 2000, false)
 
 		}
-		if(newValue == 'error'){
-			$scope.section.operations.push($scope.section.operation)
+		if($scope.section.fulltext.length < parseInt($scope.section.end - $scope.section.start)+1){
+			$scope.flashmessage('size mismatch <', 'bad' , 2000, false)
+			$scope.section.end = $scope.section.fulltext.length-1+$scope.section.start
+
 		}
-})
-
-$scope.apply_operation = function(){
-
-
- 			 $scope.section.operation.after = {}
-
-			 if( ($scope.section.operation.before.end && $scope.section.operation.before.type == 'offset') ){
-			 	$scope.section.end =  parseInt($scope.section.operation.before.end+$scope.section.operation.before.end_qty)
-				//$scope.section.operation.after.new_end = $scope.section.end
-			 }
-			 if( ($scope.section.operation.before.start || $scope.section.operation.before.start == 0) && $scope.section.operation.before.type == 'offset'){
-			
-			 	$scope.section.start = parseInt($scope.section.operation.before.start)+parseInt($scope.section.operation.before.start_qty)
-			 //	$scope.section.operation.after.new_start = $scope.section.start
-			 }
-
-
-			 if( $scope.section.operation.before.type == 'push_markup'){
-			 			var m = $scope.section.operation.object_
-			 			m.deleted = false
-
-						$scope.doc.markups.push(m)
-						$scope.section.redraw = true;
-						$scope.flashmessage($scope.section.operation.object_.type +' inserted', 'ok' , 1400, false)	
-			
-			 }
-
-
- 			 $scope.section.operation.before.state= 'done'
- 			 $scope.section.operation.after.state= 'done'
- 			 $scope.section.operation.after.ss= $scope.section.start
-			 $scope.section.operations.push($scope.section.operation)
-	} 
-$scope.reverse_operation = function(operation){
-			
-		// console.log($scope.section.operation)
-		operation.reversable= false;
-		alert(operation.grp_log)
-}
-
-
-$scope.operations_clear= function(){
-
-	 $scope.section.operations= []
-}
-
-
-
-
-
-	$scope.$watch('section.end', function(newValue, oldValue) {
-		
-			if(oldValue == newValue){
-
-			}
-			else{
-			
-				$scope.section.start_or_end = Math.random()
-			}
-
-	});
-
-	$scope.$watch('section.start', function(newValue, oldValue) {
-		
-		if(oldValue && newValue ){
-			if(oldValue == newValue){
-
-			}
-			else{
-
-				if($scope.section.start < 0 || newValue < 0 || oldValue < 0){
-					$scope.section.start = 0;
-
-					//unregister();
-					return
-				}
-			
-			//	$scope.section.rebuild = true
-			$scope.section.start_or_end = Math.random()
-
-			}
-			
+		if($scope.section.fulltext.length == parseInt($scope.section.end - $scope.section.start)+1){
+			$scope.flashmessage('size match', 'ok' , 2000, false)
 		}
-	});
-
-
-	$scope.$watch('section.start_or_end', function(  newValue, oldValue) {
-
-
-      if(oldValue == newValue || newValue == false){
-				console.log(' nothing ')
-			}
-			else{
-
-				$scope.section.textlength= $scope.section.end - $scope.section.start
-        		$scope.section.touched = true
-        		
-
-        }
-		
-   
-
-   });	
-
-
-
-/*
-	$scope.$watch('section.objects_count.all', function(newValue, oldValue) {
-		
-			if(oldValue == newValue){
-
-			}
-			else{
-				console.log('section.objects_count.all')
-				console.log(newValue)
-				
-
-				//$scope.section.rebuild = true;
-			}
-
-	});
-*/
-	/*
-	$scope.$watch('section.textlength', function(newValue, oldValue) {
-		
-		if(oldValue && newValue ){
-			if(oldValue == newValue){
-
-			}
-			else{
-				console.log('section.textlength')
-				console.log(oldValue+'->-'+newValue)
-				$scope.section.rebuild = true;
-			//	alert('textlength')
-			}
-			
-			
-		}
-	});
-*/
-
-
-$scope.apply_ui_inrange_letters = function(){
-
-	_.each($scope.section.letters, function(l, i){
-	    // 
-	    var c_real = i + $scope.section.start;
-	    // map the range	
-	    if(c_real>=$scope.ui.selected_range.start && c_real <= $scope.ui.selected_range.end){
-	   
-	    	l.inrange = true;
-
-	    }
-	    else{
-	    	l.inrange = false;
-	   		
-	    }
-  	})
-  	console.log('############ section MAPPED RANGES.')
-}
-
-
-
-$scope.apply_ui_inrange_markups = function(){
-
-	_.each($scope.section.section_markups, function(m, i){
-		// toggle change, call $scope.markup controller watcher
-		m.map_ranges 	= true;
-	})
-  	console.log('############ section MAPPED RANGES.')
-}
-
-
-					
-$scope.$watch('section.inrange_letters_and_markups', function(newValue, oldValue) {
-	if(oldValue == newValue || newValue == false){
-
-
-	}else{
-			console.log('############ section MAP inrange_letters_and_markups (both trigger)')
-			
-			$scope.apply_ui_inrange_letters()
-			$scope.apply_ui_inrange_markups()
-			$scope.section.inrange_letters_and_markups = false;
 	}
-		
-
-
-})
 
 
 
-//OLD way
+	$scope.insert_char = function(c,s,e){
+			//alert(c,s,e)
+			$scope.section.modeletters = 'single' 
+			$scope.section.fulltext= c+''+$scope.section.fulltext
+			//for(var p=0,)
 
-	$scope.$watch('section.redraw', function(newValue, oldValue) {
-	if(oldValue === newValue || newValue == false){
+			$scope.ui.selected_range.start = 4
+			// $scope.section.fulltext.length
+			$scope.ui.selected_range.end = 7
+			// $scope.section.fulltext.length
 
+			$scope.section.end++
 
-	}else{
-		
-		console.log('############ section.redraw')
-
-		    $scope.section.section_markups = $scope.get_markups($scope.section.start, $scope.section.end)
-		
-			$scope.map_letters()
-			$scope.section.inrange_letters_and_markups = true;
-			$scope.section.redraw = false;
-				$scope.attribute_objects()
-	}
-		
-
-
-	})
-
-
-
-
-$scope.integrity_fix = function (){
-
-	//xx$scope.section.fulltext.length)
-	//alert($scope.section.end - $scope.section.start - 1)
-	if($scope.section.fulltext.length > parseInt($scope.section.end - $scope.section.start)+1){
-		$scope.flashmessage('size mismatch >', 'bad' , 2000, false)
 
 	}
-	if($scope.section.fulltext.length < parseInt($scope.section.end - $scope.section.start)+1){
-		$scope.flashmessage('size mismatch <', 'bad' , 2000, false)
-		$scope.section.end = $scope.section.fulltext.length-1+$scope.section.start
 
-	}
-	if($scope.section.fulltext.length == parseInt($scope.section.end - $scope.section.start)+1){
-		$scope.flashmessage('size match', 'ok' , 2000, false)
-	}
-}
-	
+
+
+
 }); // end controller
 
 
@@ -1219,74 +683,26 @@ angular.module('musicBox.section.controller_b', []).controller('SectionBCtrl', f
 
 
 
-$scope.init_= function () {
-	var container_ = new Object({
-			'section_index' : $scope.$parent.$index, 
-			'map' : {
-				'fulltext':true,
-				'letters':false,
-				'objects':true,
-				'layout': false,
-			}
+})
+angular.module('musicBox.section.editor_controller', []).controller('SectionEditorCtrl', function($scope, $http, DocumentService, MarkupRest,socket, MarkupService) {
+
+
+$scope.section.startt = $scope.section.start
+
+$scope.$watch('section.start_', function(newValue, oldValue) {
+	
+	if(oldValue === newValue || newValue == false){
+
+
+	}else{
+		
+		
+	}
+		
+
 
 	})
-	$scope.section = _.extend($scope.section, container_);
-}
-
-$scope.fire_map= function (map) {
-	$scope.section.map[map] = true;
-}
-
-
-
-$scope.$watch('section.map.fulltext', function(newValue, oldValue) {
-	if( newValue == true){
-		
-		$scope.section.map.fulltext = false;
-		$scope.section.fulltext = 'fsdfsdf';
-		$scope.section.map.letters = true;
-
-
-
-	}
-	else{
-
-	}
-});
-
-$scope.$watch('section.map.objects', function(newValue, oldValue) {
-	if( newValue == true){
-		
-		$scope.section.map.objects = false;
-		$scope.section.objects = [];
-
-
-	}
-	else{
-
-	}
-});
-
-
-$scope.$watch('section.map.letters', function(newValue, oldValue) {
-	if( newValue == true){
-		
-		$scope.section.map.letters = false;
-		$scope.section.letters = [];
-
-
-	}
-	else{
-
-	}
-});
-
-
-
-
-
-
-$scope.init_()
 
 
 })
+

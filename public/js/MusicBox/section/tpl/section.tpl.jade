@@ -54,25 +54,22 @@ div(ng-if="section['objects_count']['by_positions'][layout.name].count > 0 || la
 			// h2 
 				a(ng-click="sectionmarkups('selected', true)") {{section_markups.visible}}
 
-			mb-sectioninlineeditor()
-			
-			
+			mb-sectioninlineeditor(ng-if="section.editing_text === true")
 			div.fluidtextarea(ng-if="section.editing_text === true")
+			
+
 				// h3 Edit section text
 				textarea(required ng-trim="false" , text-listener  , ng-model="section.fulltext")
+				// textarea(required ng-trim="false" , text-listener  , ng-model="section.fulltext__")
+
 				//div.mtextarea(contentEditable="true" , required ng-trim="false" , text-listener  , ng-bind-html="section.fulltext")
 
 
+			// mb-text(section="section")
+			mb-letters(section="section")
 
-			// h1 editable
-			// div.fluidtext(contentEditable="true" , mb-editable , section="section" , ng-bind-html="section.fulltext" ) 
-			
-			div.theletters(section="section" class="is_multi_{{ui.selected_range.multi}} boundaries_end_{{ui.boundaries.endAtEnd}}" ng-if="section.modeletters == 'single'")
-				span(lt="l",ng-repeat="l in section.letters")
-			
-			div.fluidtext(fluidtexte, section="section" ,  ng-hide="section.modeletters =='single'") 
-			// div.fluidtddext {{section.fulltext_block}}
 
+			
 
 			mb-pusher(type="new_section", position="{{layout.name}}")
 

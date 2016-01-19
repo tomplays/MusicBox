@@ -3,7 +3,7 @@ angular.module('musicBox.markup.service',[]).factory("MarkupService", function(M
 
   
   var MarkupService = function() {
-    console.log('factory rest')
+   // console.log('factory rest')
 
   };
 
@@ -15,7 +15,7 @@ angular.module('musicBox.markup.service',[]).factory("MarkupService", function(M
   }
   MarkupService.prototype.trace = function (ev) {
     this.tracer.push(ev)
-    console.log(this.tracer)
+  //  console.log(this.tracer)
     return;
   }
 
@@ -44,7 +44,7 @@ angular.module('musicBox.markup.service',[]).factory("MarkupService", function(M
             this.apimethod = null
     } 
     
-    console.log(this)
+   // console.log(this)
     this.trace(trace_object)
     return this
 

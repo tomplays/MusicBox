@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 module.exports = function(grunt) {
 	
@@ -43,6 +43,9 @@ module.exports = function(grunt) {
 						}
 				}
 		},
+		jshint: {
+   			 all: ['Gruntfile.js', 'public/js/MusicBox/*.js', 'api/*.js',  'api/**/*.js' ]
+  		},
 		connect: {
 				options: {
 					port : "<%= cfg.PORT %>",
@@ -368,6 +371,13 @@ module.exports = function(grunt) {
 		'concat:js',
 		'concat:css'
 	]);
+
+	grunt.registerTask('jshinter', [	
+		'jshint:all'
+	]);
+
+
+	
 
 	grunt.registerTask('prod', ['forever:server1:restart']);
 

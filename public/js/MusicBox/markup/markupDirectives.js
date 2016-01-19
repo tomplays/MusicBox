@@ -17,6 +17,7 @@ angular.module('musicBox.markup.directive', [])
 .directive("markupEditor", function() {
         return {
           restrict: "E",
+          controller:"MarkupEditorCtrl",
           templateUrl: function() {
                 return "js/MusicBox/markup/tpl/editor.tpl.html";
           }
