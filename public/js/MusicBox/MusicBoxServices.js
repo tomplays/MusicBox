@@ -43,7 +43,7 @@ angular.module('musicBox.markup.service',[]).factory("MarkupService", function(M
           break;
       
       case 'document':
-          this.apimethod = DocumentRest
+          this.api_method = DocumentRest
           break;
       case 'section':
           this.apimethod = MarkupRest

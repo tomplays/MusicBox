@@ -301,38 +301,25 @@ $scope.SetSlug = function (slug) {
 	* selection / focus
 	*
 	*/
-	
 
-	  
-                  
-                    
-	
 	$scope.insert_new_container = function(mi){
-		
 		  $scope.doc.containers.push(mi)
 		  doc.docsync();
 	}
-
-
-	
-
 	$scope.switch_focus_side = function(side){
 		$scope.ui.focus_side = side;
 	}
-
 	/**
 	*
 	* Utils / misc
 	*
 	*/
 
-
 	/* turn links clickable out of angular routing
 	* @function DocumentCtrl#external_link
 	* @param  {String} link - redirect link
 	*/
 	$scope.external_link = function (link){
-
 		window.location = link;
 	}
 
@@ -369,10 +356,6 @@ $scope.SetSlug = function (slug) {
 
                 // no need yet but works. 
                 // self.virtualize()
-          
-                
-
-
 	}
 
 	/* */
@@ -382,8 +365,6 @@ $scope.SetSlug = function (slug) {
 		console.log(index)
 		$scope.doc.containers[index+1].start = $scope.doc.containers[index+1].start+1;
 	}
-
-	
 
 
 	// use renderService Shared with UserCtrl
@@ -398,12 +379,9 @@ $scope.SetSlug = function (slug) {
 	$scope.Grabcollection = function (by){
 		$scope.collection = []
 		_.each($scope.doc.markups, function(m, i){
-
 			if(m.selected == true){
 				$scope.collection.push(m)
 			}
-			
-
 		})
 
 	}
@@ -466,10 +444,6 @@ $scope.SetSlug = function (slug) {
 	});
 	*/
 	
-
-	
-
-
 	
 	$scope.$watch('doc.title', function(newValue, oldValue) {
 		if(newValue){
@@ -478,9 +452,6 @@ $scope.SetSlug = function (slug) {
 			document.title = newValue
 		}
 	});
-
-
-	
 
 	$scope.$watch('doc.updated', function( newValue,oldValue) {
 			if(newValue){
@@ -491,16 +462,37 @@ $scope.SetSlug = function (slug) {
 	
 	});
 	
-/*
-	 $scope.$watch('doc.markups', function(oldValue, newValue) {
-      
+	/*
+
+	$scope.$watch('doc.markups', function(oldValue, newValue) {
 		//
-   },true);
-*/
+	},true);
+	
+	$scope.$watch('doc.published', function(newValue, oldValue) {
+	  	if(oldValue && newValue && newValue !== oldValue){
+			if(newValue == 'public'){
+				/////$scope.ui.menus.quick_tools_published.open='no'
+			}
+	 	}
+	});
+	
+	$scope.$watch('doc.content', function(newValue, oldValue) {
+		if(oldValue && newValue && newValue !== oldValue){
+			console.log('- Document level')
+			console.log('- content change watched')
+		}
+	});
 
-
-
-
+	$scope.$watch('loaded_markups', function( newValue,oldValue) {
+			console.log('[doc] - loaded_markups watched ')		
+	}, true);
+	
+	$scope.$watch('markups', function( newValue,oldValue) {			
+				console.log('- Document level')
+				console.log('- containers filtered after markups change watched')
+	          	// filter markups > only if markup.type ==  "container"
+	}, true);
+	*/
 
 	$scope.$watch('doc.operation.before.state', function(newValue, oldValue) {
 
@@ -516,7 +508,6 @@ $scope.SetSlug = function (slug) {
 	$scope.apply_operation = function(){
 
  			//  $scope.doc.operation.after = {}
-
  			if($scope.doc.operation.before.type == 'save'){
 				doc.docsync();
  			}
@@ -527,14 +518,10 @@ $scope.SetSlug = function (slug) {
 				doc.docsync();
  			}
 			
-
-
-
-
- 			 $scope.doc.operation.before.state= 'done'
- 			 // $scope.doc.operation.after.state= 'done'
- 			 // should be in service-promise 
- 			 $scope.push_to_operations()
+ 			$scope.doc.operation.before.state= 'done'
+ 			// $scope.doc.operation.after.state= 'done'
+ 			// should be in service-promise 
+ 			$scope.push_to_operations()
 			
 	} 
 
@@ -542,14 +529,12 @@ $scope.SetSlug = function (slug) {
 	 	$scope.doc.operations.push($scope.doc.operation)
 	}
 
-	$scope.reverse_operation = function(){
-				
-	console.log($scope.doc.operation)
-		}
+	$scope.reverse_operation = function(){			
+		console.log($scope.doc.operation)
+	}
 
 
 	$scope.operations_clear= function(){
-
 		 $scope.doc.operations= []
 	}
 
@@ -559,51 +544,6 @@ $scope.SetSlug = function (slug) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	/*
-	$scope.$watch('doc.published', function(newValue, oldValue) {
-	 
-	  	if(oldValue && newValue && newValue !== oldValue){
-	  		
-			if(newValue == 'public'){
-				/////$scope.ui.menus.quick_tools_published.open='no'
-			}
-	 	}
-	});
-	
-
-	$scope.$watch('doc.content', function(newValue, oldValue) {
-		if(oldValue && newValue && newValue !== oldValue){
-			console.log('- Document level')
-			console.log('- content change watched')
-		}
-	});
-
-	$scope.$watch('loaded_markups', function( newValue,oldValue) {
-			console.log('[doc] - loaded_markups watched ')		
-	}, true);
-	*/
-/*
-	$scope.$watch('markups', function( newValue,oldValue) {
-			
-			console.log('- Document level')
-			console.log('- containers filtered after markups change watched')
-          	// filter markups > only if markup.type ==  "container"
-	}, true);
-*/
 	
 
 
@@ -632,8 +572,6 @@ $scope.SetSlug = function (slug) {
 		console.log(data);
 	})
 	
-
-	
 	socket.on('newsback', function (data) {
 		console.log('newsback')
 		console.log(data);
@@ -643,36 +581,24 @@ $scope.SetSlug = function (slug) {
 			$scope.markups_pushed = []
 		}
 		console.log($scope.markups_pushed)
-
 		if(data.identifier && data.identifier == $scope.doc.slug && data.markups_pushed){
 			_.each(data.markups_pushed, function(m){
 				    //	m.user_id = {'_id':m.user.user_id}
 					$scope.doc.markups.push(m)
 				    //  console.log($scope.markups_pushed.length)
 				    //	$scope.markups_pushed.push(m)
-					
 			})
-
 			$scope.ui.selected_range.redraw= true
-
-
 		}
-
 		if(data.identifier && data.identifier == $scope.doc.slug && data.content_pushed){
-			
 			$scope.doc.content = data.content_pushed
 			_.each($scope.doc.containers, function(c,i){
-					console.log(c)
-					c.redraw = true;
-					
-  					
-				})
+				console.log(c)
+				c.redraw = true;
+			})
 		}
-		
 	})
 
-
-	
 
 } // end DocumentCtrl
 
@@ -680,6 +606,7 @@ $scope.SetSlug = function (slug) {
 * list all socketed events
 * @class SocketsListCtrl
 **/
+
 function SocketsListCtrl($scope, $http , $location, $routeParams, socket) {
 
 			console.log(ROOM)
@@ -716,22 +643,6 @@ function SocketsListCtrl($scope, $http , $location, $routeParams, socket) {
 		}
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /** 
 * @class DocumentsListCtrl
 **/
@@ -739,7 +650,6 @@ function DocumentsListCtrl($scope, $http , $location, $routeParams, socket) {
 		$scope.docs = DOCS;
 		console.log($scope.docs)
 }
-
 
 // used to test jasmine test technique..
 function  DocumentCtrlJasmine($scope, $http , $sce, $location, $routeParams, renderfactory,socket,docfactory){
@@ -749,8 +659,6 @@ function  DocumentCtrlJasmine($scope, $http , $sce, $location, $routeParams, ren
 function DocumentCtrlRo($scope, $http , $sce, $location, $routeParams ,socket,renderfactory, DocumentService, $anchorScroll) {
 	console.log('DocumentCtrlRo')
 }
-
-
 
 // seems this syntax works.
 // it's a documentCtrl sub-controller
