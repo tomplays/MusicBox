@@ -68,52 +68,37 @@ angular.module('musicBox.document.controller', []);
 
 
 function DocumentCtrl($rootScope, $scope, $http , $sce, $location, $routeParams ,socket,renderfactory, DocumentService, $anchorScroll, $timeout, MarkupService) {
-		
-
-	
-		render = new renderfactory()
-		render.init('document')
-    	doc = new DocumentService()
-		doc.Load($routeParams.docid ? $routeParams.docid : 'homepage')
-
-
 			
-	 $scope.inserted = function(l){
-		alert(l)
-	}
-	
+	render = new renderfactory()
+	render.init('document')
+    doc = new DocumentService()
+	doc.Load($routeParams.docid ? $routeParams.docid : 'homepage')
+
 	/**
 	* initialization for document and render factory (services)
     * @function DocumentCtrl#init
 	*/
-
 	$scope.sectionstocount=0;
 	$scope.markup_total_count = 0;
-
-
-
-
 	$scope.mapping_passes = 0;
-	$scope.mapping_pass = function(){
-		$scope.mapping_passes++
-	}
-  
 	$scope.letters = [];
     $scope.max_reached_letter = 0;
 
 
+	$scope.mapping_pass = function(){
+		$scope.mapping_passes++
+	}
+  
 	$scope.update_section_count = function(direction){
-
 		if(direction=='add'){
 			$scope.sectionstocount = $scope.sectionstocount+1;
 		}
 		else{
 			$scope.sectionstocount = $scope.sectionstocount-1;
 		}
-	//	alert($scope.sectionstocount)
-	//	return $scope.sectionstocount
+		//	alert($scope.sectionstocount)
+		//	return $scope.sectionstocount
 	}
-
 
 	$scope.update_markup_count = function(direction){
 		if(direction=='add'){
@@ -124,63 +109,39 @@ function DocumentCtrl($rootScope, $scope, $http , $sce, $location, $routeParams 
 		}
 	}
 	
-
-     $scope.defocus_containers = function (){
-			// call parent CTRL > to move in documentCtrl
-		  _.each($scope.doc.containers, function(container){
-            	container.focused  = ''
-
-		  })
+    $scope.defocus_containers = function (){
+		// call parent CTRL > to move in documentCtrl
+		_.each($scope.doc.containers, function(container){
+           container.focused  = ''
+		})
 	}
 
-$scope.SetSlug = function (slug) {
-    if(!slug){
-        $scope.slug= 'homepage';
-        // using it's route (defined in app.js routers)
-        if($routeParams.docid){
-          $scope.slug = $routeParams.docid
-       
-        }
-    }
-    else{
-       $scope.slug      = slug;
-    }
-    return $scope.slug;
-  };
+	$scope.SetSlug = function (slug) {
+	    if(!slug){
+	        $scope.slug= 'homepage';
+	        // using it's route (defined in app.js routers)
+	        if($routeParams.docid){
+	          $scope.slug = $routeParams.docid
+	        }
+	    }
+	    else{
+	       $scope.slug      = slug;
+	    }
+	    return $scope.slug;
+	 };
 
 
-
-	
-	
-	
+	$scope.inserted = function(l){
+			alert(l)
+	}
 		
 	
-
-	/**
-	*  UI
-	* 
-	* handle user interactions (click, change, add, save, delete....)
-	* can call the factory.
-	* @function DocumentCtrl#events
-	*/
-
-
-
-
-
 	/**
 	*
 	* Document level
 	*
 	*/
 	
-	
-
-
-
-
-
-
 	$scope.edit_doc = function(field){
 		if(field == 'content'){
 			//alert('content change without api offset!')
@@ -200,9 +161,7 @@ $scope.SetSlug = function (slug) {
 	$scope.doc_sync = function(){
 		doc.docsync();
 	}
-	
-
-	
+		
 
 	// when user doubleclick an option (edit in place)
 	// used for footer option and before/after title
@@ -230,15 +189,9 @@ $scope.SetSlug = function (slug) {
 		doc.doc_option_new();
 	}
 	
-	
-	
 	$scope.doc_options_delete = function (opt_id){	
 		doc.doc_option_delete(opt_id);
 	}
-	
-
-
-	
 	
 	// reset a markup to a "safe" position and to a safe type {O,1,comment,left}
 	// doesnt change else values.
@@ -250,7 +203,6 @@ $scope.SetSlug = function (slug) {
 		doc.markup_save(markup)
 	}
 
-
 	$scope.offset_markups = function (){
 		doc.offset_markups()
 	}
@@ -259,8 +211,6 @@ $scope.SetSlug = function (slug) {
 		doc.offset_markup(markup, start_qty, end_qty)
 	}
 
-	
-	
 	$scope.scrollToAnchor= function(anchorID){
 		// from : https://docs.angularjs.org/api/ng/service/$anchorScroll
 		  var newHash = 'anchor' + anchorID;
@@ -282,9 +232,6 @@ $scope.SetSlug = function (slug) {
 		markup.editor_tab  = tab;
 	}
 	
-
-	
-
 	$scope.wrapin_section = function(){
 			$scope.objects_in_range('containers');
 			//$scope.objects_in_range('markups');
@@ -335,46 +282,42 @@ $scope.SetSlug = function (slug) {
 	*/ 
 	$scope.virtualize = function(collection){
 		//	doc.virtualize(collection)
-	
-   /*
-                $rootScope.virtuals= new Array();
-                var virtual_summary = new Object({'slug': 'summary', 'header': 'Text summary', 'auto': {'bytype': 'h1-h6'} , 'implicit': {'bytype': 'summary'} } )
-                var virtual_data_x = new Object({'slug': 'data_x', 'header': 'data serie (x)', 'explicit': {'bysubtype': 'x'} } )
-                var virtual_data_y = new Object({'slug': 'data_y', 'header': 'data serie (y)', 'explicit': {'bysubtype': 'y'} } )
-                var virtual_data = new Object({'slug': 'data', 'header': 'data serie (any)', 'explicit': {'bytype': 'data'} } )
+   		/*
+	    $rootScope.virtuals= new Array();
+	    var virtual_summary = new Object({'slug': 'summary', 'header': 'Text summary', 'auto': {'bytype': 'h1-h6'} , 'implicit': {'bytype': 'summary'} } )
+	    var virtual_data_x = new Object({'slug': 'data_x', 'header': 'data serie (x)', 'explicit': {'bysubtype': 'x'} } )
+	    var virtual_data_y = new Object({'slug': 'data_y', 'header': 'data serie (y)', 'explicit': {'bysubtype': 'y'} } )
+	    var virtual_data = new Object({'slug': 'data', 'header': 'data serie (any)', 'explicit': {'bytype': 'data'} } )
 
-            
-                $rootScope.virtuals.push(virtual_summary)
-                $rootScope.virtuals.push(virtual_data_x)
-                $rootScope.virtuals.push(virtual_data_y)
-                $rootScope.virtuals.push(virtual_data)
-                */
-              
 
-                // var virtual_containers = new Object({'slug': 'sections', 'header': 'containers ', 'auto': {'bytype': 'h1-h6'} , 'implicit': {'bytype': 'container'} } )
-                // $rootScope.virtuals.push(virtual_containers)
+	    $rootScope.virtuals.push(virtual_summary)
+	    $rootScope.virtuals.push(virtual_data_x)
+	    $rootScope.virtuals.push(virtual_data_y)
+	    $rootScope.virtuals.push(virtual_data)
+	    */
+	  
 
-                // no need yet but works. 
-                // self.virtualize()
+	    // var virtual_containers = new Object({'slug': 'sections', 'header': 'containers ', 'auto': {'bytype': 'h1-h6'} , 'implicit': {'bytype': 'container'} } )
+	    // $rootScope.virtuals.push(virtual_containers)
+
+	    // no need yet but works. 
+	    // self.virtualize()
 	}
-
 	/* */
 	
-
 	$scope.sync_section_next = function(section, index){
 		console.log(index)
 		$scope.doc.containers[index+1].start = $scope.doc.containers[index+1].start+1;
 	}
 
-
 	// use renderService Shared with UserCtrl
 	$scope.expand_tools = function(name){
 		render.expand_tools(name)
   	}
+
   	$scope.toggle_render = function(r){
 		render.toggle_render(r)
 	}
-	
 	
 	$scope.Grabcollection = function (by){
 		$scope.collection = []
@@ -383,7 +326,6 @@ $scope.SetSlug = function (slug) {
 				$scope.collection.push(m)
 			}
 		})
-
 	}
 
 	$scope.test_draft = function (value){
@@ -396,7 +338,6 @@ $scope.SetSlug = function (slug) {
 		}
 		return false;
 	}
-
 
     // transform ranges to string
     // limited to 70 chars
@@ -414,15 +355,52 @@ $scope.SetSlug = function (slug) {
         	var ci = 0
             for (var i = start; i <= end; i++) {
             	text_range 		+= content_string[i];
-
           	}
          }
-         text_range				 +='"'
+         text_range				+='"'
          return text_range;
   	}
 
+  	// ** Atomic operations
 
-		
+	$scope.apply_operation = function(){
+
+ 			//  $scope.doc.operation.after = {}
+ 			if($scope.doc.operation.before.type == 'save'){
+				doc.docsync();
+ 			}
+ 			if($scope.doc.operation.before.type == 'push_container'){
+ 				var c = $scope.doc.operation.object_
+				$scope.doc.containers.push(c)
+				$scope.doc.content += c.fulltext
+				doc.docsync();
+ 			}
+			
+ 			$scope.doc.operation.before.state= 'done'
+ 			// $scope.doc.operation.after.state= 'done'
+ 			// should be in service-promise 
+ 			$scope.push_to_operations()
+			
+	} 
+
+	$scope.push_to_operations = function(){
+	 	$scope.doc.operations.push($scope.doc.operation)
+	}
+
+	$scope.reverse_operation = function(){			
+		console.log($scope.doc.operation)
+	}
+
+
+	$scope.operations_clear= function(){
+		 $scope.doc.operations= []
+	}
+
+	$scope.expand_operation = function(op){
+		op.expanded = op.expanded ? !op.expanded : true
+	}
+
+
 	/**
 	*  WATCHERS
 	* 
@@ -505,46 +483,8 @@ $scope.SetSlug = function (slug) {
 			}
 	})
 
-	$scope.apply_operation = function(){
-
- 			//  $scope.doc.operation.after = {}
- 			if($scope.doc.operation.before.type == 'save'){
-				doc.docsync();
- 			}
- 			if($scope.doc.operation.before.type == 'push_container'){
- 				var c = $scope.doc.operation.object_
-				$scope.doc.containers.push(c)
-				$scope.doc.content += c.fulltext
-				doc.docsync();
- 			}
-			
- 			$scope.doc.operation.before.state= 'done'
- 			// $scope.doc.operation.after.state= 'done'
- 			// should be in service-promise 
- 			$scope.push_to_operations()
-			
-	} 
-
-	$scope.push_to_operations = function(){
-	 	$scope.doc.operations.push($scope.doc.operation)
-	}
-
-	$scope.reverse_operation = function(){			
-		console.log($scope.doc.operation)
-	}
-
-
-	$scope.operations_clear= function(){
-		 $scope.doc.operations= []
-	}
-
-	$scope.expand_operation = function(op){
-		op.expanded = op.expanded ? !op.expanded : true
-	}
-
-
-
 	
+
 
 
 	/**
@@ -674,27 +614,18 @@ function DocumentNewCtrl($scope, $compile, $http , $sce, $location, $routeParams
 } // end controller
 //DocumentNewCtrl.$inject = ['$scope', '$http' ,'docfactory', '$timeout'];
 
-
 function DocumentCtrlCompiled($scope, $http , $sce, $location, $routeParams ,socket,renderfactory, DocumentService,DocumentRest,$anchorScroll,  $timeout) {
  	
-
 	//some setup 
-
 	$scope.doc = {slug:$routeParams.docid, mode:'compiled'}
 	$scope.cursor = {}
 	var cursor = function(letter,action){
-
-			
 			$scope.cursor.start_relative = letter.position.relative
 			$scope.cursor.start_absolute = letter.position.absolute
-
 			$scope.cursor.start_local = letter.position.local
-
 			$scope.cursor.action = action
 
 	}
-
-
  	var promise = DocumentRest.get({Id:$scope.doc.slug},{  }).$promise;
     promise.then(function (Result) {
        if(Result){
