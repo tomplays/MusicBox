@@ -898,7 +898,8 @@ exports.doc_sync= function(req, res) {
 
 
 					out.doc_title 		= doc.title
-				
+					doc.updated 		= new Date()
+
 
 						doc.save(function(errors, doc) {
 								out.doc 			= doc.toObject()

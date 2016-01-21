@@ -290,7 +290,7 @@ angular.module('musicBox.section.directive.textarea', [])
      
       // else if(eventname == 'click'){}
       // else if(eventname== 'mv'){}   
-                 $rootScope.ui.selected_range.working_section        =  scope.$parent.section.sectionin  
+      $rootScope.ui.selected_range.working_section        =  scope.$parent.section.sectionin  
 
       var rstart  =  parseInt(event.target.selectionStart + scope.section.start)
       var rend    =  parseInt(event.target.selectionEnd + scope.section.start)
@@ -316,10 +316,17 @@ angular.module('musicBox.section.directive.textarea', [])
 
        }
 
+if(eventname == 'mousedown' ){}
+else{}
+
+
 
       $rootScope.ui.selected_range.start = rstart
       $rootScope.ui.selected_range.end   = rend
       $rootScope.ui.boundaries = boundaries_test(scope.section, $rootScope.ui.selected_range)
+
+
+      console.log( $rootScope.ui.selected_range)
       $rootScope.$apply()
     }   
 })

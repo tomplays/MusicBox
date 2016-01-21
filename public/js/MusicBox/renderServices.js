@@ -1,74 +1,75 @@
-angular.module('musicBox.document.ui', [])
-
-.factory('ooo', function ($rootScope, $http, $routeParams, $locale) {
-   
-      return function (inf) {
-     var self = {
-       init: function () {
-    alert('fd')
-       }
-         }
-
-          return self;
-        }
-  
-    
-});
 
 
 angular.module('musicBox.render', [])
 
 
-.factory('renderfactory', function ($rootScope, $http, $routeParams, $locale, ooo) {
+.factory('renderfactory', function ($rootScope, $http, $routeParams, $locale, mb_ui) {
     return function (inf) {
      var self = {
+
+
+    
+
+
+
+
        init: function (view) {
         
          console.log('renderService:init for view: '+view)
          $rootScope.is_view = view
 
 
+         $rootScope.render_config = {
+              'i18n' :  $locale,
+              'renderAvailable' : self.renderAvailable(),
+              'renderAvailable_active' :  $routeParams.mode ? $routeParams.mode : self.renderAvailable()[0]
+
+         }
+
+          $rootScope.render = {
+              'dataset' : {'active': $routeParams.dataset == true  ? true : false},
+              'menu_a'  : {'open':true},
+              'is_home' : ($routeParams.docid) ? 'false' : 'true',
+              'is_single': ($routeParams.docid) ? 'true' : 'false',
+              'top_menus': {
+                              'help'  : {'open': $routeParams.fresh ? true : false },
+                              'published'  : {'open':  false },
+                              'doc'  : {'open':  false }
+
+                          }
+
+           }
        
-         var ttthgh = ooo()
-         ttthgh.init()
-         $rootScope.render_config = {}
-         $rootScope.render_config.loading = {}
-         $rootScope.render_config.loading.inited = true;
-        
-         $rootScope.render_config.i18n =  $locale;
 
-
-
-        // inject locale service. defined in public/js/angualr-modules/i18n/angular_lang-lang.js
-        
-
-        // DEPREC. use :  $rootScope.render_config.i18n instead
         $rootScope.i18n                       = $locale;
+        
 
 
-       
-
-
-        //console.log($rootScope.i18n.id)
-
-        //$rootScope.$emit('renderEvent', { action:'render_ready' });
-        self.config                           = [];
-        self.state                            = [];
-        //$rootScope.r = 7;
-        self.config.hasbranding               = true;
-        self.state.logs                       = 'closed';
 
         // api/misc
         $rootScope.globals                    = GLOBALS;
         $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
 
+        var mb_ui_ =  new mb_ui()
+        mb_ui_.init()
+    
+       // self.renderAvailable()
+       // $rootScope.ui.renderAvailable_active =  $routeParams.mode ? $routeParams.mode : $rootScope.ui.renderAvailable[0]
+      
+
+
+      
+
+
+
 
         if(view == 'document'){
-            $rootScope.objSchemas                  =   self.objSchemas(); 
+
+            //mb_ui
+            $rootScope.objSchemas                 =   self.objSchemas(); 
             $rootScope.available_sections_objects =   self.objAvailable(); 
             $rootScope.available_layouts          =   self.posAvailable();
-            $rootScope.item_position              = '';
-            $rootScope.fragments                 =   self.fragmentsAvailable();
+            $rootScope.fragments                  =   self.fragmentsAvailable();
         }
         else if(view == 'user'){
            
@@ -78,106 +79,35 @@ angular.module('musicBox.render', [])
         }
 
         
-       
-       
-        // $rootScope.classesofsections       =   self.classesAvailable();
-
-        // ui set up.
-        // this var never change as long a doc is loaded... (no reset at rebuild)
-
-        $rootScope.ui                         = new Object();
-        $rootScope.ui.selected_range          = new Object({'wait_ev' : false, 'set': false, 'start':null, 'end':null, 'textrange':''});
-        $rootScope.ui.boundaries = new Object();
-
-        //$rootScope.ui.selected_range.markups_to_offset = new Array();
-        //$rootScope.ui.selected_range.insert = null;
-        //$rootScope.ui.offset_queue = new Array()
-        $rootScope.ui.selected_range.debug = new Array()
-
-        $rootScope.ui.routing = $routeParams
-
-        $rootScope.ui.selected_section_index  = null;
-       
-
-        $rootScope.ui.selected_objects        = [];
-        $rootScope.ui.selected_objects_filter = null;
-        $rootScope.ui.dataset = {'active': $routeParams.dataset == true  ? true : false}
-              
-
-        $rootScope.ui.renderAvailable         = self.renderAvailable()
-
-        // used in section editing
-        $rootScope.ui.sync_sections           = true;
-        
-      
-        // ?mode=
-        $rootScope.ui.renderAvailable_active =  $routeParams.mode ? $routeParams.mode : $rootScope.ui.renderAvailable[0]
-        // ?secret=  
-        $rootScope.ui.secret  =  $routeParams.secret ? $routeParams.secret : false
-        var doc_secret = $rootScope.ui.secret 
-        // ? debug
-        $rootScope.ui.debug   = $routeParams.debug ? true : null;
-       
-
-      
-
-        if($routeParams.docid){
-              $rootScope.ui.is_home = 'false'
-              $rootScope.ui.is_single = 'true'
-        }
-        else{
-            $rootScope.ui.is_home = 'true'
-            $rootScope.ui.is_single = 'false'
-        }
-
-        $rootScope.ui.menus = [];
-        $rootScope.ui.menus.push_markup = [];
-        $rootScope.ui.menus.push_markup.open = -1;
-        $rootScope.ui.menus.push_comment = [];
-        $rootScope.ui.menus.push_comment.open = -1;
-        
-
-        // top page menu tools
-
-       // $rootScope.ui.menus['quick_tools']            = new Object({'open': 'no'});
-        $rootScope.ui.menus['quick_tools_help']       = new Object({'open': $routeParams.fresh ? true : false});
-
-
-        $rootScope.ui.menus['quick_tools_published'] = new Object({'open': 'no'});
-        $rootScope.ui.menus['quick_tools_document'] = new Object({'open': 'no'});
-
-        $rootScope.inserttext = [];
-        $rootScope.inserttext[0] =''
-
-        // $rootScope.ui.lastover = {};
-
-
-        // the object to push init
-        $rootScope.push = {};
-
-        // init flash message object
-        $rootScope.flash_message = {'text':''};
-
-        /**
-      * @description 
-      * Show a message to user
-      *
-      *  @param {String} msg - message to show
-      *  @param {String} classname - a css class ('ok'/ 'bad' / ..)
-      *  @param {Number/Time} timeout - 
-
-      *  @return -
-      * 
-      * @function docfactory#flash_message
-      * @link docfactory#flash_message
-      * @todo --
-      */
-
-        
-          //console.log(self)
-          return  $rootScope.render_config
+        return  $rootScope.render_config
         
         },
+
+        toggle_render: function(r){
+          console.log('toggled_render from '+$rootScope.render_config.renderAvailable_active+' to '+r)
+          $rootScope.render.top_menus.doc.open = false
+          $rootScope.render.top_menus.help.open =  false
+          $rootScope.render.top_menus.published.open =  false
+          $rootScope.render_config.renderAvailable_active = r
+        },
+
+
+
+
+      expand_tools: function(name){
+               //   if(!)
+
+          // use DocumentCtrl AND with UserCtrl
+          if(!$rootScope.render.top_menus[name] || $rootScope.render.top_menus[name].open === false){
+               $rootScope.render.top_menus[name].open = true
+          }
+          else{
+           $rootScope.render.top_menus[name].open = false
+          }
+         //  return $rootScope.render.top_menus
+
+        },
+
 
       // flat list.
       objAvailable:function (){
@@ -264,9 +194,9 @@ angular.module('musicBox.render', [])
                   },
             },
           })
- definitions.media = new Object({
+          definitions.media = new Object({
               'name': 'media',
-              'display_name': $rootScope.render_config.i18n.CUSTOM.OBJECTS.media,
+              'display_name': $rootScope.i18n.CUSTOM.OBJECTS.media,
               'map_range': false,
                'compute_fulltext': true,
               'positions': {
@@ -355,7 +285,7 @@ angular.module('musicBox.render', [])
           })
           definitions.comment = new Object({
               'name': 'comment',
-              'display_name': $rootScope.render_config.i18n.CUSTOM.OBJECTS.comment,
+              'display_name': $rootScope.i18n.CUSTOM.OBJECTS.comment,
               'map_range': true,
                'compute_fulltext': false,
               'positions': {

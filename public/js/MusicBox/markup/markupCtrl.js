@@ -1,5 +1,5 @@
 
-angular.module('musicBox.markup.controller', ['musicBox.section']).controller('MarkupCtrl', function($scope, $http, MarkupRest,socket,MarkupService) {
+angular.module('musicBox.markup.controller', ['musicBox.section']).controller('MarkupCtrl', function($rootScope, $scope, $http, MarkupRest,socket,MarkupService) {
 	
 	$scope.init__= function () {
 					
@@ -25,6 +25,7 @@ angular.module('musicBox.markup.controller', ['musicBox.section']).controller('M
 			'servicetype'  	 :'markup',
 			'operation'		 :	$scope.markup.operation ?  $scope.markup.operation : {},
        		'operations': []
+       
         })      	
 
 		$scope.markup =  _.extend($scope.markup, markup_);
@@ -38,7 +39,7 @@ angular.module('musicBox.markup.controller', ['musicBox.section']).controller('M
 
 
 		// $scope.markup.sectionin = $scope.$parent.$parent.$index
-		$scope.markup.fulltext  = $scope.fulltext()
+		//$scope.markup.fulltext  = $scope.fulltext()
 		
   		
 
@@ -302,14 +303,14 @@ angular.module('musicBox.markup.controller', ['musicBox.section']).controller('M
 
 		// set or unset range
 		if($scope.markup.selected == true){
-			$scope.ui.selected_range.start =  $scope.markup.start
-			$scope.ui.selected_range.end   =  $scope.markup.end
+			$rootScope.ui.selected_range.start =  $scope.markup.start
+			$rootScope.ui.selected_range.end   =  $scope.markup.end
 		}
 		else{
-			$scope.ui.selected_range.start =  $scope.section.start
-			$scope.ui.selected_range.end   =  $scope.section.end
-			// $scope.ui.selected_range.start = null
-			// $scope.ui.selected_range.end   = null
+			$rootScope.ui.selected_range.start =  $scope.section.start
+			$rootScope.ui.selected_range.end   =  $scope.section.end
+			// $rootScope.ui.selected_range.start = null
+			// $rootScope.ui.selected_range.end   = null
 		}
 
 		// apply its range
@@ -377,14 +378,14 @@ $scope.$watch('markup.fulltext', function(newValue, oldValue) {
      $scope.save = function (save_msg) {
 
      	
-        var thos = this;
+      
        
         var data ={
 					            'start'			: $scope.markup.start,
 					            'end'			: $scope.markup.end,
 					            'depth'			: $scope.markup.depth,
 					            'status'		: $scope.markup.status,
-					            'secret' : $scope.ui.secret,
+					            'secret' : $rootScope.ui.secret,
 					            'doc_id' : $scope.markup.doc_id_id ? $scope.markup.doc_id_id : ''
 					         };
 
@@ -406,16 +407,16 @@ $scope.$watch('markup.fulltext', function(newValue, oldValue) {
         promise.then(function (Result) {
             
             if(save_msg){
-				$scope.flashmessage(save_msg, 'help' , 3000)
+				$rootScope.flashmessage(save_msg, 'help' , 3000)
             }
             else{
-            	$scope.flashmessage(Result.edited[0][0].type +' saved', 'help' , 3000)
+            	$rootScope.flashmessage(Result.edited[0][0].type +' saved', 'help' , 3000)
             	console.log(Result.edited[0][0])
             }
           }.bind(this));
           promise.catch(function (response) {  
             console.log(response)   
-           	$scope.flashmessage(response.err.err_code, 'bad' , 3000)
+           	$rootScope.flashmessage(response.err.err_code, 'bad' , 3000)
           }.bind(this));
 
       }
@@ -433,8 +434,8 @@ $scope.$watch('markup.fulltext', function(newValue, oldValue) {
 
 	$scope.match_selection = function (markup){
 		// todo: should check notnull / section limits
-		$scope.markup.start     =  $scope.ui.selected_range.start
-		$scope.markup.end 		=  $scope.ui.selected_range.end
+		$scope.markup.start     =  $rootScope.ui.selected_range.start
+		$scope.markup.end 		=  $rootScope.ui.selected_range.end
 		$scope.save()
 	}
 	$scope.apply_reverse =function(){
@@ -472,15 +473,15 @@ $scope.$watch('markup.fulltext', function(newValue, oldValue) {
 			promise.then(function (Result) {
 				
 				$scope.section.redraw = true;
-				$scope.flashmessage('Markup deleted', 'ok' , 2000, false)
+				$rootScope.flashmessage('Markup deleted', 'ok' , 2000, false)
 
 
 			}.bind(this));
 			promise.catch(function (response) {  
-				$scope.flashmessage(response.err, 'bad' , 3000)
+				$rootScope.flashmessage(response.err, 'bad' , 3000)
 			}.bind(this));
 		// toggle
-		$scope.ui.focus_side = ''
+		$rootScope.ui.focus_side = ''
 
         
 
@@ -526,9 +527,9 @@ $scope.$watch('markup.fulltext', function(newValue, oldValue) {
 			if(newValue && oldValue && newValue !== oldValue ){
 				// console.log('############MARKUP TEST map_ranges='+newValue +'=:'+ oldValue)
 
-			
+				
 				var z, z_real, rtest;
-				rtest = ranges_test($scope.ui.selected_range.start,$scope.ui.selected_range.end, $scope.markup.start,$scope.markup.end, 'markup' )
+				rtest = ranges_test($rootScope.ui.selected_range.start,$rootScope.ui.selected_range.end, $scope.markup.start,$scope.markup.end, 'markup' )
 				//console.log('rtest:'+rtest+' --- '+$scope.markup.metadata)
 				
 				$scope.markup.selected = false;
@@ -567,6 +568,7 @@ $scope.$watch('markup.fulltext', function(newValue, oldValue) {
 				// console.log('mk end redraw')
 			}
 			else{
+
 				// console.log('############ mk.redraw')
 
 				// $scope.markup.fulltext = $scope.fulltext()

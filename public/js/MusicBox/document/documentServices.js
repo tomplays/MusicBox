@@ -35,16 +35,9 @@ angular.module('musicBox.document.service',[])
     this.api_method = DocumentRest;
 
   };
-  DocumentService.prototype.FreshLoad = function () {
-    this.SetSlug()
-    this.Load()
+ 
 
-  }
-
-
-  DocumentService.prototype.SetSlugFromValue = function (slug) {
-    this.slug = slug
-  }
+ 
   
 
   DocumentService.prototype.Load = function (slug) {
@@ -224,13 +217,11 @@ angular.module('musicBox.document.service',[])
 
 
 
-            if($rootScope.ui.debug){
-                $rootScope.doc.formated_date = Result.doc.updated;
-
-            }
+            
+             $rootScope.doc.updated = new Date()
              
            
-          thos.flash_message('Document saved', 'ok' , 1600, false)
+          $rootScope.flashmessage('Document saved', 'ok' , 1600, false)
 
             _.each($rootScope.doc.containers, function(s){
                  s.touched = false
@@ -246,9 +237,9 @@ angular.module('musicBox.document.service',[])
         }.bind(this));
         promise.catch(function (response) { 
                 console.log(response)
-                thos.flash_message('doc sync error', 'bad' , 2000)
+                $rootScope.flashmessage('doc sync error', 'bad' , 2000)
 
-           //this.flash_message(response.err, 'bad' , 3000)
+           //this.flashmessage(response.err, 'bad' , 3000)
         }.bind(this));
 
 
@@ -292,7 +283,7 @@ angular.module('musicBox.document.service',[])
                             $rootScope.doc.room     = Result.doc.room;
                             $rootScope.doc.room__id = Result.doc.room; 
                           }
-                          thos.flash_message('document set to room', 'ok' , 2000)    
+                         $rootScope.flashmessage('document set to room', 'ok' , 2000)    
             }
 
             // hard redirect
@@ -301,19 +292,19 @@ angular.module('musicBox.document.service',[])
             }
   
             else if(field == 'published'){
-              thos.flash_message('document set to '+Result.doc.published, 'ok' , 2000)    
+              $rootScope.flashmessage('document set to '+Result.doc.published, 'ok' , 2000)    
 
             }
             else if(field == 'excerpt' || field == 'thumbnail'){
-                thos.flash_message('document\' '+field+' set to '+data.value, 'ok' , 2000)  
+                $rootScope.flashmessage('document\' '+field+' set to '+data.value, 'ok' , 2000)  
 
             }
             else{
-              thos.flash_message('document set for  '+field, 'ok' , 2000)    
+              $rootScope.flashmessage('document set for  '+field, 'ok' , 2000)    
             }   
         }.bind(this));
         promise.catch(function (response) { 
-            thos.flash_message('document edit error', 'bad' , 2000)    
+            $rootScope.flashmessage('document edit error', 'bad' , 2000)    
         }.bind(this));
      }
   /**
@@ -336,6 +327,7 @@ angular.module('musicBox.document.service',[])
         $rootScope.newdoc.raw_title        =   $rootScope.i18n.CUSTOM.DOCUMENT.default_title
         $rootScope.newdoc.published        =   'draft';
         console.log($rootScope)
+        alert('qsd')
   };
 
 
@@ -361,11 +353,11 @@ angular.module('musicBox.document.service',[])
         var promise = this.api_method.option_edit({id:this.slug},serialize(data)).$promise;
         promise.then(function (Result) {
              
-              thos.flash_message('option saved (->'+data.value+')', 'ok' , 3000)
+              $rootScope.flashmessage('option saved (->'+data.value+')', 'ok' , 3000)
              
         }.bind(this));
         promise.catch(function (response) { 
-          thos.flash_message('error', 'bad' , 3000)
+          $rootScope.flashmessage('error', 'bad' , 3000)
         }.bind(this));
 
  
@@ -391,11 +383,11 @@ angular.module('musicBox.document.service',[])
         var promise = this.api_method.option_delete({id:this.slug},serialize(data)).$promise;
         promise.then(function (Result) {
              
-              thos.flash_message('option deleted', 'ok' , 3000)
+              $rootScope.flashmessage('option deleted', 'ok' , 3000)
               // reinit, no need to redraw containers
         }.bind(this));
         promise.catch(function (response) { 
-          thos.flash_message('error', 'bad' , 3000)
+          $rootScope.flashmessage('error', 'bad' , 3000)
         }.bind(this));
 
       }
@@ -421,10 +413,10 @@ angular.module('musicBox.document.service',[])
         var promise = this.api_method.option_new({id:this.slug},serialize(data)).$promise;
         promise.then(function (Result) {
              
-              thos.flash_message('document option created','ok', 3000)
+              $rootScope.flashmessage('document option created','ok', 3000)
         }.bind(this));
         promise.catch(function (response) { 
-          thos.flash_message('error', 'bad' , 3000)
+          $rootScope.flashmessage('error', 'bad' , 3000)
         }.bind(this));
 
       }
@@ -463,10 +455,10 @@ angular.module('musicBox.document.service',[])
                   if(Result.err){
                           if(Result.code == 11000 ){
 
-                           thos.flash_message('This title is already used please choose another one', 'bad' , 3000)
+                           $rootScope.flashmessage('This title is already used please choose another one', 'bad' , 3000)
                           }
                           else{
-                           thos.flash_message('error #'+Result.code, 'bad' , 3000)
+                           $rootScope.flashmessage('error #'+Result.code, 'bad' , 3000)
 
                           }
                    
@@ -506,27 +498,7 @@ angular.module('musicBox.document.service',[])
       * @todo --
       */
 
-      DocumentService.prototype.flash_message = function (msg,classname ,timeout, closer) {
-        $rootScope.flash_message = {}
-        $rootScope.flash_message.text = msg;
-        $rootScope.flash_message.classname = classname;
-
-          if(!closer){
-              $rootScope.flash_message.closer = false;
-          }
-          else{
-              $rootScope.flash_message.closer = closer;
-          }
-        console.log('flash_message'+msg,classname ,timeout, closer)
-
-        // apply timeout if set to true
-        if(timeout){
-            $timeout(function(){
-                $rootScope.flash_message.text =  '' ;
-            },timeout);
-        }
-      };
-
+    
 
      
      
@@ -536,7 +508,7 @@ angular.module('musicBox.document.service',[])
      
         promise.query = this.api_method.delete( {id:this.slug}).$promise;
         promise.query.then(function (Result) {
-            thos.flash_message('deleted', 'ok' , 3000)
+            $rootScope.flashmessage('deleted', 'ok' , 3000)
 
             console.log(Result)
             console.log($rootScope.documents)
@@ -544,7 +516,7 @@ angular.module('musicBox.document.service',[])
         }.bind(this));
         promise.query.catch(function (response) {  
            console.log(response)   
-           thos.flash_message('error', 'error' , 3000)
+           $rootScope.flashmessage('error', 'error' , 3000)
         }.bind(this));
 
 

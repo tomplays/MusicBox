@@ -108,26 +108,22 @@ angular.module('musicBox.document.directive', [])
       }
     };
 })
-.directive("mbFlashmessage", function($rootScope) {
+.directive("mbFlashmesmmsage", function($rootScope) {
     var link= function(){
       console.log(' [Flash message] directive')
     }
     return {
       // replace:true,
       restrict: "E",
-      scope: true,
-      link:link,
-      templateUrl: function() {
-        return "js/MusicBox/document/tpl/flash_message.tpl.html";
-      }
+     
     };
 })
 .directive("mbTopmenus", function($rootScope) {
     var link= function(scope){
-      if($rootScope.ui.renderAvailable_active !=='embed'){
-          $rootScope.ui.topmenus = {'active':false}
+      if($rootScope.render_config.renderAvailable_active !=='embed'){
+          $rootScope.render.top_menus.doc = {'active':false}
       }
-      console.log(' [top menus] directive'+scope.visible+$rootScope.ui.renderAvailable_active)
+      console.log(' [top menus] directive'+scope.visible+$rootScope.render_config.renderAvailable_active)
     }
     return {
       // replace:true,

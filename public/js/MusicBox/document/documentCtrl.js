@@ -67,11 +67,14 @@ angular.module('musicBox.document.controller', []);
  */
 
 
-function DocumentCtrl($scope, $http , $sce, $location, $routeParams ,socket,renderfactory, DocumentService, $anchorScroll, $timeout, MarkupService) {
+function DocumentCtrl($rootScope, $scope, $http , $sce, $location, $routeParams ,socket,renderfactory, DocumentService, $anchorScroll, $timeout, MarkupService) {
 		
 
-	doc = new DocumentService()
-
+	
+		render = new renderfactory()
+		render.init('document')
+    	doc = new DocumentService()
+		doc.Load($routeParams.docid ? $routeParams.docid : 'homepage')
 
 
 			
@@ -120,41 +123,7 @@ function DocumentCtrl($scope, $http , $sce, $location, $routeParams ,socket,rend
 			$scope.markup_total_count--;
 		}
 	}
-	/**
-      * @description 
-      * Show a message to user
-      *
-      *  @param {String} msg - message to show
-      *  @param {String} classname - a css class ('ok'/ 'bad' / ..)
-      *  @param {Number/Time} timeout - 
-
-      *  @return -
-      * 
-      * @function docfactory#flash_message
-      * @link docfactory#flash_message
-      * @todo --
-      */
-
-      $scope.flashmessage = function (msg,classname ,timeout, closer) {
-        $scope.flash_message = {}
-        $scope.flash_message.text = msg;
-        $scope.flash_message.classname = classname;
-
-        if(!closer){
-            $scope.flash_message.closer =false;
-        }
-        else{
-            $scope.flash_message.closer = closer;
-        }
-        
-
-        // apply timeout if set to true
-        if(timeout){
-            $timeout(function(){
-                $scope.flash_message.text =  '';
-            },timeout);
-        }
-      }
+	
 
      $scope.defocus_containers = function (){
 			// call parent CTRL > to move in documentCtrl
@@ -170,10 +139,6 @@ $scope.SetSlug = function (slug) {
         // using it's route (defined in app.js routers)
         if($routeParams.docid){
           $scope.slug = $routeParams.docid
-
-        }
-        if($routeParams.docid){
-          $scope.slug = $routeParams.docid
        
         }
     }
@@ -184,31 +149,12 @@ $scope.SetSlug = function (slug) {
   };
 
 
- $scope.RenderConfig = function () {
-    new renderfactory().init('document')
-      
-
-    if($scope.ui.menus.quick_tools_help.visible == true){
-    	
-        $scope.flashmessage($scope.render_config.i18n.CUSTOM.HELP.fresh_document, 'help' , 3000, true)
-    }
-
-
-  }
 
 	
 	
-	$scope.init = function (){
-		console.log('DocumentCtrl init')
-		$scope.SetSlug()
-		$scope.RenderConfig()
-		doc.Load($scope.slug)
-		return
-	}
 	
-	// like ng-init
-	// "direct" call
-	$scope.init()
+		
+	
 
 	/**
 	*  UI
@@ -368,13 +314,7 @@ $scope.SetSlug = function (slug) {
 	}
 
 
-	$scope.toggle_render = function(r){
-		console.log('toggled_render from '+$scope.ui.renderAvailable_active+' to '+r)
-		$scope.ui.menus['quick_tools_document'].open = "no"
-		$scope.ui.menus['quick_tools_help'].open = "no"
-		$scope.ui.menus['quick_tools_published'].open = "no"
-		$scope.ui.renderAvailable_active = r
-	}
+	
 
 	$scope.switch_focus_side = function(side){
 		$scope.ui.focus_side = side;
@@ -443,20 +383,15 @@ $scope.SetSlug = function (slug) {
 		$scope.doc.containers[index+1].start = $scope.doc.containers[index+1].start+1;
 	}
 
+	
+
+
+	// use renderService Shared with UserCtrl
 	$scope.expand_tools = function(name){
-/*
-        $scope.ui.menus['quick_tools_document'].open =false
-        $scope.ui.menus['quick_tools_help'].open= false;
-        $scope.ui.menus['quick_tools_published'].open = false
-        */
-		if(!$scope.ui.menus[name].open || $scope.ui.menus[name].open === false){
-			$scope.ui.menus[name].open = true
-		}
-		else{
-			$scope.ui.menus[name].open = false
-		}
-		
-		
+		render.expand_tools(name)
+  	}
+  	$scope.toggle_render = function(r){
+		render.toggle_render(r)
 	}
 	
 	
@@ -555,82 +490,13 @@ $scope.SetSlug = function (slug) {
 			}	
 	
 	});
-	$scope.$watch('ui.selected_range.redraw', function(newValue, oldValue) {
-		//console.log('<<<<<<<<<< ui.selected_range.redraw')
-
-
-		//console.log(newValue, oldValue)
-		if(!newValue || newValue === false){
-			//console.log('<<<<<<<<<< do nothing (ui.selected_range.redraw end)')
-		}
-		else{
-		
-					
-				//console.log('reset all document markups to selected = false')
-			//	_.each($scope.markups, function(m, i){
-	  				
-			//	})
-
-	 if( $scope.ui.selected_range.wait_ev == true   ){
-       
-     
-
-				// stop redraw loop (each section)
-				$scope.ui.selected_range.redraw=false
-				$scope.ui.selected_range.set=true
-				$scope.ui.selected_range.size = $scope.ui.selected_range.end - $scope.ui.selected_range.start
-
-
-				// at least one char
-				if($scope.ui.selected_range.size == 0){
-					$scope.ui.selected_range.size = 1
-				}
-				$scope.ui.selected_range.multi =  ($scope.ui.selected_range.size) > 1 ? true : false
-			
-
-				_.each($scope.doc.containers, function(c,i){
-				
-					 c.inrange_letters  = Math.random()
-					 c.inrange_markups  =  Math.random()
-					 
-
-					  console.log('-------------CASE UI ONLY')
-				})
- }
-
-		}
-	})
+	
 /*
 	 $scope.$watch('doc.markups', function(oldValue, newValue) {
       
 		//
    },true);
 */
-
-	$scope.$watch('ui.selected_range.start', function(newValue, oldValue) {
-			if(newValue==null){
-				
-			}
-			else{
-				    if($scope.ui.selected_range.wait_ev == false){
-						$scope.ui.selected_range.redraw=true
-					}
-			}
-	});	
-
-	$scope.$watch('ui.selected_range.end', function(newValue, oldValue) {
-
-			if(newValue==null){
-				
-			}
-			else{
-					if($scope.ui.selected_range.wait_ev == false){
-						$scope.ui.selected_range.redraw=true
-					}
-			}
-					
-	});
-
 
 
 
@@ -896,42 +762,6 @@ function DocumentCtrlRo($scope, $http , $sce, $location, $routeParams ,socket,re
 var newdoc_service;
 function DocumentNewCtrl($scope, $compile, $http , $sce, $location, $routeParams, renderfactory,socket,DocumentService, $timeout) {
 
-/*
-	$scope.init_new_doc = function (){
-		console.log('DocumentNewCtrl')
-		$http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded"
-		
-		newdoc_service =  new DocumentService()
-		newdoc_service.RenderConfig()
-		newdoc_service.init_new()
-
-		//newdoc_service
-		
-		$scope.userin= USERIN;
-		document.title = 'Create a new document'	
-	}
-
-*/
-	/*
-	$scope.create_doc = function(){
-		
-		console.log($scope.newdoc)
-		var thiselem;
-		thiselem = document.createElement('div');
-		thiselem.innerHTML = $scope.newdoc.raw_content
-		document.body.appendChild(thiselem)
-		var elem = thiselem
-		$scope.serialization = new Serialize(elem)
-		console.log($scope.serialization)
-		thiselem.remove()
-		
-		var newdoc_service =  new DocumentService()
-		newdoc_service.RenderConfig()
-		newdoc_service.newdoc();
-	}
-	
-	$scope.init_new_doc();
-*/
 	
 } // end controller
 //DocumentNewCtrl.$inject = ['$scope', '$http' ,'docfactory', '$timeout'];

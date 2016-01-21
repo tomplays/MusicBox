@@ -6,7 +6,10 @@ div(ng-if="section['objects_count']['by_positions'][layout.name].count > 0 || la
 		
 		// title, author, date, ..
 		doc-title(ng-if="(layout.include_title) && ($parent.$parent.$first) &&  (ui.renderAvailable_active !=='embed') " )
-		mb-dataset(ng-if="ui.dataset.active && (layout.include_dataset)")
+		
+		mb-dataset(ng-if="render.dataset.active && (layout.include_dataset)")
+
+		div(ng-controller="MarkupCtrl", style="display:none" ng-repeat="markup in markups_by_start_end_position_type(section.start, section.end ,'inline', 'markup') track by $index")
 
 		//  
 		div(ng-if="layout.name == 'right'")
@@ -23,7 +26,7 @@ div(ng-if="section['objects_count']['by_positions'][layout.name].count > 0 || la
 				
 			div(ng-controller="MarkupCtrl", style="display:none" ng-repeat="markup in markups_by_start_end_position_type(section.start, section.end ,'any', 'container_class') track by $index")
 				
-			div(ng-controller="MarkupCtrl", style="display:none" ng-repeat="markup in markups_by_start_end_position_type(section.start, section.end ,'inline', 'markup') track by $index")
+			
 				
 		div(ng-if="object.visible!==false && layout.include_objects!==false && layout.name!=='slidewide'" , ng-repeat="object in available_sections_objects")
 			//h3 {{object}} 
@@ -34,7 +37,7 @@ div(ng-if="section['objects_count']['by_positions'][layout.name].count > 0 || la
 					markup-view()
 
 		// mb-commentform(ng-if="(doc_options.comments_open.value !=='false' || !doc_options.comments_open.value  ) && layout.name == 'left'")
-		mb-pusher(type="column", position="{{layout.name}}", ng-if="(doc_options.comments_open.value !=='false' || !doc_options.comments_open.value  ) && layout.name == 'left'")
+		mb-pusher(type="column",start="ui.selected_range.start", end="ui.selected_range.end", position="{{layout.name}}", ng-if="(doc_options.comments_open.value !=='false' || !doc_options.comments_open.value  ) && layout.name == 'left'")
 		
 		div(ng-if="layout.name == 'slidewide'")
 			carousel( interval="1000")
@@ -70,8 +73,9 @@ div(ng-if="section['objects_count']['by_positions'][layout.name].count > 0 || la
 
 
 			
+			
 
-			mb-pusher(type="new_section", position="{{layout.name}}")
+			mb-pusher(type="new_section", position="{{layout.name}}", ng-if="$parent.$parent.$parent.$last")
 
 		
 

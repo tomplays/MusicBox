@@ -21,8 +21,10 @@ var render;
 **/
 // todo : remove old api call
 
-function UserProfileCtrl($scope, $http , $location, $routeParams,  $locale, DocumentService, UserRest, UserService, renderfactory,$timeout) {
-	  	 new renderfactory().init('user')
+function UserProfileCtrl($rootScope, $scope, $http , $location, $routeParams,  $locale, DocumentService, UserRest, UserService, renderfactory,$timeout) {
+	  	
+	  	render  = new renderfactory()
+	  	render.init('user')
 
  		$scope.globals = GLOBALS;
         $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
@@ -43,27 +45,7 @@ function UserProfileCtrl($scope, $http , $location, $routeParams,  $locale, Docu
 
 
 
-      $scope.flashmessage = function (msg,classname ,timeout, closer) {
-        $scope.flash_message = {}
-        $scope.flash_message.text = msg;
-        $scope.flash_message.classname = classname;
-
-        if(!closer){
-            $scope.flash_message.closer =false;
-        }
-        else{
-            $scope.flash_message.closer = closer;
-        }
-        
-
-        // apply timeout if set to true
-        if(timeout){
-            $timeout(function(){
-                $scope.flash_message.text =  '';
-            },timeout);
-        }
-      }
-
+    
 
   		$scope.edit_user= function(){
   			var data = new Object()
@@ -73,13 +55,11 @@ function UserProfileCtrl($scope, $http , $location, $routeParams,  $locale, Docu
 
 		 	var promise = UserRest.edit({}, serialize(data) ).$promise;
     		promise.then(function (Result) {
-    			var msg = 'saved'
     			if(Result.edited){
-					msg = Result.edited
-					$scope.flashmessage(msg, 'ok' , 2000, false)
+					$rootScope.flashmessage(Result.edited, 'ok' , 2000, false)
     			}
     			if(Result.error){
-    				$scope.flashmessage(Result.error, 'bad' , 2000, false)
+    				$rootScope.flashmessage(Result.error, 'bad' , 2000, false)
     			}
           		
 
@@ -91,11 +71,20 @@ function UserProfileCtrl($scope, $http , $location, $routeParams,  $locale, Docu
 
 		}
 
+		$scope.expand_tools = function(name){
+			render.expand_tools(name)
+  		}
+  		$scope.toggle_render = function(r){
+			render.toggle_render(r)
+		}
+
+
+
         $scope.delete_document= function(doc){
         	
         	var tdoc           	= new DocumentService();
-        	tdoc.SetSlugFromValue(doc.slug)
-        	tdoc.doc_delete({id:doc.slug});
+        	//tdoc.SetSlugFromValue(doc.slug)
+        	tdoc.doc_delete({id:tdoc.slug});
         	$scope.documents  = _.reject($scope.documents , function(doch){ return doch._id == doc._id });
         }
 

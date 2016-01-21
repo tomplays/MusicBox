@@ -1,17 +1,17 @@
-span.open_comment(tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.COMMENT.label}}" ng-click="open_pusher()") +
+span.open_comment(tooltip-placement="right" tooltip="{{i18n.CUSTOM.COMMENT.label}}" ng-click="open_pusher()") +
 div.comment_form(ng-if="ui.menus.push_comment.open == $parent.$parent.$parent.$index")
 	div.user_not_in(ng-if="userin.username == '' ")
 		p
-			a(ng-click="external_link(root_url+':'+port+'/login')" , ng-if="userin.username == '' ") {{render_config.i18n.CUSTOM.COMMENT.needs_logging}}
+			a(ng-click="external_link(root_url+':'+port+'/login')" , ng-if="userin.username == '' ") {{i18n.CUSTOM.COMMENT.needs_logging}}
 		p
-			a.loginOrSignup(ng-click="external_link(root_url+'/login?redirect_url=#{root_url}:#{port}/doc/'+doc.slug)" , ng-if="userin.username == '' ") {{render_config.i18n.CUSTOM.USER.loginOrSignup}}
+			a.loginOrSignup(ng-click="external_link(root_url+'/login?redirect_url=#{root_url}:#{port}/doc/'+doc.slug)" , ng-if="userin.username == '' ") {{i18n.CUSTOM.USER.loginOrSignup}}
 	div.user_in(ng-if="userin.username")
 		
 		span.floating-edit
 			//span(ng-if="doc.published == 'draft'") a&nbsp; 
 			
 		p
-			label {{render_config.i18n.CUSTOM.ACTIONS.add}} {{render_config.i18n.CUSTOM.OBJECTS[push.type]}}
+			label {{i18n.CUSTOM.ACTIONS.add}} {{i18n.CUSTOM.OBJECTS[push.type]}}
 		p(ng-hide="ui.selected_range.start || ui.selected_range.end")
 			label Select a range of text first
 		p(ng-if="ui.selected_range.start || ui.selected_range.end") Adding {{push.type}} from {{ui.selected_range.start}} to {{ui.selected_range.end}}
@@ -19,25 +19,25 @@ div.comment_form(ng-if="ui.menus.push_comment.open == $parent.$parent.$parent.$i
 
 		div(ng-if="doc_owner ==true")
 			p
-				label {{render_config.i18n.CUSTOM.ACTIONS.select}} type
+				label {{i18n.CUSTOM.ACTIONS.select}} type
 				select(ng-model="push.type")
 					option(ng-repeat="object in available_sections_objects" ng-if="objSchemas[object].modes.pusherleft == true" ng-value="{{object}}" ) {{object}}
 			p
-				label {{render_config.i18n.CUSTOM.ACTIONS.select}} position
+				label {{i18n.CUSTOM.ACTIONS.select}} position
 				select(ng-model="push.position" )
 					option(ng-repeat="p in objSchemas[push.type].positions.available" ng-if="objSchemas[push.type].modes.pusherleft == true" ng-value="{{p}}" ) {{p}}
 			p
-				label {{render_config.i18n.CUSTOM.ACTIONS.select}} subtype
+				label {{i18n.CUSTOM.ACTIONS.select}} subtype
 				select(ng-model="push.subtype")
 					option(ng-repeat="st in objSchemas[push.type].modes.editor.fields.subtype.available" ng-if="objSchemas[push.type].modes.pusherleft == true" ng-value="{{st}}" ) {{st}}
 
 
 		p(ng-if="push.rangetext") 
 			label {{push.rangetext}}
-		textarea(ng-model="push.metadata", type="text", value="{{render_config.i18n.CUSTOM.COMMENT.textarea}}") 
+		textarea(ng-model="push.metadata", type="text", value="{{i18n.CUSTOM.COMMENT.textarea}}") 
 		p.logged_in_as 
-			{{render_config.i18n.CUSTOM.COMMENT.logged_in_as}} 
+			{{i18n.CUSTOM.COMMENT.logged_in_as}} 
 			em
 				a(href="/me/account") {{userin.username}}
 		p
-			a.btn_ok.float_right(ng-show="ui.selected_range.start || ui.selected_range.end" ng-click="add()") {{render_config.i18n.CUSTOM.ACTIONS.add}}
+			a.btn_ok.float_right(ng-show="ui.selected_range.start || ui.selected_range.end" ng-click="add()") {{i18n.CUSTOM.ACTIONS.add}}

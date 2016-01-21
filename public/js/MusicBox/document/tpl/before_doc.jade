@@ -1,36 +1,6 @@
-// pre {{ui.boundaries}}
-// pre {{doc.operation}}
-// pre {{sectionstocount}}
 ul(ng-if="ui.debug")
 	li(ng-repeat="op in doc.operations") {{op}}
 
-div(ng-repeat="d in ui.selected_range.debug")
-	// pre {{d}}
-// div.sectiondebug(ng-if="ui.debug")
-	h3 mapping_passes {{mapping_passes}}
-	h3 section count {{sectionstocount}}
 
-	h2 stack ({{ ui.offset_queue.length }})
-	a(ng-click="sync_queue()")  sync queue
-	div(ng-repeat="s in ui.offset_queue")
-		em {{s.type}}
-		em {{s.start}}
-		em {{s.end}}
 
-	// {{ui.selected_range.markups_to_offset}}
-	// input(type="checkbox", ng-model="ui.sync_sections" , ng-true-value="true" ,ng-false-value="false")
-	// span {{ui.sync_sections}}
-	ul
-		li(ng-repeat='s in doc.containers')
-			span # {{$index}}
-				// input(ng-model="s.start" ,type="number") 
-				// input(ng-change="" , ng-model="s.end", type="number")
-				
-				// textarea(ng-model="s.fulltext" , readonly)
-				//span (read-only)
-				p {{s.fulltext}}
-				p {{s.objects}}
-				// sync_section_next(s, $index)
-				p objects in section :  {{s.objects_count.all.count}}
-				p {{s.objects_count['inline']['markup'].count}}
-				i.fa.fa-save.btn_action(ng-click="markup_save(s)")
+

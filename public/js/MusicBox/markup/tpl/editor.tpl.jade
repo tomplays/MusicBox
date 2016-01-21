@@ -1,6 +1,6 @@
 // editor for markup object
 // can be in any position of the layout depending markup position
-h5 {{render_config.i18n.CUSTOM.ACTIONS.edit}} {{markup.type}}
+h5 {{i18n.CUSTOM.ACTIONS.edit}} {{markup.type}}
 form(name="myForm")
 
 
@@ -33,7 +33,7 @@ form(name="myForm")
 
 		tab(ng-if="markup.objSchemas.modes.editor.tabs.type"    heading="{{markup.objSchemas.modes.editor.tabs.type}}") 
 			span.field.typer
-				label.label_type {{render_config.i18n.CUSTOM.ACTIONS.select}} type
+				label.label_type {{i18n.CUSTOM.ACTIONS.select}} type
 				ul.typer
 					li(ng-repeat="t in available_sections_objects")
 						span {{objSchemas[t].display_name}}
@@ -42,7 +42,7 @@ form(name="myForm")
 		tab(ng-if="markup.objSchemas.modes.editor.tabs.subtype"    heading="{{markup.objSchemas.modes.editor.tabs.subtype}}") 	
 					
 			span.field.typer.sub
-				label.label_type {{render_config.i18n.CUSTOM.ACTIONS.select}} subtype
+				label.label_type {{i18n.CUSTOM.ACTIONS.select}} subtype
 				// div(ng-if="markup.objSchemas.subtype.free_input")
 					label Set sub-type
 					input(ng-model="markup.subtype" , type="text")
@@ -55,11 +55,11 @@ form(name="myForm")
 			
 			span.field.positions
 				
-				label {{render_config.i18n.CUSTOM.ACTIONS.select}} position
-				// h2 {{render_config.i18n.CUSTOM.POSITIONS[markup.position]}}
+				label {{i18n.CUSTOM.ACTIONS.select}} position
+				// h2 {{i18n.CUSTOM.POSITIONS[markup.position]}}
 				div(class="btn-group typer.position")
 					label(ng-repeat="t in markup.objSchemas.positions.available" class="btn btn-primary" ng-click="change_value('position', t, true)" , ng-model="markup.position" btn-radio="t")
-							{{render_config.i18n.CUSTOM.POSITIONS[t]}}
+							{{i18n.CUSTOM.POSITIONS[t]}}
 		tab(heading="O.")
 			pre {{markup.operation}}
 			ul
@@ -99,10 +99,10 @@ form(name="myForm")
 			input(ng-model="markup.fulltext" type="text" )
 
 	.object-tools
-		i.fa.fa-sliders.btn_action(tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.more_options}}" ng-click="toggle_attribute('object_tools')")
-		i.fa.fa-save.btn_action( tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.save}}" ng-click="save()")
+		i.fa.fa-sliders.btn_action(tooltip-placement="right" tooltip="{{i18n.CUSTOM.ACTIONS.more_options}}" ng-click="toggle_attribute('object_tools')")
+		i.fa.fa-save.btn_action( tooltip-placement="right" tooltip="{{i18n.CUSTOM.ACTIONS.save}}" ng-click="save()")
 
 		// ng-if="markup.touched == true"
 
 		
-		i.fa.fa-remove.btn_action(tooltip-placement="left" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.delete}}" ng-click="delete()")
+		i.fa.fa-remove.btn_action(tooltip-placement="left" tooltip="{{i18n.CUSTOM.ACTIONS.delete}}" ng-click="delete()")

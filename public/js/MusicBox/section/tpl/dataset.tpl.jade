@@ -29,9 +29,9 @@ div(ng-if="section.section_markups.length>0")
            span.markup-item-subtype(ng-click="toggle_select_markup('click')", class="clipped_{{markup.isselected}} markup-hn_{{markup.subtype}}" ) + 
            
           td
-           i.fa.fa-save.btn_action(tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.save}}" ng-click="save('ok')")
+           i.fa.fa-save.btn_action(tooltip-placement="right" tooltip="{{i18n.CUSTOM.ACTIONS.save}}" ng-click="save('ok')")
 
-           i.fa.fa-remove.btn_action(tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.delete}}" ng-click="delete()")
+           i.fa.fa-remove.btn_action(tooltip-placement="right" tooltip="{{i18n.CUSTOM.ACTIONS.delete}}" ng-click="delete()")
           td 
             input(ng-model="markup.type" , type="text")
           td 

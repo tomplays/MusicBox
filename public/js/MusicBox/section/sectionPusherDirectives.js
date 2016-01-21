@@ -1,38 +1,50 @@
 'use strict';
 
+
+/* Angular Directive + controller
+
+// Handle new markup or (section) in document.
+
+// INJECT : 
+
+        $rootScope 
+            for doc owner,
+            objects configs
+            i18n
+
+        MarkupRest (rest api for "add" )
+
+
+*/  
+
+
 angular.module('musicBox.section.directive.pusher', [])
 
-.directive("mbPusher", function($rootScope,MarkupRest, renderfactory) {
+.directive("mbPusher", function($rootScope, MarkupRest) {
     var global_active_pusher =true;
 
     var link= function(scope){
        //   console.log(' [mbPusher] directive')
     }
-    var controller= function($scope){
-          /*
-             console.log($scope.$parent.section)
-             console.log($scope.$parent.$parent.doc)
-             console.log($rootScope.userin.username)
-             console.log($rootScope.doc_owner)
-          */
-
-           $scope.userin  = $rootScope.userin
+    var pusherCtrl= function($scope ){
+         
+           $scope.userin      = $rootScope.userin
            $scope.render_config =$rootScope.render_config
+           $scope.render =$rootScope.render
            $scope.objSchemas = $rootScope.objSchemas 
-           $scope.ui = $rootScope.ui
            $scope.push = {}
-           
+           $scope.i18n = $rootScope.i18n;
            $scope.preset_push = function(){
                     
                     var push_set= {
                                       isanon : true,
                                       isowner: $rootScope.doc_owner,
-                                      start: ($scope.type=='new_section') ? $scope.$parent.section.end+1 : $rootScope.ui.selected_range.start,
-                                      end: ($scope.type=='new_section') ? $scope.$parent.section.end+9 :  $rootScope.ui.selected_range.end,
+                                      start: ($scope.type=='new_section') ? $scope.$parent.section.end+1 : $scope.start,
+                                      end: ($scope.type=='new_section') ? $scope.$parent.section.end+9 :  $scope.end,
                                       position   : ($scope.type=='new_section' || $scope.type=='inline_objects') ? 'inline' : 'left',
                                       metadata : ($scope.type=='new_section') ? '' : 'write your comment here',
-                                      username : $scope.userin.username,
-                                      user_id : $scope.userin._id,
+                                      username : ($scope.userin && $scope.userin.username) ? $scope.userin.username : null,
+                                      user_id : ($scope.userin && $scope.userin._id)  ? $scope.userin._id : null,
                                       has_ranges:  ($scope.type=='new_section') ? true :false,
 
                    }
@@ -44,6 +56,7 @@ angular.module('musicBox.section.directive.pusher', [])
               $scope.push.type=  'container';
               $scope.push.subtype =  'section'
               $scope.available_sections_objects = ['container']
+               
 
           }
            else if($scope.type=='inline_objects'){
@@ -64,7 +77,7 @@ angular.module('musicBox.section.directive.pusher', [])
                 $scope.push.metadata  = $scope.objSchemas[$scope.push.type].modes.editor.fields.metadata.label
 
                 if($rootScope.doc_owner == true ){
-                  $scope.available_sections_objects = $rootScope.available_sections_objects
+                  $scope.available_sections_objects = $scope.available_sections_objects
                 }
                 else{
                   $scope.available_sections_objects = ['comment']
@@ -87,11 +100,12 @@ angular.module('musicBox.section.directive.pusher', [])
            $scope.add = function(){
 
                  var push = $scope.push
+               
                  if(!$scope.push.status) { $scope.push.status   = 'approved' }
                  if(!$scope.push.depth)   { $scope.push.depth    = 1 }
                  if(!$scope.push.doc_id_id) { $scope.push.doc_id_id  = 'null'  }
                  console.log('ready to push')
-                 
+                 console.log($scope.push)
                  var promise= MarkupRest.new({Id:$scope.$parent.doc.slug}, serialize($scope.push)).$promise;
                   promise.then(function (Result) {
                   if(Result.inserted[0]){
@@ -113,6 +127,7 @@ angular.module('musicBox.section.directive.pusher', [])
                          
                         } 
                         $scope.$parent.doc.operation = operation_
+                        
 
 
                     
@@ -153,28 +168,31 @@ angular.module('musicBox.section.directive.pusher', [])
               if(global_active_pusher !== true){
                   return false
               }
-              if($scope.type=='new_section' && $rootScope.doc_owner == true && $scope.$parent.$parent.$parent.$parent.$last){
+              else if($scope.type=='new_section' && $rootScope.doc_owner == true && $scope.last == true){
                 return true
               }
-              if( $scope.type=='inline_objects' && $rootScope.doc_owner == true){
+              else if( $scope.type=='inline_objects' && $rootScope.doc_owner == true){
                  return true
                }
-              if( $scope.type=='container_class' && $rootScope.doc_owner == true && $scope.$parent.$parent.$parent.$parent.$last){
+              else if( $scope.type=='container_class' && $rootScope.doc_owner == true){
                  return true
               }
-              return true;
+              else{
+                return true;
+              }
            
             
            }
 
            $scope.new_section = function(){
+
              $scope.add()
            }
 
 
             $scope.pusher_isopen = function(){
 
-              if( $scope.type=='new_section' && $rootScope.doc_owner == true && $scope.$parent.$parent.$parent.$parent.$last){
+              if( $scope.type=='new_section' && $rootScope.doc_owner == true && $scope.last== true){
                  return true
               }
                if( $scope.type=='inline_objects' && $rootScope.doc_owner == true){
@@ -211,22 +229,26 @@ angular.module('musicBox.section.directive.pusher', [])
            }
 
            /// watch rootscope UI changes
-          $rootScope.$watch('ui.selected_range.redraw', function(newValue, oldValue) {
-              if(oldValue == newValue){}
-              else{
-                if($scope.type=='new_section'){
+         $scope.$watch('[start,end]', function(newValue, oldValue) {
+                
+            //  if(oldValue == newValue){}
+            //  else{
+           
+                if($scope.type && $scope.type=='new_section'){
 
                  
                 }
                 
                 else{
-                  $scope.push.start =  $rootScope.ui.selected_range.start
-                  $scope.push.end   =  $rootScope.ui.selected_range.end
+                  $scope.push.start =  $scope.start
+                  $scope.push.end   =  $scope.end
+
+                 
                 }
 
 
 
-              }
+           //   }
 
               if($scope.push.start && $scope.push.start!==null && $scope.push.end && $scope.push.end!==null){
                   $scope.push.has_ranges =true
@@ -237,13 +259,14 @@ angular.module('musicBox.section.directive.pusher', [])
           })
 
     
-          $scope.$watch('[$parent.section.end, $parent.section.start]', function(newValue, oldValue) {
+          $scope.$watch('[section.end, section.start]', function(newValue, oldValue) {
               if(oldValue == newValue){}
               else{
+
                 if($scope.type=='new_section'){
 
                      $scope.push.start     =  parseInt($scope.$parent.section.end)+1
-                     $scope.push.end   =  parseInt($scope.$parent.section.end)+9
+                     $scope.push.end       =  parseInt($scope.$parent.section.end)+9
                      console.log('Pusher (new_section) updated')
                 }
                 else{
@@ -308,12 +331,16 @@ angular.module('musicBox.section.directive.pusher', [])
         return {
         restrict: "AE", 
         scope: {
+            start: "=",
+            end: "=",
             type: "@",
-            position: "@"
+            position: "@",
+            last: "="
         },
-        replace : true,
-        controller: controller,
-        link:link,
+        //require: 'mbRanges',
+        // replace : true,
+        controller:pusherCtrl,
+      //  link:link,
           templateUrl: function() {
                 return "js/MusicBox/section/tpl/pusher.tpl.html";
           }

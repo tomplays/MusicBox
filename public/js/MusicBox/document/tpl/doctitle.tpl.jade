@@ -12,9 +12,8 @@ div.doc_header()
 		label Edit beforetitle
 		input(ng-if="ui.editing_doc_notices_before_title", ng-model="doc_options.doc_notices_before_title.value", name="doc_options.doc_notices_before_title.value")
 		a.btn_ok.float_right(ng-click="edit_doc_option('doc_notices_before_title')") Save
-
 	h1(ng-if="test_draft(doc.title)" ng-click="edit_doc('title')")
-		{{render_config.i18n.CUSTOM.DOCUMENT.default_title}}
+		{{i18n.CUSTOM.DOCUMENT.default_title}}
 		span.hint(tooltip="edit title") edit title
 	
 	h1(ng-hide="test_draft(doc.title)" ng-if="doc_options.display_doc_title.value =='doc_header' || !doc_options.display_doc_title.value", ng-dblclick="edit_doc('title')") {{doc.title}} &nbsp;
@@ -34,15 +33,14 @@ div.doc_header()
 		a.btn_ok.float_right(ng-click="edit_doc_option('doc_notices_after_title')") Save
 			
 	time.head_left(ng-if="doc_options.display_date.value =='doc_header' || !doc_options.display_date.value") {{doc.formated_date}}&nbsp;
-		
-		span.published-header.hint(tooltip="{{doc.published}}" ng-click="expand_tools('quick_tools_published')", ng-if="doc_owner == true  || ui.secret")
+		span.published-header.hint(tooltip="{{doc.published}}" ng-click="expand_tools('published')", ng-if="doc_owner == true  || ui.secret")
 			i.fa.fa-eye-slash(ng-if="doc.published=='draft'") 
 			i.fa.fa-eye(ng-if="doc.published=='public'") 
 
 	
 	div.head_left(ng-if="doc_options.display_author.value =='doc_header' || !doc_options.display_author.value ")
 		div.post-author-info
-			p {{render_config.i18n.CUSTOM.DOCUMENT.by_author}} 
+			p {{i18n.CUSTOM.DOCUMENT.by_author}} 
 				span(style="color:{{doc.user.color}};", class="post-author-name", rel="author") {{doc.user.username}} 
 
 	div.sharer(ng-if="doc.published=='public' && (doc_options.display_sharer.value =='doc_header' || !doc_options.display_sharer.value)" )

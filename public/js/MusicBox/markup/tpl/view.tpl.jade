@@ -1,7 +1,6 @@
 div(ng-controller="MarkupCtrl", class="markup_box markup_box_depth_{{markup.depth}} markup_box_status_{{markup.status}}   markup_displayer_ markup_displayer markup_displayer_{{markup.type}} markup_displayer_subtype_{{markup.subtype}}  by_me_{{markup.by_me}} is_editing_{{markup.editing}}  touchedmk-{{markup.touched}} ")
-	
-	markup-editor(class="markup_editor markup_editor_{{markup.type}}", ng-if="markup.editing == true")
-	
+	// pre {{markup}}
+
 
 	// h4 even not visible {{markup.visible}} {{markup.type}}
 	// h3 mtda : {{markup.metadata}}
@@ -13,7 +12,7 @@ div(ng-controller="MarkupCtrl", class="markup_box markup_box_depth_{{markup.dept
 	// pre {{markup}}
 	.fast_editor(ng-if="markup.fast_editor")
 		span.flag()
-			i.fa.fa-remove.btn_action(tooltip-placement="left" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.delete}}" ng-click="delete()")
+			i.fa.fa-remove.btn_action(tooltip-placement="left" tooltip="{{i18n.CUSTOM.ACTIONS.delete}}" ng-click="delete()")
 	
 
 	// h6(ng-bind-html="markup.fulltext")
@@ -26,7 +25,7 @@ div(ng-controller="MarkupCtrl", class="markup_box markup_box_depth_{{markup.dept
 		a(ng-click="apply_reverse()") reverse_apply
 
 
-	div.mk_inside_visible(ng-if="(markup.visible && !markup.forced) || (markup.visible && markup.forced && ui.renderAvailable_active== 'editor')")
+	div.mk_inside_visible(ng-if="(markup.visible && !markup.forced) || (markup.visible && markup.forced && render_config.renderAvailable_active== 'editor')")
 		// a(ng-click="offset(1,1)") offset me
 		// a(ng-click="match_selection()") match selection
 		// h1 isol ? {{markup.isolated}}
@@ -52,12 +51,12 @@ div(ng-controller="MarkupCtrl", class="markup_box markup_box_depth_{{markup.dept
 
 
 		span.icon_col.use_depth(ng-hide="markup.type== 'child'")
-			i(tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.select_edit}}" class="fa fa-{{markup.type}} fa-{{markup.subtype}} editing_{{markup.editing}} selected_{{markup.selected}}",  ng-click="toggle_select_markup('click')", ng-dblclick="toggle_select_markup( 'dblclick')"  ) 
+			i(tooltip-placement="right" tooltip="{{i18n.CUSTOM.ACTIONS.select_edit}}" class="fa fa-{{markup.type}} fa-{{markup.subtype}} editing_{{markup.editing}} selected_{{markup.selected}}",  ng-click="toggle_select_markup('click')", ng-dblclick="toggle_select_markup( 'dblclick')"  ) 
 				span(ng-if="markup.type=='generic'") {{markup.subtype[0]}}
 			// span select
 
 		// span.icon_col.use_depth(ng-if="markup.type== 'container'")
-			i(tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.select_edit}}" class="fa fa-{{markup.type}} fa-{{markup.subtype}} editing_{{markup.editing}} selected_{{markup.selected}}",  ng-click="select_section()"  ) Select section # {{markup.sectionin}}
+			i(tooltip-placement="right" tooltip="{{i18n.CUSTOM.ACTIONS.select_edit}}" class="fa fa-{{markup.type}} fa-{{markup.subtype}} editing_{{markup.editing}} selected_{{markup.selected}}",  ng-click="select_section()"  ) Select section # {{markup.sectionin}}
 		div.data_col
 
 			span.mk_val.metadata.use_depth(ng-bind-html="markup.metadata",  ng-if="(markup.objSchemas.modes.read.display.metadata.displayed =='metadata')  ") 
@@ -77,9 +76,9 @@ div(ng-controller="MarkupCtrl", class="markup_box markup_box_depth_{{markup.dept
 				span.flag(ng-if="markup.status !== 'approved'")
 					i.fa.fa-flag.pending(tooltip="only visible by you and doc owner" ng-click="markup.editing = true")
 
-					i.fa.fa-remove.btn_action(tooltip-placement="left" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.delete}}" ng-click="delete()")
+					i.fa.fa-remove.btn_action(tooltip-placement="left" tooltip="{{i18n.CUSTOM.ACTIONS.delete}}" ng-click="delete()")
 
 
 			span(ng-include="fragments['child_markup'][0].url", ng-if="markup.type == 'child' ")
-		
+	markup-editor(class="markup_editor markup_editor_{{markup.type}}", ng-if="markup.editing == true")
 

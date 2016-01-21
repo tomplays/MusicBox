@@ -31,8 +31,7 @@ var MarkupSchema = new Schema({
         default: Date.now
     },
     updated: {
-        type: Date,
-        default: Date.now
+        type: Date
     },
     user_id: {
         type: Schema.ObjectId,

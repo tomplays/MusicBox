@@ -17,6 +17,84 @@ angular.module('musicBox.directives', [])
     };
 })
 
+
+.directive('mbFlashmessage', function($rootScope, $timeout){
+/**
+      * @description 
+      * Show a message to user
+      *
+      *  @param {String} msg - message to show
+      *  @param {String} classname - a css class ('ok'/ 'bad' / ..)
+      *  @param {Number/Time} timeout - 
+
+      *  @return -
+      * 
+      * @function docfactory#flash_message
+      * @link docfactory#flash_message
+      * @todo --
+      */
+
+
+  var flashmessageCtrl= function($scope, $rootScope){
+
+
+     // init flash message object
+   $scope.flash_message = {'text':''};
+
+   // bug if user ... :( 
+   if($rootScope.render.top_menus.help && $rootScope.render.top_menus.help.open == true){
+      $rootScope.flashmessage($rootScope.i18n.CUSTOM.HELP.fresh_document, 'help' , 3000, true)
+   }
+     
+    $rootScope.flashmessage = function (msg,classname ,timeout, closer) {
+       
+
+        $scope.flash_message = {}
+        $scope.flash_message.text = msg;
+        $scope.flash_message.classname = classname;
+
+        if(!closer){
+            $scope.flash_message.closer =false;
+        }
+        else{
+            $scope.flash_message.closer = closer;
+        }
+        
+
+        // apply timeout if set to true
+        if(timeout){
+            $timeout(function(){
+                $scope.flash_message.text =  '';
+            },timeout);
+        }
+      }
+      // test on load // $scope.flashmessage('hello /-)', 'help', 2220, true)
+
+
+  }
+
+
+
+
+
+
+
+    return {
+        restrict: 'AE',
+        controller: flashmessageCtrl,
+        link: function(scope, elem, attrs){
+         
+        },
+      scope: true,
+      templateUrl: function() {
+        return "js/MusicBox/document/tpl/flash_message.tpl.html";
+      }
+    };
+})
+
+
+
+
 .directive('fluid', 
 
   function($rootScope) {

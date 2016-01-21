@@ -19,6 +19,16 @@ angular.module('musicBox.markup.service',[]).factory("MarkupService", function(M
     return;
   }
 
+  MarkupService.prototype.fulltext = function (s,e){
+  console.log('init_fulltext (Class)')
+
+   
+
+  return ;
+  //$scope.compile_fulltext(fulltext_block)
+
+  }
+
   MarkupService.prototype.set = function (object) {
     this.servicetype = object.servicetype
     this.tracer = [];
@@ -37,6 +47,7 @@ angular.module('musicBox.markup.service',[]).factory("MarkupService", function(M
           break;
       case 'section':
           this.apimethod = MarkupRest
+          this.fulltext(object.start, object.end)
           break;
       
       

@@ -2,12 +2,12 @@
 // todo :
 //  * i18n
 //  * api for delete and create
-div(ng-if="ui.renderAvailable_active == 'doc_options'")
+div(ng-if="render_config.renderAvailable_active == 'doc_options'")
 	div.doc_editor()
 		
-		h4 {{render_config.i18n.CUSTOM.DOCUMENT.document_options}}
-		p.back_read(ng-if="ui.renderAvailable_active !=='read'")
-				span(ng-click="toggle_render('read')") &laquo; {{render_config.i18n.CUSTOM.ACTIONS.back_to_document}}
+		h4 {{i18n.CUSTOM.DOCUMENT.document_options}}
+		p.back_read(ng-if="render_config.renderAvailable_active !=='read'")
+				span(ng-click="toggle_render('read')") &laquo; {{i18n.CUSTOM.ACTIONS.back_to_document}}
 
 		.edit_field_left
 			.edit_field.excerpt_field
@@ -15,7 +15,7 @@ div(ng-if="ui.renderAvailable_active == 'doc_options'")
 				textarea(ng-model="doc.excerpt")
 				i.fa.fa-save(ng-click="edit_doc('excerpt')")
 										
-			.edit_field.room_field(ng-if="doc.user.username =='Tom Wersinger'")
+			.edit_field.room_field(ng-if="doc.user.username =='tomtomtom'")
 				label Published in "room" ID : {{doc.room.slug}}
 				input(type="text" ,ng-model="doc.room__id", name="doc.room__id")
 				i.fa.fa-save(ng-click="edit_doc('room_id')")

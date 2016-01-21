@@ -185,7 +185,7 @@ module.exports = function(grunt) {
 						'public/bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
 						'public/js/lib/webfont.js',
 						'public/bower_components/momentjs/min/moment-with-langs.min.js',
-						'public/bower_components/momentjs/lang/fr.js',
+						// 'public/bower_components/momentjs/lang/fr.js',
 						'public/c/MusicBox/*.js', 
 						'public/c/MusicBox/user/*.js',
 						'public/c/MusicBox/document/*.js', 

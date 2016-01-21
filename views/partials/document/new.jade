@@ -2,23 +2,20 @@ div(class="branding sc bg_white")
 	h1
 		a(href="/#!", title="") 
 			span #{locals.site_title}
-div.flash_message(ng-if="flash_message.text !==''", class="{{flash_message.classname}}")
-		span {{flash_message.text}}
 
-// TOP MENUS
-div.top_menus(ng-include="fragments['top_menus'][0]['url']")
+
 
 
 div.main_center.newdoc_form.bordered
 	
 
 	form(ng-if="!newdoc.created_link") 
-		h3 {{render_config.i18n.CUSTOM.DOCUMENT.create_new}}
+		h3 {{i18n.CUSTOM.DOCUMENT.create_new}}
 		.left_part
 			// p  {{render_config.i18n.CUSTOM.DOCUMENT.instructions}}
 			p
 			p
-				label {{render_config.i18n.CUSTOM.DOCUMENT.default_title}}
+				label {{i18n.CUSTOM.DOCUMENT.default_title}}
 				input(ng-model="newdoc.raw_title", ng-value="newdoc.title") 
 			
 			p

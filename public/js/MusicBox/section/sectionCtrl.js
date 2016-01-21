@@ -43,7 +43,7 @@
 
 
 
-angular.module('musicBox.section.controller', []).controller('SectionCtrl', function($scope, $http, DocumentService, MarkupRest,socket, MarkupService) {
+angular.module('musicBox.section.controller', []).controller('SectionCtrl', function($rootScope, $scope, $http, DocumentService, MarkupRest,socket, MarkupService) {
 
 $scope.init_= function (index_) {
 	console.log('init_ (section #'+ index_+')')
@@ -54,11 +54,10 @@ $scope.init_= function (index_) {
 		'sectionin' : index_,
 		'selected'  : false,
 		'focused'   : '',
-		'editing_text': $scope.ui.debug ? true : false,
-		'modeletters' : $scope.ui.debug ? 'single' : 'compiled',
+		'editing_text': $rootScope.ui.debug ? true : false,
+		'modeletters' : $rootScope.ui.debug ? 'single' : 'compiled',
 		'section_classes':'', 
         'touched'     : false,
-        'keepsync'     : true,
         'objSchemas' : $scope.objSchemas['container'],
         'objSchemas_css': $scope.objSchemas['container_class'],
         'servicetype'  	 :'section',
@@ -302,7 +301,7 @@ $scope.$watch('section.fulltext', function(newValue, oldValue) {
  			return s.deleted !==true; 
  		})
  		if(section_count.length==1){
-			$scope.flashmessage('Can\'t delete last section ', 'bad' , 2000, false)
+			$rootScope.flashmessage('Can\'t delete last section ', 'bad' , 2000, false)
 			return
 		}
 		
@@ -311,14 +310,14 @@ $scope.$watch('section.fulltext', function(newValue, oldValue) {
 			
 			$scope.section.deleted = true;
 			$scope.section.visible = false;
-			$scope.flashmessage('Section deleted', 'ok' , 2000, false)
+			$rootScope.flashmessage('Section deleted', 'ok' , 2000, false)
 
 		}.bind(this));
 		promise.catch(function (response) {  
-			$scope.flashmessage(response.err, 'bad' , 3000)
+			$rootScope.flashmessage(response.err, 'bad' , 3000)
 		}.bind(this));
 		// toggle
-		$scope.ui.focus_side = ''
+		$rootScope.ui.focus_side = ''
 	}
 
 
@@ -341,23 +340,23 @@ $scope.$watch('section.fulltext', function(newValue, oldValue) {
 					c.selected 		= !c.selected;
 					c.editing 		= !c.editing
 					c.editing_text 	= !c.editing_text
-					//$scope.ui.selected_range.start = parseInt(c.start)
-					//$scope.ui.selected_range.end = parseInt(c.end)
+					//$rootScope.ui.selected_range.start = parseInt(c.start)
+					//$rootScope.ui.selected_range.end = parseInt(c.end)
 					$scope.section.modeletters =  'single'
 					if(c.selected == true){
 						$scope.section.focused  = 'side_right'
 					}
 					if(c.selected == true){
-						$scope.ui.renderAvailable_active =  'editor'	
+						$rootScope.render_config.renderAvailable_active =  'editor'	
 					}
 					else{
-						$scope.ui.renderAvailable_active =  'read'
+						$rootScope.render_config.renderAvailable_active =  'read'
 					}
 				}
 					
 			});
-			$scope.ui.selected_range.start =  $scope.section.start
-			$scope.ui.selected_range.end   =  $scope.section.end
+			$rootScope.ui.selected_range.start =  $scope.section.start
+			$rootScope.ui.selected_range.end   =  $scope.section.end
 
     }	
 
@@ -372,7 +371,7 @@ $scope.$watch('section.fulltext', function(newValue, oldValue) {
 					         });
 
 		// can be null.
-		data.secret = $scope.ui.secret;
+		data.secret = $rootScope.ui.secret;
 		data.edittype = 'edit_markup'
 
 	    promise.query =  MarkupRest.save({id:$scope.$parent.doc.slug, mid:$scope.section._id }, serialize(data) ).$promise;
@@ -380,15 +379,15 @@ $scope.$watch('section.fulltext', function(newValue, oldValue) {
             var edited  = Result.edited[0][0]
             
             if(save_msg){
-				$scope.flashmessage(save_msg, 'ok' , 3000)
+				$rootScope.flashmessage(save_msg, 'ok' , 3000)
             }
             else{
-            	$scope.flashmessage(edited.subtype +' saved', 'ok' , 3000)
+            	$rootScope.flashmessage(edited.subtype +' saved', 'ok' , 3000)
             }
           }.bind(this));
           promise.query.catch(function (response) {  
             console.log(response)   
-           	$scope.flashmessage(response.err.err_code, 'bad' , 3000)
+           	$rootScope.flashmessage(response.err.err_code, 'bad' , 3000)
           }.bind(this));
 
       }
@@ -430,15 +429,14 @@ $scope.apply_operation = function(){
 						
 						$scope.section.redraw = true;
 						
-					
-						$scope.flashmessage($scope.section.operation.object_.type +' inserted', 'ok' , 1400, false)	
+					    console.log($rootScope)
+						$rootScope.flashmessage($scope.section.operation.object_.type +' inserted', 'ok' , 1400, false)	
 			
 			 }
 
 
  			 $scope.section.operation.before.state= 'done'
  			 $scope.section.operation.after.state= 'done'
- 			 $scope.section.operation.after.ss= $scope.section.start
 			 $scope.section.operations.push($scope.section.operation)
 	} 
 $scope.reverse_operation = function(operation){
@@ -583,23 +581,23 @@ $scope.merge= function (){
 $scope.split= function (){
 
 
-     	//alert($scope.ui.selected_range.start+'-'+$scope.ui.selected_range.end+' - '+$scope.section.start+' - '+$scope.section.end)
+     	//alert($rootScope.ui.selected_range.start+'-'+$rootScope.ui.selected_range.end+' - '+$scope.section.start+' - '+$scope.section.end)
       	
 
-      	if($scope.ui.selected_range.start == $scope.ui.selected_range.end){
-      		alert('split one>two at '+$scope.ui.selected_range.start)
+      	if($rootScope.ui.selected_range.start == $rootScope.ui.selected_range.end){
+      		alert('split one>two at '+$rootScope.ui.selected_range.start)
       	}
 
 
-      	var mks = $scope.markups_by_start_end_position_type($scope.ui.selected_range.start,$scope.ui.selected_range.end, 'any','any')
+      	var mks = $scope.markups_by_start_end_position_type($rootScope.ui.selected_range.start,$rootScope.ui.selected_range.end, 'any','any')
       	console.log(mks)
 
 
-      	if($scope.ui.selected_range.start == $scope.section.start ){
+      	if($rootScope.ui.selected_range.start == $scope.section.start ){
       	//	alert('start in')
       	
       	}
-      	if($scope.ui.selected_range.end == $scope.section.end ){
+      	if($rootScope.ui.selected_range.end == $scope.section.end ){
       	//	alert('endin')
       	}
 		
@@ -641,16 +639,16 @@ $scope.split= function (){
 		//xx$scope.section.fulltext.length)
 		//alert($scope.section.end - $scope.section.start - 1)
 		if($scope.section.fulltext.length > parseInt($scope.section.end - $scope.section.start)+1){
-			$scope.flashmessage('size mismatch >', 'bad' , 2000, false)
+			$rootScope.flashmessage('size mismatch >', 'bad' , 2000, false)
 
 		}
 		if($scope.section.fulltext.length < parseInt($scope.section.end - $scope.section.start)+1){
-			$scope.flashmessage('size mismatch <', 'bad' , 2000, false)
+			$rootScope.flashmessage('size mismatch <', 'bad' , 2000, false)
 			$scope.section.end = $scope.section.fulltext.length-1+$scope.section.start
 
 		}
 		if($scope.section.fulltext.length == parseInt($scope.section.end - $scope.section.start)+1){
-			$scope.flashmessage('size match', 'ok' , 2000, false)
+			$rootScope.flashmessage('size match', 'ok' , 2000, false)
 		}
 	}
 
@@ -662,9 +660,9 @@ $scope.split= function (){
 			$scope.section.fulltext= c+''+$scope.section.fulltext
 			//for(var p=0,)
 
-			$scope.ui.selected_range.start = 4
+			$rootScope.ui.selected_range.start = 4
 			// $scope.section.fulltext.length
-			$scope.ui.selected_range.end = 7
+			$rootScope.ui.selected_range.end = 7
 			// $scope.section.fulltext.length
 
 			$scope.section.end++

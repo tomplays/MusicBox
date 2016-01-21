@@ -3,7 +3,7 @@ html(manifest="" class="is_home_{{ui.is_home}} is_single_{{ui.is_single}} doc_id
 	
 	include header.jade
 	
-	body(class="render_active_{{ui.renderAvailable_active}} text_typography_{{doc_options.text_typography.fixed}} headings_typography_{{doc_options.headings_typography.fixed}}")
+	body(class="render_active_{{render_config.renderAvailable_active}} text_typography_{{doc_options.text_typography.fixed}} headings_typography_{{doc_options.headings_typography.fixed}}")
 		div( ng-view, autoscroll="true")
 			// angular injection here
 

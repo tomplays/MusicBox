@@ -6,8 +6,8 @@
 
 	.head-right(ng-if="section.editing_text === true")
 		h4 delete 
-		i.fa.fa-remove.btn_action(tooltip-placement="left" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.delete}}" ng-click="delete()")
-		// i.fa.fa-save.btn_action( tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.save}}" ng-click="save()")
+		i.fa.fa-remove.btn_action(tooltip-placement="left" tooltip="{{i18n.CUSTOM.ACTIONS.delete}}" ng-click="delete()")
+		// i.fa.fa-save.btn_action( tooltip-placement="right" tooltip="{{i18n.CUSTOM.ACTIONS.save}}" ng-click="save()")
 
 	// .section_editor_body(ng-if="section.editing_text === true" class="touchedinput-{{section.touched}}")
 		div.section_ranges
@@ -31,7 +31,7 @@
 
 		// div.section_quick_tools
 			.sobject-tools
-				// i.fa.fa-sliders.btn_action(tooltip-placement="right" tooltip="{{render_config.i18n.CUSTOM.ACTIONS.more_options}}" ng-click="toggle_attribute('object_tools')")
+				// i.fa.fa-sliders.btn_action(tooltip-placement="right" tooltip="{{i18n.CUSTOM.ACTIONS.more_options}}" ng-click="toggle_attribute('object_tools')")
 				
 		tabset.editor-main-tab()			
 						

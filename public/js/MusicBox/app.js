@@ -8,6 +8,7 @@ angular.module('musicBox',  [
   'ui.bootstrap',
   'musicBox.socket',
   'musicBox.render',
+  'musicBox.ui',
   'musicBox.directives', 
   'musicBox.document',
   'musicBox.section',
@@ -19,10 +20,6 @@ angular.module('musicBox',  [
  	   when('/', {
         templateUrl: 'partials/document/single',
         controller: DocumentCtrl
-      }).
-      when('/doc/create', {
-        templateUrl: '/partials/document/new',
-        controller: DocumentNewCtrl
       }).
       when('/readonly/:docid', {
         templateUrl: '/../partials/document/compiled',

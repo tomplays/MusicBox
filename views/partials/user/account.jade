@@ -19,6 +19,8 @@ div.main_center.user_account.bordered
 						th {{i18n.CUSTOM.DOCUMENT_FIELDS.published}} 
 						th {{i18n.CUSTOM.DOCUMENT_FIELDS.room}}
 						th {{i18n.CUSTOM.DOCUMENT_FIELDS.updated}} 
+						th {{i18n.CUSTOM.DOCUMENT_FIELDS.created}} 
+
 						th options
 				
 				tbody
@@ -28,6 +30,8 @@ div.main_center.user_account.bordered
 						td {{doc.published}}
 						td {{doc.room.name}} 
 						td {{doc.created | date }}
+						td {{doc.updated | date }}
+
 						
 						td 
 							i.fa.fa-cogs(href="", ng-click="external_link('/doc/'+doc.slug+'?mode=doc_options') " )
