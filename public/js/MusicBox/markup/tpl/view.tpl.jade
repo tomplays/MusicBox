@@ -2,7 +2,7 @@ div(ng-controller="MarkupCtrl", class="markup_box markup_box_depth_{{markup.dept
 	// pre {{markup}}
 
 
-	// h4 even not visible {{markup.visible}} {{markup.type}}
+	// h4 even not visible --v: {{markup.visible}}  -- f : {{markup.forced}} -- t: {{markup.type}}
 	// h3 mtda : {{markup.metadata}}
 	// h3 inrange / selected : {{markup.inrange}} - {{markup.selected}}
 	// p {{markup.selected}}
@@ -24,8 +24,9 @@ div(ng-controller="MarkupCtrl", class="markup_box markup_box_depth_{{markup.dept
 		input(ng-model="markup.fulltext" type="text" )
 		a(ng-click="apply_reverse()") reverse_apply
 
-
-	div.mk_inside_visible(ng-if="(markup.visible && !markup.forced) || (markup.visible && markup.forced && render_config.renderAvailable_active== 'editor')")
+	// ng-if="(markup.visible && !markup.forced) || (markup.visible && markup.forced && render_config.renderAvailable_active== 'editor')"
+	div.mk_inside_visible()
+		// h1 {{markup}}
 		// a(ng-click="offset(1,1)") offset me
 		// a(ng-click="match_selection()") match selection
 		// h1 isol ? {{markup.isolated}}

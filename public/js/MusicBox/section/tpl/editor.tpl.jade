@@ -34,11 +34,7 @@
 				// i.fa.fa-sliders.btn_action(tooltip-placement="right" tooltip="{{i18n.CUSTOM.ACTIONS.more_options}}" ng-click="toggle_attribute('object_tools')")
 				
 		tabset.editor-main-tab()			
-						
-		
-
-			
-						
+								
 			tab(heading="slidewide" ng-if="markups_by_start_end_position_type(section.start, section.end ,'slidewide', 'media').length>0" ) 
 				div(ng-repeat="markup in markups_by_start_end_position_type(section.start, section.end ,'slidewide', 'media') track by $index")
 					div(class="markup_ markup_type_{{markup.type}}")
@@ -49,12 +45,10 @@
 						markup-view
 
 	div(ng-if="ui.debug") 
-		ul
-			li(ng-repeat="e in ui.selected_range.debug track by $index") {{e}}
 		p is touched ? {{section.touched}}
-		p range: {{ui.selected_range.textrange}}
+		// p range: {{ui.selected_range.textrange}}
 		h2 is multi ? {{ui.selected_range.multi}} size ? {{ui.selected_range.size}}
-		h1 rebuild ? : {{section.rebuild}} {{section.rebuild_count}} Textlength: {{section.textlength}} objects count: {{section.objects_count.all}}
+		h1  Textlength: {{section.textlength}} objects count: {{section.objects_count.all}}
 		h2 section letter length {{section.letters.length}}
 		h4  s {{section.start }} ;end: {{section.end}}
 		// a(ng-click="insert_char('A','','')") insert a "A"

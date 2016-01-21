@@ -23,9 +23,9 @@ angular.module('musicBox.section.directive.pusher', [])
 .directive("mbPusher", function($rootScope, MarkupRest) {
     var global_active_pusher =true;
 
-    var link= function(scope){
-       //   console.log(' [mbPusher] directive')
-    }
+
+
+    // 
     var pusherCtrl= function($scope ){
          
            $scope.userin      = $rootScope.userin
@@ -34,11 +34,16 @@ angular.module('musicBox.section.directive.pusher', [])
            $scope.objSchemas = $rootScope.objSchemas 
            $scope.push = {}
            $scope.i18n = $rootScope.i18n;
+
+           $scope.push.isopen = false;
+           $scope.push.isvisible = false;
+
+
            $scope.preset_push = function(){
                     
                     var push_set= {
-                                      isanon : true,
-                                      isowner: $rootScope.doc_owner,
+                                      isanon : $scope.$parent.doc.doc_owner ? false : true,
+                                      isowner: $scope.$parent.doc.doc_owner,
                                       start: ($scope.type=='new_section') ? $scope.$parent.section.end+1 : $scope.start,
                                       end: ($scope.type=='new_section') ? $scope.$parent.section.end+9 :  $scope.end,
                                       position   : ($scope.type=='new_section' || $scope.type=='inline_objects') ? 'inline' : 'left',
@@ -59,31 +64,33 @@ angular.module('musicBox.section.directive.pusher', [])
                
 
           }
-           else if($scope.type=='inline_objects'){
-                $scope.push.type =  'markup' 
-                $scope.push.subtype =  'h1' 
-                $scope.push.available_sections_objects = ['markup', 'hyperlink', 'media']
+         else if($scope.type=='inline_objects'){
+              $scope.push.type =  'markup' 
+              $scope.push.subtype =  'h1' 
+              $scope.push.available_sections_objects = ['markup', 'hyperlink', 'media']
 
-            }
-            else if($scope.type=='container_class'){
-                $scope.push.type =  'container_class' 
-                $scope.push.subtype =  'css' 
-                $scope.push.available_sections_objects = ['container_class']
+          }
+          else if($scope.type=='container_class'){
+              $scope.push.type =  'container_class' 
+              $scope.push.subtype =  'css' 
+              $scope.push.available_sections_objects = ['container_class']
 
-            }
-            else{
-                $scope.push.type =  'comment' 
-                $scope.push.subtype =  'comment' 
-                $scope.push.metadata  = $scope.objSchemas[$scope.push.type].modes.editor.fields.metadata.label
-                /*
-                if($rootScope.doc_owner == true ){
-                  $scope.push.available_sections_objects = ['comment']
-                }
-                else{
-                  $scope.push.available_sections_objects = ['comment']
-                }
-                */
-            }
+          }
+          else{
+              $scope.push.type =  'comment' 
+              $scope.push.subtype =  'comment' 
+              $scope.push.metadata  = $scope.objSchemas[$scope.push.type].modes.editor.fields.metadata.label
+
+             
+              if($scope.$parent.doc.doc_owner == true ){
+                             $scope.push.available_sections_objects = ['comment', 'note', 'media']
+
+              }
+              else{
+                $scope.push.available_sections_objects = ['comment']
+              }
+             
+          }
            
           $scope.push_generic_from_ranges= function (type, subtype, position,metadata){
 
@@ -92,19 +99,20 @@ angular.module('musicBox.section.directive.pusher', [])
               $scope.push.subtype = subtype ? subtype : 'comment';
               $scope.push.position = (position) ? position : 'left';
 
-                if(type !=='hyperlink' && type !=='media'){
-                   $scope.add();
-                }    
+              if(type !=='hyperlink' && type !=='media'){
+                $scope.add();
+              }    
           }
+          
+          $scope.add = function(){
 
-         
-           $scope.add = function(){
+              // close after push
+              
 
-                 var push = $scope.push
-               
                  if(!$scope.push.status) { $scope.push.status   = 'approved' }
                  if(!$scope.push.depth)   { $scope.push.depth    = 1 }
                  if(!$scope.push.doc_id_id) { $scope.push.doc_id_id  = 'null'  }
+
                  console.log('ready to push')
                  console.log($scope.push)
                  var promise= MarkupRest.new({Id:$scope.$parent.doc.slug}, serialize($scope.push)).$promise;
@@ -116,23 +124,15 @@ angular.module('musicBox.section.directive.pusher', [])
                   
                     // add to doc containers
                     if(mi.type== 'container'){
-
                        mi.fulltext = 'Your text' 
-                       
                        var operation_ = {
                           'object_': mi, 
                           'before':{'state':'new',  'type': 'push_container',
                           }, 
                           'grp_log': Math.random()*1000, 
-                          'reversable': true,
-                         
-                        } 
+                          'reversable': true     
+                        }
                         $scope.$parent.doc.operation = operation_
-                        
-
-
-                    
-                     
                     }
 
                     // add to doc markups (and its section as an operation)
@@ -142,17 +142,15 @@ angular.module('musicBox.section.directive.pusher', [])
                           'before':{'state':'new',  'type': 'push_markup',
                           }, 
                           'grp_log': Math.random()*1000, 
-                          'reversable': true,
-                         
+                          'reversable': true
                         } 
-                      
                         $scope.$parent.section.operation = operation_
 
-                 
-                    }
-                  
-                
 
+                        if($scope.type=="column"){
+                         $scope.pusher_toggle()
+                        }
+                    }
                   }
                   else{
                       alert('err')
@@ -163,63 +161,68 @@ angular.module('musicBox.section.directive.pusher', [])
                   }.bind(this));
            }
 
-
-
-            $scope.pusher_isvisible = function(){
+          $scope.pusher_isvisible = function(){
               if(global_active_pusher !== true){
                   return false
               }
-              else if($scope.type=='new_section' && $rootScope.doc_owner == true && $scope.last == true){
-                return true
+              if($scope.$parent.doc.doc_owner == true){
+               
+                  if( $scope.type == 'inline_objects' || $scope.type=='container_class' ){
+                       return true
+                  }
+                  if($scope.type=='new_section' && $scope.last == true){
+                     return true
+                  }
               }
-              else if( $scope.type=='inline_objects' && $rootScope.doc_owner == true){
-                 return true
-               }
-              else if( $scope.type=='container_class' && $rootScope.doc_owner == true){
-                 return true
+              if($scope.push.isopen == true && $scope.type == 'column' ){
+                     return true
               }
-              else{
-                return true;
+
+             
+              return true;
+                      
+          }
+
+          $scope.new_section = function(){
+            $scope.add()
+          }
+
+          $scope.pusher_isopen = function(){
+
+             if(global_active_pusher !== true){
+                  return false
               }
-           
+              if($scope.$parent.doc.doc_owner == true){
+               
+                  if( $scope.type == 'inline_objects' || $scope.type=='container_class' ){
+                       return true
+                  }
+
+                 
+                  else if($scope.type=='new_section' && $scope.last == true){
+                     return true
+                  }
+              }
+              if($scope.push.isopen == true && $scope.type == 'column' ){
+                  return true
+              }
             
-           }
-
-           $scope.new_section = function(){
-
-             $scope.add()
-           }
-
-
-            $scope.pusher_isopen = function(){
-
-              if( $scope.type=='new_section' && $rootScope.doc_owner == true && $scope.last== true){
-                 return true
-              }
-               if( $scope.type=='inline_objects' && $rootScope.doc_owner == true){
-                 return true
-              }
-
-              if( $scope.type=='container_class' && $rootScope.doc_owner == true){
-                 return true
-              }
-
-              return false
-           }
+              
+               return false
+                      
+              
+          }
 
            $scope.pusher_toggle = function(){
-             $scope.isopen = !$scope.isopen
-             if($scope.isopen == true){
+             $scope.push.isopen = !$scope.push.isopen
+             if($scope.push.isopen == true){
                 $scope.$parent.defocus_containers();
                 $scope.$parent.section.focused  = 'side_left'
-             
              }
              else{
                   $scope.$parent.defocus_containers();
-               
              }
              $scope.$parent.section.modeletters = 'single'
-           
            }
 
           $scope.pusher_isvalid = function(){
@@ -229,49 +232,35 @@ angular.module('musicBox.section.directive.pusher', [])
                 return false;
            }
 
-           /// watch rootscope UI changes
-         $scope.$watch('[start,end]', function(newValue, oldValue) {
-                
+         /// watch rootscope UI changes
+         $scope.$watch('[start,end]', function(newValue, oldValue) {       
             //  if(oldValue == newValue){}
             //  else{
-           
-                if($scope.type && $scope.type=='new_section'){
-
-                 
-                }
+            if($scope.type && $scope.type=='new_section'){}
                 
-                else{
-                  $scope.push.start =  $scope.start
-                  $scope.push.end   =  $scope.end
+            else{
+                $scope.push.start =  $scope.start
+                $scope.push.end   =  $scope.end
+            }
+            //   }
 
-                 
-                }
-
-
-
-           //   }
-
-              if($scope.push.start && $scope.push.start!==null && $scope.push.end && $scope.push.end!==null){
-                  $scope.push.has_ranges =true
-              }
-              else{
-                 $scope.push.has_ranges = false
-              }
+            if($scope.push.start && $scope.push.start!==null && $scope.push.end && $scope.push.end!==null){
+              $scope.push.has_ranges =true
+            }
+            else{
+              $scope.push.has_ranges = false
+            }
           })
 
-    
           $scope.$watch('[section.end, section.start]', function(newValue, oldValue) {
               if(oldValue == newValue){}
               else{
-
                 if($scope.type=='new_section'){
-
                      $scope.push.start     =  parseInt($scope.$parent.section.end)+1
                      $scope.push.end       =  parseInt($scope.$parent.section.end)+9
                      console.log('Pusher (new_section) updated')
                 }
-                else{
-                
+                else{               
                 }      
               }
           }, true)
@@ -317,34 +306,40 @@ angular.module('musicBox.section.directive.pusher', [])
               if(oldValue == newValue){}
               else{
                   if($scope.push.type && $scope.push.subtype  && $scope.push.start!==null && $scope.push.end!==null){
-                    $scope.isvalid = true;
+                    $scope.push.isvalid = true;
                   };
               }
            }, true) 
 
-
-           $scope.isvisible   = $scope.pusher_isvisible()
-           $scope.isopen      = $scope.pusher_isopen()
-           $scope.isvalid     = $scope.pusher_isvalid()
+        
            $scope.preset_push()
 
+           $scope.push.isvisible   = $scope.pusher_isvisible()
+           $scope.push.isopen      = $scope.pusher_isopen()
+           $scope.push.isvalid     = $scope.pusher_isvalid()
+
     }
-        return {
-        restrict: "AE", 
-        scope: {
-            start: "=",
-            end: "=",
-            type: "@",
-            position: "@",
-            last: "="
-        },
-        //require: 'mbRanges',
-        // replace : true,
-        controller:pusherCtrl,
-      //  link:link,
-          templateUrl: function() {
-                return "js/MusicBox/section/tpl/pusher.tpl.html";
-          }
+
+    /* var link= function(scope){
+      //   console.log(' [mbPusher] directive')
+    }
+    */
+
+    return {
+            restrict: "AE", 
+            scope: {
+                start: "=",
+                end: "=",
+                type: "@",
+                position: "@",
+                last: "="
+            },
+            //require: 'mbRanges',
+            // replace : true,
+            controller:pusherCtrl,
+            templateUrl: function() {
+              return "js/MusicBox/section/tpl/pusher.tpl.html";
+            }
         };
 })
 

@@ -21,7 +21,7 @@ angular.module('musicBox.markup.controller', ['musicBox.section']).controller('M
             'doc_id_id'      : '', // special cases for child documents (refs as doc_id in markup record)
 			'by_me' 		 : ( $scope.markup.user_id._id && $scope.$parent.userin._id  && ($scope.$parent.userin._id == $scope.markup.user_id._id ) ) ? true : false,
 			'can_approve' 	 : ($scope.$parent.doc_owner) ? true : false,
-			'objSchemas' 	 : $scope.objSchemas[$scope.markup.type] ?  $scope.objSchemas[$scope.markup.type] : [],
+			'objSchemas' 	 : $rootScope.objSchemas[$scope.markup.type] ?  $rootScope.objSchemas[$scope.markup.type] : [],
 			'servicetype'  	 :'markup',
 			'operation'		 :	$scope.markup.operation ?  $scope.markup.operation : {},
        		'operations': []

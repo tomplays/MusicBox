@@ -3,34 +3,28 @@ div.inline_tools()
 	span.pusher
 		mb-ranges()
 
-			tabset.editor-main-tab()
-				
-				
-				tab(ng-if="object=='markup'" heading='Add {{object}}' ng-repeat="object in available_sections_objects") 
-					// p &nbsp;
-					mb-pusher(type="inline_objects", position="{{layout.name}}", start="ui.selected_range.start", end="ui.selected_range.end", last="false")
+		tabset.editor-main-tab()
+			
+			tab(heading='Add inline markup') 
+				mb-pusher(type="inline_objects", position="inline", start="ui.selected_range.start", end="ui.selected_range.end", last="$last")
 
-				tab(heading="Markups" ng-if="markups_by_start_end_position_type(section.start, section.end ,'inline', 'markup').length > 0") 
-					div(ng-repeat="markup in markups_by_start_end_position_type(section.start, section.end ,'inline', 'markup') track by $index")
-						div(class="markup_ markup_type_{{markup.type}}")
-							markup-view
+			tab(heading="Markups" ng-if="markups_by_start_end_position_type(section.start, section.end ,'inline', 'markup').length > 0") 
+				div(ng-repeat="markup in markups_by_start_end_position_type(section.start, section.end ,'inline', 'markup') track by $index")
+					div(class="markup_ markup_type_{{markup.type}}")
+						markup-view
 
-				tab(heading="Add section styles") 
-					mb-pusher(type="container_class", position="{{layout.name}}" ,start="ui.selected_range.start", end="ui.selected_range.end")
-				
+			tab(heading="Add section styles") 
+				mb-pusher(type="container_class", position="{{layout.name}}" ,start="ui.selected_range.start", end="ui.selected_range.end", last="$last")
 
-				tab(heading="section styles" ng-if="markups_by_start_end_position_type(section.start, section.end ,'any', 'container_class').length >0") 
-					div(ng-repeat="markup in markups_by_start_end_position_type(section.start, section.end ,'any', 'container_class') track by $index")
-						div(class="markup_ markup_type_{{markup.type}}")
-							markup-view
-				
-
-				tab(heading="Operations" ng-if="section.operations.length>0")
-					a.btn(ng-click="operations_clear()") clear
-					a.btn(ng-click="reverse_operation()") reverse last operation
-					ul
-						li(ng-repeat="op in section.operations") {{op.grp_log}}
-							a.btn(ng-click="expand_operation(op)") +
-							pre(ng-if="op.expanded") {{op}}
-
-	
+			tab(heading="section styles" ng-if="markups_by_start_end_position_type(section.start, section.end ,'any', 'container_class').length >0") 
+				div(ng-repeat="markup in markups_by_start_end_position_type(section.start, section.end ,'any', 'container_class') track by $index")
+					div(class="markup_ markup_type_{{markup.type}}")
+						markup-view
+			
+			tab(heading="Operations" ng-if="section.operations.length>0")
+				a.btn(ng-click="operations_clear()") clear
+				a.btn(ng-click="reverse_operation()") reverse last operation
+				ul
+					li(ng-repeat="op in section.operations") {{op.grp_log}}
+						a.btn(ng-click="expand_operation(op)") +
+						pre(ng-if="op.expanded") {{op}}

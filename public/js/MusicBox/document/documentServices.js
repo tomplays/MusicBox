@@ -118,7 +118,10 @@ angular.module('musicBox.document.service',[])
             //_.filter($rootScope.sections, function(td){ return  td.type == 'container'; });
            
 
-            $rootScope.doc_owner = Result.is_owner;
+           //depre.
+            $rootScope.doc_owner     = Result.is_owner;
+           // new:
+            $rootScope.doc.doc_owner = Result.is_owner;
             
             console.log('is owner or has secret ('+ Result.is_owner+')')
 
@@ -136,16 +139,6 @@ angular.module('musicBox.document.service',[])
     }.bind(this));
 
   };
-
-
-
-
-
-
-
-
-
- 
 
 
    /**
@@ -276,7 +269,6 @@ angular.module('musicBox.document.service',[])
 
         var promise = this.api_method.save({id:$rootScope.doc._id},serialize(data)).$promise;
         promise.then(function (Result) {
-            var restart = false
             if(field == 'room_id'){
                           if(field == 'room_id' && data.value !==''){}
                           else{

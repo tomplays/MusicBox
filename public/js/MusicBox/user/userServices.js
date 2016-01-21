@@ -11,10 +11,11 @@ angular.module('musicBox.user.service', [])
       if(u){
 
         if(u.username !== ''){
-          u.islogged=true
+          u.islogged = true
+         
         }
         $rootScope.userin = _.extend($rootScope.userin, u);
-
+        
 
       }
    };
@@ -25,14 +26,11 @@ angular.module('musicBox.user.service', [])
             var options_array = [];
             _.each(data.user.user_options , function(option){
               
-              
                 var op_name = option.option_name ? option.option_name : '';
                 var op_value = option.option_value ? option.option_value : '';
                 var op_type = option.option_type  ? option.option_type : '';
                 var opt = {'option_name' : op_name, 'option_value' : op_value,'option_type' : op_type }
-                options_array.push(opt)
-              
-             
+                options_array.push(opt)   
             });
            console.log(options_array)
            return options_array

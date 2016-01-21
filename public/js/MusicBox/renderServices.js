@@ -8,14 +8,9 @@ angular.module('musicBox.render', [])
      var self = {
 
 
-    
-
-
-
-
        init: function (view) {
         
-         console.log('renderService:init for view: '+view)
+         console.log('renderService:init for _view: '+view)
          $rootScope.is_view = view
 
 
@@ -43,9 +38,6 @@ angular.module('musicBox.render', [])
 
         $rootScope.i18n                       = $locale;
         
-
-
-
         // api/misc
         $rootScope.globals                    = GLOBALS;
         $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
@@ -55,16 +47,9 @@ angular.module('musicBox.render', [])
     
        // self.renderAvailable()
        // $rootScope.ui.renderAvailable_active =  $routeParams.mode ? $routeParams.mode : $rootScope.ui.renderAvailable[0]
-      
-
-
-      
-
-
-
+    
 
         if(view == 'document'){
-
             //mb_ui
             $rootScope.objSchemas                 =   self.objSchemas(); 
             $rootScope.available_sections_objects =   self.objAvailable(); 
@@ -72,7 +57,6 @@ angular.module('musicBox.render', [])
             $rootScope.fragments                  =   self.fragmentsAvailable();
         }
         else if(view == 'user'){
-           
         }
         else{
            
@@ -82,7 +66,6 @@ angular.module('musicBox.render', [])
         return  $rootScope.render_config
         
         },
-
         toggle_render: function(r){
           console.log('toggled_render from '+$rootScope.render_config.renderAvailable_active+' to '+r)
           $rootScope.render.top_menus.doc.open = false
@@ -95,7 +78,7 @@ angular.module('musicBox.render', [])
 
 
       expand_tools: function(name){
-               //   if(!)
+          //   if(!)
 
           // use DocumentCtrl AND with UserCtrl
           if(!$rootScope.render.top_menus[name] || $rootScope.render.top_menus[name].open === false){
@@ -114,10 +97,14 @@ angular.module('musicBox.render', [])
         var arr = Object.keys($rootScope.objSchemas) 
         return arr ;
       },
+      
+
       markupSchema:function (){
         // start end metavalue, .......
 
       },
+      
+
       objSchemas:function (){
         var definitions = new Array();
        

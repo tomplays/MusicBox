@@ -676,31 +676,15 @@ $scope.split= function (){
 }); // end controller
 
 
-
-angular.module('musicBox.section.controller_b', []).controller('SectionBCtrl', function($scope, $http, DocumentService, MarkupRest,socket, MarkupService) {
-
-
-
-})
+/*
+angular.module('musicBox.section.controller_b', []).controller('SectionBCtrl', function($scope, $http, DocumentService, MarkupRest,socket, MarkupService) {})
+*/
 angular.module('musicBox.section.editor_controller', []).controller('SectionEditorCtrl', function($scope, $http, DocumentService, MarkupRest,socket, MarkupService) {
 
-
-$scope.section.startt = $scope.section.start
-
-$scope.$watch('section.start_', function(newValue, oldValue) {
-	
-	if(oldValue === newValue || newValue == false){
-
-
-	}else{
-		
-		
-	}
-		
-
-
+	$scope.section.startt = $scope.section.start
+	$scope.$watch('section.start_', function(newValue, oldValue) {
+		if(oldValue === newValue || newValue == false){
+		}
+		else{}
 	})
-
-
 })
-
