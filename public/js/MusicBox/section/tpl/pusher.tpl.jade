@@ -29,13 +29,14 @@
 
 			div(ng-if="userin.islogged")
 				// h1 inside pusher opened
-				// pre {{push}}
-				// pre {{available_sections_objects}}
+				pre {{push}}
+				pre {{push.available_sections_objects}}
 
-				p(ng-if="objSchemas[push.type].modes.editor.fields.type.show_editor && type!=='inline_objects'")
+				p(ng-if="objSchemas[push.type].modes.editor.fields.type.show_editor && type !=='inline_objects'")
 					label {{i18n.CUSTOM.ACTIONS.select}} type
+					
 					select(ng-model="push.type")
-						option(ng-repeat="object in available_sections_objects" ng-if="objSchemas[object].modes.pusherleft") {{object}}
+						option(ng-repeat="object in push.available_sections_objects" ng-if="objSchemas[object].modes.pusherleft") {{object}}
 				
 
 				p(ng-if="objSchemas[push.type].modes.editor.fields.position.show_editor")

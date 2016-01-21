@@ -55,33 +55,34 @@ angular.module('musicBox.section.directive.pusher', [])
           if($scope.type=='new_section'){
               $scope.push.type=  'container';
               $scope.push.subtype =  'section'
-              $scope.available_sections_objects = ['container']
+              $scope.push.available_sections_objects = ['container']
                
 
           }
            else if($scope.type=='inline_objects'){
                 $scope.push.type =  'markup' 
                 $scope.push.subtype =  'h1' 
-                $scope.available_sections_objects = ['markup', 'hyperlink', 'media']
+                $scope.push.available_sections_objects = ['markup', 'hyperlink', 'media']
 
             }
             else if($scope.type=='container_class'){
                 $scope.push.type =  'container_class' 
                 $scope.push.subtype =  'css' 
-                $scope.available_sections_objects = ['container_class']
+                $scope.push.available_sections_objects = ['container_class']
 
             }
             else{
                 $scope.push.type =  'comment' 
                 $scope.push.subtype =  'comment' 
                 $scope.push.metadata  = $scope.objSchemas[$scope.push.type].modes.editor.fields.metadata.label
-
+                /*
                 if($rootScope.doc_owner == true ){
-                  $scope.available_sections_objects = $scope.available_sections_objects
+                  $scope.push.available_sections_objects = ['comment']
                 }
                 else{
-                  $scope.available_sections_objects = ['comment']
+                  $scope.push.available_sections_objects = ['comment']
                 }
+                */
             }
            
           $scope.push_generic_from_ranges= function (type, subtype, position,metadata){

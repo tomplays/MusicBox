@@ -9,7 +9,8 @@ div(ng-if="section['objects_count']['by_positions'][layout.name].count > 0 || la
 		
 		mb-dataset(ng-if="render.dataset.active && (layout.include_dataset)")
 
-		div(ng-controller="MarkupCtrl", style="display:none" ng-repeat="markup in markups_by_start_end_position_type(section.start, section.end ,'inline', 'markup') track by $index")
+		div(ng-controller="MarkupCtrl", ng-repeat="markup in markups_by_start_end_position_type(section.start, section.end ,'inline', 'markup') track by $index")
+			pre {{markup}}
 
 		//  
 		div(ng-if="layout.name == 'right'")
