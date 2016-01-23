@@ -383,6 +383,6 @@ module.exports = function(grunt) {
 
 
 	// grunt.registerTask('minify', ['useminPrepare', 'ngtemplates','concat','usemin']);
-	grunt.registerTask('initdb', ['open']);
-	grunt.registerTask("deploy:test", "Deploy on TEST. server", ["rsync:test"]);
+	//grunt.registerTask('initdb', ['open']);
+	///grunt.registerTask("deploy:test", "Deploy on TEST. server", ["rsync:test"]);
 };
