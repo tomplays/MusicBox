@@ -13,17 +13,12 @@
             i18n
 
         MarkupRest (rest api for "add" )
-
-
 */  
-
 
 angular.module('musicBox.section.directive.pusher', [])
 
 .directive("mbPusher", function($rootScope, MarkupRest) {
     var global_active_pusher =true;
-
-
 
     // 
     var pusherCtrl= function($scope ){
@@ -32,83 +27,71 @@ angular.module('musicBox.section.directive.pusher', [])
            $scope.render_config =$rootScope.render_config
            $scope.render =$rootScope.render
            $scope.objSchemas = $rootScope.objSchemas 
-           $scope.push = {}
-           $scope.i18n = $rootScope.i18n;
-
-           $scope.push.isopen = false;
-           $scope.push.isvisible = false;
-
-
-           $scope.preset_push = function(){
-                    
-                    var push_set= {
-                                      isanon : $scope.$parent.doc.doc_owner ? false : true,
-                                      isowner: $scope.$parent.doc.doc_owner,
-                                      start: ($scope.type=='new_section') ? $scope.$parent.section.end+1 : $scope.start,
-                                      end: ($scope.type=='new_section') ? $scope.$parent.section.end+9 :  $scope.end,
-                                      position   : ($scope.type=='new_section' || $scope.type=='inline_objects') ? 'inline' : 'left',
-                                      metadata : ($scope.type=='new_section') ? '' : 'write your comment here',
-                                      username : ($scope.userin && $scope.userin.username) ? $scope.userin.username : null,
-                                      user_id : ($scope.userin && $scope.userin._id)  ? $scope.userin._id : null,
-                                      has_ranges:  ($scope.type=='new_section') ? true :false,
-
-                   }
-                   $scope.push = _.extend($scope.push, push_set)
+           $scope.push = {
+            
            }
+           $scope.i18n = $rootScope.i18n;
+           
+           $scope.init_push = function(){
+                    
+              var push_set= {
+                                      isvisible  : $scope.pusher_isvisible(),
+                                      isopen     : $scope.pusher_isopen(),
+                                      isvalid    : $scope.pusher_isvalid(),
+                                      isanon     : ($scope.$parent.doc.doc_owner) ?  false : true,
+                                      isowner    : ($scope.$parent.doc.doc_owner),
+                                      start      : ($scope.type=='new_section')  ?   $scope.$parent.section.end+1 : $scope.start,
+                                      end        : ($scope.type=='new_section')  ?   $scope.$parent.section.end+9 :  $scope.end,
+                                      position   : ($scope.type=='new_section' || $scope.type=='inline_objects') ? 'inline' : 'left',
+                                      metadata   : ($scope.type=='new_section') ? '' : 'write your comment here',
+                                      username   : ($scope.userin && $scope.userin.username) ? $scope.userin.username : null,
+                                      user_id    : ($scope.userin && $scope.userin._id)  ? $scope.userin._id : null,
+                                      has_ranges : ($scope.type=='new_section') ? true :false,
 
-
-          if($scope.type=='new_section'){
-              $scope.push.type=  'container';
-              $scope.push.subtype =  'section'
-              $scope.push.available_sections_objects = ['container']
-               
-
-          }
-         else if($scope.type=='inline_objects'){
-              $scope.push.type =  'markup' 
-              $scope.push.subtype =  'h1' 
-              $scope.push.available_sections_objects = ['markup', 'hyperlink', 'media']
-
-          }
-          else if($scope.type=='container_class'){
-              $scope.push.type =  'container_class' 
-              $scope.push.subtype =  'css' 
-              $scope.push.available_sections_objects = ['container_class']
-
-          }
-          else{
-              $scope.push.type =  'comment' 
-              $scope.push.subtype =  'comment' 
-              $scope.push.metadata  = $scope.objSchemas[$scope.push.type].modes.editor.fields.metadata.label
-
-             
-              if($scope.$parent.doc.doc_owner == true ){
-                             $scope.push.available_sections_objects = ['comment', 'note', 'media']
-
+              }
+  
+              if($scope.type=='new_section'){
+                    push_set.type=  'container';
+                    push_set.subtype =  'section'
+                    push_set.available_sections_objects = ['container']
+              }
+              else if($scope.type=='inline_objects'){
+                    push_set.type =  'markup' 
+                   push_set.subtype =  'h1' 
+                   push_set.available_sections_objects = ['markup', 'hyperlink', 'media']
+              }
+              else if($scope.type=='container_class'){
+                   push_set.type =  'container_class' 
+                    push_set.subtype =  'css' 
+                    push_set.available_sections_objects = ['container_class']
               }
               else{
-                $scope.push.available_sections_objects = ['comment']
+                    push_set.type =  'comment' 
+                    push_set.subtype =  'comment' 
+                    push_set.metadata  = $scope.objSchemas[push_set.type].modes.editor.fields.metadata.label
+                    if($scope.$parent.doc.doc_owner == true ){
+                      push_set.available_sections_objects = ['comment', 'note', 'media']
+                    }
+                    else{
+                      push_set.available_sections_objects = ['comment']
+                    }
               }
-             
-          }
+              $scope.push = _.extend($scope.push, push_set)
+           }
+
            
           $scope.push_generic_from_ranges= function (type, subtype, position,metadata){
-
               $scope.push.metadata = (metadata) ? metadata : ''
               $scope.push.type = (type) ? type : 'comment';
               $scope.push.subtype = subtype ? subtype : 'comment';
               $scope.push.position = (position) ? position : 'left';
-
               if(type !=='hyperlink' && type !=='media'){
                 $scope.add();
               }    
           }
           
           $scope.add = function(){
-
-              // close after push
               
-
                  if(!$scope.push.status) { $scope.push.status   = 'approved' }
                  if(!$scope.push.depth)   { $scope.push.depth    = 1 }
                  if(!$scope.push.doc_id_id) { $scope.push.doc_id_id  = 'null'  }
@@ -197,8 +180,6 @@ angular.module('musicBox.section.directive.pusher', [])
                   if( $scope.type == 'inline_objects' || $scope.type=='container_class' ){
                        return true
                   }
-
-                 
                   else if($scope.type=='new_section' && $scope.last == true){
                      return true
                   }
@@ -206,14 +187,10 @@ angular.module('musicBox.section.directive.pusher', [])
               if($scope.push.isopen == true && $scope.type == 'column' ){
                   return true
               }
-            
-              
-               return false
-                      
-              
+              return false
           }
 
-           $scope.pusher_toggle = function(){
+          $scope.pusher_toggle = function(){
              $scope.push.isopen = !$scope.push.isopen
              if($scope.push.isopen == true){
                 $scope.$parent.defocus_containers();
@@ -223,7 +200,7 @@ angular.module('musicBox.section.directive.pusher', [])
                   $scope.$parent.defocus_containers();
              }
              $scope.$parent.section.modeletters = 'single'
-           }
+          }
 
           $scope.pusher_isvalid = function(){
                if($scope.type=='new_section' || $scope.type=='container_class'){
@@ -310,13 +287,8 @@ angular.module('musicBox.section.directive.pusher', [])
                   };
               }
            }, true) 
-
         
-           $scope.preset_push()
-
-           $scope.push.isvisible   = $scope.pusher_isvisible()
-           $scope.push.isopen      = $scope.pusher_isopen()
-           $scope.push.isvalid     = $scope.pusher_isvalid()
+           $scope.init_push()
 
     }
 

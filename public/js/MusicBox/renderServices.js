@@ -68,9 +68,9 @@ angular.module('musicBox.render', [])
         },
         toggle_render: function(r){
           console.log('toggled_render from '+$rootScope.render_config.renderAvailable_active+' to '+r)
-          $rootScope.render.top_menus.doc.open = false
-          $rootScope.render.top_menus.help.open =  false
-          $rootScope.render.top_menus.published.open =  false
+          $rootScope.render.top_menus.doc.open        =   false
+          $rootScope.render.top_menus.help.open       =   false
+          $rootScope.render.top_menus.published.open  =   false
           $rootScope.render_config.renderAvailable_active = r
         },
 

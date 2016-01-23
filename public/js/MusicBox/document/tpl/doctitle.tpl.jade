@@ -1,7 +1,7 @@
 // the document title, time, author... 
 // + document options editor
 div.doc_header()
-	h4 {{mapping_pass}}
+	
 	// ng-if="ui.renderAvailable_active !=='embed'"
 	// p {{doc_options.include_audio_autoplay.value}}
 	// audio(id="video1" controls src="{{doc_options.include_audio_file.value}}" type="audio/mpeg")
@@ -33,7 +33,7 @@ div.doc_header()
 		a.btn_ok.float_right(ng-click="edit_doc_option('doc_notices_after_title')") Save
 			
 	time.head_left(ng-if="doc_options.display_date.value =='doc_header' || !doc_options.display_date.value") {{doc.formated_date}}&nbsp;
-		span.published-header.hint(tooltip="{{doc.published}}" ng-click="expand_tools('published')", ng-if="doc_owner == true  || ui.secret")
+		span.published-header.hint(tooltip="{{doc.published}}" ng-click="expand_tools('published')", ng-if="doc.doc_owner == true  || ui.secret")
 			i.fa.fa-eye-slash(ng-if="doc.published=='draft'") 
 			i.fa.fa-eye(ng-if="doc.published=='public'") 
 

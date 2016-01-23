@@ -15,7 +15,7 @@
 
 angular.module('musicBox.document.service',[])
 
-.factory("DocumentService", function($rootScope, $http, $sce, $resource, $location,$routeParams,$timeout, $locale, DocumentRest, UserService,MarkupService) {
+.factory("DocumentService", function($rootScope, $http, $sce, $resource, $location,$routeParams,$timeout, $locale, DocumentRest, MarkupService) {
   
   var DocumentService = function() {
     this.api_method = DocumentRest;
@@ -28,15 +28,20 @@ angular.module('musicBox.document.service',[])
     promise.then(function (Result) {
       if(Result){
 
-          new UserService().SetFromData(Result.userin)
+      
+          var _user         = new MarkupService().init(Result, 'user')
+          $rootScope.userin =  _user.populate()
           $rootScope.userin.login_url               = '/login?redirect_url='+root_url+':'+PORT+'/doc/'+Result.doc.slug;
+          
+
           //depre.
           $rootScope.doc_owner                      = Result.is_owner;
+          
+
           // new: see object extend
           console.log('is owner or has secret ('+ Result.is_owner+')');
 
-          Result.doc.servicetype = 'document'
-          var _doc = new MarkupService().init(Result.doc)
+          var _doc = new MarkupService().init(Result.doc, 'document')
 
           var encoded_url = root_url+':'+PORT;
           if(Result.doc.slug !=='homepage'){
@@ -66,8 +71,8 @@ angular.module('musicBox.document.service',[])
           $rootScope.sections_to_count_notice       = ($rootScope.sectionstocount == 0) ? true : false;
           $rootScope.objects_sections               = [];
           $rootScope.objects_sections['global_all'] = [];
-          $rootScope.doc_options                    =   _doc.apply_object_options('document', Result.doc.doc_options);
-          $rootScope.author_options                 =   _doc.apply_object_options('author',   Result.doc.user.user_options);
+          $rootScope.doc_options                    =   _doc.apply_object_options();
+          $rootScope.author_options                 =   _doc.apply_object_options('author');
       }
       else{
         console.log('err');

@@ -54,7 +54,7 @@ module.exports = function(grunt) {
 				},
 				livereload: {
 						options: {
-							open: 'true',
+						//	open: 'true',
 							base: ["views", "public"]
 						}
 				},
@@ -332,10 +332,9 @@ module.exports = function(grunt) {
 			},
 			
 			api_folder:{
-
 				options: { livereload: true },
 				files: ['api/**/*.js', 'config.json', 'index.js'], // restart server on controllers, routes and models changes
-				tasks: ['forever:server1:restart']
+				 tasks: ['forever:server1:restart']
 
 			}
 			
@@ -345,10 +344,8 @@ module.exports = function(grunt) {
 	grunt.registerTask('lesscss', ['less']); // , 'connect:server' // 'forever', 
 
 
-
-
 	grunt.registerTask('stop', ['forever:server1:stop']); // , 'connect:server' // 'forever', 
-	grunt.registerTask('default', ['forever:server1:restart','watch','less', 'jade', 'connect:livereload']);
+	grunt.registerTask('default', ['forever:server1:restart','less','watch', 'jade',  'connect:livereload']);
 	
 	// for production templates
 	grunt.registerTask('rebuild', ['jade']); 
@@ -360,6 +357,7 @@ module.exports = function(grunt) {
 				'copy:dist',
 				'watch',
 				'less',
+
 				//'jasmine', 
 				//'ngtemplates',
 				'connect:livereload'

@@ -33,7 +33,7 @@ angular.module('musicBox.user.rest', [])
       },
       login:{
         method:"POST",
-        url:  api_url+'/user/userlogin',
+        url: api_url+'/user/userlogin',
       }
     }
   );

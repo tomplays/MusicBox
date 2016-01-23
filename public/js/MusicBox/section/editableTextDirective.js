@@ -13,9 +13,6 @@
   > apply save action 
       > save()
 
-  
-
-  
 
   for example 
 
@@ -200,10 +197,9 @@ angular.module('musicBox.section.directive.textarea', [])
                 //  var endend  = ($rootScope.ui.selected_range.end == parseInt(o.end+1) && $rootScope.ui.selected_range.start == parseInt(o.end+1)  ) ? true : false;
                 //  var startstart =  ($rootScope.ui.selected_range.start == o.start && $rootScope.ui.selected_range.end == o.start) ? true : false;
                
-
                 var otype = 'markup'
-                 if(o.type && o.type == 'container'){
-                      var otype = 'container'
+                if(o.type && o.type == 'container'){
+                  var otype = 'container'
 
                   }
                  

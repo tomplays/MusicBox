@@ -27,7 +27,7 @@ exports.room_view = function(req, res){
 
 		var user_ = ''
 		if(req.user){
-			user_ = new Object({'_id': req.user._id , 'username': req.user.username,  'image_url': req.user.image_url})
+			user_ = {'_id': req.user._id , 'username': req.user.username,  'image_url': req.user.image_url}
 		}
 
 		var room =  Room.findOne( {'slug': req.params.slug}, {secret: 0, owner_email:0}).populate('owner', '-user_options -hashed_password -email -salt').exec(function(err, room) {
@@ -35,21 +35,17 @@ exports.room_view = function(req, res){
 				var options_array = []; 
 
 				 _.each(room.room_options , function(option){
-            
-           
 			            var op_name = option.option_name;
 			            options_array[op_name]          = [];
 			            options_array[op_name]['value'] = option.option_value
 			            options_array[op_name]['_id']   = option._id
 			            options_array[op_name]['type']  = option.option_type
-
-
 				});
 				 room.options_ = options_array;
 
 
 				res.render('index', {
-					user_in : user_,
+					user : user_,
 					room : room
 				});
 
@@ -60,11 +56,21 @@ exports.room_view = function(req, res){
 }
 
 exports.createroom = function(req, res){
-	//var ar = new Object({'title':'bloue'+Math.random()})
-	var new_room = new Object({'name':req.params.slug, 'slug':req.params.slug})
-	var room_options  = new Object( {'option_name':'branding_image_url', 'option_value':'logo.jpg',  'option_type': 'branding' } )
+
+	var new_room = {
+			'name':req.params.slug,
+			'slug':req.params.slug
+	};
+	
+	var room_options  =  {
+			'option_name':'branding_image_url',
+			'option_value':'logo.jpg',
+			'option_type': 'branding' };
+	
 	var room = new Room(new_room);
 	room.room_options.push(room_options)
+	
+
 	if(req.user){
 		room.owner_email = req.user.email
 		room.owner = req.user

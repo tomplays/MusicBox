@@ -12,6 +12,7 @@
 
 angular.module('musicBox.user.controller', []);
 
+
 // ** GLOBAL MISC VARS
 var inheriting = {};
 var GLOBALS;
@@ -21,22 +22,27 @@ var render;
 **/
 // todo : remove old api call
 
-function UserProfileCtrl($rootScope, $scope, $http , $location, $routeParams,  $locale, DocumentService, UserRest, UserService, renderfactory,$timeout) {
+function UserProfileCtrl($rootScope, $scope, $http , $location, $routeParams,  $locale, $timeout, DocumentService, UserRest, renderfactory, MarkupService ) {
 	  	
 	  	render  = new renderfactory()
 	  	render.init('user')
 
+
  		$scope.globals = GLOBALS;
         $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
 		
+
+
+
  		var promise = UserRest.account({},{  }).$promise;
     	promise.then(function (Result) {
-      		
-      		var this_user = new UserService()
-      		this_user.SetFromData(Result.user)
-      		
-      		$scope.userin.user_options = this_user.MapOptions(Result)
-      		
+
+			
+			var _user 		    = new MarkupService().init(Result, 'user')
+			$rootScope.userin 	= _user.populate()
+			
+			console.log($scope.userin)
+
 
 		 }.bind(this));
 		 promise.catch(function (response) {     
@@ -44,8 +50,6 @@ function UserProfileCtrl($rootScope, $scope, $http , $location, $routeParams,  $
 		 }.bind(this));
 
 
-
-    
 
   		$scope.edit_user= function(){
   			var data = new Object()
@@ -81,11 +85,10 @@ function UserProfileCtrl($rootScope, $scope, $http , $location, $routeParams,  $
 
 
         $scope.delete_document= function(doc){
-        	
         	var tdoc           	= new DocumentService();
         	//tdoc.SetSlugFromValue(doc.slug)
         	tdoc.doc_delete({id:tdoc.slug});
-        	$scope.documents  = _.reject($scope.documents , function(doch){ return doch._id == doc._id });
+        	$scope.userin.documents  = _.reject($scope.userin.documents , function(doch){ return doch._id == doc._id });
         }
 
         $scope.external_link = function (link){
@@ -93,12 +96,11 @@ function UserProfileCtrl($rootScope, $scope, $http , $location, $routeParams,  $
 		}
 
 		$scope.create_doc = function(){
-		
 			var newdoc_service =  new DocumentService('n')
 			newdoc_service.newdoc();
-	}
+		}
 }
-function UserCtrl($scope, $http , $location, $routeParams,  $locale, renderfactory, UserService, UserRest) {
+function UserCtrl($scope, $http , $location, $routeParams,  $locale, renderfactory, UserRest, MarkupService) {
 	
 	console.log('User Controller (signup, login, newsletter)')
 
@@ -106,16 +108,18 @@ function UserCtrl($scope, $http , $location, $routeParams,  $locale, renderfacto
 	new renderfactory().init('user')
 
 	// get user
-	new UserService().SetFromData(USERIN)
+
+	//var _user 		    = new MarkupService().init(USERIN, 'user')
+	// _user.populate()
+	//new UserService().SetFromData(USERIN)
 
 	
-	$scope.created_user_link   = root_url+':'+PORT+'/me/account?welcome';
-	$scope.register_url = root_url+':'+PORT+'/signup';
+	$scope.created_user_link   	= root_url+':'+PORT+'/me/account?welcome';
+	$scope.register_url 		= root_url+':'+PORT+'/signup';
 	
 	if($routeParams.redirect_url){
 		$scope.created_user_link 	= $routeParams.redirect_url;
 		$scope.register_url 		+= '?redirect_url='+$routeParams.redirect_url
-
 	}
 
 	if(action_){
@@ -123,7 +127,6 @@ function UserCtrl($scope, $http , $location, $routeParams,  $locale, renderfacto
 	}
 
 	//	$scope.render_config = new Object({'i18n':  $locale})
-
 
 
  	$scope.globals = GLOBALS;
@@ -136,12 +139,11 @@ function UserCtrl($scope, $http , $location, $routeParams,  $locale, renderfacto
 	$scope.lostpass_form = false
 
 	$scope.checklogin = function(){
-		var data = new Object({'username': $scope.username, 'password': $scope.password, 'redirect_url':$routeParams.redirect_url})
+		var data = {'username': $scope.username, 'password': $scope.password, 'redirect_url':$routeParams.redirect_url}
 		//console.log($routeParams.redirect_url)
 		var promise = UserRest.login({}, serialize(data) ).$promise;
 		promise.then(function (Result) {
           		window.location = Result.redirect_url;
-
 		 }.bind(this));
 		 promise.catch(function (response) {     
 		      console.log(response);
@@ -153,8 +155,8 @@ function UserCtrl($scope, $http , $location, $routeParams,  $locale, renderfacto
 	}
 
 	$scope.lostpass_post = function(email){
-		var data = new Object({'email' :email } )	
-		var promise = UserRest.lostpass({}, serialize(data) ).$promise;
+		
+		var promise = UserRest.lostpass({}, serialize({'email' :email }) ).$promise;
 		promise.then(function (Result) {
           		$scope.complete 	 = true
           		$scope.lostpass_form = false
@@ -169,12 +171,14 @@ function UserCtrl($scope, $http , $location, $routeParams,  $locale, renderfacto
 		
 		if($scope.password && $scope.username && $scope.password !=="" && $scope.username !=="" ){
 			$scope.errors= ''
-			var data = new Object({
+			
+			var data = {
 					'username' 	: $scope.username,
 					'password' 	: $scope.password,
 					'email' 	: $scope.email,
 					'newsletter': $scope.newsletter ? $scope.newsletter : false 
-			})
+			};
+
 			var promise = UserRest.register({}, serialize(data) ).$promise;
 			promise.then(function (Result) {
 	          		$scope.complete = true;
@@ -193,9 +197,7 @@ function UserCtrl($scope, $http , $location, $routeParams,  $locale, renderfacto
 		
 		if($scope.email){
 			$scope.errors= ''
-			var data = new Object()
-			data.email 		= $scope.email;
-			var promise = UserRest.subscribe({}, serialize(data) ).$promise;
+			var promise = UserRest.subscribe({}, serialize({'email':$scope.email}) ).$promise;
 			promise.then(function (Result) {
 	          		 $scope.complete = true;
 			 }.bind(this));

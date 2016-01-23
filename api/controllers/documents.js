@@ -47,7 +47,7 @@ var mails = require('./mails.js');
 	 		var user_	= req.user.toObject()
 
 			res.render('index', {
-				user_in : user_,
+				user : user_,
 				doc_title : '',
 				raw_content : '',
 				doc_thumbnail : '',
@@ -75,7 +75,7 @@ var mails = require('./mails.js');
 
 		var user_ = ''
 		if(req.user){
-			 user_ = new Object({'_id': req.user._id , 'username': req.user.username,  'image_url': req.user.image_url})
+			 user_ = {'_id': req.user._id , 'username': req.user.username,  'image_url': req.user.image_url}
 		}
 		var doc_req_slug 	  = 'homepage';
 		var doc_slug_discret  =  nconf.get('ROOT_URL')+':'+nconf.get('PORT');
@@ -150,7 +150,7 @@ if(debugger_on){
 
 					console.log('public doc rendered')	
 					res.render('index', {
-						user_in : user_,
+						user : user_,
 						doc_title : doc.title,
 						raw_content : doc.content,
 						is_view : 'document',
@@ -708,7 +708,7 @@ exports.prerender = function(doc) {
 					out.is_owner  		= false
 
 					if(req.user){
-						 out.userin 	= req.user.toObject()
+						 out.user	= req.user.toObject()
 					}
 					out.is_owner 		= exports.test_owner_or_key(doc,req)
 					if(out.is_owner !== true){
@@ -885,7 +885,7 @@ exports.doc_sync= function(req, res) {
                
 
                if(req.user){
-					 out.userin 	= req.user.toObject()
+					 out.user 	= req.user.toObject()
 				}
 				out.is_owner 		= exports.test_owner_or_key(doc,req)
 					console.log(chalk.green('doc sync') );
@@ -1213,7 +1213,7 @@ exports.doc_edit  = function(req, res) {
 			}
                var out 			= {}
                if(req.user){
-					 out.userin 	= req.user.toObject()
+					 out.user 	= req.user.toObject()
 				}
 				out.is_owner 		= exports.test_owner_or_key(doc,req)
 
@@ -1248,7 +1248,7 @@ exports.doc_option_new  = function(req, res) {
 				//var value = req.body.value
 	  				var  new_option = new meta_options( {'option_name':req.body.option_name, 'option_value':'-',  'option_type': '' } )
 					if(req.user){
-						 out.userin 	= req.user.toObject()
+						 out.user 	= req.user.toObject()
 					}
 					out.is_owner 		= exports.test_owner_or_key(doc,req)
 
@@ -1301,7 +1301,7 @@ exports.doc_option_new  = function(req, res) {
 
 	  				 
 					if(req.user){
-						 out.userin 	= req.user.toObject()
+						 out.user	= req.user.toObject()
 					}
 					out.is_owner 		= exports.test_owner_or_key(doc,req)
 
@@ -1355,7 +1355,7 @@ exports.doc_option_new  = function(req, res) {
 				 doc.doc_options = doc_options_new
 				
 					if(req.user){
-						 out.userin 	= req.user.toObject()
+						 out.user 	= req.user.toObject()
 					}
 
 

@@ -26,15 +26,11 @@ head
 		var is_view = '#{is_view}'
 		var doc_include_js = '#{doc_include_js}'
 		var action_ = '#{action_}'
-		var USERIN = new Object({'username':'#{user_in.username}', 'image_url': '#{user_in.image_url}', '_id': '#{user_in._id}'} )
+		var USERIN = {'username':'#{user.username}', 'image_url': '#{user.image_url}', '_id': '#{user._id}'}
 	// room view ? 
 	if(room)
 		script(type='text/javascript').
-			
-			var ROOM = new Object(
-				{'name':'#{room.name}',
-				'room_branding':'#{room.options_.branding_image_url.value}'
-				})
+			var ROOM = {'name':'#{room.name}', 'room_branding':'#{room.options_.branding_image_url.value}'}
 
 	// cant compress
 	link(rel='stylesheet', href='/bower_components/font-awesome/css/font-awesome.css')
@@ -63,7 +59,7 @@ head
 		script(type='text/javascript', src='js/lib/webfont.js')
 		// calendar functions lib. (momentjs)
 		script(type='text/javascript', src='bower_components/momentjs/min/moment-with-langs.min.js')
-		script(type='text/javascript', src='bower_components/momentjs/lang/fr.js')
+		// script(type='text/javascript', src='bower_components/momentjs/lang/fr.js')
 
 
 		script(type='text/javascript', src='js/MusicBox/filters.js')
@@ -85,7 +81,7 @@ head
 		// document level
 		script(type='text/javascript', src='js/MusicBox/document/document.js')
 		script(type='text/javascript', src='js/MusicBox/document/documentServices.js')
-		script(type='text/javascript', src='js/MusicBox/MusicBoxServices.js')
+		script(type='text/javascript', src='js/MusicBox/ObjectsServices.js')
 
 		script(type='text/javascript', src='js/MusicBox/document/documentRest.js')
 		script(type='text/javascript', src='js/MusicBox/document/documentCtrl.js')

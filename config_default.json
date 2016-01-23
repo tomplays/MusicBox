@@ -23,5 +23,6 @@
     "MAIL_PROVIDER_MAIL":"xxxx@gmail.com",
     "MAIL_PROVIDER_PASS":"",
     "MAIL_TRANSPORTER":"gmail",
+    "ADMIN_EMAIL" : "somebody@gmail.com",
     "ENV": "dev"
 }

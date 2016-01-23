@@ -180,7 +180,7 @@ exports.edit = function(req, res) {
 							else {
 							
 								if(req.user){
-									out.userin 	= req.user.toObject();
+									out.user	= req.user.toObject();
 								}
 								out.is_owner 		= documents.test_owner_or_key(doc,req);
 								out.doc = doc
@@ -281,7 +281,7 @@ exports.create = function(req, res) {
 					else{
 			        	out.doc 			=  doc.toObject()
 						if(req.user){
-							out.userin 		= req.user.toObject()
+							out.user 		= req.user.toObject()
 						}
 						out.is_owner 		=  documents.test_owner_or_key(doc,req)	
 						out.doc.secret 		= 'api_secret';
@@ -375,7 +375,7 @@ exports.delete = function(req, res) {
 		        	var out = {}
 		        	out.doc 			= doc.toObject()
 					if(req.user){
-						out.userin 		= req.user.toObject()
+						out.user 		= req.user.toObject()
 					}
 					out.is_owner 		=  documents.test_owner_or_key(doc,req)	
 					out.doc.secret 		= 'api_secret'

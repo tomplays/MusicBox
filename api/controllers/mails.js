@@ -140,7 +140,7 @@ exports.send_mail_from_internal_document= function(req, res) {
 }
 
 exports.get_subscribers= function(req, res) {
-    User.find({newsletter: true, trust : 'confirmed'} , {secret:0, email:0, user_options:0} , function(err, users) {
+    User.find({newsletter: true, trust : 'confirmed'} , {secret:0, user_options:0} , function(err, users) {
         users.forEach(function(user) {
             // console.log(user)
             // userMap[user._id] = user
@@ -172,8 +172,8 @@ exports.send_mail_from_html= function(req, res) {
 }
 
 exports.subscribe_view = function(req, res) {
-	    var user_ = new Object({'username': null,  'image_url':null})
-        res.render('index', { user_in:user_ } );
+	    var user_ = {'username': null,  'image_url':null}
+        res.render('index', { user:user_ } );
     
 }
 
@@ -192,7 +192,7 @@ exports.subscribe_post = function(req, res) {
     var g = getRandomInt(0, 255);
     var b = getRandomInt(0, 255);
     var rand_color = 'rgb('+r+', '+g+', '+b+')';
-    var user_option = new Object( {'option_name':'color', 'option_value': rand_color,  'option_type': '' } )
+    var user_option = {'option_name':'color', 'option_value': rand_color,  'option_type': '' }
     user.user_options.push(user_option)
 	user.newsletter = true;
     user.provider = 'local';
@@ -210,18 +210,20 @@ exports.subscribe_post = function(req, res) {
             return res.send(message);
         }
         else{
-			var user_email = new Object({
-				'subject':'hacktuel.fr - Confirmer inscription', 
-				'bodytext':'Veuillez cliquer ce <a href="http://localhost:8087/api/v1/subscribe_action?action=confirm&mail='+user.email+'&key='+user.secret+'">lien</a> pour activer votre abonnement à la newsletter d\'hacktuel</p><p>ou entrez directement cette adresse dans votre navigateur : http://localhost:8087/api/v1/subscribe_action?action=confirm&mail='+user.email+'&key='+user.secret+'</p>', 
+
+			var user_email = {
+				'subject': nconf.get('SITE_TITLE')+' - Confirmer inscription', 
+				'bodytext':'Veuillez cliquer ce <a href="'+nconf.get('ROOT_URL')+':'+nconf.get('PORT')+'/api/v1/subscribe_action?action=confirm&mail='+user.email+'&key='+user.secret+'">lien</a> pour activer votre abonnement à la newsletter </p><p>ou entrez directement cette adresse dans votre navigateur : '+nconf.get('ROOT_URL')+':'+nconf.get('PORT')+'/api/v1/subscribe_action?action=confirm&mail='+user.email+'&key='+user.secret+'</p>', 
 				'to':user.email
-			})
-			var admin_email = new Object({
-				'subject':'hacktuel.fr - new subscriber', 
-				'bodytext':'Veuillez cliquer ce <a href="http://localhost:8087/api/v1/subscribe_action?action=confirm&mail='+user.email+'&key='+user.secret+'">lien</a> pour activer votre abonnement à la newsletter d\'hacktuel</p><p>ou entrez directement cette adresse dans votre navigateur : http://localhost:8087/api/v1/subscribe_action?action=confirm&mail='+user.email+'&key='+user.secret+'</p>', 
-				'to':'homeof@gmail.com'
-			})
+			}
+			var admin_email = {
+				'subject': nconf.get('SITE_TITLE')+' - new subscriber', 
+				'bodytext':'Veuillez cliquer ce <a href="'+nconf.get('ROOT_URL')+':'+nconf.get('PORT')+'/api/v1/subscribe_action?action=confirm&mail='+user.email+'&key='+user.secret+'">lien</a> pour activer votre abonnement à la newsletter</p><p>ou entrez directement cette adresse dans votre navigateur : '+nconf.get('ROOT_URL')+':'+nconf.get('PORT')+'/api/v1/subscribe_action?action=confirm&mail='+user.email+'&key='+user.secret+'</p>', 
+				'to': nconf.get("ADMIN_EMAIL")
+			}
+			console.log(user_email)
 			sendmailer(user_email)
-			//sendmailer(admin_email)
+			sendmailer(admin_email)
 			console.log(user)
 			res.send(user) 
         }
@@ -247,15 +249,15 @@ exports.subscribe_action = function(req, res) {
 	 					if(req.query.action == 'confirm'){
 	 						user.trust = 'confirmed'
 		 					user.save(function(err) {
-									var user_ = new Object({'username': null,  'image_url':null})
-									res.render('index', { action_: 'confirmed' , user_in:user_ } );
+									var user_ = {'username': null,  'image_url':null}
+									res.render('index', { action_: 'confirmed' , user:user_ } );
 		 					})
 	 					}
 	 					else if(req.query.action == 'unsubscribe'){
 	 						user.trust = 'unsubscribed'
 		 					user.save(function(err) {
-									var user_ = new Object({'username': null,  'image_url':null})
-									res.render('index', { action_: 'unsubscribed' , user_in:user_ } );
+									var user_ = {'username': null,  'image_url':null}
+									res.render('index', { action_: 'unsubscribed' , user:user_ } );
 		 					})
 	 					}
 						else if(req.query.action == 'reset'){
@@ -274,7 +276,7 @@ exports.subscribe_action = function(req, res) {
 									        res.send('err')   
 									    }
 					                    else{
-					                    	res.render('index', { action_: 'Mail reset to:   '+newpass+ '   You can change it in your account infos.' , user_in:user } );
+					                    	res.render('index', { action_: 'Mail reset to:   '+newpass+ '   You can change it in your account infos.' , user:user } );
 					                    }
 					                       
 					                })

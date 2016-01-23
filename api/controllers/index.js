@@ -87,8 +87,8 @@ nconf.argv().env().file({file:'config.json'});
   */
 
   exports.sockets_list = function(req, res) {
-           var user_ = new Object({'username': null,  'image_url':null})
-           res.render('index_v1', { user_in:user_ } );
+           var user_ = {'username': null,  'image_url':null}
+           res.render('index_v1', { user:user_ } );
   };
 
 

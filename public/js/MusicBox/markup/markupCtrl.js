@@ -31,8 +31,10 @@ angular.module('musicBox.markup.controller', ['musicBox.section']).controller('M
 		$scope.markup =  _.extend($scope.markup, markup_);
 
 
-		var _markup = new MarkupService().init($scope.markup)
-		$scope.markup.user_options = _markup.apply_object_options('markup_user_options',$scope.markup.user_id.user_options)
+		var _markup = new MarkupService().init($scope.markup, 'markup')
+		
+		$scope.markup.user_options = _markup.apply_object_options()
+		
 		// console.log(_markup.options_array.color.value)
 		
 		// its own fulltext for section.

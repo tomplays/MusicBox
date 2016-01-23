@@ -30,31 +30,33 @@ nconf.argv().env().file({file:'config.json'});
 * @todo nothing
 */
 
+
+// NEED ADMIN
 exports.list= function(req, res) {
     User.find({}, function(err, users) {
         //var userMap = {}
       
         var out= {}
-       out.users= []
-       out.count= users.length
+        out.users= []
+        out.count= users.length
         users.forEach(function(user) {
             
 
-            user.secret = 'secret'
+           // user.secret = 'secret'
             out.users.push(user)
             
             // console.log(user)
             // userMap[user._id] = user
             console.log('username: '+user.username +' mail: '+user.email)
         })
-        res.send('console only infos')
-        // res.json(out)
+        // res.send('console only infos')
+        res.json(out)
     });
 }
 
 exports.login = function(req, res) {
-    var user_ = new Object({'username': null,  'image_url':null})
-    res.render('index', { user_in:user_ , is_view : 'user' } );
+    var user_ = {'username': null,  'image_url':null}
+    res.render('index', { user:user_ , is_view : 'user' } );
 };
 
 
@@ -73,15 +75,12 @@ exports.lostpass = function(req, res) {
 
               
                         console.log('mail')
-                        var admin_email = new Object({
+                        var admin_email = {
                         'subject': nconf.get('SITE_TITLE')+' - Reset password', 
                         'bodytext':'Veuillez cliquer ce <a href="'+nconf.get('ROOT_URL')+':'+nconf.get('PORT')+'/api/v1/subscribe_action?action=reset&mail='+user.email+'&key='+user.secret+'">lien</a> pour </p><p>ou entrez directement cette adresse dans votre navigateur : '+nconf.get('ROOT_URL')+':'+nconf.get('PORT')+'/api/v1/subscribe_action?action=reset&mail='+user.email+'&key='+user.secret+'</p>', 
                         'to':'homeof@gmail.com'
-                         })
-                         mails.sendmailer(admin_email)   
-                
-
-                        
+                         }
+                         mails.sendmailer(admin_email);         
             } 
             else {
                
@@ -103,13 +102,13 @@ exports.lostpass = function(req, res) {
 
 
 exports.signup = function(req, res) {
-  var user_ = new Object({'username': null,  'image_url':null})
-  res.render('index', { user_in:user_ , is_view : 'user'} ); 
+  var user_ = {'username': null,  'image_url':null}
+  res.render('index', { user:user_ , is_view : 'user'} ); 
 };
 
 exports.signin_login= function(req, res) {
     if(req.user){
-        var out = new Object({'redirect_url': req.body.redirect_url})
+        var out = {'redirect_url': req.body.redirect_url}
         res.json(out)
     }
 };
@@ -132,12 +131,12 @@ exports.signin = function(req, res) {};
 
 exports.account = function(req, res) {
        
-        var user_ = new Object({'username': req.user.username, '_id':req.user._id})
+        var user_ = {'username': req.user.username, '_id':req.user._id}
 
 
         res.render('index', {
-            doc: new Object(),
-            user_in : user_,
+            doc: {},
+            user : user_,
             is_view : 'user'
         });
 }
@@ -151,7 +150,7 @@ exports.account_api = function(req, res) {
                 res.send('err')
             } else {
                //console.log(user_documents);
-               var out = new Object();
+               var out = {};
                if(req.user.trust == 'confirmed'){
                     out.user_documents = user_documents;
                }
@@ -168,7 +167,7 @@ exports.account_api = function(req, res) {
     }
 }  
 exports.edit = function(req, res) {
-    var out = new Object();
+    var out = {};
     if(req.user._id){
     //console.log(req.body)
 
@@ -218,7 +217,7 @@ exports.create = function(req, res) {
     var g = getRandomInt(140, 175);
     var b = getRandomInt(200, 225);
     var rand_color = 'rgb('+r+', '+g+', '+b+')';
-    var user_option = new Object( {'option_name':'color', 'option_value': rand_color,  'option_type': '' } )
+    var user_option =  {'option_name':'color', 'option_value': rand_color,  'option_type': '' } 
     user.user_options.push(user_option)
     user.provider = 'local';
 
@@ -241,23 +240,23 @@ exports.create = function(req, res) {
 
             return res.send(message);
         }
-         var user_email = new Object({
+         var user_email = {
                 'subject':'['+ nconf.get('SITE_TITLE')+'] - Confirmer inscription', 
                 'bodytext':'Veuillez cliquer ce <a href="'+nconf.get('ROOT_URL')+':'+nconf.get('PORT')+'/api/v1/subscribe_action?action=confirm&mail='+user.email+'&key='+user.secret+'">lien</a> pour activer votre inscription </p><p>ou entrez directement cette adresse dans votre navigateur : '+nconf.get('ROOT_URL')+':'+nconf.get('PORT')+'/api/v1/subscribe_action?action=confirm&mail='+user.email+'&key='+user.secret+'</p>', 
                 'to':'homeof@gmail.com'
                 //user.email
-            })
-            var admin_email = new Object({
+            }
+            var admin_email = {
                 'subject':'[SITE ADMIN '+ nconf.get('SITE_TITLE')+'] - new signup', 
                 'bodytext':'new_user_signup'+JSON.stringify(user), 
                 'to':'homeof@gmail.com'
-            })
+            }
             mails.sendmailer(user_email)
             mails.sendmailer(admin_email)
 
 
 
-        req.logIn(user, function(err) {
+            req.logIn(user, function(err) {
 
            
             

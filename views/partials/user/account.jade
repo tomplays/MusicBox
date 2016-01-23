@@ -10,7 +10,7 @@ div.main_center.user_account.bordered
 	a(style="float:right;" ng-click="external_link(userin.signout_url)") {{i18n.CUSTOM.USER.logout}} &nbsp;
 					i.fa.fa-sign-out 
 	tabset.editor-main-tab()
-		tab(ng-if="documents && documents.length > 0", heading="{{i18n.CUSTOM.DOCUMENT.my_documents}}")
+		tab(ng-if="userin.documents && userin.documents.length > 0", heading="{{i18n.CUSTOM.DOCUMENT.my_documents}}")
 			
 			table.user_documents()
 				thead
@@ -24,7 +24,7 @@ div.main_center.user_account.bordered
 						th options
 				
 				tbody
-					tr(ng-repeat="doc in documents")
+					tr(ng-repeat="doc in userin.documents")
 						td 
 							a(href="/doc/{{doc.slug}}") {{doc.title}} 
 						td {{doc.published}}
@@ -100,7 +100,7 @@ div.main_center.user_account.bordered
 			
 	
 						
-	a.btn_big.btn_newdoc(ng-if="documents.length==0 && userin.trust == 'confirmed'" title="{{i18n.CUSTOM.DOCUMENT.create_new}}" ng-click="create_doc()" ) {{i18n.CUSTOM.DOCUMENT.create_first}}
+	a.btn_big.btn_newdoc(ng-if="userin.documents.length==0 && userin.trust == 'confirmed'" title="{{i18n.CUSTOM.DOCUMENT.create_new}}" ng-click="create_doc()" ) {{i18n.CUSTOM.DOCUMENT.create_first}}
 	p(ng-if="userin.trust !== 'confirmed'") You need to confirm your account (sent by mail) before being allowed to create document
 footer
 	p 2015 - MusicBox

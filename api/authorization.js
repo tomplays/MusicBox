@@ -3,12 +3,26 @@
 /**
  * Generic require login routing middleware
  */
+ var nconf = require('nconf');
+
+
 exports.requiresLogin = function(req, res, next) {
     if (!req.isAuthenticated()) {
         return res.send(401, 'User is not authorized (requiresLogin)');
     }
     next();
 };
+
+exports.requiresAdmin = function(req, res, next) {
+    
+    if (req.user && nconf.get("ADMIN_EMAIL") && req.user.email == nconf.get("ADMIN_EMAIL") ) {
+        next();
+    }
+    else{
+        return res.send(401, 'User is not authorized (requiresAdmin)');
+    }   
+};
+
 exports.requiresLogin_or_secret = function(req, res, next) {
     
     if(req.isAuthenticated()){

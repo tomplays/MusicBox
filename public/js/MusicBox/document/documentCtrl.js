@@ -2,14 +2,8 @@
 
 /*
 
-AngularJs controllers 
-	
-	Controllers are used to communicate between user interactions in views (load, clicks, changes) 
-	and the document services (factory) located in ./angular-modules/document_services.js
-	
-	Main : 
 
-	- DocumentCtrl :
+	DocumentCtrl :
 	  
 	  * document to service communication,
 	  * document editing
@@ -27,11 +21,7 @@ AngularJs controllers
 	- DocumentNewCtrl
 		* new document 
     - DocumentsListCtrl
-    	* list
-    - DocumentCtrlJasmine
-    	* jasmine (tests)
-    - SectionCtrl
-    	* not used
+    	* list  
     - SocketsListCtrl
     	* sockets debugger view
 
@@ -48,23 +38,7 @@ var GLOBALS;
 var render;
 var doc;
 
-
-
-
 angular.module('musicBox.document.controller', []);
-
-
-
- /**
- * controller for document.
- * @class DocumentCtrl
- * @param {Object} $scope - angular service
- * @param {Object} $http -  angular service
- * @param {Object} $location -  angular service
- * @param {Object} $routeParams -  angular service
- * @param {Factory} renderfactory -  angular custom factory for render
- * @param {Factory} docfactory -  angular custom factory for document 
- */
 
 
 function DocumentCtrl($rootScope, $scope, $http , $sce, $location, $routeParams ,socket,renderfactory, DocumentService, $anchorScroll, $timeout, MarkupService) {
@@ -88,6 +62,7 @@ function DocumentCtrl($rootScope, $scope, $http , $sce, $location, $routeParams 
 	$scope.mapping_pass = function(){
 		$scope.mapping_passes++
 	}
+  
   
 	$scope.update_section_count = function(direction){
 		if(direction=='add'){
@@ -361,7 +336,7 @@ function DocumentCtrl($rootScope, $scope, $http , $sce, $location, $routeParams 
          return text_range;
   	}
 
-  	// ** Atomic operations
+  	// ** Atomic operation(s)
 
 	$scope.apply_operation = function(){
 
@@ -404,25 +379,17 @@ function DocumentCtrl($rootScope, $scope, $http , $sce, $location, $routeParams 
 	/**
 	*  WATCHERS
 	* 
-	* Get broadcasted events
-	* @function DocumentCtrl#events
 	*/
-	
+		
+	$scope.$watch('doc.operation.before.state', function(newValue, oldValue) {
+		if(newValue == 'new'){
+			$scope.apply_operation()
+		}
+		if(newValue == 'error'){
+			$scope.doc.operations.push($scope.doc.operation)
+		}
+	})
 
-	// act as a debugger to count watched count.
-	// performances logging.
-
-	/*
-	var tttt = 0;
-	$scope.$watch('doc.containers', function(newValue, oldValue) {
-	   tttt++;
-	   // if(oldValue){
-	   // 	console.log('////////'+tttt)
-	   // }
-	});
-	*/
-	
-	
 	$scope.$watch('doc.title', function(newValue, oldValue) {
 		if(newValue){
 			console.log('- Document level')
@@ -432,12 +399,11 @@ function DocumentCtrl($rootScope, $scope, $http , $sce, $location, $routeParams 
 	});
 
 	$scope.$watch('doc.updated', function( newValue,oldValue) {
-			if(newValue){
-				console.log('- Document level')
-				console.log('- content change watched'+newValue)
-				$scope.doc.formated_date = moment(newValue).calendar() +', '+moment(newValue).fromNow(); 
-			}	
-	
+		if(newValue){
+			console.log('- Document level')
+			console.log('- content change watched'+newValue)
+			$scope.doc.formated_date = moment(newValue).calendar() +', '+moment(newValue).fromNow(); 
+		}
 	});
 	
 	/*
@@ -472,21 +438,9 @@ function DocumentCtrl($rootScope, $scope, $http , $sce, $location, $routeParams 
 	}, true);
 	*/
 
-	$scope.$watch('doc.operation.before.state', function(newValue, oldValue) {
-
-			if(newValue == 'new'){
-				 $scope.apply_operation()
-
-			}
-			if(newValue == 'error'){
-				$scope.doc.operations.push($scope.doc.operation)
-			}
-	})
-
 	
 
-
-
+	
 	/**
 	*  EVENTS 
 	* 
