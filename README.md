@@ -2,6 +2,8 @@ MusicBox
 ========
 [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/tomplays/MusicBox?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
+[![Stories in Ready](https://badge.waffle.io/tomplays/MusicBox.svg?label=ready&title=Ready)](http://waffle.io/tomplays/MusicBox)
+
 ## LIVE DEMO
   
   * soon 
