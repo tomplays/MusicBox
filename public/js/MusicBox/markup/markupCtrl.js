@@ -525,8 +525,9 @@ $scope.$watch('markup.fulltext', function(newValue, oldValue) {
 				
 				var z, z_real, rtest;
 			
+				rtest = ranges_compare('markup', parseInt($rootScope.ui.selected_range.start) ,parseInt($rootScope.ui.selected_range.end) , $scope.markup.start , $scope.markup.end , parseInt($scope.section.start) , parseInt($scope.section.end) )
 
-				rtest = ranges_test(parseInt($rootScope.ui.selected_range.start),$rootScope.ui.selected_range.end, $scope.markup.start,$scope.markup.end, 'markup' )
+				///rtest = ranges_test(parseInt($rootScope.ui.selected_range.start),$rootScope.ui.selected_range.end, $scope.markup.start,$scope.markup.end, 'markup' )
 			
 				$scope.markup.test_map_r = rtest
 				//console.log('rtest:'+rtest+' --- '+$scope.markup.metadata)
@@ -534,7 +535,7 @@ $scope.$watch('markup.fulltext', function(newValue, oldValue) {
 				$scope.markup.selected = false;
 				$scope.markup.inrange  = false;
 			
-				if(rtest == 3  || rtest == 2 || rtest == 4){
+				if(rtest.case == 5 || rtest.case == 2 || rtest.case == 10 || rtest.case == 11 ){
 					
 				
 					$scope.markup.selected = true;
