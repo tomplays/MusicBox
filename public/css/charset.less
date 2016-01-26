@@ -512,17 +512,8 @@ ul.typer{
    
 }
 
-section .lt.mup{
-     background: #2ecc71;
-    
-   
-}
-section .lt.cursor_at{
-    border-left: 2px solid blue;
-}
 
-section ::-moz-selection {  background:#2ecc71; }
-section ::selection      {  background: #2ecc71; } 
+
 
 // refactor i.fa &.fa-sub serie
 i.fa{
@@ -890,13 +881,73 @@ i.fa-mood:before {
 }
 
 
-span.lt[inrange="true"]{
-     &:before {
+
+
+section ::-moz-selection {  background:#2ecc71; }
+section ::selection      {  background: #2ecc71; } 
+
+
+
+  section{ 
+      .no_default_selection ::-moz-selection,
+      .no_default_selection ::selection{
+         background:transparent; 
+      }
+   }
+
+
+
+
+
+
+/*
+
+span.isfirst{
+   &.lt[inrange="true"]{
+      border-right:none;
+      border-left:2px solid #2ecc71;
+  }
+}
+span.islast{
+   &.lt[inrange="true"] {
+ border:1px solid red;
+      border-right:2px solid #2ecc71;
+  }
+}
+
+*/
+
+
+
+
+
+/*
+span.lt[inrange="true"] {
+ 
+  border-left:none;
+    border-right:none;
+//
+  
+  -webkit-animation-name: none;
+  animation-name: none;
+}
+*/
+/*
+.is_multi_true 
+*/
+
+
+
+
+.is_collapsed_true{
+
+span.lt[inrange="true"] {
+      
+      &:before {
     
-    }
-    border-left:2px solid #2ecc71;
-    
-        -webkit-animation-name: pulse;
+      }
+      border-left:2px solid #2ecc71;
+      -webkit-animation-name: pulse;
       animation-name: pulse;
       -webkit-animation-duration: 1s;
       animation-duration: 1s;
@@ -904,7 +955,68 @@ span.lt[inrange="true"]{
       animation-timing-function: linear;
       -webkit-animation-iteration-count: infinite;
       animation-iteration-count: infinite;
-} 
+      background: transparent;
+    }
+   
+}
+
+.is_multi_true{
+
+  span.lt[inrange="true"] {
+        border-left:0px solid #2ecc71;
+        background: blue;
+  }
+}
+
+.is_single__true{
+
+  span.lt[inrange="true"] {
+        border-left:0px solid #2ecc71;
+        background: red;
+  }
+}
+
+
+.floppy__true span.lt.islast-section { 
+  border-right:18px solid #2ecc71;
+}
+._floppy_true span.lt.isfirst-section { 
+  content: "your text";
+  border-left:8px solid #2ecc71;
+}
+
+
+.boundaries_end_true {
+  border-right:1px solid blue;
+  // border-left:0px solid blue;
+
+}
+
+
+
+
+.wait_ev{
+   border-radius: 8px;
+    display: inline-block;
+    float: left;
+    height: 7px;
+    margin-right: 3px;
+    margin-top: 7px;
+    opacity: 0.8;
+    width: 7px;
+}
+
+.wait_ev--true{
+  background:red;
+}
+.wait_ev--false {
+  background: #2ecc71 none repeat scroll 0 0;
+   
+}
+
+
+
+
 
 
 @-webkit-keyframes pulse {
@@ -929,83 +1041,4 @@ span.lt[inrange="true"]{
 }
 
 
-span.isfirst{
-   &.lt[inrange="true"]{
-      border-right:none;
-      border-left:2px solid #2ecc71;
-  }
-}
-span.islast{
-   &.lt[inrange="true"] {
- border:1px solid red;
-      border-right:2px solid #2ecc71;
-  }
-}
 
-
-
-
-
-/*
-span.lt[inrange="true"] {
- 
-  border-left:none;
-    border-right:none;
-//
-  
-  -webkit-animation-name: none;
-  animation-name: none;
-}
-*/
-/*
-.is_multi_true 
-*/
-
-
-
-
-
-
-span.lt[inrange="true"] {
-    background:red;
-}
-
-
-span.lt[inselection="true"][inselection="true"] { 
-  border-left:1px solid blue;
-   border-right:0px solid blue;
-}
-
-
-
-.boundaries_end_true {
-  border-right:1px solid blue;
-  // border-left:0px solid blue;
-
-}
-
-
- span.lt[inrange="true"] {
-    &[inselection="true"]{
-     
-    }
-  }
-
-.wait_ev{
-   border-radius: 8px;
-    display: inline-block;
-    float: left;
-    height: 7px;
-    margin-right: 3px;
-    margin-top: 7px;
-    opacity: 0.8;
-    width: 7px;
-}
-
-.wait_ev--true{
-  background:red;
-}
-.wait_ev--false {
-  background: #2ecc71 none repeat scroll 0 0;
-   
-}

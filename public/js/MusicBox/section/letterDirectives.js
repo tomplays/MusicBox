@@ -182,17 +182,25 @@ console.log($scope.mks)
                   // map the range  
                   
                  
-
-                    if( (c_real == 9999999990 ) || (c_real>=$rootScope.ui.selected_range.start && c_real <= $rootScope.ui.selected_range.end)) {
+                                                                            
+                    if(c_real>=$rootScope.ui.selected_range.start) {
                      
+                        // testing cases
+                        // kind of "floppy"_mode.
 
-                     l.inrange = true;
-                   
+                                // ==                                                                           collapsed
+                        if(c_real == $rootScope.ui.selected_range.end && $rootScope.ui.selected_range.collapsed == true){
+                          l.inrange = true;
+                        }
+                                // <
+                        if(c_real < $rootScope.ui.selected_range.end ){
+                          l.inrange = true;
+                        }
+
 
                     }
                     else{
                      
-
 
                     }
                  
@@ -572,6 +580,7 @@ angular.module('musicBox.section.directive.letters', [])
 
   var use_markup = 'span'
 
+  var logevent = {'directive':'lt', 'event':'none','count':0,'waiting':null}
 
 
 
@@ -629,17 +638,28 @@ angular.module('musicBox.section.directive.letters', [])
   }
   */
 
-  var tsts = 0
-  var logevent = {'directive':'lt', 'event':'none','count':tsts, 'waiting':null}
-  function sets(scope){
-    tsts++
-   
-    logevent.started = $rootScope.ui.selected_range.start
-    logevent.ended = $rootScope.ui.selected_range.end
+  function sets(scope, log){
+
+      $rootScope.ui.selected_range.current_action =  log.current_action 
+      $rootScope.ui.selected_range.wait_ev        =  log.wait_ev 
+      $rootScope.ui.selected_range.start          =  log.start
+      $rootScope.ui.selected_range.end            =  log.end
+
+      if(log.switchrender !==false){
+         $rootScope.ui.renderAvailable_active     =  log.switchrender
+        
+
+         logevent.switchrender = false;
+         
+      }
+     
+      console.log(log)
 
 
-    $rootScope.ui.selected_range.working_section        =  scope.$parent.section.sectionin  
 
+
+  //  logevent.started = $rootScope.ui.selected_range.start
+   // logevent.ended   =   $rootScope.ui.selected_range.end
 
    // console.log(logevent)
 
@@ -658,45 +678,10 @@ angular.module('musicBox.section.directive.letters', [])
      //  console.log(scope.lt)
 
 
-          // $rootScope.ui.current_action = 'mousedown'
-          //
-          // scope.lt.classes = new Array('h2') 
-          // = scope.lt.classes
-         /* scope.lt.char =   scope.$parent.section.start+' p:'+scope.lt.char +'- order:'+scope.lt.order+' abs;'+scope.lt.absolute_order
-
-          if(scope.lt.absolute_order== scope.$parent.section.start){
-            scope.lt.char +='FIRST' 
-          }
-
-           if(scope.lt.absolute_order-1 ==  scope.$parent.section.end){
-            scope.lt.char +='LAST('+scope.lt.absolute_order+'/'+scope.$parent.section.end+')' 
-          }
+          if(scope.lt.islast){}
+          if(scope.lt.isfirst){}
+          /*
           */
-         // scope.lt.char = ''+scope.lt.absolute_order;
-
-          if(scope.lt.islast){
-           
-          }
-          if(scope.lt.isfirst){
-           
-          }
-/*
-           scope.lt.isparentready = false
-
-
-           var tc =   scope.lt.classes
-
-
-
-          tc.push('lt')
-          tc.push('ispr')
-          console.log(tc)
-
-          scope.lt.tc = tc
-
-        //  scope.$apply()
-
-*/
           elem.bind('click', function(event) {
         
               if(scope.lt.href){
@@ -704,26 +689,20 @@ angular.module('musicBox.section.directive.letters', [])
                   window.open(scope.lt.href,'_blank');
               }
               else{
-/*
+                  /*
                   if($rootScope.doc.doc_owner == true){
                     alert('e')
                       $rootScope.ui.renderAvailable_active =  'editor'
                       scope.$parent.section.editing_text = true;
                       scope.$parent.section.editing = true;
                   }
-                  */
-
-                 
+                  */  
               }
+             
 
-
-
-             // scope.lt.char = '<clicker class="clickers">+</clicker>'
-              $rootScope.ui.selected_range.wait_ev =false
-             // alert('char: '+scope.lt.char+'scope.absolute_order:'+scope.lt.absolute_order+'  scope.order:'+scope.lt.order)
-
-             logevent.event = 'click'
-             sets(scope)
+              logevent.wait_ev = false
+              logevent.current_action = 'click'
+              sets(scope,logevent)
           });
 
           elem.bind('dblclick', function(event) {
@@ -742,71 +721,77 @@ angular.module('musicBox.section.directive.letters', [])
 
               // AUTO OFF
              
-              $rootScope.ui.renderAvailable_active =  'editor'
+             
             
 
               scope.$parent.section.editing_text = true;
               scope.$parent.section.editing = true;
              
              
-              $rootScope.ui.selected_range.wait_ev = false
+              logevent.switchrender  =  'editor'
+              logevent.wait_ev=false
+              logevent.current_action = 'dblclick'
+
               //alert('char: '+scope.lt.char+'scope.absolute_order:'+scope.lt.absolute_order+'  scope.order:'+scope.lt.order)
-              sets(scope)
+              sets(scope, logevent)
           });
         
 
           elem.bind('mousedown', function(e) { // restarting a selection
               //selection_starts(scope)
-
+logevent.start =  $rootScope.ui.selected_range.start
+logevent.end=  $rootScope.ui.selected_range.end
              
               if(!$rootScope.ui.selected_range.end){
                 if(scope.lt.order==0){
-                      $rootScope.ui.selected_range.end= 0
+                      logevent.end= 0
                     }
                     else{
-                      $rootScope.ui.selected_range.end= scope.lt.absolute_order
+                      logevent.end= scope.lt.absolute_order
                     }
                }
                else{
-                 $rootScope.ui.selected_range.end= scope.lt.absolute_order
+                  logevent.end= scope.lt.absolute_order
 
                }
-                if(!$rootScope.ui.selected_range.start){
+                if(!logevent.start){
 
                    if(scope.lt.order==0){
-                      $rootScope.ui.selected_range.start = 0
+                      logevent.start = 0
                     }
                     else{
-                      $rootScope.ui.selected_range.start= scope.lt.absolute_order
+                       logevent.start= scope.lt.absolute_order
                     }
                }
                else{
-                 $rootScope.ui.selected_range.start= scope.lt.absolute_order
+                 logevent.start= scope.lt.absolute_order
                }
 
 
    
-              if( $rootScope.ui.selected_range.start >  $rootScope.ui.selected_range.end){
-                var temp_s = $rootScope.ui.selected_range.start+1;
-                $rootScope.ui.selected_range.start  = $rootScope.ui.selected_range.end
-                $rootScope.ui.selected_range.end = temp_s
+              if( logevent.start >  logevent.end){
+                var temp_s = logevent.start+1;
+                logevent.start  = logevent.end
+                logevent.end = temp_s
 
               }
-              
-              console.log('event for <lt>')
-              $rootScope.ui.selected_range.wait_ev = false  // now waiting mouseup!
-             logevent.event = 'mousedown'
- 
-              sets(scope)
+
+
+
+              logevent.wait_ev = true// now waiting mouseup!
+              logevent.current_action = 'md'
+              sets(scope, logevent)
           });
 
           elem.bind('change', function(e) { // selection ends
-            alert('k')
+              logevent.wait_ev = false// now waiting mouseup!
+              logevent.current_action = 'change'
+              sets(scope, logevent)
           })
 
           elem.bind('mouseup', function(e) { // selection ends
 
-            logevent.event = 'mouseup'
+           
 
 
             var rstart =  $rootScope.ui.selected_range.start
@@ -844,25 +829,22 @@ angular.module('musicBox.section.directive.letters', [])
                }
 
               if(rstart >  rend){
-                 var temp_s = rstart+1;
+                 var temp_s = rstart;
                  rstart  = rend
                  rend = temp_s
-                 logevent.event = 'mouseup-reversed'
+                 logevent.current_action_sub = 'mouseup-reversed'
               }
               
               if(rend<0){
-               rend=0
+                rend=0
               }
 
+             logevent.wait_ev    = false  // now waiting mouseup!
+             logevent.start      = rstart 
+             logevent.end        = rend
+             logevent.current_action = 'mup'
 
-             
-              $rootScope.ui.selected_range.wait_ev    = false  // now waiting mouseup!
-              $rootScope.ui.selected_range.start      = rstart 
-              $rootScope.ui.selected_range.end        = rend
-
-
-
-              sets(scope)
+              sets(scope, logevent)
           });
           /*
            elem.bind('mouseover', function(e) {  // while selection is active
@@ -874,7 +856,7 @@ angular.module('musicBox.section.directive.letters', [])
     }
 
     return {
-          template: '<span contenteditable_  class="lt" ng-class="lt.classes" inselection="{{lt.inselection}}" inrange="{{lt.inrange}}" ng-bind-html="lt.char"><span>',
+          template: '<span contenteditable_  class="lt" ng-class="lt.classes" inrange="{{lt.inrange}}" ng-bind-html="lt.char"><span>',
           replace :false,
           restrict: 'A',
           link:link,

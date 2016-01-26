@@ -43,9 +43,9 @@ angular.module('musicBox.section.directive.section', [])
         return {
           restrict: "EA",
           link:link,
-         scope: {
-              section   : '=',     
-            },
+        // scope: {
+            //  section   : '=',     
+          //  },
           controller:"LettersCtrl",
           templateUrl: function() {
                 return "js/MusicBox/section/tpl/letters.tpl.html";

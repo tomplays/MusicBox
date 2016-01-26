@@ -139,7 +139,9 @@ console.log('SET !')
                                     'multi'     : false,
                                     'redraw_content' :false,
                                     'redraw' : false,
-                                    'floppy': false
+                                    'floppy': {'floppy_': false, '_floppy': false},
+                                   
+
 
                                     },
             'boundaries'        :  {},
@@ -148,6 +150,7 @@ console.log('SET !')
         };
         console.log('Mb.ui init')
       },
+     
       redraw_textcontent : function(){
               var string = ''
                _.each($rootScope.doc.sections, function(s){
@@ -180,9 +183,17 @@ console.log('SET !')
 
               // at least one char
               if($rootScope.ui.selected_range.size == 0){
-              $rootScope.ui.selected_range.size = 1
+               //  $rootScope.ui.selected_range.size = 1
               }
-              $rootScope.ui.selected_range.multi =  ($rootScope.ui.selected_range.size) > 1 ? true : false
+            
+              $rootScope.ui.selected_range.collapsed = ($rootScope.ui.selected_range.size) == 0 ? true : false
+              $rootScope.ui.selected_range.single =  ($rootScope.ui.selected_range.size)    == 1 ? true : false
+              $rootScope.ui.selected_range.multi =   ($rootScope.ui.selected_range.size) > 1 ? true : false
+             /*       alert($rootScope.ui.selected_range.size)
+            alert($rootScope.ui.selected_range.collapsed)
+            alert($rootScope.ui.selected_range.single)
+            */
+
       },
       remap_sections: function(){
           _.each($rootScope.doc.sections, function(c,i){
@@ -206,9 +217,7 @@ console.log('SET !')
 
 
 
-   // alert($scope.section.start)
-//       $rootScope.ui.selected_range.floppy = (scope.section.end+1  == rend) ? true : false
-
+  
 
       $scope.reverse_text = function(){
            // 
