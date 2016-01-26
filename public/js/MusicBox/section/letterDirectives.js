@@ -75,6 +75,11 @@ console.log($scope.mks)
 
 
                for (var i = str_start; i <= str_end; i++) {  
+                    
+
+
+
+
                     var c = $scope.section.fulltext_edit[i]
                //      console.log(i+' '+c)
                        var letter_arr = {

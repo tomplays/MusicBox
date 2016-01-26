@@ -9,8 +9,6 @@ angular.module('musicBox.section', [
 	'musicBox.section.directive.pusher'
 ])
 
-
-
 .directive('mbLayouts', function($rootScope, $routeParams, $locale){
   var layoutCtrl = function($scope, $rootScope){
 
