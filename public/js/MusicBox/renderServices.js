@@ -3,7 +3,7 @@
 angular.module('musicBox.render', [])
 
 
-.factory('renderfactory', function ($rootScope, $http, $routeParams, $locale, mb_ui) {
+.factory('renderfactory', function ($rootScope, $http, $routeParams, $locale) {
     return function (inf) {
      var self = {
 
@@ -22,12 +22,14 @@ angular.module('musicBox.render', [])
          }
 
           $rootScope.render = {
-              'dataset' : {'active': $routeParams.dataset == true  ? true : false},
-              'menu_a'  : {'open':true},
-              'is_home' : ($routeParams.docid) ? 'false' : 'true',
-              'is_single': ($routeParams.docid) ? 'true' : 'false',
-              'top_menus': {
-                              'help'  : {'open': $routeParams.fresh ? true : false },
+              'debug'     : ($routeParams.debug) ? true : false,
+              'dataset'   : {'active': $routeParams.dataset == true  ? true : false},
+              'menu_a'    : {'open':true},
+              'fresh'     : ($routeParams.fresh) ? true : false,
+              'is_home'   : ($routeParams.docid) ? 'false' : 'true',
+              'is_single' : ($routeParams.docid) ? 'true' : 'false',
+              'top_menus' : {
+                              'help'  : {'open': false },
                               'published'  : {'open':  false },
                               'doc'  : {'open':  false }
 
@@ -42,15 +44,14 @@ angular.module('musicBox.render', [])
         $rootScope.globals                    = GLOBALS;
         $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
 
-        var mb_ui_ =  new mb_ui()
-        mb_ui_.init()
+      
     
        // self.renderAvailable()
        // $rootScope.ui.renderAvailable_active =  $routeParams.mode ? $routeParams.mode : $rootScope.ui.renderAvailable[0]
     
 
         if(view == 'document'){
-            //mb_ui
+          
             $rootScope.objSchemas                 =   self.objSchemas(); 
             $rootScope.available_sections_objects =   self.objAvailable(); 
             $rootScope.available_layouts          =   self.posAvailable();

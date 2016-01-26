@@ -87,20 +87,22 @@ angular.module('musicBox',  [
  
   $rootScope.$on('$routeChangeSuccess', function (e, cur, prev) {
     if(cur && prev && cur !== prev){
-      console.log(prev.originalPath)
-      console.log(cur.originalPath)
+    //  console.log(prev.originalPath)
+    //  console.log(cur.originalPath)
       // $rootScope.$emit('docEvent', {action: 'reload' });
       // if(prev.originalPath == '')
       // from '/docs/:mode' to '/doc/:docid'
       // console.log('route.change')
        
        console.log($route)
-       //if(!$rootScope.doc){
+       if($rootScope.doc){
         $rootScope.doc       = null;
-       //}
+       }
+
+
      
        //if(!$rootScope.ui){
-          $rootScope.ui        = null;
+         // $rootScope.ui        = null;
       //}
   }
   });

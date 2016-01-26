@@ -33,18 +33,23 @@
 *
 */
 
-var inheriting = {};
-var GLOBALS;
-var render;
-var doc;
+var inheriting = {},
+GLOBALS,
+render,
+mb_ui_,
+doc;
 
 angular.module('musicBox.document.controller', []);
 
 
-function DocumentCtrl($rootScope, $scope, $http , $sce, $location, $routeParams ,socket,renderfactory, DocumentService, $anchorScroll, $timeout, MarkupService) {
+function DocumentCtrl($rootScope, $scope, $http , $sce, $location, $routeParams ,socket,renderfactory, DocumentService, $anchorScroll, $timeout, ObjectService, mb_ui) {
 			
 	render = new renderfactory()
 	render.init('document')
+
+	
+
+
     doc = new DocumentService()
 	doc.Load($routeParams.docid ? $routeParams.docid : 'homepage')
 
@@ -63,7 +68,7 @@ function DocumentCtrl($rootScope, $scope, $http , $sce, $location, $routeParams 
 		$scope.mapping_passes++
 	}
   
-  
+
 	$scope.update_section_count = function(direction){
 		if(direction=='add'){
 			$scope.sectionstocount = $scope.sectionstocount+1;
@@ -86,8 +91,8 @@ function DocumentCtrl($rootScope, $scope, $http , $sce, $location, $routeParams 
 	
     $scope.defocus_containers = function (){
 		// call parent CTRL > to move in documentCtrl
-		_.each($scope.doc.containers, function(container){
-           container.focused  = ''
+		_.each($scope.doc.sections, function(section){
+           section.focused  = ''
 		})
 	}
 
@@ -225,7 +230,7 @@ function DocumentCtrl($rootScope, $scope, $http , $sce, $location, $routeParams 
 	*/
 
 	$scope.insert_new_container = function(mi){
-		  $scope.doc.containers.push(mi)
+		  $scope.doc.sections.push(mi)
 		  doc.docsync();
 	}
 	$scope.switch_focus_side = function(side){
@@ -282,7 +287,7 @@ function DocumentCtrl($rootScope, $scope, $http , $sce, $location, $routeParams 
 	
 	$scope.sync_section_next = function(section, index){
 		console.log(index)
-		$scope.doc.containers[index+1].start = $scope.doc.containers[index+1].start+1;
+		$scope.doc.sections[index+1].start = $scope.doc.sections[index+1].start+1;
 	}
 
 	// use renderService Shared with UserCtrl
@@ -313,6 +318,10 @@ function DocumentCtrl($rootScope, $scope, $http , $sce, $location, $routeParams 
 		}
 		return false;
 	}
+
+
+
+
 
     // transform ranges to string
     // limited to 70 chars
@@ -346,7 +355,7 @@ function DocumentCtrl($rootScope, $scope, $http , $sce, $location, $routeParams 
  			}
  			if($scope.doc.operation.before.type == 'push_container'){
  				var c = $scope.doc.operation.object_
-				$scope.doc.containers.push(c)
+				$scope.doc.sections.push(c)
 				$scope.doc.content += c.fulltext
 				doc.docsync();
  			}
@@ -355,6 +364,9 @@ function DocumentCtrl($rootScope, $scope, $http , $sce, $location, $routeParams 
  			// $scope.doc.operation.after.state= 'done'
  			// should be in service-promise 
  			$scope.push_to_operations()
+
+ 						 console.log('----------------------- DOCUMNT OPERATION DONE')
+
 			
 	} 
 
@@ -486,7 +498,7 @@ function DocumentCtrl($rootScope, $scope, $http , $sce, $location, $routeParams 
 		}
 		if(data.identifier && data.identifier == $scope.doc.slug && data.content_pushed){
 			$scope.doc.content = data.content_pushed
-			_.each($scope.doc.containers, function(c,i){
+			_.each($scope.doc.sections, function(c,i){
 				console.log(c)
 				c.redraw = true;
 			})

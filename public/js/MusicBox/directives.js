@@ -41,12 +41,7 @@ angular.module('musicBox.directives', [])
      // init flash message object
    $scope.flash_message = {'text':''};
 
-   // bug if user ... :( 
-   if($rootScope.render.top_menus.help && $rootScope.render.top_menus.help.open == true){
-      $rootScope.flashmessage($rootScope.i18n.CUSTOM.HELP.fresh_document, 'help' , 3000, true)
-   }
-     
-    $rootScope.flashmessage = function (msg,classname ,timeout, closer) {
+   $rootScope.flashmessage = function (msg,classname ,timeout, closer) {
        
 
         $scope.flash_message = {}
@@ -68,7 +63,16 @@ angular.module('musicBox.directives', [])
             },timeout);
         }
       }
-      // test on load // $scope.flashmessage('hello /-)', 'help', 2220, true)
+
+      // OnLoad
+      //if($rootScope.render.top_menus.help && $rootScope.render.top_menus.help.open == true){
+      //}
+
+      if($rootScope.render && $rootScope.render.fresh == true){
+        $rootScope.flashmessage($rootScope.i18n.CUSTOM.HELP.fresh_document, 'help' , 3000, true)
+      }
+
+
 
 
   }

@@ -146,8 +146,10 @@ angular.module('musicBox.section.directive.section', [])
         elem.bind('mousedown click', function(event) {
             // console.log(event)
             scope.$apply(function(){
+
               /// OFF ONE-CLICK AUTO TOGGLE
               scope.section.modeletters = 'single';
+               scope.section.edit = true;
               //    var logevent = {'directive':'fluidtext', 'event':'mouseup'}
               //    $rootScope.ui.selected_range.debug.push(logevent)
            })

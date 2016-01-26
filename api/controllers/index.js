@@ -11,17 +11,6 @@
 var nconf = require('nconf');
 nconf.argv().env().file({file:'config.json'});
 
-
-
-
-
-  /**
-  * @description
-  * @function 
-  * @link 
-  * @todo nothing
-  */
-
   exports.partial = function (req, res) {
     var name = req.params.name;
     if(req.params.sub){
@@ -88,7 +77,7 @@ nconf.argv().env().file({file:'config.json'});
 
   exports.sockets_list = function(req, res) {
            var user_ = {'username': null,  'image_url':null}
-           res.render('index_v1', { user:user_ } );
+           res.render('index', { user:user_ } );
   };
 
 

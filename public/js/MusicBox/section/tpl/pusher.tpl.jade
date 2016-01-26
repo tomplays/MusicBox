@@ -2,7 +2,7 @@
 	// pre {{push}}
 	.pusher(ng-if="push.isvisible")
 		span.open_comment(ng-if="type=='column'" tooltip-placement="right" tooltip="{{i18n.CUSTOM.COMMENT.label}}" ng-click="pusher_toggle()") +
-		.pusher(ng-if="push.isopen") 
+		.pusher(ng-if="push.isopen || type=='new_section'") 
 
 			div(ng-if="type=='column'")
 				div.user_not_in(ng-if="!userin.islogged")
@@ -10,7 +10,6 @@
 						a(ng-href="{{userin.login_url}}" , ng-if="userin.username == '' ") {{i18n.CUSTOM.COMMENT.needs_logging}}
 					p
 						a.loginOrSignup(ng-href="{{userin.login_url}}", ng-if="userin.username == '' ") {{i18n.CUSTOM.USER.loginOrSignup}}
-
 
 				div.user_in(ng-if="userin.islogged")
 					p.logged_in_as 

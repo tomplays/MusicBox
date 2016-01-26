@@ -1,14 +1,16 @@
 notifications:
-  email:
-    recipients:
-      - homeof@gmail.com
-language: node_js
-node_js: 
-  - '0.10'
-
-webhooks:
+  webhooks:
     urls:
       - https://webhooks.gitter.im/e/c643363401320bfde591
     on_success: always  # options: [always|never|change] default: always
     on_failure: always  # options: [always|never|change] default: always
-    on_start: false     # default: false
+    on_start: never     # default: false
+  email:
+    recipients:
+      - homeof@gmail.com
+    on_success: always
+    on_failure: always
+language: node_js
+node_js: 
+  - '0.10'
+

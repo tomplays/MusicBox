@@ -132,8 +132,6 @@ exports.signin = function(req, res) {};
 exports.account = function(req, res) {
        
         var user_ = {'username': req.user.username, '_id':req.user._id}
-
-
         res.render('index', {
             doc: {},
             user : user_,

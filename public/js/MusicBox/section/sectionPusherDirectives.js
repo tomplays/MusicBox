@@ -25,7 +25,7 @@ angular.module('musicBox.section.directive.pusher', [])
          
            $scope.userin      = $rootScope.userin
            $scope.render_config =$rootScope.render_config
-           $scope.render =$rootScope.render
+           $scope.render =     $rootScope.render
            $scope.objSchemas = $rootScope.objSchemas 
            $scope.push = {
             
@@ -148,7 +148,8 @@ angular.module('musicBox.section.directive.pusher', [])
               if(global_active_pusher !== true){
                   return false
               }
-              if($scope.$parent.doc.doc_owner == true){
+             // alert($rootScope.doc.doc_owner)
+              if($rootScope.doc.doc_owner == true){
                
                   if( $scope.type == 'inline_objects' || $scope.type=='container_class' ){
                        return true
@@ -175,7 +176,8 @@ angular.module('musicBox.section.directive.pusher', [])
              if(global_active_pusher !== true){
                   return false
               }
-              if($scope.$parent.doc.doc_owner == true){
+
+              if($rootScope.doc.doc_owner == true){
                
                   if( $scope.type == 'inline_objects' || $scope.type=='container_class' ){
                        return true

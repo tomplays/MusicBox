@@ -1,5 +1,6 @@
 div(ng-controller="MarkupCtrl", class="markup_box markup_box_depth_{{markup.depth}} markup_box_status_{{markup.status}}   markup_displayer_ markup_displayer markup_displayer_{{markup.type}} markup_displayer_subtype_{{markup.subtype}}  by_me_{{markup.by_me}} is_editing_{{markup.editing}}  touchedmk-{{markup.touched}} ")
-	// pre {{markup}}
+	pre {{markup.test_map_r}}
+
 
 
 	// h4 even not visible --v: {{markup.visible}}  -- f : {{markup.forced}} -- t: {{markup.type}}
@@ -14,13 +15,10 @@ div(ng-controller="MarkupCtrl", class="markup_box markup_box_depth_{{markup.dept
 		span.flag()
 			i.fa.fa-remove.btn_action(tooltip-placement="left" tooltip="{{i18n.CUSTOM.ACTIONS.delete}}" ng-click="delete()")
 	
-
 	// h6(ng-bind-html="markup.fulltext")
 	
-
-
 	//div
-		label  reverse text
+		label reverse text
 		input(ng-model="markup.fulltext" type="text" )
 		a(ng-click="apply_reverse()") reverse_apply
 
@@ -38,7 +36,7 @@ div(ng-controller="MarkupCtrl", class="markup_box markup_box_depth_{{markup.dept
 			// p {{markup.selected}}
 			p m.by_me: {{markup.by_me}}
 			p m.can_approve  {{markup.can_approve}}
-			// p doc_owner: {{doc_owner}}
+			// p doc_owner: {{doc.doc_owner}}
 			p status: {{markup.status}}
 			p m.visible :{{markup.visible}}
 			// p {{objSchemas['comment'].modes.read.enabled}}
@@ -75,7 +73,7 @@ div(ng-controller="MarkupCtrl", class="markup_box markup_box_depth_{{markup.dept
 			
 			// .fast_editor
 				span.flag(ng-if="markup.status !== 'approved'")
-					i.fa.fa-flag.pending(tooltip="only visible by you and doc owner" ng-click="markup.editing = true")
+					i.fa.fa-flag.pending(tooltip="only visible by you and doc.owner" ng-click="markup.editing = true")
 
 					i.fa.fa-remove.btn_action(tooltip-placement="left" tooltip="{{i18n.CUSTOM.ACTIONS.delete}}" ng-click="delete()")
 

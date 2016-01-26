@@ -15,7 +15,7 @@
 
 angular.module('musicBox.document.service',[])
 
-.factory("DocumentService", function($rootScope, $http, $sce, $resource, $location,$routeParams,$timeout, $locale, DocumentRest, MarkupService) {
+.factory("DocumentService", function($rootScope, $http, $sce, $resource, $location,$routeParams,$timeout, $locale, DocumentRest, ObjectService,mb_ui) {
   
   var DocumentService = function() {
     this.api_method = DocumentRest;
@@ -28,51 +28,36 @@ angular.module('musicBox.document.service',[])
     promise.then(function (Result) {
       if(Result){
 
-      
-          var _user         = new MarkupService().init(Result, 'user')
-          $rootScope.userin =  _user.populate()
+         
+
+          var _user         = new ObjectService().init(Result, 'user')
+          $rootScope.userin =  _user.populateUser()
           $rootScope.userin.login_url               = '/login?redirect_url='+root_url+':'+PORT+'/doc/'+Result.doc.slug;
           
+  
 
           //depre.
-          $rootScope.doc_owner                      = Result.is_owner;
           
 
           // new: see object extend
-          console.log('is owner or has secret ('+ Result.is_owner+')');
+         
+ $rootScope.doc =                               Result.doc
 
-          var _doc = new MarkupService().init(Result.doc, 'document')
+          var _doc = new ObjectService().init(Result.doc, 'document')
+        
+        
 
-          var encoded_url = root_url+':'+PORT;
-          if(Result.doc.slug !=='homepage'){
-            encoded_url += '/doc/'+Result.doc.slug;
-          }
-          encoded_url = urlencode(encoded_url);
-
-          var doc__ = {
-                'operation'     : {},
-                'operations'    : [],
-                'text_summary'  : '',
-                'doc_owner'     : Result.is_owner,
-                'encoded_url'   : encoded_url,
-                'room__id'      : (Result.doc.room) ? Result.doc.room._id : '',
-                'containers'    : _.sortBy(Result.doc.sections,function (num) {
-                   return num.start;
-                  }),
-                 'markups'      : _.sortBy(Result.doc.markups_,function (num) {
-                   return num.start;
-                  })
-              }
-
-          $rootScope.doc                            = _.extend(Result.doc ,doc__ )
           if(!Result.doc.room){
               $rootScope.doc.room                   = {'_id':'-'};
           }
           $rootScope.sections_to_count_notice       = ($rootScope.sectionstocount == 0) ? true : false;
           $rootScope.objects_sections               = [];
           $rootScope.objects_sections['global_all'] = [];
-          $rootScope.doc_options                    =   _doc.apply_object_options();
-          $rootScope.author_options                 =   _doc.apply_object_options('author');
+         // $rootScope.doc_options                    =   _doc.apply_object_options();
+
+          /////   $rootScope.author_options                 =   _doc.apply_object_options('author');
+        //  $rootScope.doc.author_options                 =   _doc.apply_object_options('author');
+ console.log('is owner or has secret ('+ Result.doc.doc_owner+')');
       }
       else{
         console.log('err');
@@ -105,19 +90,12 @@ angular.module('musicBox.document.service',[])
     };
     // prepare / clean 
     var string  = '';
-     _.each($rootScope.doc.containers, function(s){
-      // remove line breaks
-      //  container.fulltext =  container.fulltext.replace(/(\r\n|\n|\r)/gm,"");
-      // console.log(container.fulltext)
-      string  += s.fulltext;
+     _.each($rootScope.doc.sections, function(s){
         if(s.touched == true){
            data.markups.push({'id':s._id, 'start': s.start,'end': s.end, 'action':'offset' })
         }
      })
-
-    $rootScope.doc.content = string
-    // equivalent service call // $scope.sync_queue()
-    data.doc_content = string
+    data.doc_content =$rootScope.doc.content
     _.each($rootScope.doc.markups, function(m){
        if(m.touched == true){
          if(m.deleted !==true &&  _.isFinite(m.start) && _.isFinite(m.end)){
@@ -126,15 +104,13 @@ angular.module('musicBox.document.service',[])
        }   
     });
     console.log(data)
-    //// $rootScope.doc.operation.before.sync = data;
-    data.doc_content = string
-    
+   
     var promise = this.api_method.sync({id:$rootScope.doc.slug},serialize(data)).$promise;
     promise.then(function (Result) {
       if(Result.doc){
         $rootScope.doc.updated = new Date()
         $rootScope.flashmessage('Document saved', 'ok' , 1600, false);
-        _.each(['markups','containers'], function(obj){
+        _.each(['markups','sections'], function(obj){
             _.each($rootScope.doc[obj], function(o, i){
                o.touched = false;
            });

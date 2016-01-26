@@ -51,9 +51,6 @@
 */
   
 
-
-
-
 angular.module('musicBox.section.directive.textarea', [])
 .directive('textListener', function($rootScope) {
 
@@ -68,8 +65,15 @@ angular.module('musicBox.section.directive.textarea', [])
     function link(scope, elem, attrs) { 
 
 
+
+
       elem.bind("mousedown", function(event){
           move('mousedown', event, scope)
+          
+          return
+      })
+      elem.bind("click", function(event){
+          move('mouseup', event, scope)
           
           return
       })
@@ -151,12 +155,11 @@ angular.module('musicBox.section.directive.textarea', [])
 
 
    function edit(eventname, event, scope){
-        $rootScope.ui.current_action = eventname
+       
         var grp_log = Math.random()*1000
 
-        /// $rootScope.ui.selected_range.working_section        =  scope.$parent.section.sectionin  
-
-        var objs = ['markups','containers']
+        var objs_touched = 0
+        var objs = ['sections', 'markups']
         if(eventname == 'key'){
               
               var qty = 1;
@@ -184,30 +187,313 @@ angular.module('musicBox.section.directive.textarea', [])
 
 
           // Important to memorize current section (mostly the "double-end issue")
-          var boundaries =  boundaries_test(scope.section, $rootScope.ui.selected_range)
+          
+          var ref_section_start   = parseInt(scope.section.start)
+          var ref_section_end     = parseInt(scope.section.end)
+
+
+
+          var rs = parseInt($rootScope.ui.selected_range.start)
+          var re = parseInt($rootScope.ui.selected_range.end)
+
+          var ss =  parseInt(scope.section.start)
+          var se =  parseInt(scope.section.end)
+
+
+
+         // var boundaries =  boundaries_test(scope.section, $rootScope.ui.selected_range)
         //  console.log('boundaries')
         //  console.log(boundaries)
 
-
+        //console.log($rootScope.doc.markups)
           // tests obj' (container/ markups)
           _.each(objs, function(obj, oi){
+              var obj_name = objs[oi]
+
 
              _.each($rootScope.doc[obj], function(o, i){
 
-                //  var endend  = ($rootScope.ui.selected_range.end == parseInt(o.end+1) && $rootScope.ui.selected_range.start == parseInt(o.end+1)  ) ? true : false;
-                //  var startstart =  ($rootScope.ui.selected_range.start == o.start && $rootScope.ui.selected_range.end == o.start) ? true : false;
+
+                //  var endend  = (re == parseInt(o.end+1) && rs == parseInt(o.end+1)  ) ? true : false;
+                //  var startstart =  (rs == o.start && re == o.start) ? true : false;
                
                 var otype = 'markup'
+                var otouched = false
+                var otested = false
                 if(o.type && o.type == 'container'){
-                  var otype = 'container'
+                  var otype = 'section'
+                  
 
                   }
-                 
+                
 
                //   alert(startstart)
 
-                  var test_r = ranges_test($rootScope.ui.selected_range.start,$rootScope.ui.selected_range.end, o.start, o.end,otype,boundaries)
-                 
+                //  var test_r = ranges_test(rs,re, o.start, o.end,otype,boundaries)
+                var test_r = -1; 
+
+
+                var otest = {
+                         'case'     : -1, 
+                         'floppy_'   : false,
+                         '_floppy'   : false,
+                         'is_into'  : false,
+                         'is_before': false,
+                         'is_after' : false,
+                         'otype'    : otype,
+                         'touched': {}
+                }
+
+              
+   
+
+              //console.log(rs+' :: '+o.start+' --- '+re+' :: '+o.end+ ' ..... refs :::'+ref_section_start+'/'+ref_section_end)                
+              // 9 :: 0 --- 9 :: 8refs :::0/8 
+              // old
+          
+
+
+       
+
+          var os =  parseInt(o.start)
+
+          var oe =  parseInt(o.end)
+
+
+          //otype=='section'
+          if(true){
+            var f = 0
+            
+
+            // the "both" cases 
+ 
+                        /*-
+            s          e
+            |          |
+            -----------------------
+           |           |    into_  |
+           |    into   |  floppy_  | before 
+            -----------------------
+                       |                            |
+                       s                            e
+                       -----------------------------------------
+                       |   _into  |                 |           | 
+              after    |  _floppy |                 |  floppy   | 
+                       -----------------------------------------
+                                                    |                        |
+                                                    s                        e
+                                                    -----------------------------
+                                                    |          |                 |
+                                                    |  _floppy |                 |
+                                                     ----------------------------
+          
+          
+
+
+          ------------------------------------------------------------------------
+          6 !        |--------------------|        |       
+          7          |--------------------|--|     |    
+          8          |--------------------|--------|---------------|
+
+          2                               |>>|--|<=|  
+          3 _floppy/5                     |==|--|<=|   
+          4 floppy_/6                     |>>|--|>>|  
+          10                              |??|--|??|  
+          9                               |??|-----|----------------|
+                                        
+          1                               |        |<<|---------------|<<
+          5 !_floppy/3                    |        |==|---------------|<<
+
+          ------------------------------------------------------------------------
+
+
+
+           */
+           
+          /*
+           // rs  before o.start && re before  oend   >>> 6 (non flopy into exception)
+           // rs  before ostart but  re  after rstart but re before o.end >> not tested yet >> 7
+           // rs  before o start but  re  after r start and re after o.end  >> not tested yet >> 8
+
+
+           // start into, end into  
+              //  >>> 4 (into_ : at floppy end
+                  >>> 2, _into_ (strict)
+                  >>> 3 _into : at start of section
+
+           // start into BUT end after >> 9 not tested yet.
+
+
+           // end after () >> 1 (strict.) OR 5 (non floppy into) 
+
+
+           // ALL cases are tested BUT there can be more sub cases to determine
+
+           */
+
+
+            if(re == parseInt(se+1)   &&    (oe == se) ){
+                  // at "extra" end of a section
+                   otest.floppy_ = true;
+            }
+
+            if( (re == parseInt(ss))  &&   (os == ss) ){
+                  // at start of a section (really)
+                   otest._floppy = true;
+            }
+
+
+
+            otest.tt = false;
+            otest.c  = false 
+            otest.case_  = false 
+
+            /*
+            */
+
+            if(rs < os && re < os && rs< oe && re <oe){
+          
+                 otest.c  = '|after'
+                 otest.case_  = 1
+                 otest.tt = true
+
+            }
+
+
+            else if(rs > os && re > os && rs<= oe && re <=oe){
+              // SUB CASE : RE < OE 10
+               otest.case_  = 2
+               otest.c  = '|into|'  
+               otest.tt = true
+
+            }
+
+             else if(rs == os && re == os && rs<= oe && re <=oe){
+              // otest.into = true;
+               
+              if(otest._floppy == true){
+                  otest.c  = '___into'
+                  otest.case_  = 3
+
+               }
+               else{
+                  otest.c  = '_after'
+                  otest.case_  = 5
+
+               }
+               otest.tt = true
+
+            }
+
+
+            else if(rs > os && re > os && rs> oe && re > oe){
+               if(otest.floppy_ == true){
+                  otest.c  = 'into_'
+                  otest.case_  = 4
+
+               }
+               else{
+                  otest.c  = 'before'
+                  otest.case_  = 6
+
+               }
+               //otest.after = true ;
+               otest.tt = true
+
+            }
+
+            
+            /*
+            */
+
+
+
+            if(otest.case_  == false){
+           
+            }
+
+
+            else if(otest.case_  == 6){
+               
+
+            }
+
+            else if(otest.case_  == 4 || otest.case_  == 2 || otest.case_  == 3  ){
+                // into
+                otest.touched = {
+                    'end' : o.end,
+                    '_end': o.end+1
+                }
+                 o.end = o.end+1
+               
+            }
+
+            else if(otest.case_  == 1 || otest.case_  == 5  ){
+                // after
+                otest.touched = {
+                    'start':o.start,
+                    '_start':o.start+1,
+                    'end':o.end,
+                    '_end': o.end+1
+                }
+                o.start = o.start+1
+
+                o.end = o.end+1
+
+                
+
+            }
+
+
+
+
+
+
+        //    console.log('>>><< section #'+i+' at start:'+ section_is_current_at_start+' at end'+section_is_current_at_end+'into'+section_is_current_at_into)
+            /// Boundaries OKS.
+
+            //check cases...
+           // stric.after > 0 > do nothing
+           
+           // 1 : stric before offeset start and end.
+
+           // into > 3  > offset end
+
+           //
+         
+
+          otested = true
+
+              
+
+
+
+          }
+          else{
+                otested = false
+          }
+
+               
+
+
+
+
+         o.test = { 
+                'case'    : otest.case_,
+                'type'    : otype,
+                'touched' : otest.touched
+        }
+
+
+
+
+               if(otouched == true){
+                  //     console.log('AFTER '+ obj_name+' --obj loop count = '+i+' ---OPERATION for '+otype+ ' -- '+o.subtype+' >>start: '+o.start)
+
+                }
+                else{
+                  //  console.log('NO CHANGE FOR OBJECT')
+                }
 
 
                   // console.log(test_r)
@@ -258,19 +544,33 @@ angular.module('musicBox.section.directive.textarea', [])
 
                     } 
                     operation.before =  _.extend(operation.before,  operation_);
-
-
                     
                     // SET markup or section operation > toggle controller callback.
-                    o.operation = operation;
+                     //     console.log('-----OPERATION')
+                     //     console.log(operation)
+
+                   // o.operation = operation;
              })
           })
+  
 
       // key or delete = 
-       console.log('-------------CASE EDIT ONLY')
-      $rootScope.ui.selected_range.start = $rootScope.ui.selected_range.start+qty
-      $rootScope.ui.selected_range.end   = $rootScope.ui.selected_range.end+qty
+      $rootScope.ui.current_action = eventname      
+       console.log('TEXTAREA MOVE AND EDIT! > count:'+objs_touched)
+
+       // fulltext independant
+      $rootScope.ui.selected_range.redraw_content    = true;
+
+
+       $rootScope.ui.process_ready_0    = 0;
+
+
+    //$rootScope.ui.selected_range.start = $rootScope.ui.selected_range.start+qty
+    //  $rootScope.ui.selected_range.end   = $rootScope.ui.selected_range.end+qty
       $rootScope.ui.boundaries = boundaries_test(scope.section, $rootScope.ui.selected_range)
+
+    
+
       $rootScope.$apply()
    }
 
@@ -282,14 +582,19 @@ angular.module('musicBox.section.directive.textarea', [])
    }
 
     function move(eventname, event, scope){
-    
-     
+       console.log('TEXTAREA MOVE ! ')
+
+
+
+       if(event.which== 39){
+
+       }
+
       // else if(eventname == 'click'){}
       // else if(eventname== 'mv'){}   
-      $rootScope.ui.selected_range.working_section        =  scope.$parent.section.sectionin  
 
-      var rstart  =  parseInt(event.target.selectionStart + scope.section.start)
-      var rend    =  parseInt(event.target.selectionEnd + scope.section.start)
+      var rstart  =  parseInt(event.target.selectionStart+scope.section.start)
+      var rend    =  parseInt(event.target.selectionEnd+scope.section.start)
 
       if(rstart > rend){
         var temp_s = rstart;
@@ -307,22 +612,27 @@ angular.module('musicBox.section.directive.textarea', [])
 
       // cursor "UP" > go to start
        if(event.which== 38){
-        rstart = scope.section.start
-        rend =scope.section.start
+        rstart  = scope.section.start
+        rend    = scope.section.start
 
        }
 
-if(eventname == 'mousedown' ){}
-else{}
+      if(eventname == 'mousedown' ){}
+      else{}
 
 
 
       $rootScope.ui.selected_range.start = rstart
       $rootScope.ui.selected_range.end   = rend
+
+      $rootScope.ui.selected_range.floppy = (scope.section.end+1  == rend) ? true : false
+
+
+     
       $rootScope.ui.boundaries = boundaries_test(scope.section, $rootScope.ui.selected_range)
 
 
-      console.log( $rootScope.ui.selected_range)
+      console.log($rootScope.ui.selected_range)
       $rootScope.$apply()
     }   
 })
@@ -361,7 +671,7 @@ function ranges_test(as,ae,ms,me,type, boundaries){
 
      
          
-        if(type =='container'){
+        if(type =='section'){
               if(section_is_current  == true){
                          c = 3
                          f++
@@ -379,7 +689,7 @@ function ranges_test(as,ae,ms,me,type, boundaries){
         } 
         else{
               
- if(as <= ms && ae <= ms){
+          if(as <= ms && ae <= ms){
                 c = 1
                 f++
           }
@@ -400,7 +710,7 @@ function ranges_test(as,ae,ms,me,type, boundaries){
                 }
                 else{
                    c = 3
-                     f++
+                   f++
                 }
 
 
@@ -439,7 +749,7 @@ function ranges_test(as,ae,ms,me,type, boundaries){
           if(f==0){
              c = -110
           }              
-          console.log('RANGE RESULTS for '+type+'='+ c)
+         // console.log('RANGE RESULTS for '+type+'='+ c)
           return c
    }
 

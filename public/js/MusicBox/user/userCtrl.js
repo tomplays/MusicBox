@@ -22,7 +22,7 @@ var render;
 **/
 // todo : remove old api call
 
-function UserProfileCtrl($rootScope, $scope, $http , $location, $routeParams,  $locale, $timeout, DocumentService, UserRest, renderfactory, MarkupService ) {
+function UserProfileCtrl($rootScope, $scope, $http , $location, $routeParams,  $locale, $timeout, DocumentService, UserRest, renderfactory, ObjectService ) {
 	  	
 	  	render  = new renderfactory()
 	  	render.init('user')
@@ -38,10 +38,10 @@ function UserProfileCtrl($rootScope, $scope, $http , $location, $routeParams,  $
     	promise.then(function (Result) {
 
 			
-			var _user 		    = new MarkupService().init(Result, 'user')
-			$rootScope.userin 	= _user.populate()
+			var _user 		    = new ObjectService().init(Result, 'user')
+			$rootScope.userin 	= _user.populateUser()
 			
-			console.log($scope.userin)
+			console.log(_user)
 
 
 		 }.bind(this));
@@ -100,7 +100,7 @@ function UserProfileCtrl($rootScope, $scope, $http , $location, $routeParams,  $
 			newdoc_service.newdoc();
 		}
 }
-function UserCtrl($scope, $http , $location, $routeParams,  $locale, renderfactory, UserRest, MarkupService) {
+function UserCtrl($scope, $http , $location, $routeParams,  $locale, renderfactory, UserRest) {
 	
 	console.log('User Controller (signup, login, newsletter)')
 
@@ -109,7 +109,7 @@ function UserCtrl($scope, $http , $location, $routeParams,  $locale, renderfacto
 
 	// get user
 
-	//var _user 		    = new MarkupService().init(USERIN, 'user')
+	//var _user 		    = new ObjectService().init(USERIN, 'user')
 	// _user.populate()
 	//new UserService().SetFromData(USERIN)
 

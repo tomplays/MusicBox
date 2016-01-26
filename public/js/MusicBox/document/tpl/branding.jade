@@ -2,7 +2,7 @@
 div.loading(class="is_{{ui.loaded}}") 
 	// span {{ui.loaded}}
 
-div(ng-if="doc.room.name", class="branding {{doc_options.branding_class.value}}")
+div(ng-if="doc.room.name", class="branding {{doc.doc_options.branding_class.value}}")
 	h1
 		a(href="/#!", title="back to {{doc.room.name}}") 
 			span {{doc.room.slug}}

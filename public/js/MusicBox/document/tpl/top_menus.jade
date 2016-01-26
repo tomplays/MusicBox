@@ -96,17 +96,17 @@ div.top_menus
 
 
 	// DOC OPTIONS > toggle mode
-	a.quick_tool_opener.menuicon.menuicon-document(tooltip="{{i18n.CUSTOM.DOCUMENT.document_options}}" tooltip-placement="left" ng-if="doc_owner == true  || ui.secret " ng-click="toggle_render('doc_options')" ng-class="{'visible_yes': render_config.renderAvailable_active =='doc_options'}") 
+	a.quick_tool_opener.menuicon.menuicon-document(tooltip="{{i18n.CUSTOM.DOCUMENT.document_options}}" tooltip-placement="left" ng-if="doc.doc_owner == true  || ui.secret " ng-click="toggle_render('doc_options')" ng-class="{'visible_yes': render_config.renderAvailable_active =='doc_options'}") 
 		i.fa.fa-cog() 
 
 
 	// edit > toggle mode
-	a.quick_tool_opener.menuicon.menuicon-editor(tooltip="edit" tooltip-placement="left" ng-if="(doc_owner == true  || ui.secret) && render_config.renderAvailable_active =='read'" ng-click="toggle_render('editor')") 
+	a.quick_tool_opener.menuicon.menuicon-editor(tooltip="edit" tooltip-placement="left" ng-if="(doc.doc_owner == true  || ui.secret) && render_config.renderAvailable_active =='read'" ng-click="toggle_render('editor')") 
 		i.fa.fa-pencil( ng-class="{'visible_yes': render_config.renderAvailable_active =='editor'}")
 
 
 	// edit > toggle mode
-	a.quick_tool_opener.menuicon.menuicon-editor(tooltip="edit" tooltip-placement="left" ng-if="(doc_owner == true  || ui.secret) && render_config.renderAvailable_active !=='read'" ng-click="toggle_render('read')" ng-class="{'visible_yes': render_config.renderAvailable_active =='read'}") 
+	a.quick_tool_opener.menuicon.menuicon-editor(tooltip="edit" tooltip-placement="left" ng-if="(doc.doc_owner == true  || ui.secret) && render_config.renderAvailable_active !=='read'" ng-click="toggle_render('read')" ng-class="{'visible_yes': render_config.renderAvailable_active =='read'}") 
 		i.fa.fa-eye()
 
 

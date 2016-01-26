@@ -29,115 +29,128 @@ console.log($scope.fff)
 console.log($scope.mks)
 */
 
-      $scope.$watch('section.fulltext', function(newValue, oldValue) {
-                 console.log(' [Section] fulltext ')
-                 //newValue = newValue.replace("\n", "");
-        console.log('----B-------------- BUILD LETTERS (BASE) ARRAYS')
-
-    var temp_letters = new Array();
-        var i;
-        var i_array     =   0;
-        var fulltext    =   '';
-        var str_start   =   0;
-        var str_end     =   _.size($scope.section.fulltext)-1;
-        // confing could be a option/mode feature
-        var content_string  = $rootScope.doc.content
-        var classes_arr = []
-        // classes_arr.h1 = {}
-        // classes_arr.h2 = {}
-           var fulltext_block = ''
+/*
+ $scope.$watch('section.fulltext_edit', function(newValue, oldValue) {
+     // console.log( $rootScope.letters_edit)
+ })
+*/
 
 
 
-          var at_least_one = false
+
+  // triggered whan : 
+  //                  doc.content clean
+  //                  scope.section.fulltext_edit is OK ()
+  //                  mks ans sections ok (no way to check...)
+ 
+
+
+  $scope.$watch('section.fulltext_to_array', function(newValue, oldValue) {
+      if(newValue){
+
+         if(newValue == 'init'){
+            console.log('contruct letters array')
+
+         }
+         else{
+              console.log('RE -- contruct letters array')
+
+         }
+         //console.log('----B-------------- call LETTER ARRAY')
+       
+     
+            // IT 's local !! >> good :)
+
+           //   console.log('FT FT EDIT VALUE;' +$scope.section.fulltext_edit)
+
+           $scope.section.letters_edit = []
 
 
 
-        //alert(str_end)
-          for (i = str_start; i <= str_end; i++) {
+             var str_start   =   0;
+             //  console.log($scope.section.fulltext)
+              var str_end     =   _.size($scope.section.fulltext_edit)-1;
+
+
+
+
+               for (var i = str_start; i <= str_end; i++) {  
+                    var c = $scope.section.fulltext_edit[i]
+               //      console.log(i+' '+c)
+                       var letter_arr = {
+                          'order': i,
+                          'inrange':false,
+                          'href':'',
+                          'absolute_order': $scope.section.start+i,
+                       }
+                        if(!c){
+                          
+                        }
+                        else{
+                         
+                          if(c === " ") {
+                                  letter_arr.char = '&nbsp;'
+                                //  fulltext_block += '&nbsp;'
+                              }
+                              else{
+                                letter_arr.char = c
+                              //  fulltext_block +=$scope.section.fulltext[i]
+                              }
+
+                        }
+
+
+
+                          letter_arr.isfirst = false
+                          letter_arr.islast = false
+                              if(str_start == i)
+                          {
+                          //  letter_arr.char = '>'+letter_arr.char 
+                            letter_arr.isfirst = true
+                          }
+
+                          if(i == str_end)
+                          {
+                            //letter_arr.char += '<'
+                          
+                            letter_arr.islast = true
+                          }
 
             
-          var letter_arr = new Object({
-            'classes_flat': '',
-            'order': i,
-            'inrange':false,
-            'href':'',
-            'absolute_order': $scope.section.start+i,
-
-          });
-                  ///console.log(letter_arr)
-
-
-            if(!$scope.section.fulltext[i]){
-              
-            }
-            else{
-              at_least_one = true
-              if($scope.section.fulltext[i] === " ") {
-
-                      letter_arr.char = '&nbsp;'
-                      fulltext_block += '&nbsp;'
-                  }
-                  else{
-                    letter_arr.char = $scope.section.fulltext[i]
-                    fulltext_block +=$scope.section.fulltext[i]
-                  }
-
-            }
-
-
-                
-            letter_arr.isfirst = false
-            letter_arr.islast = false
-                if(str_start == i)
-            {
-            //  letter_arr.char = '>'+letter_arr.char 
-              letter_arr.isfirst = true
-            }
-
-            if(i == str_end)
-            {
-              //letter_arr.char += '<'
-            
-              letter_arr.islast = true
-            }
-
-            temp_letters[i_array]  = letter_arr;
-
-           
-
-            i_array++;
-        }
+                      $scope.section.letters_edit.push(letter_arr)
+              }
+            $scope.section.letters = $scope.section.letters_edit;
+            console.log('------ letters_array ready --- ')
+           // console.log($scope.section.fulltext_edit)
         
 
-        if( at_least_one === false){
-          alert('no letter ')
-        }
-       
-          
-        $scope.section.letters = temp_letters;
-        $scope.section.lettersarray = Math.random()
-       
+            // trigger remap classes
+             console.log('>> ------ trigger letters_to_classes --- ')
+            $scope.section.letters_to_classes = newValue
 
+      } 
+   })
 
-      // optionnal (if range  were set in params..) 
-      // not triggered on init 
-      // $scope.section.inrange_letters = Math.random()
-                    
+   $scope.$watch('section.letters_to_classes', function(newValue, oldValue) {
+      if(newValue){
 
+          if(newValue == 'init'){
+             console.log('------ contruct letters_to_classes --- ')
 
-      })
+         }
+         else{
+              console.log('RE -- contruct letters_to_classes ')
 
+         }
 
-   $scope.$watch('section.lettersarray', function(newValue, oldValue) {
-        console.log('----B-------------- call LETTER MAPS CLASSES ARRAYS')
-         $scope.map_letters()    
+        
+         console.log('------ map_letters call --- ')
 
+          $scope.map_letters()
+      } 
    })
      
-
-
-/*
+   /*
       $scope.$watch('section.remap_fulltext_block', function(newValue, oldValue) {
 
 
@@ -148,23 +161,24 @@ console.log($scope.mks)
               }
 
       })
-*/
+   */
 
 
       $scope.$watch('section.inrange_letters', function(newValue, oldValue) {
        
+       
+                                   
+         if(newValue){
+           
 
-         if(!oldValue == true){
-            
-          } 
-
-          console.log('----B------START-------- call LETTER MAPS INRANGE ATTRIBUTE (ONLY IF UI )')
-               
-                  _.each($scope.section.letters, function(l, i){
+    _.each($scope.section.letters, function(l, i){
                   l.inrange = false;
                   var c_real = i + $scope.section.start;
                   // map the range  
-                    if(c_real>=$rootScope.ui.selected_range.start && c_real <= $rootScope.ui.selected_range.end){
+                  
+                 
+
+                    if( (c_real == 9999999990 ) || (c_real>=$rootScope.ui.selected_range.start && c_real <= $rootScope.ui.selected_range.end)) {
                      
 
                      l.inrange = true;
@@ -179,27 +193,19 @@ console.log($scope.mks)
                  
                   })
            
-          console.log('----B-----DONE--------- call LETTER MAPS INRANGE ATTRIBUTE (ONLY IF UI DONE)')
+        console.log('-- call MAPS INRANGE ')   
+        $scope.section.inrange_letters= false    
 
-
-          
+          }       
 
     })
 
-
-
-
-
-
-
 $scope.map_letters = function(){
-  console.log('map_letters (section)')
+  console.log('map_letters() ')
 
   var fulltext_block = ''
 
-  if(!$scope.section.letters){
-    //$scope.section.letters = []
-  }
+  
 
   
   _.each($scope.section.letters, function(l,li){
@@ -340,7 +346,7 @@ $scope.map_letters = function(){
             if(m_objSchemas.map_range === true){
               if(_.contains($scope.section.letters[mi].classes, markup.subtype )){
 
-$scope.section.letters[mi].classes.push(markup.subtype) 
+             $scope.section.letters[mi].classes.push(markup.subtype) 
               }
               else{
                 $scope.section.letters[mi].classes.push(markup.subtype) 
@@ -357,6 +363,8 @@ $scope.section.letters[mi].classes.push(markup.subtype)
 
     if($scope.section.modeletters == 'compiled'){
       var out = ''
+      
+/// could trigger a watcher
       $scope.section.fulltext_block = $scope.compile_html(fulltext_block)
       console.log(' block html compiled')
     }
@@ -567,8 +575,8 @@ angular.module('musicBox.section.directive.letters', [])
       
 
       console.log(e)
-      $rootScope.ui.selected_range.end =  scope.lt.absolute_order+1
-      $rootScope.ui.selected_range.start=  scope.lt.absolute_order
+      $rootScope.ui.selected_range.end   =  scope.lt.absolute_order+1
+      $rootScope.ui.selected_range.start =  scope.lt.absolute_order
       // alert($rootScope.ui.selected_range.end)
       $rootScope.ui.selected_range.textrange = '';
       $rootScope.ui.selected_range.wait_ev = false  // now ready!
@@ -691,11 +699,14 @@ angular.module('musicBox.section.directive.letters', [])
                   window.open(scope.lt.href,'_blank');
               }
               else{
-                  if($rootScope.doc_owner == true){
+/*
+                  if($rootScope.doc.doc_owner == true){
+                    alert('e')
                       $rootScope.ui.renderAvailable_active =  'editor'
                       scope.$parent.section.editing_text = true;
                       scope.$parent.section.editing = true;
                   }
+                  */
 
                  
               }
@@ -725,14 +736,14 @@ angular.module('musicBox.section.directive.letters', [])
               
 
               // AUTO OFF
-              /*
+             
               $rootScope.ui.renderAvailable_active =  'editor'
             
 
               scope.$parent.section.editing_text = true;
               scope.$parent.section.editing = true;
              
-              */
+             
               $rootScope.ui.selected_range.wait_ev = false
               //alert('char: '+scope.lt.char+'scope.absolute_order:'+scope.lt.absolute_order+'  scope.order:'+scope.lt.order)
               sets(scope)

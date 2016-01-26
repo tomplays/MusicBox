@@ -2,6 +2,10 @@ div.inline_tools()
 	
 	span.pusher
 		mb-ranges()
+		
+		pre {{section.test}}
+		a(ng-click="next_prev('next')" , ng-if="!$parent.$parent.$parent.$parent.$parent.$last") next section
+		a(ng-click="next_prev('prev')" , ng-if="!$parent.$parent.$parent.$parent.$parent.$first") previous section
 
 		tabset.editor-main-tab()
 			

@@ -64,16 +64,13 @@ angular.module('musicBox.document.directive', [])
 
 .directive("mbBeforedoc", function($rootScope) {
     var link= function(){
-      //if($rootScope.ui.debug){
-
-      //}
       console.log(' [before doc] directive')
     }
     return {
       // replace:true,
       restrict: "E",
       scope: true,
-      link:link,
+      //link:link,
       templateUrl: function() {
         return "js/MusicBox/document/tpl/before_doc.tpl.html";
       }

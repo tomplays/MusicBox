@@ -43,32 +43,15 @@
 
 
 
-angular.module('musicBox.section.controller', []).controller('SectionCtrl', function($rootScope, $scope, $http, DocumentService, MarkupRest,socket, MarkupService) {
+angular.module('musicBox.section.controller', []).controller('SectionCtrl', function($rootScope, $scope, $http, DocumentService, MarkupRest,socket, ObjectService) {
 
 $scope.init_= function (index_) {
 	console.log('init_ (section #'+ index_+')')
 
-	/* some variable seting for each container */
-	var container_ ={
+	var section_ = new ObjectService();
+	section_.sectionin  = index_
+	section_.init($scope.section, 'section')
 	
-		'sectionin' : index_,
-		'selected'  : false,
-		'focused'   : '',
-		'editing_text': $rootScope.ui.debug ? true : false,
-		'modeletters' : $rootScope.ui.debug ? 'single' : 'compiled',
-		'section_classes':'', 
-        'touched'     : false,
-        'objSchemas' : $scope.objSchemas['container'],
-        'objSchemas_css': $scope.objSchemas['container_class'],
-        'operation': {},
-        'operations': [],
-        'fulltext' : $scope.init_fulltext($scope.section.start, $scope.section.end),
-	}
-
-	// extend this 
-	$scope.section = _.extend($scope.section, container_);
-	new MarkupService().init($scope.section, 'section')
-
 	/// need for layout 
 	$scope.get_markups($scope.section.start, $scope.section.end)
 
@@ -94,28 +77,7 @@ $scope.init_= function (index_) {
 	// contruct temp fulltext, 
 	// called at section init only 
 	$scope.init_fulltext = function (s,e){
-		console.log('init_fulltext (section)')
-	    var fulltext = '';
-	    var fulltext_block = ''
-	    var i_array     =   0;
-		for (var i = s; i <= e; i++) {
-			// console.log(i)
-			if($scope.doc && $scope.doc.content[i]){
-				fulltext += $scope.doc.content[i];
-				fulltext_block += $scope.doc.content[i];
-			}
-			else{
-				// there is no letter for section !
-				fulltext += '-';
-				fulltext_block += '-'
-
-			}
-		}
-		//$scope.section.fulltext = fulltext
-		// $scope.section.fulltext__ = fulltext+'llll'
-		return fulltext;
-		//$scope.compile_fulltext(fulltext_block)
-
+		return section_.fulltext()
 	}
 	$scope.attribute_objects = function(){
   			
@@ -222,11 +184,11 @@ $scope.init_= function (index_) {
 
 
 	$scope.select_section = function (){
-
-			if(!($scope.doc_owner || $scope.markup.by_me === true)){
+			
+			if(!($scope.doc.doc_owner || $scope.markup.by_me === true)){
 				return;
 			}
-			_.each($scope.doc.containers, function(c, i){
+			_.each($scope.doc.sections, function(c, i){
 
 				c.focused  = ''  
 
@@ -259,6 +221,28 @@ $scope.init_= function (index_) {
 
     }	
 
+    $scope.next_prev = function(dir){
+    	var si =-1
+    	var target;
+    	_.each($scope.doc.sections, function(c, i){
+    			if(c == $scope.section){
+    				c.selected 		= false;
+					c.editing 		= false;
+					c.editing_text 	= false;
+					si = (dir == 'next') ? i+1 : i-1
+					target = $scope.doc.sections[si]
+					target.selected 		= true
+					target.editing 		= true;
+					target.editing_text 	= true;
+					$rootScope.ui.selected_range.start =  target.start
+			        $rootScope.ui.selected_range.end   =  target.end
+				}
+				
+    	})
+
+
+    }
+
 	$scope.save = function (save_msg) {
 
         var data = {
@@ -266,7 +250,7 @@ $scope.init_= function (index_) {
 					    'end'			: $scope.section.end
 					};
 		// can be null.
-		data.secret = $rootScope.ui.secret;
+		
 		data.edittype = 'edit_markup'
 	    var promise =  MarkupRest.save({id:$scope.$parent.doc.slug, mid:$scope.section._id }, serialize(data) ).$promise;
         promise.then(function (Result) {
@@ -304,11 +288,10 @@ $scope.init_= function (index_) {
 			 			m.deleted = false
 
 						$scope.doc.markups.push(m)
-					
-						
 						$scope.section.redraw = true;
-						
-					    console.log($rootScope)
+					
+					
+					//    console.log($rootScope)
 						$rootScope.flashmessage($scope.section.operation.object_.type +' inserted', 'ok' , 1400, false)	
 			
 			 }
@@ -317,6 +300,9 @@ $scope.init_= function (index_) {
  			 $scope.section.operation.before.state= 'done'
  			 $scope.section.operation.after.state= 'done'
 			 $scope.section.operations.push($scope.section.operation)
+
+			 console.log('----------------------- SECTION OPERATION DONE')
+
 	} 
 	$scope.reverse_operation = function(operation){	
 			// console.log($scope.section.operation)
@@ -334,18 +320,27 @@ $scope.init_= function (index_) {
 			    // toggle change, call $scope.markup controller watcher
 			    m.map_ranges  =  Math.random()
 			 })
-			console.log('LAYOUT --  SECTION_MARKUP(S) '+$scope.section.section_markups.length+'   REMAPPED INRANGE ')
+			console.log('apply_ui_inrange_markups')
 		}
 		else{
-			console.log('LAYOUT -- (NONE) SECTION_MARKUP   REMAPPED INRANGE ')
+			// console.log('LAYOUT -- (NONE) SECTION_MARKUP   REMAPPED INRANGE ')
 		}	  	
 	}
+
+/*
+
+   $scope.$watch('section.fulltext', function(newValue, oldValue) {
+                 console.log(' [Section] fulltext ')
+                 //newValue = newValue.replace("\n", "");
+                 console.log('----B-----PPPP--------- BUILD LETTERS (BASE) ARRAYS >> SECTION should be later')
+
+     })
+*/
 
 	$scope.$watch('section.operation.before.state', function(newValue, oldValue) {
 
 		if(newValue == 'new'){
 			 $scope.apply_operation()
-
 		}
 		if(newValue == 'error'){
 			$scope.section.operations.push($scope.section.operation)
@@ -391,12 +386,14 @@ $scope.init_= function (index_) {
    	});	
 					
 	$scope.$watch('section.inrange_markups', function(newValue, oldValue) {
-			// remap MARKUP CHILDRENS 
+		// remap MARKUP CHILDRENS 
+		//console.log('NO SET?')
 		if(oldValue === newValue || newValue == false){
-
+		//	 console.log('NO SET')
 
 		}
 		else{
+		//	console.log('SET')
 			$scope.apply_ui_inrange_markups()
 
 		}
@@ -406,16 +403,26 @@ $scope.init_= function (index_) {
 		if(oldValue === newValue || newValue == false){
 		}
 		else{
+		
+
+// alert('readra')
+// from push 
+
 					        $scope.section.section_markups = $scope.get_markups($scope.section.start, $scope.section.end)
 				
 							//$scope.section.inrange_markups = true;
 							// eq
 							$scope.apply_ui_inrange_markups()
 
-							// remap classes call watcher
-							$scope.section.lettersarray = Math.random()
-							$scope.inrange_letters      = Math.random()
+						//  remap classes call watcher
+						//	$scope.section.lettersarray = Math.random()
+						//	$scope.inrange_letters      = Math.random()
 			   	            $scope.section.redraw = false;
+
+
+			   	              // trigger remap classes
+				             console.log('>> ------ trigger letters_to_classes --- ')
+				            $scope.section.letters_to_classes = Math.random()
 		}
 	})
 
@@ -548,9 +555,9 @@ $scope.split= function (){
 
 
 /*
-angular.module('musicBox.section.controller_b', []).controller('SectionBCtrl', function($scope, $http, DocumentService, MarkupRest,socket, MarkupService) {})
+angular.module('musicBox.section.controller_b', []).controller('SectionBCtrl', function($scope, $http, DocumentService, MarkupRest,socket, ObjectService) {})
 */
-angular.module('musicBox.section.editor_controller', []).controller('SectionEditorCtrl', function($scope, $http, DocumentService, MarkupRest,socket, MarkupService) {
+angular.module('musicBox.section.editor_controller', []).controller('SectionEditorCtrl', function($scope, $http, DocumentService, MarkupRest,socket, ObjectService) {
 
 	$scope.section.startt = $scope.section.start
 	$scope.$watch('section.start_', function(newValue, oldValue) {

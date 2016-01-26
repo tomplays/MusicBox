@@ -16,6 +16,12 @@ angular.module('musicBox.markup.rest', [])
     return data_
   };
 
+/* if($routeParams.secret){
+      data.secret = $rootScope.ui.secret;
+  }
+  */
+
+
   var route_object = 'markup' 
  
   return $resource(

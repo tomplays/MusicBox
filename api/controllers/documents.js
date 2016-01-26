@@ -694,6 +694,7 @@ exports.prerender = function(doc) {
 	* @todo nothing
 	*/
 
+
 	exports.doc_get = function(req, res) {
 			console.log(req.query.secret)
 		var query = Document.findOne({ 'slug':req.params.slug })
@@ -704,14 +705,22 @@ exports.prerender = function(doc) {
 			else{
 				if(doc){
 					var out 			= {}
-					out.doc 			= doc.toObject()
-					out.is_owner  		= false
 
+					
+				
+					doc = doc.toObject()
+					out.doc_owner = false;
+					out.doc_owner 	= exports.test_owner_or_key(doc,req)
+
+					doc.doc_owner 	= exports.test_owner_or_key(doc,req)
+				
 					if(req.user){
 						 out.user	= req.user.toObject()
 					}
-					out.is_owner 		= exports.test_owner_or_key(doc,req)
-					if(out.is_owner !== true){
+				
+					out.doc = doc
+
+					if(doc.doc_owner !== true){
 							out.doc.secret 		= 'api_secret'
 							if(doc.published =='draft'){	
 									var message = 'This doc is a draft, are you the document owner ? are you logged in or using secret key ?';
@@ -733,9 +742,11 @@ exports.prerender = function(doc) {
 					//	out.doc.segments = outobjects.compiled_full_array.segments;
 
 					//}
-                    		out = _.extend(out, exports.prerender(doc)); 
+                  //  out = _.extend(out, exports.prerender(doc)); 
 					out.doc.sections 	= []
 					out.doc.markups_ 	= []
+
+					
 					
 
 					doc.markups.forEach(function(mk) {
@@ -888,6 +899,9 @@ exports.doc_sync= function(req, res) {
 					 out.user 	= req.user.toObject()
 				}
 				out.is_owner 		= exports.test_owner_or_key(doc,req)
+					
+
+
 					console.log(chalk.green('doc sync') );
 				  		//console.log(doc.markup );
 				
@@ -902,14 +916,11 @@ exports.doc_sync= function(req, res) {
 
 
 						doc.save(function(errors, doc) {
-								out.doc 			= doc.toObject()
-									var now = new Date();
-									out.doc.updated     = now.toJSON();
+									out.doc 			= doc.toObject()
+									var now = new Date();    
 									out.doc.secret 		= 'api_secret'
 									out.edittype 		= req.body.edittype
 									res.json(out)
-						 
-							
 						});
 
 

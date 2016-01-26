@@ -16,7 +16,7 @@ div.comment_form(ng-if="ui.menus.push_comment.open == $parent.$parent.$parent.$i
 		p(ng-if="ui.selected_range.start || ui.selected_range.end") Adding {{push.type}} from {{ui.selected_range.start}} to {{ui.selected_range.end}}
 		
 
-		div(ng-if="doc_owner ==true")
+		div(ng-if="doc.doc_owner ==true")
 			p
 				label {{i18n.CUSTOM.ACTIONS.select}} type
 				select(ng-model="push.type")

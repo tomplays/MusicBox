@@ -36453,65 +36453,6 @@ $.prototype.v=function(a,b){var c=this.d.id,d=this.c.u,e=this;c?(d.__webfontfont
 },nextDay:function(){return"[demà a "+(1!==this.hours()?"les":"la")+"] LT"},nextWeek:function(){return"dddd [a "+(1!==this.hours()?"les":"la")+"] LT"},lastDay:function(){return"[ahir a "+(1!==this.hours()?"les":"la")+"] LT"},lastWeek:function(){return"[el] dddd [passat a "+(1!==this.hours()?"les":"la")+"] LT"},sameElse:"L"},relativeTime:{future:"en %s",past:"fa %s",s:"uns segons",m:"un minut",mm:"%d minuts",h:"una hora",hh:"%d hores",d:"un dia",dd:"%d dies",M:"un mes",MM:"%d mesos",y:"un any",yy:"%d anys"},ordinal:"%dº",week:{dow:1,doy:4}})}),function(a){a(db)}(function(a){function b(a){return a>1&&5>a&&1!==~~(a/10)}function c(a,c,d,e){var f=a+" ";switch(d){case"s":return c||e?"pár vteřin":"pár vteřinami";case"m":return c?"minuta":e?"minutu":"minutou";case"mm":return c||e?f+(b(a)?"minuty":"minut"):f+"minutami";break;case"h":return c?"hodina":e?"hodinu":"hodinou";case"hh":return c||e?f+(b(a)?"hodiny":"hodin"):f+"hodinami";break;case"d":return c||e?"den":"dnem";case"dd":return c||e?f+(b(a)?"dny":"dní"):f+"dny";break;case"M":return c||e?"měsíc":"měsícem";case"MM":return c||e?f+(b(a)?"měsíce":"měsíců"):f+"měsíci";break;case"y":return c||e?"rok":"rokem";case"yy":return c||e?f+(b(a)?"roky":"let"):f+"lety"}}var d="leden_únor_březen_duben_květen_červen_červenec_srpen_září_říjen_listopad_prosinec".split("_"),e="led_úno_bře_dub_kvě_čvn_čvc_srp_zář_říj_lis_pro".split("_");return a.lang("cs",{months:d,monthsShort:e,monthsParse:function(a,b){var c,d=[];for(c=0;12>c;c++)d[c]=new RegExp("^"+a[c]+"$|^"+b[c]+"$","i");return d}(d,e),weekdays:"neděle_pondělí_úterý_středa_čtvrtek_pátek_sobota".split("_"),weekdaysShort:"ne_po_út_st_čt_pá_so".split("_"),weekdaysMin:"ne_po_út_st_čt_pá_so".split("_"),longDateFormat:{LT:"H:mm",L:"DD.MM.YYYY",LL:"D. MMMM YYYY",LLL:"D. MMMM YYYY LT",LLLL:"dddd D. MMMM YYYY LT"},calendar:{sameDay:"[dnes v] LT",nextDay:"[zítra v] LT",nextWeek:function(){switch(this.day()){case 0:return"[v neděli v] LT";case 1:case 2:return"[v] dddd [v] LT";case 3:return"[ve středu v] LT";case 4:return"[ve čtvrtek v] LT";case 5:return"[v pátek v] LT";case 6:return"[v sobotu v] LT"}},lastDay:"[včera v] LT",lastWeek:function(){switch(this.day()){case 0:return"[minulou neděli v] LT";case 1:case 2:return"[minulé] dddd [v] LT";case 3:return"[minulou středu v] LT";case 4:case 5:return"[minulý] dddd [v] LT";case 6:return"[minulou sobotu v] LT"}},sameElse:"L"},relativeTime:{future:"za %s",past:"před %s",s:c,m:c,mm:c,h:c,hh:c,d:c,dd:c,M:c,MM:c,y:c,yy:c},ordinal:"%d.",week:{dow:1,doy:4}})}),function(a){a(db)}(function(a){return a.lang("cv",{months:"кăрлач_нарăс_пуш_ака_май_çĕртме_утă_çурла_авăн_юпа_чӳк_раштав".split("_"),monthsShort:"кăр_нар_пуш_ака_май_çĕр_утă_çур_ав_юпа_чӳк_раш".split("_"),weekdays:"вырсарникун_тунтикун_ытларикун_юнкун_кĕçнерникун_эрнекун_шăматкун".split("_"),weekdaysShort:"выр_тун_ытл_юн_кĕç_эрн_шăм".split("_"),weekdaysMin:"вр_тн_ыт_юн_кç_эр_шм".split("_"),longDateFormat:{LT:"HH:mm",L:"DD-MM-YYYY",LL:"YYYY [çулхи] MMMM [уйăхĕн] D[-мĕшĕ]",LLL:"YYYY [çулхи] MMMM [уйăхĕн] D[-мĕшĕ], LT",LLLL:"dddd, YYYY [çулхи] MMMM [уйăхĕн] D[-мĕшĕ], LT"},calendar:{sameDay:"[Паян] LT [сехетре]",nextDay:"[Ыран] LT [сехетре]",lastDay:"[Ĕнер] LT [сехетре]",nextWeek:"[Çитес] dddd LT [сехетре]",lastWeek:"[Иртнĕ] dddd LT [сехетре]",sameElse:"L"},relativeTime:{future:function(a){var b=/сехет$/i.exec(a)?"рен":/çул$/i.exec(a)?"тан":"ран";return a+b},past:"%s каялла",s:"пĕр-ик çеккунт",m:"пĕр минут",mm:"%d минут",h:"пĕр сехет",hh:"%d сехет",d:"пĕр кун",dd:"%d кун",M:"пĕр уйăх",MM:"%d уйăх",y:"пĕр çул",yy:"%d çул"},ordinal:"%d-мĕш",week:{dow:1,doy:7}})}),function(a){a(db)}(function(a){return a.lang("cy",{months:"Ionawr_Chwefror_Mawrth_Ebrill_Mai_Mehefin_Gorffennaf_Awst_Medi_Hydref_Tachwedd_Rhagfyr".split("_"),monthsShort:"Ion_Chwe_Maw_Ebr_Mai_Meh_Gor_Aws_Med_Hyd_Tach_Rhag".split("_"),weekdays:"Dydd Sul_Dydd Llun_Dydd Mawrth_Dydd Mercher_Dydd Iau_Dydd Gwener_Dydd Sadwrn".split("_"),weekdaysShort:"Sul_Llun_Maw_Mer_Iau_Gwe_Sad".split("_"),weekdaysMin:"Su_Ll_Ma_Me_Ia_Gw_Sa".split("_"),longDateFormat:{LT:"HH:mm",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY LT",LLLL:"dddd, D MMMM YYYY LT"},calendar:{sameDay:"[Heddiw am] LT",nextDay:"[Yfory am] LT",nextWeek:"dddd [am] LT",lastDay:"[Ddoe am] LT",lastWeek:"dddd [diwethaf am] LT",sameElse:"L"},relativeTime:{future:"mewn %s",past:"%s yn àl",s:"ychydig eiliadau",m:"munud",mm:"%d munud",h:"awr",hh:"%d awr",d:"diwrnod",dd:"%d diwrnod",M:"mis",MM:"%d mis",y:"blwyddyn",yy:"%d flynedd"},ordinal:function(a){var b=a,c="",d=["","af","il","ydd","ydd","ed","ed","ed","fed","fed","fed","eg","fed","eg","eg","fed","eg","eg","fed","eg","fed"];return b>20?c=40===b||50===b||60===b||80===b||100===b?"fed":"ain":b>0&&(c=d[b]),a+c},week:{dow:1,doy:4}})}),function(a){a(db)}(function(a){return a.lang("da",{months:"januar_februar_marts_april_maj_juni_juli_august_september_oktober_november_december".split("_"),monthsShort:"jan_feb_mar_apr_maj_jun_jul_aug_sep_okt_nov_dec".split("_"),weekdays:"søndag_mandag_tirsdag_onsdag_torsdag_fredag_lørdag".split("_"),weekdaysShort:"søn_man_tir_ons_tor_fre_lør".split("_"),weekdaysMin:"sø_ma_ti_on_to_fr_lø".split("_"),longDateFormat:{LT:"HH:mm",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY LT",LLLL:"dddd D. MMMM, YYYY LT"},calendar:{sameDay:"[I dag kl.] LT",nextDay:"[I morgen kl.] LT",nextWeek:"dddd [kl.] LT",lastDay:"[I går kl.] LT",lastWeek:"[sidste] dddd [kl] LT",sameElse:"L"},relativeTime:{future:"om %s",past:"%s siden",s:"få sekunder",m:"et minut",mm:"%d minutter",h:"en time",hh:"%d timer",d:"en dag",dd:"%d dage",M:"en måned",MM:"%d måneder",y:"et år",yy:"%d år"},ordinal:"%d.",week:{dow:1,doy:4}})}),function(a){a(db)}(function(a){function b(a,b,c){var d={m:["eine Minute","einer Minute"],h:["eine Stunde","einer Stunde"],d:["ein Tag","einem Tag"],dd:[a+" Tage",a+" Tagen"],M:["ein Monat","einem Monat"],MM:[a+" Monate",a+" Monaten"],y:["ein Jahr","einem Jahr"],yy:[a+" Jahre",a+" Jahren"]};return b?d[c][0]:d[c][1]}return a.lang("de",{months:"Januar_Februar_März_April_Mai_Juni_Juli_August_September_Oktober_November_Dezember".split("_"),monthsShort:"Jan._Febr._Mrz._Apr._Mai_Jun._Jul._Aug._Sept._Okt._Nov._Dez.".split("_"),weekdays:"Sonntag_Montag_Dienstag_Mittwoch_Donnerstag_Freitag_Samstag".split("_"),weekdaysShort:"So._Mo._Di._Mi._Do._Fr._Sa.".split("_"),weekdaysMin:"So_Mo_Di_Mi_Do_Fr_Sa".split("_"),longDateFormat:{LT:"H:mm [Uhr]",L:"DD.MM.YYYY",LL:"D. MMMM YYYY",LLL:"D. MMMM YYYY LT",LLLL:"dddd, D. MMMM YYYY LT"},calendar:{sameDay:"[Heute um] LT",sameElse:"L",nextDay:"[Morgen um] LT",nextWeek:"dddd [um] LT",lastDay:"[Gestern um] LT",lastWeek:"[letzten] dddd [um] LT"},relativeTime:{future:"in %s",past:"vor %s",s:"ein paar Sekunden",m:b,mm:"%d Minuten",h:b,hh:"%d Stunden",d:b,dd:b,M:b,MM:b,y:b,yy:b},ordinal:"%d.",week:{dow:1,doy:4}})}),function(a){a(db)}(function(a){return a.lang("el",{monthsNominativeEl:"Ιανουάριος_Φεβρουάριος_Μάρτιος_Απρίλιος_Μάιος_Ιούνιος_Ιούλιος_Αύγουστος_Σεπτέμβριος_Οκτώβριος_Νοέμβριος_Δεκέμβριος".split("_"),monthsGenitiveEl:"Ιανουαρίου_Φεβρουαρίου_Μαρτίου_Απριλίου_Μαΐου_Ιουνίου_Ιουλίου_Αυγούστου_Σεπτεμβρίου_Οκτωβρίου_Νοεμβρίου_Δεκεμβρίου".split("_"),months:function(a,b){return/D/.test(b.substring(0,b.indexOf("MMMM")))?this._monthsGenitiveEl[a.month()]:this._monthsNominativeEl[a.month()]},monthsShort:"Ιαν_Φεβ_Μαρ_Απρ_Μαϊ_Ιουν_Ιουλ_Αυγ_Σεπ_Οκτ_Νοε_Δεκ".split("_"),weekdays:"Κυριακή_Δευτέρα_Τρίτη_Τετάρτη_Πέμπτη_Παρασκευή_Σάββατο".split("_"),weekdaysShort:"Κυρ_Δευ_Τρι_Τετ_Πεμ_Παρ_Σαβ".split("_"),weekdaysMin:"Κυ_Δε_Τρ_Τε_Πε_Πα_Σα".split("_"),meridiem:function(a,b,c){return a>11?c?"μμ":"ΜΜ":c?"πμ":"ΠΜ"},longDateFormat:{LT:"h:mm A",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY LT",LLLL:"dddd, D MMMM YYYY LT"},calendarEl:{sameDay:"[Σήμερα {}] LT",nextDay:"[Αύριο {}] LT",nextWeek:"dddd [{}] LT",lastDay:"[Χθες {}] LT",lastWeek:"[την προηγούμενη] dddd [{}] LT",sameElse:"L"},calendar:function(a,b){var c=this._calendarEl[a],d=b&&b.hours();return c.replace("{}",d%12===1?"στη":"στις")},relativeTime:{future:"σε %s",past:"%s πριν",s:"δευτερόλεπτα",m:"ένα λεπτό",mm:"%d λεπτά",h:"μία ώρα",hh:"%d ώρες",d:"μία μέρα",dd:"%d μέρες",M:"ένας μήνας",MM:"%d μήνες",y:"ένας χρόνος",yy:"%d χρόνια"},ordinal:function(a){return a+"η"},week:{dow:1,doy:4}})}),function(a){a(db)}(function(a){return a.lang("en-au",{months:"January_February_March_April_May_June_July_August_September_October_November_December".split("_"),monthsShort:"Jan_Feb_Mar_Apr_May_Jun_Jul_Aug_Sep_Oct_Nov_Dec".split("_"),weekdays:"Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday".split("_"),weekdaysShort:"Sun_Mon_Tue_Wed_Thu_Fri_Sat".split("_"),weekdaysMin:"Su_Mo_Tu_We_Th_Fr_Sa".split("_"),longDateFormat:{LT:"h:mm A",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY LT",LLLL:"dddd, D MMMM YYYY LT"},calendar:{sameDay:"[Today at] LT",nextDay:"[Tomorrow at] LT",nextWeek:"dddd [at] LT",lastDay:"[Yesterday at] LT",lastWeek:"[Last] dddd [at] LT",sameElse:"L"},relativeTime:{future:"in %s",past:"%s ago",s:"a few seconds",m:"a minute",mm:"%d minutes",h:"an hour",hh:"%d hours",d:"a day",dd:"%d days",M:"a month",MM:"%d months",y:"a year",yy:"%d years"},ordinal:function(a){var b=a%10,c=1===~~(a%100/10)?"th":1===b?"st":2===b?"nd":3===b?"rd":"th";return a+c},week:{dow:1,doy:4}})}),function(a){a(db)}(function(a){return a.lang("en-ca",{months:"January_February_March_April_May_June_July_August_September_October_November_December".split("_"),monthsShort:"Jan_Feb_Mar_Apr_May_Jun_Jul_Aug_Sep_Oct_Nov_Dec".split("_"),weekdays:"Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday".split("_"),weekdaysShort:"Sun_Mon_Tue_Wed_Thu_Fri_Sat".split("_"),weekdaysMin:"Su_Mo_Tu_We_Th_Fr_Sa".split("_"),longDateFormat:{LT:"h:mm A",L:"YYYY-MM-DD",LL:"D MMMM, YYYY",LLL:"D MMMM, YYYY LT",LLLL:"dddd, D MMMM, YYYY LT"},calendar:{sameDay:"[Today at] LT",nextDay:"[Tomorrow at] LT",nextWeek:"dddd [at] LT",lastDay:"[Yesterday at] LT",lastWeek:"[Last] dddd [at] LT",sameElse:"L"},relativeTime:{future:"in %s",past:"%s ago",s:"a few seconds",m:"a minute",mm:"%d minutes",h:"an hour",hh:"%d hours",d:"a day",dd:"%d days",M:"a month",MM:"%d months",y:"a year",yy:"%d years"},ordinal:function(a){var b=a%10,c=1===~~(a%100/10)?"th":1===b?"st":2===b?"nd":3===b?"rd":"th";return a+c}})}),function(a){a(db)}(function(a){return a.lang("en-gb",{months:"January_February_March_April_May_June_July_August_September_October_November_December".split("_"),monthsShort:"Jan_Feb_Mar_Apr_May_Jun_Jul_Aug_Sep_Oct_Nov_Dec".split("_"),weekdays:"Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday".split("_"),weekdaysShort:"Sun_Mon_Tue_Wed_Thu_Fri_Sat".split("_"),weekdaysMin:"Su_Mo_Tu_We_Th_Fr_Sa".split("_"),longDateFormat:{LT:"HH:mm",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY LT",LLLL:"dddd, D MMMM YYYY LT"},calendar:{sameDay:"[Today at] LT",nextDay:"[Tomorrow at] LT",nextWeek:"dddd [at] LT",lastDay:"[Yesterday at] LT",lastWeek:"[Last] dddd [at] LT",sameElse:"L"},relativeTime:{future:"in %s",past:"%s ago",s:"a few seconds",m:"a minute",mm:"%d minutes",h:"an hour",hh:"%d hours",d:"a day",dd:"%d days",M:"a month",MM:"%d months",y:"a year",yy:"%d years"},ordinal:function(a){var b=a%10,c=1===~~(a%100/10)?"th":1===b?"st":2===b?"nd":3===b?"rd":"th";return a+c},week:{dow:1,doy:4}})}),function(a){a(db)}(function(a){return a.lang("eo",{months:"januaro_februaro_marto_aprilo_majo_junio_julio_aŭgusto_septembro_oktobro_novembro_decembro".split("_"),monthsShort:"jan_feb_mar_apr_maj_jun_jul_aŭg_sep_okt_nov_dec".split("_"),weekdays:"Dimanĉo_Lundo_Mardo_Merkredo_Ĵaŭdo_Vendredo_Sabato".split("_"),weekdaysShort:"Dim_Lun_Mard_Merk_Ĵaŭ_Ven_Sab".split("_"),weekdaysMin:"Di_Lu_Ma_Me_Ĵa_Ve_Sa".split("_"),longDateFormat:{LT:"HH:mm",L:"YYYY-MM-DD",LL:"D[-an de] MMMM, YYYY",LLL:"D[-an de] MMMM, YYYY LT",LLLL:"dddd, [la] D[-an de] MMMM, YYYY LT"},meridiem:function(a,b,c){return a>11?c?"p.t.m.":"P.T.M.":c?"a.t.m.":"A.T.M."},calendar:{sameDay:"[Hodiaŭ je] LT",nextDay:"[Morgaŭ je] LT",nextWeek:"dddd [je] LT",lastDay:"[Hieraŭ je] LT",lastWeek:"[pasinta] dddd [je] LT",sameElse:"L"},relativeTime:{future:"je %s",past:"antaŭ %s",s:"sekundoj",m:"minuto",mm:"%d minutoj",h:"horo",hh:"%d horoj",d:"tago",dd:"%d tagoj",M:"monato",MM:"%d monatoj",y:"jaro",yy:"%d jaroj"},ordinal:"%da",week:{dow:1,doy:7}})}),function(a){a(db)}(function(a){return a.lang("es",{months:"enero_febrero_marzo_abril_mayo_junio_julio_agosto_septiembre_octubre_noviembre_diciembre".split("_"),monthsShort:"ene._feb._mar._abr._may._jun._jul._ago._sep._oct._nov._dic.".split("_"),weekdays:"domingo_lunes_martes_miércoles_jueves_viernes_sábado".split("_"),weekdaysShort:"dom._lun._mar._mié._jue._vie._sáb.".split("_"),weekdaysMin:"Do_Lu_Ma_Mi_Ju_Vi_Sá".split("_"),longDateFormat:{LT:"H:mm",L:"DD/MM/YYYY",LL:"D [de] MMMM [de] YYYY",LLL:"D [de] MMMM [de] YYYY LT",LLLL:"dddd, D [de] MMMM [de] YYYY LT"},calendar:{sameDay:function(){return"[hoy a la"+(1!==this.hours()?"s":"")+"] LT"},nextDay:function(){return"[mañana a la"+(1!==this.hours()?"s":"")+"] LT"},nextWeek:function(){return"dddd [a la"+(1!==this.hours()?"s":"")+"] LT"},lastDay:function(){return"[ayer a la"+(1!==this.hours()?"s":"")+"] LT"},lastWeek:function(){return"[el] dddd [pasado a la"+(1!==this.hours()?"s":"")+"] LT"},sameElse:"L"},relativeTime:{future:"en %s",past:"hace %s",s:"unos segundos",m:"un minuto",mm:"%d minutos",h:"una hora",hh:"%d horas",d:"un día",dd:"%d días",M:"un mes",MM:"%d meses",y:"un año",yy:"%d años"},ordinal:"%dº",week:{dow:1,doy:4}})}),function(a){a(db)}(function(a){function b(a,b,c,d){var e={s:["mõne sekundi","mõni sekund","paar sekundit"],m:["ühe minuti","üks minut"],mm:[a+" minuti",a+" minutit"],h:["ühe tunni","tund aega","üks tund"],hh:[a+" tunni",a+" tundi"],d:["ühe päeva","üks päev"],M:["kuu aja","kuu aega","üks kuu"],MM:[a+" kuu",a+" kuud"],y:["ühe aasta","aasta","üks aasta"],yy:[a+" aasta",a+" aastat"]};return b?e[c][2]?e[c][2]:e[c][1]:d?e[c][0]:e[c][1]}return a.lang("et",{months:"jaanuar_veebruar_märts_aprill_mai_juuni_juuli_august_september_oktoober_november_detsember".split("_"),monthsShort:"jaan_veebr_märts_apr_mai_juuni_juuli_aug_sept_okt_nov_dets".split("_"),weekdays:"pühapäev_esmaspäev_teisipäev_kolmapäev_neljapäev_reede_laupäev".split("_"),weekdaysShort:"P_E_T_K_N_R_L".split("_"),weekdaysMin:"P_E_T_K_N_R_L".split("_"),longDateFormat:{LT:"H:mm",L:"DD.MM.YYYY",LL:"D. MMMM YYYY",LLL:"D. MMMM YYYY LT",LLLL:"dddd, D. MMMM YYYY LT"},calendar:{sameDay:"[Täna,] LT",nextDay:"[Homme,] LT",nextWeek:"[Järgmine] dddd LT",lastDay:"[Eile,] LT",lastWeek:"[Eelmine] dddd LT",sameElse:"L"},relativeTime:{future:"%s pärast",past:"%s tagasi",s:b,m:b,mm:b,h:b,hh:b,d:b,dd:"%d päeva",M:b,MM:b,y:b,yy:b},ordinal:"%d.",week:{dow:1,doy:4}})}),function(a){a(db)}(function(a){return a.lang("eu",{months:"urtarrila_otsaila_martxoa_apirila_maiatza_ekaina_uztaila_abuztua_iraila_urria_azaroa_abendua".split("_"),monthsShort:"urt._ots._mar._api._mai._eka._uzt._abu._ira._urr._aza._abe.".split("_"),weekdays:"igandea_astelehena_asteartea_asteazkena_osteguna_ostirala_larunbata".split("_"),weekdaysShort:"ig._al._ar._az._og._ol._lr.".split("_"),weekdaysMin:"ig_al_ar_az_og_ol_lr".split("_"),longDateFormat:{LT:"HH:mm",L:"YYYY-MM-DD",LL:"YYYY[ko] MMMM[ren] D[a]",LLL:"YYYY[ko] MMMM[ren] D[a] LT",LLLL:"dddd, YYYY[ko] MMMM[ren] D[a] LT",l:"YYYY-M-D",ll:"YYYY[ko] MMM D[a]",lll:"YYYY[ko] MMM D[a] LT",llll:"ddd, YYYY[ko] MMM D[a] LT"},calendar:{sameDay:"[gaur] LT[etan]",nextDay:"[bihar] LT[etan]",nextWeek:"dddd LT[etan]",lastDay:"[atzo] LT[etan]",lastWeek:"[aurreko] dddd LT[etan]",sameElse:"L"},relativeTime:{future:"%s barru",past:"duela %s",s:"segundo batzuk",m:"minutu bat",mm:"%d minutu",h:"ordu bat",hh:"%d ordu",d:"egun bat",dd:"%d egun",M:"hilabete bat",MM:"%d hilabete",y:"urte bat",yy:"%d urte"},ordinal:"%d.",week:{dow:1,doy:7}})}),function(a){a(db)}(function(a){var b={1:"۱",2:"۲",3:"۳",4:"۴",5:"۵",6:"۶",7:"۷",8:"۸",9:"۹",0:"۰"},c={"۱":"1","۲":"2","۳":"3","۴":"4","۵":"5","۶":"6","۷":"7","۸":"8","۹":"9","۰":"0"};return a.lang("fa",{months:"ژانویه_فوریه_مارس_آوریل_مه_ژوئن_ژوئیه_اوت_سپتامبر_اکتبر_نوامبر_دسامبر".split("_"),monthsShort:"ژانویه_فوریه_مارس_آوریل_مه_ژوئن_ژوئیه_اوت_سپتامبر_اکتبر_نوامبر_دسامبر".split("_"),weekdays:"یک‌شنبه_دوشنبه_سه‌شنبه_چهارشنبه_پنج‌شنبه_جمعه_شنبه".split("_"),weekdaysShort:"یک‌شنبه_دوشنبه_سه‌شنبه_چهارشنبه_پنج‌شنبه_جمعه_شنبه".split("_"),weekdaysMin:"ی_د_س_چ_پ_ج_ش".split("_"),longDateFormat:{LT:"HH:mm",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY LT",LLLL:"dddd, D MMMM YYYY LT"},meridiem:function(a){return 12>a?"قبل از ظهر":"بعد از ظهر"},calendar:{sameDay:"[امروز ساعت] LT",nextDay:"[فردا ساعت] LT",nextWeek:"dddd [ساعت] LT",lastDay:"[دیروز ساعت] LT",lastWeek:"dddd [پیش] [ساعت] LT",sameElse:"L"},relativeTime:{future:"در %s",past:"%s پیش",s:"چندین ثانیه",m:"یک دقیقه",mm:"%d دقیقه",h:"یک ساعت",hh:"%d ساعت",d:"یک روز",dd:"%d روز",M:"یک ماه",MM:"%d ماه",y:"یک سال",yy:"%d سال"},preparse:function(a){return a.replace(/[۰-۹]/g,function(a){return c[a]}).replace(/،/g,",")},postformat:function(a){return a.replace(/\d/g,function(a){return b[a]}).replace(/,/g,"،")},ordinal:"%dم",week:{dow:6,doy:12}})}),function(a){a(db)}(function(a){function b(a,b,d,e){var f="";switch(d){case"s":return e?"muutaman sekunnin":"muutama sekunti";case"m":return e?"minuutin":"minuutti";case"mm":f=e?"minuutin":"minuuttia";break;case"h":return e?"tunnin":"tunti";case"hh":f=e?"tunnin":"tuntia";break;case"d":return e?"päivän":"päivä";case"dd":f=e?"päivän":"päivää";break;case"M":return e?"kuukauden":"kuukausi";case"MM":f=e?"kuukauden":"kuukautta";break;case"y":return e?"vuoden":"vuosi";case"yy":f=e?"vuoden":"vuotta"}return f=c(a,e)+" "+f}function c(a,b){return 10>a?b?e[a]:d[a]:a}var d="nolla yksi kaksi kolme neljä viisi kuusi seitsemän kahdeksan yhdeksän".split(" "),e=["nolla","yhden","kahden","kolmen","neljän","viiden","kuuden",d[7],d[8],d[9]];return a.lang("fi",{months:"tammikuu_helmikuu_maaliskuu_huhtikuu_toukokuu_kesäkuu_heinäkuu_elokuu_syyskuu_lokakuu_marraskuu_joulukuu".split("_"),monthsShort:"tammi_helmi_maalis_huhti_touko_kesä_heinä_elo_syys_loka_marras_joulu".split("_"),weekdays:"sunnuntai_maanantai_tiistai_keskiviikko_torstai_perjantai_lauantai".split("_"),weekdaysShort:"su_ma_ti_ke_to_pe_la".split("_"),weekdaysMin:"su_ma_ti_ke_to_pe_la".split("_"),longDateFormat:{LT:"HH.mm",L:"DD.MM.YYYY",LL:"Do MMMM[ta] YYYY",LLL:"Do MMMM[ta] YYYY, [klo] LT",LLLL:"dddd, Do MMMM[ta] YYYY, [klo] LT",l:"D.M.YYYY",ll:"Do MMM YYYY",lll:"Do MMM YYYY, [klo] LT",llll:"ddd, Do MMM YYYY, [klo] LT"},calendar:{sameDay:"[tänään] [klo] LT",nextDay:"[huomenna] [klo] LT",nextWeek:"dddd [klo] LT",lastDay:"[eilen] [klo] LT",lastWeek:"[viime] dddd[na] [klo] LT",sameElse:"L"},relativeTime:{future:"%s päästä",past:"%s sitten",s:b,m:b,mm:b,h:b,hh:b,d:b,dd:b,M:b,MM:b,y:b,yy:b},ordinal:"%d.",week:{dow:1,doy:4}})}),function(a){a(db)}(function(a){return a.lang("fo",{months:"januar_februar_mars_apríl_mai_juni_juli_august_september_oktober_november_desember".split("_"),monthsShort:"jan_feb_mar_apr_mai_jun_jul_aug_sep_okt_nov_des".split("_"),weekdays:"sunnudagur_mánadagur_týsdagur_mikudagur_hósdagur_fríggjadagur_leygardagur".split("_"),weekdaysShort:"sun_mán_týs_mik_hós_frí_ley".split("_"),weekdaysMin:"su_má_tý_mi_hó_fr_le".split("_"),longDateFormat:{LT:"HH:mm",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY LT",LLLL:"dddd D. MMMM, YYYY LT"},calendar:{sameDay:"[Í dag kl.] LT",nextDay:"[Í morgin kl.] LT",nextWeek:"dddd [kl.] LT",lastDay:"[Í gjár kl.] LT",lastWeek:"[síðstu] dddd [kl] LT",sameElse:"L"},relativeTime:{future:"um %s",past:"%s síðani",s:"fá sekund",m:"ein minutt",mm:"%d minuttir",h:"ein tími",hh:"%d tímar",d:"ein dagur",dd:"%d dagar",M:"ein mánaði",MM:"%d mánaðir",y:"eitt ár",yy:"%d ár"},ordinal:"%d.",week:{dow:1,doy:4}})}),function(a){a(db)}(function(a){return a.lang("fr-ca",{months:"janvier_février_mars_avril_mai_juin_juillet_août_septembre_octobre_novembre_décembre".split("_"),monthsShort:"janv._févr._mars_avr._mai_juin_juil._août_sept._oct._nov._déc.".split("_"),weekdays:"dimanche_lundi_mardi_mercredi_jeudi_vendredi_samedi".split("_"),weekdaysShort:"dim._lun._mar._mer._jeu._ven._sam.".split("_"),weekdaysMin:"Di_Lu_Ma_Me_Je_Ve_Sa".split("_"),longDateFormat:{LT:"HH:mm",L:"YYYY-MM-DD",LL:"D MMMM YYYY",LLL:"D MMMM YYYY LT",LLLL:"dddd D MMMM YYYY LT"},calendar:{sameDay:"[Aujourd'hui à] LT",nextDay:"[Demain à] LT",nextWeek:"dddd [à] LT",lastDay:"[Hier à] LT",lastWeek:"dddd [dernier à] LT",sameElse:"L"},relativeTime:{future:"dans %s",past:"il y a %s",s:"quelques secondes",m:"une minute",mm:"%d minutes",h:"une heure",hh:"%d heures",d:"un jour",dd:"%d jours",M:"un mois",MM:"%d mois",y:"un an",yy:"%d ans"},ordinal:function(a){return a+(1===a?"er":"")}})}),function(a){a(db)}(function(a){return a.lang("fr",{months:"janvier_février_mars_avril_mai_juin_juillet_août_septembre_octobre_novembre_décembre".split("_"),monthsShort:"janv._févr._mars_avr._mai_juin_juil._août_sept._oct._nov._déc.".split("_"),weekdays:"dimanche_lundi_mardi_mercredi_jeudi_vendredi_samedi".split("_"),weekdaysShort:"dim._lun._mar._mer._jeu._ven._sam.".split("_"),weekdaysMin:"Di_Lu_Ma_Me_Je_Ve_Sa".split("_"),longDateFormat:{LT:"HH:mm",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY LT",LLLL:"dddd D MMMM YYYY LT"},calendar:{sameDay:"[Aujourd'hui à] LT",nextDay:"[Demain à] LT",nextWeek:"dddd [à] LT",lastDay:"[Hier à] LT",lastWeek:"dddd [dernier à] LT",sameElse:"L"},relativeTime:{future:"dans %s",past:"il y a %s",s:"quelques secondes",m:"une minute",mm:"%d minutes",h:"une heure",hh:"%d heures",d:"un jour",dd:"%d jours",M:"un mois",MM:"%d mois",y:"un an",yy:"%d ans"},ordinal:function(a){return a+(1===a?"er":"")},week:{dow:1,doy:4}})}),function(a){a(db)}(function(a){return a.lang("gl",{months:"Xaneiro_Febreiro_Marzo_Abril_Maio_Xuño_Xullo_Agosto_Setembro_Outubro_Novembro_Decembro".split("_"),monthsShort:"Xan._Feb._Mar._Abr._Mai._Xuñ._Xul._Ago._Set._Out._Nov._Dec.".split("_"),weekdays:"Domingo_Luns_Martes_Mércores_Xoves_Venres_Sábado".split("_"),weekdaysShort:"Dom._Lun._Mar._Mér._Xov._Ven._Sáb.".split("_"),weekdaysMin:"Do_Lu_Ma_Mé_Xo_Ve_Sá".split("_"),longDateFormat:{LT:"H:mm",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY LT",LLLL:"dddd D MMMM YYYY LT"},calendar:{sameDay:function(){return"[hoxe "+(1!==this.hours()?"ás":"á")+"] LT"},nextDay:function(){return"[mañá "+(1!==this.hours()?"ás":"á")+"] LT"},nextWeek:function(){return"dddd ["+(1!==this.hours()?"ás":"a")+"] LT"},lastDay:function(){return"[onte "+(1!==this.hours()?"á":"a")+"] LT"},lastWeek:function(){return"[o] dddd [pasado "+(1!==this.hours()?"ás":"a")+"] LT"},sameElse:"L"},relativeTime:{future:function(a){return"uns segundos"===a?"nuns segundos":"en "+a},past:"hai %s",s:"uns segundos",m:"un minuto",mm:"%d minutos",h:"unha hora",hh:"%d horas",d:"un día",dd:"%d días",M:"un mes",MM:"%d meses",y:"un ano",yy:"%d anos"},ordinal:"%dº",week:{dow:1,doy:7}})}),function(a){a(db)}(function(a){return a.lang("he",{months:"ינואר_פברואר_מרץ_אפריל_מאי_יוני_יולי_אוגוסט_ספטמבר_אוקטובר_נובמבר_דצמבר".split("_"),monthsShort:"ינו׳_פבר׳_מרץ_אפר׳_מאי_יוני_יולי_אוג׳_ספט׳_אוק׳_נוב׳_דצמ׳".split("_"),weekdays:"ראשון_שני_שלישי_רביעי_חמישי_שישי_שבת".split("_"),weekdaysShort:"א׳_ב׳_ג׳_ד׳_ה׳_ו׳_ש׳".split("_"),weekdaysMin:"א_ב_ג_ד_ה_ו_ש".split("_"),longDateFormat:{LT:"HH:mm",L:"DD/MM/YYYY",LL:"D [ב]MMMM YYYY",LLL:"D [ב]MMMM YYYY LT",LLLL:"dddd, D [ב]MMMM YYYY LT",l:"D/M/YYYY",ll:"D MMM YYYY",lll:"D MMM YYYY LT",llll:"ddd, D MMM YYYY LT"},calendar:{sameDay:"[היום ב־]LT",nextDay:"[מחר ב־]LT",nextWeek:"dddd [בשעה] LT",lastDay:"[אתמול ב־]LT",lastWeek:"[ביום] dddd [האחרון בשעה] LT",sameElse:"L"},relativeTime:{future:"בעוד %s",past:"לפני %s",s:"מספר שניות",m:"דקה",mm:"%d דקות",h:"שעה",hh:function(a){return 2===a?"שעתיים":a+" שעות"},d:"יום",dd:function(a){return 2===a?"יומיים":a+" ימים"},M:"חודש",MM:function(a){return 2===a?"חודשיים":a+" חודשים"},y:"שנה",yy:function(a){return 2===a?"שנתיים":a+" שנים"}}})}),function(a){a(db)}(function(a){var b={1:"१",2:"२",3:"३",4:"४",5:"५",6:"६",7:"७",8:"८",9:"९",0:"०"},c={"१":"1","२":"2","३":"3","४":"4","५":"5","६":"6","७":"7","८":"8","९":"9","०":"0"};return a.lang("hi",{months:"जनवरी_फ़रवरी_मार्च_अप्रैल_मई_जून_जुलाई_अगस्त_सितम्बर_अक्टूबर_नवम्बर_दिसम्बर".split("_"),monthsShort:"जन._फ़र._मार्च_अप्रै._मई_जून_जुल._अग._सित._अक्टू._नव._दिस.".split("_"),weekdays:"रविवार_सोमवार_मंगलवार_बुधवार_गुरूवार_शुक्रवार_शनिवार".split("_"),weekdaysShort:"रवि_सोम_मंगल_बुध_गुरू_शुक्र_शनि".split("_"),weekdaysMin:"र_सो_मं_बु_गु_शु_श".split("_"),longDateFormat:{LT:"A h:mm बजे",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY, LT",LLLL:"dddd, D MMMM YYYY, LT"},calendar:{sameDay:"[आज] LT",nextDay:"[कल] LT",nextWeek:"dddd, LT",lastDay:"[कल] LT",lastWeek:"[पिछले] dddd, LT",sameElse:"L"},relativeTime:{future:"%s में",past:"%s पहले",s:"कुछ ही क्षण",m:"एक मिनट",mm:"%d मिनट",h:"एक घंटा",hh:"%d घंटे",d:"एक दिन",dd:"%d दिन",M:"एक महीने",MM:"%d महीने",y:"एक वर्ष",yy:"%d वर्ष"},preparse:function(a){return a.replace(/[१२३४५६७८९०]/g,function(a){return c[a]})},postformat:function(a){return a.replace(/\d/g,function(a){return b[a]})},meridiem:function(a){return 4>a?"रात":10>a?"सुबह":17>a?"दोपहर":20>a?"शाम":"रात"},week:{dow:0,doy:6}})}),function(a){a(db)}(function(a){function b(a,b,c){var d=a+" ";switch(c){case"m":return b?"jedna minuta":"jedne minute";case"mm":return d+=1===a?"minuta":2===a||3===a||4===a?"minute":"minuta";case"h":return b?"jedan sat":"jednog sata";case"hh":return d+=1===a?"sat":2===a||3===a||4===a?"sata":"sati";case"dd":return d+=1===a?"dan":"dana";case"MM":return d+=1===a?"mjesec":2===a||3===a||4===a?"mjeseca":"mjeseci";case"yy":return d+=1===a?"godina":2===a||3===a||4===a?"godine":"godina"}}return a.lang("hr",{months:"sječanj_veljača_ožujak_travanj_svibanj_lipanj_srpanj_kolovoz_rujan_listopad_studeni_prosinac".split("_"),monthsShort:"sje._vel._ožu._tra._svi._lip._srp._kol._ruj._lis._stu._pro.".split("_"),weekdays:"nedjelja_ponedjeljak_utorak_srijeda_četvrtak_petak_subota".split("_"),weekdaysShort:"ned._pon._uto._sri._čet._pet._sub.".split("_"),weekdaysMin:"ne_po_ut_sr_če_pe_su".split("_"),longDateFormat:{LT:"H:mm",L:"DD. MM. YYYY",LL:"D. MMMM YYYY",LLL:"D. MMMM YYYY LT",LLLL:"dddd, D. MMMM YYYY LT"},calendar:{sameDay:"[danas u] LT",nextDay:"[sutra u] LT",nextWeek:function(){switch(this.day()){case 0:return"[u] [nedjelju] [u] LT";case 3:return"[u] [srijedu] [u] LT";case 6:return"[u] [subotu] [u] LT";case 1:case 2:case 4:case 5:return"[u] dddd [u] LT"}},lastDay:"[jučer u] LT",lastWeek:function(){switch(this.day()){case 0:case 3:return"[prošlu] dddd [u] LT";case 6:return"[prošle] [subote] [u] LT";case 1:case 2:case 4:case 5:return"[prošli] dddd [u] LT"}},sameElse:"L"},relativeTime:{future:"za %s",past:"prije %s",s:"par sekundi",m:b,mm:b,h:b,hh:b,d:"dan",dd:b,M:"mjesec",MM:b,y:"godinu",yy:b},ordinal:"%d.",week:{dow:1,doy:7}})}),function(a){a(db)}(function(a){function b(a,b,c,d){var e=a;switch(c){case"s":return d||b?"néhány másodperc":"néhány másodperce";case"m":return"egy"+(d||b?" perc":" perce");case"mm":return e+(d||b?" perc":" perce");case"h":return"egy"+(d||b?" óra":" órája");case"hh":return e+(d||b?" óra":" órája");case"d":return"egy"+(d||b?" nap":" napja");case"dd":return e+(d||b?" nap":" napja");case"M":return"egy"+(d||b?" hónap":" hónapja");case"MM":return e+(d||b?" hónap":" hónapja");case"y":return"egy"+(d||b?" év":" éve");case"yy":return e+(d||b?" év":" éve")}return""}function c(a){return(a?"":"[múlt] ")+"["+d[this.day()]+"] LT[-kor]"}var d="vasárnap hétfőn kedden szerdán csütörtökön pénteken szombaton".split(" ");return a.lang("hu",{months:"január_február_március_április_május_június_július_augusztus_szeptember_október_november_december".split("_"),monthsShort:"jan_feb_márc_ápr_máj_jún_júl_aug_szept_okt_nov_dec".split("_"),weekdays:"vasárnap_hétfő_kedd_szerda_csütörtök_péntek_szombat".split("_"),weekdaysShort:"vas_hét_kedd_sze_csüt_pén_szo".split("_"),weekdaysMin:"v_h_k_sze_cs_p_szo".split("_"),longDateFormat:{LT:"H:mm",L:"YYYY.MM.DD.",LL:"YYYY. MMMM D.",LLL:"YYYY. MMMM D., LT",LLLL:"YYYY. MMMM D., dddd LT"},calendar:{sameDay:"[ma] LT[-kor]",nextDay:"[holnap] LT[-kor]",nextWeek:function(){return c.call(this,!0)},lastDay:"[tegnap] LT[-kor]",lastWeek:function(){return c.call(this,!1)},sameElse:"L"},relativeTime:{future:"%s múlva",past:"%s",s:b,m:b,mm:b,h:b,hh:b,d:b,dd:b,M:b,MM:b,y:b,yy:b},ordinal:"%d.",week:{dow:1,doy:7}})}),function(a){a(db)}(function(a){function b(a,b){var c={nominative:"հունվար_փետրվար_մարտ_ապրիլ_մայիս_հունիս_հուլիս_օգոստոս_սեպտեմբեր_հոկտեմբեր_նոյեմբեր_դեկտեմբեր".split("_"),accusative:"հունվարի_փետրվարի_մարտի_ապրիլի_մայիսի_հունիսի_հուլիսի_օգոստոսի_սեպտեմբերի_հոկտեմբերի_նոյեմբերի_դեկտեմբերի".split("_")},d=/D[oD]?(\[[^\[\]]*\]|\s+)+MMMM?/.test(b)?"accusative":"nominative";return c[d][a.month()]}function c(a){var b="հնվ_փտր_մրտ_ապր_մյս_հնս_հլս_օգս_սպտ_հկտ_նմբ_դկտ".split("_");return b[a.month()]}function d(a){var b="կիրակի_երկուշաբթի_երեքշաբթի_չորեքշաբթի_հինգշաբթի_ուրբաթ_շաբաթ".split("_");return b[a.day()]}return a.lang("hy-am",{months:b,monthsShort:c,weekdays:d,weekdaysShort:"կրկ_երկ_երք_չրք_հնգ_ուրբ_շբթ".split("_"),weekdaysMin:"կրկ_երկ_երք_չրք_հնգ_ուրբ_շբթ".split("_"),longDateFormat:{LT:"HH:mm",L:"DD.MM.YYYY",LL:"D MMMM YYYY թ.",LLL:"D MMMM YYYY թ., LT",LLLL:"dddd, D MMMM YYYY թ., LT"},calendar:{sameDay:"[այսօր] LT",nextDay:"[վաղը] LT",lastDay:"[երեկ] LT",nextWeek:function(){return"dddd [օրը ժամը] LT"},lastWeek:function(){return"[անցած] dddd [օրը ժամը] LT"},sameElse:"L"},relativeTime:{future:"%s հետո",past:"%s առաջ",s:"մի քանի վայրկյան",m:"րոպե",mm:"%d րոպե",h:"ժամ",hh:"%d ժամ",d:"օր",dd:"%d օր",M:"ամիս",MM:"%d ամիս",y:"տարի",yy:"%d տարի"},meridiem:function(a){return 4>a?"գիշերվա":12>a?"առավոտվա":17>a?"ցերեկվա":"երեկոյան"},ordinal:function(a,b){switch(b){case"DDD":case"w":case"W":case"DDDo":return 1===a?a+"-ին":a+"-րդ";default:return a}},week:{dow:1,doy:7}})}),function(a){a(db)}(function(a){return a.lang("id",{months:"Januari_Februari_Maret_April_Mei_Juni_Juli_Agustus_September_Oktober_November_Desember".split("_"),monthsShort:"Jan_Feb_Mar_Apr_Mei_Jun_Jul_Ags_Sep_Okt_Nov_Des".split("_"),weekdays:"Minggu_Senin_Selasa_Rabu_Kamis_Jumat_Sabtu".split("_"),weekdaysShort:"Min_Sen_Sel_Rab_Kam_Jum_Sab".split("_"),weekdaysMin:"Mg_Sn_Sl_Rb_Km_Jm_Sb".split("_"),longDateFormat:{LT:"HH.mm",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY [pukul] LT",LLLL:"dddd, D MMMM YYYY [pukul] LT"},meridiem:function(a){return 11>a?"pagi":15>a?"siang":19>a?"sore":"malam"},calendar:{sameDay:"[Hari ini pukul] LT",nextDay:"[Besok pukul] LT",nextWeek:"dddd [pukul] LT",lastDay:"[Kemarin pukul] LT",lastWeek:"dddd [lalu pukul] LT",sameElse:"L"},relativeTime:{future:"dalam %s",past:"%s yang lalu",s:"beberapa detik",m:"semenit",mm:"%d menit",h:"sejam",hh:"%d jam",d:"sehari",dd:"%d hari",M:"sebulan",MM:"%d bulan",y:"setahun",yy:"%d tahun"},week:{dow:1,doy:7}})}),function(a){a(db)}(function(a){function b(a){return a%100===11?!0:a%10===1?!1:!0}function c(a,c,d,e){var f=a+" ";switch(d){case"s":return c||e?"nokkrar sekúndur":"nokkrum sekúndum";case"m":return c?"mínúta":"mínútu";case"mm":return b(a)?f+(c||e?"mínútur":"mínútum"):c?f+"mínúta":f+"mínútu";case"hh":return b(a)?f+(c||e?"klukkustundir":"klukkustundum"):f+"klukkustund";case"d":return c?"dagur":e?"dag":"degi";case"dd":return b(a)?c?f+"dagar":f+(e?"daga":"dögum"):c?f+"dagur":f+(e?"dag":"degi");case"M":return c?"mánuður":e?"mánuð":"mánuði";case"MM":return b(a)?c?f+"mánuðir":f+(e?"mánuði":"mánuðum"):c?f+"mánuður":f+(e?"mánuð":"mánuði");case"y":return c||e?"ár":"ári";case"yy":return b(a)?f+(c||e?"ár":"árum"):f+(c||e?"ár":"ári")}}return a.lang("is",{months:"janúar_febrúar_mars_apríl_maí_júní_júlí_ágúst_september_október_nóvember_desember".split("_"),monthsShort:"jan_feb_mar_apr_maí_jún_júl_ágú_sep_okt_nóv_des".split("_"),weekdays:"sunnudagur_mánudagur_þriðjudagur_miðvikudagur_fimmtudagur_föstudagur_laugardagur".split("_"),weekdaysShort:"sun_mán_þri_mið_fim_fös_lau".split("_"),weekdaysMin:"Su_Má_Þr_Mi_Fi_Fö_La".split("_"),longDateFormat:{LT:"H:mm",L:"DD/MM/YYYY",LL:"D. MMMM YYYY",LLL:"D. MMMM YYYY [kl.] LT",LLLL:"dddd, D. MMMM YYYY [kl.] LT"},calendar:{sameDay:"[í dag kl.] LT",nextDay:"[á morgun kl.] LT",nextWeek:"dddd [kl.] LT",lastDay:"[í gær kl.] LT",lastWeek:"[síðasta] dddd [kl.] LT",sameElse:"L"},relativeTime:{future:"eftir %s",past:"fyrir %s síðan",s:c,m:c,mm:c,h:"klukkustund",hh:c,d:c,dd:c,M:c,MM:c,y:c,yy:c},ordinal:"%d.",week:{dow:1,doy:4}})
 }),function(a){a(db)}(function(a){return a.lang("it",{months:"Gennaio_Febbraio_Marzo_Aprile_Maggio_Giugno_Luglio_Agosto_Settembre_Ottobre_Novembre_Dicembre".split("_"),monthsShort:"Gen_Feb_Mar_Apr_Mag_Giu_Lug_Ago_Set_Ott_Nov_Dic".split("_"),weekdays:"Domenica_Lunedì_Martedì_Mercoledì_Giovedì_Venerdì_Sabato".split("_"),weekdaysShort:"Dom_Lun_Mar_Mer_Gio_Ven_Sab".split("_"),weekdaysMin:"D_L_Ma_Me_G_V_S".split("_"),longDateFormat:{LT:"HH:mm",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY LT",LLLL:"dddd, D MMMM YYYY LT"},calendar:{sameDay:"[Oggi alle] LT",nextDay:"[Domani alle] LT",nextWeek:"dddd [alle] LT",lastDay:"[Ieri alle] LT",lastWeek:"[lo scorso] dddd [alle] LT",sameElse:"L"},relativeTime:{future:function(a){return(/^[0-9].+$/.test(a)?"tra":"in")+" "+a},past:"%s fa",s:"alcuni secondi",m:"un minuto",mm:"%d minuti",h:"un'ora",hh:"%d ore",d:"un giorno",dd:"%d giorni",M:"un mese",MM:"%d mesi",y:"un anno",yy:"%d anni"},ordinal:"%dº",week:{dow:1,doy:4}})}),function(a){a(db)}(function(a){return a.lang("ja",{months:"1月_2月_3月_4月_5月_6月_7月_8月_9月_10月_11月_12月".split("_"),monthsShort:"1月_2月_3月_4月_5月_6月_7月_8月_9月_10月_11月_12月".split("_"),weekdays:"日曜日_月曜日_火曜日_水曜日_木曜日_金曜日_土曜日".split("_"),weekdaysShort:"日_月_火_水_木_金_土".split("_"),weekdaysMin:"日_月_火_水_木_金_土".split("_"),longDateFormat:{LT:"Ah時m分",L:"YYYY/MM/DD",LL:"YYYY年M月D日",LLL:"YYYY年M月D日LT",LLLL:"YYYY年M月D日LT dddd"},meridiem:function(a){return 12>a?"午前":"午後"},calendar:{sameDay:"[今日] LT",nextDay:"[明日] LT",nextWeek:"[来週]dddd LT",lastDay:"[昨日] LT",lastWeek:"[前週]dddd LT",sameElse:"L"},relativeTime:{future:"%s後",past:"%s前",s:"数秒",m:"1分",mm:"%d分",h:"1時間",hh:"%d時間",d:"1日",dd:"%d日",M:"1ヶ月",MM:"%dヶ月",y:"1年",yy:"%d年"}})}),function(a){a(db)}(function(a){function b(a,b){var c={nominative:"იანვარი_თებერვალი_მარტი_აპრილი_მაისი_ივნისი_ივლისი_აგვისტო_სექტემბერი_ოქტომბერი_ნოემბერი_დეკემბერი".split("_"),accusative:"იანვარს_თებერვალს_მარტს_აპრილის_მაისს_ივნისს_ივლისს_აგვისტს_სექტემბერს_ოქტომბერს_ნოემბერს_დეკემბერს".split("_")},d=/D[oD] *MMMM?/.test(b)?"accusative":"nominative";return c[d][a.month()]}function c(a,b){var c={nominative:"კვირა_ორშაბათი_სამშაბათი_ოთხშაბათი_ხუთშაბათი_პარასკევი_შაბათი".split("_"),accusative:"კვირას_ორშაბათს_სამშაბათს_ოთხშაბათს_ხუთშაბათს_პარასკევს_შაბათს".split("_")},d=/(წინა|შემდეგ)/.test(b)?"accusative":"nominative";return c[d][a.day()]}return a.lang("ka",{months:b,monthsShort:"იან_თებ_მარ_აპრ_მაი_ივნ_ივლ_აგვ_სექ_ოქტ_ნოე_დეკ".split("_"),weekdays:c,weekdaysShort:"კვი_ორშ_სამ_ოთხ_ხუთ_პარ_შაბ".split("_"),weekdaysMin:"კვ_ორ_სა_ოთ_ხუ_პა_შა".split("_"),longDateFormat:{LT:"h:mm A",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY LT",LLLL:"dddd, D MMMM YYYY LT"},calendar:{sameDay:"[დღეს] LT[-ზე]",nextDay:"[ხვალ] LT[-ზე]",lastDay:"[გუშინ] LT[-ზე]",nextWeek:"[შემდეგ] dddd LT[-ზე]",lastWeek:"[წინა] dddd LT-ზე",sameElse:"L"},relativeTime:{future:function(a){return/(წამი|წუთი|საათი|წელი)/.test(a)?a.replace(/ი$/,"ში"):a+"ში"},past:function(a){return/(წამი|წუთი|საათი|დღე|თვე)/.test(a)?a.replace(/(ი|ე)$/,"ის წინ"):/წელი/.test(a)?a.replace(/წელი$/,"წლის წინ"):void 0},s:"რამდენიმე წამი",m:"წუთი",mm:"%d წუთი",h:"საათი",hh:"%d საათი",d:"დღე",dd:"%d დღე",M:"თვე",MM:"%d თვე",y:"წელი",yy:"%d წელი"},ordinal:function(a){return 0===a?a:1===a?a+"-ლი":20>a||100>=a&&a%20===0||a%100===0?"მე-"+a:a+"-ე"},week:{dow:1,doy:7}})}),function(a){a(db)}(function(a){return a.lang("ko",{months:"1월_2월_3월_4월_5월_6월_7월_8월_9월_10월_11월_12월".split("_"),monthsShort:"1월_2월_3월_4월_5월_6월_7월_8월_9월_10월_11월_12월".split("_"),weekdays:"일요일_월요일_화요일_수요일_목요일_금요일_토요일".split("_"),weekdaysShort:"일_월_화_수_목_금_토".split("_"),weekdaysMin:"일_월_화_수_목_금_토".split("_"),longDateFormat:{LT:"A h시 mm분",L:"YYYY.MM.DD",LL:"YYYY년 MMMM D일",LLL:"YYYY년 MMMM D일 LT",LLLL:"YYYY년 MMMM D일 dddd LT"},meridiem:function(a){return 12>a?"오전":"오후"},calendar:{sameDay:"오늘 LT",nextDay:"내일 LT",nextWeek:"dddd LT",lastDay:"어제 LT",lastWeek:"지난주 dddd LT",sameElse:"L"},relativeTime:{future:"%s 후",past:"%s 전",s:"몇초",ss:"%d초",m:"일분",mm:"%d분",h:"한시간",hh:"%d시간",d:"하루",dd:"%d일",M:"한달",MM:"%d달",y:"일년",yy:"%d년"},ordinal:"%d일",meridiemParse:/(오전|오후)/,isPM:function(a){return"오후"===a}})}),function(a){a(db)}(function(a){function b(a,b,c){var d={m:["eng Minutt","enger Minutt"],h:["eng Stonn","enger Stonn"],d:["een Dag","engem Dag"],dd:[a+" Deeg",a+" Deeg"],M:["ee Mount","engem Mount"],MM:[a+" Méint",a+" Méint"],y:["ee Joer","engem Joer"],yy:[a+" Joer",a+" Joer"]};return b?d[c][0]:d[c][1]}function c(a){var b=a.substr(0,a.indexOf(" "));return g(b)?"a "+a:"an "+a}function d(a){var b=a.substr(0,a.indexOf(" "));return g(b)?"viru "+a:"virun "+a}function e(){var a=this.format("d");return f(a)?"[Leschte] dddd [um] LT":"[Leschten] dddd [um] LT"}function f(a){switch(a=parseInt(a,10)){case 0:case 1:case 3:case 5:case 6:return!0;default:return!1}}function g(a){if(a=parseInt(a,10),isNaN(a))return!1;if(0>a)return!0;if(10>a)return a>=4&&7>=a?!0:!1;if(100>a){var b=a%10,c=a/10;return 0===b?g(c):g(b)}if(1e4>a){for(;a>=10;)a/=10;return g(a)}return a/=1e3,g(a)}return a.lang("lb",{months:"Januar_Februar_Mäerz_Abrëll_Mee_Juni_Juli_August_September_Oktober_November_Dezember".split("_"),monthsShort:"Jan._Febr._Mrz._Abr._Mee_Jun._Jul._Aug._Sept._Okt._Nov._Dez.".split("_"),weekdays:"Sonndeg_Méindeg_Dënschdeg_Mëttwoch_Donneschdeg_Freideg_Samschdeg".split("_"),weekdaysShort:"So._Mé._Dë._Më._Do._Fr._Sa.".split("_"),weekdaysMin:"So_Mé_Dë_Më_Do_Fr_Sa".split("_"),longDateFormat:{LT:"H:mm [Auer]",L:"DD.MM.YYYY",LL:"D. MMMM YYYY",LLL:"D. MMMM YYYY LT",LLLL:"dddd, D. MMMM YYYY LT"},calendar:{sameDay:"[Haut um] LT",sameElse:"L",nextDay:"[Muer um] LT",nextWeek:"dddd [um] LT",lastDay:"[Gëschter um] LT",lastWeek:e},relativeTime:{future:c,past:d,s:"e puer Sekonnen",m:b,mm:"%d Minutten",h:b,hh:"%d Stonnen",d:b,dd:b,M:b,MM:b,y:b,yy:b},ordinal:"%d.",week:{dow:1,doy:4}})}),function(a){a(db)}(function(a){function b(a,b,c,d){return b?"kelios sekundės":d?"kelių sekundžių":"kelias sekundes"}function c(a,b,c,d){return b?e(c)[0]:d?e(c)[1]:e(c)[2]}function d(a){return a%10===0||a>10&&20>a}function e(a){return h[a].split("_")}function f(a,b,f,g){var h=a+" ";return 1===a?h+c(a,b,f[0],g):b?h+(d(a)?e(f)[1]:e(f)[0]):g?h+e(f)[1]:h+(d(a)?e(f)[1]:e(f)[2])}function g(a,b){var c=-1===b.indexOf("dddd LT"),d=i[a.weekday()];return c?d:d.substring(0,d.length-2)+"į"}var h={m:"minutė_minutės_minutę",mm:"minutės_minučių_minutes",h:"valanda_valandos_valandą",hh:"valandos_valandų_valandas",d:"diena_dienos_dieną",dd:"dienos_dienų_dienas",M:"mėnuo_mėnesio_mėnesį",MM:"mėnesiai_mėnesių_mėnesius",y:"metai_metų_metus",yy:"metai_metų_metus"},i="pirmadienis_antradienis_trečiadienis_ketvirtadienis_penktadienis_šeštadienis_sekmadienis".split("_");return a.lang("lt",{months:"sausio_vasario_kovo_balandžio_gegužės_biržėlio_liepos_rugpjūčio_rugsėjo_spalio_lapkričio_gruodžio".split("_"),monthsShort:"sau_vas_kov_bal_geg_bir_lie_rgp_rgs_spa_lap_grd".split("_"),weekdays:g,weekdaysShort:"Sek_Pir_Ant_Tre_Ket_Pen_Šeš".split("_"),weekdaysMin:"S_P_A_T_K_Pn_Š".split("_"),longDateFormat:{LT:"HH:mm",L:"YYYY-MM-DD",LL:"YYYY [m.] MMMM D [d.]",LLL:"YYYY [m.] MMMM D [d.], LT [val.]",LLLL:"YYYY [m.] MMMM D [d.], dddd, LT [val.]",l:"YYYY-MM-DD",ll:"YYYY [m.] MMMM D [d.]",lll:"YYYY [m.] MMMM D [d.], LT [val.]",llll:"YYYY [m.] MMMM D [d.], ddd, LT [val.]"},calendar:{sameDay:"[Šiandien] LT",nextDay:"[Rytoj] LT",nextWeek:"dddd LT",lastDay:"[Vakar] LT",lastWeek:"[Praėjusį] dddd LT",sameElse:"L"},relativeTime:{future:"po %s",past:"prieš %s",s:b,m:c,mm:f,h:c,hh:f,d:c,dd:f,M:c,MM:f,y:c,yy:f},ordinal:function(a){return a+"-oji"},week:{dow:1,doy:4}})}),function(a){a(db)}(function(a){function b(a,b,c){var d=a.split("_");return c?b%10===1&&11!==b?d[2]:d[3]:b%10===1&&11!==b?d[0]:d[1]}function c(a,c,e){return a+" "+b(d[e],a,c)}var d={mm:"minūti_minūtes_minūte_minūtes",hh:"stundu_stundas_stunda_stundas",dd:"dienu_dienas_diena_dienas",MM:"mēnesi_mēnešus_mēnesis_mēneši",yy:"gadu_gadus_gads_gadi"};return a.lang("lv",{months:"janvāris_februāris_marts_aprīlis_maijs_jūnijs_jūlijs_augusts_septembris_oktobris_novembris_decembris".split("_"),monthsShort:"jan_feb_mar_apr_mai_jūn_jūl_aug_sep_okt_nov_dec".split("_"),weekdays:"svētdiena_pirmdiena_otrdiena_trešdiena_ceturtdiena_piektdiena_sestdiena".split("_"),weekdaysShort:"Sv_P_O_T_C_Pk_S".split("_"),weekdaysMin:"Sv_P_O_T_C_Pk_S".split("_"),longDateFormat:{LT:"HH:mm",L:"DD.MM.YYYY",LL:"YYYY. [gada] D. MMMM",LLL:"YYYY. [gada] D. MMMM, LT",LLLL:"YYYY. [gada] D. MMMM, dddd, LT"},calendar:{sameDay:"[Šodien pulksten] LT",nextDay:"[Rīt pulksten] LT",nextWeek:"dddd [pulksten] LT",lastDay:"[Vakar pulksten] LT",lastWeek:"[Pagājušā] dddd [pulksten] LT",sameElse:"L"},relativeTime:{future:"%s vēlāk",past:"%s agrāk",s:"dažas sekundes",m:"minūti",mm:c,h:"stundu",hh:c,d:"dienu",dd:c,M:"mēnesi",MM:c,y:"gadu",yy:c},ordinal:"%d.",week:{dow:1,doy:4}})}),function(a){a(db)}(function(a){return a.lang("mk",{months:"јануари_февруари_март_април_мај_јуни_јули_август_септември_октомври_ноември_декември".split("_"),monthsShort:"јан_фев_мар_апр_мај_јун_јул_авг_сеп_окт_ное_дек".split("_"),weekdays:"недела_понеделник_вторник_среда_четврток_петок_сабота".split("_"),weekdaysShort:"нед_пон_вто_сре_чет_пет_саб".split("_"),weekdaysMin:"нe_пo_вт_ср_че_пе_сa".split("_"),longDateFormat:{LT:"H:mm",L:"D.MM.YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY LT",LLLL:"dddd, D MMMM YYYY LT"},calendar:{sameDay:"[Денес во] LT",nextDay:"[Утре во] LT",nextWeek:"dddd [во] LT",lastDay:"[Вчера во] LT",lastWeek:function(){switch(this.day()){case 0:case 3:case 6:return"[Во изминатата] dddd [во] LT";case 1:case 2:case 4:case 5:return"[Во изминатиот] dddd [во] LT"}},sameElse:"L"},relativeTime:{future:"после %s",past:"пред %s",s:"неколку секунди",m:"минута",mm:"%d минути",h:"час",hh:"%d часа",d:"ден",dd:"%d дена",M:"месец",MM:"%d месеци",y:"година",yy:"%d години"},ordinal:function(a){var b=a%10,c=a%100;return 0===a?a+"-ев":0===c?a+"-ен":c>10&&20>c?a+"-ти":1===b?a+"-ви":2===b?a+"-ри":7===b||8===b?a+"-ми":a+"-ти"},week:{dow:1,doy:7}})}),function(a){a(db)}(function(a){return a.lang("ml",{months:"ജനുവരി_ഫെബ്രുവരി_മാർച്ച്_ഏപ്രിൽ_മേയ്_ജൂൺ_ജൂലൈ_ഓഗസ്റ്റ്_സെപ്റ്റംബർ_ഒക്ടോബർ_നവംബർ_ഡിസംബർ".split("_"),monthsShort:"ജനു._ഫെബ്രു._മാർ._ഏപ്രി._മേയ്_ജൂൺ_ജൂലൈ._ഓഗ._സെപ്റ്റ._ഒക്ടോ._നവം._ഡിസം.".split("_"),weekdays:"ഞായറാഴ്ച_തിങ്കളാഴ്ച_ചൊവ്വാഴ്ച_ബുധനാഴ്ച_വ്യാഴാഴ്ച_വെള്ളിയാഴ്ച_ശനിയാഴ്ച".split("_"),weekdaysShort:"ഞായർ_തിങ്കൾ_ചൊവ്വ_ബുധൻ_വ്യാഴം_വെള്ളി_ശനി".split("_"),weekdaysMin:"ഞാ_തി_ചൊ_ബു_വ്യാ_വെ_ശ".split("_"),longDateFormat:{LT:"A h:mm -നു",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY, LT",LLLL:"dddd, D MMMM YYYY, LT"},calendar:{sameDay:"[ഇന്ന്] LT",nextDay:"[നാളെ] LT",nextWeek:"dddd, LT",lastDay:"[ഇന്നലെ] LT",lastWeek:"[കഴിഞ്ഞ] dddd, LT",sameElse:"L"},relativeTime:{future:"%s കഴിഞ്ഞ്",past:"%s മുൻപ്",s:"അൽപ നിമിഷങ്ങൾ",m:"ഒരു മിനിറ്റ്",mm:"%d മിനിറ്റ്",h:"ഒരു മണിക്കൂർ",hh:"%d മണിക്കൂർ",d:"ഒരു ദിവസം",dd:"%d ദിവസം",M:"ഒരു മാസം",MM:"%d മാസം",y:"ഒരു വർഷം",yy:"%d വർഷം"},meridiem:function(a){return 4>a?"രാത്രി":12>a?"രാവിലെ":17>a?"ഉച്ച കഴിഞ്ഞ്":20>a?"വൈകുന്നേരം":"രാത്രി"}})}),function(a){a(db)}(function(a){var b={1:"१",2:"२",3:"३",4:"४",5:"५",6:"६",7:"७",8:"८",9:"९",0:"०"},c={"१":"1","२":"2","३":"3","४":"4","५":"5","६":"6","७":"7","८":"8","९":"9","०":"0"};return a.lang("mr",{months:"जानेवारी_फेब्रुवारी_मार्च_एप्रिल_मे_जून_जुलै_ऑगस्ट_सप्टेंबर_ऑक्टोबर_नोव्हेंबर_डिसेंबर".split("_"),monthsShort:"जाने._फेब्रु._मार्च._एप्रि._मे._जून._जुलै._ऑग._सप्टें._ऑक्टो._नोव्हें._डिसें.".split("_"),weekdays:"रविवार_सोमवार_मंगळवार_बुधवार_गुरूवार_शुक्रवार_शनिवार".split("_"),weekdaysShort:"रवि_सोम_मंगळ_बुध_गुरू_शुक्र_शनि".split("_"),weekdaysMin:"र_सो_मं_बु_गु_शु_श".split("_"),longDateFormat:{LT:"A h:mm वाजता",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY, LT",LLLL:"dddd, D MMMM YYYY, LT"},calendar:{sameDay:"[आज] LT",nextDay:"[उद्या] LT",nextWeek:"dddd, LT",lastDay:"[काल] LT",lastWeek:"[मागील] dddd, LT",sameElse:"L"},relativeTime:{future:"%s नंतर",past:"%s पूर्वी",s:"सेकंद",m:"एक मिनिट",mm:"%d मिनिटे",h:"एक तास",hh:"%d तास",d:"एक दिवस",dd:"%d दिवस",M:"एक महिना",MM:"%d महिने",y:"एक वर्ष",yy:"%d वर्षे"},preparse:function(a){return a.replace(/[१२३४५६७८९०]/g,function(a){return c[a]})},postformat:function(a){return a.replace(/\d/g,function(a){return b[a]})},meridiem:function(a){return 4>a?"रात्री":10>a?"सकाळी":17>a?"दुपारी":20>a?"सायंकाळी":"रात्री"},week:{dow:0,doy:6}})}),function(a){a(db)}(function(a){return a.lang("ms-my",{months:"Januari_Februari_Mac_April_Mei_Jun_Julai_Ogos_September_Oktober_November_Disember".split("_"),monthsShort:"Jan_Feb_Mac_Apr_Mei_Jun_Jul_Ogs_Sep_Okt_Nov_Dis".split("_"),weekdays:"Ahad_Isnin_Selasa_Rabu_Khamis_Jumaat_Sabtu".split("_"),weekdaysShort:"Ahd_Isn_Sel_Rab_Kha_Jum_Sab".split("_"),weekdaysMin:"Ah_Is_Sl_Rb_Km_Jm_Sb".split("_"),longDateFormat:{LT:"HH.mm",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY [pukul] LT",LLLL:"dddd, D MMMM YYYY [pukul] LT"},meridiem:function(a){return 11>a?"pagi":15>a?"tengahari":19>a?"petang":"malam"},calendar:{sameDay:"[Hari ini pukul] LT",nextDay:"[Esok pukul] LT",nextWeek:"dddd [pukul] LT",lastDay:"[Kelmarin pukul] LT",lastWeek:"dddd [lepas pukul] LT",sameElse:"L"},relativeTime:{future:"dalam %s",past:"%s yang lepas",s:"beberapa saat",m:"seminit",mm:"%d minit",h:"sejam",hh:"%d jam",d:"sehari",dd:"%d hari",M:"sebulan",MM:"%d bulan",y:"setahun",yy:"%d tahun"},week:{dow:1,doy:7}})}),function(a){a(db)}(function(a){return a.lang("nb",{months:"januar_februar_mars_april_mai_juni_juli_august_september_oktober_november_desember".split("_"),monthsShort:"jan._feb._mars_april_mai_juni_juli_aug._sep._okt._nov._des.".split("_"),weekdays:"søndag_mandag_tirsdag_onsdag_torsdag_fredag_lørdag".split("_"),weekdaysShort:"sø._ma._ti._on._to._fr._lø.".split("_"),weekdaysMin:"sø_ma_ti_on_to_fr_lø".split("_"),longDateFormat:{LT:"H.mm",L:"DD.MM.YYYY",LL:"D. MMMM YYYY",LLL:"D. MMMM YYYY [kl.] LT",LLLL:"dddd D. MMMM YYYY [kl.] LT"},calendar:{sameDay:"[i dag kl.] LT",nextDay:"[i morgen kl.] LT",nextWeek:"dddd [kl.] LT",lastDay:"[i går kl.] LT",lastWeek:"[forrige] dddd [kl.] LT",sameElse:"L"},relativeTime:{future:"om %s",past:"for %s siden",s:"noen sekunder",m:"ett minutt",mm:"%d minutter",h:"en time",hh:"%d timer",d:"en dag",dd:"%d dager",M:"en måned",MM:"%d måneder",y:"ett år",yy:"%d år"},ordinal:"%d.",week:{dow:1,doy:4}})}),function(a){a(db)}(function(a){var b={1:"१",2:"२",3:"३",4:"४",5:"५",6:"६",7:"७",8:"८",9:"९",0:"०"},c={"१":"1","२":"2","३":"3","४":"4","५":"5","६":"6","७":"7","८":"8","९":"9","०":"0"};return a.lang("ne",{months:"जनवरी_फेब्रुवरी_मार्च_अप्रिल_मई_जुन_जुलाई_अगष्ट_सेप्टेम्बर_अक्टोबर_नोभेम्बर_डिसेम्बर".split("_"),monthsShort:"जन._फेब्रु._मार्च_अप्रि._मई_जुन_जुलाई._अग._सेप्ट._अक्टो._नोभे._डिसे.".split("_"),weekdays:"आइतबार_सोमबार_मङ्गलबार_बुधबार_बिहिबार_शुक्रबार_शनिबार".split("_"),weekdaysShort:"आइत._सोम._मङ्गल._बुध._बिहि._शुक्र._शनि.".split("_"),weekdaysMin:"आइ._सो._मङ्_बु._बि._शु._श.".split("_"),longDateFormat:{LT:"Aको h:mm बजे",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY, LT",LLLL:"dddd, D MMMM YYYY, LT"},preparse:function(a){return a.replace(/[१२३४५६७८९०]/g,function(a){return c[a]})},postformat:function(a){return a.replace(/\d/g,function(a){return b[a]})},meridiem:function(a){return 3>a?"राती":10>a?"बिहान":15>a?"दिउँसो":18>a?"बेलुका":20>a?"साँझ":"राती"},calendar:{sameDay:"[आज] LT",nextDay:"[भोली] LT",nextWeek:"[आउँदो] dddd[,] LT",lastDay:"[हिजो] LT",lastWeek:"[गएको] dddd[,] LT",sameElse:"L"},relativeTime:{future:"%sमा",past:"%s अगाडी",s:"केही समय",m:"एक मिनेट",mm:"%d मिनेट",h:"एक घण्टा",hh:"%d घण्टा",d:"एक दिन",dd:"%d दिन",M:"एक महिना",MM:"%d महिना",y:"एक बर्ष",yy:"%d बर्ष"},week:{dow:1,doy:7}})}),function(a){a(db)}(function(a){var b="jan._feb._mrt._apr._mei_jun._jul._aug._sep._okt._nov._dec.".split("_"),c="jan_feb_mrt_apr_mei_jun_jul_aug_sep_okt_nov_dec".split("_");return a.lang("nl",{months:"januari_februari_maart_april_mei_juni_juli_augustus_september_oktober_november_december".split("_"),monthsShort:function(a,d){return/-MMM-/.test(d)?c[a.month()]:b[a.month()]},weekdays:"zondag_maandag_dinsdag_woensdag_donderdag_vrijdag_zaterdag".split("_"),weekdaysShort:"zo._ma._di._wo._do._vr._za.".split("_"),weekdaysMin:"Zo_Ma_Di_Wo_Do_Vr_Za".split("_"),longDateFormat:{LT:"HH:mm",L:"DD-MM-YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY LT",LLLL:"dddd D MMMM YYYY LT"},calendar:{sameDay:"[vandaag om] LT",nextDay:"[morgen om] LT",nextWeek:"dddd [om] LT",lastDay:"[gisteren om] LT",lastWeek:"[afgelopen] dddd [om] LT",sameElse:"L"},relativeTime:{future:"over %s",past:"%s geleden",s:"een paar seconden",m:"één minuut",mm:"%d minuten",h:"één uur",hh:"%d uur",d:"één dag",dd:"%d dagen",M:"één maand",MM:"%d maanden",y:"één jaar",yy:"%d jaar"},ordinal:function(a){return a+(1===a||8===a||a>=20?"ste":"de")},week:{dow:1,doy:4}})}),function(a){a(db)}(function(a){return a.lang("nn",{months:"januar_februar_mars_april_mai_juni_juli_august_september_oktober_november_desember".split("_"),monthsShort:"jan_feb_mar_apr_mai_jun_jul_aug_sep_okt_nov_des".split("_"),weekdays:"sundag_måndag_tysdag_onsdag_torsdag_fredag_laurdag".split("_"),weekdaysShort:"sun_mån_tys_ons_tor_fre_lau".split("_"),weekdaysMin:"su_må_ty_on_to_fr_lø".split("_"),longDateFormat:{LT:"HH:mm",L:"DD.MM.YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY LT",LLLL:"dddd D MMMM YYYY LT"},calendar:{sameDay:"[I dag klokka] LT",nextDay:"[I morgon klokka] LT",nextWeek:"dddd [klokka] LT",lastDay:"[I går klokka] LT",lastWeek:"[Føregående] dddd [klokka] LT",sameElse:"L"},relativeTime:{future:"om %s",past:"for %s siden",s:"noen sekund",m:"ett minutt",mm:"%d minutt",h:"en time",hh:"%d timar",d:"en dag",dd:"%d dagar",M:"en månad",MM:"%d månader",y:"ett år",yy:"%d år"},ordinal:"%d.",week:{dow:1,doy:4}})}),function(a){a(db)}(function(a){function b(a){return 5>a%10&&a%10>1&&~~(a/10)%10!==1}function c(a,c,d){var e=a+" ";switch(d){case"m":return c?"minuta":"minutę";case"mm":return e+(b(a)?"minuty":"minut");case"h":return c?"godzina":"godzinę";case"hh":return e+(b(a)?"godziny":"godzin");case"MM":return e+(b(a)?"miesiące":"miesięcy");case"yy":return e+(b(a)?"lata":"lat")}}var d="styczeń_luty_marzec_kwiecień_maj_czerwiec_lipiec_sierpień_wrzesień_październik_listopad_grudzień".split("_"),e="stycznia_lutego_marca_kwietnia_maja_czerwca_lipca_sierpnia_września_października_listopada_grudnia".split("_");return a.lang("pl",{months:function(a,b){return/D MMMM/.test(b)?e[a.month()]:d[a.month()]},monthsShort:"sty_lut_mar_kwi_maj_cze_lip_sie_wrz_paź_lis_gru".split("_"),weekdays:"niedziela_poniedziałek_wtorek_środa_czwartek_piątek_sobota".split("_"),weekdaysShort:"nie_pon_wt_śr_czw_pt_sb".split("_"),weekdaysMin:"N_Pn_Wt_Śr_Cz_Pt_So".split("_"),longDateFormat:{LT:"HH:mm",L:"DD.MM.YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY LT",LLLL:"dddd, D MMMM YYYY LT"},calendar:{sameDay:"[Dziś o] LT",nextDay:"[Jutro o] LT",nextWeek:"[W] dddd [o] LT",lastDay:"[Wczoraj o] LT",lastWeek:function(){switch(this.day()){case 0:return"[W zeszłą niedzielę o] LT";case 3:return"[W zeszłą środę o] LT";case 6:return"[W zeszłą sobotę o] LT";default:return"[W zeszły] dddd [o] LT"}},sameElse:"L"},relativeTime:{future:"za %s",past:"%s temu",s:"kilka sekund",m:c,mm:c,h:c,hh:c,d:"1 dzień",dd:"%d dni",M:"miesiąc",MM:c,y:"rok",yy:c},ordinal:"%d.",week:{dow:1,doy:4}})}),function(a){a(db)}(function(a){return a.lang("pt-br",{months:"Janeiro_Fevereiro_Março_Abril_Maio_Junho_Julho_Agosto_Setembro_Outubro_Novembro_Dezembro".split("_"),monthsShort:"Jan_Fev_Mar_Abr_Mai_Jun_Jul_Ago_Set_Out_Nov_Dez".split("_"),weekdays:"Domingo_Segunda-feira_Terça-feira_Quarta-feira_Quinta-feira_Sexta-feira_Sábado".split("_"),weekdaysShort:"Dom_Seg_Ter_Qua_Qui_Sex_Sáb".split("_"),weekdaysMin:"Dom_2ª_3ª_4ª_5ª_6ª_Sáb".split("_"),longDateFormat:{LT:"HH:mm",L:"DD/MM/YYYY",LL:"D [de] MMMM [de] YYYY",LLL:"D [de] MMMM [de] YYYY LT",LLLL:"dddd, D [de] MMMM [de] YYYY LT"},calendar:{sameDay:"[Hoje às] LT",nextDay:"[Amanhã às] LT",nextWeek:"dddd [às] LT",lastDay:"[Ontem às] LT",lastWeek:function(){return 0===this.day()||6===this.day()?"[Último] dddd [às] LT":"[Última] dddd [às] LT"},sameElse:"L"},relativeTime:{future:"em %s",past:"%s atrás",s:"segundos",m:"um minuto",mm:"%d minutos",h:"uma hora",hh:"%d horas",d:"um dia",dd:"%d dias",M:"um mês",MM:"%d meses",y:"um ano",yy:"%d anos"},ordinal:"%dº"})}),function(a){a(db)}(function(a){return a.lang("pt",{months:"Janeiro_Fevereiro_Março_Abril_Maio_Junho_Julho_Agosto_Setembro_Outubro_Novembro_Dezembro".split("_"),monthsShort:"Jan_Fev_Mar_Abr_Mai_Jun_Jul_Ago_Set_Out_Nov_Dez".split("_"),weekdays:"Domingo_Segunda-feira_Terça-feira_Quarta-feira_Quinta-feira_Sexta-feira_Sábado".split("_"),weekdaysShort:"Dom_Seg_Ter_Qua_Qui_Sex_Sáb".split("_"),weekdaysMin:"Dom_2ª_3ª_4ª_5ª_6ª_Sáb".split("_"),longDateFormat:{LT:"HH:mm",L:"DD/MM/YYYY",LL:"D [de] MMMM [de] YYYY",LLL:"D [de] MMMM [de] YYYY LT",LLLL:"dddd, D [de] MMMM [de] YYYY LT"},calendar:{sameDay:"[Hoje às] LT",nextDay:"[Amanhã às] LT",nextWeek:"dddd [às] LT",lastDay:"[Ontem às] LT",lastWeek:function(){return 0===this.day()||6===this.day()?"[Último] dddd [às] LT":"[Última] dddd [às] LT"},sameElse:"L"},relativeTime:{future:"em %s",past:"%s atrás",s:"segundos",m:"um minuto",mm:"%d minutos",h:"uma hora",hh:"%d horas",d:"um dia",dd:"%d dias",M:"um mês",MM:"%d meses",y:"um ano",yy:"%d anos"},ordinal:"%dº",week:{dow:1,doy:4}})}),function(a){a(db)}(function(a){function b(a,b,c){var d={mm:"minute",hh:"ore",dd:"zile",MM:"luni",yy:"ani"},e=" ";return(a%100>=20||a>=100&&a%100===0)&&(e=" de "),a+e+d[c]}return a.lang("ro",{months:"ianuarie_februarie_martie_aprilie_mai_iunie_iulie_august_septembrie_octombrie_noiembrie_decembrie".split("_"),monthsShort:"ian_feb_mar_apr_mai_iun_iul_aug_sep_oct_noi_dec".split("_"),weekdays:"duminică_luni_marți_miercuri_joi_vineri_sâmbătă".split("_"),weekdaysShort:"Dum_Lun_Mar_Mie_Joi_Vin_Sâm".split("_"),weekdaysMin:"Du_Lu_Ma_Mi_Jo_Vi_Sâ".split("_"),longDateFormat:{LT:"H:mm",L:"DD.MM.YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY H:mm",LLLL:"dddd, D MMMM YYYY H:mm"},calendar:{sameDay:"[azi la] LT",nextDay:"[mâine la] LT",nextWeek:"dddd [la] LT",lastDay:"[ieri la] LT",lastWeek:"[fosta] dddd [la] LT",sameElse:"L"},relativeTime:{future:"peste %s",past:"%s în urmă",s:"câteva secunde",m:"un minut",mm:b,h:"o oră",hh:b,d:"o zi",dd:b,M:"o lună",MM:b,y:"un an",yy:b},week:{dow:1,doy:7}})}),function(a){a(db)}(function(a){function b(a,b,c){var d=a+" ";switch(c){case"m":return b?"jedna minuta":"jedne minute";case"mm":return d+=1===a?"minuta":2===a||3===a||4===a?"minute":"minuta";case"h":return b?"jedan sat":"jednog sata";case"hh":return d+=1===a?"sat":2===a||3===a||4===a?"sata":"sati";case"dd":return d+=1===a?"dan":"dana";case"MM":return d+=1===a?"mesec":2===a||3===a||4===a?"meseca":"meseci";case"yy":return d+=1===a?"godina":2===a||3===a||4===a?"godine":"godina"}}return a.lang("rs",{months:"januar_februar_mart_april_maj_jun_jul_avgust_septembar_oktobar_novembar_decembar".split("_"),monthsShort:"jan._feb._mar._apr._maj._jun._jul._avg._sep._okt._nov._dec.".split("_"),weekdays:"nedelja_ponedeljak_utorak_sreda_četvrtak_petak_subota".split("_"),weekdaysShort:"ned._pon._uto._sre._čet._pet._sub.".split("_"),weekdaysMin:"ne_po_ut_sr_če_pe_su".split("_"),longDateFormat:{LT:"H:mm",L:"DD. MM. YYYY",LL:"D. MMMM YYYY",LLL:"D. MMMM YYYY LT",LLLL:"dddd, D. MMMM YYYY LT"},calendar:{sameDay:"[danas u] LT",nextDay:"[sutra u] LT",nextWeek:function(){switch(this.day()){case 0:return"[u] [nedelju] [u] LT";case 3:return"[u] [sredu] [u] LT";case 6:return"[u] [subotu] [u] LT";case 1:case 2:case 4:case 5:return"[u] dddd [u] LT"}},lastDay:"[juče u] LT",lastWeek:function(){switch(this.day()){case 0:case 3:return"[prošlu] dddd [u] LT";case 6:return"[prošle] [subote] [u] LT";case 1:case 2:case 4:case 5:return"[prošli] dddd [u] LT"}},sameElse:"L"},relativeTime:{future:"za %s",past:"pre %s",s:"par sekundi",m:b,mm:b,h:b,hh:b,d:"dan",dd:b,M:"mesec",MM:b,y:"godinu",yy:b},ordinal:"%d.",week:{dow:1,doy:7}})}),function(a){a(db)}(function(a){function b(a,b){var c=a.split("_");return b%10===1&&b%100!==11?c[0]:b%10>=2&&4>=b%10&&(10>b%100||b%100>=20)?c[1]:c[2]}function c(a,c,d){var e={mm:"минута_минуты_минут",hh:"час_часа_часов",dd:"день_дня_дней",MM:"месяц_месяца_месяцев",yy:"год_года_лет"};return"m"===d?c?"минута":"минуту":a+" "+b(e[d],+a)}function d(a,b){var c={nominative:"январь_февраль_март_апрель_май_июнь_июль_август_сентябрь_октябрь_ноябрь_декабрь".split("_"),accusative:"января_февраля_марта_апреля_мая_июня_июля_августа_сентября_октября_ноября_декабря".split("_")},d=/D[oD]?(\[[^\[\]]*\]|\s+)+MMMM?/.test(b)?"accusative":"nominative";return c[d][a.month()]}function e(a,b){var c={nominative:"янв_фев_мар_апр_май_июнь_июль_авг_сен_окт_ноя_дек".split("_"),accusative:"янв_фев_мар_апр_мая_июня_июля_авг_сен_окт_ноя_дек".split("_")},d=/D[oD]?(\[[^\[\]]*\]|\s+)+MMMM?/.test(b)?"accusative":"nominative";return c[d][a.month()]}function f(a,b){var c={nominative:"воскресенье_понедельник_вторник_среда_четверг_пятница_суббота".split("_"),accusative:"воскресенье_понедельник_вторник_среду_четверг_пятницу_субботу".split("_")},d=/\[ ?[Вв] ?(?:прошлую|следующую)? ?\] ?dddd/.test(b)?"accusative":"nominative";return c[d][a.day()]}return a.lang("ru",{months:d,monthsShort:e,weekdays:f,weekdaysShort:"вс_пн_вт_ср_чт_пт_сб".split("_"),weekdaysMin:"вс_пн_вт_ср_чт_пт_сб".split("_"),monthsParse:[/^янв/i,/^фев/i,/^мар/i,/^апр/i,/^ма[й|я]/i,/^июн/i,/^июл/i,/^авг/i,/^сен/i,/^окт/i,/^ноя/i,/^дек/i],longDateFormat:{LT:"HH:mm",L:"DD.MM.YYYY",LL:"D MMMM YYYY г.",LLL:"D MMMM YYYY г., LT",LLLL:"dddd, D MMMM YYYY г., LT"},calendar:{sameDay:"[Сегодня в] LT",nextDay:"[Завтра в] LT",lastDay:"[Вчера в] LT",nextWeek:function(){return 2===this.day()?"[Во] dddd [в] LT":"[В] dddd [в] LT"},lastWeek:function(){switch(this.day()){case 0:return"[В прошлое] dddd [в] LT";case 1:case 2:case 4:return"[В прошлый] dddd [в] LT";case 3:case 5:case 6:return"[В прошлую] dddd [в] LT"}},sameElse:"L"},relativeTime:{future:"через %s",past:"%s назад",s:"несколько секунд",m:c,mm:c,h:"час",hh:c,d:"день",dd:c,M:"месяц",MM:c,y:"год",yy:c},meridiem:function(a){return 4>a?"ночи":12>a?"утра":17>a?"дня":"вечера"},ordinal:function(a,b){switch(b){case"M":case"d":case"DDD":return a+"-й";case"D":return a+"-го";case"w":case"W":return a+"-я";default:return a}},week:{dow:1,doy:7}})}),function(a){a(db)}(function(a){function b(a){return a>1&&5>a}function c(a,c,d,e){var f=a+" ";switch(d){case"s":return c||e?"pár sekúnd":"pár sekundami";case"m":return c?"minúta":e?"minútu":"minútou";case"mm":return c||e?f+(b(a)?"minúty":"minút"):f+"minútami";break;case"h":return c?"hodina":e?"hodinu":"hodinou";case"hh":return c||e?f+(b(a)?"hodiny":"hodín"):f+"hodinami";break;case"d":return c||e?"deň":"dňom";case"dd":return c||e?f+(b(a)?"dni":"dní"):f+"dňami";break;case"M":return c||e?"mesiac":"mesiacom";case"MM":return c||e?f+(b(a)?"mesiace":"mesiacov"):f+"mesiacmi";break;case"y":return c||e?"rok":"rokom";case"yy":return c||e?f+(b(a)?"roky":"rokov"):f+"rokmi"}}var d="január_február_marec_apríl_máj_jún_júl_august_september_október_november_december".split("_"),e="jan_feb_mar_apr_máj_jún_júl_aug_sep_okt_nov_dec".split("_");return a.lang("sk",{months:d,monthsShort:e,monthsParse:function(a,b){var c,d=[];for(c=0;12>c;c++)d[c]=new RegExp("^"+a[c]+"$|^"+b[c]+"$","i");return d}(d,e),weekdays:"nedeľa_pondelok_utorok_streda_štvrtok_piatok_sobota".split("_"),weekdaysShort:"ne_po_ut_st_št_pi_so".split("_"),weekdaysMin:"ne_po_ut_st_št_pi_so".split("_"),longDateFormat:{LT:"H:mm",L:"DD.MM.YYYY",LL:"D. MMMM YYYY",LLL:"D. MMMM YYYY LT",LLLL:"dddd D. MMMM YYYY LT"},calendar:{sameDay:"[dnes o] LT",nextDay:"[zajtra o] LT",nextWeek:function(){switch(this.day()){case 0:return"[v nedeľu o] LT";case 1:case 2:return"[v] dddd [o] LT";case 3:return"[v stredu o] LT";case 4:return"[vo štvrtok o] LT";case 5:return"[v piatok o] LT";case 6:return"[v sobotu o] LT"}},lastDay:"[včera o] LT",lastWeek:function(){switch(this.day()){case 0:return"[minulú nedeľu o] LT";case 1:case 2:return"[minulý] dddd [o] LT";case 3:return"[minulú stredu o] LT";case 4:case 5:return"[minulý] dddd [o] LT";case 6:return"[minulú sobotu o] LT"}},sameElse:"L"},relativeTime:{future:"za %s",past:"pred %s",s:c,m:c,mm:c,h:c,hh:c,d:c,dd:c,M:c,MM:c,y:c,yy:c},ordinal:"%d.",week:{dow:1,doy:4}})}),function(a){a(db)}(function(a){function b(a,b,c){var d=a+" ";switch(c){case"m":return b?"ena minuta":"eno minuto";case"mm":return d+=1===a?"minuta":2===a?"minuti":3===a||4===a?"minute":"minut";case"h":return b?"ena ura":"eno uro";case"hh":return d+=1===a?"ura":2===a?"uri":3===a||4===a?"ure":"ur";case"dd":return d+=1===a?"dan":"dni";case"MM":return d+=1===a?"mesec":2===a?"meseca":3===a||4===a?"mesece":"mesecev";case"yy":return d+=1===a?"leto":2===a?"leti":3===a||4===a?"leta":"let"}}return a.lang("sl",{months:"januar_februar_marec_april_maj_junij_julij_avgust_september_oktober_november_december".split("_"),monthsShort:"jan._feb._mar._apr._maj._jun._jul._avg._sep._okt._nov._dec.".split("_"),weekdays:"nedelja_ponedeljek_torek_sreda_četrtek_petek_sobota".split("_"),weekdaysShort:"ned._pon._tor._sre._čet._pet._sob.".split("_"),weekdaysMin:"ne_po_to_sr_če_pe_so".split("_"),longDateFormat:{LT:"H:mm",L:"DD. MM. YYYY",LL:"D. MMMM YYYY",LLL:"D. MMMM YYYY LT",LLLL:"dddd, D. MMMM YYYY LT"},calendar:{sameDay:"[danes ob] LT",nextDay:"[jutri ob] LT",nextWeek:function(){switch(this.day()){case 0:return"[v] [nedeljo] [ob] LT";case 3:return"[v] [sredo] [ob] LT";case 6:return"[v] [soboto] [ob] LT";case 1:case 2:case 4:case 5:return"[v] dddd [ob] LT"}},lastDay:"[včeraj ob] LT",lastWeek:function(){switch(this.day()){case 0:case 3:case 6:return"[prejšnja] dddd [ob] LT";case 1:case 2:case 4:case 5:return"[prejšnji] dddd [ob] LT"}},sameElse:"L"},relativeTime:{future:"čez %s",past:"%s nazaj",s:"nekaj sekund",m:b,mm:b,h:b,hh:b,d:"en dan",dd:b,M:"en mesec",MM:b,y:"eno leto",yy:b},ordinal:"%d.",week:{dow:1,doy:7}})}),function(a){a(db)}(function(a){return a.lang("sq",{months:"Janar_Shkurt_Mars_Prill_Maj_Qershor_Korrik_Gusht_Shtator_Tetor_Nëntor_Dhjetor".split("_"),monthsShort:"Jan_Shk_Mar_Pri_Maj_Qer_Kor_Gus_Sht_Tet_Nën_Dhj".split("_"),weekdays:"E Diel_E Hënë_E Marte_E Mërkure_E Enjte_E Premte_E Shtunë".split("_"),weekdaysShort:"Die_Hën_Mar_Mër_Enj_Pre_Sht".split("_"),weekdaysMin:"D_H_Ma_Më_E_P_Sh".split("_"),longDateFormat:{LT:"HH:mm",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY LT",LLLL:"dddd, D MMMM YYYY LT"},calendar:{sameDay:"[Sot në] LT",nextDay:"[Neser në] LT",nextWeek:"dddd [në] LT",lastDay:"[Dje në] LT",lastWeek:"dddd [e kaluar në] LT",sameElse:"L"},relativeTime:{future:"në %s",past:"%s me parë",s:"disa sekonda",m:"një minut",mm:"%d minuta",h:"një orë",hh:"%d orë",d:"një ditë",dd:"%d ditë",M:"një muaj",MM:"%d muaj",y:"një vit",yy:"%d vite"},ordinal:"%d.",week:{dow:1,doy:4}})}),function(a){a(db)}(function(a){return a.lang("sv",{months:"januari_februari_mars_april_maj_juni_juli_augusti_september_oktober_november_december".split("_"),monthsShort:"jan_feb_mar_apr_maj_jun_jul_aug_sep_okt_nov_dec".split("_"),weekdays:"söndag_måndag_tisdag_onsdag_torsdag_fredag_lördag".split("_"),weekdaysShort:"sön_mån_tis_ons_tor_fre_lör".split("_"),weekdaysMin:"sö_må_ti_on_to_fr_lö".split("_"),longDateFormat:{LT:"HH:mm",L:"YYYY-MM-DD",LL:"D MMMM YYYY",LLL:"D MMMM YYYY LT",LLLL:"dddd D MMMM YYYY LT"},calendar:{sameDay:"[Idag] LT",nextDay:"[Imorgon] LT",lastDay:"[Igår] LT",nextWeek:"dddd LT",lastWeek:"[Förra] dddd[en] LT",sameElse:"L"},relativeTime:{future:"om %s",past:"för %s sedan",s:"några sekunder",m:"en minut",mm:"%d minuter",h:"en timme",hh:"%d timmar",d:"en dag",dd:"%d dagar",M:"en månad",MM:"%d månader",y:"ett år",yy:"%d år"},ordinal:function(a){var b=a%10,c=1===~~(a%100/10)?"e":1===b?"a":2===b?"a":3===b?"e":"e";return a+c},week:{dow:1,doy:4}})}),function(a){a(db)}(function(a){return a.lang("ta",{months:"ஜனவரி_பிப்ரவரி_மார்ச்_ஏப்ரல்_மே_ஜூன்_ஜூலை_ஆகஸ்ட்_செப்டெம்பர்_அக்டோபர்_நவம்பர்_டிசம்பர்".split("_"),monthsShort:"ஜனவரி_பிப்ரவரி_மார்ச்_ஏப்ரல்_மே_ஜூன்_ஜூலை_ஆகஸ்ட்_செப்டெம்பர்_அக்டோபர்_நவம்பர்_டிசம்பர்".split("_"),weekdays:"ஞாயிற்றுக்கிழமை_திங்கட்கிழமை_செவ்வாய்கிழமை_புதன்கிழமை_வியாழக்கிழமை_வெள்ளிக்கிழமை_சனிக்கிழமை".split("_"),weekdaysShort:"ஞாயிறு_திங்கள்_செவ்வாய்_புதன்_வியாழன்_வெள்ளி_சனி".split("_"),weekdaysMin:"ஞா_தி_செ_பு_வி_வெ_ச".split("_"),longDateFormat:{LT:"HH:mm",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY, LT",LLLL:"dddd, D MMMM YYYY, LT"},calendar:{sameDay:"[இன்று] LT",nextDay:"[நாளை] LT",nextWeek:"dddd, LT",lastDay:"[நேற்று] LT",lastWeek:"[கடந்த வாரம்] dddd, LT",sameElse:"L"},relativeTime:{future:"%s இல்",past:"%s முன்",s:"ஒரு சில விநாடிகள்",m:"ஒரு நிமிடம்",mm:"%d நிமிடங்கள்",h:"ஒரு மணி நேரம்",hh:"%d மணி நேரம்",d:"ஒரு நாள்",dd:"%d நாட்கள்",M:"ஒரு மாதம்",MM:"%d மாதங்கள்",y:"ஒரு வருடம்",yy:"%d ஆண்டுகள்"},ordinal:function(a){return a+"வது"
 },meridiem:function(a){return a>=6&&10>=a?" காலை":a>=10&&14>=a?" நண்பகல்":a>=14&&18>=a?" எற்பாடு":a>=18&&20>=a?" மாலை":a>=20&&24>=a?" இரவு":a>=0&&6>=a?" வைகறை":void 0},week:{dow:0,doy:6}})}),function(a){a(db)}(function(a){return a.lang("th",{months:"มกราคม_กุมภาพันธ์_มีนาคม_เมษายน_พฤษภาคม_มิถุนายน_กรกฎาคม_สิงหาคม_กันยายน_ตุลาคม_พฤศจิกายน_ธันวาคม".split("_"),monthsShort:"มกรา_กุมภา_มีนา_เมษา_พฤษภา_มิถุนา_กรกฎา_สิงหา_กันยา_ตุลา_พฤศจิกา_ธันวา".split("_"),weekdays:"อาทิตย์_จันทร์_อังคาร_พุธ_พฤหัสบดี_ศุกร์_เสาร์".split("_"),weekdaysShort:"อาทิตย์_จันทร์_อังคาร_พุธ_พฤหัส_ศุกร์_เสาร์".split("_"),weekdaysMin:"อา._จ._อ._พ._พฤ._ศ._ส.".split("_"),longDateFormat:{LT:"H นาฬิกา m นาที",L:"YYYY/MM/DD",LL:"D MMMM YYYY",LLL:"D MMMM YYYY เวลา LT",LLLL:"วันddddที่ D MMMM YYYY เวลา LT"},meridiem:function(a){return 12>a?"ก่อนเที่ยง":"หลังเที่ยง"},calendar:{sameDay:"[วันนี้ เวลา] LT",nextDay:"[พรุ่งนี้ เวลา] LT",nextWeek:"dddd[หน้า เวลา] LT",lastDay:"[เมื่อวานนี้ เวลา] LT",lastWeek:"[วัน]dddd[ที่แล้ว เวลา] LT",sameElse:"L"},relativeTime:{future:"อีก %s",past:"%sที่แล้ว",s:"ไม่กี่วินาที",m:"1 นาที",mm:"%d นาที",h:"1 ชั่วโมง",hh:"%d ชั่วโมง",d:"1 วัน",dd:"%d วัน",M:"1 เดือน",MM:"%d เดือน",y:"1 ปี",yy:"%d ปี"}})}),function(a){a(db)}(function(a){return a.lang("tl-ph",{months:"Enero_Pebrero_Marso_Abril_Mayo_Hunyo_Hulyo_Agosto_Setyembre_Oktubre_Nobyembre_Disyembre".split("_"),monthsShort:"Ene_Peb_Mar_Abr_May_Hun_Hul_Ago_Set_Okt_Nob_Dis".split("_"),weekdays:"Linggo_Lunes_Martes_Miyerkules_Huwebes_Biyernes_Sabado".split("_"),weekdaysShort:"Lin_Lun_Mar_Miy_Huw_Biy_Sab".split("_"),weekdaysMin:"Li_Lu_Ma_Mi_Hu_Bi_Sab".split("_"),longDateFormat:{LT:"HH:mm",L:"MM/D/YYYY",LL:"MMMM D, YYYY",LLL:"MMMM D, YYYY LT",LLLL:"dddd, MMMM DD, YYYY LT"},calendar:{sameDay:"[Ngayon sa] LT",nextDay:"[Bukas sa] LT",nextWeek:"dddd [sa] LT",lastDay:"[Kahapon sa] LT",lastWeek:"dddd [huling linggo] LT",sameElse:"L"},relativeTime:{future:"sa loob ng %s",past:"%s ang nakalipas",s:"ilang segundo",m:"isang minuto",mm:"%d minuto",h:"isang oras",hh:"%d oras",d:"isang araw",dd:"%d araw",M:"isang buwan",MM:"%d buwan",y:"isang taon",yy:"%d taon"},ordinal:function(a){return a},week:{dow:1,doy:4}})}),function(a){a(db)}(function(a){var b={1:"'inci",5:"'inci",8:"'inci",70:"'inci",80:"'inci",2:"'nci",7:"'nci",20:"'nci",50:"'nci",3:"'üncü",4:"'üncü",100:"'üncü",6:"'ncı",9:"'uncu",10:"'uncu",30:"'uncu",60:"'ıncı",90:"'ıncı"};return a.lang("tr",{months:"Ocak_Şubat_Mart_Nisan_Mayıs_Haziran_Temmuz_Ağustos_Eylül_Ekim_Kasım_Aralık".split("_"),monthsShort:"Oca_Şub_Mar_Nis_May_Haz_Tem_Ağu_Eyl_Eki_Kas_Ara".split("_"),weekdays:"Pazar_Pazartesi_Salı_Çarşamba_Perşembe_Cuma_Cumartesi".split("_"),weekdaysShort:"Paz_Pts_Sal_Çar_Per_Cum_Cts".split("_"),weekdaysMin:"Pz_Pt_Sa_Ça_Pe_Cu_Ct".split("_"),longDateFormat:{LT:"HH:mm",L:"DD.MM.YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY LT",LLLL:"dddd, D MMMM YYYY LT"},calendar:{sameDay:"[bugün saat] LT",nextDay:"[yarın saat] LT",nextWeek:"[haftaya] dddd [saat] LT",lastDay:"[dün] LT",lastWeek:"[geçen hafta] dddd [saat] LT",sameElse:"L"},relativeTime:{future:"%s sonra",past:"%s önce",s:"birkaç saniye",m:"bir dakika",mm:"%d dakika",h:"bir saat",hh:"%d saat",d:"bir gün",dd:"%d gün",M:"bir ay",MM:"%d ay",y:"bir yıl",yy:"%d yıl"},ordinal:function(a){if(0===a)return a+"'ıncı";var c=a%10,d=a%100-c,e=a>=100?100:null;return a+(b[c]||b[d]||b[e])},week:{dow:1,doy:7}})}),function(a){a(db)}(function(a){return a.lang("tzm-la",{months:"innayr_brˤayrˤ_marˤsˤ_ibrir_mayyw_ywnyw_ywlywz_ɣwšt_šwtanbir_ktˤwbrˤ_nwwanbir_dwjnbir".split("_"),monthsShort:"innayr_brˤayrˤ_marˤsˤ_ibrir_mayyw_ywnyw_ywlywz_ɣwšt_šwtanbir_ktˤwbrˤ_nwwanbir_dwjnbir".split("_"),weekdays:"asamas_aynas_asinas_akras_akwas_asimwas_asiḍyas".split("_"),weekdaysShort:"asamas_aynas_asinas_akras_akwas_asimwas_asiḍyas".split("_"),weekdaysMin:"asamas_aynas_asinas_akras_akwas_asimwas_asiḍyas".split("_"),longDateFormat:{LT:"HH:mm",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY LT",LLLL:"dddd D MMMM YYYY LT"},calendar:{sameDay:"[asdkh g] LT",nextDay:"[aska g] LT",nextWeek:"dddd [g] LT",lastDay:"[assant g] LT",lastWeek:"dddd [g] LT",sameElse:"L"},relativeTime:{future:"dadkh s yan %s",past:"yan %s",s:"imik",m:"minuḍ",mm:"%d minuḍ",h:"saɛa",hh:"%d tassaɛin",d:"ass",dd:"%d ossan",M:"ayowr",MM:"%d iyyirn",y:"asgas",yy:"%d isgasn"},week:{dow:6,doy:12}})}),function(a){a(db)}(function(a){return a.lang("tzm",{months:"ⵉⵏⵏⴰⵢⵔ_ⴱⵕⴰⵢⵕ_ⵎⴰⵕⵚ_ⵉⴱⵔⵉⵔ_ⵎⴰⵢⵢⵓ_ⵢⵓⵏⵢⵓ_ⵢⵓⵍⵢⵓⵣ_ⵖⵓⵛⵜ_ⵛⵓⵜⴰⵏⴱⵉⵔ_ⴽⵟⵓⴱⵕ_ⵏⵓⵡⴰⵏⴱⵉⵔ_ⴷⵓⵊⵏⴱⵉⵔ".split("_"),monthsShort:"ⵉⵏⵏⴰⵢⵔ_ⴱⵕⴰⵢⵕ_ⵎⴰⵕⵚ_ⵉⴱⵔⵉⵔ_ⵎⴰⵢⵢⵓ_ⵢⵓⵏⵢⵓ_ⵢⵓⵍⵢⵓⵣ_ⵖⵓⵛⵜ_ⵛⵓⵜⴰⵏⴱⵉⵔ_ⴽⵟⵓⴱⵕ_ⵏⵓⵡⴰⵏⴱⵉⵔ_ⴷⵓⵊⵏⴱⵉⵔ".split("_"),weekdays:"ⴰⵙⴰⵎⴰⵙ_ⴰⵢⵏⴰⵙ_ⴰⵙⵉⵏⴰⵙ_ⴰⴽⵔⴰⵙ_ⴰⴽⵡⴰⵙ_ⴰⵙⵉⵎⵡⴰⵙ_ⴰⵙⵉⴹⵢⴰⵙ".split("_"),weekdaysShort:"ⴰⵙⴰⵎⴰⵙ_ⴰⵢⵏⴰⵙ_ⴰⵙⵉⵏⴰⵙ_ⴰⴽⵔⴰⵙ_ⴰⴽⵡⴰⵙ_ⴰⵙⵉⵎⵡⴰⵙ_ⴰⵙⵉⴹⵢⴰⵙ".split("_"),weekdaysMin:"ⴰⵙⴰⵎⴰⵙ_ⴰⵢⵏⴰⵙ_ⴰⵙⵉⵏⴰⵙ_ⴰⴽⵔⴰⵙ_ⴰⴽⵡⴰⵙ_ⴰⵙⵉⵎⵡⴰⵙ_ⴰⵙⵉⴹⵢⴰⵙ".split("_"),longDateFormat:{LT:"HH:mm",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY LT",LLLL:"dddd D MMMM YYYY LT"},calendar:{sameDay:"[ⴰⵙⴷⵅ ⴴ] LT",nextDay:"[ⴰⵙⴽⴰ ⴴ] LT",nextWeek:"dddd [ⴴ] LT",lastDay:"[ⴰⵚⴰⵏⵜ ⴴ] LT",lastWeek:"dddd [ⴴ] LT",sameElse:"L"},relativeTime:{future:"ⴷⴰⴷⵅ ⵙ ⵢⴰⵏ %s",past:"ⵢⴰⵏ %s",s:"ⵉⵎⵉⴽ",m:"ⵎⵉⵏⵓⴺ",mm:"%d ⵎⵉⵏⵓⴺ",h:"ⵙⴰⵄⴰ",hh:"%d ⵜⴰⵙⵙⴰⵄⵉⵏ",d:"ⴰⵙⵙ",dd:"%d oⵙⵙⴰⵏ",M:"ⴰⵢoⵓⵔ",MM:"%d ⵉⵢⵢⵉⵔⵏ",y:"ⴰⵙⴳⴰⵙ",yy:"%d ⵉⵙⴳⴰⵙⵏ"},week:{dow:6,doy:12}})}),function(a){a(db)}(function(a){function b(a,b){var c=a.split("_");return b%10===1&&b%100!==11?c[0]:b%10>=2&&4>=b%10&&(10>b%100||b%100>=20)?c[1]:c[2]}function c(a,c,d){var e={mm:"хвилина_хвилини_хвилин",hh:"година_години_годин",dd:"день_дні_днів",MM:"місяць_місяці_місяців",yy:"рік_роки_років"};return"m"===d?c?"хвилина":"хвилину":"h"===d?c?"година":"годину":a+" "+b(e[d],+a)}function d(a,b){var c={nominative:"січень_лютий_березень_квітень_травень_червень_липень_серпень_вересень_жовтень_листопад_грудень".split("_"),accusative:"січня_лютого_березня_квітня_травня_червня_липня_серпня_вересня_жовтня_листопада_грудня".split("_")},d=/D[oD]? *MMMM?/.test(b)?"accusative":"nominative";return c[d][a.month()]}function e(a,b){var c={nominative:"неділя_понеділок_вівторок_середа_четвер_п’ятниця_субота".split("_"),accusative:"неділю_понеділок_вівторок_середу_четвер_п’ятницю_суботу".split("_"),genitive:"неділі_понеділка_вівторка_середи_четверга_п’ятниці_суботи".split("_")},d=/(\[[ВвУу]\]) ?dddd/.test(b)?"accusative":/\[?(?:минулої|наступної)? ?\] ?dddd/.test(b)?"genitive":"nominative";return c[d][a.day()]}function f(a){return function(){return a+"о"+(11===this.hours()?"б":"")+"] LT"}}return a.lang("uk",{months:d,monthsShort:"січ_лют_бер_квіт_трав_черв_лип_серп_вер_жовт_лист_груд".split("_"),weekdays:e,weekdaysShort:"нд_пн_вт_ср_чт_пт_сб".split("_"),weekdaysMin:"нд_пн_вт_ср_чт_пт_сб".split("_"),longDateFormat:{LT:"HH:mm",L:"DD.MM.YYYY",LL:"D MMMM YYYY р.",LLL:"D MMMM YYYY р., LT",LLLL:"dddd, D MMMM YYYY р., LT"},calendar:{sameDay:f("[Сьогодні "),nextDay:f("[Завтра "),lastDay:f("[Вчора "),nextWeek:f("[У] dddd ["),lastWeek:function(){switch(this.day()){case 0:case 3:case 5:case 6:return f("[Минулої] dddd [").call(this);case 1:case 2:case 4:return f("[Минулого] dddd [").call(this)}},sameElse:"L"},relativeTime:{future:"за %s",past:"%s тому",s:"декілька секунд",m:c,mm:c,h:"годину",hh:c,d:"день",dd:c,M:"місяць",MM:c,y:"рік",yy:c},meridiem:function(a){return 4>a?"ночі":12>a?"ранку":17>a?"дня":"вечора"},ordinal:function(a,b){switch(b){case"M":case"d":case"DDD":case"w":case"W":return a+"-й";case"D":return a+"-го";default:return a}},week:{dow:1,doy:7}})}),function(a){a(db)}(function(a){return a.lang("uz",{months:"январь_февраль_март_апрель_май_июнь_июль_август_сентябрь_октябрь_ноябрь_декабрь".split("_"),monthsShort:"янв_фев_мар_апр_май_июн_июл_авг_сен_окт_ноя_дек".split("_"),weekdays:"Якшанба_Душанба_Сешанба_Чоршанба_Пайшанба_Жума_Шанба".split("_"),weekdaysShort:"Якш_Душ_Сеш_Чор_Пай_Жум_Шан".split("_"),weekdaysMin:"Як_Ду_Се_Чо_Па_Жу_Ша".split("_"),longDateFormat:{LT:"HH:mm",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY LT",LLLL:"D MMMM YYYY, dddd LT"},calendar:{sameDay:"[Бугун соат] LT [да]",nextDay:"[Эртага] LT [да]",nextWeek:"dddd [куни соат] LT [да]",lastDay:"[Кеча соат] LT [да]",lastWeek:"[Утган] dddd [куни соат] LT [да]",sameElse:"L"},relativeTime:{future:"Якин %s ичида",past:"Бир неча %s олдин",s:"фурсат",m:"бир дакика",mm:"%d дакика",h:"бир соат",hh:"%d соат",d:"бир кун",dd:"%d кун",M:"бир ой",MM:"%d ой",y:"бир йил",yy:"%d йил"},week:{dow:1,doy:7}})}),function(a){a(db)}(function(a){return a.lang("vn",{months:"tháng 1_tháng 2_tháng 3_tháng 4_tháng 5_tháng 6_tháng 7_tháng 8_tháng 9_tháng 10_tháng 11_tháng 12".split("_"),monthsShort:"Th01_Th02_Th03_Th04_Th05_Th06_Th07_Th08_Th09_Th10_Th11_Th12".split("_"),weekdays:"chủ nhật_thứ hai_thứ ba_thứ tư_thứ năm_thứ sáu_thứ bảy".split("_"),weekdaysShort:"CN_T2_T3_T4_T5_T6_T7".split("_"),weekdaysMin:"CN_T2_T3_T4_T5_T6_T7".split("_"),longDateFormat:{LT:"HH:mm",L:"DD/MM/YYYY",LL:"D MMMM [năm] YYYY",LLL:"D MMMM [năm] YYYY LT",LLLL:"dddd, D MMMM [năm] YYYY LT",l:"DD/M/YYYY",ll:"D MMM YYYY",lll:"D MMM YYYY LT",llll:"ddd, D MMM YYYY LT"},calendar:{sameDay:"[Hôm nay lúc] LT",nextDay:"[Ngày mai lúc] LT",nextWeek:"dddd [tuần tới lúc] LT",lastDay:"[Hôm qua lúc] LT",lastWeek:"dddd [tuần rồi lúc] LT",sameElse:"L"},relativeTime:{future:"%s tới",past:"%s trước",s:"vài giây",m:"một phút",mm:"%d phút",h:"một giờ",hh:"%d giờ",d:"một ngày",dd:"%d ngày",M:"một tháng",MM:"%d tháng",y:"một năm",yy:"%d năm"},ordinal:function(a){return a},week:{dow:1,doy:4}})}),function(a){a(db)}(function(a){return a.lang("zh-cn",{months:"一月_二月_三月_四月_五月_六月_七月_八月_九月_十月_十一月_十二月".split("_"),monthsShort:"1月_2月_3月_4月_5月_6月_7月_8月_9月_10月_11月_12月".split("_"),weekdays:"星期日_星期一_星期二_星期三_星期四_星期五_星期六".split("_"),weekdaysShort:"周日_周一_周二_周三_周四_周五_周六".split("_"),weekdaysMin:"日_一_二_三_四_五_六".split("_"),longDateFormat:{LT:"Ah点mm",L:"YYYY-MM-DD",LL:"YYYY年MMMD日",LLL:"YYYY年MMMD日LT",LLLL:"YYYY年MMMD日ddddLT",l:"YYYY-MM-DD",ll:"YYYY年MMMD日",lll:"YYYY年MMMD日LT",llll:"YYYY年MMMD日ddddLT"},meridiem:function(a,b){var c=100*a+b;return 600>c?"凌晨":900>c?"早上":1130>c?"上午":1230>c?"中午":1800>c?"下午":"晚上"},calendar:{sameDay:function(){return 0===this.minutes()?"[今天]Ah[点整]":"[今天]LT"},nextDay:function(){return 0===this.minutes()?"[明天]Ah[点整]":"[明天]LT"},lastDay:function(){return 0===this.minutes()?"[昨天]Ah[点整]":"[昨天]LT"},nextWeek:function(){var b,c;return b=a().startOf("week"),c=this.unix()-b.unix()>=604800?"[下]":"[本]",0===this.minutes()?c+"dddAh点整":c+"dddAh点mm"},lastWeek:function(){var b,c;return b=a().startOf("week"),c=this.unix()<b.unix()?"[上]":"[本]",0===this.minutes()?c+"dddAh点整":c+"dddAh点mm"},sameElse:"LL"},ordinal:function(a,b){switch(b){case"d":case"D":case"DDD":return a+"日";case"M":return a+"月";case"w":case"W":return a+"周";default:return a}},relativeTime:{future:"%s内",past:"%s前",s:"几秒",m:"1分钟",mm:"%d分钟",h:"1小时",hh:"%d小时",d:"1天",dd:"%d天",M:"1个月",MM:"%d个月",y:"1年",yy:"%d年"},week:{dow:1,doy:4}})}),function(a){a(db)}(function(a){return a.lang("zh-tw",{months:"一月_二月_三月_四月_五月_六月_七月_八月_九月_十月_十一月_十二月".split("_"),monthsShort:"1月_2月_3月_4月_5月_6月_7月_8月_9月_10月_11月_12月".split("_"),weekdays:"星期日_星期一_星期二_星期三_星期四_星期五_星期六".split("_"),weekdaysShort:"週日_週一_週二_週三_週四_週五_週六".split("_"),weekdaysMin:"日_一_二_三_四_五_六".split("_"),longDateFormat:{LT:"Ah點mm",L:"YYYY年MMMD日",LL:"YYYY年MMMD日",LLL:"YYYY年MMMD日LT",LLLL:"YYYY年MMMD日ddddLT",l:"YYYY年MMMD日",ll:"YYYY年MMMD日",lll:"YYYY年MMMD日LT",llll:"YYYY年MMMD日ddddLT"},meridiem:function(a,b){var c=100*a+b;return 900>c?"早上":1130>c?"上午":1230>c?"中午":1800>c?"下午":"晚上"},calendar:{sameDay:"[今天]LT",nextDay:"[明天]LT",nextWeek:"[下]ddddLT",lastDay:"[昨天]LT",lastWeek:"[上]ddddLT",sameElse:"L"},ordinal:function(a,b){switch(b){case"d":case"D":case"DDD":return a+"日";case"M":return a+"月";case"w":case"W":return a+"週";default:return a}},relativeTime:{future:"%s內",past:"%s前",s:"幾秒",m:"一分鐘",mm:"%d分鐘",h:"一小時",hh:"%d小時",d:"一天",dd:"%d天",M:"一個月",MM:"%d個月",y:"一年",yy:"%d年"}})}),db.lang("en"),rb?(module.exports=db,cb(!0)):"function"==typeof define&&define.amd?define("moment",function(b,c,d){return d.config&&d.config()&&d.config().noGlobal!==!0&&cb(d.config().noGlobal===a),db}):cb()}).call(this);
-// moment.js language configuration
-// language : french (fr)
-// author : John Fischer : https://github.com/jfroffice
-
-(function (factory) {
-    if (typeof define === 'function' && define.amd) {
-        define(['moment'], factory); // AMD
-    } else if (typeof exports === 'object') {
-        module.exports = factory(require('../moment')); // Node
-    } else {
-        factory(window.moment); // Browser global
-    }
-}(function (moment) {
-    return moment.lang('fr', {
-        months : "janvier_février_mars_avril_mai_juin_juillet_août_septembre_octobre_novembre_décembre".split("_"),
-        monthsShort : "janv._févr._mars_avr._mai_juin_juil._août_sept._oct._nov._déc.".split("_"),
-        weekdays : "dimanche_lundi_mardi_mercredi_jeudi_vendredi_samedi".split("_"),
-        weekdaysShort : "dim._lun._mar._mer._jeu._ven._sam.".split("_"),
-        weekdaysMin : "Di_Lu_Ma_Me_Je_Ve_Sa".split("_"),
-        longDateFormat : {
-            LT : "HH:mm",
-            L : "DD/MM/YYYY",
-            LL : "D MMMM YYYY",
-            LLL : "D MMMM YYYY LT",
-            LLLL : "dddd D MMMM YYYY LT"
-        },
-        calendar : {
-            sameDay: "[Aujourd'hui à] LT",
-            nextDay: '[Demain à] LT',
-            nextWeek: 'dddd [à] LT',
-            lastDay: '[Hier à] LT',
-            lastWeek: 'dddd [dernier à] LT',
-            sameElse: 'L'
-        },
-        relativeTime : {
-            future : "dans %s",
-            past : "il y a %s",
-            s : "quelques secondes",
-            m : "une minute",
-            mm : "%d minutes",
-            h : "une heure",
-            hh : "%d heures",
-            d : "un jour",
-            dd : "%d jours",
-            M : "un mois",
-            MM : "%d mois",
-            y : "un an",
-            yy : "%d ans"
-        },
-        ordinal : function (number) {
-            return number + (number === 1 ? 'er' : '');
-        },
-        week : {
-            dow : 1, // Monday is the first day of the week.
-            doy : 4  // The week that contains Jan 4th is the first week of the year.
-        }
-    });
-}));
-
 'use strict';
 /*
 
@@ -36643,17 +36584,334 @@ angular.module('musicBox.markup.service',[]).factory("MarkupService", ["MarkupRe
 
   return MarkupService;
 }])
+
+angular.module('musicBox.markup.service',[]).factory("ObjectService", ["$rootScope", "$routeParams", "MarkupRest", "DocumentRest", "UserRest", "mb_ui", function($rootScope,  $routeParams, MarkupRest, DocumentRest, UserRest, mb_ui) {
+
+  
+  var ObjectService = function() {
+   // console.log('factory rest')
+
+  };
+
+  ObjectService.prototype.init = function (object, servicetype ) {
+     if(servicetype){
+       this.servicetype = servicetype
+     }
+     this.object_ = object;
+     this.set()
+     return this
+
+  }
+  ObjectService.prototype.trace = function (ev) {
+    this.tracer.push(ev)
+  //  console.log(this.tracer)
+    return;
+  }
+
+ 
+
+  ObjectService.prototype.setFulltext = function (){
+    
+
+    var s = this.object_.start
+    var e = this.object_.end
+   
+    //alert(e)
+   
+      var fulltext = '';
+      var fulltext_block = ''
+      var i_array     =   0;
+      for (var i = s; i <= e; i++) {
+      // console.log(i)
+      if($rootScope.doc && $rootScope.doc.content[i]){
+        fulltext        += $rootScope.doc.content[i];
+        fulltext_block  += $rootScope.doc.content[i];
+      }
+      else{
+        // there is no letter for section !
+        fulltext += '-';
+        fulltext_block += '-'
+      }
+    }
+  
+   this.object_.fulltext = fulltext;
+    //$scope.section.fulltext = fulltext
+    // $scope.section.fulltext__ = fulltext+'llll'
+   return  fulltext;
+    //$scope.compile_fulltext(fulltext_block)
+   
+
+  
+  //$scope.compile_fulltext(fulltext_block)
+
+  }
+
+
+
+     ObjectService.prototype.setobjSchemas = function (object){
+          
+      // var objSchemas;
+      var objSchemas_ = $rootScope.objSchemas[object]
+
+      if(object == 'container_class'){
+          this.object_.objSchemas_css = objSchemas_
+      }
+      else{
+          this.object_.objSchemas = objSchemas_
+      }
+    //  console.log(this.objSchemas)
+      return objSchemas_;
+
+     }
+
+
+   ObjectService.prototype.populateUser = function (){
+
+              //base user
+              var u = { 
+                        'username':'',
+                        'account_url':'me/account', 
+                        'login_url':'/login',
+                        'signout_url':'/signout',
+                        'islogged' : false
+              }
+              if(this.object_.user && this.object_.user.username !== null){
+                // u = this.object_.user;
+                u.documents = this.object_.user_documents ? this.object_.user_documents : [];
+                u.islogged = true
+                u.user_options = this.apply_object_options('user') 
+                u  = _.extend(u ,this.object_.user)
+               
+              }
+              return u;
+
+   }
+
+
+   ObjectService.prototype.populate = function (){
+          console.log('populate object_'+this.servicetype)
+          var d_s_m_base = { 
+                          'operation': this.object_.operation ?  this.object_.operation : {},
+                          'operations': this.object_.operations ?  this.object_.operations : [],
+                          'touched'     : false
+                        } 
+
+                       
+          if(this.servicetype == 'section'){
+             var d_s_m =  _.extend(d_s_m_base, {
+                        'selected'  : false,
+                        'focused'   : '',
+                        'editing_text': $rootScope.render.debug ? true : false,
+                        'modeletters' : $rootScope.render.debug ? 'single' : 'compiled',
+                        'section_classes':'__bg_black',
+                      
+             })
+             this.object_ = _.extend(this.object_, d_s_m)
+
+
+             return d_s_m;
+          }
+
+           if(this.servicetype == 'markup'){
+             var d_s_m =  _.extend(d_s_m_base, {
+                  selected        : false,
+                  editing         : false,
+                  fast_editor     : ($rootScope.doc.doc_owner) ? true : false,
+                  inrange         : false,
+                  deleted         : false,
+                  forced          : (this.object_.type =='markup' || this.object_.type =='container_class' ) ? true : false,
+                  doc_id_id       : '', // special cases for child documents (refs as doc_id in markup record)
+                   ////      by_me      : ( $scope.markup.user_id._id && $scope.$parent.userin._id  && ($scope.$parent.userin._id == $scope.markup.user_id._id ) ) ? true : false,
+                  can_approve     : ($rootScope.doc.doc_owner) ? true : false                     
+             })
+              
+
+           }
+           if(this.servicetype == 'document'){
+
+            
+              mb_ui_.textrange()
+
+             var encoded_url = root_url+':'+PORT+''
+             encoded_url += (this.object_.slug !=='homepage') ? '/doc/'+this.object_.slug : '';
+             
+      
+             var d_s_m =  _.extend(d_s_m_base, {
+                encoded_url     : urlencode(encoded_url),
+                text_summary    : '',
+                room__id        : (this.object_.room) ? this.object_.room._id : '',
+                containers      : _.sortBy(this.object_.sections,function (num) {
+                   return num.start;
+                }),
+                sections      : _.sortBy(this.object_.sections,function (num) {
+                   return num.start;
+                }),
+                markups         : _.sortBy(this.object_.markups_,function (num) {
+                   return num.start;
+                })           
+             })
+              
+
+           }
+           console.log(this.object_)
+          
+          this.object_ = _.extend(this.object_, d_s_m)
+          return 
+
+
+ 
+
+  }
+
+  ObjectService.prototype.set = function () {
+    var object = this.object_
+    this.tracer = [];
+    this.object_.options_ = []
+    var trace_object = {'log':'setting API for '+this.servicetype, 'id' : object._id} 
+   
+    switch(this.servicetype) {
+
+      case 'markup':
+          this.apimethod = MarkupRest
+          // object.isolated  = object.isolated ? object.isolated : 'undef'
+          this.setobjSchemas(this.object_.type);
+          this.populate()
+          this.setFulltext()
+          break;
+      
+      case 'document':
+          
+          // set UI 
+          mb_ui_ =  new mb_ui()
+          mb_ui_.init()
+
+          this.api_method = DocumentRest
+          this.populate()
+          this.apply_object_options('doc_options')
+
+         
+          break;
+      case 'section':
+          this.apimethod = MarkupRest
+          this.setobjSchemas('container');
+          this.setobjSchemas('container_class');
+          this.populate()
+          this.setFulltext()
+
+          break;
+      case 'user':
+          this.apimethod = UserRest
+          break;
+      
+      
+      default:
+          this.apimethod = null
+    } 
+    
+   // console.log(this)
+    //this.trace(trace_object)
+    return this
+
+  }
+
+
+
+  /**
+      * @description Sub-function to set objects options (doc_options, users_options, etc..)
+      * @param {String} object - kind of object to map
+      * @param {Array} options - source array
+      * @return {{Array}}
+      * @function docfactory#apply_object_options
+      * @todo ---
+      */
+
+     ObjectService.prototype.apply_object_options = function(f){
+       
+        var options;
+
+        if(f && f=='doc_options' ){
+            options = this.object_.doc_options
+        }
+        if(this.servicetype == 'section'){
+        }
+       /* if(this.servicetype == 'markup'){
+            // ??? 
+            options = this.object_.user_id.user_options
+        }
+        */
+        if(f && f=='user' || this.servicetype == 'user'){
+            options = this.object_.user.user_options
+        }
+        if(f &&  f=='author' ){
+            options = this.object_.user
+        }
+        
+        if(f && f=='markup_user'){
+           options = this.object_.user_id.user_options
+        }
+
+
+
+        //console.log(' apply doc_options to object'+object)
+        var options_array = {};
+        _.each(options, function(option){
+           
+            var op_name = option.option_name;
+            options_array[op_name]          = {};
+            
+
+            options_array[op_name].option_name = option.option_name
+            options_array[op_name].value= option.option_value
+            options_array[op_name]._id   = option._id
+            options_array[op_name].type  = option.option_type
+
+            if(this.servicetype == 'document' && option.option_value && option.option_type == 'google_typo'){
+              
+               WebFont.load({
+                  google: {
+                   families: [option.option_value]
+                  }
+               }); 
+               var fixed = options_array[op_name]['value'];
+               options_array[op_name]['fixed'] =  fixed.replace(/ /g, '_').replace(/,/g, '').replace(/:/g, '').replace(/400/g, '').replace(/700/g, '') 
+            }
+
+
+        });       
+        
+        if(f && f=='doc_options' ){   
+            this.object_.doc_options  = options_array
+        }
+
+        this.object_.options_[f] = options_array
+        return options_array
+      }
+
+
+  
+
+  ObjectService.prototype.save = function (msg) {
+    console.log('ObjectService.prototype.save '+msg+'/'+this.apimethod)
+    return
+
+  }
+
+
+  
+
+  return ObjectService;
+}])
 'use strict';
 
 // Declare app level modules
 
 
 angular.module('musicBox',  [
+  'ngLocale', 'ngResource', 'ngRoute', 'ngSanitize', 
   'ui.bootstrap',
-  'ngLocale', 'ngResource', 'ngRoute',
-  'ngSanitize',  
   'musicBox.socket',
   'musicBox.render',
+  'musicBox.ui',
   'musicBox.directives', 
   'musicBox.document',
   'musicBox.section',
@@ -36665,10 +36923,6 @@ angular.module('musicBox',  [
  	   when('/', {
         templateUrl: 'partials/document/single',
         controller: DocumentCtrl
-      }).
-      when('/doc/create', {
-        templateUrl: '/partials/document/new',
-        controller: DocumentNewCtrl
       }).
       when('/readonly/:docid', {
         templateUrl: '/../partials/document/compiled',
@@ -37015,6 +37269,88 @@ angular.module('musicBox.directives', [])
     };
 }])
 
+
+.directive('mbFlashmessage', ["$rootScope", "$timeout", function($rootScope, $timeout){
+/**
+      * @description 
+      * Show a message to user
+      *
+      *  @param {String} msg - message to show
+      *  @param {String} classname - a css class ('ok'/ 'bad' / ..)
+      *  @param {Number/Time} timeout - 
+
+      *  @return -
+      * 
+      * @function docfactory#flash_message
+      * @link docfactory#flash_message
+      * @todo --
+      */
+
+
+  var flashmessageCtrl= ["$scope", "$rootScope", function($scope, $rootScope){
+
+
+     // init flash message object
+   $scope.flash_message = {'text':''};
+
+   $rootScope.flashmessage = function (msg,classname ,timeout, closer) {
+       
+
+        $scope.flash_message = {}
+        $scope.flash_message.text = msg;
+        $scope.flash_message.classname = classname;
+
+        if(!closer){
+            $scope.flash_message.closer =false;
+        }
+        else{
+            $scope.flash_message.closer = closer;
+        }
+        
+
+        // apply timeout if set to true
+        if(timeout){
+            $timeout(function(){
+                $scope.flash_message.text =  '';
+            },timeout);
+        }
+      }
+
+      // OnLoad
+      //if($rootScope.render.top_menus.help && $rootScope.render.top_menus.help.open == true){
+      //}
+
+      if($rootScope.render && $rootScope.render.fresh == true){
+        $rootScope.flashmessage($rootScope.i18n.CUSTOM.HELP.fresh_document, 'help' , 3000, true)
+      }
+
+
+
+
+  }]
+
+
+
+
+
+
+
+    return {
+        restrict: 'AE',
+        controller: flashmessageCtrl,
+        link: function(scope, elem, attrs){
+         
+        },
+      scope: true,
+      templateUrl: function() {
+        return "js/MusicBox/document/tpl/flash_message.tpl.html";
+      }
+    };
+}])
+
+
+
+
 .directive('fluid', 
 
   ["$rootScope", function($rootScope) {
@@ -37127,6 +37463,178 @@ filter('trusted', function() {
     };
 }]);
 */
+/*
+
+ui
+
+Includes : 
+
+  - Angular factory
+      
+      mb_ui (Class)
+      
+
+        Functions 
+
+          __ init
+              set ui. object base.
+
+          __ redraw_textcontent
+              reset doc_content
+
+          __ textrange() (wait doc.content)
+              selected ranges text
+
+          __ remap_sections()
+              remap selected sub objects (letters, markups)
+
+
+          
+        Watchers
+
+            __ ui.selected_range.end, ui.selected_range.start
+
+            __ ui.selected_range.redraw_content
+            
+            __ ui.selected_range.redraw
+
+        
+        Directives
+
+            > mbRanges 
+
+
+*/
+angular.module('musicBox.ui', [])
+
+.factory('mb_ui', ["$rootScope", "$http", "$routeParams", "$locale", function ($rootScope, $http, $routeParams, $locale) {
+
+  return function (inf) {
+
+
+    $rootScope.$watch('[ui.selected_range.end, ui.selected_range.start]', function(newValue, oldValue) {
+        if(newValue==null){}
+        else{
+          if($rootScope.ui.selected_range.wait_ev !== true){
+             //console.log('ui end changed')
+             $rootScope.ui.selected_range.redraw = true;
+          }
+          else{
+          }
+        }                  
+    }, true);
+
+    // flat doc.content 
+    $rootScope.$watch('ui.selected_range.redraw_content', function(newValue, oldValue) {
+          if(newValue==true){
+              self.redraw_textcontent()
+              $rootScope.ui.selected_range.redraw_content = false
+          }
+          else{
+        
+          }
+    })
+
+    $rootScope.$watch('ui.selected_range.redraw', function(newValue, oldValue) {
+        if(newValue == false ){
+           //    console.log('NO oldVlaue for UI chnages')
+        }
+        else{
+            // if( $rootScope.ui.selected_range.wait_ev == true   ){             
+            // stop redraw loop (each section
+            self.textrange()
+            self.remap_sections()
+            $rootScope.ui.selected_range.redraw = false;
+        }
+                
+    })   
+
+
+    var self = {
+
+      init: function () {
+        $rootScope.ui = { 
+            'selected_range'    : {
+
+                                    'wait_ev'   : null,
+                                    'set'       : false, 
+                                    'start'     :($routeParams.range_start) ? parseInt($routeParams.range_start) : null,  // can be preset 
+                                    'end'       : ($routeParams.range_end)  ? parseInt($routeParams.range_end) : null,    // can be preset
+                                    'debug'     : [],
+                                    'size'      : 0,
+                                    'multi'     : false,
+                                    'redraw_content' :false,
+                                    'redraw' : false
+
+                                    },
+            'boundaries'        :  {},
+            'selected_objects'  :  [],
+            'secret'            :  $routeParams.secret ? $routeParams.secret : false, 
+            'debug'             :  ($routeParams.debug) ? true : false,
+        };
+        console.log('Mb.ui init')
+      },
+      redraw_textcontent : function(){
+              var string = ''
+               _.each($rootScope.doc.sections, function(s){
+                    // remove line breaks
+                    //  container.fulltext =  container.fulltext.replace(/(\r\n|\n|\r)/gm,"");
+                    // console.log(container.fulltext)
+                 string  += s.fulltext;
+                 })
+                $rootScope.doc.content = string
+
+      },
+      textrange: function() {
+            var textrange = ''
+            for (var i = $rootScope.ui.selected_range.start; i <= $rootScope.ui.selected_range.end; i++) {
+              if($rootScope.doc && $rootScope.doc.content && $rootScope.doc.content[i] ){
+                textrange +=  $rootScope.doc.content[i]
+              }
+            }
+            $rootScope.ui.selected_range.textrange = textrange
+
+              $rootScope.ui.selected_range.size = $rootScope.ui.selected_range.end - $rootScope.ui.selected_range.start
+
+              // at least one char
+              if($rootScope.ui.selected_range.size == 0){
+              $rootScope.ui.selected_range.size = 1
+              }
+              $rootScope.ui.selected_range.multi =  ($rootScope.ui.selected_range.size) > 1 ? true : false
+      },
+      remap_sections: function(){
+          _.each($rootScope.doc.sections, function(c,i){
+            c.inrange_letters  = Math.random()
+            c.inrange_markups  = Math.random()
+            // console.log('-------------CASE UI ONLY')
+          })
+      }
+
+    }
+    return self;
+  }
+}])
+
+.directive('mbRanges', ["$rootScope", "$routeParams", "$locale", function($rootScope, $routeParams, $locale){
+  var rangesCtrl = ["$scope", "$rootScope", function($scope, $rootScope){
+
+      $scope.reverse_text = function(){
+            alert($rootScope.ui.selected_range.textrange)
+      }
+
+  }]
+  return {
+    restrict: 'AE',
+     controller: rangesCtrl,
+    // link: function(scope, elem, attrs){},
+   scope: true,
+   templateUrl: function() {
+      return "js/MusicBox/document/tpl/ranges.tpl.html";
+    }
+  };
+}])
+
+
 
 
 // Avoid `console` errors in browsers that lack a console.
@@ -37148,177 +37656,114 @@ function serialize(obj, prefix) {
   }
   return str.join("&")
 }
+
+
 angular.module('musicBox.render', [])
 
 
 .factory('renderfactory', ["$rootScope", "$http", "$routeParams", "$locale", function ($rootScope, $http, $routeParams, $locale) {
     return function (inf) {
      var self = {
+
+
        init: function (view) {
         
-         console.log('renderService:init for view: '+view)
+         console.log('renderService:init for _view: '+view)
          $rootScope.is_view = view
 
 
+         $rootScope.render_config = {
+              'i18n' :  $locale,
+              'renderAvailable' : self.renderAvailable(),
+              'renderAvailable_active' :  $routeParams.mode ? $routeParams.mode : self.renderAvailable()[0]
+
+         }
+
+          $rootScope.render = {
+              'debug'     : ($routeParams.debug) ? true : false,
+              'dataset'   : {'active': $routeParams.dataset == true  ? true : false},
+              'menu_a'    : {'open':true},
+              'fresh'     : ($routeParams.fresh) ? true : false,
+              'is_home'   : ($routeParams.docid) ? 'false' : 'true',
+              'is_single' : ($routeParams.docid) ? 'true' : 'false',
+              'top_menus' : {
+                              'help'  : {'open': false },
+                              'published'  : {'open':  false },
+                              'doc'  : {'open':  false }
+
+                          }
+
+           }
        
 
-         $rootScope.render_config = new Object()
-         $rootScope.render_config.loading = new Object()
-         $rootScope.render_config.loading.inited = true;
-        
-         $rootScope.render_config.i18n =  $locale;
-
-
-
-        // inject locale service. defined in public/js/angualr-modules/i18n/angular_lang-lang.js
-        
-
-        // DEPREC. use :  $rootScope.render_config.i18n instead
         $rootScope.i18n                       = $locale;
-
-
-       
-
-
-        //console.log($rootScope.i18n.id)
-
-        //$rootScope.$emit('renderEvent', { action:'render_ready' });
-        self.config                           = [];
-        self.state                            = [];
-        //$rootScope.r = 7;
-        self.config.hasbranding               = true;
-        self.state.logs                       = 'closed';
-
+        
         // api/misc
         $rootScope.globals                    = GLOBALS;
         $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
 
+      
+    
+       // self.renderAvailable()
+       // $rootScope.ui.renderAvailable_active =  $routeParams.mode ? $routeParams.mode : $rootScope.ui.renderAvailable[0]
+    
 
         if(view == 'document'){
-            $rootScope.objSchemas                  =   self.objSchemas(); 
+          
+            $rootScope.objSchemas                 =   self.objSchemas(); 
             $rootScope.available_sections_objects =   self.objAvailable(); 
             $rootScope.available_layouts          =   self.posAvailable();
-            $rootScope.item_position              = '';
-            $rootScope.fragments                 =   self.fragmentsAvailable();
+            $rootScope.fragments                  =   self.fragmentsAvailable();
         }
         else if(view == 'user'){
-           
         }
         else{
            
         }
 
         
-       
-       
-        // $rootScope.classesofsections       =   self.classesAvailable();
-
-        // ui set up.
-        // this var never change as long a doc is loaded... (no reset at rebuild)
-
-        $rootScope.ui                         = new Object();
-        $rootScope.ui.selected_range          = new Object({'wait_ev' : false, 'set': false, 'start':null, 'end':null, 'textrange':''});
-        $rootScope.ui.boundaries = new Object();
-
-        //$rootScope.ui.selected_range.markups_to_offset = new Array();
-        //$rootScope.ui.selected_range.insert = null;
-        //$rootScope.ui.offset_queue = new Array()
-        $rootScope.ui.selected_range.debug = new Array()
-
-        $rootScope.ui.routing = $routeParams
-
-        $rootScope.ui.selected_section_index  = null;
-       
-
-        $rootScope.ui.selected_objects        = [];
-        $rootScope.ui.selected_objects_filter = null;
-        $rootScope.ui.dataset = {'active': $routeParams.dataset == true  ? true : false}
-              
-
-        $rootScope.ui.renderAvailable         = self.renderAvailable()
-
-        // used in section editing
-        $rootScope.ui.sync_sections           = true;
-        
-      
-        // ?mode=
-        $rootScope.ui.renderAvailable_active =  $routeParams.mode ? $routeParams.mode : $rootScope.ui.renderAvailable[0]
-        // ?secret=  
-        $rootScope.ui.secret  =  $routeParams.secret ? $routeParams.secret : false
-        var doc_secret = $rootScope.ui.secret 
-        // ? debug
-        $rootScope.ui.debug   = $routeParams.debug ? true : null;
-       
-
-      
-
-        if($routeParams.docid){
-              $rootScope.ui.is_home = 'false'
-              $rootScope.ui.is_single = 'true'
-        }
-        else{
-            $rootScope.ui.is_home = 'true'
-            $rootScope.ui.is_single = 'false'
-        }
-
-        $rootScope.ui.menus = [];
-        $rootScope.ui.menus.push_markup = [];
-        $rootScope.ui.menus.push_markup.open = -1;
-        $rootScope.ui.menus.push_comment = [];
-        $rootScope.ui.menus.push_comment.open = -1;
-        
-
-        // top page menu tools
-
-       // $rootScope.ui.menus['quick_tools']            = new Object({'open': 'no'});
-        $rootScope.ui.menus['quick_tools_help']       = new Object({'open': $routeParams.fresh ? true : false});
-
-
-        $rootScope.ui.menus['quick_tools_published'] = new Object({'open': 'no'});
-        $rootScope.ui.menus['quick_tools_document'] = new Object({'open': 'no'});
-
-        $rootScope.inserttext = [];
-        $rootScope.inserttext[0] =''
-
-        // $rootScope.ui.lastover = {};
-
-
-        // the object to push init
-        $rootScope.push = {};
-
-        // init flash message object
-        $rootScope.flash_message = {'text':''};
-
-        /**
-      * @description 
-      * Show a message to user
-      *
-      *  @param {String} msg - message to show
-      *  @param {String} classname - a css class ('ok'/ 'bad' / ..)
-      *  @param {Number/Time} timeout - 
-
-      *  @return -
-      * 
-      * @function docfactory#flash_message
-      * @link docfactory#flash_message
-      * @todo --
-      */
-
-        
-          //console.log(self)
-          return  $rootScope.render_config
+        return  $rootScope.render_config
         
         },
+        toggle_render: function(r){
+          console.log('toggled_render from '+$rootScope.render_config.renderAvailable_active+' to '+r)
+          $rootScope.render.top_menus.doc.open        =   false
+          $rootScope.render.top_menus.help.open       =   false
+          $rootScope.render.top_menus.published.open  =   false
+          $rootScope.render_config.renderAvailable_active = r
+        },
+
+
+
+
+      expand_tools: function(name){
+          //   if(!)
+
+          // use DocumentCtrl AND with UserCtrl
+          if(!$rootScope.render.top_menus[name] || $rootScope.render.top_menus[name].open === false){
+               $rootScope.render.top_menus[name].open = true
+          }
+          else{
+           $rootScope.render.top_menus[name].open = false
+          }
+         //  return $rootScope.render.top_menus
+
+        },
+
 
       // flat list.
       objAvailable:function (){
         var arr = Object.keys($rootScope.objSchemas) 
         return arr ;
       },
+      
+
       markupSchema:function (){
         // start end metavalue, .......
 
       },
+      
+
       objSchemas:function (){
         var definitions = new Array();
        
@@ -37395,9 +37840,9 @@ angular.module('musicBox.render', [])
                   },
             },
           })
- definitions.media = new Object({
+          definitions.media = new Object({
               'name': 'media',
-              'display_name': $rootScope.render_config.i18n.CUSTOM.OBJECTS.media,
+              'display_name': $rootScope.i18n.CUSTOM.OBJECTS.media,
               'map_range': false,
                'compute_fulltext': true,
               'positions': {
@@ -37486,7 +37931,7 @@ angular.module('musicBox.render', [])
           })
           definitions.comment = new Object({
               'name': 'comment',
-              'display_name': $rootScope.render_config.i18n.CUSTOM.OBJECTS.comment,
+              'display_name': $rootScope.i18n.CUSTOM.OBJECTS.comment,
               'map_range': true,
                'compute_fulltext': false,
               'positions': {
@@ -38146,7 +38591,7 @@ angular.module('musicBox.socket', [])
 angular.module('musicBox.user', [
 	'musicBox.user.controller',
 	'musicBox.user.rest',
-	'musicBox.user.service'
+	// 'musicBox.user.service'
 ]);
 
 'use strict';
@@ -38163,6 +38608,7 @@ angular.module('musicBox.user', [
 
 angular.module('musicBox.user.controller', []);
 
+
 // ** GLOBAL MISC VARS
 var inheriting = {};
 var GLOBALS;
@@ -38172,48 +38618,33 @@ var render;
 **/
 // todo : remove old api call
 
-function UserProfileCtrl($scope, $http , $location, $routeParams,  $locale, DocumentService, UserRest, UserService, renderfactory,$timeout) {
-	  	 new renderfactory().init('user')
+function UserProfileCtrl($rootScope, $scope, $http , $location, $routeParams,  $locale, $timeout, DocumentService, UserRest, renderfactory, ObjectService ) {
+	  	
+	  	render  = new renderfactory()
+	  	render.init('user')
+
 
  		$scope.globals = GLOBALS;
         $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
 		
+
+
+
  		var promise = UserRest.account({},{  }).$promise;
     	promise.then(function (Result) {
-      		
-      		var this_user = new UserService()
-      		this_user.SetFromData(Result.user)
-      		
-      		$scope.userin.user_options = this_user.MapOptions(Result)
-      		
+
+			
+			var _user 		    = new ObjectService().init(Result, 'user')
+			$rootScope.userin 	= _user.populateUser()
+			
+			console.log(_user)
+
 
 		 }.bind(this));
 		 promise.catch(function (response) {     
 		      console.log(response);
 		 }.bind(this));
 
-
-
-      $scope.flashmessage = function (msg,classname ,timeout, closer) {
-        $scope.flash_message = {}
-        $scope.flash_message.text = msg;
-        $scope.flash_message.classname = classname;
-
-        if(!closer){
-            $scope.flash_message.closer =false;
-        }
-        else{
-            $scope.flash_message.closer = closer;
-        }
-        
-
-        // apply timeout if set to true
-        if(timeout){
-            $timeout(function(){
-                $scope.flash_message.text =  '';
-            },timeout);
-        }
-      }
 
 
   		$scope.edit_user= function(){
@@ -38224,13 +38655,11 @@ function UserProfileCtrl($scope, $http , $location, $routeParams,  $locale, Docu
 
 		 	var promise = UserRest.edit({}, serialize(data) ).$promise;
     		promise.then(function (Result) {
-    			var msg = 'saved'
     			if(Result.edited){
-					msg = Result.edited
-					$scope.flashmessage(msg, 'ok' , 2000, false)
+					$rootScope.flashmessage(Result.edited, 'ok' , 2000, false)
     			}
     			if(Result.error){
-    				$scope.flashmessage(Result.error, 'bad' , 2000, false)
+    				$rootScope.flashmessage(Result.error, 'bad' , 2000, false)
     			}
           		
 
@@ -38242,12 +38671,20 @@ function UserProfileCtrl($scope, $http , $location, $routeParams,  $locale, Docu
 
 		}
 
+		$scope.expand_tools = function(name){
+			render.expand_tools(name)
+  		}
+  		$scope.toggle_render = function(r){
+			render.toggle_render(r)
+		}
+
+
+
         $scope.delete_document= function(doc){
-        	
         	var tdoc           	= new DocumentService();
-        	tdoc.SetSlugFromValue(doc.slug)
-        	tdoc.doc_delete({id:doc.slug});
-        	$scope.documents  = _.reject($scope.documents , function(doch){ return doch._id == doc._id });
+        	//tdoc.SetSlugFromValue(doc.slug)
+        	tdoc.doc_delete({id:tdoc.slug});
+        	$scope.userin.documents  = _.reject($scope.userin.documents , function(doch){ return doch._id == doc._id });
         }
 
         $scope.external_link = function (link){
@@ -38255,12 +38692,11 @@ function UserProfileCtrl($scope, $http , $location, $routeParams,  $locale, Docu
 		}
 
 		$scope.create_doc = function(){
-		
 			var newdoc_service =  new DocumentService('n')
 			newdoc_service.newdoc();
-	}
+		}
 }
-function UserCtrl($scope, $http , $location, $routeParams,  $locale, renderfactory, UserService, UserRest) {
+function UserCtrl($scope, $http , $location, $routeParams,  $locale, renderfactory, UserRest) {
 	
 	console.log('User Controller (signup, login, newsletter)')
 
@@ -38268,16 +38704,18 @@ function UserCtrl($scope, $http , $location, $routeParams,  $locale, renderfacto
 	new renderfactory().init('user')
 
 	// get user
-	new UserService().SetFromData(USERIN)
+
+	//var _user 		    = new ObjectService().init(USERIN, 'user')
+	// _user.populate()
+	//new UserService().SetFromData(USERIN)
 
 	
-	$scope.created_user_link   = root_url+':'+PORT+'/me/account?welcome';
-	$scope.register_url = root_url+':'+PORT+'/signup';
+	$scope.created_user_link   	= root_url+':'+PORT+'/me/account?welcome';
+	$scope.register_url 		= root_url+':'+PORT+'/signup';
 	
 	if($routeParams.redirect_url){
 		$scope.created_user_link 	= $routeParams.redirect_url;
 		$scope.register_url 		+= '?redirect_url='+$routeParams.redirect_url
-
 	}
 
 	if(action_){
@@ -38285,7 +38723,6 @@ function UserCtrl($scope, $http , $location, $routeParams,  $locale, renderfacto
 	}
 
 	//	$scope.render_config = new Object({'i18n':  $locale})
-
 
 
  	$scope.globals = GLOBALS;
@@ -38298,12 +38735,11 @@ function UserCtrl($scope, $http , $location, $routeParams,  $locale, renderfacto
 	$scope.lostpass_form = false
 
 	$scope.checklogin = function(){
-		var data = new Object({'username': $scope.username, 'password': $scope.password, 'redirect_url':$routeParams.redirect_url})
+		var data = {'username': $scope.username, 'password': $scope.password, 'redirect_url':$routeParams.redirect_url}
 		//console.log($routeParams.redirect_url)
 		var promise = UserRest.login({}, serialize(data) ).$promise;
 		promise.then(function (Result) {
           		window.location = Result.redirect_url;
-
 		 }.bind(this));
 		 promise.catch(function (response) {     
 		      console.log(response);
@@ -38315,8 +38751,8 @@ function UserCtrl($scope, $http , $location, $routeParams,  $locale, renderfacto
 	}
 
 	$scope.lostpass_post = function(email){
-		var data = new Object({'email' :email } )	
-		var promise = UserRest.lostpass({}, serialize(data) ).$promise;
+		
+		var promise = UserRest.lostpass({}, serialize({'email' :email }) ).$promise;
 		promise.then(function (Result) {
           		$scope.complete 	 = true
           		$scope.lostpass_form = false
@@ -38331,12 +38767,14 @@ function UserCtrl($scope, $http , $location, $routeParams,  $locale, renderfacto
 		
 		if($scope.password && $scope.username && $scope.password !=="" && $scope.username !=="" ){
 			$scope.errors= ''
-			var data = new Object({
+			
+			var data = {
 					'username' 	: $scope.username,
 					'password' 	: $scope.password,
 					'email' 	: $scope.email,
 					'newsletter': $scope.newsletter ? $scope.newsletter : false 
-			})
+			};
+
 			var promise = UserRest.register({}, serialize(data) ).$promise;
 			promise.then(function (Result) {
 	          		$scope.complete = true;
@@ -38355,9 +38793,7 @@ function UserCtrl($scope, $http , $location, $routeParams,  $locale, renderfacto
 		
 		if($scope.email){
 			$scope.errors= ''
-			var data = new Object()
-			data.email 		= $scope.email;
-			var promise = UserRest.subscribe({}, serialize(data) ).$promise;
+			var promise = UserRest.subscribe({}, serialize({'email':$scope.email}) ).$promise;
 			promise.then(function (Result) {
 	          		 $scope.complete = true;
 			 }.bind(this));
@@ -38406,72 +38842,35 @@ angular.module('musicBox.user.rest', [])
       },
       login:{
         method:"POST",
-        url:  api_url+'/user/userlogin',
+        url: api_url+'/user/userlogin',
       }
     }
   );
 }])
+
+// NOT USED ANYMORE 
 angular.module('musicBox.user.service', [])
 
 .factory("UserService", ["$rootScope", function($rootScope) {
 
   var UserService = function() {
-     console.log('UserService')
-     $rootScope.userin = new Object({'username':'', 'account_url':'me/account', 'login_url':'/login', 'signout_url':'/signout'});
+     // console.log('UserService')
   };
-
-  UserService.prototype.SetFromData = function(u) {
-      if(u){
-
-        if(u.username !== ''){
-          u.islogged=true
-        }
-        $rootScope.userin = _.extend($rootScope.userin, u);
-
-
-      }
-   };
-
-  UserService.prototype.MapOptions = function(data) {
-            $rootScope.documents = [];
-            $rootScope.documents = data.user_documents;
-            var options_array = [];
-            _.each(data.user.user_options , function(option){
-              
-              
-                var op_name = option.option_name ? option.option_name : '';
-                var op_value = option.option_value ? option.option_value : '';
-                var op_type = option.option_type  ? option.option_type : '';
-                var opt = {'option_name' : op_name, 'option_value' : op_value,'option_type' : op_type }
-                options_array.push(opt)
-              
-             
-            });
-           console.log(options_array)
-           return options_array
-
-  }
   return UserService;
 }]);
 angular.module('musicBox.document', [
 	'musicBox.document.rest',
 	'musicBox.document.service',
 	'musicBox.document.directive',
-	'musicBox.document.controller',
-])
+	'musicBox.document.controller'
+	])
 
 'use strict';
 
 /*
 
-AngularJs controllers 
-	
-	Controllers are used to communicate between user interactions in views (load, clicks, changes) 
-	and the document services (factory) located in ./angular-modules/document_services.js
-	
-	Main : 
 
-	- DocumentCtrl :
+	DocumentCtrl :
 	  
 	  * document to service communication,
 	  * document editing
@@ -38489,11 +38888,7 @@ AngularJs controllers
 	- DocumentNewCtrl
 		* new document 
     - DocumentsListCtrl
-    	* list
-    - DocumentCtrlJasmine
-    	* jasmine (tests)
-    - SectionCtrl
-    	* not used
+    	* list  
     - SocketsListCtrl
     	* sockets debugger view
 
@@ -38505,72 +38900,52 @@ AngularJs controllers
 *
 */
 
-var inheriting = {};
-var GLOBALS;
-var render;
-var doc;
-
-
+var inheriting = {},
+GLOBALS,
+render,
+mb_ui_,
+doc;
 
 angular.module('musicBox.document.controller', []);
 
 
-
- /**
- * controller for document.
- * @class DocumentCtrl
- * @param {Object} $scope - angular service
- * @param {Object} $http -  angular service
- * @param {Object} $location -  angular service
- * @param {Object} $routeParams -  angular service
- * @param {Factory} renderfactory -  angular custom factory for render
- * @param {Factory} docfactory -  angular custom factory for document 
- */
-
-function DocumentCtrl($scope, $http , $sce, $location, $routeParams ,socket,renderfactory, DocumentService, $anchorScroll, $timeout, MarkupService) {
-		
-
-	doc = new DocumentService()
-
-
-
+function DocumentCtrl($rootScope, $scope, $http , $sce, $location, $routeParams ,socket,renderfactory, DocumentService, $anchorScroll, $timeout, ObjectService, mb_ui) {
 			
-	 $scope.inserted = function(l){
-		alert(l)
-	}
+	render = new renderfactory()
+	render.init('document')
+
 	
+
+
+    doc = new DocumentService()
+	doc.Load($routeParams.docid ? $routeParams.docid : 'homepage')
+
 	/**
 	* initialization for document and render factory (services)
     * @function DocumentCtrl#init
 	*/
-
 	$scope.sectionstocount=0;
 	$scope.markup_total_count = 0;
-
-
-
-
 	$scope.mapping_passes = 0;
-	$scope.mapping_pass = function(){
-		$scope.mapping_passes++
-	}
-  
 	$scope.letters = [];
     $scope.max_reached_letter = 0;
 
 
-	$scope.update_section_count = function(direction){
+	$scope.mapping_pass = function(){
+		$scope.mapping_passes++
+	}
+  
 
+	$scope.update_section_count = function(direction){
 		if(direction=='add'){
 			$scope.sectionstocount = $scope.sectionstocount+1;
 		}
 		else{
 			$scope.sectionstocount = $scope.sectionstocount-1;
 		}
-	//	alert($scope.sectionstocount)
-	//	return $scope.sectionstocount
+		//	alert($scope.sectionstocount)
+		//	return $scope.sectionstocount
 	}
-
 
 	$scope.update_markup_count = function(direction){
 		if(direction=='add'){
@@ -38580,121 +38955,40 @@ function DocumentCtrl($scope, $http , $sce, $location, $routeParams ,socket,rend
 			$scope.markup_total_count--;
 		}
 	}
-	/**
-      * @description 
-      * Show a message to user
-      *
-      *  @param {String} msg - message to show
-      *  @param {String} classname - a css class ('ok'/ 'bad' / ..)
-      *  @param {Number/Time} timeout - 
-
-      *  @return -
-      * 
-      * @function docfactory#flash_message
-      * @link docfactory#flash_message
-      * @todo --
-      */
-
-      $scope.flashmessage = function (msg,classname ,timeout, closer) {
-        $scope.flash_message = {}
-        $scope.flash_message.text = msg;
-        $scope.flash_message.classname = classname;
-
-        if(!closer){
-            $scope.flash_message.closer =false;
-        }
-        else{
-            $scope.flash_message.closer = closer;
-        }
-        
-
-        // apply timeout if set to true
-        if(timeout){
-            $timeout(function(){
-                $scope.flash_message.text =  '';
-            },timeout);
-        }
-      }
-
-     $scope.defocus_containers = function (){
-			// call parent CTRL > to move in documentCtrl
-		  _.each($scope.doc.containers, function(container){
-            	container.focused  = ''
-
-		  })
+	
+    $scope.defocus_containers = function (){
+		// call parent CTRL > to move in documentCtrl
+		_.each($scope.doc.sections, function(section){
+           section.focused  = ''
+		})
 	}
 
-$scope.SetSlug = function (slug) {
-    if(!slug){
-        $scope.slug= 'homepage';
-        // using it's route (defined in app.js routers)
-        if($routeParams.docid){
-          $scope.slug = $routeParams.docid
-
-        }
-        if($routeParams.docid){
-          $scope.slug = $routeParams.docid
-       
-        }
-    }
-    else{
-       $scope.slug      = slug;
-    }
-    return $scope.slug;
-  };
+	$scope.SetSlug = function (slug) {
+	    if(!slug){
+	        $scope.slug= 'homepage';
+	        // using it's route (defined in app.js routers)
+	        if($routeParams.docid){
+	          $scope.slug = $routeParams.docid
+	        }
+	    }
+	    else{
+	       $scope.slug      = slug;
+	    }
+	    return $scope.slug;
+	 };
 
 
- $scope.RenderConfig = function () {
-    new renderfactory().init('document')
-      
-
-    if($scope.ui.menus.quick_tools_help.visible == true){
-    	
-        $scope.flashmessage($scope.render_config.i18n.CUSTOM.HELP.fresh_document, 'help' , 3000, true)
-    }
-
-
-  }
-
-	
-	
-	$scope.init = function (){
-		console.log('DocumentCtrl init')
-		$scope.SetSlug()
-		$scope.RenderConfig()
-		doc.Load($scope.slug)
-		return
+	$scope.inserted = function(l){
+			alert(l)
 	}
+		
 	
-	// like ng-init
-	// "direct" call
-	$scope.init()
-
-	/**
-	*  UI
-	* 
-	* handle user interactions (click, change, add, save, delete....)
-	* can call the factory.
-	* @function DocumentCtrl#events
-	*/
-
-
-
-
-
 	/**
 	*
 	* Document level
 	*
 	*/
 	
-	
-
-
-
-
-
-
 	$scope.edit_doc = function(field){
 		if(field == 'content'){
 			//alert('content change without api offset!')
@@ -38714,9 +39008,7 @@ $scope.SetSlug = function (slug) {
 	$scope.doc_sync = function(){
 		doc.docsync();
 	}
-	
-
-	
+		
 
 	// when user doubleclick an option (edit in place)
 	// used for footer option and before/after title
@@ -38744,15 +39036,9 @@ $scope.SetSlug = function (slug) {
 		doc.doc_option_new();
 	}
 	
-	
-	
 	$scope.doc_options_delete = function (opt_id){	
 		doc.doc_option_delete(opt_id);
 	}
-	
-
-
-	
 	
 	// reset a markup to a "safe" position and to a safe type {O,1,comment,left}
 	// doesnt change else values.
@@ -38764,7 +39050,6 @@ $scope.SetSlug = function (slug) {
 		doc.markup_save(markup)
 	}
 
-
 	$scope.offset_markups = function (){
 		doc.offset_markups()
 	}
@@ -38773,8 +39058,6 @@ $scope.SetSlug = function (slug) {
 		doc.offset_markup(markup, start_qty, end_qty)
 	}
 
-	
-	
 	$scope.scrollToAnchor= function(anchorID){
 		// from : https://docs.angularjs.org/api/ng/service/$anchorScroll
 		  var newHash = 'anchor' + anchorID;
@@ -38796,9 +39079,6 @@ $scope.SetSlug = function (slug) {
 		markup.editor_tab  = tab;
 	}
 	
-
-	
-
 	$scope.wrapin_section = function(){
 			$scope.objects_in_range('containers');
 			//$scope.objects_in_range('markups');
@@ -38815,44 +39095,25 @@ $scope.SetSlug = function (slug) {
 	* selection / focus
 	*
 	*/
-	
 
-	  
-                  
-                    
-	
 	$scope.insert_new_container = function(mi){
-		
-		  $scope.doc.containers.push(mi)
+		  $scope.doc.sections.push(mi)
 		  doc.docsync();
 	}
-
-
-	$scope.toggle_render = function(r){
-		console.log('toggled_render from '+$scope.ui.renderAvailable_active+' to '+r)
-		$scope.ui.menus['quick_tools_document'].open = "no"
-		$scope.ui.menus['quick_tools_help'].open = "no"
-		$scope.ui.menus['quick_tools_published'].open = "no"
-		$scope.ui.renderAvailable_active = r
-	}
-
 	$scope.switch_focus_side = function(side){
 		$scope.ui.focus_side = side;
 	}
-
 	/**
 	*
 	* Utils / misc
 	*
 	*/
 
-
 	/* turn links clickable out of angular routing
 	* @function DocumentCtrl#external_link
 	* @param  {String} link - redirect link
 	*/
 	$scope.external_link = function (link){
-
 		window.location = link;
 	}
 
@@ -38868,69 +39129,50 @@ $scope.SetSlug = function (slug) {
 	*/ 
 	$scope.virtualize = function(collection){
 		//	doc.virtualize(collection)
-	
-   /*
-                $rootScope.virtuals= new Array();
-                var virtual_summary = new Object({'slug': 'summary', 'header': 'Text summary', 'auto': {'bytype': 'h1-h6'} , 'implicit': {'bytype': 'summary'} } )
-                var virtual_data_x = new Object({'slug': 'data_x', 'header': 'data serie (x)', 'explicit': {'bysubtype': 'x'} } )
-                var virtual_data_y = new Object({'slug': 'data_y', 'header': 'data serie (y)', 'explicit': {'bysubtype': 'y'} } )
-                var virtual_data = new Object({'slug': 'data', 'header': 'data serie (any)', 'explicit': {'bytype': 'data'} } )
-
-            
-                $rootScope.virtuals.push(virtual_summary)
-                $rootScope.virtuals.push(virtual_data_x)
-                $rootScope.virtuals.push(virtual_data_y)
-                $rootScope.virtuals.push(virtual_data)
-                */
-              
-
-                // var virtual_containers = new Object({'slug': 'sections', 'header': 'containers ', 'auto': {'bytype': 'h1-h6'} , 'implicit': {'bytype': 'container'} } )
-                // $rootScope.virtuals.push(virtual_containers)
-
-                // no need yet but works. 
-                // self.virtualize()
-          
-                
+   		/*
+	    $rootScope.virtuals= new Array();
+	    var virtual_summary = new Object({'slug': 'summary', 'header': 'Text summary', 'auto': {'bytype': 'h1-h6'} , 'implicit': {'bytype': 'summary'} } )
+	    var virtual_data_x = new Object({'slug': 'data_x', 'header': 'data serie (x)', 'explicit': {'bysubtype': 'x'} } )
+	    var virtual_data_y = new Object({'slug': 'data_y', 'header': 'data serie (y)', 'explicit': {'bysubtype': 'y'} } )
+	    var virtual_data = new Object({'slug': 'data', 'header': 'data serie (any)', 'explicit': {'bytype': 'data'} } )
 
 
+	    $rootScope.virtuals.push(virtual_summary)
+	    $rootScope.virtuals.push(virtual_data_x)
+	    $rootScope.virtuals.push(virtual_data_y)
+	    $rootScope.virtuals.push(virtual_data)
+	    */
+	  
+
+	    // var virtual_containers = new Object({'slug': 'sections', 'header': 'containers ', 'auto': {'bytype': 'h1-h6'} , 'implicit': {'bytype': 'container'} } )
+	    // $rootScope.virtuals.push(virtual_containers)
+
+	    // no need yet but works. 
+	    // self.virtualize()
 	}
-
 	/* */
 	
-
 	$scope.sync_section_next = function(section, index){
 		console.log(index)
-		$scope.doc.containers[index+1].start = $scope.doc.containers[index+1].start+1;
+		$scope.doc.sections[index+1].start = $scope.doc.sections[index+1].start+1;
 	}
 
+	// use renderService Shared with UserCtrl
 	$scope.expand_tools = function(name){
-/*
-        $scope.ui.menus['quick_tools_document'].open =false
-        $scope.ui.menus['quick_tools_help'].open= false;
-        $scope.ui.menus['quick_tools_published'].open = false
-        */
-		if(!$scope.ui.menus[name].open || $scope.ui.menus[name].open === false){
-			$scope.ui.menus[name].open = true
-		}
-		else{
-			$scope.ui.menus[name].open = false
-		}
-		
-		
+		render.expand_tools(name)
+  	}
+
+  	$scope.toggle_render = function(r){
+		render.toggle_render(r)
 	}
-	
 	
 	$scope.Grabcollection = function (by){
 		$scope.collection = []
 		_.each($scope.doc.markups, function(m, i){
-
 			if(m.selected == true){
 				$scope.collection.push(m)
 			}
-			
-
 		})
-
 	}
 
 	$scope.test_draft = function (value){
@@ -38943,6 +39185,9 @@ $scope.SetSlug = function (slug) {
 		}
 		return false;
 	}
+
+
+
 
 
     // transform ranges to string
@@ -38961,162 +39206,31 @@ $scope.SetSlug = function (slug) {
         	var ci = 0
             for (var i = start; i <= end; i++) {
             	text_range 		+= content_string[i];
-
           	}
          }
-         text_range				 +='"'
+         text_range				+='"'
          return text_range;
   	}
 
-
-		
-	/**
-	*  WATCHERS
-	* 
-	* Get broadcasted events
-	* @function DocumentCtrl#events
-	*/
-	
-
-	// act as a debugger to count watched count.
-	// performances logging.
-
-	/*
-	var tttt = 0;
-	$scope.$watch('doc.containers', function(newValue, oldValue) {
-	   tttt++;
-	   // if(oldValue){
-	   // 	console.log('////////'+tttt)
-	   // }
-	});
-	*/
-	
-
-	
-
-
-	
-	$scope.$watch('doc.title', function(newValue, oldValue) {
-		if(newValue){
-			console.log('- Document level')
-			console.log('- title change watched')
-			document.title = newValue
-		}
-	});
-
-
-	
-
-	$scope.$watch('doc.updated', function( newValue,oldValue) {
-			if(newValue){
-				console.log('- Document level')
-				console.log('- content change watched'+newValue)
-				$scope.doc.formated_date = moment(newValue).calendar() +', '+moment(newValue).fromNow(); 
-			}	
-	
-	});
-	$scope.$watch('ui.selected_range.redraw', function(newValue, oldValue) {
-		//console.log('<<<<<<<<<< ui.selected_range.redraw')
-
-
-		//console.log(newValue, oldValue)
-		if(!newValue || newValue === false){
-			//console.log('<<<<<<<<<< do nothing (ui.selected_range.redraw end)')
-		}
-		else{
-					
-				//console.log('reset all document markups to selected = false')
-			//	_.each($scope.markups, function(m, i){
-	  				
-			//	})
-
-				// stop redraw loop (each section)
-				$scope.ui.selected_range.redraw=false
-				$scope.ui.selected_range.set=true
-				$scope.ui.selected_range.size = $scope.ui.selected_range.end - $scope.ui.selected_range.start
-
-
-				// at least one char
-				if($scope.ui.selected_range.size == 0){
-					$scope.ui.selected_range.size = 1
-				}
-				$scope.ui.selected_range.multi =  ($scope.ui.selected_range.size) > 1 ? true : false
-			
-
-				_.each($scope.doc.containers, function(c,i){
-					c.inrange_letters_and_markups =  true;
-				})
-		}
-	})
-/*
-	 $scope.$watch('doc.markups', function(oldValue, newValue) {
-      
-		//
-   },true);
-*/
-
-	$scope.$watch('ui.selected_range.start', function(newValue, oldValue) {
-			if(newValue==null){
-				
-			}
-			else{
-				    if($scope.ui.selected_range.wait_ev == false){
-						$scope.ui.selected_range.redraw=true
-					}
-			}
-	});	
-
-	$scope.$watch('ui.selected_range.end', function(newValue, oldValue) {
-
-			if(newValue==null){
-				
-			}
-			else{
-					if($scope.ui.selected_range.wait_ev == false){
-						$scope.ui.selected_range.redraw=true
-					}
-			}
-					
-	});
-
-
-
-
-
-
-	$scope.$watch('doc.operation.before.state', function(newValue, oldValue) {
-
-			if(newValue == 'new'){
-				 $scope.apply_operation()
-
-			}
-			if(newValue == 'error'){
-				$scope.doc.operations.push($scope.doc.operation)
-			}
-	})
+  	// ** Atomic operation(s)
 
 	$scope.apply_operation = function(){
 
  			//  $scope.doc.operation.after = {}
-
  			if($scope.doc.operation.before.type == 'save'){
 				doc.docsync();
  			}
  			if($scope.doc.operation.before.type == 'push_container'){
  				var c = $scope.doc.operation.object_
-				$scope.doc.containers.push(c)
+				$scope.doc.sections.push(c)
 				$scope.doc.content += c.fulltext
 				doc.docsync();
  			}
 			
-
-
-
-
- 			 $scope.doc.operation.before.state= 'done'
- 			 // $scope.doc.operation.after.state= 'done'
- 			 // should be in service-promise 
- 			 $scope.push_to_operations()
+ 			$scope.doc.operation.before.state= 'done'
+ 			// $scope.doc.operation.after.state= 'done'
+ 			// should be in service-promise 
+ 			$scope.push_to_operations()
 			
 	} 
 
@@ -39124,14 +39238,12 @@ $scope.SetSlug = function (slug) {
 	 	$scope.doc.operations.push($scope.doc.operation)
 	}
 
-	$scope.reverse_operation = function(){
-				
-	console.log($scope.doc.operation)
-		}
+	$scope.reverse_operation = function(){			
+		console.log($scope.doc.operation)
+	}
 
 
 	$scope.operations_clear= function(){
-
 		 $scope.doc.operations= []
 	}
 
@@ -39140,33 +39252,50 @@ $scope.SetSlug = function (slug) {
 	}
 
 
+	/**
+	*  WATCHERS
+	* 
+	*/
+		
+	$scope.$watch('doc.operation.before.state', function(newValue, oldValue) {
+		if(newValue == 'new'){
+			$scope.apply_operation()
+		}
+		if(newValue == 'error'){
+			$scope.doc.operations.push($scope.doc.operation)
+		}
+	})
 
+	$scope.$watch('doc.title', function(newValue, oldValue) {
+		if(newValue){
+			console.log('- Document level')
+			console.log('- title change watched')
+			document.title = newValue
+		}
+	});
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+	$scope.$watch('doc.updated', function( newValue,oldValue) {
+		if(newValue){
+			console.log('- Document level')
+			console.log('- content change watched'+newValue)
+			$scope.doc.formated_date = moment(newValue).calendar() +', '+moment(newValue).fromNow(); 
+		}
+	});
+	
 	/*
+
+	$scope.$watch('doc.markups', function(oldValue, newValue) {
+		//
+	},true);
+	
 	$scope.$watch('doc.published', function(newValue, oldValue) {
-	 
 	  	if(oldValue && newValue && newValue !== oldValue){
-	  		
 			if(newValue == 'public'){
 				/////$scope.ui.menus.quick_tools_published.open='no'
 			}
 	 	}
 	});
 	
-
 	$scope.$watch('doc.content', function(newValue, oldValue) {
 		if(oldValue && newValue && newValue !== oldValue){
 			console.log('- Document level')
@@ -39177,18 +39306,17 @@ $scope.SetSlug = function (slug) {
 	$scope.$watch('loaded_markups', function( newValue,oldValue) {
 			console.log('[doc] - loaded_markups watched ')		
 	}, true);
-	*/
-/*
-	$scope.$watch('markups', function( newValue,oldValue) {
-			
-			console.log('- Document level')
-			console.log('- containers filtered after markups change watched')
-          	// filter markups > only if markup.type ==  "container"
+	
+	$scope.$watch('markups', function( newValue,oldValue) {			
+				console.log('- Document level')
+				console.log('- containers filtered after markups change watched')
+	          	// filter markups > only if markup.type ==  "container"
 	}, true);
-*/
+	*/
+
 	
 
-
+	
 	/**
 	*  EVENTS 
 	* 
@@ -39214,8 +39342,6 @@ $scope.SetSlug = function (slug) {
 		console.log(data);
 	})
 	
-
-	
 	socket.on('newsback', function (data) {
 		console.log('newsback')
 		console.log(data);
@@ -39225,36 +39351,24 @@ $scope.SetSlug = function (slug) {
 			$scope.markups_pushed = []
 		}
 		console.log($scope.markups_pushed)
-
 		if(data.identifier && data.identifier == $scope.doc.slug && data.markups_pushed){
 			_.each(data.markups_pushed, function(m){
 				    //	m.user_id = {'_id':m.user.user_id}
 					$scope.doc.markups.push(m)
 				    //  console.log($scope.markups_pushed.length)
 				    //	$scope.markups_pushed.push(m)
-					
 			})
-
 			$scope.ui.selected_range.redraw= true
-
-
 		}
-
 		if(data.identifier && data.identifier == $scope.doc.slug && data.content_pushed){
-			
 			$scope.doc.content = data.content_pushed
-			_.each($scope.doc.containers, function(c,i){
-					console.log(c)
-					c.redraw = true;
-					
-  					
-				})
+			_.each($scope.doc.sections, function(c,i){
+				console.log(c)
+				c.redraw = true;
+			})
 		}
-		
 	})
 
-
-	
 
 } // end DocumentCtrl
 
@@ -39262,6 +39376,7 @@ $scope.SetSlug = function (slug) {
 * list all socketed events
 * @class SocketsListCtrl
 **/
+
 function SocketsListCtrl($scope, $http , $location, $routeParams, socket) {
 
 			console.log(ROOM)
@@ -39297,6 +39412,7 @@ function SocketsListCtrl($scope, $http , $location, $routeParams, socket) {
 		 })
 		}
 }
+
 /** 
 * @class DocumentsListCtrl
 **/
@@ -39304,7 +39420,6 @@ function DocumentsListCtrl($scope, $http , $location, $routeParams, socket) {
 		$scope.docs = DOCS;
 		console.log($scope.docs)
 }
-
 
 // used to test jasmine test technique..
 function  DocumentCtrlJasmine($scope, $http , $sce, $location, $routeParams, renderfactory,socket,docfactory){
@@ -39314,8 +39429,6 @@ function  DocumentCtrlJasmine($scope, $http , $sce, $location, $routeParams, ren
 function DocumentCtrlRo($scope, $http , $sce, $location, $routeParams ,socket,renderfactory, DocumentService, $anchorScroll) {
 	console.log('DocumentCtrlRo')
 }
-
-
 
 // seems this syntax works.
 // it's a documentCtrl sub-controller
@@ -39327,67 +39440,22 @@ function DocumentCtrlRo($scope, $http , $sce, $location, $routeParams ,socket,re
 var newdoc_service;
 function DocumentNewCtrl($scope, $compile, $http , $sce, $location, $routeParams, renderfactory,socket,DocumentService, $timeout) {
 
-/*
-	$scope.init_new_doc = function (){
-		console.log('DocumentNewCtrl')
-		$http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded"
-		
-		newdoc_service =  new DocumentService()
-		newdoc_service.RenderConfig()
-		newdoc_service.init_new()
-
-		//newdoc_service
-		
-		$scope.userin= USERIN;
-		document.title = 'Create a new document'	
-	}
-
-*/
-	/*
-	$scope.create_doc = function(){
-		
-		console.log($scope.newdoc)
-		var thiselem;
-		thiselem = document.createElement('div');
-		thiselem.innerHTML = $scope.newdoc.raw_content
-		document.body.appendChild(thiselem)
-		var elem = thiselem
-		$scope.serialization = new Serialize(elem)
-		console.log($scope.serialization)
-		thiselem.remove()
-		
-		var newdoc_service =  new DocumentService()
-		newdoc_service.RenderConfig()
-		newdoc_service.newdoc();
-	}
-	
-	$scope.init_new_doc();
-*/
 	
 } // end controller
 //DocumentNewCtrl.$inject = ['$scope', '$http' ,'docfactory', '$timeout'];
 
-
 function DocumentCtrlCompiled($scope, $http , $sce, $location, $routeParams ,socket,renderfactory, DocumentService,DocumentRest,$anchorScroll,  $timeout) {
  	
-
 	//some setup 
-
 	$scope.doc = {slug:$routeParams.docid, mode:'compiled'}
 	$scope.cursor = {}
 	var cursor = function(letter,action){
-
-			
 			$scope.cursor.start_relative = letter.position.relative
 			$scope.cursor.start_absolute = letter.position.absolute
-
 			$scope.cursor.start_local = letter.position.local
-
 			$scope.cursor.action = action
 
 	}
-
-
  	var promise = DocumentRest.get({Id:$scope.doc.slug},{  }).$promise;
     promise.then(function (Result) {
        if(Result){
@@ -39475,16 +39543,13 @@ angular.module('musicBox.document.directive', [])
 
 .directive("mbBeforedoc", ["$rootScope", function($rootScope) {
     var link= function(){
-      //if($rootScope.ui.debug){
-
-      //}
       console.log(' [before doc] directive')
     }
     return {
       // replace:true,
       restrict: "E",
       scope: true,
-      link:link,
+      //link:link,
       templateUrl: function() {
         return "js/MusicBox/document/tpl/before_doc.tpl.html";
       }
@@ -39519,26 +39584,22 @@ angular.module('musicBox.document.directive', [])
       }
     };
 }])
-.directive("mbFlashmessage", ["$rootScope", function($rootScope) {
+.directive("mbFlashmesmmsage", ["$rootScope", function($rootScope) {
     var link= function(){
       console.log(' [Flash message] directive')
     }
     return {
       // replace:true,
       restrict: "E",
-      scope: true,
-      link:link,
-      templateUrl: function() {
-        return "js/MusicBox/document/tpl/flash_message.tpl.html";
-      }
+     
     };
 }])
 .directive("mbTopmenus", ["$rootScope", function($rootScope) {
     var link= function(scope){
-      if($rootScope.ui.renderAvailable_active !=='embed'){
-          $rootScope.ui.topmenus = {'active':false}
+      if($rootScope.render_config.renderAvailable_active !=='embed'){
+          $rootScope.render.top_menus.doc = {'active':false}
       }
-      console.log(' [top menus] directive'+scope.visible+$rootScope.ui.renderAvailable_active)
+      console.log(' [top menus] directive'+scope.visible+$rootScope.render_config.renderAvailable_active)
     }
     return {
       // replace:true,
@@ -39613,136 +39674,71 @@ angular.module('musicBox.document.rest', [])
 }])
 
 /* 
-main "service / angular factory"
+      "DOCUMENT" <--> MusicBox API model 
 
-handle POST/GET calls to api (rest) for document, doc_options, markups .. crud / backend methods
-can be called from contollers (init on load, save / edits from UI )
-can emit events, flash_messages and websockets.
-can redirect window
+      // angular factory
 
-
- Contains "MusicBox algorithm" (sorting, distribution, letters system)
+      handle POST/GET calls to api (rest) for document, doc_options, markups .. crud / backend methods
+      
+      used from documentCtrl and UserCtrl (load / save / edit )
+      
+      flash_messages
+      can redirect window
 */
 
 
- /**
- * Factory / services for document model
- * 
- * @class docfactory
- * @param {Factory} docfactory -  angular custom factory for document 
- * @inject $rootScope, $http, $location,$sce, $routeParams, socket, renderfactory, $locale, $timeout
- */
-var temp_scope;
 angular.module('musicBox.document.service',[])
-.factory("DocumentService", ["$rootScope", "$http", "$sce", "$resource", "$location", "$routeParams", "renderfactory", "DocumentRest", "UserService", "$timeout", "$locale", "MarkupService", function($rootScope, $http,$sce, $resource,$location, $routeParams ,renderfactory, DocumentRest, UserService, $timeout, $locale,MarkupService) {
 
+.factory("DocumentService", ["$rootScope", "$http", "$sce", "$resource", "$location", "$routeParams", "$timeout", "$locale", "DocumentRest", "ObjectService", "mb_ui", function($rootScope, $http, $sce, $resource, $location,$routeParams,$timeout, $locale, DocumentRest, ObjectService,mb_ui) {
   
   var DocumentService = function() {
     this.api_method = DocumentRest;
-
   };
-  DocumentService.prototype.FreshLoad = function () {
-    this.SetSlug()
-    this.Load()
-
-  }
-
-
-  DocumentService.prototype.SetSlugFromValue = function (slug) {
-    this.slug = slug
-  }
-  
 
   DocumentService.prototype.Load = function (slug) {
-       
     this.slug = slug
-    // this.flash_message('..', 'bad' , 10, false)
 
-    var promise = DocumentRest.get({Id:this.slug},{  }).$promise;
+    var promise = this.api_method.get({Id:this.slug},{  }).$promise;
     promise.then(function (Result) {
-       if(Result){
-          $rootScope.doc = Result.doc
-      
-          $rootScope.markups  = _.sortBy(Result.doc.markups_,function (num) {
-               return num.start;
-          });
+      if(Result){
 
-          $rootScope.doc.markups  = _.sortBy(Result.doc.markups_,function (num) {
-               return num.start;
-          });
-          //    $rootScope.doc.markups  = Result.doc.markups;
          
 
-       
+          var _user         = new ObjectService().init(Result, 'user')
+          $rootScope.userin =  _user.populateUser()
+          $rootScope.userin.login_url               = '/login?redirect_url='+root_url+':'+PORT+'/doc/'+Result.doc.slug;
+          
+  
 
-              if(Result.doc.room){
-                  $rootScope.doc.room__id = Result.doc.room._id;
-                 // $rootScope.room_options =  self.apply_object_options('room', d.doc.room.room_options)
-               }
-               else{
-                   $rootScope.doc.room__id = '';
-                   $rootScope.doc.room = new Object({'_id':'-'});
-               }
-             
+          //depre.
+          $rootScope.doc_owner                      = Result.is_owner;
+          
 
-                $rootScope.doc.operation = {}
-                $rootScope.doc.operations = []
+          // new: see object extend
+          console.log('is owner or has secret ('+ Result.is_owner+')');
 
-                var encoded_url = root_url+':'+PORT;
-                if(Result.doc.slug !=='homepage'){
-                    encoded_url += '/doc/'+Result.doc.slug;
-                }
-                $rootScope.doc.encoded_url = urlencode(encoded_url);
-                $rootScope.doc.text_summary = '';
-
-                $rootScope.sections_to_count_notice = ($rootScope.sectionstocount == 0) ? true : false;
-        
-                $rootScope.objects_sections = [];
-                $rootScope.objects_sections['global_all'] = [];
-                
-
-               // // new service call.
-                Result.doc.servicetype = 'document'
-                var _doc = new MarkupService().init(Result.doc)
-
-
-                $rootScope.doc_options      =    _doc.apply_object_options('document', Result.doc.doc_options)
-                $rootScope.author_options    =   _doc.apply_object_options('author',   Result.doc.user.user_options)
-               
-
-
-            new UserService().SetFromData(Result.userin)
-            $rootScope.userin.login_url = '/login?redirect_url='+root_url+':'+PORT+'/doc/'+Result.doc.slug
-
-            $rootScope.containers = _.sortBy( Result.doc.sections,function (num) {
-               return num.start;
-            });
-
-
-            $rootScope.doc.containers = _.sortBy( Result.doc.sections,function (num) {
-               return num.start;
-            });
-
-            /* to refactor... vs 'containers'
-            $rootScope.sections = _.sortBy( Result.doc.sections,function (num) {
-               return num.start;
-            });
-            */
-            //_.filter($rootScope.sections, function(td){ return  td.type == 'container'; });
-           
-
-            $rootScope.doc_owner = Result.is_owner;
-            
-            console.log('is owner or has secret ('+ Result.is_owner+')')
-
-
-       
-          }
-          else{
-            console.log('err');
+          var _doc = new ObjectService().init(Result.doc, 'document')
+          var doc__ = {
+                'doc_owner'     : Result.is_owner,
           }
 
+          $rootScope.doc                            = _.extend(Result.doc ,doc__ )
+          
+          if(!Result.doc.room){
+              $rootScope.doc.room                   = {'_id':'-'};
+          }
+          $rootScope.sections_to_count_notice       = ($rootScope.sectionstocount == 0) ? true : false;
+          $rootScope.objects_sections               = [];
+          $rootScope.objects_sections['global_all'] = [];
+         // $rootScope.doc_options                    =   _doc.apply_object_options();
 
+          /////   $rootScope.author_options                 =   _doc.apply_object_options('author');
+        //  $rootScope.doc.author_options                 =   _doc.apply_object_options('author');
+
+      }
+      else{
+        console.log('err');
+      }
     }.bind(this));
     promise.catch(function (response) {     
       console.log(response);
@@ -39751,467 +39747,328 @@ angular.module('musicBox.document.service',[])
   };
 
 
-
-
-
-
-
-
-
- 
-
-
-   /**
-      * @description 
-      * Save 'sync' a document by offsets.. 
-      *
-      *  --
-      *  @params collection_name (o{})
-      *  @return -
-      * 
-      * @function docfactory#docsync
-      * @link docfactory#docsync
-      * @todo documentation, rename to doc_sync
-      */
-  DocumentService.prototype.docsync = function(){
-        ///api/v1/doc/create
-        var data = new Object();
-        var thos = this;
-
-      
-     
-        data.markups = new Array()
-        // prepare / clean 
-        var string  = '';
-         _.each($rootScope.doc.containers, function(s){
-         
-          // remove line breaks
-          //  container.fulltext =  container.fulltext.replace(/(\r\n|\n|\r)/gm,"");
-        
-          // console.log(container.fulltext)
-          string  += s.fulltext;
-
-            if(s.touched == true){
-              var a_s = new Object({'id':s._id, 'start': s.start,'end': s.end, 'action':'offset' })
-               data.markups.push(a_s)
-            }
-         })
-
-   $rootScope.doc.content = string
-        
-        // equivalent service call // $scope.sync_queue()
-       
-        data.doc_content = string
-      
-
-        _.each($rootScope.doc.markups, function(m){
-
-           if(m.touched == true){
-                         if( _.isFinite(m.start) && _.isFinite(m.end)){
-                             var a_mk = new Object({'id':m._id, 'start': m.start,'end': m.end, 'action':'offset' })
-                             data.markups.push(a_mk)
-                          }
-                          else{
-                            alert('doh ? ')
-                          }
-           } 
-               
-        });
-        data.edittype = 'markups_sync'
-
-        console.log(data)
-        //// $rootScope.doc.operation.before.sync = data;
-
-        data.doc_content = string
-        
-        var promise = this.api_method.sync({id:$rootScope.doc.slug},serialize(data)).$promise;
-        promise.then(function (Result) {
-          if(Result.doc){
-
-
-
-            if($rootScope.ui.debug){
-                $rootScope.doc.formated_date = Result.doc.updated;
-
-            }
-             
-           
-          thos.flash_message('Document saved', 'ok' , 1600, false)
-
-            _.each($rootScope.doc.containers, function(s){
-                 s.touched = false
-             });
-
-              _.each($rootScope.doc.markups, function(m){
-                 m.touched = false
-             });
-              
-          }
-         
-
-        }.bind(this));
-        promise.catch(function (response) { 
-                console.log(response)
-                thos.flash_message('doc sync error', 'bad' , 2000)
-
-           //this.flash_message(response.err, 'bad' , 3000)
-        }.bind(this));
-
-
-      },
-
-      /**
-      * @description 
-      * save a document value-field.
-      *
-      *  --
-      *  @params collection_name (o{})
-      *  @return -
-      * 
-      * @function docfactory#save_doc
-      * @link docfactory#save_doc
-      */
-
-      DocumentService.prototype.save_doc = function (field) {
-        var thos = this;
-        var data = new Object()
-        data.field = field;     
-        
-        if(field == 'room_id'){
-          data.value =  $rootScope.doc.room__id
-        
-        }
-        else if(field == 'user_id'){
-          data.value =  $rootScope.doc.user._id;
-        }
-        else{
-          data.value =  $rootScope.doc[field]
-        }
-
-
-        var promise = this.api_method.save({id:$rootScope.doc._id},serialize(data)).$promise;
-        promise.then(function (Result) {
-            var restart = false
-            if(field == 'room_id'){
-                          if(field == 'room_id' && data.value !==''){}
-                          else{
-                            $rootScope.doc.room     = Result.doc.room;
-                            $rootScope.doc.room__id = Result.doc.room; 
-                          }
-                          thos.flash_message('document set to room', 'ok' , 2000)    
-            }
-
-            // hard redirect
-            else if(field == 'title'){
-              window.location = root_url+':'+PORT+'/doc/'+Result.doc.slug;
-            }
-  
-            else if(field == 'published'){
-              thos.flash_message('document set to '+Result.doc.published, 'ok' , 2000)    
-
-            }
-            else if(field == 'excerpt' || field == 'thumbnail'){
-                thos.flash_message('document\' '+field+' set to '+data.value, 'ok' , 2000)  
-
-            }
-            else{
-              thos.flash_message('document set for  '+field, 'ok' , 2000)    
-            }   
-        }.bind(this));
-        promise.catch(function (response) { 
-            thos.flash_message('document edit error', 'bad' , 2000)    
-        }.bind(this));
-     }
   /**
-      * @description 
-      * Setup a document
-      *
-      *  --
-      *  @params collection_name (o{})
-      *  @return nothing
-      * 
-      * @function docfactory#init_new
-      * @link docfactory#init_new
-      * @todo rename to doc_init_new
-      */
+  * @description 
+  * Save 'sync' a document by offsets.. 
+  *
+  *  --
+  *  @params collection_name (o{})
+  *  @return -
+  * 
+  * @function docfactory#docsync
+  * @link docfactory#docsync
+  * @todo documentation, rename to doc_sync
+  */
+  DocumentService.prototype.docsync = function(){
+    ///api/v1/doc/create
+    var data = {
+             'markups': [],
+             'edittype' : 'markups_sync'
+    };
+    // prepare / clean 
+    var string  = '';
+     _.each($rootScope.doc.sections, function(s){
+        if(s.touched == true){
+           data.markups.push({'id':s._id, 'start': s.start,'end': s.end, 'action':'offset' })
+        }
+     })
+    data.doc_content =$rootScope.doc.content
+    _.each($rootScope.doc.markups, function(m){
+       if(m.touched == true){
+         if(m.deleted !==true &&  _.isFinite(m.start) && _.isFinite(m.end)){
+             data.markups.push({'id':m._id, 'start': m.start,'end': m.end, 'action':'offset' });
+          }
+       }   
+    });
+    console.log(data)
+   
+    var promise = this.api_method.sync({id:$rootScope.doc.slug},serialize(data)).$promise;
+    promise.then(function (Result) {
+      if(Result.doc){
+        $rootScope.doc.updated = new Date()
+        $rootScope.flashmessage('Document saved', 'ok' , 1600, false);
+        _.each(['markups','sections'], function(obj){
+            _.each($rootScope.doc[obj], function(o, i){
+               o.touched = false;
+           });
+        });
+          
+      }
+     
 
-  DocumentService.prototype.init_new = function () {
-        $rootScope.i18n                    =   $locale;         
-        $rootScope.newdoc                  =   new Object();
-        $rootScope.newdoc.raw_content      =   $rootScope.i18n.CUSTOM.DOCUMENT.default_content
-        $rootScope.newdoc.raw_title        =   $rootScope.i18n.CUSTOM.DOCUMENT.default_title
-        $rootScope.newdoc.published        =   'draft';
-        console.log($rootScope)
+    }.bind(this));
+    promise.catch(function (response) { 
+            console.log(response)
+            $rootScope.flashmessage('doc sync error', 'bad' , 2000);
+       //this.flashmessage(response.err, 'bad' , 3000)
+    }.bind(this));
+
   };
 
-
   /**
-      * @description 
-      * Save a doc_option 
-      *
-      *  --
-      *  @params collection_name (o{})
-      *  @return -
-      * 
-      * @function docfactory#save_doc_option
-      * @link docfactory#save_doc_option
-      */
+  * @description 
+  * save a document value-field.
+  *
+  *  --
+  *  @params collection_name (o{})
+  *  @return -
+  * 
+  * @function docfactory#save_doc
+  * @link docfactory#save_doc
+  */
 
-      DocumentService.prototype.doc_option_edit =  function (value, id) {
-        var thos = this;
-        if($rootScope.userin.username ==''){
-           return false
-        }
-        var data = new Object({'_id':id,'value':value})
-      
-        var promise = this.api_method.option_edit({id:this.slug},serialize(data)).$promise;
-        promise.then(function (Result) {
-             
-              thos.flash_message('option saved (->'+data.value+')', 'ok' , 3000)
-             
-        }.bind(this));
-        promise.catch(function (response) { 
-          thos.flash_message('error', 'bad' , 3000)
-        }.bind(this));
-
- 
-           
-      }
-
-      /**
-      * @description 
-      * Delete an option of document 
-      *
-      *  --
-      *  @return -
-      * 
-      * @function docfactory#delete_doc_option
-      * @link docfactory#delete_doc_option
-      * @todo rename doc_option_delete / implement in api!
-      */
-
-      DocumentService.prototype.doc_option_delete = function (_id) {
-        var thos = this;
-        var data = new Object({'_id':_id})
-   
-        var promise = this.api_method.option_delete({id:this.slug},serialize(data)).$promise;
-        promise.then(function (Result) {
-             
-              thos.flash_message('option deleted', 'ok' , 3000)
-              // reinit, no need to redraw containers
-        }.bind(this));
-        promise.catch(function (response) { 
-          thos.flash_message('error', 'bad' , 3000)
-        }.bind(this));
-
-      }
-
-      /**
-      * @description 
-      * create a new option to document
-      *
-      *  --
-      *  @params collection_name (o{})
-      *  @return -
-      * 
-      * @function docfactory#create_doc_option
-      * @link docfactory#create_doc_option
-      * @todo rename to   doc_option_create
-      */
-
-      DocumentService.prototype.doc_option_new = function () {
-         // calling service
-        var thos = this;
-        var data = new Object({'option_name':$rootScope.ui.doc_option_new_name })
+  DocumentService.prototype.save_doc = function (field) {
     
-        var promise = this.api_method.option_new({id:this.slug},serialize(data)).$promise;
-        promise.then(function (Result) {
-             
-              thos.flash_message('document option created','ok', 3000)
-        }.bind(this));
-        promise.catch(function (response) { 
-          thos.flash_message('error', 'bad' , 3000)
-        }.bind(this));
-
-      }
-      /**
-      * @description 
-      * new document 
-      *
-      *  --
-      *  @params collection_name (o{})
-      *  @return -
-      * 
-      * @function docfactory#--
-      * @link docfactory#--
-      * @todo rename to doc_new
-      */
-
-      DocumentService.prototype.newdoc = function(){
-        var thos = this;
-        
-
-        $rootScope.i18n                    =   $locale;         
-        $rootScope.newdoc                  =   new Object();
-        $rootScope.newdoc.raw_content      =   $rootScope.i18n.CUSTOM.DOCUMENT.default_content
-        $rootScope.newdoc.raw_title        =   'draft #'+Math.random();
-        $rootScope.newdoc.published        =   'draft';
-       
+    var data = {
+      'field' : field
+    }
+    
+    if(field == 'room_id'){
+      data.value =  $rootScope.doc.room__id;
+    
+    }
+    else if(field == 'user_id'){
+      data.value =  $rootScope.doc.user._id;
+    }
+    else{
+      data.value =  $rootScope.doc[field];
+    }
 
 
-        var data =  $rootScope.newdoc;
-        
-        var promise = this.api_method.new({},serialize(data)).$promise;
-        promise.then(function (Result) {
+    var promise = this.api_method.save({id:$rootScope.doc._id},serialize(data)).$promise;
+    promise.then(function (Result) {
+        if(field == 'room_id'){
+            if(field == 'room_id' && data.value !==''){}
+            else{
+                $rootScope.doc.room     = Result.doc.room;
+                $rootScope.doc.room__id = Result.doc.room; 
+            }
+            $rootScope.flashmessage('document set to room', 'ok' , 2000);   
+        }
 
+        // hard redirect
+        else if(field == 'title'){
+          window.location = root_url+':'+PORT+'/doc/'+Result.doc.slug;
+        }
 
+        else if(field == 'published'){
+          $rootScope.flashmessage('document set to '+Result.doc.published, 'ok' , 2000);  
 
-                  if(Result.err){
-                          if(Result.code == 11000 ){
+        }
+        else if(field == 'excerpt' || field == 'thumbnail'){
+            $rootScope.flashmessage('document\' '+field+' set to '+data.value, 'ok' , 2000);
 
-                           thos.flash_message('This title is already used please choose another one', 'bad' , 3000)
-                          }
-                          else{
-                           thos.flash_message('error #'+Result.code, 'bad' , 3000)
-
-                          }
-                   
-                  }else{
-                              window.location = root_url+':'+PORT+'/doc/'+Result.slug+'?fresh'; // fresh
-
-
-                  }
-
-        }.bind(this));
-        promise.catch(function (response) { 
-         
-        }.bind(this));
-
-
-
-
-      };
-
-
-
-
-
+        }
+        else{
+          $rootScope.flashmessage('document set for  '+field, 'ok' , 2000);  
+        }   
+    }.bind(this));
+    promise.catch(function (response) { 
+        $rootScope.flashmessage('document edit error', 'bad' , 2000);  
+    }.bind(this));
+  }
 
   /**
-      * @description 
-      * Show a message to user
-      *
-      *  @param {String} msg - message to show
-      *  @param {String} classname - a css class ('ok'/ 'bad' / ..)
-      *  @param {Number/Time} timeout - 
+  * @description 
+  * Save a doc_option 
+  *
+  *  --
+  *  @params collection_name (o{})
+  *  @return -
+  * 
+  * @function docfactory#save_doc_option
+  * @link docfactory#save_doc_option
+  */
 
-      *  @return -
-      * 
-      * @function docfactory#flash_message
-      * @link docfactory#flash_message
-      * @todo --
-      */
+  DocumentService.prototype.doc_option_edit =  function (value, id) {
+    if($rootScope.userin.username ==''){
+       return false;
+    }
+    var data = {'_id':id,'value':value};
+    var promise = this.api_method.option_edit({id:this.slug},serialize(data)).$promise;
+    promise.then(function (Result) {
+      $rootScope.flashmessage('option saved (->'+data.value+')', 'ok' , 3000);
+    }.bind(this));
+    promise.catch(function (response) { 
+      $rootScope.flashmessage('error', 'bad' , 3000);
+    }.bind(this));    
+  }
 
-      DocumentService.prototype.flash_message = function (msg,classname ,timeout, closer) {
-        $rootScope.flash_message = {}
-        $rootScope.flash_message.text = msg;
-        $rootScope.flash_message.classname = classname;
+  /**
+  * @description 
+  * Delete an option of document 
+  *
+  *  --
+  *  @return -
+  * 
+  * @function docfactory#delete_doc_option
+  * @link docfactory#delete_doc_option
+  * @todo rename doc_option_delete / implement in api!
+  */
 
-          if(!closer){
-              $rootScope.flash_message.closer = false;
-          }
-          else{
-              $rootScope.flash_message.closer = closer;
-          }
-        console.log('flash_message'+msg,classname ,timeout, closer)
+  DocumentService.prototype.doc_option_delete = function (_id) {
+    
+    var data = {'_id': _id };
 
-        // apply timeout if set to true
-        if(timeout){
-            $timeout(function(){
-                $rootScope.flash_message.text =  '' ;
-            },timeout);
-        }
-      };
+    var promise = this.api_method.option_delete({id:this.slug},serialize(data)).$promise;
+      promise.then(function (Result) {
+            $rootScope.flashmessage('option deleted', 'ok' , 3000);
+            // reinit, no need to redraw containers
+      }.bind(this));
+      promise.catch(function (response) { 
+        $rootScope.flashmessage('error', 'bad' , 3000);
+      }.bind(this));
 
+  }
 
-     
-     
-       DocumentService.prototype.doc_delete = function () {
-        var thos = this;
-        var promise = new Object();
-     
-        promise.query = this.api_method.delete( {id:this.slug}).$promise;
-        promise.query.then(function (Result) {
-            thos.flash_message('deleted', 'ok' , 3000)
+  /**
+  * @description 
+  * create a new option to document
+  *
+  *  --
+  *  @params collection_name (o{})
+  *  @return -
+  * 
+  * @function docfactory#create_doc_option
+  * @link docfactory#create_doc_option
+  * @todo rename to   doc_option_create
+  */
 
-            console.log(Result)
-            console.log($rootScope.documents)
+  DocumentService.prototype.doc_option_new = function () {
+     // calling service
+    
+    var data = {'option_name':$rootScope.ui.doc_option_new_name }
+    var promise = this.api_method.option_new({id:this.slug},serialize(data)).$promise;
+      promise.then(function (Result) { 
+          $rootScope.flashmessage('document option created','ok', 3000)
+      }.bind(this));
+      promise.catch(function (response) { 
+        $rootScope.flashmessage('error', 'bad' , 3000)
+      }.bind(this));
+
+  }
+  /**
+  * @description 
+  * new document 
+  *
+  *  --
+  *  @params 
+  *  @return -
+  * 
+  * @function docfactory#--
+  * @link docfactory#--
+  * @todo rename to doc_new
+  */
+
+  DocumentService.prototype.newdoc = function(){
+
+    $rootScope.i18n     =   $locale;         
+    $rootScope.newdoc   =   {
+                              'raw_content'      :   $rootScope.i18n.CUSTOM.DOCUMENT.default_content,
+                              'raw_title'        :   'draft #'+Math.random(),
+                              'published'        :   'draft'
+                           } ;
+    var promise = this.api_method.new({},serialize($rootScope.newdoc)).$promise;
+    promise.then(function (Result) {
+              if(Result.err){
+                if(Result.code == 11000 ){
+
+                  $rootScope.flashmessage('This title is already used please choose another one', 'bad' , 3000)
+                }
+                else{
+                  $rootScope.flashmessage('error #'+Result.code, 'bad' , 3000)
+                }
+               
+              }else{
+                window.location = root_url+':'+PORT+'/doc/'+Result.slug+'?fresh'; 
+              }
+
+    }.bind(this));
+    promise.catch(function (response) { 
+    }.bind(this));
+  };
+
+  /**
+  * @description 
+  * Show a message to user
+  *
+  *  @param {String} msg - message to show
+  *  @param {String} classname - a css class ('ok'/ 'bad' / ..)
+  *  @param {Number/Time} timeout - 
+
+  *  @return -
+  * 
+  * @function docfactory#flash_message
+  * @link docfactory#flash_message
+  * @todo --
+  */
  
-        }.bind(this));
-        promise.query.catch(function (response) {  
-           console.log(response)   
-           thos.flash_message('error', 'error' , 3000)
-        }.bind(this));
-
-
-       }
-
-
-      
-
-
-       /**
-      * @description 
-      * depre.  
-      *
-      *  --
-      *  @params collection_name (o{})
-      *  @return -
-      * 
-      * @function docfactory#--
-      * @link docfactory#--
-      * @todo ---
-      */
-
-     DocumentService.prototype.offset_markups = function (){
-          $http.get(api_url+'/doc/'+$rootScope.doc.slug+'/markups/offset/left/0/1/1').success(function(d) {
-            console.log(d)
-            //doc.init(d,true);
-            //$rootScope.$emit('docEvent', {action: 'doc_ready', type: 'offset', collection_type: 'markup', collection:d.markups });
-          })
-      }
-
-
-      /**
-      * @description 
-      * Offset a markup positions
-      *
-      *  --
-      * @param {object} markup - markup to offset
-      *  @return -
-      * 
-      * @function docfactory#--
-      * @link docfactory#--
-      * @todo rename/check use
-      */
-
-      DocumentService.prototype.offset_markup =  function (markup,start_qty, end_qty){
-
-          var data = {}
-          data.markup_id  = markup._id;
-          data.start_qty  = start_qty
-          data.end_qty    = end_qty
-        
+   DocumentService.prototype.doc_delete = function () {
+    
  
-          $http.post(api_url+'/doc/'+$rootScope.doc.slug+'/markup/'+markup._id+'/offset', serialize(data) ).success(function(m) {
-            console.log(m)
-              alert('??')
-            $rootScope.doc = m;
-            //$rootScope.$emit('docEvent', {action: 'doc_ready', type: 'offset', collection_type: 'markup', collection:m.markups });
-          })
-      }
+    var promise = this.api_method.delete( {id:this.slug}).$promise;
+      promise.then(function (Result) {
+          $rootScope.flashmessage('deleted', 'ok' , 3000);
+          console.log(Result);
+          console.log($rootScope.documents);
+
+      }.bind(this));
+
+      promise.catch(function (response) {  
+         console.log(response)   
+         $rootScope.flashmessage('error', 'error' , 3000);
+      }.bind(this));
+   }
+
+  /**
+  * @description 
+  * depre.  
+  *
+  *  --
+  *  @params collection_name (o{})
+  *  @return -
+  * 
+  * @function docfactory#--
+  * @link docfactory#--
+  * @todo ---
+  */
+
+ DocumentService.prototype.offset_markups = function (){
+      $http.get(api_url+'/doc/'+$rootScope.doc.slug+'/markups/offset/left/0/1/1').success(function(d) {
+        console.log(d);
+        //doc.init(d,true);
+        //$rootScope.$emit('docEvent', {action: 'doc_ready', type: 'offset', collection_type: 'markup', collection:d.markups });
+      })
+  }
+
+  /**
+  * @description 
+  * Offset a markup positions
+  *
+  *  --
+  * @param {object} markup - markup to offset
+  *  @return -
+  * 
+  * @function docfactory#--
+  * @link docfactory#--
+  * @todo rename/check use
+  */
+
+  DocumentService.prototype.offset_markup =  function (markup,start_qty, end_qty){
+
+      var data        = {}
+      data.markup_id  = markup._id;
+      data.start_qty  = start_qty
+      data.end_qty    = end_qty
+    
+      $http.post(api_url+'/doc/'+$rootScope.doc.slug+'/markup/'+markup._id+'/offset', serialize(data) ).success(function(m) {
+        console.log(m);
+          alert('??');
+        $rootScope.doc = m;
+        //$rootScope.$emit('docEvent', {action: 'doc_ready', type: 'offset', collection_type: 'markup', collection:m.markups });
+      })
+  }
   
-
   return DocumentService;
 }])
 /*  
@@ -40229,9 +40086,6 @@ angular.module('musicBox.document.service',[])
   > apply save action 
       > save()
 
-  
-
-  
 
   for example 
 
@@ -40270,9 +40124,6 @@ angular.module('musicBox.document.service',[])
 */
   
 
-
-
-
 angular.module('musicBox.section.directive.textarea', [])
 .directive('textListener', ["$rootScope", function($rootScope) {
 
@@ -40289,6 +40140,7 @@ angular.module('musicBox.section.directive.textarea', [])
 
       elem.bind("mousedown", function(event){
           move('mousedown', event, scope)
+          
           return
       })
 
@@ -40372,7 +40224,6 @@ angular.module('musicBox.section.directive.textarea', [])
         $rootScope.ui.current_action = eventname
         var grp_log = Math.random()*1000
 
-        /// $rootScope.ui.selected_range.working_section        =  scope.$parent.section.sectionin  
 
         var objs = ['markups','containers']
         if(eventname == 'key'){
@@ -40415,10 +40266,9 @@ angular.module('musicBox.section.directive.textarea', [])
                 //  var endend  = ($rootScope.ui.selected_range.end == parseInt(o.end+1) && $rootScope.ui.selected_range.start == parseInt(o.end+1)  ) ? true : false;
                 //  var startstart =  ($rootScope.ui.selected_range.start == o.start && $rootScope.ui.selected_range.end == o.start) ? true : false;
                
-
                 var otype = 'markup'
-                 if(o.type && o.type == 'container'){
-                      var otype = 'container'
+                if(o.type && o.type == 'container'){
+                  var otype = 'container'
 
                   }
                  
@@ -40477,8 +40327,6 @@ angular.module('musicBox.section.directive.textarea', [])
 
                     } 
                     operation.before =  _.extend(operation.before,  operation_);
-
-
                     
                     // SET markup or section operation > toggle controller callback.
                     o.operation = operation;
@@ -40486,6 +40334,9 @@ angular.module('musicBox.section.directive.textarea', [])
           })
 
       // key or delete = 
+       console.log('-------------CASE EDIT ONLY')
+             $rootScope.ui.selected_range.redraw_content    = true;
+
       $rootScope.ui.selected_range.start = $rootScope.ui.selected_range.start+qty
       $rootScope.ui.selected_range.end   = $rootScope.ui.selected_range.end+qty
       $rootScope.ui.boundaries = boundaries_test(scope.section, $rootScope.ui.selected_range)
@@ -40504,10 +40355,9 @@ angular.module('musicBox.section.directive.textarea', [])
      
       // else if(eventname == 'click'){}
       // else if(eventname== 'mv'){}   
-                 $rootScope.ui.selected_range.working_section        =  scope.$parent.section.sectionin  
 
       var rstart  =  parseInt(event.target.selectionStart + scope.section.start)
-      var rend    =  parseInt(event.target.selectionEnd + scope.section.start)
+      var rend    =  parseInt(event.target.selectionEnd   + scope.section.start)
 
       if(rstart > rend){
         var temp_s = rstart;
@@ -40519,21 +40369,28 @@ angular.module('musicBox.section.directive.textarea', [])
       if(eventname == 'mousedown' ){
         $rootScope.ui.selected_range.wait_ev = true 
       }
-      else if(eventname == 'mouseup'){
+      else { // if(eventname == 'mouseup')
         $rootScope.ui.selected_range.wait_ev = false 
       }
 
       // cursor "UP" > go to start
        if(event.which== 38){
-        rstart = scope.section.start
-        rend =scope.section.start
+        rstart  = scope.section.start
+        rend    = scope.section.start
 
        }
+
+      if(eventname == 'mousedown' ){}
+      else{}
+
 
 
       $rootScope.ui.selected_range.start = rstart
       $rootScope.ui.selected_range.end   = rend
       $rootScope.ui.boundaries = boundaries_test(scope.section, $rootScope.ui.selected_range)
+
+
+      console.log( $rootScope.ui.selected_range)
       $rootScope.$apply()
     }   
 }])
@@ -40650,7 +40507,7 @@ function ranges_test(as,ae,ms,me,type, boundaries){
           if(f==0){
              c = -110
           }              
-          console.log('RANGE RESULTS='+ c)
+          console.log('RANGE RESULTS for '+type+'='+ c)
           return c
    }
 
@@ -40708,6 +40565,534 @@ function boundaries_test(s, r){
 > the letter element.
 
 */
+
+
+angular.module('musicBox.section.directive.letters.letters_controller', ['musicBox.section']).controller('LettersCtrl', ["$scope", "$rootScope", function($scope, $rootScope) {
+
+//console.log($rootScope)
+//console.log($scope)
+
+/*
+$scope.f = $scope.section.fulltext
+$scope.fl = $scope.section.inrange_letters_and_markupsllll
+$scope.mks = $scope.section.section_markups
+console.log($scope.fff)
+console.log($scope.mks)
+*/
+
+      $scope.$watch('section.fulltext', function(newValue, oldValue) {
+                 console.log(' [Section] fulltext ')
+                 //newValue = newValue.replace("\n", "");
+        console.log('----B-------------- BUILD LETTERS (BASE) ARRAYS')
+
+    var temp_letters = new Array();
+        var i;
+        var i_array     =   0;
+        var fulltext    =   '';
+        var str_start   =   0;
+        var str_end     =   _.size($scope.section.fulltext)-1;
+        // confing could be a option/mode feature
+        var content_string  = $rootScope.doc.content
+        var classes_arr = []
+        // classes_arr.h1 = {}
+        // classes_arr.h2 = {}
+           var fulltext_block = ''
+
+
+
+          var at_least_one = false
+
+
+
+        //alert(str_end)
+          for (i = str_start; i <= str_end; i++) {
+
+            
+          var letter_arr = new Object({
+            'classes_flat': '',
+            'order': i,
+            'inrange':false,
+            'href':'',
+            'absolute_order': $scope.section.start+i,
+
+          });
+                  ///console.log(letter_arr)
+
+
+            if(!$scope.section.fulltext[i]){
+              
+            }
+            else{
+              at_least_one = true
+              if($scope.section.fulltext[i] === " ") {
+
+                      letter_arr.char = '&nbsp;'
+                      fulltext_block += '&nbsp;'
+                  }
+                  else{
+                    letter_arr.char = $scope.section.fulltext[i]
+                    fulltext_block +=$scope.section.fulltext[i]
+                  }
+
+            }
+
+
+                
+            letter_arr.isfirst = false
+            letter_arr.islast = false
+                if(str_start == i)
+            {
+            //  letter_arr.char = '>'+letter_arr.char 
+              letter_arr.isfirst = true
+            }
+
+            if(i == str_end)
+            {
+              //letter_arr.char += '<'
+            
+              letter_arr.islast = true
+            }
+
+            temp_letters[i_array]  = letter_arr;
+
+           
+
+            i_array++;
+        }
+        
+
+        if( at_least_one === false){
+          alert('no letter ')
+        }
+       
+          
+        $scope.section.letters = temp_letters;
+        $scope.section.lettersarray = Math.random()
+       
+
+
+      // optionnal (if range  were set in params..) 
+      // not triggered on init 
+      // $scope.section.inrange_letters = Math.random()
+                    
+
+
+      })
+
+
+   $scope.$watch('section.lettersarray', function(newValue, oldValue) {
+        console.log('----B-------------- call LETTER MAPS CLASSES ARRAYS')
+         $scope.map_letters()    
+
+   })
+     
+
+
+/*
+      $scope.$watch('section.remap_fulltext_block', function(newValue, oldValue) {
+
+
+              if(newValue == true){
+                console.log(' compile fulltext_block (ONLY ONCE )')
+                  $scope.section.fulltext_block  = 'undef...';
+                  $scope.section.remap_fulltext_block = false
+              }
+
+      })
+*/
+
+
+      $scope.$watch('section.inrange_letters', function(newValue, oldValue) {
+       
+
+         if(!oldValue == true){
+            
+          } 
+
+         // console.log('----B------START-------- call LETTER MAPS INRANGE ATTRIBUTE (ONLY IF UI )')
+               
+                  _.each($scope.section.letters, function(l, i){
+                  l.inrange = false;
+                  var c_real = i + $scope.section.start;
+                  // map the range  
+                    if(c_real>=$rootScope.ui.selected_range.start && c_real <= $rootScope.ui.selected_range.end){
+                     
+
+                     l.inrange = true;
+                   
+
+                    }
+                    else{
+                     
+
+
+                    }
+                 
+                  })
+           
+        console.log('-- call LETTER MAPS INRANGE ATTRIBUTE (ONLY IF UI DONE)')          
+
+    })
+
+$scope.map_letters = function(){
+  console.log('map_letters (section)')
+
+  var fulltext_block = ''
+
+  if(!$scope.section.letters){
+    //$scope.section.letters = []
+  }
+
+  
+  _.each($scope.section.letters, function(l,li){
+
+    l.classes = []
+    l.classes_array = ''
+
+
+    var li_real = li+parseInt($scope.section.start)
+
+    if(li==0){
+
+      $scope.section.letters[li].classes.push('isfirst-section')
+      $scope.section.letters[li].isfirst = true
+
+    }
+    if(li == $scope.section.letters.length-1){
+      $scope.section.letters[li].classes.push('islast-section')
+      $scope.section.letters[li].islast = true
+    }
+
+//console.log(l)
+//console.log($scope.section.letters[li])
+       
+
+    //if(($scope.$parent.ui.selected_range.start || $scope.$parent.ui.selected_range.start ==0 )  && $scope.$parent.ui.selected_range.end){
+      var index_absolute_start =   $rootScope.ui.selected_range.start -  parseInt($scope.section.start)
+      var index_absolute_end   =   $rootScope.ui.selected_range.end   -  parseInt($scope.section.start)
+
+    //}
+
+    //l.inrange=false;
+    //  console.log(li , index_absolute_start ,index_absolute_end)
+
+    if( 
+
+      // li == 3 || 
+      //($scope.$parent.ui.selected_range.start || $scope.$parent.ui.selected_range.start == 0 ) 
+      //&& 
+      //($scope.$parent.ui.selected_range.end || $scope.$parent.ui.selected_range.end ==0) 
+      //&& 
+
+      li == index_absolute_start || (li > index_absolute_start && li <= index_absolute_end )  ){
+
+      //console.log('true at '+li+' LR; '+li_real )
+      //( (li > index_absolute_start && li < index_absolute_end) ||  li == index_absolute_end ||  li == index_absolute_start) ) {
+    //  l.inrange = true;
+    }
+
+
+
+    
+
+
+    if($scope.section.letters[li].char == '&nbsp;'){
+      fulltext_block += ' '
+    }
+    else{
+      fulltext_block += $scope.section.letters[li].char;
+    }
+    
+
+  
+  })
+
+  if( $scope.$parent.ui.selected_range.end == $scope.section.end && $scope.section.letters[$scope.section.end]) {
+      //$scope.section.letters[$scope.section.end].inrange = true;
+    }
+  if( $scope.$parent.ui.selected_range.start == $scope.section.start) {
+     // $scope.section.letters[0].inrange = true;
+  }
+
+
+  if( $scope.$parent.ui.selected_range.start == $scope.section.end) {
+    if($scope.section.letters[$scope.section.end]){
+
+     // $scope.section.letters[$scope.section.end].inrange = true;
+    }
+    else{
+      //// alert('??')
+    }
+  }
+  
+
+
+  var s_markups  = $scope.section.section_markups
+  // console.log(s_markups)
+  // $scope.markups_by_start_end_position_type($scope.section.start, $scope.section.end, 'any', 'any')
+    
+    _.each(s_markups, function(markup,k){
+        var m_objSchemas = $scope.$parent.objSchemas[markup.type]
+
+        var loop_start = parseInt(markup.start) - parseInt($scope.section.start);
+      var loop_end   = markup.end     - $scope.section.start;
+                        
+
+      if(markup.type=='container_class' ){ // or pos == inlined
+        //$scope.section.section_classes += markup.metadata+' ';
+      }
+
+
+      if(!$scope.section.letters[loop_start]){
+      //  alert('test suite no start letter')
+      }
+      if(!$scope.section.letters[loop_end]){
+
+
+        //alert('test suite no end letter')
+      }
+      
+      for (var mi = loop_start ; mi <= loop_end;mi++) {
+
+
+      
+        if($scope.section.letters && $scope.section.letters[mi]){
+
+
+            if(mi ==  loop_start){
+              $scope.section.letters[mi].classes.push('isfirst-range')
+            }
+            if(mi ==  loop_end){
+              $scope.section.letters[mi].classes.push('islast-range islast-range--')
+            }
+
+            
+
+            if(markup.type == 'datavalue'){
+              $scope.section.letters[mi].classes.push(markup.subtype)
+              $scope.section.letters[mi].classes.push(markup.type)
+
+            }
+            if(markup.type == 'hyperlink' && markup.metadata){
+              //  console.log('markup.type == hyperlink')
+              //  console.log(markup)
+                $scope.section.letters[mi].href = markup.metadata
+            }
+            
+            if(m_objSchemas.map_range === true){
+              if(_.contains($scope.section.letters[mi].classes, markup.subtype )){
+
+$scope.section.letters[mi].classes.push(markup.subtype) 
+              }
+              else{
+                $scope.section.letters[mi].classes.push(markup.subtype) 
+              }
+              
+            }
+        }
+      }
+
+    })
+
+
+
+
+    if($scope.section.modeletters == 'compiled'){
+      var out = ''
+      $scope.section.fulltext_block = $scope.compile_html(fulltext_block)
+      console.log(' block html compiled')
+    }
+    else{
+      console.log('use less compile')
+    }
+
+
+}
+
+
+
+
+
+
+// transform a string into a rich "classic html" markup string
+// used only at page load, because after click, text is transformed into 'single' letters directives
+
+$scope.compile_html = function(fulltext_block ){
+  var out = ''
+
+  for (var i = 0; i < fulltext_block.length; i++) {
+          
+          
+
+            var  prev_class = false
+            var current_class = false
+            var next_class  = false;
+            
+
+            /*if($scope.section.letters[i].inrange === true){
+             _.isArray(current_class) ? current_class.push('inrange') : current_class = new Array('inrange')
+          }
+
+            if(i==0){
+                  //     _.isArray(current_class) ? current_class.push('iss') : current_class = new Array('iss')
+
+
+            }
+
+            if(i+1 == $scope.section.letters.length ){
+                                   _.isArray(current_class) ? current_class.push('issd') : current_class = new Array('issd')
+
+          /// current_class.push('is_last')
+
+            }
+            */
+          //console.log('prev next i == '+i)
+          if($scope.section.letters[i] && ($scope.section.letters[i].classes.length > 0 ) ){
+            var current = true  
+          //  if(_.isArray())
+          //  current_class.push($scope.section.letters[i].classes) : current_class = new Array($scope.section.letters[i].classes)
+            
+            //if($scope.section.letters[i].href !== '')
+            current_class = $scope.section.letters[i].classes
+
+
+            //current_class.push()
+
+
+          }
+          
+
+          if( $scope.section.letters[i+1] && $scope.section.letters[i+1].classes.length > 0 ){
+             var next = true;
+             next_class = $scope.section.letters[i+1].classes;
+          }
+          
+          if($scope.section.letters[i-1] && $scope.section.letters[i-1].classes.length > 0 ){
+             var prev = true
+             prev_class = $scope.section.letters[i-1].classes
+          }
+
+
+          
+          
+
+
+          // case letter as at least one class
+          if(_.isArray(current_class)){
+            //console.log($scope.section.letters[i].classes)
+            
+
+            // add to array before compare
+            
+
+            // default class
+            var classes_flat  = 'lt '
+            // flatten 
+             _.each(current_class, function(c,ci){
+              classes_flat += c+' ';
+            })
+
+            
+            var inside = ''
+            
+            if($scope.section.letters[i].href !== ''){
+
+
+              //inside = '<a href="'+$scope.section.letters[i].href+'">'+fulltext_block[i]+'</a>'
+              
+              if($scope.section.letters[i-1] && $scope.section.letters[i-1].href !== ''){
+                inside += fulltext_block[i]
+              }
+              else{
+                inside += '<a title="hyperlink to '+$scope.section.letters[i].href+'" target="_blank" href="'+$scope.section.letters[i].href+'">'+fulltext_block[i]
+              }
+
+
+              if($scope.section.letters[i+1] && $scope.section.letters[i+1].href == ''){
+                inside +='</a>'
+              }
+              else{
+                
+              }
+
+
+            }
+            else{
+
+              if(fulltext_block[i] == ' '){
+              inside = '&nbsp;'
+            
+            }
+            else{
+              inside = fulltext_block[i]
+            }
+              
+              
+                
+              
+
+            }
+
+            if(  _.isEqual(prev_class , current_class))  {
+              out += inside
+
+            }
+            else{
+              out += '<span class="'+classes_flat+'">'+inside
+
+            }
+            if(_.isArray(next_class) && _.isEqual(next_class , current_class) ) {
+            
+            }
+            else{
+              out += '</span>'
+
+            }
+
+
+            //out += '<span class="'+classes_flat+'">'+inside+'</span>'
+
+            
+            //console.log($scope.section.letters[i].classes[])
+          }
+
+          // case letter has no classes
+          else{
+            
+
+            if(_.isArray(prev_class) || i==0 ){
+              // prev was a self closing letter or first letter then open span
+              out +='<span>'
+            }
+            
+            
+
+            if(fulltext_block[i] == ' '){
+              out += '&nbsp;'
+            
+            }
+            else{
+              out += fulltext_block[i]
+            }
+
+            
+            if(_.isArray(next_class) || i+1 == $scope.section.letters.length){
+              // next is a letter or is last letter then close span
+              out +='</span>'
+            }
+        
+          }
+
+        }
+  return out
+}
+
+
+
+
+
+}])
+
 
 angular.module('musicBox.section.directive.letters', [])
 .directive('lt',   ["$rootScope", function($rootScope) {
@@ -40782,10 +41167,10 @@ angular.module('musicBox.section.directive.letters', [])
     logevent.ended = $rootScope.ui.selected_range.end
 
 
-             $rootScope.ui.selected_range.working_section        =  scope.$parent.section.sectionin  
+    $rootScope.ui.selected_range.working_section        =  scope.$parent.section.sectionin  
 
 
-    console.log(logevent)
+   // console.log(logevent)
 
     // $rootScope.ui.selected_range.debug.push(logevent)
     $rootScope.$apply(function(){});
@@ -40934,7 +41319,7 @@ angular.module('musicBox.section.directive.letters', [])
 
               }
               
-              console.log(e)
+              console.log('event for <lt>')
               $rootScope.ui.selected_range.wait_ev = false  // now waiting mouseup!
              logevent.event = 'mousedown'
  
@@ -41015,7 +41400,7 @@ angular.module('musicBox.section.directive.letters', [])
     }
 
     return {
-          template: '<span contenteditable_  class="lt" ng-class="lt.classes" inselection="{{lt.inselection}}" inrange="{{lt.inrange}}" ng-bind-html="lt.char"></span>',
+          template: '<span contenteditable_  class="lt" ng-class="lt.classes" inselection="{{lt.inselection}}" inrange="{{lt.inrange}}" ng-bind-html="lt.char"><span>',
           replace :false,
           restrict: 'A',
           link:link,
@@ -41026,13 +41411,17 @@ angular.module('musicBox.section.directive.letters', [])
   }])
 
 
+
+
+
+
+
+
+
 .directive("contenteditable_ddd", function() {
   return {
     restrict: "A",
     link: function(scope, element, attrs, ngModel) {
-
-      
-
       element.bind("blur keyup change", function() {
         console.log(element.html())
          //console.log(scope.lt.char)
@@ -41108,9 +41497,11 @@ angular.module('musicBox.section.directive.letters', [])
 }])
 angular.module('musicBox.section', [
 	'musicBox.section.controller',
-	'musicBox.section.controller_b',
+	// 'musicBox.section.controller_b',
+	'musicBox.section.editor_controller',
 	'musicBox.section.directive.textarea',
 	'musicBox.section.directive.section',
+	'musicBox.section.directive.letters.letters_controller',
 	'musicBox.section.directive.letters',
 	'musicBox.section.directive.pusher'
 ])
@@ -41118,798 +41509,158 @@ angular.module('musicBox.section', [
 
 
 /*
+		SET base value for section
 
-triggers / callback
-attribute_objects()->map_letters->
+		GET markups (collection A)
+			
+			> attribute objects (LAYOUT)
+		
+
+		SET FUllTEXT
+				> watched in letters directive
+					> contruct letters array (base)
+						> map classes (ft+ (collection A))
+
+		
+
+		seLEct
+
+		// SAVE / dElEtE
 
 
->> MAIN FUNCTIONS/LOGIC 
 
-	base section : {
-					start: 0
-					end: n
-	}
+		PUSH Markup
+		
+		//OPerattions: 	
+	
 
-	>> INIT()
-		> 
+		WATCH: 
+			start -> start_or_end
+			end   -> start or end
+
+			start or end > stack list
+
+
+			inrange_markups  : reset inrange for markups 
+				> calls markupCTRL 
+						-> test range (true | false)
+
 
 */
 
 
 
-angular.module('musicBox.section.controller', []).controller('SectionCtrl', ["$scope", "$http", "DocumentService", "MarkupRest", "socket", "MarkupService", function($scope, $http, DocumentService, MarkupRest,socket, MarkupService) {
+angular.module('musicBox.section.controller', []).controller('SectionCtrl', ["$rootScope", "$scope", "$http", "DocumentService", "MarkupRest", "socket", "ObjectService", function($rootScope, $scope, $http, DocumentService, MarkupRest,socket, ObjectService) {
 
 $scope.init_= function (index_) {
 	console.log('init_ (section #'+ index_+')')
 
-	/* some variable seting for each container */
-	var container_ = new Object({
-		'selecting' : -1,
-		'sectionin' : index_,
-		'selected'  : false,
-		'focused'   : '',
-		'editing_text': $scope.ui.debug ? true : false,
-		'ready' : 'init',
-		'modeletters' : $scope.ui.debug ? 'single' : 'compiled',
-		'section_classes':'', 
-		'stack': [],
-	//	'rebuild' : false,
-		'rebuild_count' : 0, 
-		'textlength': null,
-	//	'objects_count': '0',
-	//	'debuggr' : ['init'],
-        'has_offset'     : false,
-        'touched'     : false,
-        'keepsync'     : true,
-        'objSchemas' : $scope.objSchemas['container'],
-        'objSchemas_css': $scope.objSchemas['container_class'],
-        'servicetype'  	 :'section',
-        'operation': {},
-        'operations': [],
-        'fulltext' : $scope.init_fulltext($scope.section.start, $scope.section.end),
-        'section_markups' : $scope.get_markups($scope.section.start, $scope.section.end),
-        'section_markups_ready' : 'false',
-        'section_fulltext_ready' : 'false',
-        
+	var section_ = new ObjectService();
+	section_.sectionin  = index_
+	section_.init($scope.section, 'section')
 	
-	})
+	/// need for layout 
+	$scope.get_markups($scope.section.start, $scope.section.end)
 
-	// extend this 
-	$scope.section = _.extend($scope.section, container_);
-
-
-	new MarkupService().init($scope.section)
-	//	$scope.markup.user_options = _markup.apply_object_options('markup_user_options',$scope.markup.user_id.user_options)
-
-
-	//$scope.
+	//$scope.markup.user_options = _markup.apply_object_options('markup_user_options',$scope.markup.user_id.user_options)
 	//$scope.section.section_markups_length 	= $scope.section.section_markups.length
-
-	
-	
 	// add to parent scope section count
-	
-
-
 	// reach letter max test
 	if($scope.section.end > $scope.$parent.max_reached_letter){
 		$scope.$parent.max_reached_letter = $scope.section.end
 	}
-
-
-
-	
-	// console.log('$scope.section')
-
-
-	// console.log($scope.section)
-
 	// continous test (prev end match current start)
-
 	/*
 	if($rootScope.doc.containers[index-1]){
-	var container_prev_end = ($rootScope.containers[index-1].end)+1;
-	if(container_prev_end !== container.start){
-	console.log('discontinous section found '+container_prev_end+' /vs/'+container.start)
-	}
+		var container_prev_end = ($rootScope.containers[index-1].end)+1;
+		if(container_prev_end !== container.start){
+			console.log('discontinous section found '+container_prev_end+' /vs/'+container.start)
+		}
 	}
 	*/
 }
 
 
-// contruct temp fulltext, 
-// called at section init only 
-$scope.init_fulltext = function (s,e){
-	 console.log('init_fulltext (section)')
-
-    var fulltext = '';
-    var fulltext_block = ''
-    var i_array     =   0;
-	for (var i = s; i <= e; i++) {
-		// console.log(i)
-		if($scope.doc && $scope.doc.content[i]){
-			fulltext += $scope.doc.content[i];
-			fulltext_block += $scope.doc.content[i];
-
-		}
-		else{
-			// there is no letter for section !
-			fulltext += '-';
-			fulltext_block += '-'
-
-		}
+	// contruct temp fulltext, 
+	// called at section init only 
+	$scope.init_fulltext = function (s,e){
+		return section_.fulltext()
 	}
-	$scope.section.fulltext = fulltext
-
-	return fulltext;
-	//$scope.compile_fulltext(fulltext_block)
-
-}
-
-
-$scope.get_markups  = function(ss,se){
-		var arr_m = []
-		_.each($scope.doc.markups, function(m){
-
-				if( !m.deleted && (m.start >= parseInt(ss)) && (m.end <= parseInt(se)) ){
-					///m.visible = true
-					m.sectionin = $scope.section.sectionin
-					m.isolated= 'false'
-					arr_m.push(m)
-				}
-		});
-		console.log('get markups>')
-		console.log(arr_m)
-		$scope.section_markups_ready = 'true';
-
-		return arr_m;
-}
-
-
-// main filter for markups
-$scope.get_local_markups_by_start_end_position_type  = function(p,t){
-		//console.log('markups_by_start_end_position_type (l)')
-		var arr_m = []
-		_.each($scope.section.section_markups, function(m){
-				if( (m.position == p  || p =='any' ) && (m.type == t  || t=='any')  ){
-					arr_m.push(m)
-				}
-		});
-		return arr_m;
-}
-
-// main filter for markups
-$scope.markups_by_start_end_position_type  = function(ss, se , p , t ){
-	//console.log('>get local')
-	return $scope.get_local_markups_by_start_end_position_type(p,t)
-	/*
-		
-		console.log('markups_by_start_end_position_type'+ss+se+p+t)
-
-		var arr_m = []
-		_.each($scope.section_markups, function(m){
-				if( (!m.deleted) && (m.position == p  || p =='any' ) && (m.type == t  || t=='any') && (m.start >= parseInt(ss) || ss == 'any') && (m.end <= parseInt(se) || se =='any' ) ){
-					///m.visible = true
-					arr_m.push(m)
-				}
-		});
-
-		
-		return arr_m;
-		*/
-}
-
-
-
-
-
-$scope.map_letters = function(){
-  console.log('map_letters (section)')
-
-
- 	var fulltext_block = ''
-
- 	if(!$scope.section.letters){
- 		//$scope.section.letters = []
- 	}
-
-  
-	_.each($scope.section.letters, function(l,li){
-
-		l.classes = []
-		l.classes_array = ''
-
-
-		var li_real = li+parseInt($scope.section.start)
-
-		if(li==0){
-
-			$scope.section.letters[li].classes.push('isfirst-section')
-			$scope.section.letters[li].isfirst = true
-
-		}
-		if(li == $scope.section.letters.length-1){
-			$scope.section.letters[li].classes.push('islast-section')
-			$scope.section.letters[li].islast = true
-		}
-
-//console.log(l)
-//console.log($scope.section.letters[li])
-       
-
-		//if(($scope.$parent.ui.selected_range.start || $scope.$parent.ui.selected_range.start ==0 )  && $scope.$parent.ui.selected_range.end){
-			var index_absolute_start =   $scope.ui.selected_range.start -  parseInt($scope.section.start)
-			var index_absolute_end   =   $scope.ui.selected_range.end 	-  parseInt($scope.section.start)
-
-		//}
-
-		l.inrange=false;
-		//	console.log(li , index_absolute_start ,index_absolute_end)
-
-		if( 
-			//($scope.$parent.ui.selected_range.start || $scope.$parent.ui.selected_range.start == 0 ) 
-			//&& 
-			//($scope.$parent.ui.selected_range.end || $scope.$parent.ui.selected_range.end ==0) 
-			//&& 
-
-			li == index_absolute_start || (li > index_absolute_start && li <= index_absolute_end )  ){
-
-			//console.log('true at '+li+' LR; '+li_real )
-			//( (li > index_absolute_start && li < index_absolute_end) ||  li == index_absolute_end ||  li == index_absolute_start) ) {
-			l.inrange = true;
-		}
-
-
-
-		
-
-
-		if($scope.section.letters[li].char == '&nbsp;'){
-			fulltext_block += ' '
-		}
-		else{
-			fulltext_block += $scope.section.letters[li].char;
-		}
-		
-
-	
-	})
-
-	if( $scope.$parent.ui.selected_range.end == $scope.section.end && $scope.section.letters[$scope.section.end]) {
-			$scope.section.letters[$scope.section.end].inrange = true;
-		}
-	if( $scope.$parent.ui.selected_range.start == $scope.section.start) {
-			$scope.section.letters[0].inrange = true;
-	}
-
-
-	if( $scope.$parent.ui.selected_range.start == $scope.section.end) {
-		if($scope.section.letters[$scope.section.end]){
-
-			$scope.section.letters[$scope.section.end].inrange = true;
-		}
-		else{
-			//// alert('??')
-		}
-	}
-	
-
-
-	var s_markups  = $scope.section.section_markups
-	// $scope.markups_by_start_end_position_type($scope.section.start, $scope.section.end, 'any', 'any')
-  	
-  	_.each(s_markups, function(markup,k){
-  			var m_objSchemas = $scope.$parent.objSchemas[markup.type]
-
-  			var loop_start = parseInt(markup.start) - parseInt($scope.section.start);
-			var loop_end   = markup.end 		- $scope.section.start;
-												
-
-			if(markup.type=='container_class' ){ // or pos == inlined
-				//$scope.section.section_classes += markup.metadata+' ';
-			}
-
-
-			if(!$scope.section.letters[loop_start]){
-			//	alert('test suite no start letter')
-			}
-			if(!$scope.section.letters[loop_end]){
-
-
-				//alert('test suite no end letter')
-			}
-			
-			for (var mi = loop_start ; mi <= loop_end;mi++) {
-
-
-			
-				if($scope.section.letters && $scope.section.letters[mi]){
-
-
-						if(mi ==  loop_start){
-							$scope.section.letters[mi].classes.push('isfirst-range')
-						}
-						if(mi ==  loop_end){
-							$scope.section.letters[mi].classes.push('islast-range islast-range--')
-						}
-
-						
-
-						if(markup.type == 'datavalue'){
-							$scope.section.letters[mi].classes.push(markup.subtype)
-							$scope.section.letters[mi].classes.push(markup.type)
-
-						}
-						if(markup.type == 'hyperlink' && markup.metadata){
-							//	console.log('markup.type == hyperlink')
-							//	console.log(markup)
-								$scope.section.letters[mi].href = markup.metadata
-						}
-						
-						if(m_objSchemas.map_range === true){
-							if(_.contains($scope.section.letters[mi].classes, markup.subtype )){
-
-$scope.section.letters[mi].classes.push(markup.subtype)	
-							}
-							else{
-								$scope.section.letters[mi].classes.push(markup.subtype)	
-							}
-							
-						}
-				}
-			}
-
-  	})
-
-
-
-
-		if($scope.section.modeletters == 'compiled'){
-			var out = ''
-			$scope.section.fulltext_block = $scope.compile_html(fulltext_block)
-			console.log(' block html compiled')
-		}
-		else{
-			console.log('use less compile')
-		}
-
-}
-
-
-// transform a string into a rich "classic html" markup string
-// used only at page load, because after click, text is transformed into 'single' letters directives
-
-$scope.compile_html = function(fulltext_block ){
-	var out = ''
-
-	for (var i = 0; i < fulltext_block.length; i++) {
-					
-					
-
-	    			var  prev_class = false
-	    			var current_class = false
-	    			var next_class  = false;
-	    			
-
-	    			/*if($scope.section.letters[i].inrange === true){
-						 _.isArray(current_class) ? current_class.push('inrange') : current_class = new Array('inrange')
-					}
-
-						if(i==0){
-									//		 _.isArray(current_class) ? current_class.push('iss') : current_class = new Array('iss')
-
-
-						}
-
-						if(i+1 == $scope.section.letters.length ){
-																	 _.isArray(current_class) ? current_class.push('issd') : current_class = new Array('issd')
-
-					///	current_class.push('is_last')
-
-						}
-						*/
-					//console.log('prev next i == '+i)
-					if($scope.section.letters[i] && ($scope.section.letters[i].classes.length > 0 ) ){
-						var current = true	
-					//	if(_.isArray())
-					//	current_class.push($scope.section.letters[i].classes) : current_class = new Array($scope.section.letters[i].classes)
-						
-						//if($scope.section.letters[i].href !== '')
-						current_class = $scope.section.letters[i].classes
-
-
-						//current_class.push()
-
-
-					}
-					
-
-					if( $scope.section.letters[i+1] && $scope.section.letters[i+1].classes.length > 0 ){
-						 var next = true;
-						 next_class = $scope.section.letters[i+1].classes;
-					}
-					
-					if($scope.section.letters[i-1] && $scope.section.letters[i-1].classes.length > 0 ){
-						 var prev = true
-						 prev_class = $scope.section.letters[i-1].classes
-					}
-
-
-					
-					
-
-
-					// case letter as at least one class
-					if(_.isArray(current_class)){
-						//console.log($scope.section.letters[i].classes)
-						
-
-						// add to array before compare
-						
-
-						// default class
-						var classes_flat  = 'lt '
-						// flatten 
-						 _.each(current_class, function(c,ci){
-							classes_flat += c+' ';
-						})
-
-						
-						var inside = ''
-						
-						if($scope.section.letters[i].href !== ''){
-
-
-							//inside = '<a href="'+$scope.section.letters[i].href+'">'+fulltext_block[i]+'</a>'
-							
-							if($scope.section.letters[i-1] && $scope.section.letters[i-1].href !== ''){
-								inside += fulltext_block[i]
-							}
-							else{
-								inside += '<a title="hyperlink to '+$scope.section.letters[i].href+'" target="_blank" href="'+$scope.section.letters[i].href+'">'+fulltext_block[i]
-							}
-
-
-							if($scope.section.letters[i+1] && $scope.section.letters[i+1].href == ''){
-								inside +='</a>'
-							}
-							else{
-								
-							}
-
-
-						}
-						else{
-
-							if(fulltext_block[i] == ' '){
-							inside = '&nbsp;'
-						
-						}
-						else{
-							inside = fulltext_block[i]
-						}
-							
-							
-								
-							
-
-						}
-
-						if(  _.isEqual(prev_class , current_class))  {
-							out += inside
-
-						}
-						else{
-							out += '<span class="'+classes_flat+'">'+inside
-
-						}
-						if(_.isArray(next_class) && _.isEqual(next_class , current_class) ) {
-						
-						}
-						else{
-							out += '</span>'
-
-						}
-
-
-						//out += '<span class="'+classes_flat+'">'+inside+'</span>'
-
-						
-						//console.log($scope.section.letters[i].classes[])
-					}
-
-					// case letter has no classes
-					else{
-						
-
-						if(_.isArray(prev_class) || i==0 ){
-							// prev was a self closing letter or first letter then open span
-							out +='<span>'
-						}
-						
-						
-
-						if(fulltext_block[i] == ' '){
-							out += '&nbsp;'
-						
-						}
-						else{
-							out += fulltext_block[i]
-						}
-
-						
-						if(_.isArray(next_class) || i+1 == $scope.section.letters.length){
-							// next is a letter or is last letter then close span
-							out +='</span>'
-						}
-				
-					}
-
-				}
-	return out
-}
- $scope.section.section_classes = ''
-
-
-
-
-
-$scope.attribute_objects = function(){
-  			console.log('attribute_objects')
-	
-  		
-  		
-            var objectsarray = new Object();
-
-          
-
-           objectsarray['objects_count'] = [];
+	$scope.attribute_objects = function(){
+  			
+           var objectsarray = {
+				'objects_count' : []
+
+           };
            objectsarray['objects_count']['by_positions'] = [];
            objectsarray['objects_count']['all'] = [];
             // section can have css classes and inlined styles (background-image)
-         
             // $rootScope.containers[index]['classes'] =[];
             // $rootScope.objects_sections[index]['global'] = [];
             _.each($scope.$parent.available_sections_objects, function(o, obj_index){
-              objectsarray['objects_count']['all']= new Object({'count':0, 'has_object':false})
-             
-              _.each($scope.$parent.available_layouts  , function(op){ // op: left, right, ..
-                objectsarray['objects_count']['by_positions'][op.name] = new Object({'count':0, 'has_object':false})
-              });
-            
-
+	              objectsarray['objects_count']['all']						= {'count':0, 'has_object':false}
+	             
+	              _.each($scope.$parent.available_layouts  , function(op){ // op: left, right, ..
+	                objectsarray['objects_count']['by_positions'][op.name] = {'count':0, 'has_object':false}
+	              });
             });
 
-			$scope.section = _.extend($scope.section, objectsarray );
-			console.log('O A')
-			console.log(objectsarray)
-
-    		
-  	       var mkr = $scope.section.section_markups
-
+		   $scope.section = _.extend($scope.section, objectsarray);    		
+  	       
   	       // _.filter($scope.markups, function(m){ return m.start >= $scope.section.start; })
-		    
-
-
-		    _.each(mkr, function(markup){
+		    _.each($scope.section.section_markups, function(markup){
 
 		    	if(markup.start > markup.end){
 		    		var temp =  markup.start
 		    		markup.end = markup.start
 		    		markup.start = temp
 		    	}
-
-		    	// if( $scope.$parent.ui.selected_range.start && $scope.$parent.ui.selected_range.end && markup.start >= $scope.$parent.ui.selected_range.start && markup.end <= $scope.$parent.ui.selected_range.end) {
-				//	markup.inrange = true;
-				//	markup.selected = true;
-				// }
-				// else{
-				//	markup.inrange = false;
-				//	markup.selected = false;
-				//}
-		        // only for markups which ranges match container
-
-
-		        
-
-			        /////  ///
-			        if(markup.type !== "" && markup.position){ // > can add it
-						$scope.section.objects_count['by_positions'][markup.position].count++;
-						$scope.section.objects_count['by_positions'][markup.position].has_object  = true;
-					
-					}
-		    
 		    	
-
+			    if(markup.type !== "" && markup.position){ // > can add it
+					$scope.section.objects_count['by_positions'][markup.position].count++;
+					$scope.section.objects_count['by_positions'][markup.position].has_object  = true;
+				}
 		    }); // each markups end.
-    //console.log($scope.section)
-	
-}
-
-
-
-
-
-
-$scope.$watch('section.fulltext', function(newValue, oldValue) {
-	console.log(' [Section] fulltext watched')
-
-
-
-	if(!newValue){
-		// deleted by user in textarea
-		newValue=  ''
-	}
-	if(oldValue && newValue){
-
-
-		if(oldValue == newValue){
-			console.log(' [Section] fulltext same value')
-
-		}
-		else{
-			console.log(' [Section] fulltext change : '+oldValue+' > '+newValue)
+    		//console.log($scope.section)
+	        console.log('SECTION LAYOUT OK (attribute_objects)')
 		}
 
-		
 
-		
-		
+	$scope.get_markups  = function(ss,se){
+			var arr_m = []
+			_.each($scope.doc.markups, function(m){
 
-		// a way to detect multiple chars paste or deletions   (not in angular bindings)
-
-		// delta is sup or inf from 1
-		if(oldValue.length - newValue.length > 1){
-			//alert('A' + (oldValue.length - newValue.length))
-			//$scope.section.end = newValue.length
-		}
-		if(oldValue.length - newValue.length  < -1){
-			//$scope.section.end = newValue.length
-			//alert('B' + (oldValue.length - newValue.length))
-		}
-	
-
-
-		//newValue = newValue.replace("\n", "");
-		var temp_letters = new Array();
-		var i;
-		var i_array     =   0;
-		var fulltext    =   '';
-		var str_start   =   0;
-		var str_end     =   _.size(newValue)-1;
-		// confing could be a option/mode feature
-		var content_string  = $scope.doc.content
-		var classes_arr = new Array()
-		// classes_arr.h1 = {}
-		// classes_arr.h2 = {}
-	     var fulltext_block = ''
-
-
-
-	    var at_least_one = false
-
-
-
-		//alert(str_end)
-	    for (i = str_start; i <= str_end; i++) {
-
-	    	
-			var letter_arr = new Object({
-			
-			  'classes_flat': '',
-			  'order': i,
-			  'inrange':false,
-			  'href':'',
-			  'absolute_order': $scope.section.start+i,
-
-			});
-				    	///console.log(letter_arr)
-
-
-				if(!newValue[i]){
-					
-				}
-				else{
-					at_least_one = true
-					if(newValue[i] === " ") {
-
-	            		letter_arr.char = '&nbsp;'
-	            		fulltext_block += '&nbsp;'
-	         		}
-	         		else{
-	         			letter_arr.char = newValue[i]
-	         			fulltext_block += newValue[i]
-	         		}
-
-				}
-
-
-	        	
-				letter_arr.isfirst = false
-				letter_arr.islast = false
-	         	if(str_start == i)
-				{
-				//	letter_arr.char = '>'+letter_arr.char 
-					letter_arr.isfirst = true
-				}
-
-				if(i == str_end)
-				{
-					//letter_arr.char += '<'
-				
-					letter_arr.islast = true
-				}
-
-		  	temp_letters[i_array]  = letter_arr;
-
-		  	i_array++;
-		}
-		
-
-		if( at_least_one === false){
-			alert('no letter ')
-		}
-		$scope.section.letters  = temp_letters;
-	
-		$scope.section.section_fulltext_ready =Math.random();
-		$scope.map_letters()
-
-		
-	}
-});	
-
-
-
-$scope.$watch('section.section_markups_ready',function(newValue, oldValue) {
-	if(newValue == 'true'){
-		$scope.attribute_objects()
-		$scope.section.section_markups_ready = 'done';
-		
-
-	}
-	else{
-
-	}
-});
-
-$scope.$watch('section.section_fulltext_ready',function(newValue, oldValue) {
-	//if(newValue == 'true'){
-		
-		
-		
-
-		
-		
-		
-	//	$scope.section.section_fulltext_ready = 'done';
-		
-
-	//}
-	//else{
-
-	//}
-});
-
-
-
-$scope.$watch('section.has_offset', function(o, markup) {
-			
-		 	if(o && markup){
-				console.log(markup)
-				console.log('section.has_offset'+o+markup)
-		 		if(!$scope.section.objects_[markup.type]){
-					$scope.section.objects_[markup.type] = new Array()
-					if(!$scope.section.objects_[markup.type][markup.position]){
-						$scope.section.objects_[markup.type][markup.position] = new Array()
+					if( !m.deleted && (m.start >= parseInt(ss)) && (m.end <= parseInt(se)) ){
+						///m.visible = true
+						m.sectionin = $scope.section.sectionin
+						m.isolated= 'false'
+						arr_m.push(m)
 					}
-				}
-				$scope.section.objects_[markup.type][markup.position].push(markup)
-				console.log('markup pushed')
+			});
+			console.log('get markups> '+ arr_m.length +' markups to map')
+			$scope.section.section_markups = arr_m;
+			$scope.attribute_objects()
+			return arr_m;
+	}
 
-		 		//$scope.ui.selected_range.insert_applied=true;
-		 	} 
 
-});	
+	// main filter for markups
+	$scope.get_local_markups_by_start_end_position_type  = function(p,t){
+			//console.log('markups_by_start_end_position_type (l)')
+			var arr_m = []
+			_.each($scope.section.section_markups, function(m){
+					if( (m.position == p  || p =='any' ) && (m.type == t  || t=='any')  ){
+						arr_m.push(m)
+					}
+			});
+			return arr_m;
+	}
+
+	// main filter for markups
+	$scope.markups_by_start_end_position_type  = function(ss, se , p , t ){
+		//console.log('>get local')
+		return $scope.get_local_markups_by_start_end_position_type(p,t)
+	}
 
 
 
@@ -41918,7 +41669,7 @@ $scope.$watch('section.has_offset', function(o, markup) {
  			return s.deleted !==true; 
  		})
  		if(section_count.length==1){
-			$scope.flashmessage('Can\'t delete last section ', 'bad' , 2000, false)
+			$rootScope.flashmessage('Can\'t delete last section ', 'bad' , 2000, false)
 			return
 		}
 		
@@ -41927,14 +41678,14 @@ $scope.$watch('section.has_offset', function(o, markup) {
 			
 			$scope.section.deleted = true;
 			$scope.section.visible = false;
-			$scope.flashmessage('Section deleted', 'ok' , 2000, false)
+			$rootScope.flashmessage('Section deleted', 'ok' , 2000, false)
 
 		}.bind(this));
 		promise.catch(function (response) {  
-			$scope.flashmessage(response.err, 'bad' , 3000)
+			$rootScope.flashmessage(response.err, 'bad' , 3000)
 		}.bind(this));
 		// toggle
-		$scope.ui.focus_side = ''
+		$rootScope.ui.focus_side = ''
 	}
 
 
@@ -41957,70 +41708,221 @@ $scope.$watch('section.has_offset', function(o, markup) {
 					c.selected 		= !c.selected;
 					c.editing 		= !c.editing
 					c.editing_text 	= !c.editing_text
-					//$scope.ui.selected_range.start = parseInt(c.start)
-					//$scope.ui.selected_range.end = parseInt(c.end)
+					//$rootScope.ui.selected_range.start = parseInt(c.start)
+					//$rootScope.ui.selected_range.end = parseInt(c.end)
 					$scope.section.modeletters =  'single'
 					if(c.selected == true){
 						$scope.section.focused  = 'side_right'
 					}
 					if(c.selected == true){
-						$scope.ui.renderAvailable_active =  'editor'	
+						$rootScope.render_config.renderAvailable_active =  'editor'	
 					}
 					else{
-						$scope.ui.renderAvailable_active =  'read'
+						$rootScope.render_config.renderAvailable_active =  'read'
 					}
 				}
+					
 			});
+			$rootScope.ui.selected_range.start =  $scope.section.start
+			$rootScope.ui.selected_range.end   =  $scope.section.end
 
     }	
 
+	$scope.save = function (save_msg) {
 
-	$scope.insert_char = function(c,s,e){
-			//alert(c,s,e)
-			$scope.section.modeletters = 'single' 
-			$scope.section.fulltext= c+''+$scope.section.fulltext
-			//for(var p=0,)
-
-			$scope.ui.selected_range.start = 4
-			// $scope.section.fulltext.length
-			$scope.ui.selected_range.end = 7
-			// $scope.section.fulltext.length
-
-			$scope.section.end++
-
-
-	}
-
-	 $scope.save = function (save_msg) {
-
-        var thos = this;
-        var promise = new Object();
-        var data = new Object({
-					            'start'			: $scope.section.start,
-					            'end'			: $scope.section.end
-					         });
-
+        var data = {
+					    'start'			: $scope.section.start,
+					    'end'			: $scope.section.end
+					};
 		// can be null.
-		data.secret = $scope.ui.secret;
+		
 		data.edittype = 'edit_markup'
-
-	    promise.query =  MarkupRest.save({id:$scope.$parent.doc.slug, mid:$scope.section._id }, serialize(data) ).$promise;
-        promise.query.then(function (Result) {
+	    var promise =  MarkupRest.save({id:$scope.$parent.doc.slug, mid:$scope.section._id }, serialize(data) ).$promise;
+        promise.then(function (Result) {
             var edited  = Result.edited[0][0]
-            
             if(save_msg){
-				$scope.flashmessage(save_msg, 'ok' , 3000)
+				$rootScope.flashmessage(save_msg, 'ok' , 3000)
             }
             else{
-            	$scope.flashmessage(edited.subtype +' saved', 'ok' , 3000)
+            	$rootScope.flashmessage(edited.subtype +' saved', 'ok' , 3000)
             }
           }.bind(this));
-          promise.query.catch(function (response) {  
+        promise.catch(function (response) {  
             console.log(response)   
-           	$scope.flashmessage(response.err.err_code, 'bad' , 3000)
-          }.bind(this));
+           	$rootScope.flashmessage(response.err.err_code, 'bad' , 3000)
+        }.bind(this));
+    }
 
-      }
+	$scope.apply_operation = function(){
+
+ 			 $scope.section.operation.after = {}
+
+			 if( ($scope.section.operation.before.end && $scope.section.operation.before.type == 'offset') ){
+			 	$scope.section.end =  parseInt($scope.section.operation.before.end+$scope.section.operation.before.end_qty)
+				//$scope.section.operation.after.new_end = $scope.section.end
+			 }
+			 if( ($scope.section.operation.before.start || $scope.section.operation.before.start == 0) && $scope.section.operation.before.type == 'offset'){
+			
+			 	$scope.section.start = parseInt($scope.section.operation.before.start)+parseInt($scope.section.operation.before.start_qty)
+			    //$scope.section.operation.after.new_start = $scope.section.start
+			 }
+
+
+			 if( $scope.section.operation.before.type == 'push_markup'){
+			 			var m = $scope.section.operation.object_
+			 			m.deleted = false
+
+						$scope.doc.markups.push(m)
+					
+						
+						$scope.section.redraw = true;
+						
+					    console.log($rootScope)
+						$rootScope.flashmessage($scope.section.operation.object_.type +' inserted', 'ok' , 1400, false)	
+			
+			 }
+
+
+ 			 $scope.section.operation.before.state= 'done'
+ 			 $scope.section.operation.after.state= 'done'
+			 $scope.section.operations.push($scope.section.operation)
+	} 
+	$scope.reverse_operation = function(operation){	
+			// console.log($scope.section.operation)
+			operation.reversable= false;
+			alert(operation.grp_log)
+	}
+
+	$scope.operations_clear= function(){
+		 $scope.section.operations= []
+	}
+
+	$scope.apply_ui_inrange_markups = function(){
+		if($scope.section.section_markups.length>0){
+			 _.each($scope.section.section_markups, function(m, i){
+			    // toggle change, call $scope.markup controller watcher
+			    m.map_ranges  =  Math.random()
+			 })
+			console.log('LAYOUT --  SECTION_MARKUP(S) '+$scope.section.section_markups.length+'   REMAPPED INRANGE ')
+		}
+		else{
+			console.log('LAYOUT -- (NONE) SECTION_MARKUP   REMAPPED INRANGE ')
+		}	  	
+	}
+
+
+
+	
+
+
+	$scope.$watch('section.operation.before.state', function(newValue, oldValue) {
+
+		if(newValue == 'new'){
+			 $scope.apply_operation()
+		}
+		if(newValue == 'error'){
+			$scope.section.operations.push($scope.section.operation)
+		}
+	})
+
+	$scope.$watch('section.end', function(newValue, oldValue) {
+		if(oldValue == newValue){
+		}
+		else{
+			$scope.section.start_or_end = Math.random()
+		}
+	});
+
+	$scope.$watch('section.start', function(newValue, oldValue) {
+		
+		if(oldValue && newValue ){
+			if(oldValue == newValue){
+
+			}
+			else{
+				if($scope.section.start < 0 || newValue < 0 || oldValue < 0){
+					$scope.section.start = 0;
+					//unregister();
+					return
+				}
+			
+				//	$scope.section.rebuild = true
+				$scope.section.start_or_end = Math.random()
+			}
+			
+		}
+	});
+
+	$scope.$watch('section.start_or_end', function(  newValue, oldValue) {
+    	if(oldValue == newValue || newValue == false){
+			//	console.log(' nothing ')
+		}
+		else{
+				// $scope.section.textlength= $scope.section.end - $scope.section.start
+        		$scope.section.touched = true
+        }
+   	});	
+					
+	$scope.$watch('section.inrange_markups', function(newValue, oldValue) {
+			// remap MARKUP CHILDRENS 
+		if(oldValue === newValue || newValue == false){
+
+
+		}
+		else{
+			$scope.apply_ui_inrange_markups()
+
+		}
+	})
+
+	$scope.$watch('section.redraw', function(newValue, oldValue) {
+		if(oldValue === newValue || newValue == false){
+		}
+		else{
+					        $scope.section.section_markups = $scope.get_markups($scope.section.start, $scope.section.end)
+				
+							//$scope.section.inrange_markups = true;
+							// eq
+							$scope.apply_ui_inrange_markups()
+
+							// remap classes call watcher
+							$scope.section.lettersarray = Math.random()
+							$scope.inrange_letters      = Math.random()
+			   	            $scope.section.redraw = false;
+		}
+	})
+
+
+	/*
+	$scope.$watch('section.fulltext', function(newValue, oldValue) {
+		// console.log(' [Section] fulltext watched')
+
+
+
+		if(!newValue){
+			// deleted by user in textarea
+			newValue=  ''
+			
+		}
+	   
+
+		else{
+			if(oldValue == newValue){
+				console.log(' [Section watcher :  fulltext] fulltext same or init value')
+
+			}
+			else{
+				console.log(' [Section watcher :  fulltext] fulltext change : '+oldValue+' > '+newValue)
+			}
+
+
+		}
+	});	
+	*/
+
+ 
+///// TO CLEAN
+
 
 $scope.merge= function (){
       	alert('merged')
@@ -42029,23 +41931,23 @@ $scope.merge= function (){
 $scope.split= function (){
 
 
-     	//alert($scope.ui.selected_range.start+'-'+$scope.ui.selected_range.end+' - '+$scope.section.start+' - '+$scope.section.end)
+     	//alert($rootScope.ui.selected_range.start+'-'+$rootScope.ui.selected_range.end+' - '+$scope.section.start+' - '+$scope.section.end)
       	
 
-      	if($scope.ui.selected_range.start == $scope.ui.selected_range.end){
-      		alert('split one>two at '+$scope.ui.selected_range.start)
+      	if($rootScope.ui.selected_range.start == $rootScope.ui.selected_range.end){
+      		alert('split one>two at '+$rootScope.ui.selected_range.start)
       	}
 
 
-      	var mks = $scope.markups_by_start_end_position_type($scope.ui.selected_range.start,$scope.ui.selected_range.end, 'any','any')
+      	var mks = $scope.markups_by_start_end_position_type($rootScope.ui.selected_range.start,$rootScope.ui.selected_range.end, 'any','any')
       	console.log(mks)
 
 
-      	if($scope.ui.selected_range.start == $scope.section.start ){
+      	if($rootScope.ui.selected_range.start == $scope.section.start ){
       	//	alert('start in')
       	
       	}
-      	if($scope.ui.selected_range.end == $scope.section.end ){
+      	if($rootScope.ui.selected_range.end == $scope.section.end ){
       	//	alert('endin')
       	}
 		
@@ -42070,341 +41972,65 @@ $scope.split= function (){
 		$scope.save()
 		$scope.init_()
 
-
-
      	// the four in/out points
      	// is first ?
      	// is last ? 
-
-
-
-
 	}
 
-	
-$scope.$watch('section.operation.before.state', function(newValue, oldValue) {
 
-		if(newValue == 'new'){
-			 $scope.apply_operation()
+	$scope.integrity_fix = function (){
+
+		//xx$scope.section.fulltext.length)
+		//alert($scope.section.end - $scope.section.start - 1)
+		if($scope.section.fulltext.length > parseInt($scope.section.end - $scope.section.start)+1){
+			$rootScope.flashmessage('size mismatch >', 'bad' , 2000, false)
 
 		}
-		if(newValue == 'error'){
-			$scope.section.operations.push($scope.section.operation)
+		if($scope.section.fulltext.length < parseInt($scope.section.end - $scope.section.start)+1){
+			$rootScope.flashmessage('size mismatch <', 'bad' , 2000, false)
+			$scope.section.end = $scope.section.fulltext.length-1+$scope.section.start
+
 		}
-})
-
-$scope.apply_operation = function(){
-
-
- 			 $scope.section.operation.after = {}
-
-			 if( ($scope.section.operation.before.end && $scope.section.operation.before.type == 'offset') ){
-			 	$scope.section.end =  parseInt($scope.section.operation.before.end+$scope.section.operation.before.end_qty)
-				//$scope.section.operation.after.new_end = $scope.section.end
-			 }
-			 if( ($scope.section.operation.before.start || $scope.section.operation.before.start == 0) && $scope.section.operation.before.type == 'offset'){
-			
-			 	$scope.section.start = parseInt($scope.section.operation.before.start)+parseInt($scope.section.operation.before.start_qty)
-			 //	$scope.section.operation.after.new_start = $scope.section.start
-			 }
-
-
-			 if( $scope.section.operation.before.type == 'push_markup'){
-			 			var m = $scope.section.operation.object_
-			 			m.deleted = false
-
-						$scope.doc.markups.push(m)
-						$scope.section.redraw = true;
-						$scope.flashmessage($scope.section.operation.object_.type +' inserted', 'ok' , 1400, false)	
-			
-			 }
-
-
- 			 $scope.section.operation.before.state= 'done'
- 			 $scope.section.operation.after.state= 'done'
- 			 $scope.section.operation.after.ss= $scope.section.start
-			 $scope.section.operations.push($scope.section.operation)
-	} 
-$scope.reverse_operation = function(operation){
-			
-		// console.log($scope.section.operation)
-		operation.reversable= false;
-		alert(operation.grp_log)
-}
-
-
-$scope.operations_clear= function(){
-
-	 $scope.section.operations= []
-}
-
-
-
-
-
-	$scope.$watch('section.end', function(newValue, oldValue) {
-		
-			if(oldValue == newValue){
-
-			}
-			else{
-			
-				$scope.section.start_or_end = Math.random()
-			}
-
-	});
-
-	$scope.$watch('section.start', function(newValue, oldValue) {
-		
-		if(oldValue && newValue ){
-			if(oldValue == newValue){
-
-			}
-			else{
-
-				if($scope.section.start < 0 || newValue < 0 || oldValue < 0){
-					$scope.section.start = 0;
-
-					//unregister();
-					return
-				}
-			
-			//	$scope.section.rebuild = true
-			$scope.section.start_or_end = Math.random()
-
-			}
-			
+		if($scope.section.fulltext.length == parseInt($scope.section.end - $scope.section.start)+1){
+			$rootScope.flashmessage('size match', 'ok' , 2000, false)
 		}
-	});
-
-
-	$scope.$watch('section.start_or_end', function(  newValue, oldValue) {
-
-
-      if(oldValue == newValue || newValue == false){
-				console.log(' nothing ')
-			}
-			else{
-
-				$scope.section.textlength= $scope.section.end - $scope.section.start
-        		$scope.section.touched = true
-        		
-
-        }
-		
-   
-
-   });	
-
-
-
-/*
-	$scope.$watch('section.objects_count.all', function(newValue, oldValue) {
-		
-			if(oldValue == newValue){
-
-			}
-			else{
-				console.log('section.objects_count.all')
-				console.log(newValue)
-				
-
-				//$scope.section.rebuild = true;
-			}
-
-	});
-*/
-	/*
-	$scope.$watch('section.textlength', function(newValue, oldValue) {
-		
-		if(oldValue && newValue ){
-			if(oldValue == newValue){
-
-			}
-			else{
-				console.log('section.textlength')
-				console.log(oldValue+'->-'+newValue)
-				$scope.section.rebuild = true;
-			//	alert('textlength')
-			}
-			
-			
-		}
-	});
-*/
-
-
-$scope.apply_ui_inrange_letters = function(){
-
-	_.each($scope.section.letters, function(l, i){
-	    // 
-	    var c_real = i + $scope.section.start;
-	    // map the range	
-	    if(c_real>=$scope.ui.selected_range.start && c_real <= $scope.ui.selected_range.end){
-	   
-	    	l.inrange = true;
-
-	    }
-	    else{
-	    	l.inrange = false;
-	   		
-	    }
-  	})
-  	console.log('############ section MAPPED RANGES.')
-}
-
-
-
-$scope.apply_ui_inrange_markups = function(){
-
-	_.each($scope.section.section_markups, function(m, i){
-		// toggle change, call $scope.markup controller watcher
-		m.map_ranges 	= true;
-	})
-  	console.log('############ section MAPPED RANGES.')
-}
-
-
-					
-$scope.$watch('section.inrange_letters_and_markups', function(newValue, oldValue) {
-	if(oldValue == newValue || newValue == false){
-
-
-	}else{
-			console.log('############ section MAP inrange_letters_and_markups (both trigger)')
-			
-			$scope.apply_ui_inrange_letters()
-			$scope.apply_ui_inrange_markups()
-			$scope.section.inrange_letters_and_markups = false;
 	}
-		
-
-
-})
 
 
 
-//OLD way
+	$scope.insert_char = function(c,s,e){
+			//alert(c,s,e)
+			$scope.section.modeletters = 'single' 
+			$scope.section.fulltext= c+''+$scope.section.fulltext
+			//for(var p=0,)
 
-	$scope.$watch('section.redraw', function(newValue, oldValue) {
-	if(oldValue === newValue || newValue == false){
+			$rootScope.ui.selected_range.start = 4
+			// $scope.section.fulltext.length
+			$rootScope.ui.selected_range.end = 7
+			// $scope.section.fulltext.length
 
+			$scope.section.end++
 
-	}else{
-		
-		console.log('############ section.redraw')
-
-		    $scope.section.section_markups = $scope.get_markups($scope.section.start, $scope.section.end)
-		
-			$scope.map_letters()
-			$scope.section.inrange_letters_and_markups = true;
-			$scope.section.redraw = false;
-				$scope.attribute_objects()
-	}
-		
-
-
-	})
-
-
-
-
-$scope.integrity_fix = function (){
-
-	//xx$scope.section.fulltext.length)
-	//alert($scope.section.end - $scope.section.start - 1)
-	if($scope.section.fulltext.length > parseInt($scope.section.end - $scope.section.start)+1){
-		$scope.flashmessage('size mismatch >', 'bad' , 2000, false)
 
 	}
-	if($scope.section.fulltext.length < parseInt($scope.section.end - $scope.section.start)+1){
-		$scope.flashmessage('size mismatch <', 'bad' , 2000, false)
-		$scope.section.end = $scope.section.fulltext.length-1+$scope.section.start
 
-	}
-	if($scope.section.fulltext.length == parseInt($scope.section.end - $scope.section.start)+1){
-		$scope.flashmessage('size match', 'ok' , 2000, false)
-	}
-}
-	
+
+
+
 }]); // end controller
 
 
+/*
+angular.module('musicBox.section.controller_b', []).controller('SectionBCtrl', function($scope, $http, DocumentService, MarkupRest,socket, ObjectService) {})
+*/
+angular.module('musicBox.section.editor_controller', []).controller('SectionEditorCtrl', ["$scope", "$http", "DocumentService", "MarkupRest", "socket", "ObjectService", function($scope, $http, DocumentService, MarkupRest,socket, ObjectService) {
 
-angular.module('musicBox.section.controller_b', []).controller('SectionBCtrl', ["$scope", "$http", "DocumentService", "MarkupRest", "socket", "MarkupService", function($scope, $http, DocumentService, MarkupRest,socket, MarkupService) {
-
-
-
-$scope.init_= function () {
-	var container_ = new Object({
-			'section_index' : $scope.$parent.$index, 
-			'map' : {
-				'fulltext':true,
-				'letters':false,
-				'objects':true,
-				'layout': false,
-			}
-
+	$scope.section.startt = $scope.section.start
+	$scope.$watch('section.start_', function(newValue, oldValue) {
+		if(oldValue === newValue || newValue == false){
+		}
+		else{}
 	})
-	$scope.section = _.extend($scope.section, container_);
-}
-
-$scope.fire_map= function (map) {
-	$scope.section.map[map] = true;
-}
-
-
-
-$scope.$watch('section.map.fulltext', function(newValue, oldValue) {
-	if( newValue == true){
-		
-		$scope.section.map.fulltext = false;
-		$scope.section.fulltext = 'fsdfsdf';
-		$scope.section.map.letters = true;
-
-
-
-	}
-	else{
-
-	}
-});
-
-$scope.$watch('section.map.objects', function(newValue, oldValue) {
-	if( newValue == true){
-		
-		$scope.section.map.objects = false;
-		$scope.section.objects = [];
-
-
-	}
-	else{
-
-	}
-});
-
-
-$scope.$watch('section.map.letters', function(newValue, oldValue) {
-	if( newValue == true){
-		
-		$scope.section.map.letters = false;
-		$scope.section.letters = [];
-
-
-	}
-	else{
-
-	}
-});
-
-
-
-
-
-
-$scope.init_()
-
-
 }])
 
 'use strict';
@@ -42423,6 +42049,41 @@ angular.module('musicBox.section.directive.section', [])
         link:link,
           templateUrl: function() {
                 return "js/MusicBox/section/tpl/section.tpl.html";
+          }
+        };
+}])
+.directive("mbText", ["$rootScope", function($rootScope) {
+
+    var link = function(){
+    
+      console.log(' [text] directive')
+    }
+        return {
+          restrict: "EA",
+          link:link,
+           scope: {
+              section   : '=',     
+            },
+          templateUrl: function() {
+                return "js/MusicBox/section/tpl/text.tpl.html";
+          }
+        };
+}])
+.directive("mbLetters", ["$rootScope", function($rootScope) {
+
+    var link = function(){
+      
+      console.log(' [tletters] directive')
+    }
+        return {
+          restrict: "EA",
+          link:link,
+         scope: {
+              section   : '=',     
+            },
+          controller:"LettersCtrl",
+          templateUrl: function() {
+                return "js/MusicBox/section/tpl/letters.tpl.html";
           }
         };
 }])
@@ -42474,6 +42135,7 @@ angular.module('musicBox.section.directive.section', [])
         return {
           restrict: "EA",
           scope: true,
+          controller: 'SectionEditorCtrl',
           link:link,
           templateUrl: function() {
                 return "js/MusicBox/section/tpl/editor.tpl.html";
@@ -42495,6 +42157,7 @@ angular.module('musicBox.section.directive.section', [])
         };
 }])
 
+
 .directive("mbCommentform", ["$rootScope", function($rootScope) {
 
     var link = function(){
@@ -42508,20 +42171,20 @@ angular.module('musicBox.section.directive.section', [])
           }
         };
 }])
-.directive('fluidtexte',   
+.directive('mbFulltext',   
   ["$rootScope", function($rootScope) {
     // Toggle "letters mode" on click, mouvedown, ..
     
      function link(scope, elem, attrs) { 
+          console.log(' [mbFulltext] directive')
+
         elem.bind('mousedown click', function(event) {
             // console.log(event)
             scope.$apply(function(){
-            
-            /// OFF ONE-CLICK AUTO TOGGLE
-           scope.section.modeletters = 'single';
-           
-            //    var logevent = {'directive':'fluidtext', 'event':'mouseup'}
-            //    $rootScope.ui.selected_range.debug.push(logevent)
+              /// OFF ONE-CLICK AUTO TOGGLE
+              scope.section.modeletters = 'single';
+              //    var logevent = {'directive':'fluidtext', 'event':'mouseup'}
+              //    $rootScope.ui.selected_range.debug.push(logevent)
            })
         })
     }
@@ -42529,9 +42192,9 @@ angular.module('musicBox.section.directive.section', [])
             scope: {
               section   : '=',     
             },
-            template: '<span ng-bind-html="section.fulltext_block"></span>',
+           // template: '',
             transclude :true,
-            restrict: 'A',
+            restrict: 'EA',
             link: link,
         }
 }])
@@ -42540,98 +42203,104 @@ angular.module('musicBox.section.directive.section', [])
 
 'use strict';
 
+
+/* Angular Directive + controller
+
+// Handle new markup or (section) in document.
+
+// INJECT : 
+
+        $rootScope 
+            for doc owner,
+            objects configs
+            i18n
+
+        MarkupRest (rest api for "add" )
+*/  
+
 angular.module('musicBox.section.directive.pusher', [])
 
-.directive("mbPusher", ["$rootScope", "MarkupRest", "renderfactory", function($rootScope,MarkupRest, renderfactory) {
+.directive("mbPusher", ["$rootScope", "MarkupRest", function($rootScope, MarkupRest) {
     var global_active_pusher =true;
 
-    var link= function(scope){
-       //   console.log(' [mbPusher] directive')
-    }
-    var controller= ["$scope", function($scope){
-          /*
-             console.log($scope.$parent.section)
-             console.log($scope.$parent.$parent.doc)
-             console.log($rootScope.userin.username)
-             console.log($rootScope.doc_owner)
-          */
-
-           $scope.userin  = $rootScope.userin
+    // 
+    var pusherCtrl= ["$scope", function($scope ){
+         
+           $scope.userin      = $rootScope.userin
            $scope.render_config =$rootScope.render_config
+           $scope.render =$rootScope.render
            $scope.objSchemas = $rootScope.objSchemas 
-           $scope.ui = $rootScope.ui
-           $scope.push = {}
+           $scope.push = {
+            
+           }
+           $scope.i18n = $rootScope.i18n;
            
-           $scope.preset_push = function(){
+           $scope.init_push = function(){
                     
-                    var push_set= {
-                                      isanon : true,
-                                      isowner: $rootScope.doc_owner,
-                                      start: ($scope.type=='new_section') ? $scope.$parent.section.end+1 : $rootScope.ui.selected_range.start,
-                                      end: ($scope.type=='new_section') ? $scope.$parent.section.end+9 :  $rootScope.ui.selected_range.end,
+              var push_set= {
+                                      isvisible  : $scope.pusher_isvisible(),
+                                      isopen     : $scope.pusher_isopen(),
+                                      isvalid    : $scope.pusher_isvalid(),
+                                      isanon     : ($scope.$parent.doc.doc_owner) ?  false : true,
+                                      isowner    : ($scope.$parent.doc.doc_owner),
+                                      start      : ($scope.type=='new_section')  ?   $scope.$parent.section.end+1 : $scope.start,
+                                      end        : ($scope.type=='new_section')  ?   $scope.$parent.section.end+9 :  $scope.end,
                                       position   : ($scope.type=='new_section' || $scope.type=='inline_objects') ? 'inline' : 'left',
-                                      metadata : ($scope.type=='new_section') ? '' : 'write your comment here',
-                                      username : $scope.userin.username,
-                                      user_id : $scope.userin._id,
-                                      has_ranges:  ($scope.type=='new_section') ? true :false,
+                                      metadata   : ($scope.type=='new_section') ? '' : 'write your comment here',
+                                      username   : ($scope.userin && $scope.userin.username) ? $scope.userin.username : null,
+                                      user_id    : ($scope.userin && $scope.userin._id)  ? $scope.userin._id : null,
+                                      has_ranges : ($scope.type=='new_section') ? true :false,
 
-                   }
-                   $scope.push = _.extend($scope.push, push_set)
+              }
+  
+              if($scope.type=='new_section'){
+                    push_set.type=  'container';
+                    push_set.subtype =  'section'
+                    push_set.available_sections_objects = ['container']
+              }
+              else if($scope.type=='inline_objects'){
+                    push_set.type =  'markup' 
+                   push_set.subtype =  'h1' 
+                   push_set.available_sections_objects = ['markup', 'hyperlink', 'media']
+              }
+              else if($scope.type=='container_class'){
+                   push_set.type =  'container_class' 
+                    push_set.subtype =  'css' 
+                    push_set.available_sections_objects = ['container_class']
+              }
+              else{
+                    push_set.type =  'comment' 
+                    push_set.subtype =  'comment' 
+                    push_set.metadata  = $scope.objSchemas[push_set.type].modes.editor.fields.metadata.label
+                    if($scope.$parent.doc.doc_owner == true ){
+                      push_set.available_sections_objects = ['comment', 'note', 'media']
+                    }
+                    else{
+                      push_set.available_sections_objects = ['comment']
+                    }
+              }
+              $scope.push = _.extend($scope.push, push_set)
            }
 
-
-          if($scope.type=='new_section'){
-              $scope.push.type=  'container';
-              $scope.push.subtype =  'section'
-              $scope.available_sections_objects = ['container']
-
-          }
-           else if($scope.type=='inline_objects'){
-                $scope.push.type =  'markup' 
-                $scope.push.subtype =  'h1' 
-                $scope.available_sections_objects = ['markup', 'hyperlink', 'media']
-
-            }
-            else if($scope.type=='container_class'){
-                $scope.push.type =  'container_class' 
-                $scope.push.subtype =  'css' 
-                $scope.available_sections_objects = ['container_class']
-
-            }
-            else{
-                $scope.push.type =  'comment' 
-                $scope.push.subtype =  'comment' 
-                $scope.push.metadata  = $scope.objSchemas[$scope.push.type].modes.editor.fields.metadata.label
-
-                if($rootScope.doc_owner == true ){
-                  $scope.available_sections_objects = $rootScope.available_sections_objects
-                }
-                else{
-                  $scope.available_sections_objects = ['comment']
-                }
-            }
            
           $scope.push_generic_from_ranges= function (type, subtype, position,metadata){
-
               $scope.push.metadata = (metadata) ? metadata : ''
               $scope.push.type = (type) ? type : 'comment';
               $scope.push.subtype = subtype ? subtype : 'comment';
               $scope.push.position = (position) ? position : 'left';
-
-                if(type !=='hyperlink' && type !=='media'){
-                   $scope.add();
-                }    
+              if(type !=='hyperlink' && type !=='media'){
+                $scope.add();
+              }    
           }
-
-         
-           $scope.add = function(){
-
-                 var push = $scope.push
+          
+          $scope.add = function(){
+              
                  if(!$scope.push.status) { $scope.push.status   = 'approved' }
                  if(!$scope.push.depth)   { $scope.push.depth    = 1 }
                  if(!$scope.push.doc_id_id) { $scope.push.doc_id_id  = 'null'  }
+
                  console.log('ready to push')
-                 
+                 console.log($scope.push)
                  var promise= MarkupRest.new({Id:$scope.$parent.doc.slug}, serialize($scope.push)).$promise;
                   promise.then(function (Result) {
                   if(Result.inserted[0]){
@@ -42641,22 +42310,15 @@ angular.module('musicBox.section.directive.pusher', [])
                   
                     // add to doc containers
                     if(mi.type== 'container'){
-
                        mi.fulltext = 'Your text' 
-                       
                        var operation_ = {
                           'object_': mi, 
                           'before':{'state':'new',  'type': 'push_container',
                           }, 
                           'grp_log': Math.random()*1000, 
-                          'reversable': true,
-                         
-                        } 
+                          'reversable': true     
+                        }
                         $scope.$parent.doc.operation = operation_
-
-
-                    
-                     
                     }
 
                     // add to doc markups (and its section as an operation)
@@ -42666,17 +42328,15 @@ angular.module('musicBox.section.directive.pusher', [])
                           'before':{'state':'new',  'type': 'push_markup',
                           }, 
                           'grp_log': Math.random()*1000, 
-                          'reversable': true,
-                         
+                          'reversable': true
                         } 
-                      
                         $scope.$parent.section.operation = operation_
 
-                 
-                    }
-                  
-                
 
+                        if($scope.type=="column"){
+                         $scope.pusher_toggle()
+                        }
+                    }
                   }
                   else{
                       alert('err')
@@ -42687,61 +42347,63 @@ angular.module('musicBox.section.directive.pusher', [])
                   }.bind(this));
            }
 
-
-
-            $scope.pusher_isvisible = function(){
+          $scope.pusher_isvisible = function(){
               if(global_active_pusher !== true){
                   return false
               }
-              if($scope.type=='new_section' && $rootScope.doc_owner == true && $scope.$parent.$parent.$parent.$parent.$last){
-                return true
+              if($scope.$parent.doc.doc_owner == true){
+               
+                  if( $scope.type == 'inline_objects' || $scope.type=='container_class' ){
+                       return true
+                  }
+                  if($scope.type=='new_section' && $scope.last == true){
+                     return true
+                  }
               }
-              if( $scope.type=='inline_objects' && $rootScope.doc_owner == true){
-                 return true
-               }
-              if( $scope.type=='container_class' && $rootScope.doc_owner == true && $scope.$parent.$parent.$parent.$parent.$last){
-                 return true
+              if($scope.push.isopen == true && $scope.type == 'column' ){
+                     return true
               }
+
+             
               return true;
-           
-            
-           }
+                      
+          }
 
-           $scope.new_section = function(){
-             $scope.add()
-           }
+          $scope.new_section = function(){
+            $scope.add()
+          }
 
+          $scope.pusher_isopen = function(){
 
-            $scope.pusher_isopen = function(){
-
-              if( $scope.type=='new_section' && $rootScope.doc_owner == true && $scope.$parent.$parent.$parent.$parent.$last){
-                 return true
+             if(global_active_pusher !== true){
+                  return false
               }
-               if( $scope.type=='inline_objects' && $rootScope.doc_owner == true){
-                 return true
+              if($scope.$parent.doc.doc_owner == true){
+               
+                  if( $scope.type == 'inline_objects' || $scope.type=='container_class' ){
+                       return true
+                  }
+                  else if($scope.type=='new_section' && $scope.last == true){
+                     return true
+                  }
               }
-
-              if( $scope.type=='container_class' && $rootScope.doc_owner == true){
-                 return true
+              if($scope.push.isopen == true && $scope.type == 'column' ){
+                  return true
               }
-
               return false
-           }
+          }
 
-           $scope.pusher_toggle = function(){
-             $scope.isopen = !$scope.isopen
-             if($scope.isopen == true){
+          $scope.pusher_toggle = function(){
+             $scope.push.isopen = !$scope.push.isopen
+             if($scope.push.isopen == true){
                 $scope.$parent.defocus_containers();
                 $scope.$parent.section.focused  = 'side_left'
-             
              }
              else{
                   $scope.$parent.defocus_containers();
-               
              }
              $scope.$parent.section.modeletters = 'single'
-           
-           }
+          }
 
           $scope.pusher_isvalid = function(){
                if($scope.type=='new_section' || $scope.type=='container_class'){
@@ -42750,44 +42412,35 @@ angular.module('musicBox.section.directive.pusher', [])
                 return false;
            }
 
-           /// watch rootscope UI changes
-          $rootScope.$watch('ui.selected_range.redraw', function(newValue, oldValue) {
-              if(oldValue == newValue){}
-              else{
-                if($scope.type=='new_section'){
-
-                 
-                }
+         /// watch rootscope UI changes
+         $scope.$watch('[start,end]', function(newValue, oldValue) {       
+            //  if(oldValue == newValue){}
+            //  else{
+            if($scope.type && $scope.type=='new_section'){}
                 
-                else{
-                  $scope.push.start =  $rootScope.ui.selected_range.start
-                  $scope.push.end   =  $rootScope.ui.selected_range.end
-                }
+            else{
+                $scope.push.start =  $scope.start
+                $scope.push.end   =  $scope.end
+            }
+            //   }
 
-
-
-              }
-
-              if($scope.push.start && $scope.push.start!==null && $scope.push.end && $scope.push.end!==null){
-                  $scope.push.has_ranges =true
-              }
-              else{
-                 $scope.push.has_ranges = false
-              }
+            if($scope.push.start && $scope.push.start!==null && $scope.push.end && $scope.push.end!==null){
+              $scope.push.has_ranges =true
+            }
+            else{
+              $scope.push.has_ranges = false
+            }
           })
 
-    
-          $scope.$watch('[$parent.section.end, $parent.section.start]', function(newValue, oldValue) {
+          $scope.$watch('[section.end, section.start]', function(newValue, oldValue) {
               if(oldValue == newValue){}
               else{
                 if($scope.type=='new_section'){
-
                      $scope.push.start     =  parseInt($scope.$parent.section.end)+1
-                     $scope.push.end   =  parseInt($scope.$parent.section.end)+9
+                     $scope.push.end       =  parseInt($scope.$parent.section.end)+9
                      console.log('Pusher (new_section) updated')
                 }
-                else{
-                
+                else{               
                 }      
               }
           }, true)
@@ -42833,30 +42486,35 @@ angular.module('musicBox.section.directive.pusher', [])
               if(oldValue == newValue){}
               else{
                   if($scope.push.type && $scope.push.subtype  && $scope.push.start!==null && $scope.push.end!==null){
-                    $scope.isvalid = true;
+                    $scope.push.isvalid = true;
                   };
               }
            }, true) 
-
-
-           $scope.isvisible   = $scope.pusher_isvisible()
-           $scope.isopen      = $scope.pusher_isopen()
-           $scope.isvalid     = $scope.pusher_isvalid()
-           $scope.preset_push()
+        
+           $scope.init_push()
 
     }]
-        return {
-        restrict: "AE", 
-        scope: {
-            type: "@",
-            position: "@"
-        },
-        replace : true,
-        controller: controller,
-        link:link,
-          templateUrl: function() {
-                return "js/MusicBox/section/tpl/pusher.tpl.html";
-          }
+
+    /* var link= function(scope){
+      //   console.log(' [mbPusher] directive')
+    }
+    */
+
+    return {
+            restrict: "AE", 
+            scope: {
+                start: "=",
+                end: "=",
+                type: "@",
+                position: "@",
+                last: "="
+            },
+            //require: 'mbRanges',
+            // replace : true,
+            controller:pusherCtrl,
+            templateUrl: function() {
+              return "js/MusicBox/section/tpl/pusher.tpl.html";
+            }
         };
 }])
 
@@ -42870,19 +42528,10 @@ angular.module('musicBox.markup', [
 ])
 
 
+angular.module('musicBox.markup.controller', ['musicBox.section']).controller('MarkupCtrl', ["$rootScope", "$scope", "$http", "MarkupRest", "socket", "ObjectService", function($rootScope, $scope, $http, MarkupRest,socket,ObjectService) {
+	var _markup;
 
 
-/**
-init_()
-
-
-
-
-**/
-
-
-
-angular.module('musicBox.markup.controller', ['musicBox.section']).controller('MarkupCtrl', ["$scope", "$http", "MarkupRest", "socket", "MarkupService", function($scope, $http, MarkupRest,socket,MarkupService) {
 	
 	$scope.init__= function () {
 					
@@ -42892,46 +42541,25 @@ angular.module('musicBox.markup.controller', ['musicBox.section']).controller('M
 			console.log('no schematype for markup!')
 			return false;
 		}
+
+
+		 _markup = new ObjectService().init($scope.markup, 'markup')
+
 		
-        markup_ = new Object({
-            'offset_start'   : 0,
-            'offset_end'     : 0,
-            'has_offset'     : false,
-            'selected'       : false,
-            'editing'        : false,
-            'fast_editor'	 : ($scope.$parent.doc_owner) ? true : false,
-            'inrange'        : false,
-            'uptodate'       : '',
-            'deleted'        : false,
-            'forced'		 : ($scope.markup.type =='container' || $scope.markup.type =='markup' || $scope.markup.type =='container_class' ) ? true : false,
-            'touched'        : false,
-            'ready'          : 'init',
-            'doc_id_id'      : '', // special cases for child documents (refs as doc_id in markup record)
-			'by_me' 		 : ( $scope.markup.user_id._id && $scope.$parent.userin._id  && ($scope.$parent.userin._id == $scope.markup.user_id._id ) ) ? true : false,
-			'can_approve' 	 : ($scope.$parent.doc_owner) ? true : false,
-			'objSchemas' 	 : $scope.objSchemas[$scope.markup.type] ?  $scope.objSchemas[$scope.markup.type] : [],
-			'servicetype'  	 :'markup',
-			'operation'		 :	$scope.markup.operation ?  $scope.markup.operation : {},
-       		'operations': []
-       
-
-        })      	
-
-		$scope.markup =  _.extend($scope.markup, markup_);
+		// $scope.markup.user_options = _markup.apply_object_options('markup_user')
+		// $scope.markup.options_.user = _markup.apply_object_options('markup_user')
 
 
-		var _markup = new MarkupService().init($scope.markup)
-		$scope.markup.user_options = _markup.apply_object_options('markup_user_options',$scope.markup.user_id.user_options)
+		
 		// console.log(_markup.options_array.color.value)
 		
 		// its own fulltext for section.
 
 
-		// $scope.markup.sectionin = $scope.$parent.$parent.$index
-		$scope.markup.fulltext  = $scope.fulltext()
+		// $scope.markup
+		//$scope.markup.fulltext  = $scope.fulltext()
 		
-  		
-
+ 
 
   		if($scope.markup.type=='container_class' ){ // or pos == inlined
 			$scope.section.section_classes += $scope.markup.metadata+' ';
@@ -42975,14 +42603,18 @@ angular.module('musicBox.markup.controller', ['musicBox.section']).controller('M
 			}
 		}
        	
-
+		return _markup
 		
 	}
 
 	$scope.fulltext = function (){
 
+/// broken		_markup.setFulltext();
+
+
+/*
 		if($scope.markup.objSchemas && $scope.markup.objSchemas.compute_fulltext === false){
-			console.log('NO ft')
+		//	console.log('NO ft')
 			return
 		}
 		
@@ -42993,7 +42625,7 @@ angular.module('musicBox.markup.controller', ['musicBox.section']).controller('M
          	
 
          	var y = i-$scope.section.start
-         	if($scope.doc.content[i] && $scope.section.letters[i]){
+         	if($scope.doc.content[i] && $scope.section.letters && $scope.section.letters[i]){
          		//console.log(i)
 
          		fulltext += $scope.section.letters[i].char;
@@ -43002,6 +42634,8 @@ angular.module('musicBox.markup.controller', ['musicBox.section']).controller('M
 
      	}
      	return fulltext;
+
+     	*/
 	}
   	//console.log($scope.section)
     /*
@@ -43017,7 +42651,7 @@ angular.module('musicBox.markup.controller', ['musicBox.section']).controller('M
 	*/
  $scope.reverse = function(){
 
-	 	var reverse_text = $scope.fulltext();
+	 // broken var reverse_text = _markup.fulltext();
 
 	 	console.log($scope.markup)
 	 	alert('deleted:'+reverse_text)
@@ -43040,22 +42674,21 @@ angular.module('musicBox.markup.controller', ['musicBox.section']).controller('M
 			}
 			else{
 
-        	   $scope.markup.fulltext = $scope.fulltext();
- 			   $scope.markup.has_offset = true;
-			  
+        	 
+ 			 
 			   if($scope.markup.start < $scope.$parent.section.start){
 		    		$scope.markup.start = $scope.$parent.section.start
 		       }
 
 
 		       if($scope.markup.end > $scope.$parent.section.end){
-		       
 	    		$scope.markup.end = $scope.$parent.section.end
 	    	   }
 
 
 
 			   $scope.stack_markup()
+			   // broken ::  _markup.setFulltext();
 
         	  // $scope.markup.start_or_end = false
 
@@ -43106,7 +42739,7 @@ angular.module('musicBox.markup.controller', ['musicBox.section']).controller('M
         	else{
         		console.log('try to save to undef type')
         	}
-			$scope.markup.touched= true;
+		
 			$scope.$parent.attribute_objects()
 			$scope.stack_markup()
 		}
@@ -43114,7 +42747,7 @@ angular.module('musicBox.markup.controller', ['musicBox.section']).controller('M
   
     $scope.$watch('markup.subtype', function( newValue, oldValue) {
         if(oldValue && newValue && newValue !== oldValue){
-	       $scope.markup.touched= true;
+      
 	       $scope.$parent.attribute_objects()
 	       $scope.stack_markup()
 	       $scope.save('Markup subtype '+oldValue+' edited to '+newValue)
@@ -43133,7 +42766,6 @@ angular.module('musicBox.markup.controller', ['musicBox.section']).controller('M
 			if(newValue !== oldValue){
 				//$scope.$parent.init_()		
 			}
-			$scope.markup.touched= true;
 			
 			$scope.$parent.attribute_objects()
 			$scope.stack_markup()
@@ -43154,7 +42786,7 @@ angular.module('musicBox.markup.controller', ['musicBox.section']).controller('M
 
 		
 		if(event_name == 'dblclick'){
-				if($scope.doc_owner || $scope.markup.by_me === true){
+				if($scope.doc.doc_owner || $scope.markup.by_me === true){
 					$scope.markup.editing = !$scope.markup.editing
 				}
 				if($scope.markup.by_me === false){
@@ -43195,12 +42827,14 @@ angular.module('musicBox.markup.controller', ['musicBox.section']).controller('M
 
 		// set or unset range
 		if($scope.markup.selected == true){
-			$scope.ui.selected_range.start =  $scope.markup.start
-			$scope.ui.selected_range.end   =  $scope.markup.end
+			$rootScope.ui.selected_range.start =  $scope.markup.start
+			$rootScope.ui.selected_range.end   =  $scope.markup.end
 		}
 		else{
-			// $scope.ui.selected_range.start = null
-			// $scope.ui.selected_range.end   = null
+			$rootScope.ui.selected_range.start =  $scope.section.start
+			$rootScope.ui.selected_range.end   =  $scope.section.end
+			// $rootScope.ui.selected_range.start = null
+			// $rootScope.ui.selected_range.end   = null
 		}
 
 		// apply its range
@@ -43268,20 +42902,22 @@ $scope.$watch('markup.fulltext', function(newValue, oldValue) {
      $scope.save = function (save_msg) {
 
      	
-        var thos = this;
+      
        
-        var data = new Object({
+        var data ={
 					            'start'			: $scope.markup.start,
 					            'end'			: $scope.markup.end,
 					            'depth'			: $scope.markup.depth,
-					            'status'		: $scope.markup.status
-					         });
+					            'status'		: $scope.markup.status,
+					            'secret' 		: $rootScope.ui.secret,
+					            'doc_id' 		: $scope.markup.doc_id_id ? $scope.markup.doc_id_id : ''
+					         };
 
 		if($scope.markup.doc_id_id){
-			data.doc_id = $scope.markup.doc_id_id
+		//	data.
 		}
 		// can be null.
-		data.secret = $scope.ui.secret;
+		
 		// check-forced types_data
 		data.metadata 	= $scope.markup.objSchemas.modes.editor.fields.metadata.forced ? $scope.markup.objSchemas.modes.editor.fields.metadata.forced : $scope.markup.metadata
 		data.position 	= $scope.markup.objSchemas.modes.editor.fields.position.forced ? $scope.markup.objSchemas.modes.editor.fields.position.forced : $scope.markup.position
@@ -43289,20 +42925,22 @@ $scope.$watch('markup.fulltext', function(newValue, oldValue) {
 		data.subtype 	= $scope.markup.objSchemas.modes.editor.fields.subtype.forced ? $scope.markup.objSchemas.modes.editor.fields.subtype.forced : $scope.markup.subtype
 		data.edittype = 'edit_markup'
 
+
+
 	    var promise=  MarkupRest.save({id:$scope.$parent.doc.slug, mid:$scope.markup._id }, serialize(data) ).$promise;
         promise.then(function (Result) {
-            var edited  = Result.edited[0][0]
             
             if(save_msg){
-				$scope.flashmessage(save_msg, 'help' , 3000)
+				$rootScope.flashmessage(save_msg, 'help' , 3000)
             }
             else{
-            	$scope.flashmessage(edited.type +' saved', 'help' , 3000)
+            	$rootScope.flashmessage(Result.edited[0][0].type +' saved', 'help' , 3000)
+            	console.log(Result.edited[0][0])
             }
           }.bind(this));
           promise.catch(function (response) {  
             console.log(response)   
-           	$scope.flashmessage(response.err.err_code, 'bad' , 3000)
+           	$rootScope.flashmessage(response.err.err_code, 'bad' , 3000)
           }.bind(this));
 
       }
@@ -43320,8 +42958,8 @@ $scope.$watch('markup.fulltext', function(newValue, oldValue) {
 
 	$scope.match_selection = function (markup){
 		// todo: should check notnull / section limits
-		$scope.markup.start     =  $scope.ui.selected_range.start
-		$scope.markup.end 		=  $scope.ui.selected_range.end
+		$scope.markup.start     =  $rootScope.ui.selected_range.start
+		$scope.markup.end 		=  $rootScope.ui.selected_range.end
 		$scope.save()
 	}
 	$scope.apply_reverse =function(){
@@ -43359,15 +42997,15 @@ $scope.$watch('markup.fulltext', function(newValue, oldValue) {
 			promise.then(function (Result) {
 				
 				$scope.section.redraw = true;
-				$scope.flashmessage('Markup deleted', 'ok' , 2000, false)
+				$rootScope.flashmessage('Markup deleted', 'ok' , 2000, false)
 
 
 			}.bind(this));
 			promise.catch(function (response) {  
-				$scope.flashmessage(response.err, 'bad' , 3000)
+				$rootScope.flashmessage(response.err, 'bad' , 3000)
 			}.bind(this));
 		// toggle
-		$scope.ui.focus_side = ''
+		$rootScope.ui.focus_side = ''
 
         
 
@@ -43408,15 +43046,14 @@ $scope.$watch('markup.fulltext', function(newValue, oldValue) {
 		
 		
 	$scope.$watch('markup.map_ranges', function(newValue, oldValue) {
-			if(oldValue == newValue || newValue == false){
-				// console.log('mk end map_ranges')
-			}
-			else{
-				//console.log('############ map_ranges')
-
 			
+
+			if(newValue && oldValue && newValue !== oldValue ){
+				// console.log('############MARKUP TEST map_ranges='+newValue +'=:'+ oldValue)
+
+				
 				var z, z_real, rtest;
-				rtest = ranges_test($scope.ui.selected_range.start,$scope.ui.selected_range.end, $scope.markup.start,$scope.markup.end, 'markup' )
+				rtest = ranges_test($rootScope.ui.selected_range.start,$rootScope.ui.selected_range.end, $scope.markup.start,$scope.markup.end, 'markup' )
 				//console.log('rtest:'+rtest+' --- '+$scope.markup.metadata)
 				
 				$scope.markup.selected = false;
@@ -43424,19 +43061,19 @@ $scope.$watch('markup.fulltext', function(newValue, oldValue) {
 			
 				if(rtest == 3){
 					
-
-
 				
 					$scope.markup.selected = true;
 					$scope.markup.inrange  = true;
 					// map the markup
 					
 				}
+			}
+			
 
 				// finally
-				$scope.markup.map_ranges= false;
+				
 
-			}
+			
 		})
 
 
@@ -43455,16 +43092,17 @@ $scope.$watch('markup.fulltext', function(newValue, oldValue) {
 				// console.log('mk end redraw')
 			}
 			else{
+
 				// console.log('############ mk.redraw')
 
-				$scope.markup.fulltext = $scope.fulltext()
+				// $scope.markup.fulltext = $scope.fulltext()
 				
 			
 
 							// dirty string...
-							if($scope.markup.type =="container_class"){
-								$scope.section.section_classes += $scope.markup.metadata+' ';
-							}
+						//	if($scope.markup.type =="container_class"){
+						//		$scope.section.section_classes += $scope.markup.metadata+' ';
+						//	}
 
 				
 				// finally
@@ -43474,10 +43112,10 @@ $scope.$watch('markup.fulltext', function(newValue, oldValue) {
 		})
 
     $scope.$watch('markup.operation.before.state', function(newValue, oldValue) {
-		if(newValue == 'new'){
+		if(newValue && newValue == 'new'){
 			 $scope.apply_operation()
 		}
-		if(newValue == 'error'){
+		if(newValue && newValue == 'error'){
 			$scope.markup.operations.push($scope.markup.operation)
 		}
 	})
@@ -43506,11 +43144,17 @@ $scope.$watch('markup.fulltext', function(newValue, oldValue) {
 
 	$scope.init__()
 
-}]); // end controller
+}]).controller('MarkupEditorCtrl', ["$scope", "$http", "MarkupRest", "socket", "ObjectService", function($scope, $http, MarkupRest,socket,ObjectService) {
+
+//alert($scope.section.end)
+//alert($scope.markup.end)
+
+}])
+	
 
 angular.module('musicBox.markup.directive', [])
 
-.directive("markupView", function() {
+.directive("markupView", ["$rootScope", function($rootScope) {
 
         function link(scope, elem, attr) {
            console.log('   ---[m] directiive')
@@ -43518,21 +43162,23 @@ angular.module('musicBox.markup.directive', [])
         return {
           restrict: "E",
           link:link,
+             scope: true,
           templateUrl: function() {
                 return "js/MusicBox/markup/tpl/view.tpl.html";
           }
           
         };
-})
-.directive("markupEditor", function() {
+}])
+.directive("markupEditor", ["$rootScope", function($rootScope) {
         return {
           restrict: "E",
+             scope: true,
+          controller:"MarkupEditorCtrl",
           templateUrl: function() {
                 return "js/MusicBox/markup/tpl/editor.tpl.html";
           }
         };
-})
-
+}])
 /*
 
 REST API factory for markup.
@@ -43551,10 +43197,14 @@ angular.module('musicBox.markup.rest', [])
     return data_
   };
 
+/* if($routeParams.secret){
+      data.secret = $rootScope.ui.secret;
+  }
+  */
+
+
   var route_object = 'markup' 
  
-
-
   return $resource(
     {Id:'@id', Mid:'@mid'},
     {},

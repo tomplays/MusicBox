@@ -4,6 +4,7 @@ h5 {{i18n.CUSTOM.ACTIONS.edit}} {{markup.type}}
 form(name="myForm")
 
 
+
 	// tabs
 	// ranges
 	tabset.editor-main-tab(justified="true")
@@ -58,13 +59,14 @@ form(name="myForm")
 				label {{i18n.CUSTOM.ACTIONS.select}} position
 				// h2 {{i18n.CUSTOM.POSITIONS[markup.position]}}
 				div(class="btn-group typer.position")
-					label(ng-repeat="t in markup.objSchemas.positions.available" class="btn btn-primary" ng-click="change_value('position', t, true)" , ng-model="markup.position" btn-radio="t")
+					label(ng-repeat="t in markup.objSchemas.positions.available" , class="btn btn-primary" ng-click="change_value('position', t, true)" , ng-model="markup.position" , btn-radio="t")
 							{{i18n.CUSTOM.POSITIONS[t]}}
-		tab(heading="O.")
+
+		tab(heading="O")
 			pre {{markup.operation}}
 			ul
 				li(ng-repeat="op in markup.operations track by op.grp_log") {{op}}
-	
+
 	.object-tools(ng-if="markup.type =='child' ")					
 		span.field.smallinput()
 			label sub-doc id
@@ -85,7 +87,7 @@ form(name="myForm")
 			span.ranges_tools
 				i.fa.fa-text-width.match_selection(title="re-match ranges from active selection", ng-click="match_selection(markup)" ) 
 			
-	.object-tools(ng-if="doc_owner")
+	.object-tools(ng-if="doc.doc_owner")
 		label Moderation / status
 
 		i.fa.fa-flag.btn_action(style="color:green" ng-if="markup.status == 'pending' " ng-click="change_value('status','approved', true)") set as approved

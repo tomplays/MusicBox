@@ -8,15 +8,18 @@
 		h4 delete 
 		i.fa.fa-remove.btn_action(tooltip-placement="left" tooltip="{{i18n.CUSTOM.ACTIONS.delete}}" ng-click="delete()")
 		// i.fa.fa-save.btn_action( tooltip-placement="right" tooltip="{{i18n.CUSTOM.ACTIONS.save}}" ng-click="save()")
+		a(ng-click="next_prev('next')" , ng-if="!$parent.$parent.$parent.$parent.$parent.$parent.$last") next section
+		a(ng-click="next_prev('prev')" , ng-if="!$parent.$parent.$parent.$parent.$parent.$parent.$first") previous section
+		
 
-	// .section_editor_body(ng-if="section.editing_text === true" class="touchedinput-{{section.touched}}")
+	.section_editor_body(ng-if="section.editing_text === true" class="touchedinput-{{section.touched}}")
 		div.section_ranges
 			label Start-end ranges
 			span.field.ranges
 				span.ranges_inputs
 					span.field.numberfloat.oneline
-						span From__  {{section.startt}}
-						input.section_end(type="number" , ng-model="section.startt" )
+						// span From__  {{section.startt}}
+						// input.section_end(type="number" , ng-model="section.startt" )
 
 
 						span From 
@@ -44,7 +47,7 @@
 					div(class="markup_ markup_type_{{markup.type}}")
 						markup-view
 
-	div(ng-if="ui.debug") 
+	div(ng-if="render.debug") 
 		p is touched ? {{section.touched}}
 		// p range: {{ui.selected_range.textrange}}
 		h2 is multi ? {{ui.selected_range.multi}} size ? {{ui.selected_range.size}}

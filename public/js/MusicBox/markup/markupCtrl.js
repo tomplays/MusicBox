@@ -1,5 +1,8 @@
 
-angular.module('musicBox.markup.controller', ['musicBox.section']).controller('MarkupCtrl', function($rootScope, $scope, $http, MarkupRest,socket,MarkupService) {
+angular.module('musicBox.markup.controller', ['musicBox.section']).controller('MarkupCtrl', function($rootScope, $scope, $http, MarkupRest,socket,ObjectService) {
+	var _markup;
+
+
 	
 	$scope.init__= function () {
 					
@@ -9,42 +12,25 @@ angular.module('musicBox.markup.controller', ['musicBox.section']).controller('M
 			console.log('no schematype for markup!')
 			return false;
 		}
+
+
+		 _markup = new ObjectService().init($scope.markup, 'markup')
+
 		
-        markup_ = new Object({
-            'selected'       : false,
-            'editing'        : false,
-            'fast_editor'	 : ($scope.$parent.doc_owner) ? true : false,
-            'inrange'        : false,
-            'deleted'        : false,
-            'forced'		 : ($scope.markup.type =='container' || $scope.markup.type =='markup' || $scope.markup.type =='container_class' ) ? true : false,
-            'touched'        : false,
-            'doc_id_id'      : '', // special cases for child documents (refs as doc_id in markup record)
-			'by_me' 		 : ( $scope.markup.user_id._id && $scope.$parent.userin._id  && ($scope.$parent.userin._id == $scope.markup.user_id._id ) ) ? true : false,
-			'can_approve' 	 : ($scope.$parent.doc_owner) ? true : false,
-			'objSchemas' 	 : $rootScope.objSchemas[$scope.markup.type] ?  $rootScope.objSchemas[$scope.markup.type] : [],
-			'servicetype'  	 :'markup',
-			'operation'		 :	$scope.markup.operation ?  $scope.markup.operation : {},
-       		'operations': []
-       
-        })      	
-
-		$scope.markup =  _.extend($scope.markup, markup_);
+		// $scope.markup.user_options = _markup.apply_object_options('markup_user')
+		// $scope.markup.options_.user = _markup.apply_object_options('markup_user')
 
 
-		var _markup = new MarkupService().init($scope.markup, 'markup')
-		
-		$scope.markup.user_options = _markup.apply_object_options()
 		
 		// console.log(_markup.options_array.color.value)
 		
 		// its own fulltext for section.
 
 
-		// $scope.markup.sectionin = $scope.$parent.$parent.$index
+		// $scope.markup
 		//$scope.markup.fulltext  = $scope.fulltext()
 		
-  		
-
+ 
 
   		if($scope.markup.type=='container_class' ){ // or pos == inlined
 			$scope.section.section_classes += $scope.markup.metadata+' ';
@@ -88,12 +74,16 @@ angular.module('musicBox.markup.controller', ['musicBox.section']).controller('M
 			}
 		}
        	
-
+		return _markup
 		
 	}
 
 	$scope.fulltext = function (){
 
+/// broken		_markup.setFulltext();
+
+
+/*
 		if($scope.markup.objSchemas && $scope.markup.objSchemas.compute_fulltext === false){
 		//	console.log('NO ft')
 			return
@@ -115,6 +105,8 @@ angular.module('musicBox.markup.controller', ['musicBox.section']).controller('M
 
      	}
      	return fulltext;
+
+     	*/
 	}
   	//console.log($scope.section)
     /*
@@ -130,7 +122,7 @@ angular.module('musicBox.markup.controller', ['musicBox.section']).controller('M
 	*/
  $scope.reverse = function(){
 
-	 	var reverse_text = $scope.fulltext();
+	 // broken var reverse_text = _markup.fulltext();
 
 	 	console.log($scope.markup)
 	 	alert('deleted:'+reverse_text)
@@ -153,7 +145,7 @@ angular.module('musicBox.markup.controller', ['musicBox.section']).controller('M
 			}
 			else{
 
-        	   $scope.markup.fulltext = $scope.fulltext();
+        	 
  			 
 			   if($scope.markup.start < $scope.$parent.section.start){
 		    		$scope.markup.start = $scope.$parent.section.start
@@ -167,6 +159,7 @@ angular.module('musicBox.markup.controller', ['musicBox.section']).controller('M
 
 
 			   $scope.stack_markup()
+			   // broken ::  _markup.setFulltext();
 
         	  // $scope.markup.start_or_end = false
 
@@ -264,7 +257,7 @@ angular.module('musicBox.markup.controller', ['musicBox.section']).controller('M
 
 		
 		if(event_name == 'dblclick'){
-				if($scope.doc_owner || $scope.markup.by_me === true){
+				if($scope.doc.doc_owner || $scope.markup.by_me === true){
 					$scope.markup.editing = !$scope.markup.editing
 				}
 				if($scope.markup.by_me === false){
@@ -387,8 +380,8 @@ $scope.$watch('markup.fulltext', function(newValue, oldValue) {
 					            'end'			: $scope.markup.end,
 					            'depth'			: $scope.markup.depth,
 					            'status'		: $scope.markup.status,
-					            'secret' : $rootScope.ui.secret,
-					            'doc_id' : $scope.markup.doc_id_id ? $scope.markup.doc_id_id : ''
+					            'secret' 		: $rootScope.ui.secret,
+					            'doc_id' 		: $scope.markup.doc_id_id ? $scope.markup.doc_id_id : ''
 					         };
 
 		if($scope.markup.doc_id_id){
@@ -531,13 +524,17 @@ $scope.$watch('markup.fulltext', function(newValue, oldValue) {
 
 				
 				var z, z_real, rtest;
-				rtest = ranges_test($rootScope.ui.selected_range.start,$rootScope.ui.selected_range.end, $scope.markup.start,$scope.markup.end, 'markup' )
+			
+
+				rtest = ranges_test(parseInt($rootScope.ui.selected_range.start),$rootScope.ui.selected_range.end, $scope.markup.start,$scope.markup.end, 'markup' )
+			
+				$scope.markup.test_map_r = rtest
 				//console.log('rtest:'+rtest+' --- '+$scope.markup.metadata)
 				
 				$scope.markup.selected = false;
 				$scope.markup.inrange  = false;
 			
-				if(rtest == 3){
+				if(rtest == 3  || rtest == 2 || rtest == 4){
 					
 				
 					$scope.markup.selected = true;
@@ -590,10 +587,10 @@ $scope.$watch('markup.fulltext', function(newValue, oldValue) {
 		})
 
     $scope.$watch('markup.operation.before.state', function(newValue, oldValue) {
-		if(newValue == 'new'){
+		if(newValue && newValue == 'new'){
 			 $scope.apply_operation()
 		}
-		if(newValue == 'error'){
+		if(newValue && newValue == 'error'){
 			$scope.markup.operations.push($scope.markup.operation)
 		}
 	})
@@ -611,6 +608,10 @@ $scope.$watch('markup.fulltext', function(newValue, oldValue) {
  			$scope.markup.operation.before.state= 'done'
  			//$scope.markup.operation.after.state= 'done'
 			$scope.markup.operations.push($scope.markup.operation)
+
+
+						 console.log('----------------------- MARKUP OPERATION DONE')
+
 	}
 
 	$scope.reverse_operation = function(){}
@@ -622,7 +623,7 @@ $scope.$watch('markup.fulltext', function(newValue, oldValue) {
 
 	$scope.init__()
 
-}).controller('MarkupEditorCtrl', function($scope, $http, MarkupRest,socket,MarkupService) {
+}).controller('MarkupEditorCtrl', function($scope, $http, MarkupRest,socket,ObjectService) {
 
 //alert($scope.section.end)
 //alert($scope.markup.end)
