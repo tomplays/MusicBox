@@ -218,8 +218,6 @@ console.log('SET !')
 
 
 
-  
-
       $scope.reverse_text = function(){
            // 
            // alert($scope.$parent.section.start)

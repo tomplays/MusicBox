@@ -38,7 +38,7 @@ console.log($scope.mks)
 
 
 
-  // triggered whan : 
+  // triggered when : 
   //                  doc.content clean
   //                  scope.section.fulltext_edit is OK ()
   //                  mks ans sections ok (no way to check...)
@@ -275,6 +275,7 @@ $scope.map_letters = function(){
 
     if($scope.section.letters[li].char == '&nbsp;'){
       fulltext_block += ' '
+     /// $scope.section.letters[li].classes.push('wordend')
     }
     else{
       fulltext_block += $scope.section.letters[li].char;
@@ -338,9 +339,13 @@ $scope.map_letters = function(){
 
             if(mi ==  loop_start){
               $scope.section.letters[mi].classes.push('isfirst-range')
+               //             $scope.section.letters[mi].classes.push('isfirst-range--'+markup.subtype)
+
             }
             if(mi ==  loop_end){
-              $scope.section.letters[mi].classes.push('islast-range islast-range--')
+              $scope.section.letters[mi].classes.push('islast-range')
+              //$scope.section.letters[mi].classes.push('islast-range--'+markup.subtype)
+
             }
 
             
@@ -353,17 +358,20 @@ $scope.map_letters = function(){
             if(markup.type == 'hyperlink' && markup.metadata){
               //  console.log('markup.type == hyperlink')
               //  console.log(markup)
+
                 $scope.section.letters[mi].href = markup.metadata
             }
+
+          
             
             if(m_objSchemas.map_range === true){
-              if(_.contains($scope.section.letters[mi].classes, markup.subtype )){
+             // if(_.contains($scope.section.letters[mi].classes, markup.subtype )){
 
-             $scope.section.letters[mi].classes.push(markup.subtype) 
-              }
-              else{
-                $scope.section.letters[mi].classes.push(markup.subtype) 
-              }
+               //     $scope.section.letters[mi].classes.push(markup.subtype) 
+              //}
+              //else{
+                    $scope.section.letters[mi].classes.push(markup.subtype) 
+              //}
               
             }
         }
@@ -396,71 +404,150 @@ $scope.map_letters = function(){
 // transform a string into a rich "classic html" markup string
 // used only at page load, because after click, text is transformed into 'single' letters directives
 
-$scope.compile_html = function(fulltext_block ){
-  var out = ''
+$scope.compile_html = function(fulltext_block){
+var out = ''
+
+var segments = []
+
+
+
+var words = [];
+
+
+var current_word = ''
+          
 
   for (var i = 0; i < fulltext_block.length; i++) {
+
+            var segment = {
+             //   ini : true
+
+            }
           
+            var easy_filters = ['isfirst-section','islast-section', 'isfirst-range','islast-range']
+
+            _.each(easy_filters, function(f){
+           // $scope.section.letters[i].classes = _.without($scope.section.letters[i].classes, f)
+            })
           
 
-            var  prev_class = false
-            var current_class = false
-            var next_class  = false;
+            var prev_class      = false
+            var current_class   = false
+            var next_class      = false;
+
+
+
+        
+            
+            var word = {
+              string  : false,
+              end     : false,
+              into    : false,
+              start   : false,
+              space   : false,
+              current_class : false,
+              next_class : false,
+              prev_class : false,
+              open : false,
+              close :false
+
+            }
+        
+
+            if(fulltext_block[i] == ' '){
+                word.space  = +''+i;
+            }
+
+            else if( (fulltext_block[i+1] && fulltext_block[i+1]  == ' ') || ( i+1 == fulltext_block.length) ){
+                word.end = i;
+                current_word += fulltext_block[i]
+                
+                // fix before work !!  
+                current_word = current_word.replace(',', '')
+                current_word = current_word.replace('.', '')
+                
+              
+                words.push(word)
+             
+                word.string = current_word
+
+                current_word = '';
+                      //        $scope.section.letters[i].classes.push('wordend')
+
+                // $scope.section.letters[i].classes.push('wordend')
+
+
+            }
+           
+            else if(fulltext_block[i-1] && fulltext_block[i-1] == ' ' || i == 0){
+                word.start = i;
+                current_word += fulltext_block[i]
+            }
+
+
+
+            else{
+                word.into = i;
+                current_word += fulltext_block[i]
+            }
+
+
+            
             
 
-            /*if($scope.section.letters[i].inrange === true){
-             _.isArray(current_class) ? current_class.push('inrange') : current_class = new Array('inrange')
-          }
-
-            if(i==0){
-                  //     _.isArray(current_class) ? current_class.push('iss') : current_class = new Array('iss')
-
+            if($scope.section.letters[i].href !== ''){
+                word.href = $scope.section.letters[i].href
 
             }
 
-            if(i+1 == $scope.section.letters.length ){
-                                   _.isArray(current_class) ? current_class.push('issd') : current_class = new Array('issd')
+            
+          
 
-          /// current_class.push('is_last')
 
-            }
-            */
+
+
+         
+
+
+
           //console.log('prev next i == '+i)
           if($scope.section.letters[i] && ($scope.section.letters[i].classes.length > 0 ) ){
-            var current = true  
-          //  if(_.isArray())
-          //  current_class.push($scope.section.letters[i].classes) : current_class = new Array($scope.section.letters[i].classes)
-            
-            //if($scope.section.letters[i].href !== '')
             current_class = $scope.section.letters[i].classes
-
-
+            word.current_class = $scope.section.letters[i].classes
             //current_class.push()
-
-
           }
-          
 
+
+          
           if( $scope.section.letters[i+1] && $scope.section.letters[i+1].classes.length > 0 ){
-             var next = true;
              next_class = $scope.section.letters[i+1].classes;
+              word.next_class = $scope.section.letters[i+1].classes
+
           }
           
           if($scope.section.letters[i-1] && $scope.section.letters[i-1].classes.length > 0 ){
-             var prev = true
              prev_class = $scope.section.letters[i-1].classes
+             word.prev_class = $scope.section.letters[i-1].classes
+
           }
 
 
           
+            var segment= _.extend(segment, word)
+
+  
           
+            var open_seg = false
+            var close_seg = false
+            var open_seg_class  = ''
+            var open_seg_content  = ''
+
+
 
 
           // case letter as at least one class
-          if(_.isArray(current_class)){
-            //console.log($scope.section.letters[i].classes)
-            
-
+          if(_.isArray(current_class) ){
+          
             // add to array before compare
             
 
@@ -476,34 +563,30 @@ $scope.compile_html = function(fulltext_block ){
             
             if($scope.section.letters[i].href !== ''){
 
+          //    if($scope.section.letters[i-1] && $scope.section.letters[i-1].href == ''){
+                inside += '<a title="hyperlink to '+$scope.section.letters[i].href+'" target="_blank" href="'+$scope.section.letters[i].href+'">'
+                //
+            //  }
 
-              //inside = '<a href="'+$scope.section.letters[i].href+'">'+fulltext_block[i]+'</a>'
-              
-              if($scope.section.letters[i-1] && $scope.section.letters[i-1].href !== ''){
-                inside += fulltext_block[i]
-              }
-              else{
-                inside += '<a title="hyperlink to '+$scope.section.letters[i].href+'" target="_blank" href="'+$scope.section.letters[i].href+'">'+fulltext_block[i]
-              }
+              inside += fulltext_block[i]
 
 
-              if($scope.section.letters[i+1] && $scope.section.letters[i+1].href == ''){
+              //if($scope.section.letters[i+1] && $scope.section.letters[i+1].href == ''){
                 inside +='</a>'
-              }
-              else{
-                
-              }
+              //}
+
+
+
 
 
             }
             else{
 
               if(fulltext_block[i] == ' '){
-              inside = '&nbsp;'
-            
-            }
-            else{
-              inside = fulltext_block[i]
+                inside = '<span> </span>'
+              }
+              else{
+                inside = fulltext_block[i]
             }
               
               
@@ -512,21 +595,36 @@ $scope.compile_html = function(fulltext_block ){
 
             }
 
-            if(  _.isEqual(prev_class , current_class))  {
-              out += inside
+
+
+
+            if( _.isEqual(prev_class , current_class))  {
+                // out += inside
+                open_seg_content = inside
 
             }
             else{
-              out += '<span class="'+classes_flat+'">'+inside
+              // out += '<span class="'+classes_flat+'">'+inside
+              open_seg_class   = classes_flat 
+              open_seg_content = inside
+              open_seg = true
 
             }
+
+
+
+
             if(_.isArray(next_class) && _.isEqual(next_class , current_class) ) {
-            
+           
             }
             else{
-              out += '</span>'
+            //  out += '</span>'
+              close_seg = true
 
             }
+
+          
+
 
 
             //out += '<span class="'+classes_flat+'">'+inside+'</span>'
@@ -539,30 +637,64 @@ $scope.compile_html = function(fulltext_block ){
           else{
             
 
+          
+
             if(_.isArray(prev_class) || i==0 ){
               // prev was a self closing letter or first letter then open span
-              out +='<span>'
+              //   out +='<span class="no_class">'
+              open_seg_class = "lt no_prev_class"
+              open_seg = true
             }
             
             
 
             if(fulltext_block[i] == ' '){
-              out += '&nbsp;'
+             // out += '&nbsp;'
+             // open_seg = true
+              open_seg_class += " spacer"
+             // close_seg = true
+              open_seg_content +=' '
             
             }
             else{
-              out += fulltext_block[i]
+              //out += fulltext_block[i]
+              open_seg_content += fulltext_block[i]
             }
 
             
-            if(_.isArray(next_class) || i+1 == $scope.section.letters.length){
+            if(_.isArray(next_class) ){
               // next is a letter or is last letter then close span
-              out +='</span>'
+             //out +='</span>'
+              close_seg = true
             }
+
+
+            if(i == fulltext_block.length){
+              // next is a letter or is last letter then close span
+              //out +='</span>'
+              close_seg = true
+            }
+
+
+
+         
+
+
         
           }
 
+
+
+          out += (open_seg == true ) ? '<span class="'+open_seg_class+'">' : ''
+          out += open_seg_content;
+          out += (close_seg == true ) ? '</span>' : ''
+
+
+        
+           segments.push(segment)
         }
+        //console.log(words)
+          console.log(segments)
   return out
 }
 
@@ -640,7 +772,7 @@ angular.module('musicBox.section.directive.letters', [])
 
   function sets(scope, log){
 
-      $rootScope.ui.selected_range.current_action =  log.current_action 
+      $rootScope.ui.current_action    =  log.current_action 
       $rootScope.ui.selected_range.wait_ev        =  log.wait_ev 
       $rootScope.ui.selected_range.start          =  log.start
       $rootScope.ui.selected_range.end            =  log.end
@@ -693,7 +825,6 @@ angular.module('musicBox.section.directive.letters', [])
                   if($rootScope.doc.doc_owner == true){
                     alert('e')
                       $rootScope.ui.renderAvailable_active =  'editor'
-                      scope.$parent.section.editing_text = true;
                       scope.$parent.section.editing = true;
                   }
                   */  
@@ -724,7 +855,6 @@ angular.module('musicBox.section.directive.letters', [])
              
             
 
-              scope.$parent.section.editing_text = true;
               scope.$parent.section.editing = true;
              
              

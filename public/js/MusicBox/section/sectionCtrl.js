@@ -42,37 +42,36 @@
 */
 
 
-
+var section_;
 angular.module('musicBox.section.controller', []).controller('SectionCtrl', function($rootScope, $scope, $http, DocumentService, MarkupRest,socket, ObjectService) {
 
-$scope.init_= function (index_) {
-	console.log('init_ (section #'+ index_+')')
+	$scope.init_= function (index_) {
+		console.log('init_ (section #'+ index_+')')
 
-	var section_ = new ObjectService();
-	section_.sectionin  = index_
-	section_.init($scope.section, 'section')
-	
-	/// need for layout 
-	$scope.get_markups($scope.section.start, $scope.section.end)
+		section_ = new ObjectService();
+		section_.sectionin  = index_
+		section_.init($scope.section, 'section')
+		
+		/// need for layout 
+		$scope.get_markups($scope.section.start, $scope.section.end)
 
-	//$scope.markup.user_options = _markup.apply_object_options('markup_user_options',$scope.markup.user_id.user_options)
-	//$scope.section.section_markups_length 	= $scope.section.section_markups.length
-	// add to parent scope section count
-	// reach letter max test
-	if($scope.section.end > $scope.$parent.max_reached_letter){
-		$scope.$parent.max_reached_letter = $scope.section.end
-	}
-	// continous test (prev end match current start)
-	/*
-	if($rootScope.doc.containers[index-1]){
-		var container_prev_end = ($rootScope.containers[index-1].end)+1;
-		if(container_prev_end !== container.start){
-			console.log('discontinous section found '+container_prev_end+' /vs/'+container.start)
+		//$scope.markup.user_options = _markup.apply_object_options('markup_user_options',$scope.markup.user_id.user_options)
+		//$scope.section.section_markups_length 	= $scope.section.section_markups.length
+		// add to parent scope section count
+		// reach letter max test
+		if($scope.section.end > $scope.$parent.max_reached_letter){
+			$scope.$parent.max_reached_letter = $scope.section.end
 		}
+		// continous test (prev end match current start)
+		/*
+		if($rootScope.doc.containers[index-1]){
+			var container_prev_end = ($rootScope.containers[index-1].end)+1;
+			if(container_prev_end !== container.start){
+				console.log('discontinous section found '+container_prev_end+' /vs/'+container.start)
+			}
+		}
+		*/
 	}
-	*/
-}
-
 
 	// contruct temp fulltext, 
 	// called at section init only 
@@ -158,7 +157,7 @@ $scope.init_= function (index_) {
 
 
 	$scope.delete = function (){
- 		var section_count  = _.filter($scope.doc.containers, function(s){ 
+ 		var section_count  = _.filter($scope.doc.sections, function(s){ 
  			return s.deleted !==true; 
  		})
  		if(section_count.length==1){
@@ -195,12 +194,10 @@ $scope.init_= function (index_) {
 				if(c !== $scope.section){
 					c.selected 		= false;
 					c.editing 		= false;
-					c.editing_text 	= false;
 				}
 				else{
 					c.selected 		= !c.selected;
 					c.editing 		= !c.editing
-					c.editing_text 	= !c.editing_text
 					//$rootScope.ui.selected_range.start = parseInt(c.start)
 					//$rootScope.ui.selected_range.end = parseInt(c.end)
 					$scope.section.modeletters =  'single'
@@ -228,12 +225,10 @@ $scope.init_= function (index_) {
     			if(c == $scope.section){
     				c.selected 		= false;
 					c.editing 		= false;
-					c.editing_text 	= false;
 					si = (dir == 'next') ? i+1 : i-1
 					target = $scope.doc.sections[si]
 					target.selected 		= true
 					target.editing 		= true;
-					target.editing_text 	= true;
 					$rootScope.ui.selected_range.start =  target.start
 			        $rootScope.ui.selected_range.end   =  target.end
 				}
@@ -242,6 +237,27 @@ $scope.init_= function (index_) {
 
 
     }
+
+	$scope.new_option = function(name){
+		var data = {'option_name':name, 'option_value': 'true',  'option_type':'css_class'} 
+		console.log(data)
+		var promise=  MarkupRest.new_option({id:$scope.$parent.doc.slug, mid:$scope.section._id }, serialize(data) ).$promise;
+        promise.then(function (Result) {
+        	$scope.section.markup_options.push(Result.new_option);
+			section_.apply_css_class()
+        })
+	}
+
+	$scope.delete_option = function(name){
+		var data = {'option_name': name} 
+		console.log(data)
+		var promise=  MarkupRest.delete_option({id:$scope.$parent.doc.slug, mid:$scope.section._id }, serialize(data) ).$promise;
+        promise.then(function (Result) {
+			$scope.section.markup_options = Result.markup_options			
+			section_.apply_css_class()
+        })
+	}
+
 
 	$scope.save = function (save_msg) {
 
@@ -315,6 +331,18 @@ $scope.init_= function (index_) {
 	}
 
 	$scope.apply_ui_inrange_markups = function(){
+
+
+
+			// var rtest = ranges_compare('sections', parseInt($rootScope.ui.selected_range.start) ,parseInt($rootScope.ui.selected_range.end) , $scope.section.start , $scope.section.end , parseInt($scope.section.start) , parseInt($scope.section.end) )
+
+				///rtest = ranges_test(parseInt($rootScope.ui.selected_range.start),$rootScope.ui.selected_range.end, $scope.markup.start,$scope.markup.end, 'markup' )
+			
+			///	$scope.section.test_map_r = rtest
+
+
+
+
 		if($scope.section.section_markups.length>0){
 			 _.each($scope.section.section_markups, function(m, i){
 			    // toggle change, call $scope.markup controller watcher
@@ -395,6 +423,15 @@ $scope.init_= function (index_) {
 		else{
 		//	console.log('SET')
 			$scope.apply_ui_inrange_markups()
+
+
+
+
+
+
+
+
+
 
 		}
 	})
