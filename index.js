@@ -63,7 +63,13 @@ db.on('error', console.error.bind(console, 'connection error: is your mongoDB in
 
 db.once('open', function callback () {
   console.log(chalk.green('Hello mongo') );
-});
+
+
+
+
+
+
+
 var app = express();
 
     //Prettify HTML
@@ -180,6 +186,10 @@ app.use(function(req, res, next) {
 require('./api/passport')(passport);
 // Routes
 var routes = require('./api/routes')(app, passport, auth);
+
+
+
+
 var server =  http.createServer(app);
 server.listen(app.get('port'), function(){
     console.log(chalk.green( "Express server listening on port "+ app.get('port')  ) );
@@ -204,8 +214,9 @@ io.on('connection', function (socket) {
 
 
 });
+exports = module.exports = app;
 
-
+});
 
 // logger.init(app, passport, mongoose);
 //expose app
@@ -217,6 +228,5 @@ exports.stat = function(){
 */
 
  // test function for internal use
-exports = module.exports = app;
 
 

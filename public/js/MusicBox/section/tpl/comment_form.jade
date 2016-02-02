@@ -6,7 +6,6 @@ div.comment_form(ng-if="ui.menus.push_comment.open == $parent.$parent.$parent.$i
 		p
 			a.loginOrSignup(ng-click="external_link(root_url+'/login?redirect_url=#{root_url}:#{port}/doc/'+doc.slug)" , ng-if="userin.username == '' ") {{i18n.CUSTOM.USER.loginOrSignup}}
 	div.user_in(ng-if="userin.username")
-		
 		span.floating-edit
 			//span(ng-if="doc.published == 'draft'") a&nbsp; 
 		p

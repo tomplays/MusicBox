@@ -823,9 +823,7 @@ exports.listRender = function(req, res) {
 	})
 };
 exports.doc_sync= function(req, res) {
-	//console.log('req.body.markups')
-	//console.log(req.body.markups)
-	// console.log(req.params.slug)
+
 	var query = Document.findOne({ 'slug':req.params.slug });
 	// complete query 
 	query.populate('user','-email -hashed_password -salt').populate( {path:'markups.user_id', select:'-salt -email -hashed_password', model:'User'}).populate({path:'markups.doc_id', select:'-markups -secret', model:'Document'}).populate('markups.doc_id.user').populate('room', {secret:0}).exec(function (err, doc) {
@@ -833,95 +831,75 @@ exports.doc_sync= function(req, res) {
 			res.json(err)
 		} 
 		else{
+			
+			doc.content = req.body.doc_content;
+			var obj_updated = {'markup': {
+										'count':0,
+										'objects_' : []
+								} , 
+								'container':{
+										'count':0,
+										'objects_' : []
 
+								},
+								'content':{
+										'delta':(req.body.doc_content.length)-(doc.content.length)
+								}
 
-			console.log('doc_sync')
-			var sections = []
-			console.log(req.body.edittype)
-			//console.log(req.body.doc_content)
-			//console.log('doc.markups')
-			//console.log('#######')
-			//console.log(doc.markups)
-			//console.log('#######################')
-			//console.log(req.body.markups)
-			//console.log('#######')
-			var markup_count_updated = 0
+							  }
+			
 			// LOOP each editing doc markups to find and upadate coresponding one 
 			_.each(doc.markups, function(doc_mk, i){
 					doc.markups[i].touched = false
 					//console.log(mk)
-					var match = _.find(req.body.markups, function(m){ return m.id  == doc_mk._id; });
+					var match = _.find(req.body.markups, function(m){ if(m.id  == doc_mk._id ){ return m }  });
 					if(match){
+
+						// console.log(match.type)
+						var type_key = (match.type == 'container') ? 'container' : 'markup'
+						var deltas = {
+									start : parseInt(match.start) - parseInt(doc.markups[i].start), 
+									end   : parseInt(match.end)  -  parseInt(doc.markups[i].end)
+								}
+
+						obj_updated[type_key].objects_.push({
+																start: { 
+																	before  : doc.markups[i].start, 
+																	after   : match.start,
+																	delta   : deltas.start
+																}, 
+																end: {
+																	before  : doc.markups[i].end , 
+																	after   : match.end,
+																	delta   : deltas.end
+
+																} 
+															})
+						obj_updated[type_key].count++
 						doc.markups[i].start 	=  parseInt(match.start)
 						doc.markups[i].end 		=  parseInt(match.end)
-						doc.markups[i].touched = true
-						markup_count_updated++
-					//	console.log('match found:')
-					//	console.log(doc.markups[i])
-
-					
+						doc.markups[i].touched  = true
 					}
 					else{
-
 						//console.log(chalk.red('doc_sync should not mismatch >>' ) );
 						//console.log(doc_mk)
-					}
-
-				
-            		if(doc_mk.type == 'container'){
-            			sections.push(doc_mk)
-            		}
-            		
+					}	
 			});
 
-			var content_size_pre = doc.content.length
-			var content_size_after =  req.body.doc_content.length
+			console.log('obj_count_updated=')
+			console.log(obj_updated)
 
-
-				doc.content = req.body.doc_content;
-				console.log('doc content updated from '+content_size_pre+' to'+content_size_after)
-				console.log('delta'+(content_size_after-content_size_pre))
-
-
-
-				// +req.body.doc_content)
-
-				console.log('modified markups='+markup_count_updated)
-
-				doc.markModified('markups');
-				// save content
-				
-
-			   var out 			= {}
-               
-
-               if(req.user){
-					 out.user 	= req.user.toObject()
+			doc.markModified('markups');
+			// save content
+	        var out 			= {}
+			console.log(chalk.green('doc sync') );
+			doc.updated 		= new Date()
+			doc.save(function(errors) {
+				out.doc 			= {
+					'obj_updated' : obj_updated,						
 				}
-				out.is_owner 		= exports.test_owner_or_key(doc,req)
-					
-
-
-					console.log(chalk.green('doc sync') );
-				  		//console.log(doc.markup );
-				
-
-
-					//doc.sections = []
-					//_.each(doc.markups, function(doc_mk, i){})
-
-
-					out.doc_title 		= doc.title
-					doc.updated 		= new Date()
-
-
-						doc.save(function(errors, doc) {
-									out.doc 			= doc.toObject()
-									var now = new Date();    
-									out.doc.secret 		= 'api_secret'
-									out.edittype 		= req.body.edittype
-									res.json(out)
-						});
+				res.json(out)
+			});
 
 
 		}
@@ -1293,10 +1271,10 @@ exports.doc_option_new  = function(req, res) {
 		if (err){
 			res.json(err)
 		} else{
-			    var out 			= {}
+			        var out 			= {}
 
 				    var del_option_id = req.body._id;
-	  				var  new_options = new Array()
+	  				var new_options = new Array()
 	  				var doc_options_deleted = new Array()
 	  				_.each(doc.doc_options , function (option, i){
 				 	if(del_option_id && option._id ==del_option_id ){
@@ -1317,8 +1295,11 @@ exports.doc_option_new  = function(req, res) {
 					out.is_owner 		= exports.test_owner_or_key(doc,req)
 
 					if(out.is_owner == true){
-						    doc.doc_options = new Array()
+						     doc.doc_options = new Array()
 				    		 doc.doc_options = new_options
+							
+
+
 							 doc.save(function(err,doc) {
 
 						if (err) {
@@ -1439,98 +1420,109 @@ exports.doc_option_new  = function(req, res) {
     var g = getRandomInt(0, 255);
     var b = getRandomInt(0, 255);
     var rand_color = 'rgb('+r+', '+g+', '+b+')';
+
+    var uu_option = new meta_options({'option_name':req.body.option_name, 'option_value':req.body.option_value,  'option_type': req.body.option_type })
+
     var user_option = new Object( {'option_name':'color', 'option_value': rand_color,  'option_type': '' } )
     user.user_options.push(user_option)
     user.provider = 'local';
     user.save(function(err, user) {
 
 
-    	req.logIn(user, function(err) {    
-            
-        });
+    	req.logIn(user, function(err) {
 
 
 
-	var raw_title        =     'homepage';
-	var raw_content      =     'hello world';
-	
-
- 	var filtered_title   =     raw_title;
-	var filtered_content =     raw_content;
-	var slug             =     S(raw_title).slugify().s 
-
-	
-
-	//var ar = new Object({'title':'bloue'+Math.random()})
-	var new_doc = new Object({'title':filtered_title, 'slug': slug, 'content': filtered_content, 'published':'public' })
-
-	 new_doc.markups = new Array()
-	 new_doc.doc_options = new Array()
-	
-
-	 var text_size = _.size(raw_content)-1;
-
-	 var markup_section_base  = new Markup( {'user_id':user._id, 'username':user.username, 'start':0, 'end':text_size,  'type': 'container', 'subtype':'section', 'position':'inline'} )
-	 new_doc.markups.push(markup_section_base)
-
-
-   
-
-	
-
-	var text_typography  = new meta_options( {'option_name':'text_typography', 'option_value':'Open Sans',  'option_type': 'google_typo' } )
-	
-
-
-	new_doc.doc_options.push(text_typography)
-	
-
-
-	var headings_typography  = new meta_options( {'option_name':'headings_typography', 'option_value':'Open Sans',  'option_type': 'google_typo' } )
-	new_doc.doc_options.push(headings_typography)
-
-	
-	var   doc_notices_after_title= new meta_options( {'option_name':'doc_notices_after_title', 'option_value':'',  'option_type': '' } )
-	new_doc.doc_options.push(doc_notices_after_title)
-
-	var   doc_notices_before_title= new meta_options( {'option_name':'doc_notices_before_title', 'option_value':'',  'option_type': '' } )
-	new_doc.doc_options.push(doc_notices_before_title)
-
-
-	var r = getRandomInt(0, 255);
-    var g = getRandomInt(0, 255);
-    var b = getRandomInt(0, 255);
-    //var rand_color = 'rgb('+r+', '+g+', '+b+')';
-    //var rand_color_b = 'rgb('+b+', '+r+', '+g+')';
-
-	var rand_color = '#000'
-	var rand_color_b = '#fff'
-
-	var   block_color= new meta_options( {'option_name':'block_color', 'option_value':rand_color,  'option_type': '' } )
-	new_doc.doc_options.push(block_color)
-	var   title_color= new meta_options( {'option_name':'title_color', 'option_value':rand_color_b,  'option_type': '' } )
-	new_doc.doc_options.push(title_color)
-
-/*
-	var  share_fragment = new Object( {'option_name':'share_fragment', 'option_value':'right',  'option_type': '' } )
-	new_doc.doc_options.push(share_fragment)
-	var  use_authorcard = new Object( {'option_name':'use_authorcard', 'option_value':'full_last',  'option_type': 'fragment' } )
-	new_doc.doc_options.push(use_authorcard)
-*/
-
-	var branding_class  = new meta_options( {'option_name':'branding_class', 'option_value':'sa bg_transparent',  'option_type': '' } )
-	new_doc.doc_options.push(branding_class)
-
-	var   footer_center_html = new meta_options( {'option_name':'footer_center_html', 'option_value':"<i class=\'fa fa-file-text-o\'></i> powered by <a href=\'http://github.com/tomplays/MusicBox/\'>MusicBox beta*</a> - 2016",  'option_type': '' } )
-	new_doc.doc_options.push(footer_center_html)
 
 
 
-	var doc = new Document(new_doc);
-	doc.user = user;
-   	doc.username =user.username;
+
+
+
+    	});
+
+
+
+		var raw_title        =     'homepage';
+		var raw_content      =     'hello world';
 		
-	//doc.populate('user', 'name username image_url').exec(function(err,doc) {
+
+	 	var filtered_title   =     raw_title;
+		var filtered_content =     raw_content;
+		var slug             =     S(raw_title).slugify().s 
+
+		
+
+		//var ar = new Object({'title':'bloue'+Math.random()})
+		var new_doc = {'title':filtered_title, 'slug': slug, 'content': filtered_content, 'published':'public' }
+
+		 new_doc.markups = new Array()
+		 new_doc.doc_options = new Array()
+		
+
+		 var text_size = _.size(raw_content)-1;
+
+		 var markup_section_base  = new Markup( {'user_id':user._id, 'username':user.username, 'start':0, 'end':text_size,  'type': 'container', 'subtype':'section', 'position':'inline'} )
+		 new_doc.markups.push(markup_section_base)
+
+
+	   
+
+		
+
+		var text_typography  = new meta_options( {'option_name':'text_typography', 'option_value':'Open Sans',  'option_type': 'google_typo' } )
+		
+
+
+		new_doc.doc_options.push(text_typography)
+		
+
+
+		var headings_typography  = new meta_options( {'option_name':'headings_typography', 'option_value':'Open Sans',  'option_type': 'google_typo' } )
+		new_doc.doc_options.push(headings_typography)
+
+		
+		var   doc_notices_after_title= new meta_options( {'option_name':'doc_notices_after_title', 'option_value':'',  'option_type': '' } )
+		new_doc.doc_options.push(doc_notices_after_title)
+
+		var   doc_notices_before_title= new meta_options( {'option_name':'doc_notices_before_title', 'option_value':'',  'option_type': '' } )
+		new_doc.doc_options.push(doc_notices_before_title)
+
+
+		var r = getRandomInt(0, 255);
+	    var g = getRandomInt(0, 255);
+	    var b = getRandomInt(0, 255);
+	    //var rand_color = 'rgb('+r+', '+g+', '+b+')';
+	    //var rand_color_b = 'rgb('+b+', '+r+', '+g+')';
+
+		var rand_color = '#000'
+		var rand_color_b = '#fff'
+
+		var  block_color= new meta_options( {'option_name':'block_color', 'option_value':rand_color,  'option_type': '' } )
+		new_doc.doc_options.push(block_color)
+		var  title_color= new meta_options( {'option_name':'title_color', 'option_value':rand_color_b,  'option_type': '' } )
+		new_doc.doc_options.push(title_color)
+
+	/*
+		var  share_fragment = new Object( {'option_name':'share_fragment', 'option_value':'right',  'option_type': '' } )
+		new_doc.doc_options.push(share_fragment)
+		var  use_authorcard = new Object( {'option_name':'use_authorcard', 'option_value':'full_last',  'option_type': 'fragment' } )
+		new_doc.doc_options.push(use_authorcard)
+	*/
+
+		var branding_class  = new meta_options( {'option_name':'branding_class', 'option_value':'sa bg_transparent',  'option_type': 'css_class' } )
+		new_doc.doc_options.push(branding_class)
+
+		var footer_center_html = new meta_options( {'option_name':'footer_center_html', 'option_value':"<i class=\'fa fa-file-text-o\'></i> powered by <a href=\'http://github.com/tomplays/MusicBox/\'>MusicBox beta*</a> - 2016",  'option_type': 'html' } )
+		new_doc.doc_options.push(footer_center_html)
+
+
+
+		var doc = new Document(new_doc);
+		doc.user = user;
+	   	doc.username =user.username;
+		
+		//doc.populate('user', 'name username image_url').exec(function(err,doc) {
 		doc.save(function(err,doc) {
 			if (err) {
 	   			res.json(err);

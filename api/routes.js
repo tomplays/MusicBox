@@ -15,15 +15,28 @@ var mails  = require('../api/controllers/mails');
 var plugins  = require('../api/controllers/plugins');
 var api_prefix = '/api/v1/'
 
+
+
+
 module.exports = function(app, passport, auth) {
     
-
-    app.get('/login', users.login );
-    app.post(api_prefix+'user/register', users.create);
+    
+    // USER
+    app.get('/login', users.login);
     app.get('/signup', users.signup );
-	// USER
     app.get('/signout', users.signout);
+    app.get('/me/account', auth.requiresLogin, users.account);
+
+    app.post(api_prefix+'user/register', users.create);
     app.post(api_prefix+'user/lostpass', users.lostpass);
+    app.get (api_prefix+'me/account', auth.requiresLogin, users.account_api);
+    app.post(api_prefix+'me/edit', auth.requiresLogin, users.edit);
+
+     // users
+    app.get(api_prefix+'users', auth.requiresAdmin, users.list);
+
+
+
 
 
     //Setting the facebook oauth routes
@@ -43,10 +56,7 @@ module.exports = function(app, passport, auth) {
     //app.param('userId', users.userById);
 
 
-    app.get('/me/account', auth.requiresLogin, users.account);
-    app.get(api_prefix+'me/account', auth.requiresLogin, users.account_api);
-
-    app.post(api_prefix+'me/edit', auth.requiresLogin, users.edit);
+  
 
 
     var fileupload = require('fileupload').createFileUpload('public/uploads').middleware;
@@ -69,6 +79,8 @@ module.exports = function(app, passport, auth) {
 
     // views & partials
   	app.get('/doc/:slug',                   docs.index_doc);
+    app.get('/doc/:authorname/:slug',        docs.index_doc);
+
     app.get('/doc_editor/:slug',            docs.index_doc);
 
     // lite mode
@@ -87,7 +99,7 @@ module.exports = function(app, passport, auth) {
 
     // DOC
     // single doc record
-    app.get (api_prefix+'doc/:slug/:output?',                   docs.doc_get);
+    app.get(api_prefix+'doc/:slug/:output?',           docs.doc_get);
     app.post(api_prefix+'doc/:doc_id/edit',            auth.requiresLogin_or_secret,  docs.doc_edit);
     app.post(api_prefix+'doc/:slug/delete',            auth.requiresLogin_or_secret, docs.doc_delete);
     
@@ -97,15 +109,19 @@ module.exports = function(app, passport, auth) {
     app.post(api_prefix+'doc/:slug/doc_option_new',auth.requiresLogin_or_secret, docs.doc_option_new);
     app.post(api_prefix+'doc/:slug/doc_option_delete', auth.requiresLogin_or_secret, docs.doc_option_delete);
     
+
     // hard reset
-    app.get (api_prefix+'doc/:slug/reset',    auth.requiresLogin,  docs.doc_reset);
+    app.get(api_prefix+'doc/:slug/reset',    auth.requiresLogin,  docs.doc_reset);
     
     // markup offsetting method
     app.post(api_prefix+'doc/:slug/sync',     auth.requiresLogin,  docs.doc_sync);
 
 
     app.post(api_prefix+'doc/:slug/markup/:markup_id/edit',auth.requiresLogin_or_secret,  markups.edit);
-    app.post (api_prefix+'doc/:slug/markup/:markup_id/delete', auth.requiresLogin_or_secret, markups.delete);
+    app.post(api_prefix+'doc/:slug/markup/:markup_id/delete', auth.requiresLogin_or_secret, markups.delete);
+
+
+    app.post(api_prefix+'doc/:slug/markup/:markup_id/:action', auth.requiresLogin_or_secret, markups.options_actions);
 
 
     app.post(api_prefix+'doc/:slug/markup/push', auth.requiresLogin, markups.create);
@@ -132,11 +148,10 @@ module.exports = function(app, passport, auth) {
 
     app.get('/room/:slug', rooms.room_view);
 
-    // user
-    app.get(api_prefix+'users',auth.requiresAdmin, users.list);
+   
      
   	// first boot
-  	app.get('/init', docs.init );
+  	app.get('/init', docs.init);
 
 
     // newletter api

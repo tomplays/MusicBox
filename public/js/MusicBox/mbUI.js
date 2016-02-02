@@ -140,6 +140,7 @@ console.log('SET !')
                                     'redraw_content' :false,
                                     'redraw' : false,
                                     'floppy': {'floppy_': false, '_floppy': false},
+                                    'current_action': null
                                    
 
 
@@ -172,7 +173,7 @@ console.log('SET !')
       textrange: function() {
         console.log('--- EARLY --- text range or after text edit')
             var textrange = ''
-            for (var i = $rootScope.ui.selected_range.start; i <= $rootScope.ui.selected_range.end; i++) {
+            for (var i = $rootScope.ui.selected_range.start; i < $rootScope.ui.selected_range.end; i++) {
               if($rootScope.doc && $rootScope.doc.content && $rootScope.doc.content[i] ){
                 textrange +=  $rootScope.doc.content[i]
               }

@@ -22,6 +22,8 @@ angular.module('musicBox.markup.rest', [])
   */
 
 
+
+
   var route_object = 'markup' 
  
   return $resource(
@@ -40,6 +42,14 @@ angular.module('musicBox.markup.rest', [])
       save:{       
         method:"POST",
         url: api_url+'/doc/:id/'+route_object+'/:mid/edit',
+      },
+      new_option:{       
+        method:"POST",
+        url: api_url+'/doc/:id/'+route_object+'/:mid/optionnew',
+      },
+      delete_option:{
+        method:"POST",
+        url: api_url+'/doc/:id/'+route_object+'/:mid/optiondelete',
       }
     }
   );

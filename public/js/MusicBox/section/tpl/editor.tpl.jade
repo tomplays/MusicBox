@@ -1,36 +1,16 @@
-.section_editor_head
+// .section_editor_head
 	// .head-left
 		i(ng-click="select_section()" class="fa fa-container fa-section editing_{{section.editing}} selected_{{section.selected}}" ) 
-			span( ng-if="section.editing_text === false") Select section 
-			span( ng-if="section.editing_text === true") Unselect section
+			span( ng-if="section.editing === false") Select section 
+			span( ng-if="section.editing === true") Unselect section
 
-	.head-right(ng-if="section.editing_text === true")
-		h4 delete 
-		i.fa.fa-remove.btn_action(tooltip-placement="left" tooltip="{{i18n.CUSTOM.ACTIONS.delete}}" ng-click="delete()")
+	// .head-right(ng-if="section.editing === true")
 		// i.fa.fa-save.btn_action( tooltip-placement="right" tooltip="{{i18n.CUSTOM.ACTIONS.save}}" ng-click="save()")
-		a(ng-click="next_prev('next')" , ng-if="!$parent.$parent.$parent.$parent.$parent.$parent.$last") next section
-		a(ng-click="next_prev('prev')" , ng-if="!$parent.$parent.$parent.$parent.$parent.$parent.$first") previous section
+		// a(ng-click="next_prev('next')" , ng-if="!$parent.$parent.$parent.$parent.$parent.$parent.$last") next section
+		// a(ng-click="next_prev('prev')" , ng-if="!$parent.$parent.$parent.$parent.$parent.$parent.$first") previous section
 		
-
-	.section_editor_body(ng-if="section.editing_text === true" class="touchedinput-{{section.touched}}")
-		div.section_ranges
-			label Start-end ranges
-			span.field.ranges
-				span.ranges_inputs
-					span.field.numberfloat.oneline
-						// span From__  {{section.startt}}
-						// input.section_end(type="number" , ng-model="section.startt" )
-
-
-						span From 
-						input.section_end(type="number" , ng-model="section.start" )
-						span &nbsp;&nbsp;to 
-						input.section_start(type="number" , ng-model="section.end" )
-			// a(ng-click="integrity_fix()") fix offsets
-			// a(ng-click="split()") split
-			// a(ng-click="merge()") merge
-
-
+	.section_editor_body(ng-if="section.editing === true" class="touchedinput-{{section.touched}}")
+		
 
 		// div.section_quick_tools
 			.sobject-tools

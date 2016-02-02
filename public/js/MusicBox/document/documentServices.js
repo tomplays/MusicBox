@@ -86,30 +86,39 @@ angular.module('musicBox.document.service',[])
     ///api/v1/doc/create
     var data = {
              'markups': [],
-             'edittype' : 'markups_sync'
+            // 'edittype' : 'markups_sync'
     };
     // prepare / clean 
     var string  = '';
-     _.each($rootScope.doc.sections, function(s){
-        if(s.touched == true){
-           data.markups.push({'id':s._id, 'start': s.start,'end': s.end, 'action':'offset' })
-        }
-     })
-    data.doc_content =$rootScope.doc.content
-    _.each($rootScope.doc.markups, function(m){
-       if(m.touched == true){
-         if(m.deleted !==true &&  _.isFinite(m.start) && _.isFinite(m.end)){
-             data.markups.push({'id':m._id, 'start': m.start,'end': m.end, 'action':'offset' });
-          }
-       }   
+    data.doc_content = $rootScope.doc.content;
+
+    _.each(['markups','sections'], function(obj){
+            _.each($rootScope.doc[obj], function(o, i){
+              if(o.touched == true){
+                //o.deleted !==true && 
+                 if( _.isFinite(o.start) && _.isFinite(o.end)){
+                   data.markups.push({'id':o._id, 'start': o.start,'end': o.end, 'type':o.type});
+                }
+              } 
+           });
     });
+
+
+   
     console.log(data)
    
     var promise = this.api_method.sync({id:$rootScope.doc.slug},serialize(data)).$promise;
     promise.then(function (Result) {
-      if(Result.doc){
+      if(Result){
+        console.log(Result.doc.obj_updated)
+        
+        // (client-side)
         $rootScope.doc.updated = new Date()
-        $rootScope.flashmessage('Document saved', 'ok' , 1600, false);
+       
+        $rootScope.flashmessage('Document saved.', 'ok' , 1600, false);
+        
+        //
+        // reset touched
         _.each(['markups','sections'], function(obj){
             _.each($rootScope.doc[obj], function(o, i){
                o.touched = false;

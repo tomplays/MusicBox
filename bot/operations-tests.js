@@ -18,7 +18,14 @@ var sh = require('sh');
 
 
 
-var slug = 'draft-03073258369695395'
+var slug = 'draft-0656720481812954'
+
+
+function simul(){
+
+
+
+}
 
 function runner(socket){
 
@@ -98,12 +105,18 @@ rrr: 'h3 a',
 
 		var actions_array = []
 		request(server_url+'/api/v1/doc/'+slug, function(errorz, dd, res) {
-			console.log('got doc :'+slug)
+				
+
+
+
+
+				console.log('got doc :'+slug)
 				// console.log(res.doc)
 				resp = JSON.parse(res)
 			//	console.log(resp.doc.content)
 				var tstring = resp.doc.content;
-socket.emit('postdata', 
+				/*
+				socket.emit('postdata', 
 												{ 
 													time			: new Date(),
 													object			: 'document',
@@ -129,6 +142,101 @@ socket.emit('postdata',
 															
 												}
 						);
+*/
+						// for (i = 1; i <= 2; i++) { 
+							var simul_section_start		= 0
+							var simul_section_end 		= 100
+							var simul_qty		= 1
+							var simul_markup_start = 3
+							var simul_markup_end = 8
+							var simul_range_start = 0
+							var simul_range_end  =  1
+
+							var limit = 100
+													var count= 0
+
+
+					var myVar =	setInterval(function(){ 
+							count++
+							
+
+
+//simul_section_start++
+//simul_section_end++
+//simul_range_start++
+simul_range_end = simul_range_end+1
+
+
+							
+
+							var simul = {
+								
+								range :
+										{
+											start: simul_range_start,
+											end: simul_range_end
+										},
+								markup :
+										{
+											start: simul_markup_start,
+											end: simul_markup_end
+										},
+								section :
+										{
+											start: simul_section_start,
+											end: simul_section_end
+								}
+
+
+								
+
+							}
+
+							socket.emit('postdata', 
+									{ 
+										time			: new Date(),
+										object			: 'document',
+										identifier		: slug,
+										secret			: '5618a3b0be8398be16781a13',
+										user: { 
+												username:'tom', 
+												user_id: '560facdd5c9adcd3187a7bae',
+												secret	: '560facdd5c9adcd3187a7bad',
+										},
+										actions : 
+													[{
+														type:'ranges_test',
+															test: {
+																type: 'markup',
+																rs: simul.range.start,
+																re:simul.range.end,
+																os:simul.markup.start,
+																oe:simul.markup.end,
+																ss: simul.section.start,
+																se: simul.section.end,
+																qty: simul_qty
+															}
+														}]
+												
+									}
+
+
+							);
+
+
+								if(limit == count){
+								    clearInterval(myVar);
+								 
+							}
+
+						 }, 40);
+
+
+
+				
+
+
+
 
 
 
@@ -162,7 +270,7 @@ socket.emit('postdata',
 
 				
 */
-
+/*
 
 				_.each(mapObj, function(obs){
 
@@ -223,13 +331,13 @@ socket.emit('postdata',
 						);
 
 
-*/
 						tstring = tstring.replace(str1, function(){
 								return word;
 						});
 					}
 					//console.log(tstring)
 				}) // each words
+ 				*/
  			//	process.exit();
 		}) // request
 

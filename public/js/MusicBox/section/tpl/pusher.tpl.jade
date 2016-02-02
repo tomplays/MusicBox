@@ -62,12 +62,8 @@
 				.pusher_section(ng-if="type=='new_section'")
 					i.fa.fa-plus-square.pusher_item.btn( tooltip="new section" ng-click="new_section()")
 
-				.pusher_css_styles(ng-if="type=='container_class'")
-					ul
-						li.pusher_item(class="" ng-repeat="t in objSchemas[push.type].modes.editor.fields.metadata.available") 
-							i.fa.btn_action(tooltip="insert container class (css)" class="fa-container_class" ng-click="push_generic_from_ranges('container_class','css','inline', t)" ) {{t}}
-								
-				div(ng-if="type=='inline_objects' ")
+				
+				div(ng-if="type=='inline_objects'")
 					ul.typer.sub
 						li.pusher_item(class="" ng-repeat="t in objSchemas['markup'].modes.editor.fields.subtype.available") 
 							i.fa.btn_action(tooltip="insert markup" class="fa-{{t}}" ng-click="push_generic_from_ranges('markup',t,'inline')" ) 
@@ -76,5 +72,5 @@
 							i.fa.btn_action(tooltip="insert markup" class="fa-media" ng-click="push_generic_from_ranges('media', 'img','right', '')" ) 
 							i.fa.btn_action(tooltip="insert link" class="fa-link" ng-click="push_generic_from_ranges('hyperlink', 'hyperlink','under', '')" )
 				
-				p(ng-if="type!=='container_class' && type!=='new_section'")
+				p(ng-if="type!=='new_section'")
 					a.btn_ok.float_right(ng-show="push.isvalid" ng-click="add()") {{i18n.CUSTOM.ACTIONS.add}} {{push.type}}

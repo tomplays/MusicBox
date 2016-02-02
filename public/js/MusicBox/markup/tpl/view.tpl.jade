@@ -1,6 +1,8 @@
 div(ng-controller="MarkupCtrl", class="markup_box markup_box_depth_{{markup.depth}} markup_box_status_{{markup.status}}   markup_displayer_ markup_displayer markup_displayer_{{markup.type}} markup_displayer_subtype_{{markup.subtype}}  by_me_{{markup.by_me}} is_editing_{{markup.editing}}  touchedmk-{{markup.touched}} ")
 	pre {{markup.test_map_r}}
+	pre ranges {{ui.selected_range.start}} - {{ui.selected_range.end}}
 
+	pre mk : {{markup.start}} - {{markup.end}}
 
 
 	// h4 even not visible --v: {{markup.visible}}  -- f : {{markup.forced}} -- t: {{markup.type}}
@@ -16,7 +18,10 @@ div(ng-controller="MarkupCtrl", class="markup_box markup_box_depth_{{markup.dept
 			i.fa.fa-remove.btn_action(tooltip-placement="left" tooltip="{{i18n.CUSTOM.ACTIONS.delete}}" ng-click="delete()")
 	
 	// h6(ng-bind-html="markup.fulltext")
-	
+
+
+
+
 	//div
 		label reverse text
 		input(ng-model="markup.fulltext" type="text" )

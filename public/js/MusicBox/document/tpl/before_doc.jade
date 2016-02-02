@@ -1,20 +1,13 @@
+// div
+	ul(ng-if="render.debug")
+		li(ng-repeat="op in doc.operations") {{op}}
 
-ul(ng-if="render.debug")
-	li(ng-repeat="op in doc.operations") {{op}}
-
-pre {{ui.selected_range}}
-
-
-
-
-//div(ng-repeat="s in doc.sections")
-	pre # {{$index}} {{s.test}}
-hr
-
-//div(ng-repeat="m in doc.markups")
-	pre # {{$index}} {{m.test}}
-
-
-hr
-// div(ng-repeat="l in letters_edit")
-	span {{$index}} {{l.c}} {{l.cl}}
+	pre {{ui.current_action}} - {{ui.selected_range}} 
+	//div(ng-repeat="s in doc.sections")
+		pre # {{$index}} {{s.test}}
+	hr
+	//div(ng-repeat="m in doc.markups")
+		pre # {{$index}} {{m.test}}
+	hr
+	// div(ng-repeat="l in letters_edit")
+		span {{$index}} {{l.c}} {{l.cl}}

@@ -13,6 +13,20 @@ form(name="myForm")
 		// type
 		// subtype
 		// position
+		
+
+
+		// tab(heading="options")
+			ul
+				li(ng-repeat="op in markup.markup_options") name:{{op.option_name}} value:{{op.option_value}} type: {{op.option_type}}  
+			label name
+			input( ng-model="markup.new_option_name", type="text")
+			label value
+			input( ng-model="markup.new_option_value", type="text")
+			label type
+			input( ng-model="markup.new_option_type", type="text")
+
+			a(ng-click="new_option()") new_option
 
 		tab(heading="Edit {{markup.objSchemas.modes.editor.tabs.metadata}}" ng-if="markup.objSchemas.modes.editor.tabs.metadata")
 

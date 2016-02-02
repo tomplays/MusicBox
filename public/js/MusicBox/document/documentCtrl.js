@@ -481,8 +481,41 @@ function DocumentCtrl($rootScope, $scope, $http , $sce, $location, $routeParams 
 	socket.on('newsback', function (data) {
 		console.log('newsback')
 		console.log(data);
+		var out_message =''
+		var cursor = {start:0, end:0}
 		console.log($scope.doc)
+
+
+			_.each(data.actions, function(action){
+
+					if(action.type == 'ranges_test'){
+
+					cursor.start = action.test.rs
+					cursor.end = action.test.re
+						var s_train_ranges = ranges_compare(action.test.type, action.test.rs, action.test.re, action.test.os , action.test.oe ,action.test.ss ,action.test.se )
+						console.log(s_train_ranges);
+						out_message += 'Incoming socket.'
+					
+
+						_.each( Object.keys(action.test), function(k){
+							out_message += k+'/'+action.test[k]+' | ';
+
+						})
+						out_message += 'tested: '+s_train_ranges.case
+						
+
+					}
+
+			})
+			$scope.flashmessage(out_message, 'ok' , 2000, false);
+			$scope.ui.selected_range.start = cursor.start
+			$scope.ui.selected_range.end = cursor.end 
+
+	
+
+	//	 alert('s_train_renges')
 		
+		/*
 		if(!$scope.markups_pushed){
 			$scope.markups_pushed = []
 		}
@@ -503,6 +536,7 @@ function DocumentCtrl($rootScope, $scope, $http , $sce, $location, $routeParams 
 				c.redraw = true;
 			})
 		}
+		*/
 	})
 
 

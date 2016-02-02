@@ -120,13 +120,12 @@ angular.module('musicBox.markup.service',[]).factory("ObjectService", function($
 
                        
           if(this.servicetype == 'section'){
-           
+            console.log(this.object_ )
              var d_s_m =  _.extend(d_s_m_base, {
-                        'selected'  : false,
+                        'selected'  : $rootScope.render.debug ? true : false,
                         'focused'   : '',
-                        'editing_text': $rootScope.render.debug ? true : false,
+                        'editing': $rootScope.render.debug ? true : false,
                         'modeletters' : $rootScope.render.debug ? 'single' : 'compiled',
-                        'section_classes':'bsssg_black',
                         'inrange_letters': null
                       
              })
@@ -201,6 +200,7 @@ angular.module('musicBox.markup.service',[]).factory("ObjectService", function($
           this.apimethod = MarkupRest
           // object.isolated  = object.isolated ? object.isolated : 'undef'
           this.setobjSchemas(this.object_.type);
+
           this.populate()
           this.setFulltext()
           break;
@@ -220,8 +220,11 @@ angular.module('musicBox.markup.service',[]).factory("ObjectService", function($
       case 'section':
           this.apimethod = MarkupRest
           this.setobjSchemas('container');
-          this.setobjSchemas('container_class');
+         /// this.setobjSchemas('container_class');
+        
+
           this.populate()
+          this.apply_css_class()
           this.setFulltext()
 
           break;
@@ -238,6 +241,27 @@ angular.module('musicBox.markup.service',[]).factory("ObjectService", function($
     //this.trace(trace_object)
     return this
 
+  }
+
+
+  ObjectService.prototype.apply_css_class = function(){
+   // console.log(this.object_.markup_options)
+    var options = _.filter( this.object_.markup_options , function(o){return (o.option_type== 'css_class' && o.deleted !== true) })
+    var options_string = ''
+    var options_array = []
+    
+     _.each(options, function(option){
+        options_string += option.option_name+' '
+        options_array.push(option.option_name)
+     })
+
+     this.object_.css_classes       = options_string
+     this.object_.css_classes_array = options_array
+     if(options_string !==''){
+      //  alert(options_string)
+      }
+
+      return options_string;
   }
 
 
@@ -259,6 +283,10 @@ angular.module('musicBox.markup.service',[]).factory("ObjectService", function($
             options = this.object_.doc_options
         }
         if(this.servicetype == 'section'){
+        
+
+
+
         }
        /* if(this.servicetype == 'markup'){
             // ??? 
@@ -291,8 +319,9 @@ angular.module('musicBox.markup.service',[]).factory("ObjectService", function($
             options_array[op_name]._id   = option._id
             options_array[op_name].type  = option.option_type
 
-            if(this.servicetype == 'document' && option.option_value && option.option_type == 'google_typo'){
-              
+
+
+            if(option.option_type == 'google_typo'){
                WebFont.load({
                   google: {
                    families: [option.option_value]

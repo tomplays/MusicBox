@@ -22,10 +22,13 @@ var mongoose = require('mongoose'),
  _ = require('underscore'),
  S = require('string'),
 Document = mongoose.model('Document'),
-Markup  = mongoose.model('Markup');
+Markup  = mongoose.model('Markup'),
+meta_options = mongoose.model('Metaoptions'),
+chalk = require('chalk');
+
 var nconf = require('nconf');
 nconf.argv().env().file({file:'config.json'});
-var chalk = require('chalk');
+
 
 
 var app;
@@ -97,11 +100,17 @@ exports.edit = function(req, res) {
 					 	m.subtype 	= m_body.subtype ? m_body.subtype : m.subtype
 					 	m.position	= m_body.position ? m_body.position: m.position
 						m.metadata 	= m_body.metadata ? m_body.metadata : m.metadata
-												m._id 	=  m._id
+						m._id 	=  m._id
 
 						m.depth     = m_body.depth ? m_body.depth : m.depth 
 
+						console.log(m_body.doc_id)
+						
 						if(m_body.doc_id){
+						//	m.doc_id._id = m_body.doc_id;
+							m.doc_id = m_body.doc_id;
+
+							/*
 						//	console.log('DOC sub _id: '+m_body.doc_id)
 						
 							var memo_doc = m.doc_id;
@@ -111,7 +120,7 @@ exports.edit = function(req, res) {
 							if(m.doc_id !=='' && m.doc_id && m.doc_id._id){
 								m.doc_id._id = m_body.doc_id;
 
-						//		console.log('CB')
+						
 							}
 							else{
 								if( m_body.doc_id !== ''){
@@ -125,7 +134,7 @@ exports.edit = function(req, res) {
 								
 							}
 							
-						
+						*/
 
 						}
 						else{
@@ -146,8 +155,7 @@ exports.edit = function(req, res) {
 							}
 							else{
 							//	console.log('and secret dont match(   '+doc.secret+'   )')
-								var err = new Object ({'err_code':'Need to be either doc owner or use right secret key' })
-
+								var err = {'err_code':'Need to be either doc owner or use right secret key' }
 								exit_user = true;
 								
 								
@@ -164,7 +172,7 @@ exports.edit = function(req, res) {
 
 
 			if(exit_user === true){
-					var err = new Object ({'err_code':'Need to be either doc owner or use right secret key' })
+					var err = {'err_code':'Need to be either doc owner or use right secret key' }
 
 					out.err = err;	
 					res.json(out)
@@ -204,7 +212,7 @@ exports.edit = function(req, res) {
 	} // not logged
 	else{
 
-		var err = new Object ({'err_code':'Need to be either doc owner or use right secret key' })
+		var err = {'err_code':'Need to be either doc owner or use right secret key' }
 		out.err = err;	
 		res.json(out)
 		
@@ -226,72 +234,56 @@ return json ( doc, owner, inserted)
 */
 exports.create = function(req, res) {
 	
-
-	var out = {}
-//bug ?
+	
+	var out = {'inserted': []}
 	var req_user_id = req.user._id;
 	console.log(req_user_id)
-
 	var query = Document.findOne({ 'slug':req.params.slug });
-	// console.log(req.body)
-	// console.log(req.body.username)
-	//query.populate('user','-email -hashed_password -salt').populate( {path:'markups.user_id', select:'-salt', model:'User'}).populate({path:'markups.doc_id', select:'-markups -secret', model:'Document'}).populate('markups.doc_id.user').populate('room').exec(function (err, doc) {
 	query.populate('user','-email -hashed_password -salt').populate( {path:'markups.user_id', select:'-salt -email -hashed_password', model:'User'}).populate({path:'markups.doc_id', select:'-markups -secret', model:'Document'}).populate('markups.doc_id.user').populate('room', {secret:0}).exec(function (err, doc) {
-
-	if (err) {
-		res.json(err)
-	}
-	else{
-		// set as pending if not doc_owner 
-		var markup_status 	= 'pending'
-		
-		out.is_owner 		=  documents.test_owner_or_key(doc,req)	
-		if(out.is_owner == true){
-			markup_status 	= 'approved';
+		if (err) {
+			res.json(err)
 		}
 		else{
-			var email_object = new Object({'subject':'[New comment on document] - ', 'bodytext':'<p>Somebody just left a comment on a document you own.</p><p>by:<em>'+req.body.username+'</em></p><blockquote>'+req.body.metadata+'</blockquote> <p>You can set it as approved (and visible to anyone) <a href="'+nconf.get('ROOT_URL')+':'+nconf.get('PORT')+'/doc/'+req.params.slug+'">here</a></p>'})
-        	mails.sendmailer(email_object)
-
-		}
-
-		var markup = new Markup( { 'username':req.body.username, 'user_id': req_user_id, 'position': req.body.position, 'start':req.body.start, 'end':req.body.end, 'subtype': req.body.subtype, 'type': req.body.type, 'status': markup_status, 'metadata': req.body.metadata, 'depth': req.body.depth} )
-		markup.isNew; // true
-
-		//markup = markup.toObject();
-		doc.markups.push(markup)
-		
-		doc.markModified('markups');
-		
-		var inserted = _.last(doc.markups);
-		
-
-		doc.save(function(err,doc) {
-			if (err) {
-				res.json(err)
-			} else {
-				var query = Document.findOne({ 'slug':req.params.slug });
-					// console.log(req.body)
-					// console.log(req.body.username)
-					//query.populate('user','-email -hashed_password -salt').populate( {path:'markups.user_id', select:'-salt', model:'User'}).populate({path:'markups.doc_id', select:'-markups -secret', model:'Document'}).populate('markups.doc_id.user').populate('room').exec(function (err, doc) {
-					query.populate('user','-email -hashed_password -salt').populate( {path:'markups.user_id', select:'-salt -email -hashed_password', model:'User'}).populate({path:'markups.doc_id', select:'-markups -secret', model:'Document'}).populate('markups.doc_id.user').populate('room', {secret:0}).exec(function (err, doc) {
-					if (err) {
-						res.json(err)
-					}
-					else{
-			        	out.doc 			=  doc.toObject()
-						if(req.user){
-							out.user 		= req.user.toObject()
-						}
-						out.is_owner 		=  documents.test_owner_or_key(doc,req)	
-						out.doc.secret 		= 'api_secret';
-						out.inserted = new Array(inserted);
-						res.json(out);
-					}
-				});
+			// set as pending if not doc_owner 
+			var markup_status 	= 'pending'
+			out.is_owner 		=  documents.test_owner_or_key(doc,req)	
+			
+			if(out.is_owner == true){
+				markup_status 	= 'approved';
 			}
-		});
-	  }
+			else{
+				var email_object = {'subject':'[New comment on document] - ', 'bodytext':'<p>Somebody just left a comment on a document you own.</p><p>by:<em>'+req.body.username+'</em></p><blockquote>'+req.body.metadata+'</blockquote> <p>You can set it as approved (and visible to anyone) <a href="'+nconf.get('ROOT_URL')+':'+nconf.get('PORT')+'/doc/'+req.params.slug+'">here</a></p>'}
+	        	mails.sendmailer(email_object)
+			}
+			var markup = new Markup( { 'username':req.body.username, 'user_id': req_user_id, 'position': req.body.position, 'start':req.body.start, 'end':req.body.end, 'subtype': req.body.subtype, 'type': req.body.type, 'status': markup_status, 'metadata': req.body.metadata, 'depth': req.body.depth} )
+			markup.isNew; // true
+			//markup = markup.toObject();
+			
+			doc.markups.push(markup)
+			doc.markModified('markups');
+			
+			out.inserted.push(markup);
+
+			
+			doc.save(function(err,doc) {
+				if (err) {
+					res.json(err)
+				} else {
+						//var query = Document.findOne({ 'slug':req.params.slug });
+						// console.log(req.body)
+						// console.log(req.body.username)
+						//query.populate('user','-email -hashed_password -salt').populate( {path:'markups.user_id', select:'-salt', model:'User'}).populate({path:'markups.doc_id', select:'-markups -secret', model:'Document'}).populate('markups.doc_id.user').populate('room').exec(function (err, doc) {
+						//	query.populate('user','-email -hashed_password -salt').populate( {path:'markups.user_id', select:'-salt -email -hashed_password', model:'User'}).populate({path:'markups.doc_id', select:'-markups -secret', model:'Document'}).populate('markups.doc_id.user').populate('room', {secret:0}).exec(function (err, doc) {
+						//if (err) {
+						//	res.json(err)
+						//}
+						//else{
+						res.json(out);
+						//}
+					//});
+				}
+			});
+		  }
 	});
 }
 
@@ -318,7 +310,8 @@ return json ( doc, owner, deleted)
 */
 exports.delete = function(req, res) {
 	console.log(req.body.edittype)
-	var deleted= new Array();
+	var deleted= [];
+	var after_markups = [];
 	var has_error = false;
 	var query = Document.findOne({ 'slug':req.params.slug });
     // complete query 
@@ -341,14 +334,14 @@ exports.delete = function(req, res) {
 		//}
 
 	  	if(req.params.markup_id && req.params.markup_id == 'all'){
-			var deleted = doc.markups
+			deleted = doc.markups
 			doc.markups = []
 
 		}
 
 		else{
-			var deleted= [];
-			var after_markups =[];
+		
+			
 		 	_.each(doc.markups , function (m, i){
 				if(m._id == req.params.markup_id){
 					// console.log(m)
@@ -362,7 +355,7 @@ exports.delete = function(req, res) {
 			doc.markups = after_markups;
 	
 		}
-
+		doc.markModified('markups');
 
 		if(is_owner){
 			console.log('is owner or has key')
@@ -394,6 +387,93 @@ exports.delete = function(req, res) {
 		
 
 	  }
+	});
+}
+
+
+exports.options_actions  = function(req, res) {
+	console.log('new_option')
+	
+	var has_error = false;
+	var query = Document.findOne({'slug':req.params.slug });
+    // complete query 
+	query.populate('user','-email -hashed_password -salt').populate( {path:'markups.user_id', select:'-salt', model:'User'}).populate({path:'markups.doc_id', select:'-markups -secret', model:'Document'}).populate('markups.doc_id.user').populate('room').exec(function (err, doc) {
+		
+		if(err) {
+			res.send(err)
+		}
+		else{
+		  	var out = {}
+		  	/*
+			if(req.user.id == doc.user._id){
+				console.log('match')
+			}
+			*/
+			var is_owner 		=  documents.test_owner_or_key(doc,req)	
+			if(!is_owner){
+				console.log('!is_owner')
+				var out = {}
+				out.err = 'is not auhtorized'
+				res.json(out)
+			}
+
+			var after_markups = [];
+
+			if(req.params.action  =='optiondelete'){
+				var deleted_option = 'req.body.option_name';
+				_.each(doc.markups , function (m, i){
+					if(m._id == req.params.markup_id){
+						var after_mkoptions = []
+						_.each(m.markup_options , function (mo, i){	
+							if(mo.option_name == req.body.option_name){
+								console.log('deleting option_name: '+req.body.option_name)
+								// m.markup_options = _.without(m.markup_options, mo)
+							}
+							else{	
+								after_mkoptions.push(mo)
+							}
+						})
+						m.markup_options 		=  after_mkoptions
+						out.markup_options      =  m.markup_options;
+					}
+					after_markups.push(m)
+				});
+			}
+
+			if(req.params.action  == 'optionnew'){
+				var new_option = new meta_options({'option_name':req.body.option_name, 'option_value':req.body.option_value,  'option_type': req.body.option_type })
+			 	_.each(doc.markups , function (m, i){
+					if(m._id == req.params.markup_id){	
+					   console.log(m)
+						// console.log(m)
+						if(!m.markup_options){
+							m.markup_options = []
+						}
+						m.markup_options.push(new_option)
+						out.new_option       =  new_option;
+						after_markups.push(m)
+						m.save(function(err,ma) {
+							console.log(ma)
+							console.log('m saved')
+
+						})
+					}
+					else{
+						after_markups.push(m)
+					}
+				});
+			}
+			doc.markups = after_markups;
+			doc.markModified('markups');
+			doc.save(function(err,doc) {
+				if (err) {
+				  res.send(err)
+				} 
+				else {
+					res.json(out)
+				}
+			});
+		}
 	});
 }
 

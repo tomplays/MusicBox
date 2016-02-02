@@ -59,7 +59,7 @@ angular.module('musicBox',  [
         templateUrl: '/partials/room/single',
         controller: SocketsListCtrl
       }).
-      when('/:docmode/:docid', {
+      when('/:docmode/:author?/:docid', {
         // match doc, doc_editor
         templateUrl: '/../partials/document/single',
         controller: DocumentCtrl
@@ -80,7 +80,7 @@ angular.module('musicBox',  [
     }
   ])
 .run(function($rootScope, $http, $route) {
-   console.log('cross controllers service listening ..')
+   console.log('MusicBox running ♪ ♪')
    // $rootScope.$on('summarizeEvent', function(event, args) {
        // $rootScope.$broadcast('summarize', args);
     // });
@@ -99,8 +99,6 @@ angular.module('musicBox',  [
         $rootScope.doc       = null;
        }
 
-
-     
        //if(!$rootScope.ui){
          // $rootScope.ui        = null;
       //}

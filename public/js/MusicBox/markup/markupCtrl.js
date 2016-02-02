@@ -2,7 +2,18 @@
 angular.module('musicBox.markup.controller', ['musicBox.section']).controller('MarkupCtrl', function($rootScope, $scope, $http, MarkupRest,socket,ObjectService) {
 	var _markup;
 
+	$scope.new_option = function(){
 
+		var data = {'option_name':$scope.markup.new_option_name, 'option_value': $scope.markup.new_option_value,  'option_type': $scope.markup.new_option_type}
+		 var promise=  MarkupRest.new_option({id:$scope.$parent.doc.slug, mid:$scope.markup._id }, serialize(data) ).$promise;
+		
+        promise.then(function (Result) {
+        	$scope.markup.markup_options.push(Result.new_option)
+
+        })
+
+
+	}
 	
 	$scope.init__= function () {
 					
@@ -535,7 +546,7 @@ $scope.$watch('markup.fulltext', function(newValue, oldValue) {
 				$scope.markup.selected = false;
 				$scope.markup.inrange  = false;
 			
-				if(rtest.case == 5 || rtest.case == 2 || rtest.case == 10 || rtest.case == 11 ){
+				if(rtest.case == 3 || rtest.case == 5 || rtest.case == 2 || rtest.case == 10 || rtest.case == 11 ){
 					
 				
 					$scope.markup.selected = true;

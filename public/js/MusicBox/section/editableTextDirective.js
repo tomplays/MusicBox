@@ -104,9 +104,10 @@ angular.module('musicBox.section.directive.textarea', [])
       })
 
       elem.bind("paste", function(event){
-         event.preventDefault();
+       //  event.preventDefault();
          console.log('onpaste ')
          console.log(event)
+         edit('paste', event, scope)
       })
 
       /* elem.bind("change", function(event){
@@ -160,7 +161,8 @@ angular.module('musicBox.section.directive.textarea', [])
 
         var objs_touched = 0
         var objs = ['sections', 'markups']
-        if(eventname == 'key'){
+       
+        if(eventname == 'key' || eventname == 'paste'  ){
               
               var qty = 1;
               // handle paste
@@ -168,11 +170,15 @@ angular.module('musicBox.section.directive.textarea', [])
                 var pastedData = event.clipboardData.getData('text')
                 var pastedDataLength =  pastedData.length
                 qty = pastedDataLength;
+              //   alert(qty)
               }
 
              // could use event positions rather than ui memory... but values are differents...
              // alert(event.target.selectionStart+''+event.target.selectionEnd)
         }
+
+
+
          if(eventname== 'delete'){    
                   var qty = -1;
                   // handle cut (Not)
@@ -186,22 +192,37 @@ angular.module('musicBox.section.directive.textarea', [])
           var ss =  parseInt(scope.section.start)
           var se =  parseInt(scope.section.end)
 
+
+
           // short vars
           var rs = parseInt($rootScope.ui.selected_range.start)
           var re = parseInt($rootScope.ui.selected_range.end)
 
           // tests obj' (container/ markups)
           _.each(objs, function(obj, oi){
+             
+
+
               var obj_name = objs[oi]
 
+
+
              _.each($rootScope.doc[obj], function(o, i){
-                var rc = ranges_compare(obj_name, rs , re , o.start , o.end , ss , se )
+                
+                var rc = ranges_compare(obj_name, rs , re , o.start , o.end , ss ,se )
+                
                 if(rc.touched._end){
                   o.end =  o.end+qty
                 }
                 if(rc.touched._start){
                   o.start = o.start+qty
                 }
+
+
+                o.test_map_r  = rc;
+
+              
+
 
                       /*
                        if(otouched == true){
@@ -276,7 +297,8 @@ angular.module('musicBox.section.directive.textarea', [])
   
 
       // key or delete = 
-      $rootScope.ui.current_action = eventname      
+      $rootScope.ui.current_action = eventname     
+
      // console.log('TEXTAREA MOVE AND EDIT! > count:'+objs_touched)
       $rootScope.ui.selected_range.redraw_content    = true;
 
@@ -319,7 +341,6 @@ angular.module('musicBox.section.directive.textarea', [])
         rend = temp_s
       }
       
-      $rootScope.ui.current_action = eventname
       if(eventname == 'mousedown' ){
         $rootScope.ui.selected_range.wait_ev = true 
       }
@@ -342,11 +363,8 @@ angular.module('musicBox.section.directive.textarea', [])
       $rootScope.ui.selected_range.end   = rend
       $rootScope.ui.selected_range.floppy  = is_floppy_($rootScope.ui.selected_range.start, $rootScope.ui.selected_range.end, scope.section.start, scope.section.end)
   //    $rootScope.ui.selected_range.floppy = (scope.section.end+1  == rend) ? true : false
-//
 
-     
-//      $rootScope.ui.boundaries = boundaries_test(scope.section, $rootScope.ui.selected_range)
-
+            $rootScope.ui.current_action = eventname     
 
       console.log($rootScope.ui.selected_range)
       $rootScope.$apply()
@@ -424,7 +442,11 @@ function ranges_compare(type, rs , re , os , oe , ss , se ){
                          'is_before': false,
                          'is_after' : false,
                          'otype'    : otype,
-                         'touched': {}
+                         'touched': {},
+                         'into_section': {ss: ss, se: se},
+                         'ranges': {rs: rs, re: re},
+                         'o': {os: os, oe: oe}
+
                 }
 
               
@@ -456,6 +478,8 @@ function ranges_compare(type, rs , re , os , oe , ss , se ){
                                                      ----------------------------
           
           
+a <= b
+a < b
 
 
           ------------------------------------------------------------------------
@@ -463,16 +487,28 @@ function ranges_compare(type, rs , re , os , oe , ss , se ){
                                           |        | 
                                           |        | 
 
-      6 !floppy_/4      >>|---------------|>>      |   
-      10                >>|---------------|==      |    
-      10b               >>|---------------|-----|==|    
-      11 'overflow'     >>|---------------|--------|---------------|>>
+      6 !floppy_        >>|---------------|>>      |   
+      
+
+
+
+      1                 >>|--------------<|        | 
+      31                >>|--------------=|        |
+      10                >>|---------------|----|<  |    
+      91                >>|---------------|-------=|
+      11 'overflow'     >>|---------------|--------|--------------|>
+      8712 'only wide1' >>|--------------=|=| 
+
+           
+
+
 
       4 floppy_/6                         |>>|--|>>|  
       2                                   |>>|--|<=|  
       3 _floppy/5                         |==|--|<=|   
       11?                                 |>>|--|<<|  
-      12? _floppy                         |==|--|==|  
+      12? _floppy   perfect match ??      |==|--|==|  
+
 
       19                                  |??|--|??|  
       9                                   |??|-----|----------------|
@@ -508,85 +544,319 @@ function ranges_compare(type, rs , re , os , oe , ss , se ){
            */
 
 
-            if(re == parseInt(se+1)   &&    (oe == se) ){
+          otest.into = false;
+           if( (oe == se) && (os == ss) ){
+
+              otest.into = true;
+           }
+
+
+            if( rs == parseInt(se+1) && re == parseInt(se+1) &&  oe == se && os == ss  ){
                   // at "extra" end of a section
                    otest.floppy_ = true;
             }
 
-            if( (re == parseInt(ss))  &&   (os == ss) ){
+
+            if(rs == parseInt(ss) && oe == se && os == ss && rs == parseInt(os) ){
+                  // at "extra" end of a section
+                   otest._floppy = true;
+            }
+         
+
+
+/*
+            if( (rs == parseInt(ss))  &&    otest.floppy_ ==false ){
                   // at start of a section (really)
                    otest._floppy = true;
             }
+*/
 
 
 
-            otest.tt = false;
+
+
+
+            otest.tt = 0;
             otest.c  = false 
             otest.case_  = false 
+
+
 
             /*
             */
 
+            // RS < OS
+
+
+            if(rs < os){
+            //    <       && 
+                            
+                          //     re-os     rs-oe    re-oe
+
+                          //       <         <        <
+                          //       =         <        < 
+                          //       =         <        =
+                          //       >         <        <
+                          //       >         <        =
+                          //       >         <        >
+
+            }
+
+            if(rs == os){
+            //    =       && 
+                            
+                          //     re-os     rs-oe    re-oe
+
+                         
+
+            }
+             if(rs > os){
+            //     <       && 
+                            
+                           //     re-os     rs-oe    re-oe
+
+            }
+
+
+
+
+
+
             if(rs < os && re < os && rs< oe && re <oe){
-          
                  otest.c  = '|after'
                  otest.case_  = 1
-                 otest.tt = true
+                 otest.tt++
 
             }
-
-
-            else if(rs > os && re > os && rs<= oe && re <=oe){
-              // SUB CASE : RE < OE 10
-               otest.case_  = 2
-               otest.c  = '|into|'  
-               otest.tt = true
-
-            }
-
-           // 10 case ? MK sure.
-           // check boundaries..
-           
-          // rs:41 os:53 re:64 oe:72  
-            else if(rs < os && re > os && rs<= oe && re <=oe){
+             
+            else if(rs < os && re > os && rs < oe && re < oe){
                otest.case_  = 10
                otest.c  = '|start before, ends in|'  
-               otest.tt = true
-
+               otest.tt++
             }
 
-            // 11 case
-
-            // rs:48 os:53 re:81 oe:72 
-              else if(rs < os && re > os && rs< oe && re >oe){
+            else if(rs < os && re > os && rs< oe && re >oe){
                otest.case_  = 11
                otest.c  = '|overflow|'  
-               otest.tt = true
+                 otest.tt++
+
+            }
+             // start before, end at beginning
+            else if(rs < os && re == os && rs < oe && re < oe){       
+                otest.c  = '_before|'
+                otest.case_  = '31'
+                otest.tt++
+            }
+
+            // start before, ends at end
+            else if(rs < os && re > os && rs < oe && re == oe){
+                      
+                otest.c  = '_before|'
+                otest.case_  = '91'
+                otest.tt++
+            }
+
+            else if(rs < os && re == os && rs < oe && re == oe){
+                otest.c  = 'onto'
+                otest.case_  = 8712
+                 otest.tt++
 
             }
 
-             else if(rs == os && re == os && rs<= oe && re <=oe){
+
+
+           // rs == os
+
+
+            // perfect 'cursor wide 1' match
+            else if(rs == os && re == os && rs == oe && re == oe){
+
+                otest.c  = 'onto'
+                otest.case_  = 87
+                 otest.tt++
+
+            }
+
+
+            // start at start , end stric. after
+            else if(rs == os && re > os && rs < oe && re > oe){
               // otest.into = true;
                
               if(otest._floppy == true){
                   otest.c  = '___into'
-                  otest.case_  = 3
+                  otest.case_  = 3019
 
                }
                else{
                   otest.c  = '_after'
+                  otest.case_  = 2009
+
+               }
+                 otest.tt++
+            }
+
+
+
+            // perfect match
+             else if(rs == os && re > os && rs < oe && re == oe){
+              // otest.into = true;
+               
+              if(otest._floppy == true){
+                  otest.c  = '___into'
+                  otest.case_  = 42
+
+               }
+               else{
+                  otest.c  = '_after'
+                  otest.case_  = 32
+
+               }
+                 otest.tt++
+
+            }
+
+
+
+
+
+            else if(rs == os && re > os && rs == oe && re == oe){
+               otest.case_  = 221
+               otest.c  = '|start at start, ends ibefore end|'  
+               otest.tt++
+
+            }
+
+            // one wide case
+           else if(rs == os && re > os && rs == oe && re > oe){
+               otest.case_  = 229
+               otest.c  = '|start at start, ends ibefore end|'  
+               otest.tt++
+
+            }
+
+
+
+
+             else if(rs == os && re > os && rs < oe && re < oe){
+               otest.case_  = 22
+               otest.c  = '|start at start, ends ibefore end|'  
+               otest.tt++
+
+            }
+
+
+            // 11 case
+
+         
+            
+             else if(rs == os && re == os && rs < oe && re < oe){
+              // otest.into = true;
+               
+              if(otest._floppy === true){
+                  otest.c  = '___into'
+                  otest.case_  = 3
+                  otest.touchend = true
+                
+
+               }
+               else{
+               
+                  otest.c  = '_after'
                   otest.case_  = 5
 
                }
-               otest.tt = true
+              otest.tt++
 
             }
+
+            else if(rs == os && re == os && rs < oe && re == oe){
+             
+                  otest.c  = '_after'
+                  otest.case_  = 90
+                 otest.tt++
+
+
+            }
+  // else if(rs > os && re > os && rs < = oe && re <=oe){
+            else if(rs > os && re > os && rs < oe && re < oe){
+              // SUB CASE : RE < OE 10
+               otest.case_  = 2
+               otest.c  = '|into|'  
+                otest.touchend = true
+                 otest.tt++
+
+            }
+
+             else if(rs > os && re > os && rs < oe && re == oe){
+             
+                  otest.c  = '_after'
+                  otest.case_  = 988
+                 otest.tt++
+
+
+            }
+
+            // 106  - 106 UI
+            // 0  - 106
+
+          else if(rs > os && re > os && rs == oe && re == oe){
+             
+                  otest.c  = 'c ebfore end'
+                  otest.case_  = 9188
+                 otest.tt++
+
+
+            }
+
+
+           
+
+
+
+            // start into , end after
+            else if(rs > os && re > os && rs < oe && re > oe){
+              // otest.into = true;
+               
+              if(otest._floppy == true){
+                  otest.c  = '___into'
+                  otest.case_  = 39
+
+               }
+               else{
+                  otest.c  = '_after'
+                  otest.case_  = 109
+
+               }
+                 otest.tt++
+            }
+
+             // start at last , end stric. after
+            else if(rs > os && re > os && rs == oe && re > oe){
+              // otest.into = true;
+               
+              if(otest._floppy == true){
+                  otest.c  = '___into'
+                  otest.case_  = 309
+
+               }
+               else{
+                  otest.c  = '_after'
+                  otest.case_  = 1009
+
+               }
+                 otest.tt++
+            }
+
+
+
+
 
 
             else if(rs > os && re > os && rs> oe && re > oe){
                if(otest.floppy_ == true){
                   otest.c  = 'into_'
                   otest.case_  = 4
+
 
                }
                else{
@@ -595,7 +865,7 @@ function ranges_compare(type, rs , re , os , oe , ss , se ){
 
                }
                //otest.after = true ;
-               otest.tt = true
+                 otest.tt++
 
             }
 
@@ -603,8 +873,9 @@ function ranges_compare(type, rs , re , os , oe , ss , se ){
             /*
             */
 
-
-
+            if(otest.tt !==1){
+             alert('more than on case for'+ otype)
+            }
             if(otest.case_  == false){
            
             }
@@ -617,7 +888,7 @@ function ranges_compare(type, rs , re , os , oe , ss , se ){
 
 
 
-            else if(otest.case_  == 4 || otest.case_  == 2 || otest.case_  == 3  || otest.case_  == 10 ){
+            else if(otest.case_  == 4 || otest.case_  == 2 || otest.case_  == 10 || otest.case_  == 9188  || otest.case_  == 3 ){
                 // into
                 otest.touched = {
                     '_end': true
@@ -626,15 +897,14 @@ function ranges_compare(type, rs , re , os , oe , ss , se ){
                
             }
 
-            else if(otest.case_  == 1 || otest.case_  == 5  ){
+            else if(otest.case_  == 1 || otest.case_  == 5 ){
                 // after
                 otest.touched = {
                     '_start':true,
                     '_end': true
                 }
 
-            //    os = os+1
-            //    oe = oe+1
+          
 
             }
 
@@ -659,20 +929,25 @@ function ranges_compare(type, rs , re , os , oe , ss , se ){
          // otested = true
 
 
-         if( otest.case_ == false){
+         if(otest.case_ == false){
           //ss:'+ss+' se:'+se+ 
-               otest.case_ = 'type:'+type+' rs:'+rs+' os:'+os+' re:'+re+' oe:'+oe+' floppy_: '+otest.floppy_+ ' _floppy: '+otest._floppy;
+               otest.case_ = 'false!'
+               // 'type:'+type+' rs:'+rs+' os:'+os+' re:'+re+' oe:'+oe+' floppy_: '+otest.floppy_+ ' _floppy: '+otest._floppy;
          }
               
 
 
-
-
-
          var test_results = { 
                 'case'    : otest.case_,
-                'type'    : otype,
-                'touched' : otest.touched
+                //'casename'    : otest.c,
+                '_floppy': otest._floppy,
+                'floppy_': otest.floppy_,
+                'into': otest.into,
+               'type'    : otype,
+                'touched' : otest.touched,
+                'into_section': otest.into_section, 
+                'ranges': otest.ranges,
+                'o': otest.o
         }
        
       console.log(test_results)

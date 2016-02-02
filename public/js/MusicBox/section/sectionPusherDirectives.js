@@ -60,11 +60,6 @@ angular.module('musicBox.section.directive.pusher', [])
                    push_set.subtype =  'h1' 
                    push_set.available_sections_objects = ['markup', 'hyperlink', 'media']
               }
-              else if($scope.type=='container_class'){
-                   push_set.type =  'container_class' 
-                    push_set.subtype =  'css' 
-                    push_set.available_sections_objects = ['container_class']
-              }
               else{
                     push_set.type =  'comment' 
                     push_set.subtype =  'comment' 
@@ -90,12 +85,16 @@ angular.module('musicBox.section.directive.pusher', [])
               }    
           }
           
+
           $scope.add = function(){
               
                  if(!$scope.push.status) { $scope.push.status   = 'approved' }
                  if(!$scope.push.depth)   { $scope.push.depth    = 1 }
                  if(!$scope.push.doc_id_id) { $scope.push.doc_id_id  = 'null'  }
 
+               // $scope.push.doc_id = '568f5fb28e225ccc2dc588a6'
+               // $scope.push.doc_id_id = '568f5fb28e225ccc2dc588a6'
+                 
                  console.log('ready to push')
                  console.log($scope.push)
                  var promise= MarkupRest.new({Id:$scope.$parent.doc.slug}, serialize($scope.push)).$promise;
@@ -140,6 +139,7 @@ angular.module('musicBox.section.directive.pusher', [])
                   }
                 }.bind(this));
                   promise.catch(function(response) {  
+                     alert('err')
                      console.log(response)   
                   }.bind(this));
            }
@@ -151,7 +151,7 @@ angular.module('musicBox.section.directive.pusher', [])
              // alert($rootScope.doc.doc_owner)
               if($rootScope.doc.doc_owner == true){
                
-                  if( $scope.type == 'inline_objects' || $scope.type=='container_class' ){
+                  if( $scope.type == 'inline_objects'){
                        return true
                   }
                   if($scope.type=='new_section' && $scope.last == true){
@@ -179,7 +179,7 @@ angular.module('musicBox.section.directive.pusher', [])
 
               if($rootScope.doc.doc_owner == true){
                
-                  if( $scope.type == 'inline_objects' || $scope.type=='container_class' ){
+                  if( $scope.type == 'inline_objects' ){
                        return true
                   }
                   else if($scope.type=='new_section' && $scope.last == true){
@@ -205,7 +205,7 @@ angular.module('musicBox.section.directive.pusher', [])
           }
 
           $scope.pusher_isvalid = function(){
-               if($scope.type=='new_section' || $scope.type=='container_class'){
+               if($scope.type=='new_section'){
                  return true;
                 }
                 return false;
@@ -254,9 +254,7 @@ angular.module('musicBox.section.directive.pusher', [])
                       $scope.push.metadata  = '' 
                       $scope.push.position = 'inline'
                 }
-                else if($scope.push.type == "container_class" ){ 
-                      $scope.push.position = 'inline'
-                }
+             
                 else if($scope.push.type == "media" ){ 
                        $scope.push.metadata = root_url+':'+PORT+'/img/lorem/400-400.jpg'
                        $scope.push.subtype  = $scope.objSchemas[$scope.push.type].modes.editor.fields.subtype.default

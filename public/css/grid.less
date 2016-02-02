@@ -341,7 +341,7 @@ a.btn_ok{
 }
 
 
-.theletters, fluidtext{
+ .astext{
   width:100%;
   float:left;
 }
@@ -366,20 +366,26 @@ section{
     padding:7% 0px;
   }
 
+
    &.aligned{
-   .theletters, .fluidtext{
+    .astext{
       text-align:center;
      }
    }
+
+  &.bigger_fonts .astext{
+    font-size:1.4em;
+
+  }
   &.two-cols{
-     .theletters, .fluidtext{
+     .astext{
        -moz-column-count: 2;
        -moz-column-gap: 30px;
        -webkit-column-count: 2;
        -webkit-column-gap: 30px;        
      }
   }
-  &.text-right .theletters{
+  &.text-right  .astext{
     text-align:right;  
   }
   
@@ -2326,12 +2332,12 @@ pulse fxxx
 
 
     &.two-cols{
-     .theletters{
-       -moz-column-count: 1;
-       -moz-column-gap: 0px;
-       -webkit-column-count: 1;
-       -webkit-column-gap: 0px;        
-     }
+           .astext{
+             -moz-column-count: 1;
+             -moz-column-gap: 0px;
+             -webkit-column-count: 1;
+             -webkit-column-gap: 0px;        
+           }
      }
 
 

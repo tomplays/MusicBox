@@ -22,6 +22,7 @@ exports.socketer = function(socket, data){
 	// console.log(data)
 	var content_pushed = []
 	var markups_pushed = []
+	var save_doc = false;
 
 	if(data.identifier){
 			var query = Document.findOne({ 'slug':data.identifier});
@@ -42,6 +43,7 @@ exports.socketer = function(socket, data){
 								markup.isNew; // true
 								doc.markups.push(markup)
 								markups_pushed.push(markup)
+								save_doc = true
 
 							}
 							if(action.type == 'content_push' &&  action.value){
@@ -49,34 +51,51 @@ exports.socketer = function(socket, data){
 								console.log(data)
 								doc.content = action.value+''+doc.content
 								content_pushed.push(action)
+								save_doc = true
 
+							}
+
+							if(action.type == 'ranges_test'){
+								console.log('ranges_test server middleware')
+								console.log(data)
 							}
 
 
 
+
 						})
+
+						if(save_doc == true ){
+							doc.markModified('markups');
+							doc.save(function(err,doc) {
+								if (err) {
+									console.log(err)
+								} 
+								else {
+									console.log('pushed')
+
+									if(markups_pushed.length>0){
+										data.markups_pushed = markups_pushed
+
+									}
+									if(content_pushed.length>0){
+										data.content_pushed = doc.content
+									}
+
+
+									socket.broadcast.emit('newsback', data)
+									//res.send('socketed view')
+								}
+								
+							});
+						}
+						else{
+							socket.broadcast.emit('newsback', data)
+							//res.send('socketed view')
+						}
+					
 						
-						doc.markModified('markups');
-						doc.save(function(err,doc) {
-							if (err) {
-								console.log(err)
-							} 
-							else {
-								console.log('pushed')
-
-								if(markups_pushed.length>0){
-									data.markups_pushed = markups_pushed
-
-								}
-								if(content_pushed.length>0){
-									data.content_pushed = doc.content
-								}
-
-
-								socket.broadcast.emit('newsback', data)
-								}
-							
-						});
+						
 					}
 				}
 			});

@@ -16,6 +16,7 @@ var mongoose = require('mongoose'),
     documents = require('./documents'),
     User = mongoose.model('User'),
     Document = mongoose.model('Document'),
+    meta_options = mongoose.model('Metaoptions'),
      _ = require('underscore'),
     auth = require('../authorization'),
     mails = require('./mails.js'),
@@ -215,7 +216,9 @@ exports.create = function(req, res) {
     var g = getRandomInt(140, 175);
     var b = getRandomInt(200, 225);
     var rand_color = 'rgb('+r+', '+g+', '+b+')';
+   
     var user_option =  {'option_name':'color', 'option_value': rand_color,  'option_type': '' } 
+   
     user.user_options.push(user_option)
     user.provider = 'local';
 
@@ -251,24 +254,17 @@ exports.create = function(req, res) {
             }
             mails.sendmailer(user_email)
             mails.sendmailer(admin_email)
-
-
-
             req.logIn(user, function(err) {
+                // var email_object = new Object({'subject':'[SITE ADMIN new user] - ', 'bodytext':'new_user_signup'+JSON.stringify(user) })
+                // mails.sendmailer(email_object)
 
-           
-            
-
-            // var email_object = new Object({'subject':'[SITE ADMIN new user] - ', 'bodytext':'new_user_signup'+JSON.stringify(user) })
-            // mails.sendmailer(email_object)
-
-            if (err){
+                if (err){
+                    res.send('user')
+                }
+                //res.redirect('/');
                 res.send('user')
-            }
-            //res.redirect('/');
-            res.send('user')
 
-        });
+            });
     });
 };
 
