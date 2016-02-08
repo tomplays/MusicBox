@@ -1,4 +1,0 @@
-div.chapters(ng-if="doc.doc_options['chapters-menu'].value == 'true' && ui.renderAvailable_active == 'read'")
-	a(href="" title="scroll to section # {{$index+1}}", ng-click="scrollToAnchor($index+1)", ng-repeat="section in doc.sections")
-		span {{$index+1}} 
-		// {{section.metadata}}

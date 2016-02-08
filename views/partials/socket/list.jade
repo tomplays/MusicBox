@@ -1,7 +1,0 @@
-h1 hello sockets
-a(ng-click="fake_socket()") fake_socket
-section(ng-repeat='socket in stack')
-	p {{socket.action}} {{socket.doc_id}} {{socket.collection_type}} {{socket.type}}
-	div(ng-if="socket.collection_type == 'markup'")
-		// p {{socket.collection}} 
-		// a(ng-click="delete_markup(socket.collection, socket.doc_id)") delete markup

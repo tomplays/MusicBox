@@ -1,36 +1,14 @@
-
-lib-cov
-*.seed
-*.log
-*.csv
-*.dat
-*.out
-*.pid
-*.gz 
 *.DS_Store
-pids
-logs
-results
-tests
-dist/
+
 
 .grunt/
 _SpecRunner.html
 
 config.json
-config_kimi.json
 public/uploads/
 public/documentation/sources
 npm-debug.log
 node_modules
-start.sh
-compressor_CSS.sh
-compressor_JS.sh
-
-
-public/js/MusicBox/document/tpl/*.tpl.html
-public/js/MusicBox/section/tpl/*.tpl.html
-public/js/MusicBox/markup/tpl/*.tpl.html
 
 
 README.md

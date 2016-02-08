@@ -24,5 +24,6 @@
     "MAIL_PROVIDER_PASS":"",
     "MAIL_TRANSPORTER":"gmail",
     "ADMIN_EMAIL" : "somebody@gmail.com",
-    "ENV": "dev"
+    "ENV": "dev",
+    "CLIENT_SERVER_PORT": 8881
 }
