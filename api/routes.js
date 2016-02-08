@@ -14,6 +14,7 @@ var mails  = require('../api/controllers/mails');
 
 var plugins  = require('../api/controllers/plugins');
 var api_prefix = '/api/v1/'
+var api_v2_prefix = '/api/v2/'
 
 
 
@@ -100,6 +101,9 @@ module.exports = function(app, passport, auth) {
     // DOC
     // single doc record
     app.get(api_prefix+'doc/:slug/:output?',           docs.doc_get);
+
+    app.get(api_v2_prefix+'doc/:slug/:output?',        docs.doc_get_virtual);
+
     app.post(api_prefix+'doc/:doc_id/edit',            auth.requiresLogin_or_secret,  docs.doc_edit);
     app.post(api_prefix+'doc/:slug/delete',            auth.requiresLogin_or_secret, docs.doc_delete);
     

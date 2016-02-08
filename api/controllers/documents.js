@@ -32,6 +32,18 @@ User = mongoose.model('User'),
 Markup  = mongoose.model('Markup');
 
 
+
+var h = require('virtual-dom/h');
+var VNode = require("virtual-dom").VNode;
+var diff = require('virtual-dom/diff');
+var patch = require('virtual-dom/patch');
+var createElement = require('virtual-dom/create-element');
+var jsx = require('jsx-transform');
+
+
+
+
+
 var nconf = require('nconf');
 
 nconf.argv().env().file({file:'config.json'});
@@ -149,6 +161,8 @@ if(debugger_on){
 
 
 					console.log('public doc rendered')	
+
+				
 					res.render('index', {
 						user : user_,
 						doc_title : doc.title,
@@ -168,8 +182,142 @@ if(debugger_on){
 		});
 	}
 
+exports.prerender_ = function(doc) {
+
+	// define array
+	var layout_zones = [ 'inline', 'left', 'under']
+
+	var source_markups = doc.markups;
+
+	// define output 
+	var output = {
+					sections: [], 
+					markups: []
+				}
+
+	doc.markups.forEach(function(mk) {
+                   		
+            if(mk.type == 'container'){
+            	output.sections.push(mk)
+   			}
+   			else{
+   				output.markups.push(mk)
+            }
+
+
+
+	});
+
+
+	_.each(output.sections, function(s,si) {
+
+		
+
+		var s_markups = _.filter(doc.markups,function (m) {
+			 return m.type !== 'container' && m.start >= s.start && m.end <= s.end;
+		});
+
+
+		
+		var g = _.groupBy(s_markups, function(m) {
+			return m.position
+		})
+		
+
+		var s_objects = {regions: [] }
+		
+		var loop_r = _.keys(layout_zones);   
+		_.each(layout_zones, function(key) {
+			console.log(key)
+			var k_obj = {'key': key, 'markups': []}
+			//s_objects.regions = []
+
+			
+
+			if(g[key]){
+
+				
+
+				console.log('mk in '+key)
+				console.log(g[key])
+				console.log('mk•••')
+
+			//	k_obj.markups.push(g[key]) 
+				_.each(g[key], function(kk,ii){
+					k_obj.markups.push(kk)
+					console.log('kk'+ii)
+				})
+
+				/*
+				k_obj.markups  = _.groupBy(k_obj.markups, function(l){
+					return l.type
+				})
+		*/
+
+				
+				// .markups.
+			}
+			else{
+			
+
+			}
+
+		
+			
+			if(key=='inline'){
+				k_obj.letters = 'abc'
+			}
+			
+			
+			k_obj.markups  = _.groupBy(k_obj.markups, function(k){
+				return k.type
+			})
+			
+
+
+			 s_objects.regions.push(k_obj)
+				
+			
+
+			
+
+		})
+
+		
+		s_objects.regions = _.groupBy(s_objects.regions, function(ss){
+			return ss.key
+		})
+		
+		
+
+
+
+		_.extend(s,s_objects)
+
+		//console.log(s.s_objects.regions)
+
+
+
+
+	});
+
+
+
+	// console.log(output.sections)
+
+
+	return output;
+
+}
 
 exports.prerender = function(doc) {
+
+
+	
+
+
+
+
 	// console.log('Mb server side loop')
 	var output = {}
 	var trace = {}
@@ -694,9 +842,13 @@ exports.prerender = function(doc) {
 	* @todo nothing
 	*/
 
+	exports.doc_get_virtual = function(req,res){
+
+	}
+
 
 	exports.doc_get = function(req, res) {
-			console.log(req.query.secret)
+	   console.log(req.query.secret)
 		var query = Document.findOne({ 'slug':req.params.slug })
 		query.populate('user','-email -hashed_password -salt').populate( {path:'markups.user_id', select:'-salt -email -hashed_password -secret', model:'User'}).populate({path:'markups.doc_id', select:'-markups -secret', model:'Document'}).populate('markups.doc_id.user').populate('room', {secret:0}).exec(function (err, doc) {
 			if (err){
@@ -738,9 +890,14 @@ exports.prerender = function(doc) {
 					//	out.doc.doc_options=  []
 					//	//out.doc = []
 					//	out.userin ={}
-					//	var outobjects = exports.prerender(doc);
-					//	out.doc.segments = outobjects.compiled_full_array.segments;
+				 //	out.prerender = exports.prerender_(doc);
 
+
+				//	
+
+
+				   // out.doc.segments = outobjects.compiled_full_array.segments;
+				//	mb.prerender(doc);
 					//}
                   //  out = _.extend(out, exports.prerender(doc)); 
 					out.doc.sections 	= []
@@ -762,7 +919,14 @@ exports.prerender = function(doc) {
 
 
 
-});
+					});
+
+					//var aa = '--'+Math.random()
+    				//out.hblock =  h("div",{}, [ "hello"+ String(out.doc.slug) ])
+    				
+
+
+    				//console.log(out.hblock)
 			
 
 

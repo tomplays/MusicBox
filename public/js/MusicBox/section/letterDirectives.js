@@ -405,6 +405,9 @@ $scope.map_letters = function(){
 // used only at page load, because after click, text is transformed into 'single' letters directives
 
 $scope.compile_html = function(fulltext_block){
+
+            mb.prerender($scope.doc)
+
 var out = ''
 
 var segments = []

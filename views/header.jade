@@ -38,6 +38,13 @@ head
 	if(socket_url !== '')
 		script(src='#{socket_url}:#{socket_server_port}/socket.io/socket.io.js')
 
+	script(src='/lib/mb.js')
+
+	script(type='text/javascript').
+		var mb;
+		mb.test('sharetest')
+
+
 	if (env == 'dev' )	
 		// DEV  ENV
 		link(href="css/bootstrap.min.css",rel="stylesheet")

@@ -57,7 +57,7 @@ exports.socketer = function(socket, data){
 
 							if(action.type == 'ranges_test'){
 								console.log('ranges_test server middleware')
-								console.log(data)
+								// console.log(data)
 							}
 
 
@@ -101,11 +101,4 @@ exports.socketer = function(socket, data){
 			});
 
 	}
-
-
-	//socket.emit('newsback', data)
-	//socket.broadcast.to('homepage').emit('newsback', data)
-	//io.sockets.in(room).emit('message', data);
-	// to front
-	//socket.broadcast.emit('newsback', data)
 }

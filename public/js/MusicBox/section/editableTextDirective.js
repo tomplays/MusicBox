@@ -482,22 +482,20 @@ a <= b
 a < b
 
 
-          ------------------------------------------------------------------------
-         
-                                          |        | 
-                                          |        | 
+                  ------------------------------------------------------------------------
+                 
+                                                  |        | 
+                                                  |        | 
+    6 !floppy_                  >-----------------|>>      |   
+    
 
-      6 !floppy_        >>|---------------|>>      |   
-      
-
-
-
-      1                 >>|--------------<|        | 
-      31                >>|--------------=|        |
-      10                >>|---------------|----|<  |    
-      91                >>|---------------|-------=|
-      11 'overflow'     >>|---------------|--------|--------------|>
-      8712 'only wide1' >>|--------------=|=| 
+    // group1
+    1                           >------------<    |        | 
+    31                          >-----------------=        |
+    8712 'only wide1'           >----------------=|=| 
+    10                          >-----------------|----|<  |    
+    91                          >-----------------|-------=|
+    11 'overflow'               >-----------------|--------|--------------|>
 
            
 
@@ -506,8 +504,8 @@ a < b
       4 floppy_/6                         |>>|--|>>|  
       2                                   |>>|--|<=|  
       3 _floppy/5                         |==|--|<=|   
-      11?                                 |>>|--|<<|  
-      12? _floppy   perfect match ??      |==|--|==|  
+     // 11?                               |>>|--|<<|  
+     // 12? _floppy   perfect match ??    |==|--|==|  
 
 
       19                                  |??|--|??|  
@@ -544,20 +542,20 @@ a < b
            */
 
 
-          otest.into = false;
+           var into = false;
+          
            if( (oe == se) && (os == ss) ){
-
-              otest.into = true;
+              into = true;
            }
 
 
-            if( rs == parseInt(se+1) && re == parseInt(se+1) &&  oe == se && os == ss  ){
+            if( rs == parseInt(se+1) && re == parseInt(se+1) && into ){
                   // at "extra" end of a section
                    otest.floppy_ = true;
             }
 
 
-            if(rs == parseInt(ss) && oe == se && os == ss && rs == parseInt(os) ){
+            if(rs == parseInt(ss) && re == parseInt(os) && into ){
                   // at "extra" end of a section
                    otest._floppy = true;
             }
@@ -570,9 +568,6 @@ a < b
                    otest._floppy = true;
             }
 */
-
-
-
 
 
 
@@ -610,7 +605,7 @@ a < b
                          
 
             }
-             if(rs > os){
+            if(rs > os){
             //     <       && 
                             
                            //     re-os     rs-oe    re-oe
@@ -659,7 +654,7 @@ a < b
             else if(rs < os && re == os && rs < oe && re == oe){
                 otest.c  = 'onto'
                 otest.case_  = 8712
-                 otest.tt++
+                otest.tt++
 
             }
 
@@ -870,14 +865,13 @@ a < b
             }
 
             
-            /*
-            */
+         
 
             if(otest.tt !==1){
              alert('more than on case for'+ otype)
             }
             if(otest.case_  == false){
-           
+              otest.case_ = 'false!'
             }
 
 
@@ -909,32 +903,7 @@ a < b
             }
 
 
-
-
-
-
-        //    console.log('>>><< section #'+i+' at start:'+ section_is_current_at_start+' at end'+section_is_current_at_end+'into'+section_is_current_at_into)
-            /// Boundaries OKS.
-
-            //check cases...
-           // stric.after > 0 > do nothing
-           
-           // 1 : stric before offeset start and end.
-
-           // into > 3  > offset end
-
-           //
-         
-
-         // otested = true
-
-
-         if(otest.case_ == false){
-          //ss:'+ss+' se:'+se+ 
-               otest.case_ = 'false!'
-               // 'type:'+type+' rs:'+rs+' os:'+os+' re:'+re+' oe:'+oe+' floppy_: '+otest.floppy_+ ' _floppy: '+otest._floppy;
-         }
-              
+        
 
 
          var test_results = { 
