@@ -28,8 +28,7 @@ module.exports = function(grunt) {
 							"css/main.css",
 							"css/compiled/*",
 							"bower_components/es6-promise/promise.min.js",
-							"bower_components/fetch/fetch.js",
-							"js/bundle.js",
+							"bower_components/fetch/fetch.js"
 						]
 					},
 					{
@@ -78,7 +77,7 @@ module.exports = function(grunt) {
 		watchify: {
 	      client: {
 	        src: './client/src/js/mb_.js',
-	        dest:'./client/src/js/bundle.js'
+	        dest:'client/dist/js/bundle.js'
 	      },
    		},
 
@@ -94,17 +93,21 @@ module.exports = function(grunt) {
 				files: ['client/src/css/*.less'], // less auto-compilation
 				tasks: ['less', 'copy:dist']
 			},
-			js: {
+			js_client: {
 				options: { livereload: true },
-				files: ['src/js/*.js', 'client/src/js/*.js'], // less auto-compilation
-				tasks: ['copy:dist']
+				files: ['client/src/js/mb_.js'], // less auto-compilation
+			},
+			js_lib: {
+				options: { livereload: true },
+				files: ['src/*.js'], // less auto-compilation
+				tasks: ['watchify','copy:dist']
 			}
 
 
 		}
 
 	});
-	grunt.registerTask('default', ['watchify','watch']); // 'connect:livereload'
+	grunt.registerTask('default', [ 'watchify','watch']); // 'connect:livereload'
 
 
 };

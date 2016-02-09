@@ -14,38 +14,28 @@ var _ = require('underscore');
 
   
    self.set = function(data){
-   
       (debuger) ? console.log('set doc') : {}
       doc_        = _.extend(doc_, data)
-      doc_.loaded = true;
+      return doc_
+
    }
 
    self.set_field = function(field, data){
+      console.log('field: '+field+' '+'oldvalue: '+doc_.doc[field]+' newValue: '+data)
       doc_.doc[field]        = data
+      //  self.set(doc_)
+      return doc_;
    }
 
-
-   
 
    self.get = function(){
       return doc_
    }
    
-   self.isloaded = function(){
-      (debuger) ? console.log('get doc') : {}
-      if(doc_ && doc_.loaded){
-        return true
-      }
-      else{
-       return false;
-      }
-      
-
-   }
-
-   exports.set             = self.set
-   exports.isloaded        = self.isloaded
+  
+   
    exports.get             = self.get
+   exports.set             = self.set
    exports.set_field       = self.set_field
 
 
